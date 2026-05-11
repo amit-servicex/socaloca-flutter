@@ -21,7 +21,19 @@ class MostEndorsedSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FeedSectionHeader(title: 'Most Endorsed'),
+        const FeedSectionHeader(
+          title: 'Most Endorsed Players',
+        ),
+        Divider(
+          color: AppColors.socaBlack,
+          thickness: .7,
+          height: 0,
+          // indent: 12,
+          // endIndent: 12,
+        ),
+        SizedBox(
+          height: 8,
+        ),
         SizedBox(
           height: 60,
           child: ListView.builder(

@@ -28,6 +28,16 @@ class MostFollowedTeamsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const FeedSectionHeader(title: 'Most Followed Teams'),
+        Divider(
+          color: AppColors.socaBlack,
+          thickness: .7,
+          height: 0,
+          // indent: 12,
+          // endIndent: 12,
+        ),
+        SizedBox(
+          height: 8,
+        ),
         SizedBox(
           height: 65,
           child: ListView.builder(

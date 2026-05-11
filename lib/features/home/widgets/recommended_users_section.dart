@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,11 +14,49 @@ class RecommendedUsersSection extends ConsumerStatefulWidget {
       _RecommendedUsersSectionState();
 }
 
-class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSection> {
+class _RecommendedUsersSectionState
+    extends ConsumerState<RecommendedUsersSection> {
   final PageController _pageController = PageController();
+  Timer? _autoSlideTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoSlide();
+  }
+
+  void _startAutoSlide() {
+    _autoSlideTimer?.cancel();
+    _autoSlideTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (!_pageController.hasClients) return;
+
+      final state = ref.read(feedRecUsersProvider);
+      if (state.items.isEmpty) return;
+
+      int currentPage = _pageController.page?.round() ?? 0;
+      int totalCount = state.items.length + (state.hasMore ? 1 : 0);
+
+      if (currentPage >= totalCount - 1) {
+        if (!state.hasMore) {
+          // Loop back to the beginning if no more items
+          _pageController.animateToPage(
+            0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      } else {
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
 
   @override
   void dispose() {
+    _autoSlideTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -102,7 +141,8 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
                   }
 
                   final user = state.items[index];
-                  final name = '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim();
+                  final name =
+                      '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim();
 
                   return _buildUserCard(user, name);
                 },
@@ -170,7 +210,8 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
                         ),
                       ),
                       SizedBox(width: 4),
-                      Icon(Icons.verified, size: 16, color: AppColors.socaBlack),
+                      Icon(Icons.verified,
+                          size: 16, color: AppColors.socaBlack),
                     ],
                   ),
                   const Text(
@@ -186,7 +227,7 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
             ],
           ),
         ),
-        
+
         // Announcement text
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -198,7 +239,9 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
                 fontSize: 15,
               ),
               children: [
-                TextSpan(text: '${user.firstName ?? 'A user'} has joined SocaLoca!!! '),
+                TextSpan(
+                    text:
+                        '${user.firstName ?? 'A user'} has joined SocaLoca!!! '),
                 const TextSpan(
                   text: 'Check his bio',
                   style: TextStyle(fontWeight: FontWeight.w700),
@@ -207,9 +250,9 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
             ),
           ),
         ),
-        
+
         const SizedBox(height: 12),
-        
+
         // Grey section with photo and details
         Expanded(
           child: Container(
@@ -227,7 +270,8 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
                       backgroundImage: user.imageUrl != null &&
                               user.imageUrl!.isNotEmpty &&
                               !user.imageUrl!.startsWith('file:///')
-                          ? NetworkImage(ApiConstants.getImageUrl(user.imageUrl!))
+                          ? NetworkImage(
+                              ApiConstants.getImageUrl(user.imageUrl!))
                           : null,
                       child: user.imageUrl == null ||
                               user.imageUrl!.isEmpty ||
@@ -237,7 +281,8 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
                           : null,
                     ),
                     const SizedBox(height: 8),
-                    const Text('🇬🇭', style: TextStyle(fontSize: 24)), // Hardcoded for now
+                    const Text('🇬🇭',
+                        style: TextStyle(fontSize: 24)), // Hardcoded for now
                   ],
                 ),
                 const SizedBox(width: 16),
@@ -283,7 +328,8 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
                               width: 1,
                               height: 90,
                               color: Colors.grey.shade400,
-                              margin: const EdgeInsets.symmetric(horizontal: 12),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                             ),
                             Expanded(
                               flex: 4,
@@ -306,18 +352,20 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
             ),
           ),
         ),
-        
+
         // SHARE button at bottom
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
+            border:
+                Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Icon(Icons.ios_share_rounded, size: 22, color: AppColors.socaBlack),
+              Icon(Icons.ios_share_rounded,
+                  size: 22, color: AppColors.socaBlack),
               SizedBox(width: 8),
               Text(
                 'SHARE',
@@ -360,4 +408,3 @@ class _RecommendedUsersSectionState extends ConsumerState<RecommendedUsersSectio
     );
   }
 }
-
