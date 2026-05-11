@@ -1,0 +1,134 @@
+name: socaloca
+description: SocaLoca — Football Social Network
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Navigation
+  go_router: ^13.2.5
+
+  # Networking
+  dio: ^5.4.3+1
+  pretty_dio_logger: ^1.3.1
+
+  # Serialization
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+
+  # Local storage
+  shared_preferences: ^2.2.3
+  flutter_secure_storage: ^9.0.0
+
+  # Firebase
+  firebase_core: ^4.7.0
+  firebase_messaging: ^16.2.0
+
+  # Maps
+  google_maps_flutter: ^2.6.1
+
+  # AppsFlyer attribution
+  appsflyer_sdk: ^6.14.2
+
+  # ML Kit translation
+  google_mlkit_translation: ^0.13.1
+
+  # Social auth
+  google_sign_in: ^7.2.0
+  flutter_facebook_auth: ^7.0.1
+
+  # Image handling
+  image_picker: ^1.1.2
+
+  # Sharing
+
+  cached_network_image: ^3.3.1
+  photo_view: ^0.14.0
+
+  # Video
+  video_player: ^2.8.6
+  chewie: ^1.7.5
+
+  # UI utilities
+  flutter_svg: ^2.0.10+1
+  shimmer: ^3.0.0
+  lottie: ^3.1.0
+  badges: ^3.1.2
+  intl: ^0.19.0
+  timeago: ^3.6.1
+  url_launcher: ^6.3.0
+  flutter_linkify: ^6.0.0
+  share_plus: ^12.0.2
+  package_info_plus: ^8.0.0
+  connectivity_plus: ^6.0.3
+  permission_handler: ^11.3.1
+  geolocator: ^13.0.2
+  geocoding: ^3.0.0
+  in_app_review: ^2.0.9
+  flutter_inappwebview: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.4.0
+  custom_lint: ^0.6.4
+  riverpod_lint: ^2.3.10
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/
+    - assets/font/
+
+  fonts:
+    # ── Poppins (primary UI font — matches Android app) ──────────────────
+    - family: Poppins
+      fonts:
+        - asset: assets/font/poppins_thin.ttf
+          weight: 100
+        - asset: assets/font/poppins_extralight.ttf
+          weight: 200
+        - asset: assets/font/poppins_light.ttf
+          weight: 300
+        - asset: assets/font/poppins_regular.ttf
+          weight: 400
+        - asset: assets/font/poppins_medium.ttf
+          weight: 500
+        - asset: assets/font/poppins_semibold.ttf
+          weight: 600
+        - asset: assets/font/poppins_bold.ttf
+          weight: 700
+        - asset: assets/font/poppins_black.ttf
+          weight: 900
+        - asset: assets/font/poppinsextrabol.ttf
+          weight: 800
+
+    # ── Lato (app-wide default — matches Android styles.xml) ─────────────
+    - family: Lato
+      fonts:
+        - asset: assets/font/lato_light.ttf
+          weight: 300
+        - asset: assets/font/lato_regular.ttf
+          weight: 400
+        - asset: assets/font/lato_medium.ttf
+          weight: 500
+        - asset: assets/font/lato_bold.ttf
+          weight: 700
+        - asset: assets/font/lato_black.ttf
+          weight: 900

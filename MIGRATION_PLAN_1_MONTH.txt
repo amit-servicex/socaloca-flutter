@@ -1,0 +1,373 @@
+===================================================================================
+SOCALOCA ANDROID TO FLUTTER MIGRATION - 1 MONTH PLAN
+===================================================================================
+
+PROJECT OVERVIEW:
+- Android App: 200+ Fragments, 17 Activities, 400+ Adapters
+- Target: Flutter Migration in 1 Month (22 working days)
+- Holidays: All Sundays (4 days) + 2 Saturdays = 6 holidays
+- Working Days: 26 days - 6 holidays = 20 working days
+
+CURRENT STATUS (Completed):
+✅ Week 0: Authentication & Onboarding (5 days)
+  - Splash Screen
+  - Onboarding (4 slides)
+  - Role Choice (6 roles)
+  - Login (Email/Mobile/SocaLoca ID)
+  - Country Code Selection (50+ countries)
+  - Policy Acceptance
+  - Home Screen Shell with Bottom Navigation
+  - Social Feed (Basic structure)
+
+===================================================================================
+WEEK 1: CORE HOME & SOCIAL FEATURES (Days 1-5)
+===================================================================================
+
+DAY 1 (Monday): Social Feed Complete
+- Fix feed loading issue (role flags)
+- Implement feed post types (user, club, match, tournament)
+- Like/Unlike functionality
+- Comment functionality
+- Share functionality
+- Post translation
+- Report post
+APIs: getFeed, likePost, saveFeedComment, reportPost
+
+DAY 2 (Tuesday): User Profile & Bio
+- My Bio Screen (NewMyBioFragment)
+- Player Bio Screen (NewPlayerBioFragment)
+- Coach/Admin Bio Screen (CoachAdminBioFragment)
+- Profile stats (posts, cheers, followers, following)
+- Follow/Unfollow functionality
+- Skill ratings display
+APIs: getUserProfile, followUser, unfollowUser
+
+DAY 3 (Wednesday): Create & Edit Post
+- Create Post Screen (CreatePostFragment)
+- Edit Post Screen (EditPostFragment)
+- Image upload (multiple)
+- Video upload
+- Tag people
+- Tag academy
+- Post privacy settings
+APIs: createUserPost, editUserPost, deleteUserPost
+
+DAY 4 (Thursday): Gallery & Media
+- My Gallery Screen (MyGalleryNewFragment)
+- Home Feed Gallery (HomeFeedGalleryFragment)
+- Image viewer with zoom
+- Video player
+- Download media
+APIs: getUserPosts, getPostShow
+
+DAY 5 (Friday): Comments & Interactions
+- Comment Screen (CommentFragment)
+- Reply to comments
+- Like comments
+- Delete comments
+- Comment translations
+APIs: getFeedComments, getCommentReplies, likeFeedComment, saveFeedComment
+
+===================================================================================
+WEEK 2: TEAMS & MATCHES (Days 6-10)
+===================================================================================
+
+DAY 6 (Monday): Teams Landing & List
+- Player Admin Team Landing (PlayerAdminTeamLandingFragment)
+- Joined Teams (PlayerJoinedTeamsFragment)
+- Pending Teams (PlayerPendingTeamsFragment)
+- Received Invites (PlayerReceivedTeamsFragment)
+- Recently Joined Teams (RecentlyJoinedAllTeamsFragment)
+APIs: getMyTeams, getTeamInvites, acceptTeamInvite, rejectTeamInvite
+
+DAY 7 (Tuesday): Team Bio & Management
+- Team Bio Screen (TeamBioFragment)
+- Team Players List (TeamBioPlayersFragment)
+- Team All Players (TeamAllPlayerFragment)
+- Team Recent Matches
+- Follow/Unfollow team
+APIs: getTeamDetails, getTeamPlayers, followTeam, unfollowTeam
+
+DAY 8 (Wednesday): Create & Manage Team
+- Create Team Screen (CreateTeamFragment)
+- Edit Team Screen (EditTeamFragment)
+- Manage Team Landing (ManageTeamLandingFragment)
+- Manage Join Requests (ManageJoinRequestFragment)
+- Manage New Players (ManageNewPlayersFragment)
+- Manage Jersey Assignment (ManageJerseyAssignFragment)
+APIs: createTeam, editTeam, getJoinRequests, acceptPlayer, rejectPlayer
+
+DAY 9 (Thursday): Matches Landing & List
+- Common Matches Landing (CommonMatchesLandingFragment)
+- Today Matches (CommonMatchesTodayFragment)
+- Upcoming Matches (CommonMatchesUpcomingFragment)
+- Played Matches (CommonMatchesPlayedFragment)
+- Live Matches (LiveMatchFragment)
+APIs: getMatches, getLiveMatches, getUpcomingMatches, getPlayedMatches
+
+DAY 10 (Friday): Match Details & Management
+- Match Details Screen (MatchDetailsFragment)
+- Played Match Details (PlayedMatchDetailsFragment)
+- Live Match Details (LiveMatchDetailsFragment)
+- Match Stats (MatchStatsFragment)
+- Match Management (MatchManageFragment)
+APIs: getMatchDetails, getMatchStats, updateMatchScore
+
+===================================================================================
+WEEK 3: TOURNAMENTS & ORGANIZATIONS (Days 11-15)
+===================================================================================
+
+DAY 11 (Monday): Tournaments Landing
+- Common Tournaments Landing (CommonTournamentsLandingFragment)
+- Ongoing Tournaments (CommonOngoingTournamentsFragment)
+- Upcoming Tournaments (CommonUpcomingTournamentsFragment)
+- Closed Tournaments (CommonClosedTournamentsFragment)
+- My Leagues/Cups (CommonMyLeaguesCupsFragment)
+APIs: getTmnts, getMyTmnts, getOngoingTmnts, getUpcomingTmnts
+
+DAY 12 (Tuesday): Tournament Details
+- Tournament Details (TournamentDetailsFragment)
+- Tournament Cup Details (TournamentCupDetailsFragment)
+- Tournament Matches (TournamentMatchesFragment)
+- Point Table (TournamentsPointTableFragment)
+- Tournament Stats
+APIs: getTmntDetails, getTmntMatches, getTmntPointTable, getTmntStats
+
+DAY 13 (Wednesday): Clubs & Partners Landing
+- Clubs/Partners Landing (CommonClubsPartnersLandingFragment)
+- Clubs List (CommonClubsFragment)
+- Partners List (CommonPartnersFragment)
+- Club Bio User (ClubBioUserFragment)
+- Club Bio Admin (ClubBioAdminFragment)
+APIs: getClubs, getPartners, getClubDetails
+
+DAY 14 (Thursday): Club Details & Management
+- Club Gallery (ClubUserGalleryFragment / ClubAdminGalleryFragment)
+- Club Players (ClubUserPlayersFragment / ClubAdminPlayersFragment)
+- Club News
+- Club Sponsors
+- Club Trials
+APIs: getClubGallery, getClubPlayers, getClubNews, getClubTrials
+
+DAY 15 (Friday): FA, Confederation, Sponsor Bios
+- FA Bio (FABioFragment)
+- Confederation Bio (ConfederationBioFragment)
+- Sponsor Bio (SponsorBioFragment)
+- Charity/NGO Bio (CharityNGOBioFragment)
+- Gallery, News, Partners for each
+APIs: getFADetails, getConfedDetails, getSponsorDetails, getCharityDetails
+
+===================================================================================
+WEEK 4: ACADEMIES, TRIALS & ADDITIONAL FEATURES (Days 16-20)
+===================================================================================
+
+DAY 16 (Monday): Academies & Trials
+- Academy Landing (AcademyLandingFragment)
+- Academy Bio (AcademyBioFragment)
+- Academy Gallery (AcademyGalleryFragment)
+- Academy Trials (AcademyTrialFragment)
+- Trial Landing (TrialLandingFragment)
+- Register for trials
+APIs: getAcademies, getAcademyDetails, getTrials, registerForTrial
+
+DAY 17 (Tuesday): Search & Notifications
+- Search Screen (SearchNewFragment)
+- Search Filters (SearchFilterAdapter)
+- Search Invite (SearchInviteFragment)
+- Notifications (CommonNotificationsFragment)
+- Notification badge updates
+APIs: search, getNotifications, markNotificationRead
+
+DAY 18 (Wednesday): Profile Settings & Account
+- Edit Profile (CommonProfileEditNewFragment)
+- Change Password (CommonChangePasswordFragment)
+- Privacy Settings (CommonPrivacySettingsFragment)
+- Parental Settings (ParentalSettingsFragment)
+- Legacy Contact (LegacyContactFragment)
+- Account Transfer (AccountTransferFragment)
+APIs: editProfile, changePassword, updatePrivacySettings
+
+DAY 19 (Thursday): Endorsements & Skills
+- My Endorsements (MyEndorsementsFragment)
+- Other Endorsements (OtherEndorsementsFragment)
+- Endorse Player (EndorsePlayerFragment)
+- Skill Details (SkillDetailsFragment)
+- Skill View All (SkillViewAllFragment)
+- Upload skill videos
+APIs: getEndorsements, endorsePlayer, uploadSkillVideo
+
+DAY 20 (Friday): Pickup Matches & Referee Features
+- Pickup Matches (PickUpMatchesFragment)
+- Host Pickup Match (PickUpHostMatchFragment)
+- Pickup Match Details (PickUpMatchDetailsFragment)
+- Referee My Matches (RefereeMyMatchesFragment)
+- Referee Live Match Update (RefereeLiveMatchUpdateFragment)
+- Referee Match Management (RefereeManageMatchFragment)
+APIs: getPickupMatches, hostPickupMatch, getRefereeMatches
+
+===================================================================================
+ADDITIONAL FEATURES (If Time Permits or Next Phase)
+===================================================================================
+
+LOWER PRIORITY:
+- Match Requests (MatchRequestsFragment)
+- Host Match (HostMatchFragment)
+- Invite Players (InvitePlayersFragment)
+- Add Players (AddPlayersFragment)
+- Select Match Players (SelectMatchPlayersFragment)
+- My Activities (CommonMyActivitiesFragment)
+- Activity Tags (MyActivityTagsFragment)
+- Like Lists (LikeListFragment, AllUserLikeListFragment)
+- Follow Lists (FollowersFragment, FollowingFragment)
+- Data Policy (DataPolicyFragment)
+- Terms of Service (TermOfServiceFragment)
+- Survey Screens (SurveyRatingFragment, SurveyFeedbackFragment)
+- What's New Features
+- Help Desk
+- Download Activities
+- Deactivate/Delete Account
+- Language Change
+
+===================================================================================
+API ENDPOINTS SUMMARY (By Priority)
+===================================================================================
+
+HIGH PRIORITY (Week 1-2):
+- getFeed, likePost, saveFeedComment, reportPost
+- getUserProfile, followUser, unfollowUser
+- createUserPost, editUserPost, deleteUserPost
+- getUserPosts, getPostShow
+- getFeedComments, getCommentReplies, likeFeedComment
+- getMyTeams, getTeamInvites, acceptTeamInvite
+- getTeamDetails, getTeamPlayers, followTeam
+- createTeam, editTeam, getJoinRequests
+- getMatches, getLiveMatches, getMatchDetails, getMatchStats
+
+MEDIUM PRIORITY (Week 3):
+- getTmnts, getMyTmnts, getTmntDetails, getTmntMatches
+- getClubs, getPartners, getClubDetails, getClubGallery
+- getFADetails, getConfedDetails, getSponsorDetails
+
+LOW PRIORITY (Week 4):
+- getAcademies, getAcademyDetails, getTrials
+- search, getNotifications
+- editProfile, changePassword, updatePrivacySettings
+- getEndorsements, endorsePlayer, uploadSkillVideo
+- getPickupMatches, hostPickupMatch, getRefereeMatches
+
+===================================================================================
+TECHNICAL CONSIDERATIONS
+===================================================================================
+
+ARCHITECTURE:
+- Riverpod for state management
+- Go Router for navigation
+- Freezed for models
+- Dio for API calls
+- Cached Network Image for images
+- Video Player for videos
+- Image Picker for uploads
+- Permission Handler for permissions
+
+SHARED COMPONENTS TO BUILD:
+- Custom App Bar (with logo, search, notifications)
+- Custom Drawer (side menu)
+- Bottom Navigation (6 tabs)
+- Post Card Widget (reusable for all post types)
+- User Avatar Widget
+- Team Card Widget
+- Match Card Widget
+- Tournament Card Widget
+- Loading Indicators
+- Error Widgets
+- Empty State Widgets
+- Confirmation Dialogs
+- Image Viewer
+- Video Player
+- Comment Widget
+- Like Button
+- Share Button
+- Follow Button
+
+MODELS TO CREATE:
+- User, Team, Match, Tournament, Club, Academy
+- Post (User, Club, Match, Tournament types)
+- Comment, Like, Follow
+- Notification, Search Result
+- Skill, Endorsement, Rating
+- Trial, Pickup Match
+- FA, Confederation, Sponsor, Charity
+
+===================================================================================
+TESTING STRATEGY
+===================================================================================
+
+DAILY TESTING:
+- Test each screen after implementation
+- Verify API calls with actual backend
+- Check error handling
+- Test loading states
+- Verify navigation flow
+
+WEEKLY TESTING:
+- End-to-end flow testing
+- Cross-role testing (Player, Coach, Fan, etc.)
+- Performance testing
+- Memory leak checks
+
+FINAL TESTING (After Week 4):
+- Full regression testing
+- User acceptance testing
+- Bug fixing
+- Performance optimization
+
+===================================================================================
+RISK MITIGATION
+===================================================================================
+
+RISKS:
+1. API changes or undocumented behavior
+2. Complex business logic in Android code
+3. Missing API documentation
+4. Time constraints for 200+ screens
+5. Testing coverage
+
+MITIGATION:
+1. Read Android code thoroughly before implementing
+2. Create reusable components early
+3. Prioritize core features
+4. Defer low-priority features to Phase 2
+5. Daily progress tracking
+6. Buffer time for bug fixes
+
+===================================================================================
+DELIVERABLES
+===================================================================================
+
+WEEK 1: Core social features working
+WEEK 2: Teams and matches functional
+WEEK 3: Tournaments and organizations complete
+WEEK 4: Academies, trials, and additional features
+
+FINAL DELIVERABLE:
+- Fully functional Flutter app with core features
+- 80%+ feature parity with Android app
+- Clean, maintainable code
+- Documentation for future development
+- Known issues list for Phase 2
+
+===================================================================================
+NOTES
+===================================================================================
+
+- This is an aggressive timeline for such a large app
+- Focus on core user journeys first
+- Some complex features may need to be simplified
+- Phase 2 can handle remaining features
+- Continuous communication with stakeholders is critical
+- Daily standups recommended to track progress
+- Code reviews should be quick but thorough
+
+===================================================================================
+END OF MIGRATION PLAN
+===================================================================================

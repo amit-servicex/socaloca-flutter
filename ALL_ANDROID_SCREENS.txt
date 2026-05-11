@@ -1,0 +1,733 @@
+===================================================================================
+SOCALOCA ANDROID APP - COMPLETE SCREEN INVENTORY
+===================================================================================
+Total Fragments: 236
+Total Activities: 17
+Total Screens: 253
+
+===================================================================================
+SECTION 1: AUTHENTICATION & ONBOARDING (15 screens)
+===================================================================================
+
+1.1 SPLASH & ONBOARDING
+- SplashActivity
+- BoardingActivity
+- OnboardingOneFragment (Image slide 1)
+- OnboardingTwoFragment (Image slide 2)
+- OnboardingThreeFragment (Image slide 3)
+- OnboardingFourFragment (Image slide 4)
+- RoleChoiceFragment (6 roles: Player, Coach, Manager, Referee, Fan, Club)
+
+1.2 LOGIN & REGISTRATION
+- LoginActivity
+- LoginLandingFragment (Choose login type)
+- LoginFragment (Old login)
+- NewLoginFragment (New login - Email/Mobile/SocaLoca ID)
+- LoginClubFragment (Club login)
+- NewSignUpFragment (Registration)
+- RegisterClubFragment (Club registration)
+- OtpFragment (OTP verification)
+
+1.3 PASSWORD MANAGEMENT
+- ForgetPasswordFragment (Old)
+- ForgetPasswordFragmentNew (New forgot password)
+- ResetPasswordFragment (Old)
+- ResetPasswordFragmentNew (New reset password)
+
+1.4 AGE & CONSENT
+- AgeSelectionFragment (Age selection)
+- SocialAgeSelectionFragment (Social age selection)
+- ChildConsentFragment (Child consent)
+- YouthConsentFragment (Youth consent)
+- SocialChildConsentFragment (Social child consent)
+- SocialYouthConsentFragment (Social youth consent)
+- ParentalSettingsFragment (Parental controls)
+- UpdateParentalControlActivity (Update parental controls)
+- PinChangeFragment (Change PIN)
+
+1.5 PROFILE CREATION
+- CreateProfileFragment (Create profile)
+- ScoutCreateProfileFragment (Scout profile creation)
+- ScoutInfoFragment (Scout information)
+- ThankYouCreateProfile (Thank you after profile creation)
+
+===================================================================================
+SECTION 2: HOME & NAVIGATION (17 screens)
+===================================================================================
+
+2.1 COMMON HOME (Player/Coach/Manager)
+- CommonHomeActivity (Main home activity)
+- CommonHomeFeedFragment (Social feed)
+- ClubHomeFragment (Club home)
+
+2.2 FAN HOME
+- FanHomeActivity (Fan main activity)
+- FanHomeFragment (Fan home)
+- FanHomeFeedFragment (Fan social feed)
+
+2.3 REFEREE HOME
+- RefereeHomeActivity (Referee main activity)
+
+2.4 CLUB HOME
+- ClubHomeActivity (Club main activity)
+
+2.5 BOTTOM NAVIGATION TABS
+- Home/Feed Tab (CommonHomeFeedFragment / FanHomeFeedFragment)
+- Teams Tab (PlayerAdminTeamLandingFragment / FanTeamsFragment)
+- Leagues/Cups Tab (CommonMatchesLandingFragment / FanMatchesLandingFragment)
+- Clubs/Partners Tab (CommonClubsPartnersLandingFragment)
+- Trials Tab (TrialLandingFragment)
+- Academies Tab (AcademyLandingFragment / CommonAcademiesFragment)
+
+2.6 NOTIFICATIONS
+- CommonNotificationsFragment (Notifications list)
+
+===================================================================================
+SECTION 3: USER PROFILES & BIO (25 screens)
+===================================================================================
+
+3.1 MY PROFILE
+- NewMyBioFragment (My bio - new version)
+- RefereeMyBioFragment (Referee bio)
+
+3.2 PLAYER PROFILES
+- NewPlayerBioFragment (Player bio - new version)
+- ClubAdminPlayerBioFragment (Club admin player bio)
+
+3.3 COACH/ADMIN PROFILES
+- CoachAdminBioFragment (Coach/Admin bio)
+- CoachAdminBioFragment2 (Coach/Admin bio v2)
+
+3.4 REFEREE PROFILES
+- RefereeBioFragment (Referee bio)
+
+3.5 PROFILE EDITING
+- CommonProfileEditFragment (Old edit profile)
+- CommonProfileEditFragmentOld (Older version)
+- CommonProfileEditNewFragment (New edit profile)
+- FanProfileEditFragment (Fan edit profile)
+- RefereeProfileEditFragment (Referee edit profile)
+
+3.6 PROFILE SETTINGS
+- CommonChangePasswordFragment (Change password)
+- FanChangePasswordFragment (Fan change password)
+- CommonPrivacySettingsFragment (Privacy settings)
+- LegacyContactFragment (Legacy contact)
+- ThankYouLegacyContact (Thank you after legacy contact)
+- AccountTransferFragment (Account transfer)
+
+3.7 ENDORSEMENTS & RATINGS
+- MyEndorsementsFragment (My endorsements/ratings)
+- OtherEndorsementsFragment (Other user endorsements)
+- EndorsePlayerFragment (Endorse a player)
+- EndorsementListFragment (List of endorsements)
+
+3.8 SKILLS
+- SkillDetailsFragment (Skill details)
+- SkillViewAllFragment (View all skills)
+
+3.9 STATISTICS
+- PlayerAllStatFragment (Player all statistics)
+- RefereeAllStatFragment (Referee all statistics)
+- TrainingStatsFragment (Training statistics)
+
+===================================================================================
+SECTION 4: SOCIAL FEED & POSTS (15 screens)
+===================================================================================
+
+4.1 FEED
+- CommonHomeFeedFragment (Main social feed)
+- FanHomeFeedFragment (Fan social feed)
+- HomeFeedGalleryFragment (Feed gallery view)
+
+4.2 POST MANAGEMENT
+- CreatePostFragment (Create new post)
+- EditPostFragment (Edit existing post)
+
+4.3 COMMENTS
+- CommentFragment (Comments on post)
+
+4.4 LIKES & INTERACTIONS
+- LikeListFragment (List of likes)
+- AllUserLikeListFragment (All user likes)
+- FollowerUserLikeListFragment (Follower likes)
+- FollowingUserLikeListFragment (Following likes)
+- PostLikeListFragment (Post likes)
+
+4.5 FOLLOW SYSTEM
+- FollowFragment (Follow/Unfollow)
+- FollowersFragment (Followers list)
+- FollowingFragment (Following list)
+
+4.6 TAGGING
+- TagLandingFragment (Tag landing)
+- TagPeopleSearchFragment (Tag people search)
+- TagAcademySearchFragment (Tag academy search)
+
+===================================================================================
+SECTION 5: GALLERY & MEDIA (10 screens)
+===================================================================================
+
+5.1 GALLERIES
+- CommonGalleryFragment (Common gallery)
+- MyGalleryNewFragment (My gallery - new version)
+- HomeFeedGalleryFragment (Home feed gallery)
+- ClubUserGalleryFragment (Club user gallery)
+- ClubAdminGalleryFragment (Club admin gallery)
+- AcademyGalleryFragment (Academy gallery)
+- FAGalleryFragment (FA gallery)
+- ConfedGalleryFragment (Confederation gallery)
+- CharityNGOGalleryFragment (Charity/NGO gallery)
+- SponsorGalleryFragment (Sponsor gallery)
+
+5.2 IMAGE VIEWERS
+- GalleryActivity (Gallery activity)
+- FullImageActivity (Full image view)
+- ImageZoomActivity (Image zoom)
+
+5.3 VIDEO PLAYERS
+- VideoPlayActivity (Video player)
+- VideoPlayActivity2 (Video player v2)
+
+5.4 ACTIVITIES
+- MyActivityTagsFragment (My activity tags)
+- CommonMyActivitiesFragment (Common activities)
+- RefereeMyActivitiesFragment (Referee activities)
+
+===================================================================================
+SECTION 6: TEAMS (30 screens)
+===================================================================================
+
+6.1 TEAM LANDING & LISTS
+- PlayerAdminTeamLandingFragment (Player/Admin team landing)
+- FanTeamsFragment (Fan teams)
+- CoachAdminTeamsFragment (Coach/Admin teams)
+- PlayerAdminAllTeamsFragment (All teams)
+- PlayerNewAdminAllTeamsFragment (New all teams)
+- RecentlyJoinedAllTeamsFragment (Recently joined teams)
+- MyTeamsFragment (My teams)
+
+6.2 TEAM STATUS LISTS
+- PlayerJoinedTeamsFragment (Joined teams)
+- PlayerPendingTeamsFragment (Pending teams)
+- PlayerReceivedTeamsFragment (Received invites)
+
+6.3 TEAM BIO & DETAILS
+- TeamBioFragment (Team bio)
+- FanTeamBioFragment (Fan team bio)
+- TeamBioPlayersFragment (Team players)
+- TeamAllPlayerFragment (All team players)
+- AllPlayersFragment (All players)
+
+6.4 TEAM MANAGEMENT
+- CreateTeamFragment (Create team)
+- EditTeamFragment (Edit team)
+- ManageTeamLandingFragment (Manage team landing)
+- ManageJoinRequestFragment (Manage join requests)
+- ManageNewPlayersFragment (Manage new players)
+- ManageJerseyAssignFragment (Manage jersey assignment)
+
+6.5 TEAM PLAYERS
+- AddPlayersFragment (Add players)
+- InvitePlayersFragment (Invite players)
+- AddInvitePlayerFragment (Add/Invite player)
+- SelectMatchPlayersFragment (Select match players)
+- FanPlayersFragment (Fan players view)
+
+6.6 TEAM SQUAD
+- MatchSquadFragment (Match squad)
+- TournamentSquadFragment (Tournament squad)
+- PlayingElevenSubstitutesFragment (Playing 11 & substitutes)
+
+===================================================================================
+SECTION 7: MATCHES (35 screens)
+===================================================================================
+
+7.1 MATCH LANDING & LISTS
+- CommonMatchesLandingFragment (Common matches landing)
+- CommonMatchesLandingFragmentOld (Old version)
+- FanMatchesLandingFragment (Fan matches landing)
+- CommonMatchesFragment (Common matches)
+- FanMatchesFragment (Fan matches)
+- MyMatchesFragment (My matches)
+
+7.2 MATCH STATUS LISTS
+- CommonMatchesTodayFragment (Today's matches)
+- FanMatchesTodayFragment (Fan today's matches)
+- CommonMatchesUpcomingFragment (Upcoming matches)
+- FanMatchesUpcomingFragment (Fan upcoming matches)
+- CommonMatchesPlayedFragment (Played matches)
+- FanMatchesRecentFragment (Fan recent matches)
+
+7.3 MATCH DETAILS
+- MatchDetailsFragment (Match details)
+- PlayedMatchDetailsFragment (Played match details)
+- OneOffMatchDetailsFragment (One-off match details)
+- LiveMatchDetailsFragment (Live match details)
+
+7.4 LIVE MATCHES
+- LiveMatchFragment (Live match)
+- PlayerLiveMatchFragment (Player live match)
+- RefereeLiveMatchUpdateFragment (Referee live match update)
+
+7.5 MATCH MANAGEMENT
+- MatchManageFragment (Match management)
+- RefereeManageMatchFragment (Referee match management)
+- TournamentMatchManageFragment (Tournament match management)
+- HostMatchFragment (Host match)
+
+7.6 MATCH REQUESTS
+- MatchRequestsFragment (Match requests)
+- AcceptedMatchesFragment (Accepted matches)
+- ReceivedMatchesFragment (Received matches)
+- SentMatchesFragment (Sent matches)
+
+7.7 MATCH STATISTICS
+- MatchStatsFragment (Match statistics)
+- RefereeMatchStatsFragment (Referee match statistics)
+
+7.8 PICKUP MATCHES
+- PickUpMatchesFragment (Pickup matches list)
+- PickUpHostMatchFragment (Host pickup match)
+- PickUpMatchDetailsFragment (Pickup match details)
+
+7.9 REFEREE MATCHES
+- RefereeMyMatchesFragment (Referee my matches)
+- RefereeMyRequestsFragment (Referee my requests)
+
+===================================================================================
+SECTION 8: TOURNAMENTS & LEAGUES (45 screens)
+===================================================================================
+
+8.1 TOURNAMENT LANDING
+- CommonTournamentsLandingFragment (Common tournaments landing)
+- FanTournamentsLandingFragment (Fan tournaments landing)
+- RefereeTournamentsLandingFragment (Referee tournaments landing)
+
+8.2 TOURNAMENT STATUS LISTS
+- CommonOngoingTournamentsFragment (Ongoing tournaments)
+- FanOngoingTournamentsFragment (Fan ongoing tournaments)
+- RefereeOngoingTournamentsFragment (Referee ongoing tournaments)
+- CommonUpcomingTournamentsFragment (Upcoming tournaments)
+- FanUpcomingTournamentsFragment (Fan upcoming tournaments)
+- RefereeUpcomingTournamentsFragment (Referee upcoming tournaments)
+- CommonClosedTournamentsFragment (Closed tournaments)
+- FanClosedTournamentsFragment (Fan closed tournaments)
+- RefereeClosedTournamentsFragment (Referee closed tournaments)
+
+8.3 MY LEAGUES & CUPS
+- CommonMyLeaguesCupsFragment (My leagues/cups)
+- MyTournamentPlayersLandingFragment (My tournament players)
+
+8.4 TOURNAMENT DETAILS
+- TournamentsFragment (Tournaments)
+- TournamentDetailsFragment (Tournament details)
+- FanTournamentDetailsFragment (Fan tournament details)
+- TournamentsCupFragment (Tournaments cup)
+- TournamentCupDetailsFragment (Tournament cup details)
+- FanTournamentCupDetailsFragment (Fan tournament cup details)
+
+8.5 TOURNAMENT MATCHES
+- TournamentMatchesFragment (Tournament matches)
+- TournamentMatchesPlayedFragment (Tournament played matches)
+- TournamentMatchesUpcomingFragment (Tournament upcoming matches)
+
+8.6 TOURNAMENT MODES
+- TournamentCupGroupModeFragment (Cup group mode)
+- TournamentCupMatchModeFragment (Cup match mode)
+
+8.7 POINT TABLES
+- TournamentsPointTableFragment (Tournaments point table)
+- TournamentCupGroupPointTableFragment (Cup group point table)
+
+8.8 LEAGUE STATISTICS
+- LeagueStatsFragment (League statistics)
+- LeagueStatGoalsFragment (League goals stats)
+- LeagueStatAssistsFragment (League assists stats)
+- LeagueStatCardsFragment (League cards stats)
+- LeagueStatMOMFragment (League man of match stats)
+
+8.9 CUP GROUP MODE STATISTICS
+- CupGroupModeStatsFragment (Cup group mode stats)
+- CupGroupModeStatGoalsFragment (Cup group goals)
+- CupGroupModeStatAssistsFragment (Cup group assists)
+- CupGroupModeStatCardsFragment (Cup group cards)
+- CupGroupModeStatMOMFragment (Cup group MOM)
+- CupGroupModePlayedMatchDetailsFragment (Cup group played match details)
+
+8.10 CUP MATCH MODE STATISTICS
+- CupMatchModeStatsFragment (Cup match mode stats)
+- CupMatchModeStatGoalsFragment (Cup match goals)
+- CupMatchModeStatAssistsFragment (Cup match assists)
+- CupMatchModeStatCardsFragment (Cup match cards)
+- CupMatchModeStatMOMFragment (Cup match MOM)
+- CupMatchModePlayedMatchDetailsFragment (Cup match played match details)
+
+===================================================================================
+SECTION 9: CLUBS & ORGANIZATIONS (30 screens)
+===================================================================================
+
+9.1 CLUBS LANDING
+- CommonClubsPartnersLandingFragment (Clubs/Partners landing)
+- CommonClubsFragment (Clubs list)
+- CommonPartnersFragment (Partners list)
+
+9.2 CLUB BIO
+- ClubBioUserFragment (Club bio - user view)
+- ClubBioAdminFragment (Club bio - admin view)
+
+9.3 CLUB GALLERY
+- ClubUserGalleryFragment (Club user gallery)
+- ClubAdminGalleryFragment (Club admin gallery)
+
+9.4 CLUB PLAYERS
+- ClubUserPlayersFragment (Club user players)
+- ClubAdminPlayersFragment (Club admin players)
+- ClubAdminPlayerBioFragment (Club admin player bio)
+
+9.5 CLUB REGISTRATION & TRIALS
+- ClubRegisterFragment (Club registration)
+- ClubTrialFragment (Club trials)
+
+9.6 FOOTBALL ASSOCIATIONS (FA)
+- FABioFragment (FA bio)
+- FAGalleryFragment (FA gallery)
+- FACompetitionsFragment (FA competitions)
+- FATeamsFragment (FA teams)
+- FAPartnersFragment (FA partners)
+- FARegisterFragment (FA registration)
+
+9.7 CONFEDERATIONS
+- ConfederationBioFragment (Confederation bio)
+- ConfedGalleryFragment (Confederation gallery)
+- ConfedCompetitionsFragment (Confederation competitions)
+- ConfedFAsFragment (Confederation FAs)
+- ConfederationPartnersFragment (Confederation partners)
+
+9.8 SPONSORS
+- SponsorBioFragment (Sponsor bio)
+- SponsorGalleryFragment (Sponsor gallery)
+- SponsorMerchandisesFragment (Sponsor merchandises)
+- SponsorsPartnersFragment (Sponsors partners)
+
+9.9 CHARITY/NGO
+- CharityNGOBioFragment (Charity/NGO bio)
+- CharityNGOGalleryFragment (Charity/NGO gallery)
+- CharityNGOPartnersFragment (Charity/NGO partners)
+
+===================================================================================
+SECTION 10: ACADEMIES & TRIALS (10 screens)
+===================================================================================
+
+10.1 ACADEMY LANDING
+- AcademyLandingFragment (Academy landing)
+- CommonAcademiesFragment (Common academies)
+
+10.2 ACADEMY BIO
+- AcademyBioFragment (Academy bio)
+- AcademyGalleryFragment (Academy gallery)
+
+10.3 ACADEMY REGISTRATION & TRIALS
+- AcademyRegisterFragment (Academy registration)
+- AcademyTrialFragment (Academy trials)
+
+10.4 TRIALS
+- TrialLandingFragment (Trials landing)
+- ClubTrialFragment (Club trials)
+- FARegisterFragment (FA registration/trials)
+
+10.5 WITHDRAW
+- WithdrawReasonFragment (Withdraw reason)
+
+===================================================================================
+SECTION 11: SEARCH (5 screens)
+===================================================================================
+
+11.1 SEARCH
+- SearchFragment (Old search)
+- SearchNewFragment (New search)
+- SearchInviteFragment (Search invite)
+
+11.2 TAG SEARCH
+- TagPeopleSearchFragment (Tag people search)
+- TagAcademySearchFragment (Tag academy search)
+
+===================================================================================
+SECTION 12: LEGAL & POLICIES (3 screens)
+===================================================================================
+
+12.1 POLICIES
+- DataPolicyFragment (Data policy)
+- TermOfServiceFragment (Terms of service)
+
+12.2 DOCUMENTS
+- DocumentActivity (Document viewer)
+
+===================================================================================
+SECTION 13: SURVEYS & FEEDBACK (5 screens)
+===================================================================================
+
+13.1 SURVEYS
+- SurveyActivity (Survey activity)
+- NPSSurveyActivity (NPS survey activity)
+- SurveyRatingFragment (Survey rating)
+- SurveyFeedbackFragment (Survey feedback)
+- SurveyFavouriteFeatureFragment (Survey favourite feature)
+- SurveyThankYouFragment (Survey thank you)
+
+===================================================================================
+SECTION 14: MAPS & LOCATION (1 screen)
+===================================================================================
+
+14.1 MAPS
+- MapsActivity (Maps/Location picker)
+
+===================================================================================
+SECTION 15: TEST & DEBUG (1 screen)
+===================================================================================
+
+15.1 TEST
+- TestFragment (Test fragment for debugging)
+
+===================================================================================
+SCREEN CATEGORIZATION BY USER ROLE
+===================================================================================
+
+COMMON (All Roles):
+- Authentication & Onboarding (15 screens)
+- Home & Navigation (17 screens)
+- Social Feed & Posts (15 screens)
+- Gallery & Media (10 screens)
+- Search (5 screens)
+- Legal & Policies (3 screens)
+- Surveys & Feedback (5 screens)
+- Maps & Location (1 screen)
+
+PLAYER SPECIFIC:
+- Player Profiles (5 screens)
+- Player Teams (15 screens)
+- Player Matches (20 screens)
+- Player Tournaments (15 screens)
+- Player Endorsements (5 screens)
+- Player Skills (2 screens)
+- Player Statistics (3 screens)
+
+COACH/MANAGER SPECIFIC:
+- Coach Profiles (3 screens)
+- Coach Teams (10 screens)
+- Coach Matches (15 screens)
+- Coach Tournaments (10 screens)
+
+FAN SPECIFIC:
+- Fan Home (3 screens)
+- Fan Teams (5 screens)
+- Fan Matches (10 screens)
+- Fan Tournaments (10 screens)
+
+REFEREE SPECIFIC:
+- Referee Home (1 screen)
+- Referee Profiles (2 screens)
+- Referee Matches (10 screens)
+- Referee Tournaments (5 screens)
+- Referee Statistics (2 screens)
+
+CLUB SPECIFIC:
+- Club Home (1 screen)
+- Club Profiles (5 screens)
+- Club Players (5 screens)
+- Club Gallery (2 screens)
+- Club Trials (2 screens)
+
+ORGANIZATION SPECIFIC (FA, Confederation, Sponsor, Charity):
+- Organization Bios (10 screens)
+- Organization Galleries (5 screens)
+- Organization Competitions (3 screens)
+- Organization Partners (5 screens)
+
+ACADEMY SPECIFIC:
+- Academy Landing (2 screens)
+- Academy Bio (2 screens)
+- Academy Trials (2 screens)
+
+===================================================================================
+API ENDPOINTS BY SCREEN CATEGORY
+===================================================================================
+
+AUTHENTICATION:
+- modSignIn, clubLogin, socialLogin
+- modSignUp, registerClub
+- verifyOtp
+- forgetAllPass, forgetPass, resetAllPass, resetPass
+- accUserPolicy
+
+USER PROFILES:
+- getUserProfile, getPlayerBio, getCoachBio, getRefereeBio
+- editProfile, updateProfile
+- followUser, unfollowUser
+- getFollowers, getFollowing
+- changePassword
+- updatePrivacySettings
+
+SOCIAL FEED:
+- getFeed, getFeedNetwork, getFeedTeams
+- createUserPost, editUserPost, deleteUserPost
+- likePost, unlikePost
+- getFeedComments, saveFeedComment, likeFeedComment
+- reportPost, reportComment
+- getUserPosts, getPostShow
+
+TEAMS:
+- getMyTeams, getTeamDetails, getTeamPlayers
+- createTeam, editTeam, deleteTeam
+- followTeam, unfollowTeam
+- getTeamInvites, acceptTeamInvite, rejectTeamInvite
+- getJoinRequests, acceptPlayer, rejectPlayer
+- assignJersey
+
+MATCHES:
+- getMatches, getMatchDetails, getMatchStats
+- getLiveMatches, getUpcomingMatches, getPlayedMatches
+- hostMatch, acceptMatch, rejectMatch
+- updateMatchScore, updateMatchEvents
+- getPickupMatches, hostPickupMatch
+
+TOURNAMENTS:
+- getTmnts, getMyTmnts, getTmntDetails
+- getTmntMatches, getTmntPointTable, getTmntStats
+- getOngoingTmnts, getUpcomingTmnts, getClosedTmnts
+- joinTournament, leaveTournament
+
+CLUBS & ORGANIZATIONS:
+- getClubs, getClubDetails, getClubPlayers, getClubGallery
+- getFADetails, getConfedDetails, getSponsorDetails, getCharityDetails
+- getPartners, getCompetitions
+- followClub, unfollowClub
+
+ACADEMIES & TRIALS:
+- getAcademies, getAcademyDetails, getAcademyGallery
+- getTrials, registerForTrial, withdrawFromTrial
+
+ENDORSEMENTS & SKILLS:
+- getEndorsements, endorsePlayer
+- getSkills, uploadSkillVideo
+- getRatings
+
+SEARCH & NOTIFICATIONS:
+- search, searchUsers, searchTeams, searchClubs
+- getNotifications, markNotificationRead
+- getNotificationCount
+
+GALLERY & MEDIA:
+- getUserGallery, getTeamGallery, getClubGallery
+- uploadImage, uploadVideo
+- deleteMedia
+
+MISC:
+- getUserBlocked, blockUser, unblockUser
+- checkAppUpdate
+- submitSurvey, submitFeedback
+- getLanguages, changeLanguage
+
+===================================================================================
+IMPLEMENTATION PRIORITY (Based on User Flow)
+===================================================================================
+
+PHASE 1 - CRITICAL (Must Have):
+✅ Authentication & Onboarding (15 screens) - DONE
+✅ Home & Navigation (17 screens) - PARTIALLY DONE
+- Social Feed & Posts (15 screens) - IN PROGRESS
+- User Profiles & Bio (25 screens)
+- Teams (30 screens)
+- Matches (35 screens)
+
+PHASE 2 - IMPORTANT (Should Have):
+- Tournaments & Leagues (45 screens)
+- Clubs & Organizations (30 screens)
+- Gallery & Media (10 screens)
+- Search (5 screens)
+- Notifications (1 screen)
+
+PHASE 3 - NICE TO HAVE (Could Have):
+- Academies & Trials (10 screens)
+- Endorsements & Skills (7 screens)
+- Profile Settings (10 screens)
+- Pickup Matches (3 screens)
+- Referee Features (20 screens)
+
+PHASE 4 - OPTIONAL (Won't Have in MVP):
+- Legal & Policies (3 screens)
+- Surveys & Feedback (5 screens)
+- Maps & Location (1 screen)
+- Test & Debug (1 screen)
+
+===================================================================================
+COMPLEXITY RATING BY SCREEN
+===================================================================================
+
+SIMPLE (1-2 days):
+- List screens with basic API calls
+- Detail screens with read-only data
+- Static content screens
+
+MEDIUM (3-5 days):
+- Screens with multiple API calls
+- Screens with complex UI
+- Screens with form submissions
+- Screens with image/video upload
+
+COMPLEX (5-10 days):
+- Live match updates
+- Tournament management
+- Match scoring system
+- Complex statistics screens
+- Real-time features
+
+VERY COMPLEX (10+ days):
+- Referee match management
+- Tournament bracket system
+- Advanced search with filters
+- Complex endorsement system
+- Multi-step workflows
+
+===================================================================================
+ESTIMATED EFFORT (Person-Days)
+===================================================================================
+
+Authentication & Onboarding: 15 screens × 1 day = 15 days ✅ DONE
+Home & Navigation: 17 screens × 1 day = 17 days (Partially done)
+Social Feed & Posts: 15 screens × 2 days = 30 days
+User Profiles: 25 screens × 2 days = 50 days
+Teams: 30 screens × 2 days = 60 days
+Matches: 35 screens × 3 days = 105 days
+Tournaments: 45 screens × 3 days = 135 days
+Clubs & Organizations: 30 screens × 2 days = 60 days
+Academies & Trials: 10 screens × 2 days = 20 days
+Gallery & Media: 10 screens × 2 days = 20 days
+Search: 5 screens × 2 days = 10 days
+Endorsements & Skills: 7 screens × 2 days = 14 days
+Profile Settings: 10 screens × 1 day = 10 days
+Referee Features: 20 screens × 3 days = 60 days
+Legal & Misc: 10 screens × 1 day = 10 days
+
+TOTAL ESTIMATED EFFORT: 616 person-days
+REALISTIC TIMELINE: 3-4 months with 3-4 developers
+AGGRESSIVE TIMELINE: 1-2 months with 5-6 developers (MVP only)
+
+===================================================================================
+NOTES
+===================================================================================
+
+1. This is a MASSIVE application with 253 screens
+2. Many screens have role-specific variations (Player, Coach, Fan, Referee, Club)
+3. Complex features like live matches, tournaments, and endorsements need careful planning
+4. Reusable components are critical to avoid duplication
+5. API documentation is essential for smooth development
+6. Testing strategy must be comprehensive
+7. Phase-wise delivery is recommended
+8. Focus on core user journeys first
+9. Some features can be simplified for MVP
+10. Continuous stakeholder communication is critical
+
+===================================================================================
+END OF SCREEN INVENTORY
+===================================================================================

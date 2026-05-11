@@ -1,0 +1,83 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'academy_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$AcademyModelImpl _$$AcademyModelImplFromJson(Map<String, dynamic> json) =>
+    _$AcademyModelImpl(
+      academyId: json['academyId'] as String?,
+      type: json['type'] as String?,
+      name: json['name'] as String?,
+      headOfAcademy: json['headOfAcademy'] as String?,
+      director: json['director'] as String?,
+      manager: json['manager'] as String?,
+      countryCode: json['countryCode'] as String?,
+      countryIso: json['countryIso'] as String?,
+      mobile: json['mobile'] as String?,
+      email: json['email'] as String?,
+      address: json['address'] as String?,
+      country: json['country'] as String?,
+      city: json['city'] as String?,
+      formedYear: json['formedYear'] as String?,
+      category: json['category'] as String?,
+      imageUrl: json['imageUrl'] as String?,
+      liveTrial: json['liveTrial'] as String?,
+      lat: json['lat'] as String?,
+      lng: json['lng'] as String?,
+      location: json['location'] as String?,
+      about: json['about'] as String?,
+      lastUpdateBy: json['lastUpdateBy'] as String?,
+      module: json['module'] as String?,
+      website: json['website'] as String?,
+      createdOn: (json['createdOn'] as num?)?.toInt(),
+      lastUpdated: (json['lastUpdated'] as num?)?.toInt(),
+      isDelete: json['isDelete'] as bool?,
+      verified: json['verified'] as bool?,
+      verifyBadge: json['verifyBadge'] as bool?,
+      profile: json['profile'] as bool?,
+      following: json['following'] as bool?,
+      survey: (json['survey'] as num?)?.toInt(),
+      step: (json['step'] as num?)?.toInt(),
+      seq: (json['seq'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$AcademyModelImplToJson(_$AcademyModelImpl instance) =>
+    <String, dynamic>{
+      'academyId': instance.academyId,
+      'type': instance.type,
+      'name': instance.name,
+      'headOfAcademy': instance.headOfAcademy,
+      'director': instance.director,
+      'manager': instance.manager,
+      'countryCode': instance.countryCode,
+      'countryIso': instance.countryIso,
+      'mobile': instance.mobile,
+      'email': instance.email,
+      'address': instance.address,
+      'country': instance.country,
+      'city': instance.city,
+      'formedYear': instance.formedYear,
+      'category': instance.category,
+      'imageUrl': instance.imageUrl,
+      'liveTrial': instance.liveTrial,
+      'lat': instance.lat,
+      'lng': instance.lng,
+      'location': instance.location,
+      'about': instance.about,
+      'lastUpdateBy': instance.lastUpdateBy,
+      'module': instance.module,
+      'website': instance.website,
+      'createdOn': instance.createdOn,
+      'lastUpdated': instance.lastUpdated,
+      'isDelete': instance.isDelete,
+      'verified': instance.verified,
+      'verifyBadge': instance.verifyBadge,
+      'profile': instance.profile,
+      'following': instance.following,
+      'survey': instance.survey,
+      'step': instance.step,
+      'seq': instance.seq,
+    };

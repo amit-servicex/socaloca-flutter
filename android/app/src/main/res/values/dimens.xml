@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="video_play_btn_60dp">60dp</dimen>
+    <dimen name="video_play_btn_40dp">40dp</dimen>
+    <dimen name="video_play_btn_30dp">30dp</dimen>
+    <dimen name="cheer_15dp">15dp</dimen>
+    <dimen name="post_height">330dp</dimen>
+    <dimen name="post_height_max">400dp</dimen>
+    <dimen name="padding_footer">5dp</dimen>
+    <dimen name="padding_header">7dp</dimen>
+    <dimen name="padding_3dp">3dp</dimen>
+<!--
+    <dimen name="design_fab_image_size" tools:override="false">56dp</dimen>
+-->
+
+</resources>

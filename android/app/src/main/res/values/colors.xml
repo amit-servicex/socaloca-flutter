@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  <color name="colorPrimary">#f4f4f4</color>
+      <color name="colorPrimaryDark">#A7403D</color>
+      <color name="colorAccent">#A7403D</color>-->
+    <color name="colorPrimary">#1c1c1c</color>
+    <color name="colorPrimaryDark">#1c1c1c</color>
+    <color name="colorAccent">#1c1c1c</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="redtrans1">#22e84545</color>
+
+    <!--Approved colors-->
+    <color name="transparent_socaloca_gray">#99000000</color>
+    <color name="transparent_1">#00000000</color>
+    <color name="transparent_2">#CC000000</color>
+    <color name="transparent_3">#80000000</color>
+
+    <color name="new_white">#f6f6f6</color>
+    <color name="new_black_50_percent">#801c1c1c</color>
+    <color name="new_black_40_percent">#661c1c1c</color>
+    <color name="new_grey">#eaeae8</color>
+    <color name="new_yellow">#eeff41</color>
+    <color name="transparent_new_yellow">#80eeff41</color>
+    <color name="new_black">#1c1c1c</color>
+    <color name="red1">#e84343</color>
+    <color name="red2">#ff0000</color>
+    <color name="yellow2">#fff000</color>
+
+</resources>

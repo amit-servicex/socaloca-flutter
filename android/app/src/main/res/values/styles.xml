@@ -1,0 +1,110 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+
+    <style name="TextLabel" parent="@style/Theme.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/new_black</item>
+        <item name="android:textSize">14sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/new_black</item>
+        <item name="colorControlNormal">@color/new_black</item>
+        <item name="colorControlActivated">@color/new_black</item>
+        <item name="colorError">@color/new_black</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="custom_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="full_screen_dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+    <style name="MyRadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/custom_btn_radio</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="seekBar" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">#ffffff</item>
+        <item name="android:colorControlActivated">#ffffff</item>
+        <item name="android:progressBackgroundTint">#b9b9ba</item>
+        <item name="android:progressTint">@color/new_black</item>
+        <item name="thumbTint">@android:color/transparent</item>
+        <item name="android:thumbTint">@android:color/transparent</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+
+    <style name="seekBar2" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">#ffffff</item>
+        <item name="android:colorControlActivated">#ffffff</item>
+        <item name="android:progressBackgroundTint">#b9b9ba</item>
+        <item name="android:progressTint">@color/new_black</item>
+        <item name="thumbTint">@android:color/transparent</item>
+        <item name="android:thumbTint">@android:color/transparent</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="CustomTextAppearanceTab" parent="TextAppearance.AppCompat">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="Theme.AppCompat.Transparent.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="RatingBar1" parent="Widget.AppCompat.RatingBar.Indicator">
+        <item name="colorAccent">@color/new_black</item>
+        <item name="colorControlNormal">@color/new_black</item>
+        <item name="android:maxWidth">24dp</item>
+        <item name="android:minWidth">24dp</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="DialogAnimation_Popup">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+
+    <style name="CustomExoMediaButton">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+    </style>
+
+    <style name="CustomExoMediaButton.Play">
+        <item name="android:src">@drawable/ic_whats_new_video_play</item>
+    </style>
+
+    <style name="CustomExoMediaButton.Pause">
+        <item name="android:src">@drawable/ic_pause_circle</item>
+    </style>
+
+    <style name="edittext_style1" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/new_black</item>
+        <item name="colorControlActivated">@color/new_black</item>
+    </style>
+</resources>
