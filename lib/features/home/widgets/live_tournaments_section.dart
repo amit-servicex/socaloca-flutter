@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -8,11 +9,53 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
 import 'feed_section_header.dart';
 
-class LiveTournamentsSection extends ConsumerWidget {
+class LiveTournamentsSection extends ConsumerStatefulWidget {
   const LiveTournamentsSection({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LiveTournamentsSection> createState() =>
+      _LiveTournamentsSectionState();
+}
+
+class _LiveTournamentsSectionState
+    extends ConsumerState<LiveTournamentsSection> {
+  final PageController _pageController = PageController();
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoSlide();
+  }
+
+  void _startAutoSlide() {
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_pageController.hasClients) {
+        final state = ref.read(feedLiveTmntsProvider);
+        if (state.items.isEmpty) return;
+
+        int nextPage = _pageController.page!.round() + 1;
+        if (nextPage >= state.items.length) {
+          nextPage = 0; // Wrap around to the beginning
+        }
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(feedLiveTmntsProvider);
 
     if (state.isLoading && state.items.isEmpty) return const SizedBox.shrink();
@@ -63,6 +106,7 @@ class LiveTournamentsSection extends ConsumerWidget {
           color: Colors.grey.shade100, // Light background for the content
           height: 400, // Approximate height for the content block
           child: PageView.builder(
+            controller: _pageController,
             itemCount: state.items.length,
             onPageChanged: (index) {
               if (index == state.items.length - 1 &&

@@ -18,7 +18,7 @@ class FeedSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -26,7 +26,7 @@ class FeedSectionHeader extends StatelessWidget {
             title,
             style: const TextStyle(
               fontFamily: 'Poppins',
-              fontSize: 16,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               color: AppColors.socaBlack,
             ),
@@ -38,7 +38,7 @@ class FeedSectionHeader extends StatelessWidget {
                 seeAllLabel,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: AppColors.clubBadge,
                 ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -18,9 +19,46 @@ class NewTeamsSection extends ConsumerStatefulWidget {
 class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
   final PageController _pageController = PageController(viewportFraction: 0.92);
   int _currentPage = 0;
+  Timer? _autoSlideTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoSlide();
+  }
+
+  void _startAutoSlide() {
+    _autoSlideTimer?.cancel();
+    _autoSlideTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (!_pageController.hasClients) return;
+
+      final state = ref.read(feedNewTeamsProvider);
+      if (state.items.isEmpty) return;
+
+      int currentPage = _pageController.page?.round() ?? 0;
+      int totalCount = state.items.length + (state.hasMore ? 1 : 0);
+
+      if (currentPage >= totalCount - 1) {
+        if (!state.hasMore) {
+          // Loop back to the beginning if no more items
+          _pageController.animateToPage(
+            0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      } else {
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
 
   @override
   void dispose() {
+    _autoSlideTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -28,7 +66,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(feedNewTeamsProvider);
-    log("this is the data of the recently joined teams ${state.items}");
+    // log("this is the data of the recently joined teams ${state.items}");
 
     if (state.isLoading) return const SizedBox.shrink();
     if (state.items.isEmpty) return const SizedBox.shrink();

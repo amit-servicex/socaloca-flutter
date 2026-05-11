@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -34,6 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _matchUpdatesPageController =
       PageController(viewportFraction: 0.92);
   bool _showFeedbackBanner = false;
+  Timer? _matchUpdatesTimer;
 
   @override
   void initState() {
@@ -44,6 +47,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeHomeScreen();
     });
+    _startMatchUpdatesAutoSlide();
   }
 
   /// Initialize home screen following Android's API call sequence
@@ -69,8 +73,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // Feed providers will auto-load via their constructors
   }
 
+  void _startMatchUpdatesAutoSlide() {
+    _matchUpdatesTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_matchUpdatesPageController.hasClients) {
+        final matches = ref.read(matchUpdatesProvider).valueOrNull;
+        if (matches == null || matches.isEmpty) return;
+
+        int nextPage = _matchUpdatesPageController.page!.round() + 1;
+        if (nextPage >= matches.length) {
+          nextPage = 0; // Wrap around to the beginning
+        }
+        _matchUpdatesPageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
   @override
   void dispose() {
+    _matchUpdatesTimer?.cancel();
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     _matchUpdatesPageController.dispose();
@@ -570,6 +594,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 slivers: [
                   SliverAppBar(
                     backgroundColor: Colors.white,
+                    floating: true,
+                    snap: true,
                     pinned: true,
                     expandedHeight: 150,
                     flexibleSpace: FlexibleSpaceBar(
