@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/router/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
+
+/// Mirrors fragment_login_landing.xml exactly.
+///
+/// Layout:
+///   • Background: #F6F6F6 (new_white)
+///   • Logo 150×150dp centred, marginTop 50dp
+///   • "Login" button — outlined (1dp black stroke, transparent fill, 5dp radius) — height 80dp, hPad 50dp
+///   • "or" divider line
+///   • "Sign Up" button — filled black, 5dp radius — height 80dp, hPad 50dp, yellow text
+///   • Privacy text pinned at bottom of screen
+class LoginLandingScreen extends StatelessWidget {
+  const LoginLandingScreen({super.key});
+
+  static const Color _black = AppColors.socaBlack; // #1C1C1C
+  static const Color _yellow = AppColors.socaYellow; // #EEFF41
+  static const Color _pageBg = AppColors.socaPageBg; // #F6F6F6
+
+  static const String _privacyText =
+      '*SocaLoca only collects the data is necessary to provides its service and\n'
+      'stores it in the anonymised way in our own self-hosted analytics system.';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: _pageBg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ── Scrollable content ────────────────────────────────────────
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: Column(
+                  children: [
+                    // Logo  — 150×150dp, centred, marginTop 50dp
+                    const SizedBox(height: 50),
+                    Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/socaloca_logo.svg',
+                        width: 200,
+                        // height: 150,
+                        // fit: BoxFit.contain,
+                      ),
+                    ),
+
+                    // Buttons block — marginTop 50dp
+                    const SizedBox(height: 50),
+
+                    // ── LOGIN button — outlined stroke, no fill ───────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: GestureDetector(
+                        onTap: () => context.push(AppRoutes.login),
+                        child: Container(
+                          height: 80,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: _black, width: 1),
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 26,
+                              color: _black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // ── OR divider ────────────────────────────────────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 20),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Full-width line
+                          Container(height: 0.5, color: _black),
+                          // "or" text with page-bg background to mask line
+                          Container(
+                            color: _pageBg,
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: const Text(
+                              'or',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                                color: _black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // ── SIGN UP button — filled black ─────────────────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: GestureDetector(
+                        onTap: () => context.push(AppRoutes.ageSelection),
+                        child: Container(
+                          height: 80,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: _black,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 26,
+                              color: _yellow,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ── Privacy text — pinned at bottom ──────────────────────────
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 8, 20, 20),
+              child: Text(
+                _privacyText,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 8,
+                  color: _black,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

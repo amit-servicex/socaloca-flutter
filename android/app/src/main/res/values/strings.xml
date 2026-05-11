@@ -1,0 +1,1093 @@
+<resources>
+    <string name="app_name" translatable="false">SocaLoca</string>
+    <string name="app_id" translatable="false">com.football.socaloca</string>
+
+
+<!--    <string name="base_url" translatable="false">http://52.89.63.249:9757/</string>-->
+<!--    <string name="php_base_url" translatable="false">http://52.89.63.249/supersoca/rest/</string>-->
+<!--    <string name="img_base_url" translatable="false">https://d1aa86jbydwee9.cloudfront.net/dev/</string>-->
+
+
+        <string name="base_url" translatable="false">https://organise.socaloca.football:9757/</string>
+        <string name="php_base_url" translatable="false">https://console.socaloca.football/supersoca/rest/</string>
+        <string name="img_base_url" translatable="false">https://soca-loca.s3-us-west-2.amazonaws.com/dev/</string>
+
+    <string name="upload_large_file_url" translatable="false">https://largeupload.socaloca.football/uploadFile</string>
+    <!--    <string name="share_base_url" translatable="false">https://feed.socaloca.football/</string>-->
+    <string name="share_base_url" translatable="false">https://share.socaloca.football/</string>
+    <string name="share_base_url_2" translatable="false">https://share.socaloca.football/</string>
+
+    <!--    <string name="facebook_app_id" translatable="false">239847410590576</string>-->
+<!--    <string name="facebook_app_id" translatable="false">416816474818424</string>-->
+    <string name="facebook_client_token" translatable="false">7fa845f557d8be091bc0629f8720881a</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb416816474818424</string>
+    <string name="help_desk_url" translatable="false">"https://organise.socaloca.football/support.php"</string>
+
+    <string name="perm_location">"To sign up, allow SocaLoca access to your location. Tap Settings > Permissions, and turn Location on."</string>
+    <string name="perm_match_location">"To select place, allow SocaLoca access to your location. Tap Settings > Permissions, and turn Location on."</string>
+    <string name="perm_gps">"Turn on GPS to access location."</string>
+    <string name="refer_txt" translatable="false">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"</string>
+    <string name="digits" translatable="false">0123456789</string>
+    <string name="terms_txt">By clicking Submit, you agree to our <a STYLE="text-decoration:underline;" href="https://socaloca.football/terms-of-service/"><b>Terms &amp; Conditions</b></a> and <a href="https://socaloca.football/privacy-policy/"><b>Privacy Policy</b></a>. You may receive Push Notifications &amp; Text Messages from us.</string>
+
+    <string-array name="common_drawer_item_titles">
+        <item>"Menu Head"</item>
+        <item>"Edit Profile"</item>
+        <item>"My Gallery"</item>
+        <item>"Change Password"</item>
+        <item>"Sign Out"</item>
+    </string-array>
+    <string-array name="fan_drawer_item_titles">
+        <item>"Menu Head"</item>
+        <item>"Edit Profile"</item>
+        <item>"Change Password"</item>
+        <item>"Sign Out"</item>
+    </string-array>
+
+    <!-- Drawer item icons -->
+
+    <string-array name="common_drawer_item_icons">
+        <item>@drawable/gray_user</item>
+        <item>@drawable/ic_edit</item>
+        <item>@drawable/ic_gallery</item>
+        <item>@drawable/ic_lock</item>
+        <item>@drawable/ic_sign_out</item>
+    </string-array>
+
+    <string-array name="fan_drawer_item_icons">
+        <item>@drawable/gray_user</item>
+        <item>@drawable/ic_edit</item>
+        <item>@drawable/ic_lock</item>
+        <item>@drawable/ic_sign_out</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="default_notification_channel_id">"SocaLoca"</string>
+    <string name="account">6150553060001</string>
+
+    <!-- A sample Brightcove Edge Policy Key -->
+    <string name="policy">BCpkADawqM0hz9jKYe2njzzZ6utlVy_990ieJprNf9UySGA1MZ3IlLF0q2xwrHK8nPuj9VbxFrVHRqZR6mGngzfMvwJx6VqgfMYJXa6_AaG1lqTubWHE4J-z709CbX3GE6a9S7-VOgeEHacN</string>
+
+    <string name="bright_media_token">JTIZNSu8cNL0zSgKKddFo8O92lVlJebFESXTeB20lCFzX8Jkp1wMWnbMcaUNIHkBjwpld7RRD2JwVTLauPzbJg</string>
+    <string-array name="reports">
+        <item>Misleading or Scam</item>
+        <item>Sexually Inappropriate</item>
+        <item>Offensive</item>
+        <item>Violence</item>
+        <item>Prohibited Content</item>
+        <item>Spam</item>
+        <item>False News</item>
+        <item>Political candidate or Issue</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="reports_user">
+        <item>Fake Account</item>
+        <item>Fake Name</item>
+        <item>Inappropriate Post</item>
+        <item>Misguiding Content</item>
+    </string-array>
+
+
+    <string name="ext_storage_permission">"Please allow storage permission to download."</string>
+    <!-- diff language string -->
+
+    <!-- common home activity -->
+    <string name="download_activities">Download Activities</string>
+    <string name="download_activities_text">SocaLoca is in compliance with GDPR practices to protect you the user! \n\nTo request for your data, please fill in your email address here and we shall get back to you on how to pass the data to you.</string>
+    <string name="cancel">Cancel</string>
+    <string name="submit">Submit</string>
+    <string name="email">Email *</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="yes">YES</string>
+    <string name="no">No</string>
+    <string name="delete_account_confirmation">Are you sure you want to Delete your Account?</string>
+    <string name="deactivate_account_confirmation">Are you sure you want to Deactivate your Account?</string>
+    <string name="deactivate_delete_account">Deactivate/Delete Account</string>
+    <string name="delete">Delete</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="deactivate_delete_account_text">We are sorry that you want to leave.\n\nYou may choose to either delete or deactivate your account.\n\nDeletion will remove your account from the SocaLoca systems and you will not be able to use the account again.\n\nDeactivation will make your account inactive. Should you want to reactivate your account, you just need to login to SocaLoca and your account will be restored.\n\nThank you.</string>
+    <string name="please_enter_email">Please enter email</string>
+    <string name="please_enter_valid_email">Please enter valid email</string>
+    <string name="toast_verify_email">Thank you for your request. Our Team will get in touch with you soon.</string>
+    <string name="account_submitted_for_deletion">Account submitted for deletion.</string>
+    <string name="account_deactivated">Account deactivated</string>
+
+    <!-- fan home activity -->
+    <string name="home">Home</string>
+    <string name="teams">Teams</string>
+    <string name="teams_caps">TEAMS</string>
+    <string name="players">Players</string>
+    <string name="matches">Matches</string>
+    <string name="clubs_and_partners">Clubs and Partners</string>
+    <string name="clubs_and_partners_caps">CLUBS AND PARTNERS</string>
+    <string name="academies_caps">ACADEMIES</string>
+    <string name="pwd_change_warning">Hey there… You have used social login. No need of passwords.</string>
+    <!-- maps activity -->
+    <string name="search">Search</string>
+    <string name="select_location">Select Location</string>
+    <!-- academy landing -->
+    <string name="coming_soon">Coming Soon</string>
+    <string name="go_to_home">Go to Home</string>
+    <string name="academy">Academy</string>
+    <!-- accepted matches -->
+    <string name="no_accepted_request_found">No accepted request found</string>
+    <!-- add invite player -->
+    <string name="create_team">Create Team</string>
+    <string name="search_and_invite"><![CDATA[Search & Invite]]></string>
+    <string name="invite_by_phone">Invite By Phone</string>
+    <string name="create_player">Create Player</string>
+    <!-- add player -->
+    <string name="add_players">Add Players</string>
+    <string name="first_name">First Name *</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="last_name">Last Name *</string>
+    <string name="profile_name">Profile Name *</string>
+    <string name="please_select_year_of_birth">Please select year of birth</string>
+    <string name="country">Country</string>
+    <string name="gender">Gender *</string>
+    <string name="gender_2">Gender*</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="playing_position">Playing Position *</string>
+    <string name="playing_position_text">Playing Position</string>
+    <string name="mandatory_fields">* mandatory fields</string>
+    <string name="add">Add</string>
+    <string name="add_short">Add</string>
+    <string name="you_have_added">You have added</string>
+    <string name="to_your_team">to your team.</string>
+    <string name="add_another">Add another</string>
+    <string name="back">Back</string>
+    <string name="please_enter_first_name">Please enter first name</string>
+    <string name="please_enter_last_name">Please enter last name</string>
+    <string name="please_enter_profile_name">Please enter profile name</string>
+    <string name="please_enter_minimum_5_characters">Please enter minimum 5 characters</string>
+    <!-- all endorse -->
+    <string name="overall_nscore">Overall\nScore</string>
+    <string name="skill_amp_attribute_rating"><![CDATA[Skill & Attribute Rating]]></string>
+    <string name="no_endorsements_yet">No Endorsements yet</string>
+    <string name="endorsements">Endorsements</string>
+    <string name="endorsements_caps">ENDORSEMENTS</string>
+    <string name="toast_endorsed_successfully">Endorsed successfully</string>
+    <string name="already_endorsed">Already endorsed</string>
+    <!-- charity ngo bio -->
+    <string name="follow">Follow</string>
+    <string name="follow_caps">FOLLOW</string>
+    <string name="foundation_year">"Foundation Year: "</string>
+    <string name="country_colon">"Country: "</string>
+    <string name="president">"President: "</string>
+    <string name="chairman">"Chairman: "</string>
+    <string name="ceo">"CEO: "</string>
+    <string name="funding_partners">"Funding Partners: "</string>
+    <string name="where_we_make_a_difference">Where We Make A Difference</string>
+    <string name="news_amp_announcements"><![CDATA[News & Announcements]]></string>
+    <string name="followers">Followers</string>
+    <string name="follower">Follower</string>
+    <string name="following">Following</string>
+    <string name="following_short">Following</string>
+    <string name="following_caps">FOLLOWING</string>
+    <string name="following_caps_short">FOLLOWING</string>
+    <string name="charity_and_ngo"><![CDATA[Charity & NGO]]></string>
+    <!-- charity ngo gallery -->
+    <string name="no_posts_found">No posts found.</string>
+    <string name="posts">Posts</string>
+    <string name="report_submitted_post_removed">Report submitted. Post removed.</string>
+    <string name="report_submitted_the_content_is_under_review">Report submitted. The content is under review.</string>
+    <!-- charity ngo partner -->
+    <string name="all">All</string>
+    <string name="partnership">Partnership</string>
+    <string name="trial">Trial</string>
+    <string name="go">Go</string>
+    <string name="no_charities_amp_ngos_found"><![CDATA[No charities & NGOs found.]]></string>
+    <string name="charity_ngo_str1">"These are the Charities/NGOs/Social Enterprises that have partnered with "</string>
+    <string name="soca">SOCA</string>
+    <string name="charity_ngo_str2">"LOCA to provide content and services to our users.\n\nIf you are a Charity or NGO,  you can request to become a "</string>
+    <string name="charity_ngo_str3">"LOCA partner and gain access to an individualised hub with your logo and branding and a host of features including; display your projects and initiatives, reach a wider audience, upload video and photos, engage with followers, measure the impact of your CSR, and help influence the "</string>
+    <string name="charity_ngo_str4">LOCA community in a positive manner.</string>
+    <string name="charity_ngo_str">These are the Charities/NGOs/Social Enterprises that have partnered with SOCALOCA to provide content and services to our users.\n\nIf you are a Charity or NGO,  you can request to become a SOCALOCA partner and gain access to an individualised hub with your logo and branding and a host of features including; display your projects and initiatives, reach a wider audience, upload video and photos, engage with followers, measure the impact of your CSR, and help influence the SOCALOCA community in a positive manner.</string>
+    <!-- club admin player bio -->
+    <string name="followed_by">Followed by</string>
+    <string name="total_likes">Total likes</string>
+    <string name="height_cms">Height (cms)</string>
+    <string name="nationality">Nationality</string>
+    <string name="nationality_require">Nationality *</string>
+    <string name="born">Born</string>
+    <string name="preferred_foot">Preferred Foot</string>
+    <string name="playing_level">Playing Level</string>
+    <string name="playing_level_require">Playing Level *</string>
+    <string name="gender_text">Gender</string>
+    <string name="jersey_no">Jersey no.</string>
+    <string name="football">Football</string>
+    <string name="goal_scored">Goal Scored</string>
+    <string name="assists_short">Assists</string>
+    <string name="yellow_card">Yellow Card</string>
+    <string name="red_card">Red Card</string>
+    <string name="mvp">MVP</string>
+    <string name="futsal">Futsal</string>
+    <string name="images_amp_videos_on_dribble_passing_amp_more"><![CDATA[Images & videos on dribble, passing & more]]></string>
+    <string name="view_all">View All</string>
+    <string name="view_all2">View all</string>
+    <string name="player_bio">Player Bio</string>
+    <!-- club admin player -->
+    <string name="no_player_joined_yet">No player joined yet</string>
+    <!-- club bio admin -->
+    <string name="upgrade">UPGRADE</string>
+    <string name="nickname">"Nickname: "</string>
+    <string name="formed_in">"Formed In: "</string>
+    <string name="city">"City: "</string>
+    <string name="city_require">City *</string>
+    <string name="stadium">"Stadium: "</string>
+    <string name="manager">"Manager: "</string>
+    <string name="league">League</string>
+    <string name="other_competitions">Other Competitions</string>
+    <string name="live_trial">LIVE TRIAL</string>
+    <string name="recent_matches">Recent Matches</string>
+    <string name="featured_players">Featured Players</string>
+    <string name="view_all_players">view all players</string>
+    <string name="view_all_players2">view all players</string>
+    <string name="club_teams">Club Teams</string>
+    <string name="home_kit_away_kit_third_kit">Home Kit | Away Kit | Third Kit</string>
+    <string name="club_sponsors">Club Sponsors</string>
+    <string name="upgradation_request_sent">Upgradation request sent</string>
+    <string name="club_bio">Club Bio</string>
+    <!-- club bio user -->
+    <string name="live_trial_registration">Live Trial Registration</string>
+    <string name="register">Register</string>
+    <string name="register_short">Register</string>
+    <string name="thank_you_for_participating_in_live_trial_please_check_your_mail_for_instructions">Thank you for participating in Live trial. Please check your mail for instructions.</string>
+    <string name="got_it">Got It</string>
+    <string name="registered">Registered</string>
+    <string name="registration_nclosed">Registration\nClosed</string>
+    <!-- -->
+    <string name="coming_soon_dot_dot">Coming soon..</string>
+    <!-- club register -->
+    <string name="no_clubs_found">No clubs found.</string>
+    <string name="no_academies_found">No academies found.</string>
+    <string name="trials">Trials</string>
+    <!-- club user gallery -->
+    <string name="report">Report</string>
+    <string name="report_this_post">Report This Post</string>
+    <string name="help_us_understand_what_s_happening_with_this_post_how_would_you_describe_it">Help us understand what\'s happening with this post. How would you describe it?</string>
+    <string name="please_select_a_cause">Please select a cause</string>
+    <string name="jersey_size">Jersey Size</string>
+    <string name="shoe_size">Shoe Size</string>
+    <!-- club admin bio -->
+    <string name="liked">Liked</string>
+    <string name="tap_to_like">Tap to like</string>
+    <string name="tap_to_follow">Tap to follow</string>
+    <string name="coach_manager_bio">Coach/Manager Bio</string>
+    <!-- coach admin teams -->
+    <string name="create_your_own_team">Create your own Team</string>
+    <string name="are_you_a_coach_or_team_manager_create_your_team_on_socaloca_now_once_your_team_is_created_you_can_add_players_into_your_team_invite_other_teams_to_play_keep_a_record_of_your_team_s_match_history_upload_match_videos_as_well_as_browse_and_join_tournaments_near_your">Are you a coach or team manager? Create your team on SocaLoca now! Once your team is created you can add players into your team, invite other teams to play, keep a record of your team’s match history, upload match videos, as well as browse and join Tournaments near you.</string>
+    <string name="create_now">Create Now</string>
+    <string name="my_teams">My Teams</string>
+    <string name="no_teams_found_nplease_create_your_own_team">No teams found. \nPlease create your own team.</string>
+    <!-- common change password -->
+    <string name="current_password">Current Password *</string>
+    <string name="enter_your_current_password">Enter your current password</string>
+    <string name="new_password">New Password *</string>
+    <string name="minimum_6_characters">minimum 6 characters</string>
+    <string name="minimum_6_characters2">Minimum 6 characters</string>
+    <string name="strong">Strong</string>
+    <string name="enter_your_new_password">Enter your new password</string>
+    <string name="confirm_password">Confirm Password *</string>
+    <string name="change_password">Change Password</string>
+    <string name="helpdesk">Helpdesk</string>
+    <string name="weak">Weak</string>
+    <string name="please_enter_current_password">Please enter current password</string>
+    <string name="please_enter_new_password">Please enter new password</string>
+    <string name="current_password_new_password_cant_be_same"><![CDATA[Current password & new password can\'t be same]]></string>
+    <string name="please_confirm_new_password">Please confirm new password</string>
+    <string name="password_dont_match">Passwords don\'t match</string>
+    <string name="toast_password_change_successfully">Password changed successfully</string>
+    <string name="invalid_current_password">Invalid current password</string>
+    <!-- common clubs -->
+    <string name="club_str1">"These are the Professional Football Clubs that have partnered with "</string>
+    <string name="club_str2">LOCA to provide content and services to our users.\n\nIf you are a Professional Football Club, you can request to become a SocaLoca partner and gain access to a host of features including, an individualised hub with your logo and branding, in-App Uploads of game highlights, training or even interviews, advertise upcoming trials via your Club’s individual hub, display your Club teams and feature your Club’s top players, engage fans with news, announcements and recent results, display sponsors, plus much more.</string>
+    <string name="club_Str">These are the Professional Football Clubs that have partnered with SOCALOCA to provide content and services to our users.\n\nIf you are a Professional Football Club, you can request to become a SocaLoca partner and gain access to a host of features including, an individualised hub with your logo and branding, in-App Uploads of game highlights, training or even interviews, advertise upcoming trials via your Club’s individual hub, display your Club teams and feature your Club’s top players, engage fans with news, announcements and recent results, display sponsors, plus much more.</string>
+    <!-- common club parnters -->
+    <string name="clubs">Clubs</string>
+    <string name="partners">Partners</string>
+    <string name="not_a_verified_profile">Not a verified profile.</string>
+    <string name="verify_now">Verify now</string>
+    <string name="tournaments_n_amp_nmatches"><![CDATA[Tournaments\n&\nMatches]]></string>
+    <string name="tournaments_n_amp_nmatches_caps"><![CDATA[TOURNAMENTS\n&\nMATCHES]]></string>
+    <!-- common home -->
+    <string name="welcome_back">Welcome back!!!</string>
+    <string name="we_truly_missed_you">We truly missed you.</string>
+    <string name="socaloca_is_always_thinking_about_football_and_coming_up_with_new_features_which_you_are_definitely_going_to_love">Socaloca is always thinking about football and coming up with new features which you are definitely going to love.</string>
+    <string name="keep_exploring_socaloca_amp_play_the_beautiful_game_your_way"><![CDATA[Keep exploring Socaloca & Play The Beautiful Game Your Way]]></string>
+    <string name="is_inviting_to_join">is inviting to join Socaloca. Download the App from Playstore</string>
+    <string name="or_appstore">or Appstore</string>
+    <string name="share_socaloca_with">Share SocaLoca with...</string>
+    <string name="na">N/A</string>
+    <string name="hey">Hey</string>
+    <!-- common matches -->
+    <string name="host_a_one_off">Host a ‘one-off’ match with an opponent team. This will enable you to add the match results and stats into your team’s history. You may also upload photos and highlight videos of the match. Profiles of players who play in the matches will also be updated accordingly.</string>
+    <string name="host_match">Host Match</string>
+    <string name="manage_requests">Manage Requests</string>
+    <string name="today_s_matches">Today\'s Matches</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="today">Today</string>
+    <string name="manage">Manage</string>
+    <string name="upcoming_matches">Upcoming Matches</string>
+    <string name="no_upcoming_matches">No upcoming matches</string>
+    <string name="played_matches">Played Matches</string>
+    <string name="no_played_matches">No played matches</string>
+    <!-- common matches landing -->
+    <string name="tournaments">Tournaments</string>
+    <string name="pickup">Pick-Up</string>
+    <string name="one_off">One-off</string>
+    <string name="pick_up">Pick-Up</string>
+    <string name="no_match_for_today">No match for today</string>
+    <!-- common notification -->
+    <string name="no_notification_for_now">No notification for now</string>
+    <string name="notifications">Notifications</string>
+    <!-- common partner -->
+    <string name="fas">FAs</string>
+    <string name="confederations">Confederations</string>
+    <string name="sponsors">Sponsors</string>
+    <string name="charities_and_ngos"><![CDATA[Charities & NGOs]]></string>
+    <!-- common profile edit -->
+    <string name="create_password">create password</string>
+    <string name="create_password_require">create password *</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="minimum_5_characters">minimum 5 characters</string>
+    <string name="select_role">Select role *</string>
+    <string name="select_role_2">Select role*</string>
+    <string name="date_of_birth">Date Of Birth *</string>
+    <string name="date_of_birth_text">Date Of Birth</string>
+    <string name="please_enter_date_of_birth">Please enter date of birth</string>
+    <string name="please_enter_your_nationality">Please enter your nationality</string>
+    <string name="preferred_jersey_number">Preferred Jersey Number</string>
+    <string name="_0_99">0 – 99</string>
+    <string name="enter_jersey_number">Enter jersey number</string>
+    <string name="right">Right</string>
+    <string name="left">Left</string>
+    <string name="height">Height</string>
+    <string name="value_in_cm">Value in cm</string>
+    <string name="please_enter_height">Please enter height</string>
+    <string name="shirt_jersey_size">Shirt/Jersey Size</string>
+    <string name="brands_you_like">Brands you like</string>
+    <string name="major_leagues_you_follow">Major leagues you follow</string>
+    <string name="teams_you_follow">Teams you follow</string>
+    <string name="upload_your_profile_photo">Upload your profile photo</string>
+    <string name="take_a_photo">Take a photo</string>
+    <string name="choose_from_gallery">Choose from gallery</string>
+    <string name="please_upload_profile_photo">Please upload profile photo</string>
+    <string name="choose_your_avatar">Choose your avatar</string>
+    <string name="we_keep_your_data_safe">*we keep your data safe</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="profile_name_not_available">Profile name not available</string>
+    <string name="please_enter_a_valid_jersey_number">Please enter a valid jersey number</string>
+    <string name="please_enter_valid_height">"Please enter valid height"</string>
+    <string name="select_image">Select Image</string>
+    <string name="something_went_wrong_image_not_uploaded">Something went wrong! Image not uploaded.</string>
+    <string name="something_went_wrong_file_not_uploaded">Something went wrong! File not uploaded.</string>
+    <string name="something_went_wron">Something went wrong!</string>
+    <string name="file_uploaded_successfully">File uploaded successfully.</string>
+    <string name="see_the_listing_of_tournaments_in_your_area_and_apply_to_join_a_competition_if_its_right_for_your_team_you_can_also_view_the_progression_of_competitions_in_real_time_see_fixtures_points_tables_stats_and_even_match_highlights">See the listing of tournaments in your area and apply to join a competition if its right for your team. You can also view the progression of competitions in real time, see fixtures, points tables, stats and even match highlights.</string>
+    <!-- common tournaments -->
+    <string name="location">Location</string>
+    <string name="game">Game</string>
+    <string name="age_group">Age Group</string>
+    <string name="please_select_at_least_one_filter">Please select at least one filter</string>
+    <string name="no_tournaments_found">No tournaments found.</string>
+    <!-- confed competitions -->
+    <string name="no_competitions_found">No competitions found.</string>
+    <!-- confed bio -->
+    <string name="competitions">Competitions</string>
+    <string name="foundation">"Foundation: "</string>
+    <string name="general_secretary">"General Secretary: "</string>
+    <string name="featured_fas">Featured FAs</string>
+    <string name="view_all_fas">view all FAs</string>
+    <string name="view_all_competitions">view all competitions</string>
+    <string name="official_merchandise">Official Merchandise</string>
+    <string name="confederation_bio">Confederation Bio</string>
+    <string name="no_confederations_found">No Confederations found.</string>
+    <string name="confed_str1">"These are the Football Confederations that have partnered with "</string>
+    <string name="confed_str2">"LOCA to provide content and services to our users.\n\nIf you are a Confederation, you can request to become a "</string>
+    <string name="confed_str3">"LOCA partner and gain access to  an individualised hub with your logo and branding and a host of features including; the ability to organise tournaments and leagues using "</string>
+    <string name="confed_str4"><![CDATA[LOCA’s tournament module, in-App Uploads of game highlights, training or even interviews, engage fans with your latest news & announcements, display sponsors, a data-driven overview of your Football Confederation’s stakeholders through "]]></string>
+    <string name="confed_str5">LOCA Analytics, plus much more.</string>
+    <string name="confed_str">These are the Football Confederations that have partnered with SOCALOCA to provide content and services to our users.\n\nIf you are a Confederation, you can request to become a SOCALOCA partner and gain access to  an individualised hub with your logo and branding and a host of features including; the ability to organise tournaments and leagues using SOCALOCA’s tournament module, in-App Uploads of game highlights, training or even interviews, engage fans with your latest news &amp; announcements, display sponsors, a data-driven overview of your Football Confederation’s stakeholders through SOCALOCA Analytics, plus much more.</string>
+    <!-- confed fa -->
+    <string name="no_fas_found">No FAs found.</string>
+    <!-- create post -->
+    <string name="available_space">Available Space :</string>
+    <string name="used_space">Used Space :</string>
+    <string name="mb_0mb">0MB</string>
+    <string name="mb_100mb">100MB</string>
+    <string name="title_optional">Title (optional)</string>
+    <string name="post_type">Post Type</string>
+    <string name="image">Image</string>
+    <string name="photos" translatable="false">Photos</string>
+    <string name="videos" translatable="false">Videos</string>
+    <string name="upload_photos" translatable="false">Upload Photos</string>
+    <string name="video">Video</string>
+    <string name="video_added">Video Added</string>
+    <string name="upload_image">Upload Images</string>
+    <string name="upload_video">Upload Video</string>
+    <string name="create_post">Create Post</string>
+    <string name="update_post">Update Post</string>
+    <string name="please_upload_image">Please upload image</string>
+    <string name="please_upload_video">Please upload video</string>
+    <string name="select_video">Select Video</string>
+    <string name="video_larger_than_space">Video larger than space available. Please delete some video posts to avail more spaces.</string>
+    <string name="something_went_wrong_video_not_uploaded">Something went wrong! Video not uploaded.</string>
+    <string name="create_a_post">Create a post</string>
+    <string name="post_saved">Post saved</string>
+    <string name="post_published" translatable="false">Post published</string>
+    <!-- create profile -->
+    <string name="create_profile">Create Profile</string>
+    <string name="please_select_nationality">Please select nationality</string>
+    <string name="enter_number">Enter number</string>
+    <string name="please_enter_valid_password">Please enter valid password</string>
+    <string name="age_colon">age :</string>
+    <string name="add_logo">Add Logo *</string>
+    <string name="select_team_logo">Select team logo</string>
+    <string name="game_type">Game Type</string>
+    <string name="age_range">Age Range *</string>
+    <string name="age_range_text">Age Range</string>
+    <string name="age_category">Age Category *</string>
+    <string name="team_name">Team Name *</string>
+    <string name="enter_team_name">Enter team name</string>
+    <string name="short_name">Short Name *</string>
+    <string name="enter_team_short_name">Enter team short name</string>
+    <string name="select_team_country">Select team country</string>
+    <string name="enter_team_city">Enter team city</string>
+    <string name="update_team">Update Team</string>
+    <string name="edit_team">Edit Team</string>
+    <string name="team_info_updated">Team info updated</string>
+    <string name="minimum_2_characters">Minimum 2 characters</string>
+    <string name="confederation">"Confederation: "</string>
+    <string name="city_colon">"City: "</string>
+    <string name="featured_teams">Featured Teams</string>
+    <string name="view_all_teams">view all teams</string>
+    <string name="fa_sponsors">FA Sponsors</string>
+    <string name="fa_bio">FA Bio</string>
+    <string name="teams_you_can_follow">Teams you can follow</string>
+    <string name="oops">Oops!!!</string>
+    <string name="it_seems_there_are_no_nfootball_activities_in_your_country">It seems there are no\nfootball activities in your country.</string>
+    <string name="why_don_t_you_start_the_activities">Why don\'t you start the activities?</string>
+    <string name="invite_your_friends_now">Invite your friends now.</string>
+    <string name="start_inviting">Start Inviting</string>
+    <!-- fan invite -->
+    <string name="enter_your_friend_s_nphone_number_to_invite">Enter your friend\'s\nphone number to invite</string>
+    <string name="invite_now">Invite Now</string>
+    <string name="invitation_sent">Invitation Sent</string>
+    <string name="invite">Invite</string>
+    <string name="please_enter_phone_number">Please enter phone number</string>
+    <string name="please_enter_valid_phone_number">Please enter valid phone number</string>
+    <string name="this_is_your_phone_number">This is your phone number!</string>
+    <string name="no_recent_matches">No recent matches</string>
+    <string name="no_players_found">No players found.</string>
+    <!-- tournament list -->
+    <string name="upcoming">Upcoming</string>
+    <string name="closed">Closed</string>
+    <string name="age_category_text">Age Category</string>
+    <string name="no_teams_found">No teams found.</string>
+    <string name="tournament_type">Tournament Type</string>
+    <string name="country_text">Country</string>
+    <string name="tournament_date">Tournament Date</string>
+    <string name="tournament_venue">Tournament Venue</string>
+    <string name="total_number_of_teams">Total Number of Teams</string>
+    <string name="number_of_player_per_team">Number of player per team</string>
+    <string name="tournament_note">Tournament Note</string>
+    <string name="tournament_description">Tournament Description</string>
+    <string name="prizes">Prizes</string>
+    <string name="registration_fees">Registration Fees</string>
+    <string name="organizer_details">Organizer Details</string>
+    <string name="teams_playing">Teams Playing</string>
+    <string name="details">Details</string>
+    <string name="fa_str1">"These are the Football Associations that have partnered with "</string>
+    <string name="fa_str2">"LOCA to provide content and services to our users.\n\nIf you are a Football Association, you can request to become a "</string>
+    <string name="fa_str3">"LOCA partner and gain access to an individualised hub with your logo and branding and a host of features including; the ability to organise tournaments and leagues using "</string>
+    <string name="fa_str4"><![CDATA["LOCA’s tournament module, in-App Uploads of game highlights, training or even interviews, engage fans with your latest news & announcements, display sponsors, a data-driven overview of your Football Association’s stakeholders through "]]></string>
+    <string name="fa_str5">LOCA Analytics, plus much more.</string>
+    <string name="fa_str">These are the Football Associations that have partnered with SOCALOCA to provide content and services to our users.\n\n"If you are a Football Association, you can request to become a SOCALOCA partner and gain access to an individualised hub with your logo and branding and a host of features including; the ability to organise tournaments and leagues using SOCALOCA’s tournament module, in-App Uploads of game highlights, training or even interviews, engage fans with your latest news &amp; announcements, display sponsors, a data-driven overview of your Football Association’s stakeholders through SOCALOCA Analytics, plus much more.</string>
+    <string name="no_followers_yet">No followers yet</string>
+    <string name="people">People</string>
+    <string name="you_don_t_follow_anyone">You don\'t follow anyone</string>
+    <string name="following_none">Following none</string>
+    <string name="mobile_number">Mobile Number *</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="haven_t_received_the_code">Haven\'t received the code?</string>
+    <string name="re_send">Re-send</string>
+    <string name="please_enter_a_mobile_number">Please enter a mobile number</string>
+    <string name="please_enter_a_valid_mobile_number">Please enter a valid mobile number</string>
+    <string name="please_enter_a_valid_soca_loca_id" translatable="false">Please enter a valid SocaLoca ID</string>
+    <string name="mobile_number_is_not_registered" translatable="false">Mobile number is not registered</string>
+    <string name="email_is_not_registered" translatable="false">Email is not registered</string>
+    <string name="toast_otp_sent_to_your_phone">OTP sent to your mobile</string>
+    <string name="toast_otp_sent_to_your_email" translatable="false">OTP sent to your email</string>
+    <string name="profile_is_not_verified">Profile is not verified</string>
+    <string name="profile_is_not_complete">Profile is not complete</string>
+    <string name="host_a_new_match">Host a new Match</string>
+    <string name="game_require">Game *</string>
+    <string name="please_select_your_team">Please select your team</string>
+    <string name="please_select_opponent_team">Please select opponent team</string>
+    <string name="game_type_require">Game Type*</string>
+    <string name="social">Social</string>
+    <string name="competitive">Competitive</string>
+    <string name="please_enter_city">Please enter city</string>
+    <string name="city_text">City</string>
+    <string name="stadium_name">Stadium Name *</string>
+    <string name="please_enter_stadium_name">Please enter stadium name</string>
+    <string name="field_name">Field Name *</string>
+    <string name="please_enter_field_name">Please enter field name</string>
+    <string name="please_select_location">Please select location</string>
+    <string name="match_date">Match date *</string>
+    <string name="please_enter_match_date">Please enter match date</string>
+    <string name="match_time">Match Time *</string>
+    <string name="please_enter_socalocamatch_time">Please enter socaLocaMatch time</string>
+    <string name="referees">Referees *</string>
+    <string name="yes_text">Yes</string>
+    <string name="average_age">Average Age *</string>
+    <string name="substitutes">Substitutes *</string>
+    <string name="match_note">Match Note</string>
+    <string name="enter_socalocamatch_note">Enter socaLocaMatch note</string>
+    <string name="invite_players">Invite Players</string>
+    <string name="phone_number">Phone Number *</string>
+    <string name="invite_all">Invite All</string>
+    <string name="invitation_sent_to_all_numbers">Invitation sent to all numbers</string>
+    <string name="please_enter_valid_mobile_number">Please enter valid mobile number</string>
+    <string name="already_added">Already added</string>
+    <string name="you_cannot_your_own_number">You cannot add your own number</string>
+    <string name="players_capsall">PLAYERS</string>
+    <string name="assists_capsall">ASSISTS</string>
+    <string name="players_allcaps">PLAYERS</string>
+    <string name="pom_allcaps">POM</string>
+    <string name="legacy_contact">Legacy Contact</string>
+    <string name="please_enter_name">Please enter name</string>
+    <string name="this_is_your_own_email_try_other">This is your own email, try other</string>
+    <string name="no_likes_yet">No likes yet</string>
+    <string name="likes">Likes</string>
+    <string name="likes_short">likes</string>
+    <string name="like_short">like</string>
+    <string name="password">Password *</string>
+    <string name="login">Login</string>
+    <string name="register_as_a_club">Register as a Club</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="or">Or</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="please_enter_password">Please enter password</string>
+    <string name="mobile_number_require">Mobile number *</string>
+    <string name="login_as_a_club">Login as a Club</string>
+    <string name="forgotten_password">Forgotten Password?</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="jersey_assigned">Jersey Assigned</string>
+    <string name="jersey_assigned_short">Jersey Assigned</string>
+    <string name="no_assigned_players_found">No assigned players found</string>
+    <string name="toast_new_team_manager_assigned">New team manager assigned</string>
+    <string name="toast_invalid_operation">Invalid operation</string>
+    <string name="toast_maximum_number_of_team_managers_are_already_assigned">Maximum number of team managers are already assigned</string>
+    <string name="toast_manager_removed">Manager removed</string>
+    <string name="player_removed_from_team">Player removed from team</string>
+    <string name="new_requests">New Requests</string>
+    <string name="no_request_for_now">No request for now</string>
+    <string name="toast_request_accepted">Request accepted</string>
+    <string name="toast_request_declined">Request declined</string>
+    <string name="toast_player_removed_from_team">Player removed from team</string>
+    <string name="new_players">New Players</string>
+    <string name="new_players_short">New Players</string>
+    <string name="no_new_players_found">No new players found</string>
+    <string name="assign_jersey">Assign Jersey</string>
+    <string name="tap_in_the_empty_square_to_add_a_jersey_number">Tap in the empty square to add a jersey number</string>
+    <string name="toast_please_assign_all_jersey_nos">Please assign all jersey nos.</string>
+    <string name="is_not_a_valid_jersey_no">is not a valid jersey no.</string>
+    <string name="jersey_no_dot">Jersey No.</string>
+    <string name="is_assigned_to_multiple_players">is assigned to multiple players</string>
+    <string name="toast_jersey_nos_assigned_to_new_players">Jersey Nos. assigned to new players</string>
+    <string name="is_already_assigned_to_other_player">is already assigned to other player</string>
+    <string name="manage_team">Manage Team</string>
+    <string name="upload_match_photos">Upload match photos</string>
+    <string name="save">Save</string>
+    <string name="a_maximum_5_photos_will_be_allowed">a maximum 5 photos will be allowed</string>
+    <string name="upload_match_videos">Upload match videos</string>
+    <string name="_2_video_clips_of_max_size_15mb_will_be_allowed">2 video clips of max size 15MB will be allowed</string>
+    <string name="stream_live_match">Stream live match</string>
+    <string name="web">Web</string>
+    <string name="app">App</string>
+    <string name="start">Start</string>
+    <string name="notify">Notify</string>
+    <string name="full_time">Full time</string>
+    <string name="accept">Accept</string>
+    <string name="time">Time</string>
+    <string name="time_short">time</string>
+    <string name="scorer">Scorer</string>
+    <string name="assist">Assist</string>
+    <string name="no_of_cards">No. of Cards</string>
+    <string name="_1_card">1ˢᵗ Card</string>
+    <string name="_2_card">2ᶮᵈ Card</string>
+    <string name="select_squad">Select Squad</string>
+    <string name="most_valuable_player">Most Valuable Player</string>
+    <string name="team_work">Team Work</string>
+    <string name="technical_ability">Technical Ability</string>
+    <string name="aggressiveness">Aggressiveness</string>
+    <string name="tactical_ability">Tactical Ability</string>
+    <string name="overall_rating">Overall Rating</string>
+    <string name="manage_match">Manage Match</string>
+    <string name="feature_coming_soon">Feature coming soon...</string>
+    <string name="maximum_15mb_video_can_be_uploaded">Maximum 15MB video can be uploaded</string>
+    <string name="please_select_either_mp4_or_mov_file">Please select either MP4 or MOV file</string>
+    <string name="match_photos_saved">Match photos saved</string>
+    <string name="match_videos_saved">Match videos saved</string>
+    <string name="rate">Rate</string>
+    <string name="rating_saved">Ratings saved</string>
+    <string name="ratings">Ratings</string>
+    <string name="saved_most_valuable_player">Saved most valuable player</string>
+    <string name="goal">" goal"</string>
+    <string name="please_add">Please add</string>
+    <string name="goal_time_sequences_are_wrong">Goal time sequences are wrong</string>
+    <string name="scorer_short">scorer</string>
+    <string name="please_select">Please select</string>
+    <string name="saved_goal_details">Saved goal details</string>
+    <string name="please_enter_score_for_both_teams">Please enter score for both teams</string>
+    <string name="match_score_sent">Match score sent</string>
+    <string name="match_score_confirmed_please_provide_additional_match_info">Match score confirmed. Please provide additional match info.</string>
+    <string name="saved_card_details">Saved card details</string>
+    <string name="accepted">Accepted</string>
+    <string name="sent">Sent</string>
+    <string name="received">Received</string>
+    <string name="post_removed">Post removed.</string>
+    <string name="skip">skip</string>
+    <string name="mobile_number_required">Mobile number *</string>
+    <string name="are_you_a_club">Are you a Club?</string>
+    <string name="verify">Verify</string>
+    <string name="please_enter_otp">Please enter OTP</string>
+    <string name="incorrect_otp">Incorrect OTP</string>
+    <string name="please_try_again_later">Please try again later</string>
+    <string name="mobile_number_already_registered">Mobile number already registered</string>
+    <string name="host_a_pick_up_match">Host a Pick-Up Match</string>
+    <string name="mixed">Mixed</string>
+    <string name="start_time">Start Time *</string>
+    <string name="please_enter_start_time">Please enter start time</string>
+    <string name="end_time">End Time *</string>
+    <string name="please_enter_end_time">Please enter end time</string>
+    <string name="venue_name">Venue name *</string>
+    <string name="please_enter_venue_name">Please enter venue name</string>
+    <string name="select_location_from_map">Select location from map *</string>
+    <string name="max_players">Max players *</string>
+    <string name="please_enter_max_players">Please enter max players</string>
+    <string name="match_created_successfully">Match created successfully.</string>
+    <string name="end_time_must_be_greater_than_start_time">End time must be greater than start time</string>
+    <string name="max_player_must_be_greater_than_0">Max players must be greater than 0</string>
+    <string name="hosted_by">Hosted By</string>
+    <string name="view_details">View Details</string>
+    <string name="view_details_short">View Details</string>
+    <string name="max_players_text">Max Players</string>
+    <string name="match_day">Match Day</string>
+    <string name="start_time_text">Start Time</string>
+    <string name="end_time_text">End Time</string>
+    <string name="note">Note</string>
+    <string name="participate">Participate</string>
+    <string name="requested_list">Requested List</string>
+    <string name="waiting">Waiting</string>
+    <string name="declined">Declined</string>
+    <string name="can_t_get_2_full_teams_to_make_a_match_fret_not_pick_up_matches_allows_you_to_organise_an_informal_kick_about_at_a_specified_place_and_time_shout_out_to_all_nearby_that_you_are_organising_a_pick_up_match_and_get_your_game_on">Can’t get 2 full teams to make a match? Fret not. Pick-Up matches allows you to organise an informal kick-about at a specified place and time. Shout out to all nearby that you are organising a pick-up match and get your game on!</string>
+    <string name="match_videos">Match Videos</string>
+    <string name="match_highlights">Match Highlights</string>
+    <string name="goal_timeline">Goal Timeline</string>
+    <string name="match_details">Match Details</string>
+    <string name="joined">Joined</string>
+    <string name="pending">Pending</string>
+    <string name="select_team_to_invite">Select team to invite</string>
+    <string name="you_have_not_created_any_team">you have not created any team</string>
+    <string name="tap_to_rate">Tap to rate</string>
+    <string name="toast_invitation_sent">Invitation sent</string>
+    <string name="endorsed_successfully">Endorsed successfully</string>
+    <string name="no_teams_joined">No teams joined</string>
+    <string name="no_request_pending">No request pending</string>
+    <string name="no_request_received">No request received</string>
+    <string name="no_received_request_found">No received request found</string>
+    <string name="accepted_match_request">Accepted match request</string>
+    <string name="declined_match_request">Declined match request</string>
+    <string name="thanks_for_your_joining_request">Thanks for your joining request.</string>
+    <string name="we_will_validate_and_send_you_the_instructions_shortly">We will validate and send you the instructions shortly.</string>
+    <string name="redirects_to_socaloca_football">Redirects to socaloca.football</string>
+<!--    <string name="email_already_registered">Email already registered</string>-->
+    <string name="please_enter_club_name">Please enter club name</string>
+    <string name="please_enter_a_email">Please enter a email</string>
+    <string name="please_enter_a_valid_email">Please enter a valid email</string>
+    <string name="please_enter_mobile_or_email" translatable="false">Please enter mobile number or email</string>
+    <string name="please_enter_mobile_or_email_or_socaloca_id" translatable="false">Please enter mobile number or email or SocaLoca ID</string>
+    <string name="please_enter_email_or_socaloca_id" translatable="false">Please enter email or SocaLoca ID</string>
+    <string name="please_select_country">Please select country</string>
+    <string name="please_select_confederation">Please select confederation</string>
+    <string name="please_select_league">Please select league</string>
+    <string name="club_name">Club Name *</string>
+    <string name="select_country">Select Country *</string>
+    <string name="please_enter_your_country">Please enter your country</string>
+    <string name="confederation_require">Confederation *</string>
+    <string name="select_league">Select League *</string>
+    <string name="otp">OTP *</string>
+    <string name="reset">Reset</string>
+    <string name="please_enter_a_password">Please enter a password</string>
+    <string name="please_confirm_password">Please confirm password</string>
+    <string name="password_doesnt_match">Password doesn\'t match</string>
+    <string name="otp_sent_to_your_mobile">OTP sent to your mobile</string>
+    <string name="password_reset_successfully_please_sign_in">Password reset successfully. Please Sign In.</string>
+    <string name="search_here">Search here</string>
+    <string name="members">Members</string>
+    <string name="no_searches_found">No searches found.</string>
+    <string name="no_members_found">No members found.</string>
+    <string name="no_matches_found">No matches found.</string>
+    <string name="save_squad">Save Squad</string>
+    <string name="no_player_selected">No player selected</string>
+    <string name="squad_saved">Squad saved</string>
+    <string name="no_sent_request_found">No sent request found</string>
+    <string name="cancelled_match_request">Cancelled match request</string>
+    <string name="coaches">Coaches</string>
+    <string name="coaches_yet_to_endorse">Coaches yet to endorse</string>
+    <string name="players_yet_to_endorse">Players yet to endorse</string>
+    <string name="managers">Managers</string>
+    <string name="managers_yet_to_endorse">Managers yet to endorse</string>
+    <string name="fans">Fans</string>
+    <string name="fans_yet_to_endorse">Fans yet to endorse</string>
+    <string name="headquarters">"Headquarters: "</string>
+    <string name="founders">"Founders: "</string>
+    <string name="merchandise">Merchandise</string>
+    <string name="view_all_short">view all</string>
+    <string name="no_merchandise_found">No merchandise found.</string>
+    <string name="no_sponsors_found">No sponsors found.</string>
+    <string name="sponsor_str1">"These are the Sponsors that have partnered with "</string>
+    <string name="sponsor_str2">"LOCA to provide content and services to our users.\n\nIf you are a Sponsor you can request to become a "</string>
+    <string name="sponsor_str3">LOCA partner and gain access to an individualised hub with your logo and branding and a host of features including; display merchandise and services, promote your company via news and announcements, widen your reach, send push notifications to segmented audiences, measure your CSR impact, plus much more.</string>
+    <string name="sponsor_str">These are the Sponsors that have partnered with SOCALOCA to provide content and services to our users.\n\nIf you are a Sponsor you can request to become a SOCALOCA partner and gain access to an individualised hub with your logo and branding and a host of features including; display merchandise and services, promote your company via news and announcements, widen your reach, send push notifications to segmented audiences, measure your CSR impact, plus much more.</string>
+    <string name="goals">Goals</string>
+    <string name="cards">Cards</string>
+    <string name="pom">POM</string>
+    <string name="coach">Coach</string>
+    <string name="team_nmember">Team\nMember</string>
+    <string name="technical">Technical</string>
+    <string name="tactical">Tactical</string>
+    <string name="no_matches_played_yet">No matches played yet</string>
+    <string name="team_bio">Team Bio</string>
+    <string name="my_matches">My Matches</string>
+    <string name="my_requests" translatable="false">My Requests</string>
+    <string name="thank_you">Thank You!</string>
+    <string name="for_registering_with_socaloca_n_nyou_have_now_entered_a_world_where_you_can_be_connected_and_involved_in_football_activities_in_your_community_and_beyond">For registering with SocaLoca. \n\nYou have now entered a world where you can be connected and involved in football activities in your community and beyond.</string>
+    <string name="contact_us">Contact us</string>
+    <string name="we_have_received_details_of_your_legacy_contact_n_nshould_we_be_contacted_by_said_contact_at_admin_socaloca_football_and_we_are_unable_to_contact_you_we_will_grant_access_to_your_account_to_the_legacy_contact">We have received details of your Legacy Contact. \n\nShould we be contacted by said contact at admin@socaloca.football and we are unable to contact you, we will grant access to your account to the legacy contact.</string>
+    <string name="invitation_accepted">Invitation accepted</string>
+    <string name="invitation_declined">Invitation declined</string>
+    <string name="request_sent">Request sent</string>
+    <string name="invitation_from_tournament_organizer">Invitation from Tournament organizer</string>
+    <string name="request_to_join">Request to Join</string>
+    <string name="view_tournament_details">View tournament details</string>
+    <string name="tournament">Tournament</string>
+    <string name="points_table">Points Table</string>
+    <string name="stats">Stats</string>
+    <string name="team">Team</string>
+    <string name="view_player">view player</string>
+    <string name="featured">FEATURED</string>
+    <string name="live">LIVE</string>
+    <string name="live_matches" translatable="false">Live Matches</string>
+    <string name="manage_live_match" translatable="false">Live Match Update</string>
+    <string name="live_match" translatable="false">Live Matches</string>
+    <string name="live_match_details" translatable="false">Live Matchs Details</string>
+    <string name="registration">Registration</string>
+    <string name="cost">Cost</string>
+    <string name="free">Free</string>
+    <string name="brief">Brief</string>
+    <string name="registration_closed">Registration Closed</string>
+    <string name="toast_registration_restricted">Registration restricted. Your profile does not match the trial criteria. SocaLoca will notify you of future Live trials!</string>
+    <string name="rating">Rating</string>
+    <string name="view">View</string>
+    <string name="view_fa">view FA</string>
+    <string name="jersey_nno">Jersey\nNo.</string>
+    <string name="view_team">view team</string>
+    <string name="own_goal">Own Goal</string>
+    <string name="uploaded">Uploaded</string>
+    <string name="likes_your_profile">likes your profile.</string>
+    <string name="likes_a_image_you_shared">likes a image you shared.</string>
+    <string name="likes_a_video_you_shared">likes a video you shared.</string>
+    <string name="team_nmanager">Team\nManager</string>
+    <string name="please_enter_jersey_number">Please enter jersey number</string>
+    <string name="are_you_sure_to_remove">Are you sure to remove</string>
+    <string name="from_team">from team?</string>
+    <string name="jersey_number_updated">Jersey number updated</string>
+    <string name="jersey_number">Jersey number</string>
+    <string name="already_exists">already exists</string>
+    <string name="decline">Decline</string>
+    <string name="are_you_sure_to">Are you sure to</string>
+    <string name="delete_post">delete post?</string>
+    <string name="request_pending">Request Pending</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="edit">Edit</string>
+    <string name="send_request">Send Request</string>
+    <string name="played">Played</string>
+    <string name="invited_you_to_join">invited you to join</string>
+    <string name="has_invited_you_to_join">has invited you to join</string>
+    <string name="invited">Invited</string>
+    <string name="member">Member</string>
+    <string name="password_change_successfully">Password changed successfully</string>
+
+    <!-- new string resource -->
+    <string name="point_table_not_available_now">Points table not available now.</string>
+
+    <!-- new added Resource -->
+    <string name="select_your_team_to_request">Select your team to request</string>
+    <string name="no_eligible_team_found">No eligible team found</string>
+    <string name="delete_post_capitalize">Delete Post</string>
+    <string name="report_post">Report Post</string>
+    <string name="sign_out">Sign out</string>
+    <string name="my_gallery">My Gallery</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="change_language">Change Language</string>
+    <string name="data_policy">Data Policy</string>
+    <string name="term_and_conditions">Term and conditions</string>
+    <string name="cancel_uppercase">CANCEL</string>
+    <string name="set">SET</string>
+    <string name="assign_a_new_jersey_number">Assign a new jersey number</string>
+    <string name="assign">Assign</string>
+    <string name="view_nall">View\nAll</string>
+    <string name="please_provide_mobile_number_and_password_to_transfer_player_s_account">Please provide mobile number and password to transfer player\'s account.</string>
+    <string name="otp_caps">OTP</string>
+    <string name="posts_caps">POSTS</string>
+    <string name="cheers">CHEERS</string>
+    <string name="followers_caps">FOLLOWERS</string>
+    <string name="create_a_post_caps">CREATE A POST</string>
+    <string name="bio">Bio</string>
+    <string name="average_rating_endorsed_by">Average Rating | Endorsed By</string>
+    <string name="appearances">Appearances</string>
+    <string name="yellow_cards">Yellow Cards</string>
+    <string name="red_cards">Red Cards</string>
+    <string name="top_posts">Top Posts</string>
+    <string name="extra_time">Extra Time</string>
+    <string name="penalty_shootout">Penalty Shootout</string>
+    <string name="select_language">Select Language</string>
+    <string name="socaloca_is_available_in_multiple_languages_please_select_one_to_continue">SocaLoca is available in multiple languages. Please select one to continue.</string>
+    <string name="view_itinerary">View Itinerary</string>
+    <string name="make_team_manager">Make Team Manager</string>
+    <string name="remove_team_manager">Remove Team Manager</string>
+    <string name="edit_jersey_number">Edit jersey number</string>
+    <string name="account_transfer">Account Transfer</string>
+    <string name="remove_player">Remove Player</string>
+    <string name="remove">Remove</string>
+    <string name="transfer">Transfer</string>
+    <string name="legacy_contact_info">Your Legacy Contact the person that you may nominate to inherit your account should any unseen circumstances fall upon you and you are unable to access your account.\n\n Nominate your legacy contact by providing their full name and email address.</string>
+    <string name="name">Name *</string>
+    <string name="update">Update</string>
+    <string name="about_me">About Me</string>
+    <string name="about_me_hint">About Me(Max 300 chars)</string>
+    <string name="contact_name">Contact Name *</string>
+    <string name="contact_number">Contact Number *</string>
+    <string name="please_enter_contact_name">Please enter contact name</string>
+    <string name="please_enter_contact_number">Please enter contact number</string>
+    <string name="you_can_also_change_to_your_desired_language_from_the_menu">You can also change to your desired language from the menu.</string>
+    <!-- -->
+    <string name="club_register_str">Register</string>
+    <!-- -->
+
+    <string name="male_short">Male</string>
+    <string name="female_short">Female</string>
+    <string name="mixed_short">Mixed</string>
+    <string name="write_something">Write something</string>
+    <string name="add_player">Add Player</string>
+    <string name="cheers_short">cheers</string>
+    <string name="are_you_a_professional_football_club">Are you a Professional Football Club?</string>
+    <string name="register_login_here">Register/Login Here</string>
+    <!-- -->
+    <string name="basic">Basic</string>
+    <string name="average">Average</string>
+    <string name="good">Good</string>
+    <string name="very_good">Very Good</string>
+    <string name="outstanding">Outstanding</string>
+    <string name="physical">Physical</string>
+    <string name="mental">Mental</string>
+    <string name="goalkeeper">Goalkeeper</string>
+    <string name="people_endorsed">people endorsed</string>
+    <string name="person_endorsed">person endorsed</string>
+    <string name="privacy_settings">Privacy Settings</string>
+    <string name="about_socaloca">About SocaLoca</string>
+    <string name="about_socaloca_details">SocaLoca is the football app that tracks and supports your footballing career regardless of your level of play!\n\nCreate your player profile, track your career and playing statistics, upload videos and photos, jump into a pick-up match, join a team or find new teams to play against, engage in tournaments and competitions within your local community.\n\nSocaLoca provides you with a professional profile designed to easily match aspiring footballers and scouts worldwide.</string>
+    <string name="manage_account">Manage Account</string>
+    <string name="delete_deactivate_account">Delete/Deactivate Account</string>
+    <string name="sign_out_caps">Sign Out</string>
+
+    <string name="hello">Hello,</string>
+    <string name="my_bio">My Bio</string>
+    <string name="referee_bio">Referee Bio</string>
+    <string name="my_posts">My Posts</string>
+    <string name="gallery">Gallery</string>
+    <string name="share_a_photo_or_video_and_write_something">Share a photo or video and write something.</string>
+    <string name="comment">COMMENT</string>
+    <string name="share">SHARE</string>
+    <string name="write_a_comment">Write a comment</string>
+    <string name="cheer">Cheer</string>
+    <string name="reply">Reply</string>
+    <string name="translate">Translate</string>
+    <string name="reply_short">reply</string>
+    <string name="replies_short">replies</string>
+    <string name="more">more</string>
+    <string name="upload_videos">Upload Videos</string>
+    <string name="select_videos">Select Videos</string>
+    <string name="select_images">Select Images</string>
+    <string name="comment_short">comment</string>
+    <string name="comments_short">comments</string>
+    <string name="you">You</string>
+    <string name="other">other</string>
+    <string name="others">others</string>
+    <string name="cheer_short">cheer</string>
+
+    <string name="type_your_comment_here">Type your comment here</string>
+    <string name="teams_you_may_join">Most Followed Teams</string>
+    <string name="build_your_network">Most Endorsed Players</string>
+
+    <string name="no_comments_yet">No Comments Yet</string>
+    <string name="be_the_first_to_comment">Be the first to comment.</string>
+    <string name="reply_to">Reply to</string>
+    <string name="most_recent">Most Recent</string>
+    <string name="show_the_newest_comments_first">Show the newest comments first.</string>
+    <string name="all_comments">All Comments</string>
+    <string name="show_all_comments_in_chronologicacl_order">Show all comments in chronological order.</string>
+    <string name="just_now">Just now</string>
+    <string name="academy_bio">Academy Bio</string>
+    <string name="academies">Academies</string>
+    <string name="director">Director</string>
+    <string name="founded_year">Founded Year</string>
+    <string name="academy_director">Academy Director</string>
+    <string name="academy_manager">Academy Manager</string>
+    <string name="academy_contact_number">Academy Contact Number</string>
+    <string name="academy_contact_email">Academy Contact Email</string>
+    <string name="about">ABOUT</string>
+    <string name="academy_news">ACADEMY NEWS</string>
+    <string name="academy_posts">ACADEMY POSTS</string>
+    <string name="academy_str">SocaLoca is the home for football academies of any scale, age category, playing level, or location. SocaLoca provides an innovative and intuitive platform designed around the modern needs of a football academy.</string>
+    <string name="help_us_to_improve">HELP US TO IMPROVE!</string>
+    <string name="Live_Match_Update">SCORES!</string>
+    <string name="feedback">FEEDBACK</string>
+    <string name="your_feedback_matters">Your feedback matters!</string>
+    <string name="next_caps">NEXT</string>
+    <string name="skip_caps">SKIP</string>
+    <string name="please_select_a_rating">Please select a rating</string>
+    <string name="feed_caps">FEED</string>
+    <string name="my_bio_caps">MY BIO</string>
+    <string name="pick_up_match_caps">PICK-UP MATCH</string>
+    <string name="tournaments_caps">TOURNAMENTS</string>
+    <string name="do_you_want_to_offer_us_some_feedback">Do you want to offer us some feedback?</string>
+    <string name="enter_text_here_max_150_characters">Enter text here (max 150 characters)</string>
+    <string name="enter_text_here_max_200_characters" translatable="false">Enter text here (max 1000 characters)</string>
+    <string name="enter_text_here_max_300_characters" translatable="false">Enter text here (max 1000 characters)</string>
+    <string name="thank_you_caps_sentence">Thank you!</string>
+    <string name="we_highly_value_your_feedback">We highly value your feedback!</string>
+    <string name="thank_you_for_giving_your_feedback_we_appreciate_your_support_in_helping_us_to_improve_the_app">Thank you for giving your feedback, we appreciate your support in helping us to improve the app.</string>
+    <string name="done_caps">DONE</string>
+    <string name="i_am_over">I am over</string>
+    <string name="_16_years">16 years</string>
+    <string name="old">old</string>
+    <string name="_13_15_years">13 - 15 years</string>
+    <string name="i_am_a_parent_guardian_nregistering_on_behalf_of_a">I am a parent/guardian\nregistering on behalf of a</string>
+    <string name="_7_12">7 - 12</string>
+    <string name="year">year</string>
+    <string name="years">years</string>
+    <string name="child_consent_str1">Accounts of children between the ages of 7 and 13 can only created and managed by a parent or guardian.</string>
+    <string name="child_consent_str2">This is confirm that you are the legal guardian and will take full control and accountability of this account upon registering on behalf of a minor.</string>
+    <string name="minors_name">Childs Name*</string>
+    <string name="parent_guardians_name">Parent/Guardians Name* </string>
+    <string name="parent_guardians_email">Parent/Guardians Email*</string>
+    <string name="child_consent_term">I consent that I am registering on behalf of a minor and will take full control of this SocaLoca account.</string>
+    <string name="proceed">PROCEED</string>
+    <string name="youth_consent_str1">In order to be visible to scouts we need your Parent/Guardian contact details</string>
+    <string name="please_fill_out_the_fields_below_and_tick_the_checkbox">Please fill out the fields below and tick the checkbox.</string>
+    <string name="parent_guardians_phone">Parent/Guardians Phone</string>
+    <string name="youth_consent_term">I consent that the above information listed is correct and true to the best of my knowledge</string>
+    <string name="please_enter_minor_name">Please enter minor name</string>
+    <string name="please_enter_parent_name">Please enter parent name</string>
+    <string name="please_enter_a_parent_email">Please enter a parent email</string>
+    <string name="please_enter_a_valid_parent_email">Please enter a valid parent email</string>
+    <string name="please_tick_the_checkbox">Please tick the checkbox</string>
+    <string name="what_are_your_favourite_features">What are your favourite features?</string>
+    <string name="sure_dob_popup">Are you sure about your DOB? (You will not be able to change it in future)</string>
+    <string name="position">Position</string>
+    <string name="are_you_sure_about_your_dob">Are you sure about your DOB?</string>
+    <string name="you_will_not_be_able_to_change_it_in_future">(You will not be able to change it in future)</string>
+    <string name="i_am">I am</string>
+    <string name="double_tap_to_cheer" translatable="false">Double Tap to Cheer</string>
+    <string name="player_of_the_match">Player of the Match</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="make_team_coach">Make Team Coach</string>
+    <string name="remove_team_coach">Remove Team Coach</string>
+    <string name="assign_coach">Assign Coach</string>
+    <string name="assign_manager">Assign Manager</string>
+    <string name="remove_from_team">Remove From Team</string>
+    <string name="assign_team_coach">Assign Team Coach</string>
+    <string name="assign_team_manager">Assign Team Manager</string>
+    <string name="delete_this_team" translatable="false">delete this team?</string>
+    <string name="archive_this_team" translatable="false">archive this team?</string>
+    <string name="do_you_have_a_referral_code">Do you have a referral code?</string>
+    <string name="ua">UA</string>
+    <string name="previous_years" translatable="false">past years</string>
+    <string name="national" translatable="false">National</string>
+    <string name="global" translatable="false">Global</string>
+
+<!--    <string name="leagues_cups">Leagues/Cups</string>-->
+    <string name="leagues_cups">Tournaments</string>
+    <string name="my_leagues_cups" translatable="false">My Leagues/Cups</string>
+<!--    <string name="clubs_partners">Clubs/Partners</string>-->
+    <string name="clubs_partners">Clubs</string>
+    <string name="trials_menu">Trials</string>
+
+    <string name="no_results_found">No results found.</string>
+    <string name="visit" translatable="false">VISIT</string>
+    <string name="ok">OK</string>
+
+    <string name="socaloca_only_collects_the_data" translatable="false">*SocaLoca only collects the data is necessary to provides its service and\nstores it in the anonymised way in our own self-hosted analytics system.</string>
+    <string name="text_name_number" translatable="false">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "</string>
+    <string name="text_name" translatable="false">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "</string>
+    <string name="email_phone" translatable="false">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.@1234567890!#$%&amp;'*+-/=?^_`{|}~"</string>
+    <string name="email_phone_socaloca_id" translatable="false">"SLabcdefghijklmnopqrstuvwxyz.@1234567890!#$%&amp;'*+-/=?^_`{|}~"</string>
+    <string name="wrong_password" translatable="false">wrong password</string>
+    <string name="my_matches_tournament" translatable="false">Find all the matches assigned to you by the Tournament Organisers. Update scores and records by tapping \"Manage\". Download Match Report once a match is updated.</string>
+    <string name="live_match_tournament" translatable="false">Find all the matches assigned to you by the Tournament Organiser here. Tap on \"START MATCH"\ to publish \"Live Scores"\.</string>
+    <string name="live_match_tournament_filter" translatable="false">You can find all the Live Tournaments and it’s Live Matches right here. We are showing you the Live Matches on SOCALOCA, to choose a different country please use the “Select Country” filter below.</string>
+
+
+    <string name="penalty_goal">penalty Missed</string>
+    <string name="attempt"> Attempts</string>
+    <string name="Goals"> Goal</string>
+
+
+
+    <string name="assists">Assists</string>
+    <string name="number_of_assists" translatable="false">Number of assists</string>
+    <string name="cleansheets" translatable="false">Clean Sheets</string>
+    <string name="number_of_cleansheets" translatable="false">Number of clean sheet</string>
+    <string name="this_post_is_removed" translatable="false">This post is removed</string>
+    <string name="soca_loca_id_copied_successfully" translatable="false">SocaLoca ID copied successfully</string>
+    <string name="tagged_videos">Tagged Videos</string>
+    <string name="tagged_skill_videos">Tagged Skill Videos</string>
+    <string name="region">Region</string>
+    <string name="comment_blockmessage">Sorry!!! Your commenting rights are blocked in parental controls. Please consult your parent/guardian.</string>
+    <string name="comment_block_follow">Sorry!!! Your liking/following rights are blocked in parental controls. Please consult your parent/guardian.</string>
+    <string name="comment_block_post">Sorry!!! Your photo/video uploading rights are blocked in parental controls. Please consult your parent/guardian.</string>
+    <string name="common_open_on_phone">Open on phone</string>
+    <string name="com_facebook_image_download_unknown_error">Unexpected error while downloading an image.</string>
+    <string name="please_enter_a_valid_socaloca_id">Please enter a valid socaloca id</string>
+    <string name="socaloca_id">SOCALOCA ID *</string>
+    <string name="socaloca_id_">SOCALOCA ID</string>
+    <string name="email_">Email</string>
+    <string name="mobile_number_">Mobile number</string>
+    <string name="socaloca_id_is_not_registered">Socaloca id is not registered</string>
+    <string name="enter_email">Enter Email *</string>
+    <string name="forgot_password_">Forgot Password</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="enter_your_socaloca_id">enter your SOCALOCA ID *</string>
+    <string name="enter_your_mobile_number">enter your mobile number *</string>
+    <string name="enter_your_email_">enter your email *</string>
+    <string name="we_need_to_associate_an_email_address_with_this_socaloca_account_all_otps_will_be_mailed_to_this_email_please_add_the_same_below">We need to associate an email address with this SOCALOCA account. All OTPs will be mailed to this email. Please add the same below.</string>
+    <string name="no_account_found_with_this_credential">No account found with this credential</string>
+    <string name="verification_code_sent_successfully">Verification code sent successfully</string>
+    <string name="please_enter_valid_socaloca_id">Please enter valid SOCALOCA ID</string>
+    <string name="on_going_tournaments">Ongoing Tournaments</string>
+    <string name="email_already_registered">Email already registered. </string>
+
+    <string name="facebook_app_id">1370927198083603</string>
+
+
+
+</resources>

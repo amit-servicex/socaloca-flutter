@@ -1,0 +1,253 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/router/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/app_snackbar.dart';
+import '../../../shared/widgets/primary_button.dart';
+import '../data/auth_models.dart';
+import '../providers/auth_provider.dart';
+
+/// OtpFragment equivalent.
+/// Receives `userId` and `type` via GoRouter extras (Map<String, String>).
+/// 6-digit OTP with auto-advance, 60 s resend countdown.
+class OtpScreen extends ConsumerStatefulWidget {
+  const OtpScreen({super.key, required this.userId, required this.type});
+
+  final String userId;
+  final String type; // 'email' | 'phone'
+
+  @override
+  ConsumerState<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends ConsumerState<OtpScreen> {
+  static const _otpLength = 6;
+
+  final List<TextEditingController> _controllers =
+      List.generate(_otpLength, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes =
+      List.generate(_otpLength, (_) => FocusNode());
+
+  bool _isLoading = false;
+  int _resendSeconds = 60;
+  Timer? _resendTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startResendTimer();
+  }
+
+  @override
+  void dispose() {
+    _resendTimer?.cancel();
+    for (final c in _controllers) { c.dispose(); }
+    for (final f in _focusNodes) { f.dispose(); }
+    super.dispose();
+  }
+
+  void _startResendTimer() {
+    _resendSeconds = 60;
+    _resendTimer?.cancel();
+    _resendTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      setState(() {
+        if (_resendSeconds > 0) {
+          _resendSeconds--;
+        } else {
+          _resendTimer?.cancel();
+        }
+      });
+    });
+  }
+
+  String get _enteredOtp =>
+      _controllers.map((c) => c.text).join();
+
+  Future<void> _verify() async {
+    if (_enteredOtp.length < _otpLength) {
+      AppSnackBar.showError(context, 'Please enter the full $_otpLength-digit code');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    final result = await ref.read(authRepositoryProvider).verifyOtp(
+          otp: _enteredOtp,
+          userId: widget.userId,
+          type: widget.type,
+        );
+
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    switch (result) {
+      case AuthSuccess():
+        AppSnackBar.showSuccess(context, 'Verified successfully!');
+        // After OTP verification, ALWAYS navigate to create profile
+        // This matches Android behavior: OtpFragment -> ThankYouCreateProfile
+        context.go(AppRoutes.createProfile);
+
+      case AuthFailure(:final error):
+        AppSnackBar.showError(context, error);
+        // Clear fields on failure
+        for (final c in _controllers) { c.clear(); }
+        _focusNodes.first.requestFocus();
+    }
+  }
+
+  void _onDigitChanged(int index, String value) {
+    if (value.isNotEmpty) {
+      // Auto-advance to next field
+      if (index < _otpLength - 1) {
+        _focusNodes[index + 1].requestFocus();
+      } else {
+        _focusNodes[index].unfocus();
+        // Auto-submit when last digit is entered
+        _verify();
+      }
+    }
+  }
+
+  void _onKeyEvent(int index, KeyEvent event) {
+    // Move back on backspace when field is empty
+    if (event is KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.backspace &&
+        _controllers[index].text.isEmpty &&
+        index > 0) {
+      _focusNodes[index - 1].requestFocus();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final canResend = _resendSeconds == 0;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Verify Code'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: AppColors.textPrimary,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // ── Header ────────────────────────────────────────────
+            const Icon(
+              Icons.mark_email_read_outlined,
+              size: 64,
+              color: AppColors.primary,
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Enter verification code',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 22,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'We sent a 6-digit code to your ${widget.type}.',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppColors.textSecondary,
+                fontFamily: 'Poppins',
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 40),
+
+            // ── OTP cells ─────────────────────────────────────────
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(_otpLength, (i) {
+                return SizedBox(
+                  width: 46,
+                  height: 56,
+                  child: KeyboardListener(
+                    focusNode: FocusNode(),
+                    onKeyEvent: (e) => _onKeyEvent(i, e),
+                    child: TextFormField(
+                      controller: _controllers[i],
+                      focusNode: _focusNodes[i],
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.center,
+                      maxLength: 1,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Poppins',
+                        color: AppColors.textPrimary,
+                      ),
+                      decoration: InputDecoration(
+                        counterText: '',
+                        contentPadding: EdgeInsets.zero,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: AppColors.border, width: 1.5),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                        ),
+                        filled: true,
+                        fillColor: AppColors.inputBackground,
+                      ),
+                      onChanged: (v) => _onDigitChanged(i, v),
+                    ),
+                  ),
+                );
+              }),
+            ),
+            const SizedBox(height: 40),
+
+            // ── Verify button ──────────────────────────────────────
+            PrimaryButton(
+              label: 'Verify',
+              onPressed: _verify,
+              isLoading: _isLoading,
+            ),
+            const SizedBox(height: 24),
+
+            // ── Resend ─────────────────────────────────────────────
+            Center(
+              child: canResend
+                  ? TextButton(
+                      onPressed: _startResendTimer,
+                      child: const Text(
+                        'Resend Code',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  : Text(
+                      'Resend code in ${_resendSeconds}s',
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
