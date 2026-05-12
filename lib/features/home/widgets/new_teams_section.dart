@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:socaloca/core/storage/storage_service.dart';
+import 'package:socaloca/features/home/data/models/feed_new_team_model.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
-import 'feed_section_header.dart';
 
 class NewTeamsSection extends ConsumerStatefulWidget {
   const NewTeamsSection({super.key});
@@ -61,6 +62,17 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
     _autoSlideTimer?.cancel();
     _pageController.dispose();
     super.dispose();
+  }
+
+  void _onShareTeam(FeedNewTeamModel team) {
+    final currentUserId = StorageService.userId ?? '';
+    final teamId = team.teamId ?? team.id ?? '';
+    final url =
+        'https://share.socaloca.football/team/$teamId/u/$currentUserId';
+    final name = team.teamName ?? 'Team';
+    SharePlus.instance.share(ShareParams(
+      text: '$name - Check out this post on SocaLoca. $url',
+    ));
   }
 
   @override
@@ -370,9 +382,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
 
                     // ── Share button ───────────────────────────────────
                     InkWell(
-                      onTap: () {
-                        // TODO: implement share
-                      },
+                      onTap: () => _onShareTeam(team),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 14),
@@ -463,237 +473,6 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
   }
 }
 
-class _TeamCard extends StatelessWidget {
-  const _TeamCard({
-    required this.team,
-    required this.teamLocation,
-    this.joinedText,
-    this.onPrevious,
-    this.onNext,
-  });
-
-  final dynamic team; // Replace with your actual Team model type
-  final String teamLocation;
-  final String? joinedText;
-  final VoidCallback? onPrevious;
-  final VoidCallback? onNext;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // ── Announcement section ───────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _TeamAvatar(team: team, radius: 22),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            team.teamName ?? 'Team',
-                            style: const TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF1A1A1A),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          if (joinedText != null) ...[
-                            const SizedBox(height: 2),
-                            Text(
-                              joinedText!,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF888888),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    const Icon(
-                      Icons.verified,
-                      color: Color(0xFF1A73E8),
-                      size: 22,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  '${team.teamName ?? 'Team'} has joined SocaLoca!!!',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF1A1A1A),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Check team bio',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1A1A1A),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // ── Divider ────────────────────────────────────────────────────
-          Container(height: 0.5, color: const Color(0xFFE8E8E8)),
-
-          // ── Team profile row with navigation ──────────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            child: Row(
-              children: [
-                // Left chevron
-                _NavChevron(
-                  icon: Icons.chevron_left,
-                  onTap: onPrevious,
-                  enabled: onPrevious != null,
-                ),
-                const SizedBox(width: 4),
-
-                // Team logo
-                _TeamAvatar(team: team, radius: 28),
-                const SizedBox(width: 12),
-
-                // Team info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              team.teamName ?? 'Team',
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF1A1A1A),
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if (team.country != null &&
-                              team.country!.isNotEmpty) ...[
-                            const SizedBox(width: 6),
-                            Text(
-                              _countryFlag(team.country),
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                          ],
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      if (team.teamType != null)
-                        Text(
-                          team.teamType!,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF888888),
-                          ),
-                        ),
-                      if (teamLocation.isNotEmpty) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          teamLocation,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF1A1A1A),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 4),
-                // Right chevron
-                _NavChevron(
-                  icon: Icons.chevron_right,
-                  onTap: onNext,
-                  enabled: onNext != null,
-                ),
-              ],
-            ),
-          ),
-
-          // ── Divider ────────────────────────────────────────────────────
-          Container(height: 0.5, color: const Color(0xFFE8E8E8)),
-
-          // ── Share button ───────────────────────────────────────────────
-          InkWell(
-            onTap: () {
-              // TODO: implement share
-            },
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.ios_share_rounded,
-                      size: 18, color: Color(0xFF1A1A1A)),
-                  SizedBox(width: 8),
-                  Text(
-                    'SHARE',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1A1A),
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 /// Naive flag emoji helper — replace with a proper package if needed.
 String _countryFlag(String? country) {
   if (country == null) return '';
@@ -711,53 +490,3 @@ String _countryFlag(String? country) {
   return map[country] ?? '🇬🇭'; // Default to Ghana as fallback if unknown
 }
 
-// ─── Reusable sub-widgets ────────────────────────────────────────────────────
-
-class _TeamAvatar extends StatelessWidget {
-  const _TeamAvatar({required this.team, required this.radius});
-  final dynamic team;
-  final double radius;
-
-  bool get _hasLogo =>
-      team.teamLogo != null &&
-      team.teamLogo!.isNotEmpty &&
-      !team.teamLogo!.startsWith('file:///');
-
-  @override
-  Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: const Color(0xFFEEEEEE),
-      backgroundImage: _hasLogo
-          ? NetworkImage(ApiConstants.getImageUrl(team.teamLogo))
-          : null,
-      child: _hasLogo
-          ? null
-          : Icon(Icons.groups,
-              size: radius * 1.1, color: const Color(0xFF888888)),
-    );
-  }
-}
-
-class _NavChevron extends StatelessWidget {
-  const _NavChevron({
-    required this.icon,
-    required this.enabled,
-    this.onTap,
-  });
-  final IconData icon;
-  final bool enabled;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Icon(
-        icon,
-        size: 28,
-        color: enabled ? const Color(0xFF888888) : const Color(0xFFCCCCCC),
-      ),
-    );
-  }
-}

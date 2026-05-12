@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
@@ -102,7 +103,15 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
               // Back button or spacer
               if (showBack)
                 IconButton(
-                  icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+                  icon: SvgPicture.asset(
+                    'assets/icons/ic_left_arrow.svg',
+                    width: 50,
+                    height: 50,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.socaBlack,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                   onPressed: () => context.pop(),
                 )
               else
@@ -132,8 +141,8 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 width: 40,
                 height: 40,
               ),
-
-              const Spacer(),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.014),
+              // const Spacer(),
 
               // Search
               IconButton(
@@ -165,7 +174,11 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     ),
                 ],
               ),
-
+              IconButton(
+                icon: const Icon(Icons.menu,
+                    size: 25, color: AppColors.socaBlack),
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
+              ),
               const SizedBox(width: 10),
             ],
           ),

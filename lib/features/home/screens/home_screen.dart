@@ -624,6 +624,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     floating: true,
                     snap: true,
                     pinned: true,
+                    surfaceTintColor: AppColors.socaBlack,
                     expandedHeight: 150,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Padding(

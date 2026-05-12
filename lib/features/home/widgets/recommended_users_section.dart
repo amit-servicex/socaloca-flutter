@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../core/constants/api_constants.dart';
+import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../data/models/feed_rec_user_model.dart';
 import '../providers/home_feed_providers.dart';
 
 class RecommendedUsersSection extends ConsumerStatefulWidget {
@@ -77,6 +80,19 @@ class _RecommendedUsersSectionState
         curve: Curves.easeInOut,
       );
     }
+  }
+
+  void _onShare(FeedRecUserModel user) {
+    final currentUserId = StorageService.userId ?? '';
+    final userId = user.userId ?? '';
+    final isPlayer = (user.userType ?? '').toLowerCase() == 'player';
+    final path = isPlayer ? 'pl' : 'cm';
+    final url =
+        'https://share.socaloca.football/$path/$userId/u/$currentUserId';
+    final name = '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim();
+    SharePlus.instance.share(ShareParams(
+      text: '$name - Check out this post on SocaLoca. $url',
+    ));
   }
 
   @override
@@ -174,7 +190,7 @@ class _RecommendedUsersSectionState
     );
   }
 
-  Widget _buildUserCard(dynamic user, String name) {
+  Widget _buildUserCard(FeedRecUserModel user, String name) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -354,29 +370,32 @@ class _RecommendedUsersSectionState
         ),
 
         // SHARE button at bottom
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border:
-                Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.ios_share_rounded,
-                  size: 22, color: AppColors.socaBlack),
-              SizedBox(width: 8),
-              Text(
-                'SHARE',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.socaBlack,
+        GestureDetector(
+          onTap: () => _onShare(user),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border(
+                  top: BorderSide(color: Colors.grey.shade300, width: 1)),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.ios_share_rounded,
+                    size: 22, color: AppColors.socaBlack),
+                SizedBox(width: 8),
+                Text(
+                  'SHARE',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.socaBlack,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

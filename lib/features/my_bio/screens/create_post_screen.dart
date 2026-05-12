@@ -381,7 +381,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   child: TextField(
                     controller: _titleController,
                     maxLength: 200,
-                    maxLines: 3,
+                    maxLines: 1,
                     style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
