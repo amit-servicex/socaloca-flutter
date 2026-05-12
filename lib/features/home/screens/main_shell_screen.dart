@@ -48,7 +48,7 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: HomeAppBar(),
+      appBar: const HomeAppBar(),
       endDrawer: const HomeDrawer(),
       body: widget.child,
       bottomNavigationBar: Container(
