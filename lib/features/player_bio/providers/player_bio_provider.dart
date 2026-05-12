@@ -467,6 +467,104 @@ class PlayerBioNotifier extends StateNotifier<PlayerBioState> {
     }
   }
 
+  /// Add a match activity and refresh mini activity
+  Future<bool> addMatchActivity({
+    required String gameType,
+    required String matchDate,
+    required int matchMonth,
+    required int matchYear,
+    required String matchMonthStr,
+    required int goals,
+    required int goalSaved,
+    required int assists,
+    required String playPosition,
+    required String playPositionType,
+    required int minutes,
+    required String myTeamName,
+    required String opponentTeamName,
+    required int rating,
+    required String notes,
+    List<Map<String, dynamic>> tagged = const [],
+  }) async {
+    final userId = StorageService.userId;
+    final currentUser = StorageService.currentUser;
+    if (userId == null || currentUser == null) return false;
+
+    try {
+      final success = await _repository.addMatchActivity(
+        userId: userId,
+        gameType: gameType,
+        matchDate: matchDate,
+        matchMonth: matchMonth,
+        matchYear: matchYear,
+        matchMonthStr: matchMonthStr,
+        goals: goals,
+        goalSaved: goalSaved,
+        assists: assists,
+        playPosition: playPosition,
+        playPositionType: playPositionType,
+        minutes: minutes,
+        myTeamName: myTeamName,
+        opponentTeamName: opponentTeamName,
+        rating: rating,
+        notes: notes,
+        tagged: tagged,
+        isPlayer: currentUser['isPlayer'] ?? false,
+        isCoach: currentUser['isCoach'] ?? false,
+        isAdmin: currentUser['isAdmin'] ?? false,
+        isFan: currentUser['isFan'] ?? false,
+        firstName: currentUser['firstName'] ?? '',
+        lastName: currentUser['lastName'] ?? '',
+        myImageUrl: currentUser['imageUrl'] ?? '',
+      );
+      if (success) await loadMiniActivity();
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Add a training session and refresh mini activity
+  Future<bool> addTrainingActivity({
+    required String trainType,
+    required String trainDate,
+    required int trainMonth,
+    required int trainYear,
+    required String trainMonthStr,
+    required int minutes,
+    required String notes,
+    List<Map<String, dynamic>> tagged = const [],
+  }) async {
+    final userId = StorageService.userId;
+    final currentUser = StorageService.currentUser;
+    if (userId == null || currentUser == null) return false;
+
+    try {
+      final success = await _repository.addTrainingActivity(
+        userId: userId,
+        trainType: trainType,
+        trainDate: trainDate,
+        trainMonth: trainMonth,
+        trainYear: trainYear,
+        trainMonthStr: trainMonthStr,
+        minutes: minutes,
+        notes: notes,
+        tagged: tagged,
+        isPlayer: currentUser['isPlayer'] ?? false,
+        isCoach: currentUser['isCoach'] ?? false,
+        isAdmin: currentUser['isAdmin'] ?? false,
+        isFan: currentUser['isFan'] ?? false,
+        firstName: currentUser['firstName'] ?? '',
+        lastName: currentUser['lastName'] ?? '',
+        myImageUrl: currentUser['imageUrl'] ?? '',
+      );
+      if (success) await loadMiniActivity();
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// Load tagged videos
   Future<void> loadTaggedVideos() async {
     final userId = StorageService.userId;

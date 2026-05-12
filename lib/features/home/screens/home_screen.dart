@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -549,9 +550,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userId = StorageService.userId ?? '';
-    final user = ref.watch(currentUserProvider);
-    final matchUpdates = ref.watch(matchUpdatesProvider);
+    final cachedUser = ref.watch(currentUserProvider);
+    final profileState = ref.watch(userProfileDetailsProvider);
 
+    // Use the freshly fetched user details if available, otherwise fallback to the cached login user
+    var user = cachedUser;
+    final profileData = profileState.valueOrNull;
+    if (profileData != null) {
+      if (profileData.runtimeType.toString() == 'UserModel') {
+        user = profileData as dynamic;
+      } else if (profileData is Map<String, dynamic>) {
+        final userDetails =
+            profileData['response']?['userDetails'] ?? profileData;
+        if (userDetails is Map<String, dynamic>) {
+          try {
+            user = (cachedUser as dynamic).copyWith(
+              postCount: userDetails['postCount'],
+              likeCount: userDetails['likeCount'],
+              followersCount: userDetails['followCount'],
+              followingCount: userDetails['followingCount'],
+              profileImage: userDetails['imageUrl'] ??
+                  (cachedUser as dynamic).profileImage,
+            );
+          } catch (_) {}
+        }
+      }
+    }
+
+    final matchUpdates = ref.watch(matchUpdatesProvider);
+    log("this is the profile image ${user?.profileImage}");
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.socaPageBg,
@@ -624,13 +651,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    _buildStatColumn('0', 'POSTS'),
-                                    const SizedBox(width: 12),
-                                    _buildStatColumn('0', 'CHEERS'),
-                                    const SizedBox(width: 12),
-                                    _buildStatColumn('0', 'FOLLOWERS'),
-                                    const SizedBox(width: 12),
-                                    _buildStatColumn('0', 'FOLLOWING'),
+                                    _buildStatColumn(
+                                        (user?.postCount ?? 0).toString(),
+                                        'POSTS'),
+                                    const SizedBox(width: 8),
+                                    _buildStatColumn(
+                                        (user?.likeCount ?? 0).toString(),
+                                        'CHEERS'),
+                                    const SizedBox(width: 8),
+                                    _buildStatColumn(
+                                        (user?.followersCount ?? 0).toString(),
+                                        'FOLLOWERS'),
+                                    const SizedBox(width: 8),
+                                    _buildStatColumn(
+                                        (user?.followingCount ?? 0).toString(),
+                                        'FOLLOWING'),
                                   ],
                                 ),
                                 CircleAvatar(
@@ -641,7 +676,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           user!.profileImage!.isNotEmpty &&
                                           !user.profileImage!
                                               .startsWith('file:///')
-                                      ? NetworkImage(user.profileImage!)
+                                      ? NetworkImage(ApiConstants.getImageUrl(
+                                          user.profileImage!))
                                       : null,
                                   child: user?.profileImage == null ||
                                           user!.profileImage!.isEmpty ||
@@ -667,26 +703,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  _buildActionItem(
-                                      Icons.edit_document, 'My Bio'),
+                                  GestureDetector(
+                                    onTap: () => context.push(AppRoutes.myBio),
+                                    child: _buildActionItem(
+                                        Icons.edit_document, 'My Bio'),
+                                  ),
                                   Container(
                                       width: 1,
                                       height: 20,
                                       color: Colors.grey.shade300),
-                                  _buildActionItem(
-                                      Icons.image_outlined, 'My Posts'),
+                                  InkWell(
+                                    onTap: () => context.push(
+                                      AppRoutes.myPosts,
+                                      extra: {
+                                        'userId': userId,
+                                        'isOwnProfile': true,
+                                      },
+                                    ),
+                                    child: _buildActionItem(
+                                        Icons.image_outlined, 'My Posts'),
+                                  ),
                                   Container(
                                       width: 1,
                                       height: 20,
                                       color: Colors.grey.shade300),
-                                  _buildActionItem(
-                                      Icons.star_border, 'My Ratings'),
+                                  InkWell(
+                                    onTap: () => context.push(
+                                      AppRoutes.mySkillRatings,
+                                      extra: {'userId': userId},
+                                    ),
+                                    child: _buildActionItem(
+                                        Icons.star_border, 'My Ratings'),
+                                  ),
                                   Container(
                                       width: 1,
                                       height: 20,
                                       color: Colors.grey.shade300),
-                                  _buildActionItem(
-                                      Icons.photo_library_outlined, 'Gallery'),
+                                  InkWell(
+                                    onTap: () => context.push(
+                                      AppRoutes.gallery,
+                                      extra: {
+                                        'userId': userId,
+                                        'isOwnProfile': true,
+                                      },
+                                    ),
+                                    child: _buildActionItem(
+                                        Icons.photo_library_outlined,
+                                        'Gallery'),
+                                  ),
                                 ],
                               ),
                             ),
@@ -759,20 +823,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: AppColors.socaBlack,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: const Text(
-                              'CREATE A POST',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.socaYellow,
+                          InkWell(
+                            onTap: () {
+                              context.push(AppRoutes.createPost);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: AppColors.socaBlack,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Text(
+                                'CREATE A POST',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.socaYellow,
+                                ),
                               ),
                             ),
                           ),
@@ -807,7 +876,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 // TODO: navigate to feedback form
               },
             ),
-          LiveMatchBanner(onTap: () => context.push(AppRoutes.matches)),
+          // LiveMatchBanner(onTap: () => context.push(AppRoutes.matches)),
         ],
       ),
     );

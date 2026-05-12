@@ -49,10 +49,11 @@ class _TournamentFeaturedScreenState
     final user = ref.read(currentUserProvider);
     if (user == null) return;
 
-    final data = await ref.read(tournamentRepositoryProvider).getTournamentDetails(
-          userId: user.id,
-          tournamentId: widget.tournamentId,
-        );
+    final data =
+        await ref.read(tournamentRepositoryProvider).getTournamentDetails(
+              userId: user.id,
+              tournamentId: widget.tournamentId,
+            );
 
     if (mounted && data != null) {
       setState(() {
@@ -68,18 +69,19 @@ class _TournamentFeaturedScreenState
     final user = ref.read(currentUserProvider);
     if (user == null) return;
 
-    final result = await ref.read(tournamentRepositoryProvider).followTournament(
-          userId: user.id,
-          tournamentId: widget.tournamentId,
-          myName: user.name,
-          myImageUrl: user.profileImage,
-          country: user.country,
-          gender: user.userType,
-          isPlayer: user.isPlayer,
-          isCoach: user.isCoach,
-          isAdmin: user.isAdmin,
-          isFan: user.isFan,
-        );
+    final result =
+        await ref.read(tournamentRepositoryProvider).followTournament(
+              userId: user.id,
+              tournamentId: widget.tournamentId,
+              myName: user.name ?? '',
+              myImageUrl: user.profileImage,
+              country: user.country,
+              gender: user.userType,
+              isPlayer: user.isPlayer,
+              isCoach: user.isCoach,
+              isAdmin: user.isAdmin,
+              isFan: user.isFan,
+            );
 
     if (result['success'] == true && mounted) {
       final newFollowing = result['isFollow'] as bool;

@@ -32,6 +32,16 @@ class AppRoutes {
   static const String matches = '/matches';
   static const String notifications = '/notifications';
   static const String profile = '/profile';
+  static const String myBio = '/my-bio';
+  static const String mySkillRatings = '/my-bio/ratings';
+  static const String skillDetail = '/skill-detail';
+  static const String skillDetailViewAll = '/skill-detail/view-all';
+  static const String myEndorsementList = '/my-bio/endorsements';
+  static const String myActivities = '/my-bio/activities';
+  static const String myPosts = '/my-bio/posts';
+  static const String gallery = '/my-bio/gallery';
+  static const String createPost = '/my-bio/create-post';
+  static const String editProfile = '/my-bio/edit-profile';
 
   static const String matchDetail = '/matches/:matchId';
   static const String liveMatch = '/matches/:matchId/live';

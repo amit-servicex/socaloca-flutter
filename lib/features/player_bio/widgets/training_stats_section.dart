@@ -10,6 +10,7 @@ class TrainingStatsSection extends StatelessWidget {
   final MatchTrainingStatusModel? trainPrevMonth;
   final bool isOwnProfile;
   final bool isLoadingMatches;
+  final VoidCallback? onAdd;
 
   const TrainingStatsSection({
     super.key,
@@ -17,6 +18,7 @@ class TrainingStatsSection extends StatelessWidget {
     required this.trainPrevMonth,
     required this.isOwnProfile,
     required this.isLoadingMatches,
+    this.onAdd,
   });
 
   String _getMonthName(int? month) {
@@ -40,127 +42,132 @@ class TrainingStatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasData = (trainCurrMonth?.sessions ?? 0) > 0 ||
-        (trainPrevMonth?.sessions ?? 0) > 0;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Training Stats Details',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.socaBlack,
-                ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.socaGrey.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(8),
               ),
-              if (hasData)
-                TextButton(
-                  onPressed: () {
-                    // TODO: Navigate to all training stats
-                  },
-                  child: const Text(
-                    'View All',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: AppColors.socaYellow,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          if (isLoadingMatches)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(
-                  color: AppColors.socaYellow,
-                ),
-              ),
-            )
-          else if (!hasData)
-            Column(
-              children: [
-                const Text(
-                  'No training stats available',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: AppColors.socaGrey,
-                  ),
-                ),
-                if (isOwnProfile) ...[
-                  const SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () {
-                      // TODO: Navigate to add training
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.socaBlack,
-                      foregroundColor: AppColors.socaYellow,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 8,
+              child: isLoadingMatches
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(
+                          color: AppColors.socaYellow,
+                        ),
                       ),
+                    )
+                  : Column(
+                      children: [
+                        IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Previous Month
+                              Expanded(
+                                child: _buildMonthColumn(
+                                  _getMonthName(trainPrevMonth?.month),
+                                  trainPrevMonth?.sessions ?? 0,
+                                  trainPrevMonth?.mins ?? 0,
+                                ),
+                              ),
+                              VerticalDivider(
+                                color: AppColors.socaBlack.withOpacity(0.5),
+                                thickness: 1,
+                                width: 32,
+                              ),
+                              // Current Month
+                              Expanded(
+                                child: _buildMonthColumn(
+                                  _getMonthName(trainCurrMonth?.month),
+                                  trainCurrMonth?.sessions ?? 0,
+                                  trainCurrMonth?.mins ?? 0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (isOwnProfile && onAdd != null) ...[
+                          const SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: onAdd,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.socaBlack,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Text(
+                                'ADD',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.socaYellow,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                    child: const Text(
-                      'Add',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            )
-          else
-            Row(
-              children: [
-                // Previous Month
-                Expanded(
-                  child: _buildMonthColumn(
-                    _getMonthName(trainPrevMonth?.month),
-                    trainPrevMonth?.sessions ?? 0,
-                    trainPrevMonth?.mins ?? 0,
-                  ),
-                ),
-
-                const SizedBox(width: 20),
-
-                // Current Month
-                Expanded(
-                  child: _buildMonthColumn(
-                    _getMonthName(trainCurrMonth?.month),
-                    trainCurrMonth?.sessions ?? 0,
-                    trainCurrMonth?.mins ?? 0,
-                  ),
-                ),
-              ],
             ),
-        ],
-      ),
+            Positioned(
+              top: -30,
+              left: 10,
+              child: Container(
+                width: MediaQuery.of(context).size.width - 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.socaBlack,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'TRAINING STATS',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaYellow,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // TODO: Navigate to all stats
+                      },
+                      child: const Text(
+                        'view all',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -169,7 +176,7 @@ class TrainingStatsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          monthName,
+          monthName.isNotEmpty ? monthName : 'Month',
           style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
@@ -179,25 +186,27 @@ class TrainingStatsSection extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         _buildStatItem('Number of Sessions', sessions.toString()),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         _buildStatItem('Training Minutes', minutes.toString()),
       ],
     );
   }
 
   Widget _buildStatItem(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 11,
-            color: AppColors.socaGrey,
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              color: AppColors.socaBlack,
+            ),
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(width: 8),
         Text(
           value,
           style: const TextStyle(

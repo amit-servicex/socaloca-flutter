@@ -45,7 +45,9 @@ class HomeDrawer extends ConsumerWidget {
                         : null,
                     child: user.profileImage == null
                         ? Text(
-                            user.name[0].toUpperCase(),
+                            user.name?.isNotEmpty == true
+                                ? user.name![0].toUpperCase()
+                                : 'S',
                             style: const TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
@@ -57,7 +59,7 @@ class HomeDrawer extends ConsumerWidget {
                   const SizedBox(height: 10),
                   // Full name — yellow
                   Text(
-                    user.name,
+                    user.name ?? 'SocaLoca User',
                     style: const TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,

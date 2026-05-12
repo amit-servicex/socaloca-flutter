@@ -19,7 +19,8 @@ final cupDetailsProvider = FutureProvider.family<TournamentCupModel?, String>(
 );
 
 /// Cup ready detail provider (for active/live cups)
-final cupReadyDetailProvider = FutureProvider.family<TournamentCupModel?, String>(
+final cupReadyDetailProvider =
+    FutureProvider.family<TournamentCupModel?, String>(
   (ref, tournamentId) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return null;
@@ -33,7 +34,8 @@ final cupReadyDetailProvider = FutureProvider.family<TournamentCupModel?, String
 );
 
 /// Cup group matches provider
-final cupGroupMatchesProvider = FutureProvider.family<CupGroupModel?, CupGroupMatchesParams>(
+final cupGroupMatchesProvider =
+    FutureProvider.family<CupGroupModel?, CupGroupMatchesParams>(
   (ref, params) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return null;
@@ -49,7 +51,8 @@ final cupGroupMatchesProvider = FutureProvider.family<CupGroupModel?, CupGroupMa
 );
 
 /// Cup group point table provider
-final cupGroupPointTableProvider = FutureProvider.family<List<CupGroupPointTableEntry>, CupGroupTableParams>(
+final cupGroupPointTableProvider =
+    FutureProvider.family<List<CupGroupPointTableEntry>, CupGroupTableParams>(
   (ref, params) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -64,7 +67,8 @@ final cupGroupPointTableProvider = FutureProvider.family<List<CupGroupPointTable
 );
 
 /// Cup knockout matches provider
-final cupKnockoutMatchesProvider = FutureProvider.family<List<CupMatchModel>, CupKnockoutParams>(
+final cupKnockoutMatchesProvider =
+    FutureProvider.family<List<CupMatchModel>, CupKnockoutParams>(
   (ref, params) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -79,7 +83,8 @@ final cupKnockoutMatchesProvider = FutureProvider.family<List<CupMatchModel>, Cu
 );
 
 /// Cup group stats provider (group stage stats)
-final cupGroupStatsProvider = FutureProvider.family<List<CupPlayerStatEntry>, CupGroupStatsParams>(
+final cupGroupStatsProvider =
+    FutureProvider.family<List<CupPlayerStatEntry>, CupGroupStatsParams>(
   (ref, params) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -96,7 +101,8 @@ final cupGroupStatsProvider = FutureProvider.family<List<CupPlayerStatEntry>, Cu
 );
 
 /// Cup match stats provider (knockout stats)
-final cupMatchStatsProvider = FutureProvider.family<List<CupPlayerStatEntry>, CupMatchStatsParams>(
+final cupMatchStatsProvider =
+    FutureProvider.family<List<CupPlayerStatEntry>, CupMatchStatsParams>(
   (ref, params) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -148,7 +154,7 @@ class CupFollowNotifier extends StateNotifier<AsyncValue<bool>> {
       final result = await repository.followCup(
         userId: user.id,
         tournamentId: tournamentId,
-        myName: user.name,
+        myName: user.name ?? '',
         myImageUrl: user.profileImage,
         country: user.country,
         gender: user.userType,
@@ -171,7 +177,8 @@ class CupFollowNotifier extends StateNotifier<AsyncValue<bool>> {
   }
 }
 
-final cupFollowProvider = StateNotifierProvider.family<CupFollowNotifier, AsyncValue<bool>, String>(
+final cupFollowProvider =
+    StateNotifierProvider.family<CupFollowNotifier, AsyncValue<bool>, String>(
   (ref, tournamentId) => CupFollowNotifier(ref),
 );
 
@@ -208,7 +215,7 @@ class CupJoinRequestNotifier extends StateNotifier<AsyncValue<bool>> {
       );
 
       state = AsyncValue.data(success);
-      
+
       if (success) {
         // Invalidate cup details to refresh
         ref.invalidate(cupDetailsProvider(tournamentId));
@@ -240,7 +247,8 @@ class CupJoinRequestNotifier extends StateNotifier<AsyncValue<bool>> {
   }
 }
 
-final cupJoinRequestProvider = StateNotifierProvider.family<CupJoinRequestNotifier, AsyncValue<bool>, String>(
+final cupJoinRequestProvider = StateNotifierProvider.family<
+    CupJoinRequestNotifier, AsyncValue<bool>, String>(
   (ref, tournamentId) => CupJoinRequestNotifier(ref),
 );
 

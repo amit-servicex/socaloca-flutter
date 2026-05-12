@@ -1,14 +1,179 @@
 import 'package:flutter/material.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart' show SharePlus, ShareParams;
 
+import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../data/feed_repository.dart';
 import '../models/feed_post.dart';
 
-/// Feed post card widget matching Android feed item design
-class FeedPostCard extends StatelessWidget {
+/// Feed post card widget matching Android feed item design.
+/// Implements double-tap to cheer (like) with animated heart overlay.
+class FeedPostCard extends ConsumerStatefulWidget {
   const FeedPostCard({super.key, required this.post});
 
   final FeedPost post;
+
+  @override
+  ConsumerState<FeedPostCard> createState() => _FeedPostCardState();
+}
+
+class _FeedPostCardState extends ConsumerState<FeedPostCard>
+    with SingleTickerProviderStateMixin {
+  late bool _isLiked;
+  late int _likeCount;
+  late bool _isFollowing;
+  bool _followLoading = false;
+
+  bool get _isOwnPost => StorageService.userId == widget.post.userId;
+
+  // Heart animation
+  late AnimationController _heartController;
+  late Animation<double> _heartScale;
+  late Animation<double> _heartOpacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLiked = widget.post.isLiked;
+    _likeCount = widget.post.likeCount;
+    _isFollowing = widget.post.metadata?['isFollow'] as bool? ?? false;
+
+    _heartController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    // Scale: 0 → 1.2 (elastic overshoot) in first 400ms, then 1.2 → 0
+    _heartScale = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(begin: 0.0, end: 1.2)
+            .chain(CurveTween(curve: Curves.elasticOut)),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween:
+            Tween(begin: 1.2, end: 0.0).chain(CurveTween(curve: Curves.easeIn)),
+        weight: 50,
+      ),
+    ]).animate(_heartController);
+
+    // Opacity: fully visible for first 75%, then fade out
+    _heartOpacity = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: ConstantTween(1.0),
+        weight: 75,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 1.0, end: 0.0),
+        weight: 25,
+      ),
+    ]).animate(_heartController);
+  }
+
+  @override
+  void dispose() {
+    _heartController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _onDoubleTap() async {
+    // Always play animation
+    _heartController.forward(from: 0);
+
+    // Only call API if not already liked (mirror Android: no unlike on double tap)
+    if (_isLiked) return;
+
+    // Optimistic update
+    setState(() {
+      _isLiked = true;
+      _likeCount++;
+    });
+
+    final userId = StorageService.userId ?? '';
+    if (userId.isEmpty) return;
+
+    try {
+      final success = await const FeedRepository().likePost(
+        userId: userId,
+        postId: widget.post.id,
+        postType: widget.post.type,
+      );
+      if (!success && mounted) {
+        // Revert optimistic update on failure
+        setState(() {
+          _isLiked = false;
+          _likeCount--;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _isLiked = false;
+          _likeCount--;
+        });
+      }
+    }
+  }
+
+  Future<void> _onFollow() async {
+    if (_followLoading) return;
+
+    final userId = StorageService.userId ?? '';
+    if (userId.isEmpty) return;
+
+    final optimisticValue = !_isFollowing;
+    setState(() {
+      _isFollowing = optimisticValue;
+      _followLoading = true;
+    });
+
+    try {
+      final user = StorageService.currentUser ?? {};
+      final firstName = user['firstName'] as String? ?? '';
+      final lastName = user['lastName'] as String? ?? '';
+      final myName = '$firstName $lastName'.trim();
+      final myImageUrl = user['imageUrl'] as String? ?? '';
+
+      final result = await const FeedRepository().followUser(
+        userId: userId,
+        toUserId: widget.post.userId,
+        myName: myName,
+        myImageUrl: myImageUrl,
+        isPlayer: user['isPlayer'] as bool? ?? false,
+        isCoach: user['isCoach'] as bool? ?? false,
+        isAdmin: user['isAdmin'] as bool? ?? false,
+        isFan: user['isFan'] as bool? ?? true,
+      );
+
+      if (mounted) {
+        setState(() {
+          _isFollowing = result ?? optimisticValue;
+          _followLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _isFollowing = !optimisticValue;
+          _followLoading = false;
+        });
+      }
+    }
+  }
+
+  void _onShare() {
+    final post = widget.post;
+    final userId = StorageService.userId ?? '';
+    final content =
+        post.content?.isNotEmpty == true ? '${post.content} - ' : '';
+    SharePlus.instance.share(
+      ShareParams(
+        text:
+            '${content}Check out this post on SocaLoca. https://socaloca.com/post/${post.id}/u/$userId',
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +189,16 @@ class FeedPostCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // User Avatar
                 CircleAvatar(
                   radius: 24,
-                  backgroundColor: AppColors.socaGrey.withOpacity(0.2),
-                  backgroundImage: post.userImage != null
-                      ? NetworkImage(post.userImage!)
+                  backgroundColor: AppColors.socaGrey.withValues(alpha: 0.2),
+                  backgroundImage: widget.post.userImage != null
+                      ? NetworkImage(widget.post.userImage!)
                       : null,
-                  child: post.userImage == null
+                  child: widget.post.userImage == null
                       ? Text(
-                          post.userName.isNotEmpty
-                              ? post.userName[0].toUpperCase()
+                          widget.post.userName.isNotEmpty
+                              ? widget.post.userName[0].toUpperCase()
                               : 'U',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
@@ -44,7 +208,6 @@ class FeedPostCard extends StatelessWidget {
                       : null,
                 ),
                 const SizedBox(width: 12),
-                // User Name and Time
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +216,7 @@ class FeedPostCard extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              post.userName,
+                              widget.post.userName,
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
@@ -70,15 +233,12 @@ class FeedPostCard extends StatelessWidget {
                             color: AppColors.socaBlack,
                             margin: const EdgeInsets.symmetric(horizontal: 8),
                           ),
-                          const Text(
-                            '🇺🇸', // Fallback since country flag isn't in model
-                            style: TextStyle(fontSize: 18),
-                          ),
+                          const Text('🌍', style: TextStyle(fontSize: 18)),
                         ],
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        _formatDate(post.createdAt),
+                        _formatDate(widget.post.createdAt),
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
@@ -88,23 +248,20 @@ class FeedPostCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                // More options
                 IconButton(
                   icon: const Icon(Icons.more_vert, color: AppColors.socaBlack),
-                  onPressed: () {
-                    // TODO: Show options menu
-                  },
+                  onPressed: () {},
                 ),
               ],
             ),
           ),
 
-          // Content
-          if (post.content != null && post.content!.isNotEmpty)
+          // Content text
+          if (widget.post.content != null && widget.post.content!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Text(
-                post.content!,
+                widget.post.content!,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 15,
@@ -116,44 +273,68 @@ class FeedPostCard extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // Images (Edge-to-edge)
-          if (post.images.isNotEmpty)
+          // Media (image or video) — GestureDetector wraps both
+          if (widget.post.images.isNotEmpty || widget.post.videoUrl != null)
             GestureDetector(
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  MaterialPageRoute(
-                    builder: (_) => _FullScreenImageScreen(
-                      imageUrl: post.images.first,
-                    ),
-                  ),
-                );
-              },
+              onDoubleTap: _onDoubleTap,
+              onTap: widget.post.images.isNotEmpty
+                  ? () => Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (_) => _FullScreenImageScreen(
+                            imageUrl: widget.post.images.first,
+                          ),
+                        ),
+                      )
+                  : null,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.network(
-                    post.images.first,
-                    width: double.infinity,
-                    height: 400,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
+                  // Media content
+                  if (widget.post.images.isNotEmpty)
+                    Image.network(
+                      widget.post.images.first,
+                      width: double.infinity,
+                      height: 400,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
                         width: double.infinity,
                         height: 400,
                         color: AppColors.socaBlack,
                         child: const Icon(Icons.image,
                             size: 48, color: AppColors.socaGrey),
-                      );
-                    },
-                  ),
-                  // "Double Tap to Cheer" overlay
+                      ),
+                    )
+                  else if (widget.post.videoUrl != null) ...[
+                    if (widget.post.thumbnail != null)
+                      Image.network(
+                        widget.post.thumbnail!,
+                        width: double.infinity,
+                        height: 400,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          height: 400,
+                          width: double.infinity,
+                          color: AppColors.socaBlack,
+                        ),
+                      )
+                    else
+                      Container(
+                        height: 400,
+                        width: double.infinity,
+                        color: AppColors.socaBlack,
+                      ),
+                    const Icon(Icons.play_circle_outline,
+                        size: 64, color: Colors.white),
+                  ],
+
+                  // "Double Tap to Cheer" hint text
                   Positioned(
                     bottom: 180,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: const Text(
@@ -167,63 +348,36 @@ class FeedPostCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
-            )
-          // Video
-          else if (post.videoUrl != null) ...[
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                if (post.thumbnail != null)
-                  Image.network(
-                    post.thumbnail!,
-                    width: double.infinity,
-                    height: 400,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 400,
-                        width: double.infinity,
-                        color: AppColors.socaBlack,
+
+                  // Animated heart overlay (Instagram-style)
+                  AnimatedBuilder(
+                    animation: _heartController,
+                    builder: (_, __) {
+                      if (_heartController.isDismissed) {
+                        return const SizedBox.shrink();
+                      }
+                      return Opacity(
+                        opacity: _heartOpacity.value,
+                        child: Transform.scale(
+                          scale: _heartScale.value,
+                          child: const Icon(
+                            Icons.favorite,
+                            color: AppColors.socaYellow,
+                            size: 100,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black38,
+                                blurRadius: 12,
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
-                  )
-                else
-                  Container(
-                    height: 400,
-                    width: double.infinity,
-                    color: AppColors.socaBlack,
                   ),
-                const Icon(
-                  Icons.play_circle_outline,
-                  size: 64,
-                  color: Colors.white,
-                ),
-                // "Double Tap to Cheer" overlay
-                Positioned(
-                  bottom: 180,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: const Text(
-                      'Double Tap to Cheer',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Poppins',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ],
 
           // Divider
           Container(
@@ -237,14 +391,18 @@ class FeedPostCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
-                const Icon(
-                  Icons.pan_tool_alt_outlined,
-                  size: 20,
-                  color: AppColors.socaBlack,
+                GestureDetector(
+                  onTap: _onDoubleTap,
+                  child: Icon(
+                    _isLiked ? Icons.pan_tool_alt : Icons.pan_tool_alt_outlined,
+                    size: 20,
+                    color:
+                        _isLiked ? AppColors.socaYellow : AppColors.socaBlack,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '${post.likeCount} cheers',
+                  '$_likeCount ${_likeCount == 1 ? 'cheer' : 'cheers'}',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 15,
@@ -265,47 +423,50 @@ class FeedPostCard extends StatelessWidget {
           // Actions (Follow & Share)
           Row(
             children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    // TODO: Handle Follow
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.person_add_outlined,
-                            size: 22, color: AppColors.socaBlack),
-                        SizedBox(width: 8),
-                        Text(
-                          'Follow',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                            color: AppColors.socaBlack,
+              if (!_isOwnPost) ...[
+                Expanded(
+                  child: InkWell(
+                    onTap: _followLoading ? null : _onFollow,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            _isFollowing
+                                ? Icons.person_remove_outlined
+                                : Icons.person_add_outlined,
+                            size: 22,
+                            color: _isFollowing
+                                ? AppColors.socaYellow
+                                : AppColors.socaBlack,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 8),
+                          Text(
+                            _isFollowing ? 'Following' : 'Follow',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                              color: _isFollowing
+                                  ? AppColors.socaYellow
+                                  : AppColors.socaBlack,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                width: 1,
-                height: 24,
-                color: Colors.grey.shade300,
-              ),
+                Container(width: 1, height: 24, color: Colors.grey.shade300),
+              ],
               Expanded(
                 child: InkWell(
-                  onTap: () {
-                    // TODO: Handle Share
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  onTap: _onShare,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(Icons.ios_share_rounded,
                             size: 22, color: AppColors.socaBlack),
                         SizedBox(width: 8),
@@ -343,7 +504,7 @@ class FeedPostCard extends StatelessWidget {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     final hour = date.hour == 0 || date.hour == 12 ? 12 : date.hour % 12;
     final minute = date.minute.toString().padLeft(2, '0');
@@ -351,6 +512,8 @@ class FeedPostCard extends StatelessWidget {
     return '${months[date.month - 1]} ${date.day}, $hour:$minute$period';
   }
 }
+
+// ── Full Screen Image ──────────────────────────────────────────────────────────
 
 class _FullScreenImageScreen extends StatelessWidget {
   final String imageUrl;
@@ -364,18 +527,15 @@ class _FullScreenImageScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            // Center Image
             Center(
               child: Image.network(
                 imageUrl,
                 width: double.infinity,
                 fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.error, color: Colors.white, size: 64);
-                },
+                errorBuilder: (_, __, ___) =>
+                    const Icon(Icons.error, color: Colors.white, size: 64),
               ),
             ),
-            // Watermark Logo Overlay (Top-Left of the image area)
             Positioned(
               top: MediaQuery.of(context).size.height * 0.15,
               left: 20,
@@ -393,36 +553,27 @@ class _FullScreenImageScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // Back Button
             Positioned(
               top: 16,
               left: 16,
               child: GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  color: Colors.transparent,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(
-                        Icons.arrow_back_ios_new,
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.arrow_back_ios_new,
+                        color: Colors.white, size: 22),
+                    SizedBox(width: 6),
+                    Text(
+                      'Back',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: Colors.white,
-                        size: 22,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
                       ),
-                      SizedBox(width: 6),
-                      Text(
-                        'Back',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
