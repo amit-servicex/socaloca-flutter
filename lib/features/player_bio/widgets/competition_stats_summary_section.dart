@@ -24,138 +24,149 @@ class CompetitionStatsSummarySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final isGoalkeeper = playerBio.playPosition?.toLowerCase() == 'goalkeeper';
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Competition Stats',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.socaBlack,
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          if (isLoadingStats)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(
-                  color: AppColors.socaYellow,
-                ),
-              ),
-            )
-          else ...[
-            // Football Section
-            _buildStatsSection(
-              'Football',
-              footballStats,
-              isGoalkeeper,
-            ),
-
-            const SizedBox(height: 20),
-
-            // Futsal Section
-            _buildStatsSection(
-              'Futsal',
-              futsalStats,
-              isGoalkeeper,
-            ),
-          ],
-        ],
-      ),
+    return Column(
+      children: [
+        _buildCompetitionSection(
+            context, 'Football', footballStats, isGoalkeeper),
+        const SizedBox(height: 16),
+        _buildCompetitionSection(context, 'Futsal', futsalStats, isGoalkeeper),
+      ],
     );
   }
 
-  Widget _buildStatsSection(
-    String title,
+  Widget _buildCompetitionSection(
+    BuildContext context,
+    String type,
     GameStatsModel? stats,
     bool isGoalkeeper,
   ) {
-    if (stats == null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.socaBlack,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'No stats available',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 12,
-              color: AppColors.socaGrey,
-            ),
-          ),
-        ],
-      );
-    }
-
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
+        const SizedBox(height: 15),
+        Stack(
+          clipBehavior: Clip.none,
           children: [
-            Expanded(
-              child: _buildStatItem('Matches', stats.matchCount.toString()),
-            ),
-            Expanded(
-              child: _buildStatItem('Goals', stats.goalCount.toString()),
-            ),
-            Expanded(
-              child: _buildStatItem(
-                isGoalkeeper ? 'Clean Sheets' : 'Assists',
-                isGoalkeeper
-                    ? stats.cleanSheetCount.toString()
-                    : stats.assistCount.toString(),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.socaGrey.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(8),
               ),
+              child: isLoadingStats
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(
+                          color: AppColors.socaYellow,
+                        ),
+                      ),
+                    )
+                  : IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildStatItem('Appearances',
+                                    stats?.matchCount?.toString() ?? '0'),
+                                const SizedBox(height: 16),
+                                _buildStatItem('Goals',
+                                    stats?.goalCount?.toString() ?? '0'),
+                                const SizedBox(height: 16),
+                                _buildStatItem(
+                                    'POM', stats?.mvpCount?.toString() ?? '0'),
+                              ],
+                            ),
+                          ),
+                          VerticalDivider(
+                            color: AppColors.socaBlack.withOpacity(0.5),
+                            thickness: 1,
+                            width: 32,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildStatItem(
+                                  isGoalkeeper ? 'Clean Sheets' : 'Assists',
+                                  isGoalkeeper
+                                      ? (stats?.cleanSheetCount?.toString() ??
+                                          '0')
+                                      : (stats?.assistCount?.toString() ?? '0'),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildStatItem('Yellow Cards',
+                                    stats?.yellowCardCount?.toString() ?? '0'),
+                                const SizedBox(height: 16),
+                                _buildStatItem('Red Cards',
+                                    stats?.redCardCount?.toString() ?? '0'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildStatItem('Yellow Cards', stats.yellowCardCount.toString()),
-            ),
-            Expanded(
-              child: _buildStatItem('Red Cards', stats.redCardCount.toString()),
-            ),
-            Expanded(
-              child: _buildStatItem('MVP', stats.mvpCount.toString()),
-            ),
+            Positioned(
+              top: -20,
+              left: 10,
+              child: Container(
+                width: MediaQuery.of(context).size.width - 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            'COMPETITION STATS',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.socaYellow,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '$type, ${DateTime.now().year}',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // TODO: Navigate to past years
+                      },
+                      child: const Text(
+                        'past years',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ],
@@ -163,18 +174,20 @@ class CompetitionStatsSummarySection extends StatelessWidget {
   }
 
   Widget _buildStatItem(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 11,
-            color: AppColors.socaGrey,
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              color: AppColors.socaBlack,
+            ),
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(width: 8),
         Text(
           value,
           style: const TextStyle(

@@ -26,25 +26,11 @@ class PlayerTeamsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingTeams) {
-      return Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: const Center(
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: CircularProgressIndicator(
-              color: AppColors.socaYellow,
-            ),
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: CircularProgressIndicator(
+            color: AppColors.socaYellow,
           ),
         ),
       );
@@ -54,52 +40,53 @@ class PlayerTeamsSection extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Teams',
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.socaBlack,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Text(
+                'TEAMS',
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.socaBlack,
+                  color: AppColors.socaYellow,
                 ),
               ),
-              if (teams.length > 3)
-                TextButton(
-                  onPressed: () {
-                    // TODO: Navigate to all teams
-                  },
-                  child: const Text(
-                    'View All',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: AppColors.socaYellow,
-                    ),
+            ),
+            if (teams.length > 3)
+              GestureDetector(
+                onTap: () {
+                  // TODO: Navigate to all teams
+                },
+                child: const Text(
+                  'view all',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.socaBlack,
                   ),
                 ),
-            ],
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.socaGrey.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(8),
           ),
-          const SizedBox(height: 12),
-          SizedBox(
+          child: SizedBox(
             height: 100,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -168,8 +155,8 @@ class PlayerTeamsSection extends StatelessWidget {
               },
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

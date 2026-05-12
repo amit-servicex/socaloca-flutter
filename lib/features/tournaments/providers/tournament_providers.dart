@@ -6,7 +6,8 @@ import '../data/tournament_models.dart';
 import '../data/tournament_repository.dart';
 
 /// Tournament details provider (family by tournamentId)
-final tournamentDetailsProvider = FutureProvider.family<TournamentModel?, String>(
+final tournamentDetailsProvider =
+    FutureProvider.family<TournamentModel?, String>(
   (ref, tournamentId) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return null;
@@ -20,7 +21,8 @@ final tournamentDetailsProvider = FutureProvider.family<TournamentModel?, String
 );
 
 /// Tournament matches provider (family by tournamentId + isUpcoming)
-final tournamentMatchesProvider = FutureProvider.family<List<TournamentMatchModel>, TournamentMatchesParams>(
+final tournamentMatchesProvider =
+    FutureProvider.family<List<TournamentMatchModel>, TournamentMatchesParams>(
   (ref, params) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -37,7 +39,8 @@ final tournamentMatchesProvider = FutureProvider.family<List<TournamentMatchMode
 );
 
 /// Points table provider (family by tournamentId)
-final pointsTableProvider = FutureProvider.family<List<PointsTableEntry>, String>(
+final pointsTableProvider =
+    FutureProvider.family<List<PointsTableEntry>, String>(
   (ref, tournamentId) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -51,7 +54,8 @@ final pointsTableProvider = FutureProvider.family<List<PointsTableEntry>, String
 );
 
 /// Tournament stats provider (family by tournamentId + statType)
-final tournamentStatsProvider = FutureProvider.family<List<PlayerStatEntry>, TournamentStatsParams>(
+final tournamentStatsProvider =
+    FutureProvider.family<List<PlayerStatEntry>, TournamentStatsParams>(
   (ref, params) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -66,7 +70,8 @@ final tournamentStatsProvider = FutureProvider.family<List<PlayerStatEntry>, Tou
 );
 
 /// My teams for tournament provider (family by tournamentId)
-final myTeamsForTournamentProvider = FutureProvider.family<List<TeamModel>, String>(
+final myTeamsForTournamentProvider =
+    FutureProvider.family<List<TeamModel>, String>(
   (ref, tournamentId) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -80,7 +85,8 @@ final myTeamsForTournamentProvider = FutureProvider.family<List<TeamModel>, Stri
 );
 
 /// Tournament invitations provider
-final tournamentInvitationsProvider = FutureProvider<List<Map<String, dynamic>>>(
+final tournamentInvitationsProvider =
+    FutureProvider<List<Map<String, dynamic>>>(
   (ref) async {
     final user = ref.watch(currentUserProvider);
     if (user == null) return [];
@@ -128,7 +134,7 @@ class TournamentFollowNotifier extends StateNotifier<AsyncValue<bool>> {
       final result = await repository.followTournament(
         userId: user.id,
         tournamentId: tournamentId,
-        myName: user.name,
+        myName: user.name ?? '',
         myImageUrl: user.profileImage,
         country: user.country,
         gender: user.userType,
@@ -151,7 +157,8 @@ class TournamentFollowNotifier extends StateNotifier<AsyncValue<bool>> {
   }
 }
 
-final tournamentFollowProvider = StateNotifierProvider.family<TournamentFollowNotifier, AsyncValue<bool>, String>(
+final tournamentFollowProvider = StateNotifierProvider.family<
+    TournamentFollowNotifier, AsyncValue<bool>, String>(
   (ref, tournamentId) => TournamentFollowNotifier(ref),
 );
 
@@ -188,7 +195,7 @@ class JoinRequestNotifier extends StateNotifier<AsyncValue<bool>> {
       );
 
       state = AsyncValue.data(success);
-      
+
       if (success) {
         // Invalidate tournament details to refresh
         ref.invalidate(tournamentDetailsProvider(tournamentId));
@@ -199,7 +206,8 @@ class JoinRequestNotifier extends StateNotifier<AsyncValue<bool>> {
   }
 }
 
-final joinRequestProvider = StateNotifierProvider.family<JoinRequestNotifier, AsyncValue<bool>, String>(
+final joinRequestProvider =
+    StateNotifierProvider.family<JoinRequestNotifier, AsyncValue<bool>, String>(
   (ref, tournamentId) => JoinRequestNotifier(ref),
 );
 
@@ -232,7 +240,7 @@ class WithdrawTeamNotifier extends StateNotifier<AsyncValue<bool>> {
       );
 
       state = AsyncValue.data(success);
-      
+
       if (success) {
         // Invalidate relevant providers
         ref.invalidate(tournamentDetailsProvider(tournamentId));
@@ -244,7 +252,8 @@ class WithdrawTeamNotifier extends StateNotifier<AsyncValue<bool>> {
   }
 }
 
-final withdrawTeamProvider = StateNotifierProvider<WithdrawTeamNotifier, AsyncValue<bool>>(
+final withdrawTeamProvider =
+    StateNotifierProvider<WithdrawTeamNotifier, AsyncValue<bool>>(
   (ref) => WithdrawTeamNotifier(ref),
 );
 

@@ -20,12 +20,16 @@ PostMediaSource _$PostMediaSourceFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PostMediaSource {
-  @JsonKey(name: 'url')
-  String? get url => throw _privateConstructorUsedError;
-  @JsonKey(name: 'type')
-  String? get type => throw _privateConstructorUsedError;
+  @JsonKey(name: 'imageUrl')
+  String? get imageUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'videoUrl')
+  String? get videoUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'thumbnail')
   String? get thumbnail => throw _privateConstructorUsedError;
+  @JsonKey(name: 'type')
+  String? get type => throw _privateConstructorUsedError;
+  @JsonKey(name: 'seq')
+  int? get seq => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,9 +44,11 @@ abstract class $PostMediaSourceCopyWith<$Res> {
       _$PostMediaSourceCopyWithImpl<$Res, PostMediaSource>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'url') String? url,
+      {@JsonKey(name: 'imageUrl') String? imageUrl,
+      @JsonKey(name: 'videoUrl') String? videoUrl,
+      @JsonKey(name: 'thumbnail') String? thumbnail,
       @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'thumbnail') String? thumbnail});
+      @JsonKey(name: 'seq') int? seq});
 }
 
 /// @nodoc
@@ -58,23 +64,33 @@ class _$PostMediaSourceCopyWithImpl<$Res, $Val extends PostMediaSource>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? url = freezed,
-    Object? type = freezed,
+    Object? imageUrl = freezed,
+    Object? videoUrl = freezed,
     Object? thumbnail = freezed,
+    Object? type = freezed,
+    Object? seq = freezed,
   }) {
     return _then(_value.copyWith(
-      url: freezed == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
+      videoUrl: freezed == videoUrl
+          ? _value.videoUrl
+          : videoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
       thumbnail: freezed == thumbnail
           ? _value.thumbnail
           : thumbnail // ignore: cast_nullable_to_non_nullable
               as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      seq: freezed == seq
+          ? _value.seq
+          : seq // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -88,9 +104,11 @@ abstract class _$$PostMediaSourceImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'url') String? url,
+      {@JsonKey(name: 'imageUrl') String? imageUrl,
+      @JsonKey(name: 'videoUrl') String? videoUrl,
+      @JsonKey(name: 'thumbnail') String? thumbnail,
       @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'thumbnail') String? thumbnail});
+      @JsonKey(name: 'seq') int? seq});
 }
 
 /// @nodoc
@@ -104,23 +122,33 @@ class __$$PostMediaSourceImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? url = freezed,
-    Object? type = freezed,
+    Object? imageUrl = freezed,
+    Object? videoUrl = freezed,
     Object? thumbnail = freezed,
+    Object? type = freezed,
+    Object? seq = freezed,
   }) {
     return _then(_$PostMediaSourceImpl(
-      url: freezed == url
-          ? _value.url
-          : url // ignore: cast_nullable_to_non_nullable
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
+      videoUrl: freezed == videoUrl
+          ? _value.videoUrl
+          : videoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
       thumbnail: freezed == thumbnail
           ? _value.thumbnail
           : thumbnail // ignore: cast_nullable_to_non_nullable
               as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      seq: freezed == seq
+          ? _value.seq
+          : seq // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -129,26 +157,34 @@ class __$$PostMediaSourceImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PostMediaSourceImpl implements _PostMediaSource {
   const _$PostMediaSourceImpl(
-      {@JsonKey(name: 'url') this.url,
+      {@JsonKey(name: 'imageUrl') this.imageUrl,
+      @JsonKey(name: 'videoUrl') this.videoUrl,
+      @JsonKey(name: 'thumbnail') this.thumbnail,
       @JsonKey(name: 'type') this.type,
-      @JsonKey(name: 'thumbnail') this.thumbnail});
+      @JsonKey(name: 'seq') this.seq});
 
   factory _$PostMediaSourceImpl.fromJson(Map<String, dynamic> json) =>
       _$$PostMediaSourceImplFromJson(json);
 
   @override
-  @JsonKey(name: 'url')
-  final String? url;
+  @JsonKey(name: 'imageUrl')
+  final String? imageUrl;
+  @override
+  @JsonKey(name: 'videoUrl')
+  final String? videoUrl;
+  @override
+  @JsonKey(name: 'thumbnail')
+  final String? thumbnail;
   @override
   @JsonKey(name: 'type')
   final String? type;
   @override
-  @JsonKey(name: 'thumbnail')
-  final String? thumbnail;
+  @JsonKey(name: 'seq')
+  final int? seq;
 
   @override
   String toString() {
-    return 'PostMediaSource(url: $url, type: $type, thumbnail: $thumbnail)';
+    return 'PostMediaSource(imageUrl: $imageUrl, videoUrl: $videoUrl, thumbnail: $thumbnail, type: $type, seq: $seq)';
   }
 
   @override
@@ -156,15 +192,20 @@ class _$PostMediaSourceImpl implements _PostMediaSource {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PostMediaSourceImpl &&
-            (identical(other.url, url) || other.url == url) &&
-            (identical(other.type, type) || other.type == type) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.videoUrl, videoUrl) ||
+                other.videoUrl == videoUrl) &&
             (identical(other.thumbnail, thumbnail) ||
-                other.thumbnail == thumbnail));
+                other.thumbnail == thumbnail) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.seq, seq) || other.seq == seq));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, url, type, thumbnail);
+  int get hashCode =>
+      Object.hash(runtimeType, imageUrl, videoUrl, thumbnail, type, seq);
 
   @JsonKey(ignore: true)
   @override
@@ -183,23 +224,30 @@ class _$PostMediaSourceImpl implements _PostMediaSource {
 
 abstract class _PostMediaSource implements PostMediaSource {
   const factory _PostMediaSource(
-          {@JsonKey(name: 'url') final String? url,
-          @JsonKey(name: 'type') final String? type,
-          @JsonKey(name: 'thumbnail') final String? thumbnail}) =
-      _$PostMediaSourceImpl;
+      {@JsonKey(name: 'imageUrl') final String? imageUrl,
+      @JsonKey(name: 'videoUrl') final String? videoUrl,
+      @JsonKey(name: 'thumbnail') final String? thumbnail,
+      @JsonKey(name: 'type') final String? type,
+      @JsonKey(name: 'seq') final int? seq}) = _$PostMediaSourceImpl;
 
   factory _PostMediaSource.fromJson(Map<String, dynamic> json) =
       _$PostMediaSourceImpl.fromJson;
 
   @override
-  @JsonKey(name: 'url')
-  String? get url;
+  @JsonKey(name: 'imageUrl')
+  String? get imageUrl;
+  @override
+  @JsonKey(name: 'videoUrl')
+  String? get videoUrl;
+  @override
+  @JsonKey(name: 'thumbnail')
+  String? get thumbnail;
   @override
   @JsonKey(name: 'type')
   String? get type;
   @override
-  @JsonKey(name: 'thumbnail')
-  String? get thumbnail;
+  @JsonKey(name: 'seq')
+  int? get seq;
   @override
   @JsonKey(ignore: true)
   _$$PostMediaSourceImplCopyWith<_$PostMediaSourceImpl> get copyWith =>
@@ -214,8 +262,14 @@ PlayerPostModel _$PlayerPostModelFromJson(Map<String, dynamic> json) {
 mixin _$PlayerPostModel {
   @JsonKey(name: 'postId')
   String? get postId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'title')
+  String? get title => throw _privateConstructorUsedError;
   @JsonKey(name: 'text')
   String? get text => throw _privateConstructorUsedError;
+  @JsonKey(name: 'postType')
+  String? get postType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'postCat')
+  String? get postCat => throw _privateConstructorUsedError;
   @JsonKey(name: 'addedOn')
   int? get addedOn => throw _privateConstructorUsedError;
   @JsonKey(name: 'likeCount')
@@ -224,6 +278,8 @@ mixin _$PlayerPostModel {
   int? get commentCount => throw _privateConstructorUsedError;
   @JsonKey(name: 'shareCount')
   int? get shareCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'myLike')
+  bool? get myLike => throw _privateConstructorUsedError;
   @JsonKey(name: 'sources')
   List<PostMediaSource>? get sources => throw _privateConstructorUsedError;
 
@@ -241,11 +297,15 @@ abstract class $PlayerPostModelCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'postId') String? postId,
+      @JsonKey(name: 'title') String? title,
       @JsonKey(name: 'text') String? text,
+      @JsonKey(name: 'postType') String? postType,
+      @JsonKey(name: 'postCat') String? postCat,
       @JsonKey(name: 'addedOn') int? addedOn,
       @JsonKey(name: 'likeCount') int? likeCount,
       @JsonKey(name: 'commentCount') int? commentCount,
       @JsonKey(name: 'shareCount') int? shareCount,
+      @JsonKey(name: 'myLike') bool? myLike,
       @JsonKey(name: 'sources') List<PostMediaSource>? sources});
 }
 
@@ -263,11 +323,15 @@ class _$PlayerPostModelCopyWithImpl<$Res, $Val extends PlayerPostModel>
   @override
   $Res call({
     Object? postId = freezed,
+    Object? title = freezed,
     Object? text = freezed,
+    Object? postType = freezed,
+    Object? postCat = freezed,
     Object? addedOn = freezed,
     Object? likeCount = freezed,
     Object? commentCount = freezed,
     Object? shareCount = freezed,
+    Object? myLike = freezed,
     Object? sources = freezed,
   }) {
     return _then(_value.copyWith(
@@ -275,9 +339,21 @@ class _$PlayerPostModelCopyWithImpl<$Res, $Val extends PlayerPostModel>
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
               as String?,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
       text: freezed == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postType: freezed == postType
+          ? _value.postType
+          : postType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postCat: freezed == postCat
+          ? _value.postCat
+          : postCat // ignore: cast_nullable_to_non_nullable
               as String?,
       addedOn: freezed == addedOn
           ? _value.addedOn
@@ -295,6 +371,10 @@ class _$PlayerPostModelCopyWithImpl<$Res, $Val extends PlayerPostModel>
           ? _value.shareCount
           : shareCount // ignore: cast_nullable_to_non_nullable
               as int?,
+      myLike: freezed == myLike
+          ? _value.myLike
+          : myLike // ignore: cast_nullable_to_non_nullable
+              as bool?,
       sources: freezed == sources
           ? _value.sources
           : sources // ignore: cast_nullable_to_non_nullable
@@ -313,11 +393,15 @@ abstract class _$$PlayerPostModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'postId') String? postId,
+      @JsonKey(name: 'title') String? title,
       @JsonKey(name: 'text') String? text,
+      @JsonKey(name: 'postType') String? postType,
+      @JsonKey(name: 'postCat') String? postCat,
       @JsonKey(name: 'addedOn') int? addedOn,
       @JsonKey(name: 'likeCount') int? likeCount,
       @JsonKey(name: 'commentCount') int? commentCount,
       @JsonKey(name: 'shareCount') int? shareCount,
+      @JsonKey(name: 'myLike') bool? myLike,
       @JsonKey(name: 'sources') List<PostMediaSource>? sources});
 }
 
@@ -333,11 +417,15 @@ class __$$PlayerPostModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? postId = freezed,
+    Object? title = freezed,
     Object? text = freezed,
+    Object? postType = freezed,
+    Object? postCat = freezed,
     Object? addedOn = freezed,
     Object? likeCount = freezed,
     Object? commentCount = freezed,
     Object? shareCount = freezed,
+    Object? myLike = freezed,
     Object? sources = freezed,
   }) {
     return _then(_$PlayerPostModelImpl(
@@ -345,9 +433,21 @@ class __$$PlayerPostModelImplCopyWithImpl<$Res>
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
               as String?,
+      title: freezed == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
       text: freezed == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postType: freezed == postType
+          ? _value.postType
+          : postType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postCat: freezed == postCat
+          ? _value.postCat
+          : postCat // ignore: cast_nullable_to_non_nullable
               as String?,
       addedOn: freezed == addedOn
           ? _value.addedOn
@@ -365,6 +465,10 @@ class __$$PlayerPostModelImplCopyWithImpl<$Res>
           ? _value.shareCount
           : shareCount // ignore: cast_nullable_to_non_nullable
               as int?,
+      myLike: freezed == myLike
+          ? _value.myLike
+          : myLike // ignore: cast_nullable_to_non_nullable
+              as bool?,
       sources: freezed == sources
           ? _value._sources
           : sources // ignore: cast_nullable_to_non_nullable
@@ -378,11 +482,15 @@ class __$$PlayerPostModelImplCopyWithImpl<$Res>
 class _$PlayerPostModelImpl implements _PlayerPostModel {
   const _$PlayerPostModelImpl(
       {@JsonKey(name: 'postId') this.postId,
+      @JsonKey(name: 'title') this.title,
       @JsonKey(name: 'text') this.text,
+      @JsonKey(name: 'postType') this.postType,
+      @JsonKey(name: 'postCat') this.postCat,
       @JsonKey(name: 'addedOn') this.addedOn,
       @JsonKey(name: 'likeCount') this.likeCount,
       @JsonKey(name: 'commentCount') this.commentCount,
       @JsonKey(name: 'shareCount') this.shareCount,
+      @JsonKey(name: 'myLike') this.myLike,
       @JsonKey(name: 'sources') final List<PostMediaSource>? sources})
       : _sources = sources;
 
@@ -393,8 +501,17 @@ class _$PlayerPostModelImpl implements _PlayerPostModel {
   @JsonKey(name: 'postId')
   final String? postId;
   @override
+  @JsonKey(name: 'title')
+  final String? title;
+  @override
   @JsonKey(name: 'text')
   final String? text;
+  @override
+  @JsonKey(name: 'postType')
+  final String? postType;
+  @override
+  @JsonKey(name: 'postCat')
+  final String? postCat;
   @override
   @JsonKey(name: 'addedOn')
   final int? addedOn;
@@ -407,6 +524,9 @@ class _$PlayerPostModelImpl implements _PlayerPostModel {
   @override
   @JsonKey(name: 'shareCount')
   final int? shareCount;
+  @override
+  @JsonKey(name: 'myLike')
+  final bool? myLike;
   final List<PostMediaSource>? _sources;
   @override
   @JsonKey(name: 'sources')
@@ -420,7 +540,7 @@ class _$PlayerPostModelImpl implements _PlayerPostModel {
 
   @override
   String toString() {
-    return 'PlayerPostModel(postId: $postId, text: $text, addedOn: $addedOn, likeCount: $likeCount, commentCount: $commentCount, shareCount: $shareCount, sources: $sources)';
+    return 'PlayerPostModel(postId: $postId, title: $title, text: $text, postType: $postType, postCat: $postCat, addedOn: $addedOn, likeCount: $likeCount, commentCount: $commentCount, shareCount: $shareCount, myLike: $myLike, sources: $sources)';
   }
 
   @override
@@ -429,7 +549,11 @@ class _$PlayerPostModelImpl implements _PlayerPostModel {
         (other.runtimeType == runtimeType &&
             other is _$PlayerPostModelImpl &&
             (identical(other.postId, postId) || other.postId == postId) &&
+            (identical(other.title, title) || other.title == title) &&
             (identical(other.text, text) || other.text == text) &&
+            (identical(other.postType, postType) ||
+                other.postType == postType) &&
+            (identical(other.postCat, postCat) || other.postCat == postCat) &&
             (identical(other.addedOn, addedOn) || other.addedOn == addedOn) &&
             (identical(other.likeCount, likeCount) ||
                 other.likeCount == likeCount) &&
@@ -437,13 +561,25 @@ class _$PlayerPostModelImpl implements _PlayerPostModel {
                 other.commentCount == commentCount) &&
             (identical(other.shareCount, shareCount) ||
                 other.shareCount == shareCount) &&
+            (identical(other.myLike, myLike) || other.myLike == myLike) &&
             const DeepCollectionEquality().equals(other._sources, _sources));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, postId, text, addedOn, likeCount,
-      commentCount, shareCount, const DeepCollectionEquality().hash(_sources));
+  int get hashCode => Object.hash(
+      runtimeType,
+      postId,
+      title,
+      text,
+      postType,
+      postCat,
+      addedOn,
+      likeCount,
+      commentCount,
+      shareCount,
+      myLike,
+      const DeepCollectionEquality().hash(_sources));
 
   @JsonKey(ignore: true)
   @override
@@ -463,11 +599,15 @@ class _$PlayerPostModelImpl implements _PlayerPostModel {
 abstract class _PlayerPostModel implements PlayerPostModel {
   const factory _PlayerPostModel(
           {@JsonKey(name: 'postId') final String? postId,
+          @JsonKey(name: 'title') final String? title,
           @JsonKey(name: 'text') final String? text,
+          @JsonKey(name: 'postType') final String? postType,
+          @JsonKey(name: 'postCat') final String? postCat,
           @JsonKey(name: 'addedOn') final int? addedOn,
           @JsonKey(name: 'likeCount') final int? likeCount,
           @JsonKey(name: 'commentCount') final int? commentCount,
           @JsonKey(name: 'shareCount') final int? shareCount,
+          @JsonKey(name: 'myLike') final bool? myLike,
           @JsonKey(name: 'sources') final List<PostMediaSource>? sources}) =
       _$PlayerPostModelImpl;
 
@@ -478,8 +618,17 @@ abstract class _PlayerPostModel implements PlayerPostModel {
   @JsonKey(name: 'postId')
   String? get postId;
   @override
+  @JsonKey(name: 'title')
+  String? get title;
+  @override
   @JsonKey(name: 'text')
   String? get text;
+  @override
+  @JsonKey(name: 'postType')
+  String? get postType;
+  @override
+  @JsonKey(name: 'postCat')
+  String? get postCat;
   @override
   @JsonKey(name: 'addedOn')
   int? get addedOn;
@@ -492,6 +641,9 @@ abstract class _PlayerPostModel implements PlayerPostModel {
   @override
   @JsonKey(name: 'shareCount')
   int? get shareCount;
+  @override
+  @JsonKey(name: 'myLike')
+  bool? get myLike;
   @override
   @JsonKey(name: 'sources')
   List<PostMediaSource>? get sources;

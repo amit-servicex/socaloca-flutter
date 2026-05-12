@@ -22,7 +22,7 @@ class PlayerBioStatsCounters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -80,7 +80,7 @@ class PlayerBioStatsCounters extends StatelessWidget {
             _formatCount(count),
             style: const TextStyle(
               fontFamily: 'Poppins',
-              fontSize: 18,
+              fontSize: 12,
               fontWeight: FontWeight.w700,
               color: AppColors.socaBlack,
             ),
@@ -92,7 +92,7 @@ class PlayerBioStatsCounters extends StatelessWidget {
               fontFamily: 'Poppins',
               fontSize: 10,
               fontWeight: FontWeight.w400,
-              color: AppColors.socaGrey,
+              color: AppColors.socaBlack,
             ),
           ),
         ],

@@ -34,6 +34,17 @@ import '../../features/club/screens/clubs_partners_landing_screen.dart';
 import '../../features/club/screens/club_bio_screen.dart';
 import '../../features/club/screens/fa_bio_screen.dart';
 import '../../features/player_bio/screens/player_bio_screen.dart';
+import '../../features/my_bio/screens/my_bio_screen.dart';
+import '../../features/my_bio/screens/my_skill_ratings_screen.dart';
+import '../../features/my_bio/screens/my_endorsement_list_screen.dart';
+import '../../features/my_bio/screens/my_activities_form_screen.dart';
+import '../../features/my_bio/screens/edit_profile_screen.dart';
+import '../../features/my_bio/screens/create_post_screen.dart';
+import '../../features/my_bio/screens/my_posts_screen.dart';
+import '../../features/gallery/screens/gallery_screen.dart';
+import '../../features/player_bio/data/models/player_bio_model.dart';
+import '../../features/skill_detail/screens/skill_detail_screen.dart';
+import '../../features/skill_detail/screens/skill_detail_view_all_screen.dart';
 import '../../features/home/screens/main_shell_screen.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/teams/screens/teams_screen_new.dart';
@@ -299,161 +310,265 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'profile',
             builder: (ctx, state) => const SizedBox(),
           ),
+          GoRoute(
+            path: AppRoutes.myBio,
+            name: 'myBio',
+            builder: (ctx, state) => const MyBioScreen(),
+          ),
+
+          // ─── My Bio sub-screens (outside shell) ──────────────────────────
+          GoRoute(
+            path: AppRoutes.mySkillRatings,
+            name: 'mySkillRatings',
+            builder: (ctx, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              final userId = extra?['userId'] as String? ?? '';
+              return MySkillRatingsScreen(userId: userId);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.myEndorsementList,
+            name: 'myEndorsementList',
+            builder: (ctx, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              final userId = extra?['userId'] as String? ?? '';
+              final isOwnProfile = extra?['isOwnProfile'] as bool? ?? false;
+              return MyEndorsementListScreen(
+                userId: userId,
+                isOwnProfile: isOwnProfile,
+              );
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.myActivities,
+            name: 'myActivities',
+            builder: (ctx, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              final userId = extra?['userId'] as String? ?? '';
+              final initialTab = extra?['initialTab'] as String? ?? 'match';
+              final gameType = extra?['gameType'] as String?;
+              return MyActivitiesFormScreen(
+                userId: userId,
+                initialTab: initialTab,
+                initialGameType: gameType,
+              );
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.myPosts,
+            name: 'myPosts',
+            builder: (ctx, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              return MyPostsScreen(
+                userId: extra?['userId'] as String? ?? '',
+                isOwnProfile: extra?['isOwnProfile'] as bool? ?? false,
+              );
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.gallery,
+            name: 'gallery',
+            builder: (ctx, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              return GalleryScreen(
+                userId: extra?['userId'] as String? ?? '',
+                isOwnProfile: extra?['isOwnProfile'] as bool? ?? false,
+              );
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.createPost,
+            name: 'createPost',
+            builder: (ctx, state) => const CreatePostScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.editProfile,
+            name: 'editProfile',
+            builder: (ctx, state) {
+              final playerBio = state.extra as PlayerBioModel;
+              return EditProfileScreen(playerBio: playerBio);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.skillDetail,
+            name: 'skillDetail',
+            builder: (ctx, state) {
+              final extra = state.extra as Map<String, dynamic>;
+              return SkillDetailScreen(
+                playerId: extra['playerId'] as String,
+                skillName: extra['skillName'] as String,
+                skillShort: extra['skillShort'] as String,
+              );
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.skillDetailViewAll,
+            name: 'skillDetailViewAll',
+            builder: (ctx, state) {
+              final extra = state.extra as Map<String, dynamic>;
+              return SkillDetailViewAllScreen(
+                playerId: extra['playerId'] as String,
+                skillName: extra['skillName'] as String,
+                skillShort: extra['skillShort'] as String,
+                role: extra['role'] as String,
+                roleLabel: extra['roleLabel'] as String,
+              );
+            },
+          ),
+          // ─── Club Bio (detail screen outside shell) ──────────────────────
+          GoRoute(
+            path: AppRoutes.clubBio,
+            name: 'clubBio',
+            builder: (ctx, state) {
+              final clubId = state.pathParameters['clubId']!;
+              return ClubBioScreen(clubId: clubId);
+            },
+          ),
+
+          // ─── Player Bio (detail screen outside shell) ────────────────────
+          GoRoute(
+            path: AppRoutes.playerBio,
+            name: 'playerBio',
+            builder: (ctx, state) {
+              final userId = state.pathParameters['userId']!;
+              return PlayerBioScreen(playerId: userId);
+            },
+          ),
+
+          // ─── Search (full screen outside shell) ──────────────────────────
+          GoRoute(
+            path: AppRoutes.search,
+            name: 'search',
+            builder: (ctx, state) => Scaffold(
+              body: Center(child: Text('Search - Coming Soon')),
+            ),
+            // const SearchScreen(),
+          ),
+
+          // ─── Team Bio (detail screen outside shell) ──────────────────────
+          GoRoute(
+            path: AppRoutes.teamBio,
+            name: 'teamBio',
+            builder: (ctx, state) {
+              final teamId = state.pathParameters['teamId']!;
+              return TeamBioScreen(teamId: teamId);
+            },
+          ),
+
+          // ─── Team Players (detail screen outside shell) ──────────────────
+          GoRoute(
+            path: AppRoutes.teamPlayers,
+            name: 'teamPlayers',
+            builder: (ctx, state) {
+              final teamId = state.pathParameters['teamId']!;
+              return TeamPlayersScreen(teamId: teamId);
+            },
+          ),
+
+          // ─── Tournament Detail (detail screen outside shell) ─────────────
+          GoRoute(
+            path: AppRoutes.tournamentDetail,
+            name: 'tournamentDetail',
+            builder: (ctx, state) {
+              final tmntId = state.pathParameters['tmntId']!;
+              return LeagueTournamentDetailsScreen(tournamentId: tmntId);
+            },
+          ),
+
+          // ─── Cup Detail (detail screen outside shell) ────────────────────
+          GoRoute(
+            path: AppRoutes.cupDetail,
+            name: 'cupDetail',
+            builder: (ctx, state) {
+              final cupId = state.pathParameters['cupId']!;
+              return CupTournamentDetailsScreen(tournamentId: cupId);
+            },
+          ),
+
+          // ─── Match Management (detail screen outside shell) ──────────────
+
+          GoRoute(
+            path: AppRoutes.matchManagement,
+            name: 'matchManagement',
+            builder: (ctx, state) {
+              final matchId = state.pathParameters['matchId']!;
+              final extra = state.extra as Map<String, dynamic>?;
+              final match = extra?['match'] as TournamentMatchModel;
+              final tournamentId = extra?['tournamentId'] as String;
+              return MatchManagementScreen(
+                matchId: matchId,
+                match: match,
+                tournamentId: tournamentId,
+              );
+            },
+          ),
+
+          // ─── Partner Bio screens (outside shell) ─────────────────────────
+          GoRoute(
+            path: AppRoutes.faBio,
+            name: 'faBio',
+            builder: (ctx, state) {
+              final faId = state.pathParameters['faId']!;
+              return FaBioScreen(faId: faId);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.confedBio,
+            name: 'confedBio',
+            builder: (ctx, state) => const Scaffold(
+              body: Center(child: Text('Confederation Bio — Coming Soon')),
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.sponsorBio,
+            name: 'sponsorBio',
+            builder: (ctx, state) => const Scaffold(
+              body: Center(child: Text('Sponsor Bio — Coming Soon')),
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.charityBio,
+            name: 'charityBio',
+            builder: (ctx, state) => const Scaffold(
+              body: Center(child: Text('Charity Bio — Coming Soon')),
+            ),
+          ),
+
+          // ─── One-Off Matches (outside shell) ─────────────────────────────
+          GoRoute(
+            path: AppRoutes.upcomingMatches,
+            name: 'upcomingMatches',
+            builder: (ctx, state) => const UpcomingMatchesScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.recentMatches,
+            name: 'recentMatches',
+            builder: (ctx, state) => const RecentMatchesScreen(),
+          ),
+
+          // ─── Pickup Matches (outside shell) ──────────────────────────────
+          GoRoute(
+            path: AppRoutes.hostPickupMatch,
+            name: 'hostPickupMatch',
+            builder: (ctx, state) => const HostPickupMatchScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.pickupMatchDetail,
+            name: 'pickupMatchDetail',
+            builder: (ctx, state) {
+              final matchId = state.pathParameters['matchId']!;
+              return PickupMatchDetailsScreen(matchId: matchId);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.pickupMatchRequests,
+            name: 'pickupMatchRequests',
+            builder: (ctx, state) {
+              final matchId = state.pathParameters['matchId']!;
+              return PickupMatchRequestsScreen(matchId: matchId);
+            },
+          ),
         ],
-      ),
-
-      // ─── Club Bio (detail screen outside shell) ──────────────────────
-      GoRoute(
-        path: AppRoutes.clubBio,
-        name: 'clubBio',
-        builder: (ctx, state) {
-          final clubId = state.pathParameters['clubId']!;
-          return ClubBioScreen(clubId: clubId);
-        },
-      ),
-
-      // ─── Player Bio (detail screen outside shell) ────────────────────
-      GoRoute(
-        path: AppRoutes.playerBio,
-        name: 'playerBio',
-        builder: (ctx, state) {
-          final userId = state.pathParameters['userId']!;
-          return PlayerBioScreen(playerId: userId);
-        },
-      ),
-
-      // ─── Search (full screen outside shell) ──────────────────────────
-      GoRoute(
-        path: AppRoutes.search,
-        name: 'search',
-        builder: (ctx, state) => Scaffold(
-          body: Center(child: Text('Search - Coming Soon')),
-        ),
-        // const SearchScreen(),
-      ),
-
-      // ─── Team Bio (detail screen outside shell) ──────────────────────
-      GoRoute(
-        path: AppRoutes.teamBio,
-        name: 'teamBio',
-        builder: (ctx, state) {
-          final teamId = state.pathParameters['teamId']!;
-          return TeamBioScreen(teamId: teamId);
-        },
-      ),
-
-      // ─── Team Players (detail screen outside shell) ──────────────────
-      GoRoute(
-        path: AppRoutes.teamPlayers,
-        name: 'teamPlayers',
-        builder: (ctx, state) {
-          final teamId = state.pathParameters['teamId']!;
-          return TeamPlayersScreen(teamId: teamId);
-        },
-      ),
-
-      // ─── Tournament Detail (detail screen outside shell) ─────────────
-      GoRoute(
-        path: AppRoutes.tournamentDetail,
-        name: 'tournamentDetail',
-        builder: (ctx, state) {
-          final tmntId = state.pathParameters['tmntId']!;
-          return LeagueTournamentDetailsScreen(tournamentId: tmntId);
-        },
-      ),
-
-      // ─── Cup Detail (detail screen outside shell) ────────────────────
-      GoRoute(
-        path: AppRoutes.cupDetail,
-        name: 'cupDetail',
-        builder: (ctx, state) {
-          final cupId = state.pathParameters['cupId']!;
-          return CupTournamentDetailsScreen(tournamentId: cupId);
-        },
-      ),
-
-      // ─── Match Management (detail screen outside shell) ──────────────
-
-      GoRoute(
-        path: AppRoutes.matchManagement,
-        name: 'matchManagement',
-        builder: (ctx, state) {
-          final matchId = state.pathParameters['matchId']!;
-          final extra = state.extra as Map<String, dynamic>?;
-          final match = extra?['match'] as TournamentMatchModel;
-          final tournamentId = extra?['tournamentId'] as String;
-          return MatchManagementScreen(
-            matchId: matchId,
-            match: match,
-            tournamentId: tournamentId,
-          );
-        },
-      ),
-
-      // ─── Partner Bio screens (outside shell) ─────────────────────────
-      GoRoute(
-        path: AppRoutes.faBio,
-        name: 'faBio',
-        builder: (ctx, state) {
-          final faId = state.pathParameters['faId']!;
-          return FaBioScreen(faId: faId);
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.confedBio,
-        name: 'confedBio',
-        builder: (ctx, state) => const Scaffold(
-          body: Center(child: Text('Confederation Bio — Coming Soon')),
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.sponsorBio,
-        name: 'sponsorBio',
-        builder: (ctx, state) => const Scaffold(
-          body: Center(child: Text('Sponsor Bio — Coming Soon')),
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.charityBio,
-        name: 'charityBio',
-        builder: (ctx, state) => const Scaffold(
-          body: Center(child: Text('Charity Bio — Coming Soon')),
-        ),
-      ),
-
-      // ─── One-Off Matches (outside shell) ─────────────────────────────
-      GoRoute(
-        path: AppRoutes.upcomingMatches,
-        name: 'upcomingMatches',
-        builder: (ctx, state) => const UpcomingMatchesScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.recentMatches,
-        name: 'recentMatches',
-        builder: (ctx, state) => const RecentMatchesScreen(),
-      ),
-
-      // ─── Pickup Matches (outside shell) ──────────────────────────────
-      GoRoute(
-        path: AppRoutes.hostPickupMatch,
-        name: 'hostPickupMatch',
-        builder: (ctx, state) => const HostPickupMatchScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.pickupMatchDetail,
-        name: 'pickupMatchDetail',
-        builder: (ctx, state) {
-          final matchId = state.pathParameters['matchId']!;
-          return PickupMatchDetailsScreen(matchId: matchId);
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.pickupMatchRequests,
-        name: 'pickupMatchRequests',
-        builder: (ctx, state) {
-          final matchId = state.pathParameters['matchId']!;
-          return PickupMatchRequestsScreen(matchId: matchId);
-        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

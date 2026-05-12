@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_bio_model.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/router/app_routes.dart';
 
 /// Bio details section showing player information
 class PlayerBioDetailsSection extends StatelessWidget {
@@ -30,7 +32,7 @@ class PlayerBioDetailsSection extends StatelessWidget {
 
   bool _isYouthOrChild() {
     if (playerBio.dob == null || playerBio.dob!.isEmpty) return false;
-    
+
     try {
       final parts = playerBio.dob!.split('-');
       if (parts.length == 3) {
@@ -47,153 +49,227 @@ class PlayerBioDetailsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isYouth = _isYouthOrChild();
-
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ABOUT ME Section
+        if (playerBio.aboutMe != null && playerBio.aboutMe!.isNotEmpty) ...[
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.socaGrey.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  playerBio.aboutMe!,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: AppColors.socaBlack,
+                  ),
+                ),
+              ),
+              Positioned(
+                  top: -25, left: 10, child: _buildSectionTitle('ABOUT ME')),
+            ],
           ),
+          SizedBox(height: 20)
         ],
+        SizedBox(height: 15),
+
+        // BIO Section
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.socaGrey.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Left Column
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildGridRow('Born', _getBornDisplay(),
+                            isBoldValue: true),
+                        const SizedBox(height: 15),
+                        _buildGridRowWithUpdate('Height (cms)',
+                            playerBio.height?.toString() ?? '', context),
+                        const SizedBox(height: 15),
+                        _buildGridRow(
+                            'Preferred Foot', playerBio.preferredFoot ?? '',
+                            isBoldValue: true),
+                        const SizedBox(height: 15),
+                        _buildGridRow(
+                            'Playing Level', playerBio.playLevel ?? '',
+                            isBoldValue: true),
+                      ],
+                    ),
+                  ),
+                  // Vertical Divider
+                  Container(
+                    width: 1,
+                    height: 150,
+                    color: Colors.grey.shade400,
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                  ),
+                  // Right Column
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildGridRow('Position', playerBio.playPosition ?? '',
+                            isBoldValue: true),
+                        if (playerBio.playPositionType != null) ...[
+                          const SizedBox(height: 5),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              playerBio.playPositionType!,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.socaBlack,
+                              ),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 15),
+                        _buildGridRowWithUpdate('Nationality',
+                            playerBio.nationality ?? '', context),
+                        const SizedBox(height: 15),
+                        _buildGridRow('Location', playerBio.country ?? '',
+                            isBoldValue: true),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(top: -25, left: 10, child: _buildSectionTitle('BIO')),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.socaBlack,
+        borderRadius: BorderRadius.circular(6),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'BIO DETAILS',
-            style: TextStyle(
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: AppColors.socaYellow,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGridRow(String label, String value, {bool isBoldValue = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(
+            label,
+            style: const TextStyle(
               fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontSize: 12,
               color: AppColors.socaBlack,
             ),
           ),
-          const SizedBox(height: 15),
-
-          // Born
-          _buildDetailRow(
-            label: 'Born',
-            value: _getBornDisplay(),
+        ),
+        Expanded(
+          flex: 4,
+          child: Text(
+            value,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              fontWeight: isBoldValue ? FontWeight.w700 : FontWeight.w400,
+              color: AppColors.socaBlack,
+            ),
           ),
+        ),
+      ],
+    );
+  }
 
-          // Height (hidden for youth/child)
-          if (!isYouth && playerBio.height != null)
-            _buildDetailRow(
-              label: 'Height',
-              value: '${playerBio.height} cm',
+  Widget _buildGridRowWithUpdate(
+      String label, String value, BuildContext context) {
+    bool hasValue = value.isNotEmpty;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          // flex: 3,
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              color: AppColors.socaBlack,
             ),
-
-          // Gender (shown for youth/child only)
-          if (isYouth && playerBio.gender != null)
-            _buildDetailRow(
-              label: 'Gender',
-              value: playerBio.gender!,
+          ),
+        ),
+        if (!hasValue && isOwnProfile)
+          GestureDetector(
+            onTap: () {
+              context.push(AppRoutes.editProfile, extra: playerBio);
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.socaBlack,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Text(
+                'UPDATE',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.socaYellow,
+                ),
+              ),
             ),
-
-          // Preferred Foot
-          if (playerBio.preferredFoot != null)
-            _buildDetailRow(
-              label: 'Preferred Foot',
-              value: playerBio.preferredFoot!,
-            ),
-
-          // Playing Level
-          if (playerBio.playLevel != null)
-            _buildDetailRow(
-              label: 'Playing Level',
-              value: playerBio.playLevel!,
-            ),
-
-          // Jersey Size
-          if (playerBio.jerseySize != null)
-            _buildDetailRow(
-              label: 'Jersey Size',
-              value: playerBio.jerseySize!,
-            ),
-
-          // Shoe Size
-          if (playerBio.shoeSize != null)
-            _buildDetailRow(
-              label: 'Shoe Size',
-              value: playerBio.shoeSizeUnit != null
-                  ? '${playerBio.shoeSize} (${playerBio.shoeSizeUnit})'
-                  : playerBio.shoeSize!,
-            ),
-
-          // Nationality
-          if (playerBio.nationality != null && playerBio.nationality!.isNotEmpty)
-            _buildDetailRow(
-              label: 'Nationality',
-              value: playerBio.nationality!,
-            ),
-
-          // About Me
-          if (playerBio.aboutMe != null && playerBio.aboutMe!.isNotEmpty) ...[
-            const SizedBox(height: 10),
-            const Text(
-              'ABOUT ME',
-              style: TextStyle(
+          )
+        else
+          Flexible(
+            // flex: 4,
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: AppColors.socaBlack,
               ),
             ),
-            const SizedBox(height: 5),
-            Text(
-              playerBio.aboutMe!,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: AppColors.socaBlack,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetailRow({
-    required String label,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              label,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: AppColors.socaGrey,
-              ),
-            ),
           ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: AppColors.socaBlack,
-              ),
-            ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 }

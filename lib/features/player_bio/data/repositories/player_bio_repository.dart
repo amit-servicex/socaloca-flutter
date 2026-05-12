@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/api_client.dart';
 import '../models/player_bio_model.dart';
@@ -264,6 +266,7 @@ class PlayerBioRepository {
               .map((skill) =>
                   PlayerSkillModel.fromJson(skill as Map<String, dynamic>))
               .toList();
+          log("successfully parse the data of the rating and skill of the player ${skillsList.first}");
         }
 
         if (response['response']['overall'] != null) {
@@ -402,6 +405,131 @@ class PlayerBioRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  /// Add a match activity entry (Football or Futsal)
+  Future<bool> addMatchActivity({
+    required String userId,
+    required String gameType,
+    required String matchDate,
+    required int matchMonth,
+    required int matchYear,
+    required String matchMonthStr,
+    required int goals,
+    required int goalSaved,
+    required int assists,
+    required String playPosition,
+    required String playPositionType,
+    required int minutes,
+    required String myTeamName,
+    required String opponentTeamName,
+    required int rating,
+    required String notes,
+    List<Map<String, dynamic>> tagged = const [],
+    required bool isPlayer,
+    required bool isCoach,
+    required bool isAdmin,
+    required bool isFan,
+    required String firstName,
+    required String lastName,
+    required String myImageUrl,
+  }) async {
+    try {
+      final formattedDate = _formatDateForApi(matchDate);
+      final response = await ApiClient.instance.post(
+        ApiConstants.addMatchActivity,
+        body: {
+          'userId': userId,
+          'gameType': gameType,
+          'matchDate': formattedDate,
+          'matchDateGmt': DateTime.now().millisecondsSinceEpoch,
+          'matchMonth': matchMonth,
+          'matchYear': matchYear,
+          'matchMonthStr': matchMonthStr,
+          'goals': goals,
+          'goalSaved': goalSaved,
+          'assists': assists,
+          'playPosition': playPosition,
+          'playPositionType': playPositionType,
+          'minutes': minutes,
+          'myTeamName': myTeamName,
+          'opponentTeamName': opponentTeamName,
+          'rating': rating,
+          'notes': notes,
+          'tagged': tagged,
+          'isAdmin': isAdmin,
+          'isPlayer': isPlayer,
+          'isCoach': isCoach,
+          'isFan': isFan,
+          'firstName': firstName,
+          'lastName': lastName,
+          'myImageUrl': myImageUrl,
+        },
+      );
+      return response['response']?['status'] == 1 &&
+          response['response']?['success'] == true;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Add a training session activity
+  Future<bool> addTrainingActivity({
+    required String userId,
+    required String trainType,
+    required String trainDate,
+    required int trainMonth,
+    required int trainYear,
+    required String trainMonthStr,
+    required int minutes,
+    required String notes,
+    List<Map<String, dynamic>> tagged = const [],
+    required bool isPlayer,
+    required bool isCoach,
+    required bool isAdmin,
+    required bool isFan,
+    required String firstName,
+    required String lastName,
+    required String myImageUrl,
+  }) async {
+    try {
+      final formattedDate = _formatDateForApi(trainDate);
+      final response = await ApiClient.instance.post(
+        ApiConstants.addTrainingActivity,
+        body: {
+          'userId': userId,
+          'trainType': trainType.toLowerCase(),
+          'trainDate': formattedDate,
+          'trainDateGmt': DateTime.now().millisecondsSinceEpoch,
+          'trainMonth': trainMonth,
+          'trainYear': trainYear,
+          'trainMonthStr': trainMonthStr,
+          'minutes': minutes,
+          'notes': notes,
+          'tagged': tagged,
+          'isAdmin': isAdmin,
+          'isPlayer': isPlayer,
+          'isCoach': isCoach,
+          'isFan': isFan,
+          'firstName': firstName,
+          'lastName': lastName,
+          'myImageUrl': myImageUrl,
+        },
+      );
+      return response['response']?['status'] == 1 &&
+          response['response']?['success'] == true;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Convert a DateTime to yyyy-MM-dd format expected by the API
+  String _formatDateForApi(String ddMMYyyy) {
+    try {
+      final parts = ddMMYyyy.split('-');
+      if (parts.length == 3) return '${parts[2]}-${parts[1]}-${parts[0]}';
+    } catch (_) {}
+    return ddMMYyyy;
   }
 
   /// Get player academy videos (tagged videos)

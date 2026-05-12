@@ -320,6 +320,101 @@ class AuthRepository {
     }
   }
 
+  // ─── editCommonProfile ────────────────────────────────────────────────────
+  // Edit existing user profile — mirrors Android CommonProfileEditNewFragment
+
+  Future<bool> editCommonProfile({
+    required String userId,
+    required String firstName,
+    required String lastName,
+    required String profileName,
+    required bool isPlayer,
+    required bool isCoach,
+    required bool isAdmin,
+    required bool isFan,
+    required String dob,
+    required String country,
+    required String gender,
+    String aboutMe = '',
+    String imageUrl = '',
+    String playPosition = '',
+    String playPositionType = '',
+    String playLevel = '',
+    String preferredFoot = 'right',
+    String preferredJersey = '',
+    int height = 0,
+    String jerseySize = '',
+    String shoeSize = '',
+    String shoeSizeUnit = '',
+    String nationality = '',
+    String nationalityIso = '',
+    String leagueFollow = '',
+    String teamFollow = '',
+    List<String> brands = const [],
+    String userLoc = '',
+    double userLat = 0.0,
+    double userLng = 0.0,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'userId': userId,
+        'firstName': firstName,
+        'lastName': lastName,
+        'profileName': profileName,
+        'isPlayer': isPlayer,
+        'isCoach': isCoach,
+        'isAdmin': isAdmin,
+        'isFan': isFan,
+        'dob': dob,
+        'country': country,
+        'gender': gender,
+        'aboutMe': aboutMe,
+        'imageUrl': imageUrl,
+        'leagueFollow': leagueFollow,
+        'teamFollow': teamFollow,
+        'brands': brands,
+        'userLoc': userLoc,
+        'userLat': userLat,
+        'userLng': userLng,
+        'lastUpdateDeviceType': 'flutter',
+      };
+
+      if (isPlayer) {
+        body['playPosition'] = playPosition;
+        body['playPositionType'] = playPositionType;
+        body['playLevel'] = playLevel;
+        body['preferredFoot'] = preferredFoot;
+        body['preferredJersey'] = preferredJersey;
+        body['height'] = height;
+        body['jerseySize'] = jerseySize;
+        body['shoeSize'] = shoeSize;
+        body['shoeSizeUnit'] = shoeSizeUnit;
+        body['nationality'] = nationality;
+        body['nationalityIso'] = nationalityIso;
+      }
+
+      if (isCoach || isAdmin) {
+        body['jerseySize'] = jerseySize;
+        body['shoeSize'] = shoeSize;
+        body['shoeSizeUnit'] = shoeSizeUnit;
+        body['preferredJersey'] = preferredJersey;
+        body['nationality'] = nationality;
+        body['nationalityIso'] = nationalityIso;
+      }
+
+      final data = await ApiClient.instance.post(
+        ApiConstants.editCommonProfile,
+        body: body,
+      );
+
+      final status = (data['response']['status'] as num?)?.toInt() ?? 0;
+      return status == 1;
+    } on ApiException catch (e) {
+      log('❌ Edit profile error: ${e.message}');
+      return false;
+    }
+  }
+
   // ─── createUserProfile ────────────────────────────────────────────────────
   // Complete user profile creation after signup
   // Matches Android CreateProfileFragment.saveProfile() exactly

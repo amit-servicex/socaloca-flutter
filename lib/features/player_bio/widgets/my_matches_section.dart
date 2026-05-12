@@ -12,6 +12,8 @@ class MyMatchesSection extends StatelessWidget {
   final PlayerBioModel playerBio;
   final bool isOwnProfile;
   final bool isLoadingMatches;
+  final VoidCallback? onAddFootball;
+  final VoidCallback? onAddFutsal;
 
   const MyMatchesSection({
     super.key,
@@ -20,27 +22,17 @@ class MyMatchesSection extends StatelessWidget {
     required this.playerBio,
     required this.isOwnProfile,
     required this.isLoadingMatches,
+    this.onAddFootball,
+    this.onAddFutsal,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Football Matches
-        _buildMatchSection(
-          context,
-          'Football',
-          footballMatches,
-        ),
-
+        _buildMatchSection(context, 'Football', footballMatches, onAddFootball),
         const SizedBox(height: 16),
-
-        // Futsal Matches
-        _buildMatchSection(
-          context,
-          'Futsal',
-          futsalMatches,
-        ),
+        _buildMatchSection(context, 'Futsal', futsalMatches, onAddFutsal),
       ],
     );
   }
@@ -49,164 +41,178 @@ class MyMatchesSection extends StatelessWidget {
     BuildContext context,
     String type,
     MatchTrainingStatusModel? matches,
+    VoidCallback? onAdd,
   ) {
     final isGoalkeeper = playerBio.playPosition?.toLowerCase() == 'goalkeeper';
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'My Matches Details',
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.socaBlack,
+    return Column(
+      children: [
+        SizedBox(height: 25),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.socaGrey.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: isLoadingMatches
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(
+                          color: AppColors.socaYellow,
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildStatItem(
+                                      'Number of matches',
+                                      matches?.matches?.toString() ?? '0',
+                                    ),
+                                    const SizedBox(height: 16),
+                                    _buildStatItem(
+                                      'Minutes played',
+                                      matches?.mins?.toString() ?? '0',
+                                    ),
+                                    const SizedBox(height: 16),
+                                    _buildStatItem(
+                                      'Number of goals',
+                                      matches?.goals?.toString() ?? '0',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              VerticalDivider(
+                                color: AppColors.socaBlack.withOpacity(0.5),
+                                thickness: 1,
+                                width: 32,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildStatItem(
+                                      isGoalkeeper
+                                          ? 'Number of clean sheet'
+                                          : 'Number of assists',
+                                      isGoalkeeper
+                                          ? (matches?.cleanSheetCount
+                                                  ?.toString() ??
+                                              '0')
+                                          : (matches?.assists?.toString() ??
+                                              '0'),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    _buildStatItem(
+                                      'Average match rating',
+                                      matches?.rating != null
+                                          ? matches!.rating!.toStringAsFixed(2)
+                                          : '0.00',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (isOwnProfile && onAdd != null) ...[
+                          const SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: onAdd,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.socaBlack,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Text(
+                                'ADD',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.socaYellow,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+            ),
+            Positioned(
+              top: -30,
+              left: 10,
+              child: Container(
+                width: MediaQuery.of(context).size.width - 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            'MY MATCHES',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.socaYellow,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '$type, ${matches?.year ?? DateTime.now().year}',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // TODO: Navigate to all matches
+                      },
+                      child: const Text(
+                        'view all',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              if (matches != null)
-                TextButton(
-                  onPressed: () {
-                    // TODO: Navigate to all matches
-                  },
-                  child: const Text(
-                    'View All',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: AppColors.socaYellow,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '$type, ${matches?.year ?? DateTime.now().year}',
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 12,
-              color: AppColors.socaGrey,
             ),
-          ),
-          const SizedBox(height: 16),
-          if (isLoadingMatches)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(
-                  color: AppColors.socaYellow,
-                ),
-              ),
-            )
-          else if (matches == null || matches.matches == 0)
-            Column(
-              children: [
-                const Text(
-                  'No matches available',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: AppColors.socaGrey,
-                  ),
-                ),
-                if (isOwnProfile) ...[
-                  const SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () {
-                      // TODO: Navigate to add match
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.socaBlack,
-                      foregroundColor: AppColors.socaYellow,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 8,
-                      ),
-                    ),
-                    child: const Text(
-                      'Add',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            )
-          else
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatItem(
-                        'Number of Matches',
-                        matches.matches?.toString() ?? '0',
-                      ),
-                    ),
-                    Expanded(
-                      child: _buildStatItem(
-                        'Minutes Played',
-                        matches.mins?.toString() ?? '0',
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatItem(
-                        'Number of Goals',
-                        matches.goals?.toString() ?? '0',
-                      ),
-                    ),
-                    Expanded(
-                      child: _buildStatItem(
-                        isGoalkeeper ? 'Clean Sheets' : 'Number of Assists',
-                        isGoalkeeper
-                            ? (matches.cleanSheetCount?.toString() ?? '0')
-                            : (matches.assists?.toString() ?? '0'),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatItem(
-                        'Average Match Rating',
-                        matches.rating != null
-                            ? matches.rating!.toStringAsFixed(2)
-                            : '0.00',
-                      ),
-                    ),
-                    const Expanded(child: SizedBox()),
-                  ],
-                ),
-              ],
-            ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -218,8 +224,8 @@ class MyMatchesSection extends StatelessWidget {
           label,
           style: const TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 11,
-            color: AppColors.socaGrey,
+            fontSize: 12,
+            color: AppColors.socaBlack,
           ),
         ),
         const SizedBox(height: 4),

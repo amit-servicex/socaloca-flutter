@@ -6,15 +6,19 @@ import '../data/models/game_stats_model.dart';
 import '../data/models/player_bio_model.dart';
 import '../providers/player_bio_provider.dart';
 
-/// Stats tab content showing Football and Futsal statistics
+/// Stats tab content showing Football and Futsal statistics.
+/// Set [embedded] = true when placed inside a parent scroll view — content
+/// renders as a plain Column with padding instead of its own scroll.
 class StatsTabContent extends ConsumerWidget {
   final String playerId;
   final PlayerBioModel playerBio;
+  final bool embedded;
 
   const StatsTabContent({
     super.key,
     required this.playerId,
     required this.playerBio,
+    this.embedded = false,
   });
 
   bool _isGoalkeeper() {
@@ -27,38 +31,40 @@ class StatsTabContent extends ConsumerWidget {
     final state = ref.watch(playerBioProvider(playerId));
     final isGoalkeeper = _isGoalkeeper();
 
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildStatsSection(
+          context: context,
+          ref: ref,
+          title: 'FOOTBALL',
+          stats: state.footballStats,
+          isGoalkeeper: isGoalkeeper,
+          isLoading: state.isLoadingStats,
+          year: state.selectedYear,
+          onYearTap: () => _showYearPicker(context, ref),
+        ),
+        const SizedBox(height: 20),
+        _buildStatsSection(
+          context: context,
+          ref: ref,
+          title: 'FUTSAL',
+          stats: state.futsalStats,
+          isGoalkeeper: isGoalkeeper,
+          isLoading: state.isLoadingStats,
+          year: state.selectedYear,
+          onYearTap: () => _showYearPicker(context, ref),
+        ),
+      ],
+    );
+
+    if (embedded) {
+      return Padding(padding: const EdgeInsets.all(20), child: content);
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Football Stats Section
-          _buildStatsSection(
-            context: context,
-            ref: ref,
-            title: 'FOOTBALL',
-            stats: state.footballStats,
-            isGoalkeeper: isGoalkeeper,
-            isLoading: state.isLoadingStats,
-            year: state.selectedYear,
-            onYearTap: () => _showYearPicker(context, ref),
-          ),
-
-          const SizedBox(height: 20),
-
-          // Futsal Stats Section
-          _buildStatsSection(
-            context: context,
-            ref: ref,
-            title: 'FUTSAL',
-            stats: state.futsalStats,
-            isGoalkeeper: isGoalkeeper,
-            isLoading: state.isLoadingStats,
-            year: state.selectedYear,
-            onYearTap: () => _showYearPicker(context, ref),
-          ),
-        ],
-      ),
+      child: content,
     );
   }
 

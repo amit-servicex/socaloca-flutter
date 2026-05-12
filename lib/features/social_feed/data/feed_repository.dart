@@ -107,10 +107,49 @@ class FeedRepository {
         },
       );
 
-      return data['status'] == 1;
+      final raw = data['response'] as Map<String, dynamic>? ?? data;
+      return (raw['status'] as num?)?.toInt() == 1;
     } on ApiException catch (e) {
       print('Error liking post: ${e.message}');
       return false;
+    }
+  }
+
+  // ─── Follow User ──────────────────────────────────────────────────────────
+
+  /// Follows or unfollows a user. Returns `isFollow` (true=following, false=unfollowed).
+  Future<bool?> followUser({
+    required String userId,
+    required String toUserId,
+    required String myName,
+    required String myImageUrl,
+    required bool isPlayer,
+    required bool isCoach,
+    required bool isAdmin,
+    required bool isFan,
+  }) async {
+    try {
+      final data = await ApiClient.instance.post(
+        ApiConstants.followUser,
+        body: {
+          'userId': userId,
+          'toUserId': toUserId,
+          'myName': myName,
+          'myImageUrl': myImageUrl,
+          'isPlayer': isPlayer,
+          'isCoach': isCoach,
+          'isAdmin': isAdmin,
+          'isFan': isFan,
+        },
+      );
+      final raw = data['response'] ?? data;
+      if ((raw['status'] as num?)?.toInt() == 1) {
+        return raw['isFollow'] as bool?;
+      }
+      return null;
+    } on ApiException catch (e) {
+      print('Error following user: ${e.message}');
+      return null;
     }
   }
 

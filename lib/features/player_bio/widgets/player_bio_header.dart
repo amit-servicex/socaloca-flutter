@@ -20,122 +20,62 @@ class PlayerBioHeader extends StatelessWidget {
     final firstName = playerBio.firstName ?? '';
     final lastName = playerBio.lastName ?? '';
     final profileName = playerBio.profileName ?? '';
-    final sclId = playerBio.sclId ?? '';
     final imageUrl = playerBio.imageUrl;
     final preferredJersey = playerBio.preferredJersey;
     final isVerified = playerBio.isVerifyBadge ?? false;
     final isOnline = playerBio.isOnline ?? false;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.only(top: 20, bottom: 10),
       color: Colors.white,
       child: Column(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          // Player Avatar with Online indicator
+          Stack(
             children: [
-              // Jersey Number (top-left corner)
-              if (preferredJersey != null && preferredJersey.isNotEmpty)
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.socaYellow,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      preferredJersey,
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack,
-                      ),
-                    ),
-                  ),
-                ),
-
-              const Spacer(),
-
-              // Player Avatar
-              Stack(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColors.socaBlack,
-                        width: 2,
-                      ),
-                    ),
-                    child: ClipOval(
-                      child: imageUrl != null &&
-                              imageUrl.isNotEmpty &&
-                              !imageUrl.startsWith('file:///')
-                          ? Image.network(
-                              ApiConstants.getImageUrl(imageUrl),
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(
-                                color: AppColors.socaGrey,
-                                child: const Icon(
-                                  Icons.person,
-                                  size: 50,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            )
-                          : Container(
-                              color: AppColors.socaGrey,
-                              child: const Icon(
-                                Icons.person,
-                                size: 50,
-                                color: Colors.white,
-                              ),
-                            ),
-                    ),
-                  ),
-
-                  // Online/Offline indicator
-                  Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: isOnline ? Colors.green : Colors.grey,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const Spacer(),
-
-              // Country Flag (placeholder)
               Container(
-                width: 40,
-                height: 30,
+                width: 110,
+                height: 110,
                 decoration: BoxDecoration(
-                  color: AppColors.socaGrey,
-                  borderRadius: BorderRadius.circular(5),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.socaBlack,
+                    width: 2.5,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.flag,
-                  size: 20,
-                  color: AppColors.socaBlack,
+                child: ClipOval(
+                  child: imageUrl != null &&
+                          imageUrl.isNotEmpty &&
+                          !imageUrl.startsWith('file:///')
+                      ? Image.network(
+                          ApiConstants.getImageUrl(imageUrl),
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            color: AppColors.socaGrey,
+                            child: const Icon(Icons.person, size: 60, color: Colors.white),
+                          ),
+                        )
+                      : Container(
+                          color: AppColors.socaGrey,
+                          child: const Icon(Icons.person, size: 60, color: Colors.white),
+                        ),
+                ),
+              ),
+              // Online indicator
+              Positioned(
+                top: 5,
+                right: 0,
+                child: Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    color: AppColors.socaYellow,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.socaBlack,
+                      width: 1.5,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -143,25 +83,15 @@ class PlayerBioHeader extends StatelessWidget {
 
           const SizedBox(height: 15),
 
-          // Player Name
+          // Player Name and Jersey
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                firstName,
+                '$firstName $lastName'.trim(),
                 style: const TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                lastName,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 20,
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: AppColors.socaBlack,
                 ),
@@ -174,6 +104,25 @@ class PlayerBioHeader extends StatelessWidget {
                   color: Colors.blue,
                 ),
               ],
+              if (preferredJersey != null && preferredJersey.isNotEmpty) ...[
+                const SizedBox(width: 10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.socaBlack,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    preferredJersey,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.socaYellow,
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
 
@@ -182,88 +131,30 @@ class PlayerBioHeader extends StatelessWidget {
           // Profile Name
           if (profileName.isNotEmpty)
             Text(
-              '@$profileName',
+              profileName,
               style: const TextStyle(
                 fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: AppColors.socaGrey,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.socaBlack,
               ),
             ),
 
-          const SizedBox(height: 5),
+          const SizedBox(height: 15),
 
-          // Socaloca ID
-          if (sclId.isNotEmpty)
+          // Country Flag Image (placeholder using icon if no image)
+          if (playerBio.country != null && playerBio.country!.isNotEmpty)
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 4,
-              ),
+              width: 45,
+              height: 30,
               decoration: BoxDecoration(
-                color: AppColors.socaGrey.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.grey.shade400, width: 1),
+                borderRadius: BorderRadius.circular(2),
               ),
-              child: Text(
-                'SCL ID: $sclId',
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-            ),
-
-          const SizedBox(height: 10),
-
-          // Position
-          if (playerBio.playPosition != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  playerBio.playPosition!,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-                if (playerBio.playPositionType != null) ...[
-                  const SizedBox(width: 5),
-                  Container(
-                    width: 4,
-                    height: 4,
-                    decoration: const BoxDecoration(
-                      color: AppColors.socaBlack,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    playerBio.playPositionType!,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.socaBlack,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-
-          // Country
-          if (playerBio.country != null)
-            Text(
-              playerBio.country!,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: AppColors.socaGrey,
+              child: Image.network(
+                 'https://flagcdn.com/w40/in.png',
+                 fit: BoxFit.cover,
+                 errorBuilder: (_, __, ___) => const Icon(Icons.flag, color: Colors.green),
               ),
             ),
         ],

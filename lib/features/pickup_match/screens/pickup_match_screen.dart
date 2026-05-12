@@ -53,7 +53,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
     final isPlayer = user.isPlayer;
     final isCoach = user.isCoach;
     final isAdmin = user.isAdmin;
-    final isReferee = user.isReferee;
+    final isReferee = user.isReferee ?? false;
     log('User Roles - Player: $isPlayer, Coach: $isCoach, Admin: $isAdmin, Referee: $isReferee');
     return isPlayer || isCoach || isAdmin || isReferee;
   }
