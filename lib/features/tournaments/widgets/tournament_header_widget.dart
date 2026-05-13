@@ -15,6 +15,7 @@ class TournamentHeaderWidget extends StatelessWidget {
     required this.followCount,
     this.onFollowTap,
     this.onLogoTap,
+    this.showFollow = true,
   });
 
   final TournamentModel tournament;
@@ -22,6 +23,7 @@ class TournamentHeaderWidget extends StatelessWidget {
   final int followCount;
   final VoidCallback? onFollowTap;
   final VoidCallback? onLogoTap;
+  final bool showFollow;
 
   @override
   Widget build(BuildContext context) {
@@ -139,45 +141,46 @@ class TournamentHeaderWidget extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                // Follow button + count
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: onFollowTap,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: isFollowing
-                              ? AppColors.socaBlack
-                              : Colors.white,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: AppColors.socaBlack),
-                        ),
-                        child: Text(
-                          isFollowing ? 'Following' : 'Follow',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
+                // Follow button + count (hidden for referee role)
+                if (showFollow)
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: onFollowTap,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 6),
+                          decoration: BoxDecoration(
                             color: isFollowing
-                                ? AppColors.socaYellow
-                                : AppColors.socaBlack,
+                                ? AppColors.socaBlack
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: AppColors.socaBlack),
+                          ),
+                          child: Text(
+                            isFollowing ? 'Following' : 'Follow',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              color: isFollowing
+                                  ? AppColors.socaYellow
+                                  : AppColors.socaBlack,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      _followCountText(),
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        color: AppColors.socaBlack.withOpacity(0.7),
+                      const SizedBox(width: 10),
+                      Text(
+                        _followCountText(),
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          color: AppColors.socaBlack.withValues(alpha: 0.7),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
           ),

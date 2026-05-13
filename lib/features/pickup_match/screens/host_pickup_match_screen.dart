@@ -267,29 +267,141 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
     final country = user?.country ?? 'Unknown';
 
     return Scaffold(
-      backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: const Text(
-          'Host Pickup Match',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.socaBlack),
-      ),
+      backgroundColor: Colors.white,
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           children: [
-            // Country (read-only)
-            _buildLabel('Country'),
+            const Center(
+              child: Text(
+                "Host a Pick-Up Match",
+                style: TextStyle(
+                  color: AppColors.socaBlack,
+                  fontSize: 18,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Average Age
+            const Text(
+              'Average Age *',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 13,
+                color: AppColors.socaBlack,
+              ),
+            ),
+            const SizedBox(height: 8),
             Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  value: _selectedAgeGroup,
+                  hint: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'Select',
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          color: AppColors.socaBlack),
+                    ),
+                  ),
+                  icon: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Image.asset("assets/images/dropdown.png",
+                        width: 12, height: 12),
+                  ),
+                  items: _ageGroups.map((age) {
+                    return DropdownMenuItem(
+                      value: age,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(age,
+                            style: const TextStyle(
+                                fontFamily: 'Poppins', fontSize: 14)),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) =>
+                      setState(() => _selectedAgeGroup = value),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Gender
+            Row(
+              children: [
+                const Text(
+                  'Gender *',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 13,
+                    color: AppColors.socaBlack,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                _buildGenderRadio('Male'),
+                const SizedBox(width: 4),
+                _buildGenderRadio('Female'),
+                const SizedBox(width: 4),
+                _buildGenderRadio('Mixed'),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Match Date
+            _buildGreyBox(
+              text: _selectedDate == null
+                  ? 'Match date *'
+                  : _formatDate(_selectedDate!),
+              icon: Icons.edit_calendar,
+              onTap: _pickDate,
+            ),
+
+            const SizedBox(height: 16),
+
+            // Start and End Time
+            Row(
+              children: [
+                Expanded(
+                  child: _buildGreyBox(
+                    text: _startTime == null
+                        ? 'Start Time *'
+                        : _formatTime(_startTime!),
+                    icon: Icons.schedule,
+                    onTap: _pickStartTime,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildGreyBox(
+                    text: _endTime == null
+                        ? 'End Time *'
+                        : _formatTime(_endTime!),
+                    icon: Icons.schedule,
+                    onTap: _pickEndTime,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Country (read-only)
+            Container(
+              width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
@@ -308,10 +420,9 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
             const SizedBox(height: 16),
 
             // Venue Name
-            _buildLabel('Venue Name *'),
             TextFormField(
               controller: _venueController,
-              decoration: _inputDecoration('Enter venue name'),
+              decoration: _inputDecoration('Venue name *'),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return 'Venue name is required';
@@ -326,24 +437,24 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
             const SizedBox(height: 16),
 
             // Location
-            _buildLabel('Location *'),
             GestureDetector(
               onTap: _pickLocation,
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 decoration: BoxDecoration(
-                  color: AppColors.socaGrey,
-                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.location_on, color: AppColors.socaBlack),
-                    const SizedBox(width: 10),
+                    const Icon(Icons.location_on_outlined,
+                        color: AppColors.socaBlack, size: 20),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         _locationController.text.isEmpty
-                            ? 'Select location from map'
+                            ? 'Select location from map *'
                             : _locationController.text,
                         style: const TextStyle(
                           fontFamily: 'Poppins',
@@ -371,204 +482,10 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
 
             const SizedBox(height: 16),
 
-            // Match Date
-            _buildLabel('Match Date *'),
-            GestureDetector(
-              onTap: _pickDate,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _selectedDate == null
-                          ? 'Select date'
-                          : _formatDate(_selectedDate!),
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: _selectedDate == null
-                            ? Colors.grey.shade600
-                            : AppColors.socaBlack,
-                      ),
-                    ),
-                    const Icon(Icons.calendar_today, size: 20),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Start and End Time
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildLabel('Start Time *'),
-                      GestureDetector(
-                        onTap: _pickStartTime,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 14),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey.shade300),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _startTime == null
-                                    ? 'Start'
-                                    : _formatTime(_startTime!),
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  color: _startTime == null
-                                      ? Colors.grey.shade600
-                                      : AppColors.socaBlack,
-                                ),
-                              ),
-                              const Icon(Icons.access_time, size: 20),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildLabel('End Time *'),
-                      GestureDetector(
-                        onTap: _pickEndTime,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 14),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey.shade300),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _endTime == null
-                                    ? 'End'
-                                    : _formatTime(_endTime!),
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  color: _endTime == null
-                                      ? Colors.grey.shade600
-                                      : AppColors.socaBlack,
-                                ),
-                              ),
-                              const Icon(Icons.access_time, size: 20),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
-            // Game Type
-            _buildLabel('Game Type'),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildRadioOption(
-                    'Football',
-                    _selectedGameType == 'Football',
-                    () => setState(() => _selectedGameType = 'Football'),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildRadioOption(
-                    'Futsal',
-                    _selectedGameType == 'Futsal',
-                    () => setState(() => _selectedGameType = 'Futsal'),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
-            // Age Group
-            _buildLabel('Age Group *'),
-            DropdownButtonFormField<String>(
-              value: _selectedAgeGroup,
-              decoration: _inputDecoration('Select age group'),
-              items: _ageGroups.map((age) {
-                return DropdownMenuItem(value: age, child: Text(age));
-              }).toList(),
-              onChanged: (value) => setState(() => _selectedAgeGroup = value),
-              validator: (value) {
-                if (value == null) return 'Age group is required';
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 16),
-
-            // Gender
-            _buildLabel('Gender'),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildRadioOption(
-                    'Male',
-                    _selectedGender == 'Male',
-                    () => setState(() => _selectedGender = 'Male'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _buildRadioOption(
-                    'Female',
-                    _selectedGender == 'Female',
-                    () => setState(() => _selectedGender = 'Female'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _buildRadioOption(
-                    'Mixed',
-                    _selectedGender == 'Mixed',
-                    () => setState(() => _selectedGender = 'Mixed'),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
             // Max Players
-            _buildLabel('Max Players *'),
             TextFormField(
               controller: _maxPlayersController,
-              decoration: _inputDecoration('Enter max players'),
+              decoration: _inputDecoration('Max players *'),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -585,15 +502,23 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
             const SizedBox(height: 16),
 
             // Match Note
-            _buildLabel('Match Note (Optional)'),
             TextFormField(
               controller: _noteController,
-              decoration: _inputDecoration('Add any additional notes'),
-              maxLines: 3,
-              maxLength: 200,
+              decoration: _inputDecoration('Match Note'),
+              maxLines: 5,
             ),
 
             const SizedBox(height: 24),
+
+            const Text(
+              '* mandatory fields',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                color: AppColors.socaBlack,
+              ),
+            ),
+            const SizedBox(height: 12),
 
             // Host Button
             ElevatedButton(
@@ -619,31 +544,70 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                       'HOST MATCH',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         fontSize: 16,
                         color: AppColors.socaYellow,
                       ),
                     ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 32),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-          color: AppColors.socaBlack,
+  Widget _buildGreyBox(
+      {required String text,
+      required IconData icon,
+      required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(8),
         ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              text,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                color: AppColors.socaBlack,
+              ),
+            ),
+            Icon(icon, size: 20, color: Colors.black87),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGenderRadio(String label) {
+    return GestureDetector(
+      onTap: () => setState(() => _selectedGender = label),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Radio<String>(
+            value: label,
+            groupValue: _selectedGender,
+            onChanged: (v) => setState(() => _selectedGender = v!),
+            activeColor: Colors.black,
+            visualDensity: VisualDensity.compact,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          Text(label,
+              style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13,
+                  color: AppColors.socaBlack)),
+        ],
       ),
     );
   }
@@ -651,57 +615,30 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         fontFamily: 'Poppins',
         fontSize: 14,
-        color: Colors.grey.shade600,
+        color: AppColors.socaBlack,
       ),
       filled: true,
-      fillColor: Colors.white,
+      fillColor: Colors.grey.shade200,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: AppColors.socaYellow, width: 2),
+        borderSide: BorderSide.none,
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: Colors.red),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-    );
-  }
-
-  Widget _buildRadioOption(String label, bool selected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: selected ? AppColors.socaBlack : Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: selected ? AppColors.socaBlack : Colors.grey.shade300,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: selected ? AppColors.socaYellow : AppColors.socaBlack,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

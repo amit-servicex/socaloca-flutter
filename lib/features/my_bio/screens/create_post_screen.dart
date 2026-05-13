@@ -337,7 +337,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               const SizedBox(height: 16),
               LinearProgressIndicator(
                 value: _uploadProgress,
-                backgroundColor: Colors.grey.shade300,
+                backgroundColor: AppColors.socaGrey,
                 color: AppColors.socaYellow,
               ),
             ],
@@ -866,7 +866,7 @@ class _SpaceBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: fraction,
-              backgroundColor: Colors.grey.shade300,
+              backgroundColor: AppColors.socaGrey,
               color: AppColors.socaYellow,
               minHeight: 8,
             ),
@@ -1137,7 +1137,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: AppColors.socaGrey,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

@@ -151,77 +151,114 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
+    // For 'my' tab there are no filters at all
+    final showFilters = widget.status != 'my';
+
     return Column(
       children: [
-        // Filters — not shown for "My Leagues" tab
-        if (widget.status != 'my')
-          TournamentFiltersWidget(
-            filters: _filters,
-            onFiltersChanged: _onFiltersChanged,
+        // ── Fixed: NATIONAL / GLOBAL toggle ────────────────────────────
+        if (showFilters)
+          TournamentVisibilityToggle(
+            visibility: _filters.visibility,
+            onChanged: (v) {
+              setState(() => _filters = _filters.copyWith(visibility: v));
+              _loadTournaments(refresh: true);
+            },
           ),
 
-        // List
+        // ── Scrollable area (filters + list) ───────────────────────────
         Expanded(
           child: _tournaments.isEmpty && !_isLoading
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.emoji_events_outlined,
-                        size: 64,
-                        color: AppColors.socaBlack.withOpacity(0.3),
+              // Empty state
+              ? Column(
+                  children: [
+                    if (showFilters)
+                      TournamentFiltersWidget(
+                        filters: _filters,
+                        onFiltersChanged: _onFiltersChanged,
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'No tournaments found',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: AppColors.socaBlack.withOpacity(0.5),
+                    Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.emoji_events_outlined,
+                              size: 64,
+                              color: AppColors.socaBlack.withOpacity(0.3),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No tournaments found',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: AppColors.socaBlack.withOpacity(0.5),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              // Normal list state
+              : RefreshIndicator(
+                  onRefresh: () => _loadTournaments(refresh: true),
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      // Filter dropdowns scroll with the list
+                      if (showFilters)
+                        SliverToBoxAdapter(
+                          child: TournamentFiltersWidget(
+                            filters: _filters,
+                            onFiltersChanged: _onFiltersChanged,
+                          ),
+                        ),
+
+                      // Tournament cards
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              if (index >= _tournaments.length) {
+                                return const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    child: CircularProgressIndicator(
+                                      color: AppColors.socaYellow,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              final t = _tournaments[index];
+                              return TournamentCard(
+                                tournament: t,
+                                onTap: () {
+                                  final id = t.effectiveId;
+                                  if (id.isEmpty) return;
+
+                                  final tmntType = t.tmntType?.toUpperCase() ??
+                                      t.rule?.toUpperCase() ??
+                                      '';
+
+                                  if (tmntType == 'CUP') {
+                                    context.push('/cups/$id');
+                                  } else {
+                                    context.push('/tournaments/$id');
+                                  }
+                                },
+                              );
+                            },
+                            childCount:
+                                _tournaments.length + (_isLoading ? 1 : 0),
+                          ),
                         ),
                       ),
                     ],
-                  ),
-                )
-              : RefreshIndicator(
-                  onRefresh: () => _loadTournaments(refresh: true),
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.all(12),
-                    itemCount: _tournaments.length + (_isLoading ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index >= _tournaments.length) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: CircularProgressIndicator(
-                              color: AppColors.socaYellow,
-                            ),
-                          ),
-                        );
-                      }
-
-                      return TournamentCard(
-                        tournament: _tournaments[index],
-                        onTap: () {
-                          final id = _tournaments[index].effectiveId;
-                          if (id.isEmpty) return;
-                          
-                          // Navigate to appropriate detail screen based on tournament type
-                          final tmntType = _tournaments[index].tmntType?.toUpperCase() ?? 
-                                          _tournaments[index].rule?.toUpperCase() ?? '';
-                          
-                          if (tmntType == 'CUP') {
-                            // Navigate to Cup details
-                            context.push('/cups/$id');
-                          } else {
-                            // Navigate to League details
-                            context.push('/tournaments/$id');
-                          }
-                        },
-                      );
-                    },
                   ),
                 ),
         ),

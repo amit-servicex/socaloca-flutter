@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../storage/storage_service.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/login_landing_screen.dart';
 import '../../features/auth/screens/new_login_screen.dart';
@@ -47,9 +48,24 @@ import '../../features/skill_detail/screens/skill_detail_screen.dart';
 import '../../features/skill_detail/screens/skill_detail_view_all_screen.dart';
 import '../../features/home/screens/main_shell_screen.dart';
 import '../../features/home/screens/home_screen.dart';
+import '../../features/referee/screens/referee_home_screen.dart';
+import '../../features/tournaments/screens/tournament_featured_screen.dart';
+import '../../features/referee/screens/referee_tournament_screen.dart';
+import '../../features/referee/screens/referee_my_requests_screen.dart';
+import '../../features/referee/screens/referee_my_matches_screen.dart';
+import '../../features/referee/screens/referee_live_matches_screen.dart';
+import '../../features/referee/screens/referee_my_bio_screen.dart';
 import '../../features/teams/screens/teams_screen_new.dart';
 import '../../features/teams/screens/team_bio_screen.dart';
 import '../../features/teams/screens/team_players_screen.dart';
+import '../../features/club/screens/club_home_screen.dart';
+import '../../features/club/screens/club_bio_admin_screen.dart';
+import '../../features/club/screens/club_players_screen.dart';
+import '../../features/club/screens/club_player_bio_screen.dart';
+import '../../features/club/screens/club_gallery_screen.dart';
+import '../../features/club/screens/club_trials_screen.dart';
+import '../../features/settings/screens/change_password_screen.dart';
+import '../../features/settings/screens/privacy_settings_screen.dart';
 import '../../shared/providers/auth_provider.dart';
 import 'app_routes.dart';
 
@@ -77,7 +93,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (isSplash) return null;
 
       final isLoggedIn = authState.isAuthenticated;
+      final isClubLogin = StorageService.isClubLogin;
       final isAuthRoute = state.matchedLocation.startsWith('/auth');
+      final isClubRoute = state.matchedLocation.startsWith('/club');
+      final isSettingsRoute = state.matchedLocation.startsWith('/settings');
       if (state.matchedLocation == AppRoutes.onboarding) {
         return AppRoutes.onboarding;
       }
@@ -87,7 +106,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (state.matchedLocation == AppRoutes.createProfile) {
         return AppRoutes.createProfile;
       }
-      if (!isLoggedIn && !isAuthRoute) {
+      // Club admin session bypasses regular auth check for club + settings routes
+      if (isClubLogin && (isClubRoute || isSettingsRoute)) return null;
+      if (!isLoggedIn && !isAuthRoute && !isClubRoute) {
         return AppRoutes.loginLanding;
       }
       log("this is the ksdfhbgsdjfbgsdhfbg${state.matchedLocation}");
@@ -569,6 +590,129 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             },
           ),
         ],
+      ),
+
+      // ─── Referee tournament detail (full-screen, no shell nav) ───────────
+      GoRoute(
+        path: AppRoutes.refereeTournamentView,
+        name: 'refereeTournamentView',
+        builder: (ctx, state) => TournamentFeaturedScreen(
+          tournamentId: state.pathParameters['tmntId']!,
+          isReferee: true,
+        ),
+      ),
+
+      // ─── Referee shell (separate from common shell) ───────────────────────
+      ShellRoute(
+        builder: (ctx, state, child) => RefereeHomeScreen(child: child),
+        routes: [
+          GoRoute(
+            path: AppRoutes.refereeTournament,
+            name: 'refereeTournament',
+            builder: (_, __) => const RefereeTournamentScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.refereeRequests,
+            name: 'refereeRequests',
+            builder: (_, __) => Scaffold(
+              body: Center(child: Text('refereeRequests - Coming Soon')),
+            ),
+            // const RefereeMyRequestsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.refereeMatches,
+            name: 'refereeMatches',
+            builder: (_, __) => Scaffold(
+              body: Center(child: Text('refereeMatches - Coming Soon')),
+            ),
+            //  const RefereeMyMatchesScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.refereeLive,
+            name: 'refereeLive',
+            builder: (_, __) => Scaffold(
+              body: Center(child: Text('refereeLive - Coming Soon')),
+            ),
+            //  const RefereeLiveMatchesScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.refereeBio,
+            name: 'refereeBio',
+            builder: (_, __) => const RefereeMyBioScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.refereeActivities,
+            name: 'refereeActivities',
+            builder: (_, __) => const Scaffold(
+              body: Center(child: Text('Referee Activities — Phase 9')),
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.refereeManageMatch,
+            name: 'refereeManageMatch',
+            builder: (ctx, state) {
+              final matchId = state.pathParameters['matchId']!;
+              return Scaffold(
+                body: Center(child: Text('Manage Match $matchId — Phase 8')),
+              );
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.refereeLiveUpdate,
+            name: 'refereeLiveUpdate',
+            builder: (ctx, state) {
+              final matchId = state.pathParameters['matchId']!;
+              return Scaffold(
+                body: Center(child: Text('Live Update $matchId — Phase 9')),
+              );
+            },
+          ),
+        ],
+      ),
+
+      // ─── Club Admin shell (separate from common + referee shells) ─────────
+      ShellRoute(
+        builder: (ctx, state, child) => ClubHomeScreen(child: child),
+        routes: [
+          GoRoute(
+            path: AppRoutes.clubBioAdmin,
+            name: 'clubBioAdmin',
+            builder: (_, __) => const ClubBioAdminScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.clubPlayers,
+            name: 'clubPlayers',
+            builder: (_, __) => const ClubPlayersScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.clubPlayerBio,
+            name: 'clubPlayerBio',
+            builder: (ctx, state) => ClubPlayerBioScreen(
+              playerId: state.pathParameters['playerId']!,
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.clubGallery,
+            name: 'clubGallery',
+            builder: (_, __) => const ClubGalleryScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.clubTrials,
+            name: 'clubTrials',
+            builder: (_, __) => const ClubTrialsScreen(),
+          ),
+        ],
+      ),
+      // ─── Settings screens (full-screen, no shell nav) ────────────────
+      GoRoute(
+        path: AppRoutes.changePassword,
+        name: 'changePassword',
+        builder: (ctx, state) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.privacySettings,
+        name: 'privacySettings',
+        builder: (ctx, state) => const PrivacySettingsScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

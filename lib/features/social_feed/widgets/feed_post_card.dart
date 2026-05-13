@@ -382,7 +382,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
           // Divider
           Container(
             height: 0.5,
-            color: Colors.grey.shade300,
+            color: AppColors.socaGrey,
             width: double.infinity,
           ),
 
@@ -416,7 +416,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
           // Divider
           Container(
             height: 0.5,
-            color: Colors.grey.shade300,
+            color: AppColors.socaGrey,
             width: double.infinity,
           ),
 

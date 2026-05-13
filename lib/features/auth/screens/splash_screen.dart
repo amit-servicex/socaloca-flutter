@@ -41,15 +41,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   void _navigate() {
     if (!mounted) return;
+
+    // Club admin session takes priority over regular auth
+    if (StorageService.isClubLogin) {
+      context.go(AppRoutes.clubBioAdmin);
+      return;
+    }
+
     final isLoggedIn = ref.read(authStateProvider).isAuthenticated;
-    
+
     if (isLoggedIn) {
-      // User is logged in, go to home
-      context.go(AppRoutes.home);
+      final user = ref.read(authStateProvider).user;
+      if (user?.isReferee == true) {
+        context.go(AppRoutes.refereeTournament);
+      } else {
+        context.go(AppRoutes.home);
+      }
     } else {
       // User is not logged in, check onboarding status
       final hasSeenOnboarding = StorageService.onboardingComplete;
-      
+
       if (hasSeenOnboarding) {
         // User has seen onboarding, go to role choice
         context.go(AppRoutes.roleChoice);

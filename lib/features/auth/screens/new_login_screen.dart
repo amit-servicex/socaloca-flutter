@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -106,7 +108,8 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
 
   Future<void> _detectCountry() async {
     final country = await LocationService.detectCountry(context);
-    if (!mounted || country == null) return; // null = GPS failed, keep +91 default
+    if (!mounted || country == null)
+      return; // null = GPS failed, keep +91 default
     setState(() {
       _selectedCountryCode = country.phoneCode;
       _selectedCountryName = country.name;
@@ -173,7 +176,6 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
       ),
     );
   }
-
 
   // Get list of countries for picker
   List<Map<String, String>> _getCountryList() {
@@ -300,7 +302,8 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
 
         // Navigate based on user role (matches Android logic)
         if (mounted) {
-          _navigateBasedOnRole(user.userType);
+          _navigateBasedOnRole(
+              user?.isReferee == true ? 'referee' : user?.userType);
         }
 
       case AuthFailure(:final error):
@@ -318,10 +321,14 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
   }
 
   // Navigate based on user role (matches Android NewLoginFragment logic)
+  // Referee → RefHomeActivity (/referee), everyone else → HomeActivity (/)
   void _navigateBasedOnRole(String? userType) {
-    // Android routes: Fan → FanHomeActivity, Referee → RefHomeActivity, Others → HomeActivity
-    // For now, all go to home since we have unified home screen
-    context.go(AppRoutes.home);
+    log("this is the role ${userType}");
+    if (userType == 'referee') {
+      context.go(AppRoutes.refereeTournament);
+    } else {
+      context.go(AppRoutes.home);
+    }
   }
 
   // ─── Social — Google ──────────────────────────────────────────────────────

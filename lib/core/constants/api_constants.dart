@@ -232,6 +232,8 @@ class ApiConstants {
   static const String getRefMtchActList = 'getRefMtchActList';
   static const String getLiveMtchCountries = 'getLiveMtchCountries';
   static const String getRefTmnts = 'getRefTmnts';
+  static const String getRefTmntsReqDrop = 'getRefTmntsReqDrop';
+  static const String saveRefMatchIncident = 'saveRefMatchIncident';
   static const String getRefBioRef = 'getRefBio';
   static const String getRefMtchActListRef = 'getRefMtchActList';
 

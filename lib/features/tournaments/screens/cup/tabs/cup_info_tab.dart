@@ -35,11 +35,13 @@ class CupInfoTab extends StatelessWidget {
           // Banner Slider
           if (cup.banners != null && cup.banners!.isNotEmpty)
             TournamentBannerSlider(
-              banners: cup.banners!.map((b) => BannerModel(
-                imageUrl: b.imageUrl,
-                seq: b.seq,
-                link: b.link,
-              )).toList(),
+              banners: cup.banners!
+                  .map((b) => BannerModel(
+                        imageUrl: b.imageUrl,
+                        seq: b.seq,
+                        link: b.link,
+                      ))
+                  .toList(),
               height: 200,
             ),
 
@@ -117,13 +119,15 @@ class CupInfoTab extends StatelessWidget {
           // Teams Playing
           if (cup.teams != null && cup.teams!.isNotEmpty)
             TeamsHorizontalList(
-              teams: cup.teams!.map((t) => TeamModel(
-                id: t.id,
-                teamId: t.teamId,
-                teamName: t.teamName,
-                logo: t.logo,
-                country: t.country,
-              )).toList(),
+              teams: cup.teams!
+                  .map((t) => TeamModel(
+                        id: t.id,
+                        teamId: t.teamId,
+                        teamName: t.teamName,
+                        imageUrl: t.logo,
+                        country: t.country,
+                      ))
+                  .toList(),
               onTeamTap: (teamId) {
                 context.push('${AppRoutes.teams}/$teamId');
               },
@@ -134,12 +138,14 @@ class CupInfoTab extends StatelessWidget {
           // Sponsors
           if (cup.sponsors != null && cup.sponsors!.isNotEmpty)
             SponsorsHorizontalList(
-              sponsors: cup.sponsors!.map((s) => SponsorModel(
-                id: s.id,
-                name: s.name,
-                logo: s.logo,
-                website: s.website,
-              )).toList(),
+              sponsors: cup.sponsors!
+                  .map((s) => SponsorModel(
+                        id: s.id,
+                        name: s.name,
+                        logo: s.logo,
+                        website: s.website,
+                      ))
+                  .toList(),
             ),
 
           const SizedBox(height: 8),

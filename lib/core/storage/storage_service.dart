@@ -56,6 +56,17 @@ class StorageService {
   static Future<bool> setClubUser(Map<String, dynamic> user) =>
       setJson(StorageKeys.clubUser, user);
 
+  /// True when current session is a club admin login.
+  static bool get isClubLogin => getBool(StorageKeys.isClubLogin) ?? false;
+  static Future<bool> setClubLogin(bool value) =>
+      setBool(StorageKeys.isClubLogin, value);
+
+  /// Shortcut: the club's primary identifier from the stored club user.
+  static String? get clubId {
+    final user = clubUser;
+    return user?['clubId']?.toString();
+  }
+
   /// Get current user ID
   static String? get userId {
     final user = currentUser;
@@ -101,6 +112,7 @@ class StorageService {
     await remove(StorageKeys.authToken);
     await remove(StorageKeys.currentUser);
     await remove(StorageKeys.clubUser);
+    await remove(StorageKeys.isClubLogin);
     await remove(StorageKeys.userType);
     await remove(StorageKeys.notificationCount);
   }

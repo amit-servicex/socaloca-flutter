@@ -36,12 +36,11 @@ final trialRegisterProvider = FutureProvider.family<
     bool,
     ({
       String clubId,
+      String trialId,
       String email,
     })>((ref, params) async {
-  final userId = StorageService.userId ?? '';
-  final success = await ref.read(clubRepositoryProvider).trialRegister(
-        clubId: params.clubId,
-        userId: userId,
+  final success = await ref.read(clubRepositoryProvider).trialRegisterByTrialId(
+        trialId: params.trialId,
         email: params.email,
       );
 
