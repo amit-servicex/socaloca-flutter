@@ -109,12 +109,14 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.photo_library, size: 25, color: AppColors.socaBlack),
+          icon: const Icon(Icons.photo_library,
+              size: 25, color: AppColors.socaBlack),
           onPressed: () {},
         ),
         if (website != null && website.isNotEmpty)
           IconButton(
-            icon: const Icon(Icons.language, size: 25, color: AppColors.socaBlack),
+            icon: const Icon(Icons.language,
+                size: 25, color: AppColors.socaBlack),
             onPressed: () => _launchUrl(website),
           ),
       ],
@@ -238,7 +240,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
 
   Widget _imageFallback() => Container(
         color: AppColors.socaGrey,
-        child: const Icon(Icons.sports_soccer, color: AppColors.socaBlack, size: 40),
+        child: const Icon(Icons.sports_soccer,
+            color: AppColors.socaBlack, size: 40),
       );
 
   Widget _buildFifaRow(String fifaId) {
@@ -272,7 +275,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
   }
 
   Widget _buildPartnerBadge(String partnerType) {
-    final label = '${partnerType[0].toUpperCase()}${partnerType.substring(1)} Partner';
+    final label =
+        '${partnerType[0].toUpperCase()}${partnerType.substring(1)} Partner';
     final iconColor = partnerType == 'platinum'
         ? Colors.grey[400]!
         : partnerType == 'gold'
@@ -354,7 +358,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             )
           else if (trial.isRegisterBtn)
             ElevatedButton(
-              onPressed: _handleTrialRegister,
+              onPressed: () => _handleTrialRegister("0" ?? ''),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
                 shape: RoundedRectangleBorder(
@@ -414,8 +418,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   width: 60,
                   height: 60,
                   fit: BoxFit.cover,
-                  errorWidget: (_, __, ___) =>
-                      Container(width: 60, height: 60, color: AppColors.socaGrey),
+                  errorWidget: (_, __, ___) => Container(
+                      width: 60, height: 60, color: AppColors.socaGrey),
                 ),
               ),
             if (imageUrl.isNotEmpty) const SizedBox(width: 10),
@@ -435,7 +439,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  if (news.description != null && news.description!.isNotEmpty) ...[
+                  if (news.description != null &&
+                      news.description!.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
                       news.description!,
@@ -579,10 +584,11 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             ? CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) =>
-                    const Icon(Icons.sports_soccer, size: 24, color: AppColors.socaBlack),
+                errorWidget: (_, __, ___) => const Icon(Icons.sports_soccer,
+                    size: 24, color: AppColors.socaBlack),
               )
-            : const Icon(Icons.sports_soccer, size: 24, color: AppColors.socaBlack),
+            : const Icon(Icons.sports_soccer,
+                size: 24, color: AppColors.socaBlack),
       ),
     );
   }
@@ -665,10 +671,11 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                     ? CachedNetworkImage(
                         imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) =>
-                            const Icon(Icons.person, size: 30, color: AppColors.socaBlack),
+                        errorWidget: (_, __, ___) => const Icon(Icons.person,
+                            size: 30, color: AppColors.socaBlack),
                       )
-                    : const Icon(Icons.person, size: 30, color: AppColors.socaBlack),
+                    : const Icon(Icons.person,
+                        size: 30, color: AppColors.socaBlack),
               ),
             ),
             const SizedBox(height: 6),
@@ -753,10 +760,11 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) =>
-                          const Icon(Icons.group, size: 32, color: AppColors.socaBlack),
+                      errorWidget: (_, __, ___) => const Icon(Icons.group,
+                          size: 32, color: AppColors.socaBlack),
                     )
-                  : const Icon(Icons.group, size: 32, color: AppColors.socaBlack),
+                  : const Icon(Icons.group,
+                      size: 32, color: AppColors.socaBlack),
             ),
           ),
           const SizedBox(height: 6),
@@ -817,8 +825,9 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                       child: CachedNetworkImage(
                         imageUrl: kit.$2,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) =>
-                            const Icon(Icons.sports_soccer, color: AppColors.socaBlack),
+                        errorWidget: (_, __, ___) => const Icon(
+                            Icons.sports_soccer,
+                            color: AppColors.socaBlack),
                       ),
                     ),
                   ),
@@ -882,10 +891,11 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) =>
-                          const Icon(Icons.business, size: 32, color: AppColors.socaBlack),
+                      errorWidget: (_, __, ___) => const Icon(Icons.business,
+                          size: 32, color: AppColors.socaBlack),
                     )
-                  : const Icon(Icons.business, size: 32, color: AppColors.socaBlack),
+                  : const Icon(Icons.business,
+                      size: 32, color: AppColors.socaBlack),
             ),
           ),
           const SizedBox(height: 6),
@@ -944,7 +954,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     }
   }
 
-  void _handleTrialRegister() async {
+  void _handleTrialRegister(String trialId) async {
     final email = StorageService.userEmail ?? '';
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -954,7 +964,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     }
     try {
       final success = await ref.read(
-        trialRegisterProvider((clubId: widget.clubId, email: email)).future,
+        trialRegisterProvider(
+            (clubId: widget.clubId, email: email, trialId: trialId)).future,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

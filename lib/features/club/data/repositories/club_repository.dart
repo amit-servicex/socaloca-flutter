@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socaloca/features/club/data/models/club_player_model.dart';
 
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/api_client.dart';
@@ -187,37 +190,172 @@ class ClubRepository {
     }
   }
 
-  /// Register for club trial
-  /// Matches trialRegister API from Android
-  Future<bool> trialRegister({
+  /// Upgrade club plan (admin only)
+  Future<bool> upgradeClubPlan({required String clubId}) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.upgradeClubPlan,
+        body: {'clubId': clubId},
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      return (data['status'] == 1 || data['success'] == true);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // ─── Club Admin methods ──────────────────────────────────────────────────
+
+  /// getClubBio — admin view (isUser: false).
+  Future<ClubBioModel?> getClubBioAdmin({required String clubId}) async {
+    log("the club api is call and the detils should be show in the console");
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getClubBio,
+        body: {'clubId': clubId, 'userId': null, 'isUser': false},
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      if ((data['status'] == 1) && data['details'] != null) {
+        return ClubBioModel.fromApiJson(
+            data['details'] as Map<String, dynamic>);
+      }
+      print(
+          '❌ getClubBioAdmin: status=${data['status']}, message=${data['message']}');
+      return null;
+    } catch (e, st) {
+      print('❌ getClubBioAdmin error: $e\n$st');
+      return null;
+    }
+  }
+
+  /// getClubPlayerList — paginated list of club players (admin view).
+  Future<List<ClubPlayerModel>> getClubPlayerList({
     required String clubId,
-    required String userId,
+    int start = 0,
+    int limit = 10,
+  }) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getClubPlayerList,
+        body: {
+          'userId': clubId,
+          'clubId': clubId,
+          'start': start,
+          'limit': limit,
+        },
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final raw = data['players'] as List? ?? [];
+      return raw
+          .map((e) => ClubPlayerModel.fromApiJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// getClubPlayerDetails — full detail for a single club player.
+  Future<ClubPlayerModel?> getClubPlayerDetails({
+    required String playerId,
+    required String clubId,
+  }) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getClubPlayerDetails,
+        body: {'playerId': playerId, 'clubId': clubId},
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      if (data['playerDetails'] != null) {
+        return ClubPlayerModel.fromApiJson(
+            data['playerDetails'] as Map<String, dynamic>);
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// getPlayerStats — football + futsal stats for a player.
+  Future<Map<String, dynamic>> getPlayerStats({
+    required String playerId,
+    required int year,
+  }) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getPlayerStats,
+        body: {'playerId': playerId, 'year': year},
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      return data;
+    } catch (_) {
+      return {};
+    }
+  }
+
+  /// getClubPostList — paginated club gallery posts.
+  Future<List<Map<String, dynamic>>> getClubPostList({
+    required String clubId,
+    int start = 0,
+    int limit = 5,
+  }) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getClubPostList,
+        body: {
+          'userId': clubId,
+          'clubId': clubId,
+          'start': start,
+          'limit': limit,
+        },
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final raw = data['posts'] as List? ?? [];
+      return raw.cast<Map<String, dynamic>>();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// allClubTrials — paginated platform-wide trials with filters.
+  Future<List<Map<String, dynamic>>> allClubTrials({
+    String countryName = '',
+    String fromAge = '',
+    String toAge = '',
+    int start = 0,
+    int limit = 10,
+  }) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.allClubTrials,
+        body: {
+          'countryName': countryName,
+          'fromAge': fromAge,
+          'toAge': toAge,
+          'start': start,
+          'limit': limit,
+        },
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final raw = data['trials'] as List? ?? [];
+      return raw.cast<Map<String, dynamic>>();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// trialRegister by trialId + email (platform-wide trial registration).
+  Future<bool> trialRegisterByTrialId({
+    required String trialId,
     required String email,
   }) async {
     try {
-      print('📡 Calling trialRegister API for clubId: $clubId');
       final response = await ApiClient.instance.post(
         ApiConstants.trialRegister,
-        body: {
-          'clubId': clubId,
-          'userId': userId,
-          'email': email,
-        },
+        body: {'trialId': trialId, 'email': email},
       );
-
-      print('📦 Trial register response: $response');
-
-      // Check for success
-      final status = response['status'];
-      final success = status == 1 || status == '1';
-
-      print(success
-          ? '✅ Trial registration successful'
-          : '⚠️ Trial registration failed');
-      return success;
-    } catch (e, stackTrace) {
-      print('❌ Error in trialRegister: $e');
-      print('Stack trace: $stackTrace');
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      return (data['status'] == 1 || data['success'] == true);
+    } catch (_) {
       return false;
     }
   }

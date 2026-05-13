@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socaloca/features/pickup_match/screens/pickup_match_screen.dart';
+import 'package:socaloca/shared/providers/auth_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../one_off_matches/screens/one_off_matches_screen.dart';
 import 'tournament_list_screen.dart';
@@ -27,7 +28,7 @@ class _TournamentsLandingScreenState
   void initState() {
     super.initState();
     _mainTabController = TabController(length: 3, vsync: this);
-    _tournamentTabController = TabController(length: 3, vsync: this);
+    _tournamentTabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -39,104 +40,116 @@ class _TournamentsLandingScreenState
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.read(authStateProvider).user;
+    final isReferee = user?.isReferee ?? false;
+
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: const Text(
-          'Matches',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(96),
-          child: Column(
-            children: [
-              // Main tabs: TOURNAMENTS / ONE-OFF / PICK-UP
-              TabBar(
-                controller: _mainTabController,
-                labelColor: AppColors.socaBlack,
-                unselectedLabelColor:
-                    AppColors.socaBlack.withValues(alpha: 0.5),
-                labelStyle: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
-                unselectedLabelStyle: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                ),
-                indicatorColor: AppColors.socaYellow,
-                indicatorWeight: 3,
-                isScrollable: true,
-                tabAlignment: TabAlignment.start,
-                tabs: const [
-                  Tab(text: 'TOURNAMENTS'),
-                  Tab(text: 'ONE-OFF'),
-                  Tab(text: 'PICK-UP'),
-                ],
-              ),
-              // Tournament sub-tabs (only visible when TOURNAMENTS is selected)
-              AnimatedBuilder(
-                animation: _mainTabController,
-                builder: (context, child) {
-                  if (_mainTabController.index == 0) {
-                    return TabBar(
-                      controller: _tournamentTabController,
-                      labelColor: AppColors.socaBlack,
-                      unselectedLabelColor:
-                          AppColors.socaBlack.withValues(alpha: 0.5),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ── Dynamic Top Bar Area ──
+            Container(
+              color: Colors.white,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Main tabs: TOURNAMENTS / ONE-OFF / PICK-UP
+                  if (!isReferee)
+                    TabBar(
+                      controller: _mainTabController,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.black.withValues(alpha: 0.6),
                       labelStyle: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
-                        fontSize: 13,
+                        fontSize: 14,
                       ),
                       unselectedLabelStyle: const TextStyle(
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
                       ),
-                      indicatorColor: AppColors.socaYellow,
+                      indicatorColor: Colors.black,
                       indicatorWeight: 2,
                       isScrollable: true,
+                      tabAlignment: TabAlignment.start,
+                      dividerColor: Colors.transparent,
                       tabs: const [
-                        Tab(text: 'ONGOING'),
-                        Tab(text: 'UPCOMING'),
-                        Tab(text: 'CLOSED'),
+                        Tab(text: 'TOURNAMENTS'),
+                        Tab(text: 'ONE-OFF'),
+                        Tab(text: 'PICK-UP'),
                       ],
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
+                    ),
+
+                  // Tournament sub-tabs (only visible when TOURNAMENTS is selected)
+                  AnimatedBuilder(
+                    animation: _mainTabController,
+                    builder: (context, child) {
+                      if (_mainTabController.index == 0) {
+                        return Container(
+                          color: AppColors.socaPageBg,
+                          width: double.infinity,
+                          child: TabBar(
+                            controller: _tournamentTabController,
+                            labelColor: Colors.black,
+                            unselectedLabelColor:
+                                Colors.black.withValues(alpha: 0.6),
+                            labelStyle: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                            unselectedLabelStyle: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                            indicatorColor: Colors.black,
+                            indicatorWeight: 2,
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.start,
+                            dividerColor: Colors.transparent,
+                            tabs: const [
+                              Tab(text: 'Ongoing'),
+                              Tab(text: 'Upcoming'),
+                              Tab(text: 'My Leagues/Cups'),
+                              Tab(text: 'Closed'),
+                            ],
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            // ── Tab Views ──
+            Expanded(
+              child: TabBarView(
+                controller: _mainTabController,
+                children: [
+                  // TOURNAMENTS tab with sub-tabs
+                  TabBarView(
+                    controller: _tournamentTabController,
+                    children: const [
+                      TournamentListScreen(status: 'ongoing'),
+                      TournamentListScreen(status: 'upcoming'),
+                      TournamentListScreen(status: 'my'),
+                      TournamentListScreen(status: 'closed'),
+                    ],
+                  ),
+                  // ONE-OFF tab
+                  const OneOffMatchesScreen(),
+                  // PICK-UP tab — accessible to all roles
+                  const PickupMatchScreen(),
+                ],
+              ),
+            ),
+          ],
         ),
-      ),
-      body: TabBarView(
-        controller: _mainTabController,
-        children: [
-          // TOURNAMENTS tab with sub-tabs
-          TabBarView(
-            controller: _tournamentTabController,
-            children: const [
-              TournamentListScreen(status: 'ongoing'),
-              TournamentListScreen(status: 'upcoming'),
-              TournamentListScreen(status: 'closed'),
-            ],
-          ),
-          // ONE-OFF tab
-          const OneOffMatchesScreen(),
-          // PICK-UP tab — accessible to all roles
-          const PickupMatchScreen(),
-        ],
       ),
     );
   }

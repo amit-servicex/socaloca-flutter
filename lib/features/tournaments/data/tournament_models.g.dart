@@ -121,7 +121,7 @@ _$TeamModelImpl _$$TeamModelImplFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       teamId: json['teamId'] as String?,
       teamName: json['teamName'] as String?,
-      logo: json['logo'] as String?,
+      imageUrl: json['imageUrl'] as String?,
       country: json['country'] as String?,
     );
 
@@ -130,7 +130,7 @@ Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
       '_id': instance.id,
       'teamId': instance.teamId,
       'teamName': instance.teamName,
-      'logo': instance.logo,
+      'imageUrl': instance.imageUrl,
       'country': instance.country,
     };
 

@@ -4,7 +4,7 @@ part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
 Object? _readId(Map json, String key) {
-  final val = json['userId'] ?? json['_id'] ?? json['id'];
+  final val = json['userId'] ?? json['_id'] ?? json['id'] ?? json['clubId'];
   return val?.toString() ?? '';
 }
 
@@ -148,8 +148,49 @@ class ClubUserModel with _$ClubUserModel {
     String? phone,
     String? token,
     @Default(false) bool isVerified,
-    int? followersCount,
+    @JsonKey(name: 'followCount') int? followersCount,
     String? subscriptionPlan,
+
+    // Additional API fields
+    @JsonKey(name: 'clubId') String? clubId,
+    String? adminBy,
+    bool? isRequest,
+    bool? accepted,
+    String? subdomain,
+    String? partnerType,
+    bool? isPartner,
+    String? contractFrom,
+    String? contractTo,
+    int? contractFromGmt,
+    int? contractToGmt,
+    int? createdOn,
+    String? mainType,
+    String? subType,
+    String? nickName,
+    String? formedYear,
+    List<dynamic>? stadium,
+    String? manager,
+    String? confed,
+    String? league,
+    List<String>? comps,
+    String? website,
+    bool? liveTrial,
+    String? instruction,
+    String? homeKit,
+    String? awayKit,
+    String? thirdKit,
+    int? likeCount,
+    int? plan,
+    String? imageUrl,
+    bool? profile,
+    bool? isDelete,
+    String? deviceType,
+    List<dynamic>? officials,
+    String? sclId,
+    int? zendesk,
+    int? zendesklead,
+    String? lastUpdateBy,
+    int? lastUpdated,
   }) = _ClubUserModel;
 
   factory ClubUserModel.fromJson(Map<String, dynamic> json) =>

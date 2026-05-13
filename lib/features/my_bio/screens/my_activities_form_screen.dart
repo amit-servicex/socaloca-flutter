@@ -748,7 +748,7 @@ class _MyActivitiesFormScreenState
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow,
-                  disabledBackgroundColor: Colors.grey.shade300,
+                  disabledBackgroundColor: AppColors.socaGrey,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
@@ -780,7 +780,7 @@ class _MyActivitiesFormScreenState
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow,
-                  disabledBackgroundColor: Colors.grey.shade300,
+                  disabledBackgroundColor: AppColors.socaGrey,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
@@ -1148,7 +1148,7 @@ class _TagChip extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 12,
-              backgroundColor: Colors.grey.shade300,
+              backgroundColor: AppColors.socaGrey,
               backgroundImage: (imageUrl != null && imageUrl!.isNotEmpty)
                   ? NetworkImage(imageUrl!)
                   : null,
@@ -1286,7 +1286,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.grey.shade300,
+              color: AppColors.socaGrey,
               borderRadius: BorderRadius.circular(2),
             ),
           ),

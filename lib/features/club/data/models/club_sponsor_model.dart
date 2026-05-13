@@ -10,7 +10,7 @@ class ClubSponsorModel with _$ClubSponsorModel {
   const factory ClubSponsorModel({
     required String sponsorId,
     String? name,
-    String? imageUrl,
+    String? logo,
     @Default(0) int seq,
   }) = _ClubSponsorModel;
 
@@ -22,7 +22,7 @@ class ClubSponsorModel with _$ClubSponsorModel {
     final mappedJson = {
       'sponsorId': json['sponsorId'] ?? json['_id'],
       'name': json['name'],
-      'imageUrl': json['imageUrl'],
+      'logo': json['logo'],
       'seq': json['seq'] ?? 0,
     };
 
@@ -33,5 +33,5 @@ class ClubSponsorModel with _$ClubSponsorModel {
 /// Extension methods for ClubSponsorModel
 extension ClubSponsorModelX on ClubSponsorModel {
   /// Get full image URL
-  String get fullImageUrl => ApiConstants.getImageUrl(imageUrl);
+  String get fullImageUrl => ApiConstants.getImageUrl(logo ?? '');
 }

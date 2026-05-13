@@ -59,8 +59,18 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
   };
 
   static const _monthNames = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   @override
@@ -100,8 +110,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
       '${d.month.toString().padLeft(2, '0')}-'
       '${d.year}';
 
-  String _formatDateApi(DateTime d) =>
-      '${d.day.toString().padLeft(2, '0')}-'
+  String _formatDateApi(DateTime d) => '${d.day.toString().padLeft(2, '0')}-'
       '${d.month.toString().padLeft(2, '0')}-'
       '${d.year}';
 
@@ -193,7 +202,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: AppColors.socaGrey,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -262,8 +271,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                           hint: 'Select position type',
                           items: positionTypes,
                           itemLabel: (v) => v,
-                          onChanged: (v) =>
-                              setState(() => _positionType = v),
+                          onChanged: (v) => setState(() => _positionType = v),
                         ),
                         const SizedBox(height: 16),
                       ],
@@ -623,9 +631,7 @@ class _RatingRow extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: selected ? AppColors.socaBlack : Colors.transparent,
                 border: Border.all(
-                  color: selected
-                      ? AppColors.socaBlack
-                      : Colors.grey.shade400,
+                  color: selected ? AppColors.socaBlack : Colors.grey.shade400,
                   width: 1.5,
                 ),
               ),

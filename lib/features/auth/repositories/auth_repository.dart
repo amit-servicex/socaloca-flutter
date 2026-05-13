@@ -95,21 +95,19 @@ class AuthRepository {
   // ─── clubLogin ────────────────────────────────────────────────────────────
 
   Future<AuthResult<ClubLoginResponse>> clubLogin({
-    required String email,
-    required String password,
-    String? fcmToken,
+    required String uKey,
+    required String passKey,
   }) async {
     try {
       final data = await ApiClient.instance.post(
         ApiConstants.clubLogin,
         body: {
-          'email': email,
-          'password': password,
-          'deviceId': DeviceInfo.deviceId,
-          if (fcmToken != null) 'fcmToken': fcmToken,
+          'uKey': uKey,
+          'passKey': passKey,
         },
       );
       final response = ClubLoginResponse.fromJson(data);
+      log("this is the login response of the club login ${response.status} and the message is ${response.message} ${response.clubUser?.toJson()}");
       if (response.status != 1) {
         return AuthFailure(response.message ?? 'Club login failed');
       }

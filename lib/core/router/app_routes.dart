@@ -62,8 +62,35 @@ class AppRoutes {
   static const String tournamentDetail = '/tournaments/:tmntId';
   static const String cupDetail = '/cups/:cupId';
   static const String matchManagement = '/match-management/:matchId';
+
+  // ─── Referee home shell tabs ───────────────────────────────────────────────
+  static const String refereeHome = '/referee';
+  static const String refereeTournament = '/referee/tournament';
+  static const String refereeRequests = '/referee/requests';
+  static const String refereeMatches = '/referee/matches';
+  static const String refereeLive = '/referee/live';
+  static const String refereeBio = '/referee/bio';
+
+  // ─── Referee detail screens ────────────────────────────────────────────────
+  static const String refereeTournamentView = '/referee/tournament/:tmntId/view';
+  static const String refereeManageMatch = '/referee/match/:matchId/manage';
+  static const String refereeLiveUpdate = '/referee/match/:matchId/live-update';
+  static const String refereeActivities = '/referee/activities';
+
   static const String faBio = '/fa/:faId';
   static const String confedBio = '/confed/:confedId';
   static const String sponsorBio = '/sponsor/:sponId';
   static const String charityBio = '/charity/:charityId';
+
+  // ─── Settings screens ─────────────────────────────────────────────────────
+  static const String changePassword  = '/settings/change-password';
+  static const String privacySettings = '/settings/privacy';
+
+  // ─── Club admin shell ──────────────────────────────────────────────────────
+  static const String clubHome        = '/club';
+  static const String clubBioAdmin    = '/club/bio';
+  static const String clubPlayers     = '/club/players';
+  static const String clubPlayerBio   = '/club/players/:playerId';
+  static const String clubGallery     = '/club/gallery';
+  static const String clubTrials      = '/club/trials';
 }

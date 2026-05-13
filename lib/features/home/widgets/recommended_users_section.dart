@@ -375,8 +375,8 @@ class _RecommendedUsersSectionState
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(color: Colors.grey.shade300, width: 1)),
+              border:
+                  Border(top: BorderSide(color: AppColors.socaGrey, width: 1)),
             ),
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(

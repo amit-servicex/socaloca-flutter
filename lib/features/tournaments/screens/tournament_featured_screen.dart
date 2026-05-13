@@ -15,8 +15,13 @@ import 'tabs/tournament_stats_tab.dart';
 /// Featured tournament screen — mirrors Android TournamentsFragment
 /// Shows banner slider + header + tabs (Matches, Points Table, Stats)
 class TournamentFeaturedScreen extends ConsumerStatefulWidget {
-  const TournamentFeaturedScreen({super.key, required this.tournamentId});
+  const TournamentFeaturedScreen({
+    super.key,
+    required this.tournamentId,
+    this.isReferee = false,
+  });
   final String tournamentId;
+  final bool isReferee;
 
   @override
   ConsumerState<TournamentFeaturedScreen> createState() =>
@@ -135,6 +140,7 @@ class _TournamentFeaturedScreenState
                       isFollowing: _isFollowing,
                       followCount: _followCount,
                       onFollowTap: _toggleFollow,
+                      showFollow: !widget.isReferee,
                     ),
 
                     // "View Tournament Details" button
@@ -174,7 +180,7 @@ class _TournamentFeaturedScreenState
                         controller: _tabController,
                         labelColor: AppColors.socaBlack,
                         unselectedLabelColor:
-                            AppColors.socaBlack.withOpacity(0.5),
+                            AppColors.socaBlack.withValues(alpha: 0.5),
                         indicatorColor: AppColors.socaYellow,
                         indicatorWeight: 3,
                         labelStyle: const TextStyle(

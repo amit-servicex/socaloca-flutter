@@ -22,7 +22,7 @@ ClubSponsorModel _$ClubSponsorModelFromJson(Map<String, dynamic> json) {
 mixin _$ClubSponsorModel {
   String get sponsorId => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
-  String? get imageUrl => throw _privateConstructorUsedError;
+  String? get logo => throw _privateConstructorUsedError;
   int get seq => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,7 +37,7 @@ abstract class $ClubSponsorModelCopyWith<$Res> {
           ClubSponsorModel value, $Res Function(ClubSponsorModel) then) =
       _$ClubSponsorModelCopyWithImpl<$Res, ClubSponsorModel>;
   @useResult
-  $Res call({String sponsorId, String? name, String? imageUrl, int seq});
+  $Res call({String sponsorId, String? name, String? logo, int seq});
 }
 
 /// @nodoc
@@ -55,7 +55,7 @@ class _$ClubSponsorModelCopyWithImpl<$Res, $Val extends ClubSponsorModel>
   $Res call({
     Object? sponsorId = null,
     Object? name = freezed,
-    Object? imageUrl = freezed,
+    Object? logo = freezed,
     Object? seq = null,
   }) {
     return _then(_value.copyWith(
@@ -67,9 +67,9 @@ class _$ClubSponsorModelCopyWithImpl<$Res, $Val extends ClubSponsorModel>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      logo: freezed == logo
+          ? _value.logo
+          : logo // ignore: cast_nullable_to_non_nullable
               as String?,
       seq: null == seq
           ? _value.seq
@@ -87,7 +87,7 @@ abstract class _$$ClubSponsorModelImplCopyWith<$Res>
       __$$ClubSponsorModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String sponsorId, String? name, String? imageUrl, int seq});
+  $Res call({String sponsorId, String? name, String? logo, int seq});
 }
 
 /// @nodoc
@@ -103,7 +103,7 @@ class __$$ClubSponsorModelImplCopyWithImpl<$Res>
   $Res call({
     Object? sponsorId = null,
     Object? name = freezed,
-    Object? imageUrl = freezed,
+    Object? logo = freezed,
     Object? seq = null,
   }) {
     return _then(_$ClubSponsorModelImpl(
@@ -115,9 +115,9 @@ class __$$ClubSponsorModelImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      logo: freezed == logo
+          ? _value.logo
+          : logo // ignore: cast_nullable_to_non_nullable
               as String?,
       seq: null == seq
           ? _value.seq
@@ -131,7 +131,7 @@ class __$$ClubSponsorModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ClubSponsorModelImpl implements _ClubSponsorModel {
   const _$ClubSponsorModelImpl(
-      {required this.sponsorId, this.name, this.imageUrl, this.seq = 0});
+      {required this.sponsorId, this.name, this.logo, this.seq = 0});
 
   factory _$ClubSponsorModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ClubSponsorModelImplFromJson(json);
@@ -141,14 +141,14 @@ class _$ClubSponsorModelImpl implements _ClubSponsorModel {
   @override
   final String? name;
   @override
-  final String? imageUrl;
+  final String? logo;
   @override
   @JsonKey()
   final int seq;
 
   @override
   String toString() {
-    return 'ClubSponsorModel(sponsorId: $sponsorId, name: $name, imageUrl: $imageUrl, seq: $seq)';
+    return 'ClubSponsorModel(sponsorId: $sponsorId, name: $name, logo: $logo, seq: $seq)';
   }
 
   @override
@@ -159,14 +159,13 @@ class _$ClubSponsorModelImpl implements _ClubSponsorModel {
             (identical(other.sponsorId, sponsorId) ||
                 other.sponsorId == sponsorId) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
+            (identical(other.logo, logo) || other.logo == logo) &&
             (identical(other.seq, seq) || other.seq == seq));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, sponsorId, name, imageUrl, seq);
+  int get hashCode => Object.hash(runtimeType, sponsorId, name, logo, seq);
 
   @JsonKey(ignore: true)
   @override
@@ -187,7 +186,7 @@ abstract class _ClubSponsorModel implements ClubSponsorModel {
   const factory _ClubSponsorModel(
       {required final String sponsorId,
       final String? name,
-      final String? imageUrl,
+      final String? logo,
       final int seq}) = _$ClubSponsorModelImpl;
 
   factory _ClubSponsorModel.fromJson(Map<String, dynamic> json) =
@@ -198,7 +197,7 @@ abstract class _ClubSponsorModel implements ClubSponsorModel {
   @override
   String? get name;
   @override
-  String? get imageUrl;
+  String? get logo;
   @override
   int get seq;
   @override

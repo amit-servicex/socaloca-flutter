@@ -2201,8 +2201,50 @@ mixin _$ClubUserModel {
   String? get phone => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   bool get isVerified => throw _privateConstructorUsedError;
+  @JsonKey(name: 'followCount')
   int? get followersCount => throw _privateConstructorUsedError;
-  String? get subscriptionPlan => throw _privateConstructorUsedError;
+  String? get subscriptionPlan =>
+      throw _privateConstructorUsedError; // Additional API fields
+  @JsonKey(name: 'clubId')
+  String? get clubId => throw _privateConstructorUsedError;
+  String? get adminBy => throw _privateConstructorUsedError;
+  bool? get isRequest => throw _privateConstructorUsedError;
+  bool? get accepted => throw _privateConstructorUsedError;
+  String? get subdomain => throw _privateConstructorUsedError;
+  String? get partnerType => throw _privateConstructorUsedError;
+  bool? get isPartner => throw _privateConstructorUsedError;
+  String? get contractFrom => throw _privateConstructorUsedError;
+  String? get contractTo => throw _privateConstructorUsedError;
+  int? get contractFromGmt => throw _privateConstructorUsedError;
+  int? get contractToGmt => throw _privateConstructorUsedError;
+  int? get createdOn => throw _privateConstructorUsedError;
+  String? get mainType => throw _privateConstructorUsedError;
+  String? get subType => throw _privateConstructorUsedError;
+  String? get nickName => throw _privateConstructorUsedError;
+  String? get formedYear => throw _privateConstructorUsedError;
+  List<dynamic>? get stadium => throw _privateConstructorUsedError;
+  String? get manager => throw _privateConstructorUsedError;
+  String? get confed => throw _privateConstructorUsedError;
+  String? get league => throw _privateConstructorUsedError;
+  List<String>? get comps => throw _privateConstructorUsedError;
+  String? get website => throw _privateConstructorUsedError;
+  bool? get liveTrial => throw _privateConstructorUsedError;
+  String? get instruction => throw _privateConstructorUsedError;
+  String? get homeKit => throw _privateConstructorUsedError;
+  String? get awayKit => throw _privateConstructorUsedError;
+  String? get thirdKit => throw _privateConstructorUsedError;
+  int? get likeCount => throw _privateConstructorUsedError;
+  int? get plan => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
+  bool? get profile => throw _privateConstructorUsedError;
+  bool? get isDelete => throw _privateConstructorUsedError;
+  String? get deviceType => throw _privateConstructorUsedError;
+  List<dynamic>? get officials => throw _privateConstructorUsedError;
+  String? get sclId => throw _privateConstructorUsedError;
+  int? get zendesk => throw _privateConstructorUsedError;
+  int? get zendesklead => throw _privateConstructorUsedError;
+  String? get lastUpdateBy => throw _privateConstructorUsedError;
+  int? get lastUpdated => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -2228,8 +2270,47 @@ abstract class $ClubUserModelCopyWith<$Res> {
       String? phone,
       String? token,
       bool isVerified,
-      int? followersCount,
-      String? subscriptionPlan});
+      @JsonKey(name: 'followCount') int? followersCount,
+      String? subscriptionPlan,
+      @JsonKey(name: 'clubId') String? clubId,
+      String? adminBy,
+      bool? isRequest,
+      bool? accepted,
+      String? subdomain,
+      String? partnerType,
+      bool? isPartner,
+      String? contractFrom,
+      String? contractTo,
+      int? contractFromGmt,
+      int? contractToGmt,
+      int? createdOn,
+      String? mainType,
+      String? subType,
+      String? nickName,
+      String? formedYear,
+      List<dynamic>? stadium,
+      String? manager,
+      String? confed,
+      String? league,
+      List<String>? comps,
+      String? website,
+      bool? liveTrial,
+      String? instruction,
+      String? homeKit,
+      String? awayKit,
+      String? thirdKit,
+      int? likeCount,
+      int? plan,
+      String? imageUrl,
+      bool? profile,
+      bool? isDelete,
+      String? deviceType,
+      List<dynamic>? officials,
+      String? sclId,
+      int? zendesk,
+      int? zendesklead,
+      String? lastUpdateBy,
+      int? lastUpdated});
 }
 
 /// @nodoc
@@ -2258,6 +2339,45 @@ class _$ClubUserModelCopyWithImpl<$Res, $Val extends ClubUserModel>
     Object? isVerified = null,
     Object? followersCount = freezed,
     Object? subscriptionPlan = freezed,
+    Object? clubId = freezed,
+    Object? adminBy = freezed,
+    Object? isRequest = freezed,
+    Object? accepted = freezed,
+    Object? subdomain = freezed,
+    Object? partnerType = freezed,
+    Object? isPartner = freezed,
+    Object? contractFrom = freezed,
+    Object? contractTo = freezed,
+    Object? contractFromGmt = freezed,
+    Object? contractToGmt = freezed,
+    Object? createdOn = freezed,
+    Object? mainType = freezed,
+    Object? subType = freezed,
+    Object? nickName = freezed,
+    Object? formedYear = freezed,
+    Object? stadium = freezed,
+    Object? manager = freezed,
+    Object? confed = freezed,
+    Object? league = freezed,
+    Object? comps = freezed,
+    Object? website = freezed,
+    Object? liveTrial = freezed,
+    Object? instruction = freezed,
+    Object? homeKit = freezed,
+    Object? awayKit = freezed,
+    Object? thirdKit = freezed,
+    Object? likeCount = freezed,
+    Object? plan = freezed,
+    Object? imageUrl = freezed,
+    Object? profile = freezed,
+    Object? isDelete = freezed,
+    Object? deviceType = freezed,
+    Object? officials = freezed,
+    Object? sclId = freezed,
+    Object? zendesk = freezed,
+    Object? zendesklead = freezed,
+    Object? lastUpdateBy = freezed,
+    Object? lastUpdated = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -2312,6 +2432,162 @@ class _$ClubUserModelCopyWithImpl<$Res, $Val extends ClubUserModel>
           ? _value.subscriptionPlan
           : subscriptionPlan // ignore: cast_nullable_to_non_nullable
               as String?,
+      clubId: freezed == clubId
+          ? _value.clubId
+          : clubId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      adminBy: freezed == adminBy
+          ? _value.adminBy
+          : adminBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isRequest: freezed == isRequest
+          ? _value.isRequest
+          : isRequest // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      accepted: freezed == accepted
+          ? _value.accepted
+          : accepted // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      subdomain: freezed == subdomain
+          ? _value.subdomain
+          : subdomain // ignore: cast_nullable_to_non_nullable
+              as String?,
+      partnerType: freezed == partnerType
+          ? _value.partnerType
+          : partnerType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isPartner: freezed == isPartner
+          ? _value.isPartner
+          : isPartner // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      contractFrom: freezed == contractFrom
+          ? _value.contractFrom
+          : contractFrom // ignore: cast_nullable_to_non_nullable
+              as String?,
+      contractTo: freezed == contractTo
+          ? _value.contractTo
+          : contractTo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      contractFromGmt: freezed == contractFromGmt
+          ? _value.contractFromGmt
+          : contractFromGmt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      contractToGmt: freezed == contractToGmt
+          ? _value.contractToGmt
+          : contractToGmt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      createdOn: freezed == createdOn
+          ? _value.createdOn
+          : createdOn // ignore: cast_nullable_to_non_nullable
+              as int?,
+      mainType: freezed == mainType
+          ? _value.mainType
+          : mainType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      subType: freezed == subType
+          ? _value.subType
+          : subType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nickName: freezed == nickName
+          ? _value.nickName
+          : nickName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      formedYear: freezed == formedYear
+          ? _value.formedYear
+          : formedYear // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stadium: freezed == stadium
+          ? _value.stadium
+          : stadium // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
+      manager: freezed == manager
+          ? _value.manager
+          : manager // ignore: cast_nullable_to_non_nullable
+              as String?,
+      confed: freezed == confed
+          ? _value.confed
+          : confed // ignore: cast_nullable_to_non_nullable
+              as String?,
+      league: freezed == league
+          ? _value.league
+          : league // ignore: cast_nullable_to_non_nullable
+              as String?,
+      comps: freezed == comps
+          ? _value.comps
+          : comps // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      website: freezed == website
+          ? _value.website
+          : website // ignore: cast_nullable_to_non_nullable
+              as String?,
+      liveTrial: freezed == liveTrial
+          ? _value.liveTrial
+          : liveTrial // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      instruction: freezed == instruction
+          ? _value.instruction
+          : instruction // ignore: cast_nullable_to_non_nullable
+              as String?,
+      homeKit: freezed == homeKit
+          ? _value.homeKit
+          : homeKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      awayKit: freezed == awayKit
+          ? _value.awayKit
+          : awayKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      thirdKit: freezed == thirdKit
+          ? _value.thirdKit
+          : thirdKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      likeCount: freezed == likeCount
+          ? _value.likeCount
+          : likeCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      plan: freezed == plan
+          ? _value.plan
+          : plan // ignore: cast_nullable_to_non_nullable
+              as int?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      profile: freezed == profile
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      isDelete: freezed == isDelete
+          ? _value.isDelete
+          : isDelete // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      deviceType: freezed == deviceType
+          ? _value.deviceType
+          : deviceType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      officials: freezed == officials
+          ? _value.officials
+          : officials // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
+      sclId: freezed == sclId
+          ? _value.sclId
+          : sclId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      zendesk: freezed == zendesk
+          ? _value.zendesk
+          : zendesk // ignore: cast_nullable_to_non_nullable
+              as int?,
+      zendesklead: freezed == zendesklead
+          ? _value.zendesklead
+          : zendesklead // ignore: cast_nullable_to_non_nullable
+              as int?,
+      lastUpdateBy: freezed == lastUpdateBy
+          ? _value.lastUpdateBy
+          : lastUpdateBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -2336,8 +2612,47 @@ abstract class _$$ClubUserModelImplCopyWith<$Res>
       String? phone,
       String? token,
       bool isVerified,
-      int? followersCount,
-      String? subscriptionPlan});
+      @JsonKey(name: 'followCount') int? followersCount,
+      String? subscriptionPlan,
+      @JsonKey(name: 'clubId') String? clubId,
+      String? adminBy,
+      bool? isRequest,
+      bool? accepted,
+      String? subdomain,
+      String? partnerType,
+      bool? isPartner,
+      String? contractFrom,
+      String? contractTo,
+      int? contractFromGmt,
+      int? contractToGmt,
+      int? createdOn,
+      String? mainType,
+      String? subType,
+      String? nickName,
+      String? formedYear,
+      List<dynamic>? stadium,
+      String? manager,
+      String? confed,
+      String? league,
+      List<String>? comps,
+      String? website,
+      bool? liveTrial,
+      String? instruction,
+      String? homeKit,
+      String? awayKit,
+      String? thirdKit,
+      int? likeCount,
+      int? plan,
+      String? imageUrl,
+      bool? profile,
+      bool? isDelete,
+      String? deviceType,
+      List<dynamic>? officials,
+      String? sclId,
+      int? zendesk,
+      int? zendesklead,
+      String? lastUpdateBy,
+      int? lastUpdated});
 }
 
 /// @nodoc
@@ -2364,6 +2679,45 @@ class __$$ClubUserModelImplCopyWithImpl<$Res>
     Object? isVerified = null,
     Object? followersCount = freezed,
     Object? subscriptionPlan = freezed,
+    Object? clubId = freezed,
+    Object? adminBy = freezed,
+    Object? isRequest = freezed,
+    Object? accepted = freezed,
+    Object? subdomain = freezed,
+    Object? partnerType = freezed,
+    Object? isPartner = freezed,
+    Object? contractFrom = freezed,
+    Object? contractTo = freezed,
+    Object? contractFromGmt = freezed,
+    Object? contractToGmt = freezed,
+    Object? createdOn = freezed,
+    Object? mainType = freezed,
+    Object? subType = freezed,
+    Object? nickName = freezed,
+    Object? formedYear = freezed,
+    Object? stadium = freezed,
+    Object? manager = freezed,
+    Object? confed = freezed,
+    Object? league = freezed,
+    Object? comps = freezed,
+    Object? website = freezed,
+    Object? liveTrial = freezed,
+    Object? instruction = freezed,
+    Object? homeKit = freezed,
+    Object? awayKit = freezed,
+    Object? thirdKit = freezed,
+    Object? likeCount = freezed,
+    Object? plan = freezed,
+    Object? imageUrl = freezed,
+    Object? profile = freezed,
+    Object? isDelete = freezed,
+    Object? deviceType = freezed,
+    Object? officials = freezed,
+    Object? sclId = freezed,
+    Object? zendesk = freezed,
+    Object? zendesklead = freezed,
+    Object? lastUpdateBy = freezed,
+    Object? lastUpdated = freezed,
   }) {
     return _then(_$ClubUserModelImpl(
       id: null == id
@@ -2418,6 +2772,162 @@ class __$$ClubUserModelImplCopyWithImpl<$Res>
           ? _value.subscriptionPlan
           : subscriptionPlan // ignore: cast_nullable_to_non_nullable
               as String?,
+      clubId: freezed == clubId
+          ? _value.clubId
+          : clubId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      adminBy: freezed == adminBy
+          ? _value.adminBy
+          : adminBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isRequest: freezed == isRequest
+          ? _value.isRequest
+          : isRequest // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      accepted: freezed == accepted
+          ? _value.accepted
+          : accepted // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      subdomain: freezed == subdomain
+          ? _value.subdomain
+          : subdomain // ignore: cast_nullable_to_non_nullable
+              as String?,
+      partnerType: freezed == partnerType
+          ? _value.partnerType
+          : partnerType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isPartner: freezed == isPartner
+          ? _value.isPartner
+          : isPartner // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      contractFrom: freezed == contractFrom
+          ? _value.contractFrom
+          : contractFrom // ignore: cast_nullable_to_non_nullable
+              as String?,
+      contractTo: freezed == contractTo
+          ? _value.contractTo
+          : contractTo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      contractFromGmt: freezed == contractFromGmt
+          ? _value.contractFromGmt
+          : contractFromGmt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      contractToGmt: freezed == contractToGmt
+          ? _value.contractToGmt
+          : contractToGmt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      createdOn: freezed == createdOn
+          ? _value.createdOn
+          : createdOn // ignore: cast_nullable_to_non_nullable
+              as int?,
+      mainType: freezed == mainType
+          ? _value.mainType
+          : mainType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      subType: freezed == subType
+          ? _value.subType
+          : subType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nickName: freezed == nickName
+          ? _value.nickName
+          : nickName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      formedYear: freezed == formedYear
+          ? _value.formedYear
+          : formedYear // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stadium: freezed == stadium
+          ? _value._stadium
+          : stadium // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
+      manager: freezed == manager
+          ? _value.manager
+          : manager // ignore: cast_nullable_to_non_nullable
+              as String?,
+      confed: freezed == confed
+          ? _value.confed
+          : confed // ignore: cast_nullable_to_non_nullable
+              as String?,
+      league: freezed == league
+          ? _value.league
+          : league // ignore: cast_nullable_to_non_nullable
+              as String?,
+      comps: freezed == comps
+          ? _value._comps
+          : comps // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      website: freezed == website
+          ? _value.website
+          : website // ignore: cast_nullable_to_non_nullable
+              as String?,
+      liveTrial: freezed == liveTrial
+          ? _value.liveTrial
+          : liveTrial // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      instruction: freezed == instruction
+          ? _value.instruction
+          : instruction // ignore: cast_nullable_to_non_nullable
+              as String?,
+      homeKit: freezed == homeKit
+          ? _value.homeKit
+          : homeKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      awayKit: freezed == awayKit
+          ? _value.awayKit
+          : awayKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      thirdKit: freezed == thirdKit
+          ? _value.thirdKit
+          : thirdKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      likeCount: freezed == likeCount
+          ? _value.likeCount
+          : likeCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      plan: freezed == plan
+          ? _value.plan
+          : plan // ignore: cast_nullable_to_non_nullable
+              as int?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      profile: freezed == profile
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      isDelete: freezed == isDelete
+          ? _value.isDelete
+          : isDelete // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      deviceType: freezed == deviceType
+          ? _value.deviceType
+          : deviceType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      officials: freezed == officials
+          ? _value._officials
+          : officials // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
+      sclId: freezed == sclId
+          ? _value.sclId
+          : sclId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      zendesk: freezed == zendesk
+          ? _value.zendesk
+          : zendesk // ignore: cast_nullable_to_non_nullable
+              as int?,
+      zendesklead: freezed == zendesklead
+          ? _value.zendesklead
+          : zendesklead // ignore: cast_nullable_to_non_nullable
+              as int?,
+      lastUpdateBy: freezed == lastUpdateBy
+          ? _value.lastUpdateBy
+          : lastUpdateBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastUpdated: freezed == lastUpdated
+          ? _value.lastUpdated
+          : lastUpdated // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -2437,8 +2947,50 @@ class _$ClubUserModelImpl implements _ClubUserModel {
       this.phone,
       this.token,
       this.isVerified = false,
-      this.followersCount,
-      this.subscriptionPlan});
+      @JsonKey(name: 'followCount') this.followersCount,
+      this.subscriptionPlan,
+      @JsonKey(name: 'clubId') this.clubId,
+      this.adminBy,
+      this.isRequest,
+      this.accepted,
+      this.subdomain,
+      this.partnerType,
+      this.isPartner,
+      this.contractFrom,
+      this.contractTo,
+      this.contractFromGmt,
+      this.contractToGmt,
+      this.createdOn,
+      this.mainType,
+      this.subType,
+      this.nickName,
+      this.formedYear,
+      final List<dynamic>? stadium,
+      this.manager,
+      this.confed,
+      this.league,
+      final List<String>? comps,
+      this.website,
+      this.liveTrial,
+      this.instruction,
+      this.homeKit,
+      this.awayKit,
+      this.thirdKit,
+      this.likeCount,
+      this.plan,
+      this.imageUrl,
+      this.profile,
+      this.isDelete,
+      this.deviceType,
+      final List<dynamic>? officials,
+      this.sclId,
+      this.zendesk,
+      this.zendesklead,
+      this.lastUpdateBy,
+      this.lastUpdated})
+      : _stadium = stadium,
+        _comps = comps,
+        _officials = officials;
 
   factory _$ClubUserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ClubUserModelImplFromJson(json);
@@ -2470,13 +3022,118 @@ class _$ClubUserModelImpl implements _ClubUserModel {
   @JsonKey()
   final bool isVerified;
   @override
+  @JsonKey(name: 'followCount')
   final int? followersCount;
   @override
   final String? subscriptionPlan;
+// Additional API fields
+  @override
+  @JsonKey(name: 'clubId')
+  final String? clubId;
+  @override
+  final String? adminBy;
+  @override
+  final bool? isRequest;
+  @override
+  final bool? accepted;
+  @override
+  final String? subdomain;
+  @override
+  final String? partnerType;
+  @override
+  final bool? isPartner;
+  @override
+  final String? contractFrom;
+  @override
+  final String? contractTo;
+  @override
+  final int? contractFromGmt;
+  @override
+  final int? contractToGmt;
+  @override
+  final int? createdOn;
+  @override
+  final String? mainType;
+  @override
+  final String? subType;
+  @override
+  final String? nickName;
+  @override
+  final String? formedYear;
+  final List<dynamic>? _stadium;
+  @override
+  List<dynamic>? get stadium {
+    final value = _stadium;
+    if (value == null) return null;
+    if (_stadium is EqualUnmodifiableListView) return _stadium;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? manager;
+  @override
+  final String? confed;
+  @override
+  final String? league;
+  final List<String>? _comps;
+  @override
+  List<String>? get comps {
+    final value = _comps;
+    if (value == null) return null;
+    if (_comps is EqualUnmodifiableListView) return _comps;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? website;
+  @override
+  final bool? liveTrial;
+  @override
+  final String? instruction;
+  @override
+  final String? homeKit;
+  @override
+  final String? awayKit;
+  @override
+  final String? thirdKit;
+  @override
+  final int? likeCount;
+  @override
+  final int? plan;
+  @override
+  final String? imageUrl;
+  @override
+  final bool? profile;
+  @override
+  final bool? isDelete;
+  @override
+  final String? deviceType;
+  final List<dynamic>? _officials;
+  @override
+  List<dynamic>? get officials {
+    final value = _officials;
+    if (value == null) return null;
+    if (_officials is EqualUnmodifiableListView) return _officials;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? sclId;
+  @override
+  final int? zendesk;
+  @override
+  final int? zendesklead;
+  @override
+  final String? lastUpdateBy;
+  @override
+  final int? lastUpdated;
 
   @override
   String toString() {
-    return 'ClubUserModel(id: $id, clubName: $clubName, email: $email, logo: $logo, coverImage: $coverImage, country: $country, city: $city, bio: $bio, phone: $phone, token: $token, isVerified: $isVerified, followersCount: $followersCount, subscriptionPlan: $subscriptionPlan)';
+    return 'ClubUserModel(id: $id, clubName: $clubName, email: $email, logo: $logo, coverImage: $coverImage, country: $country, city: $city, bio: $bio, phone: $phone, token: $token, isVerified: $isVerified, followersCount: $followersCount, subscriptionPlan: $subscriptionPlan, clubId: $clubId, adminBy: $adminBy, isRequest: $isRequest, accepted: $accepted, subdomain: $subdomain, partnerType: $partnerType, isPartner: $isPartner, contractFrom: $contractFrom, contractTo: $contractTo, contractFromGmt: $contractFromGmt, contractToGmt: $contractToGmt, createdOn: $createdOn, mainType: $mainType, subType: $subType, nickName: $nickName, formedYear: $formedYear, stadium: $stadium, manager: $manager, confed: $confed, league: $league, comps: $comps, website: $website, liveTrial: $liveTrial, instruction: $instruction, homeKit: $homeKit, awayKit: $awayKit, thirdKit: $thirdKit, likeCount: $likeCount, plan: $plan, imageUrl: $imageUrl, profile: $profile, isDelete: $isDelete, deviceType: $deviceType, officials: $officials, sclId: $sclId, zendesk: $zendesk, zendesklead: $zendesklead, lastUpdateBy: $lastUpdateBy, lastUpdated: $lastUpdated)';
   }
 
   @override
@@ -2501,26 +3158,129 @@ class _$ClubUserModelImpl implements _ClubUserModel {
             (identical(other.followersCount, followersCount) ||
                 other.followersCount == followersCount) &&
             (identical(other.subscriptionPlan, subscriptionPlan) ||
-                other.subscriptionPlan == subscriptionPlan));
+                other.subscriptionPlan == subscriptionPlan) &&
+            (identical(other.clubId, clubId) || other.clubId == clubId) &&
+            (identical(other.adminBy, adminBy) || other.adminBy == adminBy) &&
+            (identical(other.isRequest, isRequest) ||
+                other.isRequest == isRequest) &&
+            (identical(other.accepted, accepted) ||
+                other.accepted == accepted) &&
+            (identical(other.subdomain, subdomain) ||
+                other.subdomain == subdomain) &&
+            (identical(other.partnerType, partnerType) ||
+                other.partnerType == partnerType) &&
+            (identical(other.isPartner, isPartner) ||
+                other.isPartner == isPartner) &&
+            (identical(other.contractFrom, contractFrom) ||
+                other.contractFrom == contractFrom) &&
+            (identical(other.contractTo, contractTo) ||
+                other.contractTo == contractTo) &&
+            (identical(other.contractFromGmt, contractFromGmt) ||
+                other.contractFromGmt == contractFromGmt) &&
+            (identical(other.contractToGmt, contractToGmt) ||
+                other.contractToGmt == contractToGmt) &&
+            (identical(other.createdOn, createdOn) ||
+                other.createdOn == createdOn) &&
+            (identical(other.mainType, mainType) ||
+                other.mainType == mainType) &&
+            (identical(other.subType, subType) || other.subType == subType) &&
+            (identical(other.nickName, nickName) ||
+                other.nickName == nickName) &&
+            (identical(other.formedYear, formedYear) ||
+                other.formedYear == formedYear) &&
+            const DeepCollectionEquality().equals(other._stadium, _stadium) &&
+            (identical(other.manager, manager) || other.manager == manager) &&
+            (identical(other.confed, confed) || other.confed == confed) &&
+            (identical(other.league, league) || other.league == league) &&
+            const DeepCollectionEquality().equals(other._comps, _comps) &&
+            (identical(other.website, website) || other.website == website) &&
+            (identical(other.liveTrial, liveTrial) ||
+                other.liveTrial == liveTrial) &&
+            (identical(other.instruction, instruction) ||
+                other.instruction == instruction) &&
+            (identical(other.homeKit, homeKit) || other.homeKit == homeKit) &&
+            (identical(other.awayKit, awayKit) || other.awayKit == awayKit) &&
+            (identical(other.thirdKit, thirdKit) ||
+                other.thirdKit == thirdKit) &&
+            (identical(other.likeCount, likeCount) ||
+                other.likeCount == likeCount) &&
+            (identical(other.plan, plan) || other.plan == plan) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.profile, profile) || other.profile == profile) &&
+            (identical(other.isDelete, isDelete) ||
+                other.isDelete == isDelete) &&
+            (identical(other.deviceType, deviceType) ||
+                other.deviceType == deviceType) &&
+            const DeepCollectionEquality()
+                .equals(other._officials, _officials) &&
+            (identical(other.sclId, sclId) || other.sclId == sclId) &&
+            (identical(other.zendesk, zendesk) || other.zendesk == zendesk) &&
+            (identical(other.zendesklead, zendesklead) ||
+                other.zendesklead == zendesklead) &&
+            (identical(other.lastUpdateBy, lastUpdateBy) ||
+                other.lastUpdateBy == lastUpdateBy) &&
+            (identical(other.lastUpdated, lastUpdated) ||
+                other.lastUpdated == lastUpdated));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      clubName,
-      email,
-      logo,
-      coverImage,
-      country,
-      city,
-      bio,
-      phone,
-      token,
-      isVerified,
-      followersCount,
-      subscriptionPlan);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        clubName,
+        email,
+        logo,
+        coverImage,
+        country,
+        city,
+        bio,
+        phone,
+        token,
+        isVerified,
+        followersCount,
+        subscriptionPlan,
+        clubId,
+        adminBy,
+        isRequest,
+        accepted,
+        subdomain,
+        partnerType,
+        isPartner,
+        contractFrom,
+        contractTo,
+        contractFromGmt,
+        contractToGmt,
+        createdOn,
+        mainType,
+        subType,
+        nickName,
+        formedYear,
+        const DeepCollectionEquality().hash(_stadium),
+        manager,
+        confed,
+        league,
+        const DeepCollectionEquality().hash(_comps),
+        website,
+        liveTrial,
+        instruction,
+        homeKit,
+        awayKit,
+        thirdKit,
+        likeCount,
+        plan,
+        imageUrl,
+        profile,
+        isDelete,
+        deviceType,
+        const DeepCollectionEquality().hash(_officials),
+        sclId,
+        zendesk,
+        zendesklead,
+        lastUpdateBy,
+        lastUpdated
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -2549,8 +3309,47 @@ abstract class _ClubUserModel implements ClubUserModel {
       final String? phone,
       final String? token,
       final bool isVerified,
-      final int? followersCount,
-      final String? subscriptionPlan}) = _$ClubUserModelImpl;
+      @JsonKey(name: 'followCount') final int? followersCount,
+      final String? subscriptionPlan,
+      @JsonKey(name: 'clubId') final String? clubId,
+      final String? adminBy,
+      final bool? isRequest,
+      final bool? accepted,
+      final String? subdomain,
+      final String? partnerType,
+      final bool? isPartner,
+      final String? contractFrom,
+      final String? contractTo,
+      final int? contractFromGmt,
+      final int? contractToGmt,
+      final int? createdOn,
+      final String? mainType,
+      final String? subType,
+      final String? nickName,
+      final String? formedYear,
+      final List<dynamic>? stadium,
+      final String? manager,
+      final String? confed,
+      final String? league,
+      final List<String>? comps,
+      final String? website,
+      final bool? liveTrial,
+      final String? instruction,
+      final String? homeKit,
+      final String? awayKit,
+      final String? thirdKit,
+      final int? likeCount,
+      final int? plan,
+      final String? imageUrl,
+      final bool? profile,
+      final bool? isDelete,
+      final String? deviceType,
+      final List<dynamic>? officials,
+      final String? sclId,
+      final int? zendesk,
+      final int? zendesklead,
+      final String? lastUpdateBy,
+      final int? lastUpdated}) = _$ClubUserModelImpl;
 
   factory _ClubUserModel.fromJson(Map<String, dynamic> json) =
       _$ClubUserModelImpl.fromJson;
@@ -2581,9 +3380,89 @@ abstract class _ClubUserModel implements ClubUserModel {
   @override
   bool get isVerified;
   @override
+  @JsonKey(name: 'followCount')
   int? get followersCount;
   @override
   String? get subscriptionPlan;
+  @override // Additional API fields
+  @JsonKey(name: 'clubId')
+  String? get clubId;
+  @override
+  String? get adminBy;
+  @override
+  bool? get isRequest;
+  @override
+  bool? get accepted;
+  @override
+  String? get subdomain;
+  @override
+  String? get partnerType;
+  @override
+  bool? get isPartner;
+  @override
+  String? get contractFrom;
+  @override
+  String? get contractTo;
+  @override
+  int? get contractFromGmt;
+  @override
+  int? get contractToGmt;
+  @override
+  int? get createdOn;
+  @override
+  String? get mainType;
+  @override
+  String? get subType;
+  @override
+  String? get nickName;
+  @override
+  String? get formedYear;
+  @override
+  List<dynamic>? get stadium;
+  @override
+  String? get manager;
+  @override
+  String? get confed;
+  @override
+  String? get league;
+  @override
+  List<String>? get comps;
+  @override
+  String? get website;
+  @override
+  bool? get liveTrial;
+  @override
+  String? get instruction;
+  @override
+  String? get homeKit;
+  @override
+  String? get awayKit;
+  @override
+  String? get thirdKit;
+  @override
+  int? get likeCount;
+  @override
+  int? get plan;
+  @override
+  String? get imageUrl;
+  @override
+  bool? get profile;
+  @override
+  bool? get isDelete;
+  @override
+  String? get deviceType;
+  @override
+  List<dynamic>? get officials;
+  @override
+  String? get sclId;
+  @override
+  int? get zendesk;
+  @override
+  int? get zendesklead;
+  @override
+  String? get lastUpdateBy;
+  @override
+  int? get lastUpdated;
   @override
   @JsonKey(ignore: true)
   _$$ClubUserModelImplCopyWith<_$ClubUserModelImpl> get copyWith =>

@@ -11,7 +11,7 @@ _$ClubSponsorModelImpl _$$ClubSponsorModelImplFromJson(
     _$ClubSponsorModelImpl(
       sponsorId: json['sponsorId'] as String,
       name: json['name'] as String?,
-      imageUrl: json['imageUrl'] as String?,
+      logo: json['logo'] as String?,
       seq: (json['seq'] as num?)?.toInt() ?? 0,
     );
 
@@ -20,6 +20,6 @@ Map<String, dynamic> _$$ClubSponsorModelImplToJson(
     <String, dynamic>{
       'sponsorId': instance.sponsorId,
       'name': instance.name,
-      'imageUrl': instance.imageUrl,
+      'logo': instance.logo,
       'seq': instance.seq,
     };

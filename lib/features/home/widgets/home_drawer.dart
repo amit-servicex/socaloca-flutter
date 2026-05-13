@@ -2,24 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/router/app_routes.dart';
+import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_snackbar.dart';
+import '../../player_bio/providers/player_bio_provider.dart';
+import 'language_selection_bottom_sheet.dart';
 
 /// Right-side drawer matching Android common_menu.xml.
 /// Width: 300 dp, profile section: 220 dp black background.
-class HomeDrawer extends ConsumerWidget {
+class HomeDrawer extends ConsumerStatefulWidget {
   const HomeDrawer({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeDrawer> createState() => _HomeDrawerState();
+}
+
+class _HomeDrawerState extends ConsumerState<HomeDrawer> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userId = StorageService.userId;
+      if (userId != null && userId.isNotEmpty) {
+        ref.read(playerBioProvider(userId).notifier).load();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
 
     if (user == null) return const SizedBox.shrink();
 
     final socaId = user.username ?? 'SCL${user.id}';
+    final bioState = ref.watch(playerBioProvider(user.id));
 
     return Drawer(
       width: 300,
@@ -27,7 +48,7 @@ class HomeDrawer extends ConsumerWidget {
         children: [
           // ── Profile section (220 dp, black bg) ─────────────────────────
           Container(
-            height: 220,
+            height: 250,
             width: double.infinity,
             color: AppColors.socaBlack,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -134,14 +155,21 @@ class HomeDrawer extends ConsumerWidget {
                     title: 'My Gallery',
                     onTap: () {
                       context.pop();
+                      context.push(AppRoutes.gallery);
                     },
                   ),
                   _DrawerMenuItem(
                     icon: Icons.edit_outlined,
                     title: 'Update Profile',
                     onTap: () {
+                      final playerBio = bioState.playerBio;
+                      if (playerBio == null) {
+                        AppSnackBar.showSuccess(
+                            context, 'Loading profile, please try again');
+                        return;
+                      }
                       context.pop();
-                      context.push(AppRoutes.profile);
+                      context.push(AppRoutes.editProfile, extra: playerBio);
                     },
                   ),
                   _DrawerMenuItem(
@@ -149,6 +177,7 @@ class HomeDrawer extends ConsumerWidget {
                     title: 'Change Password',
                     onTap: () {
                       context.pop();
+                      context.push(AppRoutes.changePassword);
                     },
                   ),
                   _DrawerMenuItem(
@@ -156,6 +185,13 @@ class HomeDrawer extends ConsumerWidget {
                     title: 'Change Language',
                     onTap: () {
                       context.pop();
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (_) => LanguageSelectionBottomSheet(
+                          onLanguageSelected: (code, name) {},
+                        ),
+                      );
                     },
                   ),
                   _DrawerMenuItem(
@@ -163,6 +199,11 @@ class HomeDrawer extends ConsumerWidget {
                     title: 'Help Desk',
                     onTap: () {
                       context.pop();
+                      launchUrl(
+                        Uri.parse(
+                            'https://organise.socaloca.football/support.php'),
+                        mode: LaunchMode.externalApplication,
+                      );
                     },
                   ),
                   _DrawerMenuItem(
@@ -170,6 +211,7 @@ class HomeDrawer extends ConsumerWidget {
                     title: 'Privacy Settings',
                     onTap: () {
                       context.pop();
+                      context.push(AppRoutes.privacySettings);
                     },
                   ),
                   _DrawerMenuItem(
@@ -177,6 +219,7 @@ class HomeDrawer extends ConsumerWidget {
                     title: 'Help Us To Improve',
                     onTap: () {
                       context.pop();
+                      AppSnackBar.showSuccess(context, 'Coming soon');
                     },
                   ),
 
@@ -191,6 +234,11 @@ class HomeDrawer extends ConsumerWidget {
                         GestureDetector(
                           onTap: () {
                             context.pop();
+                            launchUrl(
+                              Uri.parse(
+                                  'https://socaloca.football/privacy-policy/'),
+                              mode: LaunchMode.externalApplication,
+                            );
                           },
                           child: const Text(
                             'Data Policy',
@@ -215,6 +263,11 @@ class HomeDrawer extends ConsumerWidget {
                         GestureDetector(
                           onTap: () {
                             context.pop();
+                            launchUrl(
+                              Uri.parse(
+                                  'https://socaloca.football/terms-of-service/'),
+                              mode: LaunchMode.externalApplication,
+                            );
                           },
                           child: const Text(
                             'Terms & Conditions',
@@ -243,7 +296,7 @@ class HomeDrawer extends ConsumerWidget {
                 context.pop();
                 await ref.read(authStateProvider.notifier).logout();
                 if (context.mounted) {
-                  context.go(AppRoutes.loginLanding);
+                  context.go(AppRoutes.roleChoice);
                 }
               },
               style: ElevatedButton.styleFrom(

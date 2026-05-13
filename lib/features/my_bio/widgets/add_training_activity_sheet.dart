@@ -144,7 +144,7 @@ class _AddTrainingActivitySheetState
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: AppColors.socaGrey,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

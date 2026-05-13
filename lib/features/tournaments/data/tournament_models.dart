@@ -77,7 +77,7 @@ class TeamModel with _$TeamModel {
     @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'teamId') String? teamId,
     String? teamName,
-    String? logo,
+    String? imageUrl,
     String? country,
   }) = _TeamModel;
 

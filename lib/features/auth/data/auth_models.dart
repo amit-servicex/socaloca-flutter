@@ -64,21 +64,43 @@ class ClubLoginResponse {
     this.message,
     this.token,
     this.clubUser,
+    this.success,
+    this.isChild,
+    this.childDetails,
   });
 
   final int status;
   final String? message;
   final String? token;
   final ClubUserModel? clubUser;
+  final bool? success;
+  final bool? isChild;
+  final Map<String, dynamic>? childDetails;
 
   factory ClubLoginResponse.fromJson(Map<String, dynamic> json) {
-    final response = json['response'] as Map<String, dynamic>?;
-    final clubData = response?['clubData'] as Map<String, dynamic>?;
+    // PostApiRequest.java unwraps the "response" wrapper before onFetchComplete —
+    // Flutter receives the raw HTTP body: { "response": { "status", "details" } }
+    final resp = json['response'] as Map<String, dynamic>? ?? json;
+    var details = resp['details'] as Map<String, dynamic>?;
+    if (details != null) {
+      // Normalize fields that differ from the Dart model:
+      // stadium comes as [] array — model expects String?
+      // comps comes as [] array  — model field is competitions
+      details = Map<String, dynamic>.from(details);
+      if (details['stadium'] is List) details['stadium'] = null;
+      if (details['comps'] is List) {
+        details['competitions'] =
+            (details['comps'] as List).map((e) => e.toString()).join(', ');
+      }
+    }
     return ClubLoginResponse(
-      status: (response?['status'] as num?)?.toInt() ?? 0,
-      message: response?['message'] as String?,
-      token: response?['token'] as String?,
-      clubUser: clubData != null ? ClubUserModel.fromJson(clubData) : null,
+      status: (resp['status'] as num?)?.toInt() ?? 0,
+      message: resp['message'] as String?,
+      token: resp['token'] as String?,
+      clubUser: details != null ? ClubUserModel.fromJson(details) : null,
+      success: resp['success'] as bool?,
+      isChild: resp['isChild'] as bool?,
+      childDetails: resp['childDetails'] as Map<String, dynamic>?,
     );
   }
 }

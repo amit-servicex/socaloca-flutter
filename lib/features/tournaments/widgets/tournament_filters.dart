@@ -4,8 +4,50 @@ import 'package:socaloca/core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/tournament_models.dart';
 
-/// Tournament filters — Local/Global toggle + filter dropdowns
-/// Mirrors Android CommonOngoingTournamentsFragment filter section
+/// Pinned NATIONAL / GLOBAL visibility toggle.
+/// Rendered separately from [TournamentFiltersWidget] so it stays fixed
+/// at the top of the screen and never scrolls away.
+class TournamentVisibilityToggle extends StatelessWidget {
+  const TournamentVisibilityToggle({
+    super.key,
+    required this.visibility,
+    required this.onChanged,
+  });
+
+  /// Current value: 'local' or 'global'
+  final String visibility;
+  final void Function(String) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.socaPageBg,
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      child: Row(
+        children: [
+          Expanded(
+            child: _ToggleBtn(
+              label: 'NATIONAL',
+              active: visibility == 'local',
+              onTap: () => onChanged('local'),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _ToggleBtn(
+              label: 'GLOBAL',
+              active: visibility == 'global',
+              onTap: () => onChanged('global'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Tournament filters — filter dropdowns (country, location, game, gender, age).
+/// The NATIONAL/GLOBAL toggle is rendered separately via [TournamentVisibilityToggle].
 class TournamentFiltersWidget extends StatefulWidget {
   const TournamentFiltersWidget({
     super.key,
@@ -102,33 +144,10 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.socaPageBg,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Local / Global toggle
-          Row(
-            children: [
-              Expanded(
-                child: _ToggleBtn(
-                  label: 'NATIONAL',
-                  active: _filters.visibility == 'local',
-                  onTap: () => _setVisibility('local'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _ToggleBtn(
-                  label: 'GLOBAL',
-                  active: _filters.visibility == 'global',
-                  onTap: () => _setVisibility('global'),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
           // Country Dropdown
           _DropdownField(
             hint: _selectedCountry ?? 'India',
@@ -259,7 +278,7 @@ class _ToggleBtn extends StatelessWidget {
           color: active ? AppColors.socaBlack : Colors.white,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: active ? AppColors.socaBlack : Colors.grey.shade300,
+            color: active ? AppColors.socaBlack : AppColors.socaGrey,
             width: 1,
           ),
         ),
@@ -308,10 +327,7 @@ class _DropdownField extends StatelessWidget {
                 color: AppColors.socaBlack,
               ),
             ),
-            Icon(
-              Icons.arrow_drop_down,
-              color: Colors.grey.shade600,
-            ),
+            Image.asset("assets/images/dropdown.png", width: 12, height: 12),
           ],
         ),
       ),

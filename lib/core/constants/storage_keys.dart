@@ -9,6 +9,9 @@ class StorageKeys {
   /// Current logged-in club user JSON
   static const String clubUser = 'Msai1Q_club';
 
+  /// Flag: true when the active session is a club admin login
+  static const String isClubLogin = 'isClubLogin';
+
   /// Notification count badge
   static const String notificationCount = 'PCaU7Xg';
 

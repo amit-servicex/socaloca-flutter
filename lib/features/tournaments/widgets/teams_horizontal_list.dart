@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -93,6 +95,7 @@ class TeamsHorizontalList extends StatelessWidget {
   }
 
   Widget _buildTeamCard(TeamModel team) {
+    log("this is the temas logo ${team.imageUrl}");
     return GestureDetector(
       onTap: onTeamTap != null ? () => onTeamTap!(team.effectiveId) : null,
       child: Container(
@@ -108,7 +111,8 @@ class TeamsHorizontalList extends StatelessWidget {
           children: [
             // Team Logo
             ClipOval(
-              child: _buildTeamLogo(team.logo, 50),
+              child:
+                  _buildTeamLogo(ApiConstants.getImageUrl(team.imageUrl), 50),
             ),
 
             const SizedBox(height: 8),

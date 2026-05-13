@@ -1250,7 +1250,7 @@ mixin _$TeamModel {
   @JsonKey(name: 'teamId')
   String? get teamId => throw _privateConstructorUsedError;
   String? get teamName => throw _privateConstructorUsedError;
-  String? get logo => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
   String? get country => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1268,7 +1268,7 @@ abstract class $TeamModelCopyWith<$Res> {
       {@JsonKey(name: '_id') String? id,
       @JsonKey(name: 'teamId') String? teamId,
       String? teamName,
-      String? logo,
+      String? imageUrl,
       String? country});
 }
 
@@ -1288,7 +1288,7 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
     Object? id = freezed,
     Object? teamId = freezed,
     Object? teamName = freezed,
-    Object? logo = freezed,
+    Object? imageUrl = freezed,
     Object? country = freezed,
   }) {
     return _then(_value.copyWith(
@@ -1304,9 +1304,9 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
           ? _value.teamName
           : teamName // ignore: cast_nullable_to_non_nullable
               as String?,
-      logo: freezed == logo
-          ? _value.logo
-          : logo // ignore: cast_nullable_to_non_nullable
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
       country: freezed == country
           ? _value.country
@@ -1328,7 +1328,7 @@ abstract class _$$TeamModelImplCopyWith<$Res>
       {@JsonKey(name: '_id') String? id,
       @JsonKey(name: 'teamId') String? teamId,
       String? teamName,
-      String? logo,
+      String? imageUrl,
       String? country});
 }
 
@@ -1346,7 +1346,7 @@ class __$$TeamModelImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? teamId = freezed,
     Object? teamName = freezed,
-    Object? logo = freezed,
+    Object? imageUrl = freezed,
     Object? country = freezed,
   }) {
     return _then(_$TeamModelImpl(
@@ -1362,9 +1362,9 @@ class __$$TeamModelImplCopyWithImpl<$Res>
           ? _value.teamName
           : teamName // ignore: cast_nullable_to_non_nullable
               as String?,
-      logo: freezed == logo
-          ? _value.logo
-          : logo // ignore: cast_nullable_to_non_nullable
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
       country: freezed == country
           ? _value.country
@@ -1381,7 +1381,7 @@ class _$TeamModelImpl implements _TeamModel {
       {@JsonKey(name: '_id') this.id,
       @JsonKey(name: 'teamId') this.teamId,
       this.teamName,
-      this.logo,
+      this.imageUrl,
       this.country});
 
   factory _$TeamModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -1396,13 +1396,13 @@ class _$TeamModelImpl implements _TeamModel {
   @override
   final String? teamName;
   @override
-  final String? logo;
+  final String? imageUrl;
   @override
   final String? country;
 
   @override
   String toString() {
-    return 'TeamModel(id: $id, teamId: $teamId, teamName: $teamName, logo: $logo, country: $country)';
+    return 'TeamModel(id: $id, teamId: $teamId, teamName: $teamName, imageUrl: $imageUrl, country: $country)';
   }
 
   @override
@@ -1414,14 +1414,15 @@ class _$TeamModelImpl implements _TeamModel {
             (identical(other.teamId, teamId) || other.teamId == teamId) &&
             (identical(other.teamName, teamName) ||
                 other.teamName == teamName) &&
-            (identical(other.logo, logo) || other.logo == logo) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.country, country) || other.country == country));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, teamId, teamName, logo, country);
+      Object.hash(runtimeType, id, teamId, teamName, imageUrl, country);
 
   @JsonKey(ignore: true)
   @override
@@ -1442,7 +1443,7 @@ abstract class _TeamModel implements TeamModel {
       {@JsonKey(name: '_id') final String? id,
       @JsonKey(name: 'teamId') final String? teamId,
       final String? teamName,
-      final String? logo,
+      final String? imageUrl,
       final String? country}) = _$TeamModelImpl;
 
   factory _TeamModel.fromJson(Map<String, dynamic> json) =
@@ -1457,7 +1458,7 @@ abstract class _TeamModel implements TeamModel {
   @override
   String? get teamName;
   @override
-  String? get logo;
+  String? get imageUrl;
   @override
   String? get country;
   @override
