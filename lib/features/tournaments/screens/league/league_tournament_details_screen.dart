@@ -3,22 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/shared/providers/auth_provider.dart';
 
-import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/tournament_models.dart';
 import '../../providers/tournament_providers.dart';
-import '../../widgets/tournament_banner_slider.dart';
-import '../../widgets/tournament_header_widget.dart';
-import '../../widgets/tournament_info_card.dart';
-import '../../widgets/teams_horizontal_list.dart';
-import '../../widgets/sponsors_horizontal_list.dart';
+import 'tabs/league_info_tab.dart';
 import 'tabs/league_matches_tab.dart';
-import 'tabs/league_points_table_tab.dart';
 import 'tabs/league_stats_tab.dart';
 import 'tabs/league_match_management_tab.dart';
 
 /// League Tournament Details Screen
-/// Comprehensive tournament details with banner, info, teams, sponsors, and tabs
+/// Tabs: INFO, MATCHES, STATS (+ optional MANAGE for admins/coaches/referees)
 /// Matches Android TournamentDetailsFragment
 class LeagueTournamentDetailsScreen extends ConsumerStatefulWidget {
   final String tournamentId;
@@ -119,106 +113,46 @@ class _LeagueTournamentDetailsScreenState
   Widget _buildContent(TournamentModel tournament) {
     return Column(
       children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Banner Slider
-                if (tournament.banners != null &&
-                    tournament.banners!.isNotEmpty)
-                  TournamentBannerSlider(
-                    banners: tournament.banners!,
-                    height: 200,
-                  ),
-
-                // Header with Follow Button
-                TournamentHeaderWidget(
-                  tournament: tournament,
-                  isFollowing: tournament.isFollowing,
-                  followCount: tournament.followCount,
-                  onFollowTap: () => _handleFollowTap(tournament),
-                ),
-
-                // Tournament Info Card
-                TournamentInfoCard(tournament: tournament),
-
-                const SizedBox(height: 8),
-
-                // Teams Playing
-                if (tournament.teams != null && tournament.teams!.isNotEmpty)
-                  TeamsHorizontalList(
-                    teams: tournament.teams!,
-                    onTeamTap: (teamId) {
-                      context.push('${AppRoutes.teams}/$teamId');
-                    },
-                  ),
-
-                const SizedBox(height: 8),
-
-                // Sponsors
-                if (tournament.sponsors != null &&
-                    tournament.sponsors!.isNotEmpty)
-                  SponsorsHorizontalList(
-                    sponsors: tournament.sponsors!,
-                  ),
-
-                const SizedBox(height: 8),
-
-                // Invitations Section (if user has invitations)
-                _buildInvitationsSection(tournament),
-
-                const SizedBox(height: 8),
-
-                // Request to Join Button
-                _buildRequestToJoinButton(tournament),
-
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        ),
-
-        // Tabs Section
+        // Tab bar
         Container(
           color: Colors.white,
-          child: Column(
-            children: [
-              TabBar(
-                controller: _tabController,
-                labelColor: AppColors.socaBlack,
-                unselectedLabelColor: AppColors.socaBlack.withOpacity(0.5),
-                indicatorColor: AppColors.socaYellow,
-                indicatorWeight: 3,
-                isScrollable: _tabCount > 3,
-                labelStyle: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
-                unselectedLabelStyle: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                ),
-                tabs: [
-                  const Tab(text: 'MATCHES'),
-                  const Tab(text: 'POINTS'),
-                  const Tab(text: 'STATS'),
-                  if (_tabCount == 4) const Tab(text: 'MANAGE'),
-                ],
-              ),
+          child: TabBar(
+            controller: _tabController,
+            labelColor: AppColors.socaBlack,
+            unselectedLabelColor: AppColors.socaBlack.withValues(alpha: 0.5),
+            indicatorColor: AppColors.socaYellow,
+            indicatorWeight: 3,
+            isScrollable: _tabCount > 3,
+            labelStyle: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+            ),
+            unselectedLabelStyle: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+            ),
+            tabs: [
+              const Tab(text: 'INFO'),
+              const Tab(text: 'MATCHES'),
+              const Tab(text: 'STATS'),
+              if (_tabCount == 4) const Tab(text: 'MANAGE'),
             ],
           ),
         ),
 
-        // Tab Views
+        // Tab views
         Expanded(
           child: TabBarView(
             controller: _tabController,
             children: [
+              LeagueInfoTab(
+                tournament: tournament,
+                onFollowTap: () => _handleFollowTap(tournament),
+                onRequestToJoin: () => _handleRequestToJoin(tournament),
+              ),
               LeagueMatchesTab(tournamentId: widget.tournamentId),
-              LeaguePointsTableTab(tournamentId: widget.tournamentId),
               LeagueStatsTab(tournamentId: widget.tournamentId),
               if (_tabCount == 4)
                 LeagueMatchManagementTab(tournamentId: widget.tournamentId),
@@ -226,47 +160,6 @@ class _LeagueTournamentDetailsScreenState
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildInvitationsSection(TournamentModel tournament) {
-    // TODO: Implement invitations display
-    // This would show pending invitations for user's teams
-    return const SizedBox.shrink();
-  }
-
-  Widget _buildRequestToJoinButton(TournamentModel tournament) {
-    // Don't show if tournament is closed
-    if (tournament.status == 'end' || tournament.status == 'END') {
-      return const SizedBox.shrink();
-    }
-
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(16),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () => _handleRequestToJoin(tournament),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.socaYellow,
-            foregroundColor: AppColors.socaBlack,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            elevation: 0,
-          ),
-          child: const Text(
-            'Request to Join',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
-              fontSize: 15,
-            ),
-          ),
-        ),
-      ),
     );
   }
 

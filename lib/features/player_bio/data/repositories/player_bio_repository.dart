@@ -559,4 +559,151 @@ class PlayerBioRepository {
       rethrow;
     }
   }
+
+  /// Endorse a player
+  Future<bool> endorsePlayer({
+    required String userId,
+    required String toUserId,
+    required String comment,
+    required bool isAdmin,
+    required bool isPlayer,
+    required bool isCoach,
+    required bool isFan,
+    required String firstName,
+    required String lastName,
+    required String myImageUrl,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.endorseUser,
+      body: {
+        'userId': userId,
+        'toUserId': toUserId,
+        'comment': comment,
+        'isAdmin': isAdmin,
+        'isPlayer': isPlayer,
+        'isCoach': isCoach,
+        'isFan': isFan,
+        'firstName': firstName,
+        'lastName': lastName,
+        'myImageUrl': myImageUrl,
+      },
+    );
+    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+  }
+
+  /// Block a user
+  Future<bool> blockUser({
+    required String userId,
+    required String toUserId,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.blockUser,
+      body: {
+        'userId': userId,
+        'toUserId': toUserId,
+        'blocked': true,
+      },
+    );
+    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+  }
+
+  /// Report a user
+  Future<bool> reportUser({
+    required String userId,
+    required String toUserId,
+    required String cause,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.reportUser,
+      body: {
+        'userId': userId,
+        'toUserId': toUserId,
+        'cause': cause,
+      },
+    );
+    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+  }
+
+  /// Get teams player has joined (PlayerJoinedTeamsFragment)
+  Future<List<Map<String, dynamic>>> getPlayerJoinedTeams({
+    required String playerId,
+    required String country,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.playerJoinedTeams,
+      body: {
+        'playerId': playerId,
+        'country': country,
+      },
+    );
+    if (response['response']?['status'] == 1 && response['response']?['teams'] != null) {
+      return List<Map<String, dynamic>>.from(response['response']['teams'] as List);
+    }
+    return [];
+  }
+
+  /// Get teams where player has pending join requests
+  Future<List<Map<String, dynamic>>> getPlayerPendingTeams({
+    required String playerId,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.playerPendingTeams,
+      body: {'playerId': playerId},
+    );
+    if (response['response']?['status'] == 1 && response['response']?['teams'] != null) {
+      return List<Map<String, dynamic>>.from(response['response']['teams'] as List);
+    }
+    return [];
+  }
+
+  /// Cancel a pending team join request
+  Future<bool> cancelTeamJoinRequest({
+    required String playerId,
+    required String teamId,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.cancelTeamJoinRequest,
+      body: {'playerId': playerId, 'teamId': teamId},
+    );
+    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+  }
+
+  /// Get team invitations received by player (paginated)
+  Future<List<Map<String, dynamic>>> getTeamPlayerInvites({
+    required String userId,
+    int start = 0,
+    int limit = 5,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.teamPlayerInvites,
+      body: {'userId': userId, 'start': start, 'limit': limit},
+    );
+    if (response['response']?['status'] == 1 && response['response']?['teams'] != null) {
+      return List<Map<String, dynamic>>.from(response['response']['teams'] as List);
+    }
+    return [];
+  }
+
+  /// Respond to a team invitation (accept/decline)
+  Future<bool> respondTeamPlayer({
+    required String teamId,
+    required String userId,
+    required bool accept,
+    required String teamName,
+    required String myName,
+    required String myImageUrl,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.respondTeamPlayer,
+      body: {
+        'teamId': teamId,
+        'userId': userId,
+        'accept': accept,
+        'teamName': teamName,
+        'myName': myName,
+        'myImageUrl': myImageUrl,
+      },
+    );
+    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+  }
 }

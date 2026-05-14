@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/features/players/screens/players_screen.dart';
 import '../storage/storage_service.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/login_landing_screen.dart';
@@ -35,6 +36,9 @@ import '../../features/club/screens/clubs_partners_landing_screen.dart';
 import '../../features/club/screens/club_bio_screen.dart';
 import '../../features/club/screens/fa_bio_screen.dart';
 import '../../features/player_bio/screens/player_bio_screen.dart';
+import '../../features/player_bio/screens/player_joined_teams_screen.dart';
+import '../../features/player_bio/screens/player_pending_teams_screen.dart';
+import '../../features/player_bio/screens/player_received_teams_screen.dart';
 import '../../features/my_bio/screens/my_bio_screen.dart';
 import '../../features/my_bio/screens/my_skill_ratings_screen.dart';
 import '../../features/my_bio/screens/my_endorsement_list_screen.dart';
@@ -292,10 +296,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.players,
             name: 'players',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Players - Coming Soon')),
-            ),
-            // const PlayersScreen(),
+            builder: (ctx, state) =>
+                // Scaffold(
+                //   body: Center(child: Text('Players - Coming Soon')),
+                // ),
+                const PlayersScreen(),
           ),
           GoRoute(
             path: AppRoutes.trials,
@@ -454,6 +459,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               final userId = state.pathParameters['userId']!;
               return PlayerBioScreen(playerId: userId);
             },
+          ),
+
+          // ─── Player detail sub-screens ───────────────────────────────────
+          GoRoute(
+            path: AppRoutes.playerJoinedTeams,
+            name: 'playerJoinedTeams',
+            builder: (ctx, state) {
+              final userId = state.pathParameters['userId']!;
+              return PlayerJoinedTeamsScreen(playerId: userId);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.playerPendingTeams,
+            name: 'playerPendingTeams',
+            builder: (ctx, state) {
+              final userId = state.pathParameters['userId']!;
+              return PlayerPendingTeamsScreen(playerId: userId);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.playerReceivedTeams,
+            name: 'playerReceivedTeams',
+            builder: (ctx, state) => const PlayerReceivedTeamsScreen(),
           ),
 
           // ─── Search (full screen outside shell) ──────────────────────────

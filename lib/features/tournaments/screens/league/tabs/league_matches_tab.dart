@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../data/tournament_models.dart';
 import '../../../providers/tournament_providers.dart';
@@ -226,7 +228,12 @@ class _MatchesListState extends ConsumerState<_MatchesList>
           return MatchCard(
             match: match,
             onTap: () {
-              // TODO: Navigate to match details
+              final matchId = match.effectiveId;
+              if (matchId.isNotEmpty) {
+                context.push(
+                  AppRoutes.matchDetail.replaceFirst(':matchId', matchId),
+                );
+              }
             },
           );
         },

@@ -6,27 +6,26 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../shared/providers/auth_provider.dart';
-import '../../../data/models/cup_models.dart';
 import '../../../data/tournament_models.dart';
-import '../../../providers/cup_providers.dart';
+import '../../../providers/tournament_providers.dart';
 import '../../../widgets/tournament_banner_slider.dart';
 import '../../../widgets/tournament_header_widget.dart';
 import '../../../widgets/tournament_info_card.dart';
 import '../../../widgets/teams_horizontal_list.dart';
 import '../../../widgets/sponsors_horizontal_list.dart';
 
-/// Cup Info Tab
-/// Displays cup tournament information (banner, header, info card, teams, sponsors)
-/// Matches Android TournamentCupDetailsFragment info section
-/// Includes role-based visibility for join button and invitations section (admin/coach only)
-class CupInfoTab extends ConsumerWidget {
-  final TournamentCupModel cup;
+/// League Info Tab
+/// Displays league tournament information (banner, header, info card, teams,
+/// sponsors, itinerary, invitations, join button).
+/// Matches Android TournamentDetailsFragment info section.
+class LeagueInfoTab extends ConsumerWidget {
+  final TournamentModel tournament;
   final VoidCallback onFollowTap;
   final VoidCallback onRequestToJoin;
 
-  const CupInfoTab({
+  const LeagueInfoTab({
     super.key,
-    required this.cup,
+    required this.tournament,
     required this.onFollowTap,
     required this.onRequestToJoin,
   });
@@ -40,102 +39,29 @@ class CupInfoTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Banner Slider
-          if (cup.banners != null && cup.banners!.isNotEmpty)
+          if (tournament.banners != null && tournament.banners!.isNotEmpty)
             TournamentBannerSlider(
-              banners: cup.banners!
-                  .map((b) => BannerModel(
-                        imageUrl: b.imageUrl,
-                        seq: b.seq,
-                        link: b.link,
-                      ))
-                  .toList(),
+              banners: tournament.banners!,
               height: 200,
             ),
 
           // Header with Follow Button
-          _buildHeader(),
-
-          // Cup-specific info (rounds count)
-          if (cup.rounds > 0)
-            Container(
-              color: Colors.white,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.emoji_events,
-                    color: AppColors.socaYellow,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Knockout Rounds: ${cup.rounds}',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.socaBlack,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          TournamentHeaderWidget(
+            tournament: tournament,
+            isFollowing: tournament.isFollowing,
+            followCount: tournament.followCount,
+            onFollowTap: onFollowTap,
+          ),
 
           // Tournament Info Card
-          TournamentInfoCard(
-            tournament: TournamentModel(
-              id: cup.id,
-              tournamentId: cup.tournamentId,
-              name: cup.name,
-              logo: cup.logo,
-              location: cup.location,
-              venue: cup.venue,
-              ageGroup: cup.ageGroup,
-              ageCat: cup.ageCat,
-              gameType: cup.gameType,
-              gender: cup.gender,
-              startDate: cup.startDate,
-              endDate: cup.endDate,
-              status: cup.status,
-              tmntType: cup.tmntType,
-              visibility: cup.visibility,
-              country: cup.country,
-              confed: cup.confed,
-              parentId: cup.parentId,
-              createdBy: cup.createdBy,
-              notes: cup.notes,
-              description: cup.description,
-              prize: cup.prize,
-              regFee: cup.regFee,
-              orgDetails: cup.orgDetails,
-              fsdDate: cup.fsdDate,
-              fsdTime: cup.fsdTime,
-              fsdGmtMs: cup.fsdGmtMs,
-              teamPlayerType: cup.teamPlayerType,
-              teamPlayerLimit: cup.teamPlayerLimit,
-              followCount: cup.followCount,
-              isFollowing: cup.isFollowing,
-              teamCount: cup.teamCount,
-              matchCount: cup.matchCount,
-              withdrawable: cup.withdrawable,
-            ),
-          ),
+          TournamentInfoCard(tournament: tournament),
 
           const SizedBox(height: 8),
 
           // Teams Playing
-          if (cup.teams != null && cup.teams!.isNotEmpty)
+          if (tournament.teams != null && tournament.teams!.isNotEmpty)
             TeamsHorizontalList(
-              teams: cup.teams!
-                  .map((t) => TeamModel(
-                        id: t.id,
-                        teamId: t.teamId,
-                        teamName: t.teamName,
-                        imageUrl: t.logo,
-                        country: t.country,
-                      ))
-                  .toList(),
+              teams: tournament.teams!,
               onTeamTap: (teamId) {
                 context.push('${AppRoutes.teams}/$teamId');
               },
@@ -144,59 +70,33 @@ class CupInfoTab extends ConsumerWidget {
           const SizedBox(height: 8),
 
           // Sponsors
-          if (cup.sponsors != null && cup.sponsors!.isNotEmpty)
+          if (tournament.sponsors != null && tournament.sponsors!.isNotEmpty)
             SponsorsHorizontalList(
-              sponsors: cup.sponsors!
-                  .map((s) => SponsorModel(
-                        id: s.id,
-                        name: s.name,
-                        logo: s.logo,
-                        website: s.website,
-                      ))
-                  .toList(),
+              sponsors: tournament.sponsors!,
             ),
 
           const SizedBox(height: 8),
 
-          // Itinerary Button (shown when canView == true)
-          _CupItinerarySection(tournamentId: cup.effectiveId),
+          // Itinerary Button
+          if (tournament.itinerary?.canView == true &&
+              tournament.itinerary?.doc != null &&
+              tournament.itinerary!.doc!.isNotEmpty)
+            _LeagueItineraryButton(docUrl: tournament.itinerary!.doc!),
 
           const SizedBox(height: 8),
 
           // Invitations Section (admin/coach only)
           if (user != null && (user.isAdmin || user.isCoach))
-            _CupInvitationsSection(cup: cup),
+            _LeagueInvitationsSection(tournament: tournament),
 
           const SizedBox(height: 8),
 
-          // Request to Join Button (role + status + visibility gated)
+          // Request to Join Button
           _buildRequestToJoinButton(user),
 
           const SizedBox(height: 16),
         ],
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return TournamentHeaderWidget(
-      tournament: TournamentModel(
-        id: cup.id,
-        tournamentId: cup.tournamentId,
-        name: cup.name,
-        logo: cup.logo,
-        location: cup.location,
-        ageGroup: cup.ageGroup,
-        ageCat: cup.ageCat,
-        gameType: cup.gameType,
-        startDate: cup.startDate,
-        followCount: cup.followCount,
-        isFollowing: cup.isFollowing,
-        tmntType: cup.tmntType,
-      ),
-      isFollowing: cup.isFollowing,
-      followCount: cup.followCount,
-      onFollowTap: onFollowTap,
     );
   }
 
@@ -210,17 +110,17 @@ class CupInfoTab extends ConsumerWidget {
     if (user.isReferee == true) return const SizedBox.shrink();
 
     // Cannot join live or ended tournaments
-    final status = cup.status?.toLowerCase() ?? '';
+    final status = tournament.status?.toLowerCase() ?? '';
     if (status == 'live' || status == 'end') return const SizedBox.shrink();
 
-    // Local tournaments: user's country must match cup country
-    final visibility = cup.visibility?.toLowerCase() ?? 'global';
+    // Local tournaments: user's country must match tournament country
+    final visibility = tournament.visibility?.toLowerCase() ?? 'global';
     if (visibility == 'local') {
       final userCountry = (user.country as String?)?.toLowerCase() ?? '';
-      final cupCountry = cup.country?.toLowerCase() ?? '';
+      final tmntCountry = tournament.country?.toLowerCase() ?? '';
       if (userCountry.isEmpty ||
-          cupCountry.isEmpty ||
-          userCountry != cupCountry) {
+          tmntCountry.isEmpty ||
+          userCountry != tmntCountry) {
         return const SizedBox.shrink();
       }
     }
@@ -242,7 +142,7 @@ class CupInfoTab extends ConsumerWidget {
             elevation: 0,
           ),
           child: const Text(
-            'Request to Join Cup',
+            'Request to Join',
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
@@ -255,36 +155,16 @@ class CupInfoTab extends ConsumerWidget {
   }
 }
 
-/// Watches cupItineraryUrlProvider and shows the itinerary button when URL is available
-class _CupItinerarySection extends ConsumerWidget {
-  final String tournamentId;
+/// Invitations section — watches pending invites and renders accept/decline UI
+class _LeagueInvitationsSection extends ConsumerWidget {
+  final TournamentModel tournament;
 
-  const _CupItinerarySection({required this.tournamentId});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final itineraryAsync = ref.watch(cupItineraryUrlProvider(tournamentId));
-    return itineraryAsync.when(
-      data: (url) {
-        if (url == null || url.isEmpty) return const SizedBox.shrink();
-        return CupItineraryButton(docUrl: url);
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
-    );
-  }
-}
-
-/// Cup Invitations Section widget — watches pending invites and renders accept/decline UI
-class _CupInvitationsSection extends ConsumerWidget {
-  final TournamentCupModel cup;
-
-  const _CupInvitationsSection({required this.cup});
+  const _LeagueInvitationsSection({required this.tournament});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tournamentId = cup.effectiveId;
-    final invitesAsync = ref.watch(checkCupInvitesProvider(tournamentId));
+    final tournamentId = tournament.effectiveId;
+    final invitesAsync = ref.watch(checkInvitesProvider(tournamentId));
 
     return invitesAsync.when(
       data: (teams) {
@@ -305,8 +185,12 @@ class _CupInvitationsSection extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              ...teams.map((team) =>
-                  _CupInvitationRow(team: team, cup: cup)),
+              ...teams.map(
+                (team) => _LeagueInvitationRow(
+                  team: team,
+                  tournament: tournament,
+                ),
+              ),
             ],
           ),
         );
@@ -317,16 +201,19 @@ class _CupInvitationsSection extends ConsumerWidget {
   }
 }
 
-/// Single row for a pending cup invitation (team name + Accept/Decline)
-class _CupInvitationRow extends ConsumerWidget {
-  final CupTeamModel team;
-  final TournamentCupModel cup;
+/// Single row for a pending league invitation (team name + Accept/Decline)
+class _LeagueInvitationRow extends ConsumerWidget {
+  final TeamModel team;
+  final TournamentModel tournament;
 
-  const _CupInvitationRow({required this.team, required this.cup});
+  const _LeagueInvitationRow({
+    required this.team,
+    required this.tournament,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tournamentId = cup.effectiveId;
+    final tournamentId = tournament.effectiveId;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -396,28 +283,25 @@ class _CupInvitationRow extends ConsumerWidget {
     String tournamentId, {
     required bool accept,
   }) async {
-    final notifier =
-        ref.read(cupInviteResponseProvider(tournamentId).notifier);
+    final notifier = ref.read(inviteResponseProvider(tournamentId).notifier);
     await notifier.respond(
       tournamentId: tournamentId,
       teamId: team.effectiveId,
       accept: accept,
-      parentId: cup.parentId,
+      parentId: tournament.parentId,
       teamName: team.teamName,
-      tmntName: cup.name,
+      tmntName: tournament.name,
     );
 
     if (!context.mounted) return;
-    final state = ref.read(cupInviteResponseProvider(tournamentId));
+    final state = ref.read(inviteResponseProvider(tournamentId));
     state.when(
       data: (success) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
               success
-                  ? (accept
-                      ? 'Invitation accepted.'
-                      : 'Invitation declined.')
+                  ? (accept ? 'Invitation accepted.' : 'Invitation declined.')
                   : 'Action failed. Please try again.',
               style: const TextStyle(fontFamily: 'Poppins'),
             ),
@@ -442,10 +326,10 @@ class _CupInvitationRow extends ConsumerWidget {
 }
 
 /// Itinerary button — opens a document URL via url_launcher
-class CupItineraryButton extends StatelessWidget {
+class _LeagueItineraryButton extends StatelessWidget {
   final String docUrl;
 
-  const CupItineraryButton({super.key, required this.docUrl});
+  const _LeagueItineraryButton({required this.docUrl});
 
   @override
   Widget build(BuildContext context) {

@@ -31,7 +31,7 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -66,6 +66,7 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
               fontSize: 13,
             ),
             tabs: const [
+              Tab(text: 'TABLE'),
               Tab(text: 'GOALS'),
               Tab(text: 'ASSISTS'),
               Tab(text: 'CARDS'),
@@ -77,6 +78,7 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
           child: TabBarView(
             controller: _tabController,
             children: [
+              _PointsTableView(tournamentId: widget.tournamentId),
               _StatsList(tournamentId: widget.tournamentId, statType: 'goals'),
               _StatsList(tournamentId: widget.tournamentId, statType: 'assists'),
               _StatsList(tournamentId: widget.tournamentId, statType: 'cards'),
@@ -401,5 +403,228 @@ class _StatsList extends ConsumerWidget {
       default:
         return 'stats';
     }
+  }
+}
+
+/// Points table sub-tab embedded inside the stats tab
+class _PointsTableView extends ConsumerWidget {
+  final String tournamentId;
+
+  const _PointsTableView({required this.tournamentId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tableAsync = ref.watch(pointsTableProvider(tournamentId));
+
+    return tableAsync.when(
+      data: (table) {
+        if (table.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.table_chart, size: 64, color: Colors.grey[400]),
+                const SizedBox(height: 16),
+                Text(
+                  'No standings available',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(pointsTableProvider(tournamentId));
+          },
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                margin: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: DataTable(
+                  headingRowColor:
+                      WidgetStateProperty.all(AppColors.socaBlack),
+                  headingTextStyle: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.socaYellow,
+                  ),
+                  dataTextStyle: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    color: AppColors.socaBlack,
+                  ),
+                  columnSpacing: 16,
+                  horizontalMargin: 12,
+                  columns: const [
+                    DataColumn(label: Text('#')),
+                    DataColumn(label: Text('Team')),
+                    DataColumn(label: Text('P'), numeric: true),
+                    DataColumn(label: Text('W'), numeric: true),
+                    DataColumn(label: Text('D'), numeric: true),
+                    DataColumn(label: Text('L'), numeric: true),
+                    DataColumn(label: Text('GF'), numeric: true),
+                    DataColumn(label: Text('GA'), numeric: true),
+                    DataColumn(label: Text('GD'), numeric: true),
+                    DataColumn(label: Text('Pts'), numeric: true),
+                  ],
+                  rows: table.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final team = entry.value;
+                    final isEven = index % 2 == 0;
+
+                    return DataRow(
+                      color: WidgetStateProperty.all(
+                        isEven ? Colors.grey[50] : Colors.white,
+                      ),
+                      cells: [
+                        DataCell(Text('${index + 1}')),
+                        DataCell(
+                          Row(
+                            children: [
+                              _buildTeamLogo(team.teamLogo, 24),
+                              const SizedBox(width: 8),
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  team.teamName ?? 'Unknown',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(Text('${team.played}')),
+                        DataCell(Text('${team.won}')),
+                        DataCell(Text('${team.drawn}')),
+                        DataCell(Text('${team.lost}')),
+                        DataCell(Text('${team.goalsFor}')),
+                        DataCell(Text('${team.goalsAgainst}')),
+                        DataCell(
+                          Text(
+                            '${team.goalDifference}',
+                            style: TextStyle(
+                              color: team.goalDifference > 0
+                                  ? Colors.green
+                                  : team.goalDifference < 0
+                                      ? Colors.red
+                                      : Colors.black,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            '${team.points}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      loading: () => const Center(
+        child: CircularProgressIndicator(color: AppColors.socaYellow),
+      ),
+      error: (error, stack) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text('Error loading standings: $error'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                ref.invalidate(pointsTableProvider(tournamentId));
+              },
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTeamLogo(String? logoUrl, double size) {
+    if (logoUrl == null || logoUrl.isEmpty) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          shape: BoxShape.circle,
+        ),
+        child: Icon(Icons.shield, size: size * 0.6, color: Colors.grey[400]),
+      );
+    }
+
+    final fullImageUrl = ApiConstants.getImageUrl(logoUrl);
+
+    if (fullImageUrl.isEmpty) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          shape: BoxShape.circle,
+        ),
+        child: Icon(Icons.shield, size: size * 0.6, color: Colors.grey[400]),
+      );
+    }
+
+    return ClipOval(
+      child: CachedNetworkImage(
+        imageUrl: fullImageUrl,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          width: size,
+          height: size,
+          color: Colors.grey[200],
+        ),
+        errorWidget: (context, url, error) => Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            shape: BoxShape.circle,
+          ),
+          child:
+              Icon(Icons.shield, size: size * 0.6, color: Colors.grey[400]),
+        ),
+      ),
+    );
   }
 }

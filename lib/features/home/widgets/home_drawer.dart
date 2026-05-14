@@ -39,7 +39,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
 
     if (user == null) return const SizedBox.shrink();
 
-    final socaId = user.username ?? 'SCL${user.id}';
+    final socaId = user.sclId ?? 'SCL${user.id}';
     final bioState = ref.watch(playerBioProvider(user.id));
 
     return Drawer(
@@ -109,7 +109,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                         style: const TextStyle(
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
-                          fontSize: 14,
+                          fontSize: 10,
                           color: AppColors.socaYellow,
                         ),
                       ),

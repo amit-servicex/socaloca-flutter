@@ -5,10 +5,11 @@ import 'package:share_plus/share_plus.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
+import 'endorse_player_screen.dart';
+import 'player_stats_screen.dart';
 import '../widgets/player_bio_header.dart';
 import '../widgets/player_bio_stats_counters.dart';
 import '../widgets/player_bio_details_section.dart';
-import '../widgets/stats_tab_content.dart';
 import '../widgets/competition_stats_summary_section.dart';
 import '../widgets/my_matches_section.dart';
 import '../widgets/training_stats_section.dart';
@@ -33,26 +34,14 @@ class PlayerBioScreen extends ConsumerStatefulWidget {
   ConsumerState<PlayerBioScreen> createState() => _PlayerBioScreenState();
 }
 
-class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
+class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
   @override
   void initState() {
     super.initState();
-    // Default to Endorse tab (index 1)
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
-
     // Load player bio data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(playerBioProvider(widget.playerId).notifier).load();
     });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
   }
 
   void _handleShare() {
@@ -70,6 +59,152 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen>
     }
   }
 
+  Future<void> _showBlockDialog(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final nav = Navigator.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Block User',
+            style:
+                TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
+        content: const Text('Are you sure you want to block this user?',
+            style: TextStyle(fontFamily: 'Poppins')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel',
+                style: TextStyle(
+                    fontFamily: 'Poppins', color: AppColors.socaBlack)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red, foregroundColor: Colors.white),
+            child: const Text('Block',
+                style: TextStyle(
+                    fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    final userId = StorageService.userId;
+    if (userId == null) return;
+    try {
+      final repo = ref.read(playerBioRepositoryProvider);
+      await repo.blockUser(userId: userId, toUserId: widget.playerId);
+      if (!mounted) return;
+      messenger.showSnackBar(
+        const SnackBar(
+          content:
+              Text('User blocked.', style: TextStyle(fontFamily: 'Poppins')),
+          backgroundColor: Colors.green,
+        ),
+      );
+      nav.pop();
+    } catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(
+          content:
+              Text('Error: $e', style: const TextStyle(fontFamily: 'Poppins')),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _showReportDialog(BuildContext context) async {
+    const causes = [
+      'Fake Account',
+      'Fake Name',
+      'Inappropriate Post',
+      'Misguiding Content',
+    ];
+    final messenger = ScaffoldMessenger.of(context);
+    String? selectedCause = causes.first;
+    final confirmed = await showDialog<String>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Report User',
+              style: TextStyle(
+                  fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Select a reason:',
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+              const SizedBox(height: 8),
+              RadioGroup<String>(
+                groupValue: selectedCause,
+                onChanged: (v) => setDialogState(() => selectedCause = v),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: causes
+                      .map(
+                        (cause) => RadioListTile<String>(
+                          value: cause,
+                          title: Text(cause,
+                              style: const TextStyle(
+                                  fontFamily: 'Poppins', fontSize: 13)),
+                          contentPadding: EdgeInsets.zero,
+                          dense: true,
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel',
+                  style: TextStyle(
+                      fontFamily: 'Poppins', color: AppColors.socaBlack)),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, selectedCause),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.socaBlack,
+                  foregroundColor: AppColors.socaYellow),
+              child: const Text('Report',
+                  style: TextStyle(
+                      fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirmed == null || !mounted) return;
+    final userId = StorageService.userId;
+    if (userId == null) return;
+    try {
+      final repo = ref.read(playerBioRepositoryProvider);
+      await repo.reportUser(
+          userId: userId, toUserId: widget.playerId, cause: confirmed);
+      if (!mounted) return;
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Report submitted. Thank you.',
+              style: TextStyle(fontFamily: 'Poppins')),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(
+          content:
+              Text('Error: $e', style: const TextStyle(fontFamily: 'Poppins')),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(playerBioProvider(widget.playerId));
@@ -78,12 +213,6 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen>
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: const Text('Player Bio'),
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: AppColors.socaYellow,
-        elevation: 0,
-      ),
       body: state.isLoading
           ? const Center(
               child: CircularProgressIndicator(
@@ -135,305 +264,370 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen>
                         ),
                       ),
                     )
-                  : Column(
-                      children: [
-                        // Header Section
-                        PlayerBioHeader(
-                          playerBio: state.playerBio!,
-                          isOwnProfile: isOwnProfile,
-                        ),
-
-                        // Action Buttons Row
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
+                  : SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          // Header Section
+                          PlayerBioHeader(
+                            playerBio: state.playerBio!,
+                            isOwnProfile: isOwnProfile,
                           ),
-                          color: Colors.white,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              // Follow Button
-                              if (!isOwnProfile)
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () => ref
-                                        .read(playerBioProvider(widget.playerId)
-                                            .notifier)
-                                        .toggleFollow(),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 8,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: state.isFollowing
-                                            ? AppColors.socaYellow
-                                            : AppColors.socaBlack,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Text(
-                                        state.isFollowing
-                                            ? 'FOLLOWING'
-                                            : 'FOLLOW',
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
-                                          color: state.isFollowing
-                                              ? AppColors.socaBlack
-                                              : AppColors.socaYellow,
+                          const Divider(height: 1, color: AppColors.socaBlack),
+
+                          // Stats Counters
+                          PlayerBioStatsCounters(
+                            playerBio: state.playerBio!,
+                          ),
+
+                          const Divider(height: 1, color: AppColors.socaBlack),
+
+                          // Tab Buttons (Stats and Endorse)
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            color: Colors.white,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PlayerStatsScreen(
+                                          playerId: widget.playerId,
                                         ),
-                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 100,
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          color: AppColors.socaBlack,
+                                          width: 1.5),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: const Text(
+                                      'STATS',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.socaBlack,
                                       ),
                                     ),
                                   ),
                                 ),
-
-                              if (!isOwnProfile) const SizedBox(width: 10),
-
-                              // Share Button
-                              GestureDetector(
-                                onTap: _handleShare,
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
+                                const SizedBox(width: 10),
+                                Container(
+                                  width: 100,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
                                   decoration: BoxDecoration(
-                                    color: AppColors.socaGrey,
+                                    color: AppColors.socaBlack,
                                     borderRadius: BorderRadius.circular(5),
                                   ),
-                                  child: const Icon(
-                                    Icons.share,
-                                    size: 20,
-                                    color: AppColors.socaBlack,
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(width: 10),
-
-                              // Like Button
-                              if (!isOwnProfile)
-                                GestureDetector(
-                                  onTap: () => ref
-                                      .read(playerBioProvider(widget.playerId)
-                                          .notifier)
-                                      .toggleLike(),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.socaGrey,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Icon(
-                                      state.isLiked
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      size: 20,
-                                      color: state.isLiked
-                                          ? Colors.red
-                                          : AppColors.socaBlack,
-                                    ),
-                                  ),
-                                ),
-
-                              // Block & Report buttons (TODO: implement)
-                              if (!isOwnProfile) ...[
-                                const SizedBox(width: 10),
-                                GestureDetector(
-                                  onTap: () {
-                                    // TODO: Implement block user
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.socaGrey,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: const Icon(
-                                      Icons.block,
-                                      size: 20,
-                                      color: AppColors.socaBlack,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                GestureDetector(
-                                  onTap: () {
-                                    // TODO: Implement report user
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.socaGrey,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: const Icon(
-                                      Icons.flag,
-                                      size: 20,
-                                      color: AppColors.socaBlack,
+                                  child: const Text(
+                                    'ENDORSE',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.socaYellow,
                                     ),
                                   ),
                                 ),
                               ],
-                            ],
-                          ),
-                        ),
-
-                        // Stats Counters
-                        PlayerBioStatsCounters(
-                          playerBio: state.playerBio!,
-                        ),
-
-                        // Tab Bar
-                        Container(
-                          color: Colors.white,
-                          child: TabBar(
-                            controller: _tabController,
-                            labelColor: AppColors.socaBlack,
-                            unselectedLabelColor: AppColors.socaGrey,
-                            indicatorColor: AppColors.socaYellow,
-                            indicatorWeight: 3,
-                            labelStyle: const TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
                             ),
-                            tabs: const [
-                              Tab(text: 'STATS'),
-                              Tab(text: 'ENDORSE'),
-                            ],
                           ),
-                        ),
 
-                        // Tab Views
-                        Expanded(
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: [
-                              // Stats Tab
-                              StatsTabContent(
-                                playerId: widget.playerId,
-                                playerBio: state.playerBio!,
-                              ),
+                          const Divider(height: 1, color: AppColors.socaBlack),
 
-                              // Endorse Tab (Default)
-                              SingleChildScrollView(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Bio Details Section
-                                    PlayerBioDetailsSection(
-                                      playerBio: state.playerBio!,
-                                      isOwnProfile: isOwnProfile,
+                          // Action Buttons Row
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            color: Colors.white,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                // Follow Button
+                                if (!isOwnProfile)
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () => ref
+                                          .read(
+                                              playerBioProvider(widget.playerId)
+                                                  .notifier)
+                                          .toggleFollow(),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: state.isFollowing
+                                              ? AppColors.socaYellow
+                                              : AppColors.socaBlack,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Text(
+                                          state.isFollowing
+                                              ? 'FOLLOWING'
+                                              : 'FOLLOW',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: state.isFollowing
+                                                ? AppColors.socaBlack
+                                                : AppColors.socaYellow,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
                                     ),
+                                  ),
 
-                                    const SizedBox(height: 20),
+                                if (!isOwnProfile) const SizedBox(width: 10),
 
-                                    // Competition Stats Summary
-                                    CompetitionStatsSummarySection(
-                                      footballStats: state.footballStats,
-                                      futsalStats: state.futsalStats,
-                                      playerBio: state.playerBio!,
-                                      isLoadingStats: state.isLoadingStats,
+                                // Share Button
+                                GestureDetector(
+                                  onTap: _handleShare,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.socaPageBg,
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
-
-                                    const SizedBox(height: 20),
-
-                                    // My Matches (Football & Futsal)
-                                    MyMatchesSection(
-                                      footballMatches: state.footballMatches,
-                                      futsalMatches: state.futsalMatches,
-                                      playerBio: state.playerBio!,
-                                      isOwnProfile: isOwnProfile,
-                                      isLoadingMatches: state.isLoadingMatches,
+                                    child: const Icon(
+                                      Icons.share,
+                                      size: 20,
+                                      color: AppColors.socaBlack,
                                     ),
-
-                                    const SizedBox(height: 20),
-
-                                    // Training Stats
-                                    TrainingStatsSection(
-                                      trainCurrMonth: state.trainCurrMonth,
-                                      trainPrevMonth: state.trainPrevMonth,
-                                      isOwnProfile: isOwnProfile,
-                                      isLoadingMatches: state.isLoadingMatches,
-                                    ),
-
-                                    const SizedBox(height: 20),
-
-                                    // Endorsements
-                                    EndorsementsSection(
-                                      endorsements: state.endorsements,
-                                      isLoadingEndorsements:
-                                          state.isLoadingEndorsements,
-                                    ),
-
-                                    if (state.endorsements.isNotEmpty)
-                                      const SizedBox(height: 20),
-
-                                    // Teams List
-                                    PlayerTeamsSection(
-                                      teams: state.teams,
-                                      isLoadingTeams: state.isLoadingTeams,
-                                    ),
-
-                                    if (state.teams.isNotEmpty)
-                                      const SizedBox(height: 20),
-
-                                    // Academies List
-                                    AcademiesSection(
-                                      academies: state.academies,
-                                      isLoadingAcademies:
-                                          state.isLoadingAcademies,
-                                    ),
-
-                                    if (state.academies.isNotEmpty)
-                                      const SizedBox(height: 20),
-
-                                    // Tournaments List
-                                    TournamentsSection(
-                                      tournaments: state.tournaments,
-                                      isLoadingTournaments:
-                                          state.isLoadingTournaments,
-                                    ),
-
-                                    if (state.tournaments.isNotEmpty)
-                                      const SizedBox(height: 20),
-
-                                    // Skills & Ratings
-                                    PlayerSkillsSection(
-                                      skills: state.skills,
-                                      overallRating: state.overallRating,
-                                      isLoadingSkills: state.isLoadingSkills,
-                                      isOwnProfile: isOwnProfile,
-                                    ),
-
-                                    const SizedBox(height: 20),
-
-                                    // Top Posts
-                                    PlayerPostsSection(
-                                      posts: state.posts,
-                                      isLoadingPosts: state.isLoadingPosts,
-                                    ),
-
-                                    if (state.posts.isNotEmpty)
-                                      const SizedBox(height: 20),
-
-                                    // Tagged Videos
-                                    TaggedVideosSection(
-                                      taggedVideos: state.taggedVideos,
-                                      isLoadingTaggedVideos:
-                                          state.isLoadingTaggedVideos,
-                                    ),
-
-                                    if (state.taggedVideos.isNotEmpty)
-                                      const SizedBox(height: 20),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
+
+                                const SizedBox(width: 10),
+
+                                // Like Button
+                                if (!isOwnProfile)
+                                  GestureDetector(
+                                    onTap: () => ref
+                                        .read(playerBioProvider(widget.playerId)
+                                            .notifier)
+                                        .toggleLike(),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.socaPageBg,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Icon(
+                                        state.isLiked
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        size: 20,
+                                        color: state.isLiked
+                                            ? Colors.red
+                                            : AppColors.socaBlack,
+                                      ),
+                                    ),
+                                  ),
+
+                                // Endorse, Block & Report buttons
+                                if (!isOwnProfile) ...[
+                                  const SizedBox(width: 10),
+                                  GestureDetector(
+                                    onTap: () {
+                                      final playerBio = state.playerBio;
+                                      final playerName = playerBio != null
+                                          ? '${playerBio.firstName ?? ''} ${playerBio.lastName ?? ''}'
+                                              .trim()
+                                          : 'Player';
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => EndorsePlayerScreen(
+                                            playerId: widget.playerId,
+                                            playerName: playerName,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.socaPageBg,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: const Icon(
+                                        Icons.thumb_up_alt_outlined,
+                                        size: 20,
+                                        color: AppColors.socaBlack,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  GestureDetector(
+                                    onTap: () => _showBlockDialog(context),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.socaPageBg,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: const Icon(
+                                        Icons.person_off_outlined,
+                                        size: 20,
+                                        color: AppColors.socaBlack,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  GestureDetector(
+                                    onTap: () => _showReportDialog(context),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.socaPageBg,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: const Icon(
+                                        Icons.assignment_ind_outlined,
+                                        size: 20,
+                                        color: AppColors.socaBlack,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+
+                          // Main View
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Bio Details Section
+                                PlayerBioDetailsSection(
+                                  playerBio: state.playerBio!,
+                                  isOwnProfile: isOwnProfile,
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                // Competition Stats Summary
+                                CompetitionStatsSummarySection(
+                                  footballStats: state.footballStats,
+                                  futsalStats: state.futsalStats,
+                                  playerBio: state.playerBio!,
+                                  isLoadingStats: state.isLoadingStats,
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                // My Matches (Football & Futsal)
+                                MyMatchesSection(
+                                  footballMatches: state.footballMatches,
+                                  futsalMatches: state.futsalMatches,
+                                  playerBio: state.playerBio!,
+                                  isOwnProfile: isOwnProfile,
+                                  isLoadingMatches: state.isLoadingMatches,
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                // Training Stats
+                                TrainingStatsSection(
+                                  trainCurrMonth: state.trainCurrMonth,
+                                  trainPrevMonth: state.trainPrevMonth,
+                                  isOwnProfile: isOwnProfile,
+                                  isLoadingMatches: state.isLoadingMatches,
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                // Endorsements
+                                EndorsementsSection(
+                                  endorsements: state.endorsements,
+                                  isLoadingEndorsements:
+                                      state.isLoadingEndorsements,
+                                ),
+
+                                if (state.endorsements.isNotEmpty)
+                                  const SizedBox(height: 20),
+
+                                // Teams List
+                                PlayerTeamsSection(
+                                  teams: state.teams,
+                                  isLoadingTeams: state.isLoadingTeams,
+                                ),
+
+                                if (state.teams.isNotEmpty)
+                                  const SizedBox(height: 20),
+
+                                // Academies List
+                                AcademiesSection(
+                                  academies: state.academies,
+                                  isLoadingAcademies: state.isLoadingAcademies,
+                                ),
+
+                                if (state.academies.isNotEmpty)
+                                  const SizedBox(height: 20),
+
+                                // Tournaments List
+                                TournamentsSection(
+                                  tournaments: state.tournaments,
+                                  isLoadingTournaments:
+                                      state.isLoadingTournaments,
+                                ),
+
+                                if (state.tournaments.isNotEmpty)
+                                  const SizedBox(height: 20),
+
+                                // Skills & Ratings
+                                PlayerSkillsSection(
+                                  skills: state.skills,
+                                  overallRating: state.overallRating,
+                                  isLoadingSkills: state.isLoadingSkills,
+                                  isOwnProfile: isOwnProfile,
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                // Top Posts
+                                PlayerPostsSection(
+                                  posts: state.posts,
+                                  isLoadingPosts: state.isLoadingPosts,
+                                ),
+
+                                if (state.posts.isNotEmpty)
+                                  const SizedBox(height: 20),
+
+                                // Tagged Videos
+                                TaggedVideosSection(
+                                  taggedVideos: state.taggedVideos,
+                                  isLoadingTaggedVideos:
+                                      state.isLoadingTaggedVideos,
+                                ),
+
+                                if (state.taggedVideos.isNotEmpty)
+                                  const SizedBox(height: 20),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
     );
   }

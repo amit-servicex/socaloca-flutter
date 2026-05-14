@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/providers/auth_provider.dart';
-import '../data/models/invitation_models.dart';
 import '../data/tournament_models.dart';
 import '../data/tournament_repository.dart';
 
@@ -255,6 +254,70 @@ class WithdrawTeamNotifier extends StateNotifier<AsyncValue<bool>> {
 final withdrawTeamProvider =
     StateNotifierProvider<WithdrawTeamNotifier, AsyncValue<bool>>(
   (ref) => WithdrawTeamNotifier(ref),
+);
+
+/// Check invites provider — fetches pending invitation teams for a tournament.
+/// Only meaningful for admin/coach users; the UI layer should gate visibility.
+final checkInvitesProvider = FutureProvider.family<List<TeamModel>, String>(
+  (ref, tournamentId) async {
+    final user = ref.watch(currentUserProvider);
+    if (user == null) return [];
+
+    final repository = ref.watch(tournamentRepositoryProvider);
+    return await repository.checkInvites(
+      userId: user.id,
+      tournamentId: tournamentId,
+    );
+  },
+);
+
+/// State notifier for accepting/declining a team invitation
+class InviteResponseNotifier extends StateNotifier<AsyncValue<bool>> {
+  InviteResponseNotifier(this.ref) : super(const AsyncValue.data(false));
+
+  final Ref ref;
+
+  Future<void> respond({
+    required String tournamentId,
+    required String teamId,
+    required bool accept,
+    String? parentId,
+    String? teamName,
+    String? tmntName,
+  }) async {
+    state = const AsyncValue.loading();
+
+    final user = ref.read(currentUserProvider);
+    if (user == null) {
+      state = AsyncValue.error('User not logged in', StackTrace.current);
+      return;
+    }
+
+    try {
+      final repo = ref.read(tournamentRepositoryProvider);
+      final success = await repo.acceptDeclineInvite(
+        userId: user.id,
+        tournamentId: tournamentId,
+        teamId: teamId,
+        accept: accept,
+        parentId: parentId,
+        teamName: teamName,
+        tmntName: tmntName,
+      );
+      state = AsyncValue.data(success);
+      if (success) {
+        // Refresh the pending invitations list
+        ref.invalidate(checkInvitesProvider(tournamentId));
+      }
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
+  }
+}
+
+final inviteResponseProvider = StateNotifierProvider.family<
+    InviteResponseNotifier, AsyncValue<bool>, String>(
+  (ref, tournamentId) => InviteResponseNotifier(ref),
 );
 
 /// Parameter classes for family providers
