@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../shared/providers/auth_provider.dart';
 import '../../../data/models/cup_models.dart';
 import '../../../data/tournament_models.dart';
+import '../../../providers/cup_providers.dart';
 import '../../../widgets/tournament_banner_slider.dart';
 import '../../../widgets/tournament_header_widget.dart';
 import '../../../widgets/tournament_info_card.dart';
@@ -13,8 +17,9 @@ import '../../../widgets/sponsors_horizontal_list.dart';
 
 /// Cup Info Tab
 /// Displays cup tournament information (banner, header, info card, teams, sponsors)
-/// Matches Android Cup Info tab
-class CupInfoTab extends StatelessWidget {
+/// Matches Android TournamentCupDetailsFragment info section
+/// Includes role-based visibility for join button and invitations section (admin/coach only)
+class CupInfoTab extends ConsumerWidget {
   final TournamentCupModel cup;
   final VoidCallback onFollowTap;
   final VoidCallback onRequestToJoin;
@@ -27,7 +32,9 @@ class CupInfoTab extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +59,8 @@ class CupInfoTab extends StatelessWidget {
           if (cup.rounds > 0)
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
                   const Icon(
@@ -150,8 +158,19 @@ class CupInfoTab extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // Request to Join Button
-          _buildRequestToJoinButton(),
+          // Itinerary Button (shown when canView == true)
+          _CupItinerarySection(tournamentId: cup.effectiveId),
+
+          const SizedBox(height: 8),
+
+          // Invitations Section (admin/coach only)
+          if (user != null && (user.isAdmin || user.isCoach))
+            _CupInvitationsSection(cup: cup),
+
+          const SizedBox(height: 8),
+
+          // Request to Join Button (role + status + visibility gated)
+          _buildRequestToJoinButton(user),
 
           const SizedBox(height: 16),
         ],
@@ -181,10 +200,29 @@ class CupInfoTab extends StatelessWidget {
     );
   }
 
-  Widget _buildRequestToJoinButton() {
-    // Don't show if tournament is closed
-    if (cup.status == 'end' || cup.status == 'END') {
-      return const SizedBox.shrink();
+  Widget _buildRequestToJoinButton(dynamic user) {
+    if (user == null) return const SizedBox.shrink();
+
+    // Only admin or coach can request to join
+    if (!user.isAdmin && !user.isCoach) return const SizedBox.shrink();
+
+    // Referees cannot join
+    if (user.isReferee == true) return const SizedBox.shrink();
+
+    // Cannot join live or ended tournaments
+    final status = cup.status?.toLowerCase() ?? '';
+    if (status == 'live' || status == 'end') return const SizedBox.shrink();
+
+    // Local tournaments: user's country must match cup country
+    final visibility = cup.visibility?.toLowerCase() ?? 'global';
+    if (visibility == 'local') {
+      final userCountry = (user.country as String?)?.toLowerCase() ?? '';
+      final cupCountry = cup.country?.toLowerCase() ?? '';
+      if (userCountry.isEmpty ||
+          cupCountry.isEmpty ||
+          userCountry != cupCountry) {
+        return const SizedBox.shrink();
+      }
     }
 
     return Container(
@@ -214,5 +252,252 @@ class CupInfoTab extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Watches cupItineraryUrlProvider and shows the itinerary button when URL is available
+class _CupItinerarySection extends ConsumerWidget {
+  final String tournamentId;
+
+  const _CupItinerarySection({required this.tournamentId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final itineraryAsync = ref.watch(cupItineraryUrlProvider(tournamentId));
+    return itineraryAsync.when(
+      data: (url) {
+        if (url == null || url.isEmpty) return const SizedBox.shrink();
+        return CupItineraryButton(docUrl: url);
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+}
+
+/// Cup Invitations Section widget — watches pending invites and renders accept/decline UI
+class _CupInvitationsSection extends ConsumerWidget {
+  final TournamentCupModel cup;
+
+  const _CupInvitationsSection({required this.cup});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tournamentId = cup.effectiveId;
+    final invitesAsync = ref.watch(checkCupInvitesProvider(tournamentId));
+
+    return invitesAsync.when(
+      data: (teams) {
+        if (teams.isEmpty) return const SizedBox.shrink();
+        return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Pending Invitations',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: AppColors.socaBlack,
+                ),
+              ),
+              const SizedBox(height: 8),
+              ...teams.map((team) =>
+                  _CupInvitationRow(team: team, cup: cup)),
+            ],
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+}
+
+/// Single row for a pending cup invitation (team name + Accept/Decline)
+class _CupInvitationRow extends ConsumerWidget {
+  final CupTeamModel team;
+  final TournamentCupModel cup;
+
+  const _CupInvitationRow({required this.team, required this.cup});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tournamentId = cup.effectiveId;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              team.teamName ?? 'Unknown Team',
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppColors.socaBlack,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          ElevatedButton(
+            onPressed: () =>
+                _respond(context, ref, tournamentId, accept: true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6)),
+              elevation: 0,
+            ),
+            child: const Text(
+              'Accept',
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13),
+            ),
+          ),
+          const SizedBox(width: 6),
+          ElevatedButton(
+            onPressed: () =>
+                _respond(context, ref, tournamentId, accept: false),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6)),
+              elevation: 0,
+            ),
+            child: const Text(
+              'Decline',
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _respond(
+    BuildContext context,
+    WidgetRef ref,
+    String tournamentId, {
+    required bool accept,
+  }) async {
+    final notifier =
+        ref.read(cupInviteResponseProvider(tournamentId).notifier);
+    await notifier.respond(
+      tournamentId: tournamentId,
+      teamId: team.effectiveId,
+      accept: accept,
+      parentId: cup.parentId,
+      teamName: team.teamName,
+      tmntName: cup.name,
+    );
+
+    if (!context.mounted) return;
+    final state = ref.read(cupInviteResponseProvider(tournamentId));
+    state.when(
+      data: (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              success
+                  ? (accept
+                      ? 'Invitation accepted.'
+                      : 'Invitation declined.')
+                  : 'Action failed. Please try again.',
+              style: const TextStyle(fontFamily: 'Poppins'),
+            ),
+            backgroundColor: success ? Colors.green : Colors.red,
+          ),
+        );
+      },
+      loading: () {},
+      error: (e, _) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error: $e',
+              style: const TextStyle(fontFamily: 'Poppins'),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Itinerary button — opens a document URL via url_launcher
+class CupItineraryButton extends StatelessWidget {
+  final String docUrl;
+
+  const CupItineraryButton({super.key, required this.docUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          icon: const Icon(Icons.description_outlined),
+          label: const Text(
+            'View Itinerary',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+          onPressed: () => _launch(context),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _launch(BuildContext context) async {
+    final uri = Uri.tryParse(docUrl);
+    if (uri == null) return;
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (_) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Itinerary'),
+            content: SelectableText(docUrl),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 }

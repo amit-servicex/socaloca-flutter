@@ -252,6 +252,79 @@ final cupJoinRequestProvider = StateNotifierProvider.family<
   (ref, tournamentId) => CupJoinRequestNotifier(ref),
 );
 
+/// Cup itinerary URL provider — returns the doc URL if canView is true, else null
+final cupItineraryUrlProvider = FutureProvider.family<String?, String>(
+  (ref, tournamentId) async {
+    final user = ref.watch(currentUserProvider);
+    if (user == null) return null;
+    final repository = ref.watch(cupRepositoryProvider);
+    return await repository.getCupItineraryUrl(
+      userId: user.id,
+      tournamentId: tournamentId,
+    );
+  },
+);
+
+/// Check cup pending join requests (for organizer admin/coach)
+final checkCupInvitesProvider =
+    FutureProvider.family<List<CupTeamModel>, String>(
+  (ref, tournamentId) async {
+    final user = ref.watch(currentUserProvider);
+    if (user == null) return [];
+    final repository = ref.watch(cupRepositoryProvider);
+    return await repository.checkCupPendingInvites(
+      userId: user.id,
+      tournamentId: tournamentId,
+    );
+  },
+);
+
+/// State notifier for accepting/declining cup join requests
+class CupInviteResponseNotifier extends StateNotifier<AsyncValue<bool>> {
+  CupInviteResponseNotifier(this.ref) : super(const AsyncValue.data(false));
+
+  final Ref ref;
+
+  Future<void> respond({
+    required String tournamentId,
+    required String teamId,
+    required bool accept,
+    String? parentId,
+    String? teamName,
+    String? tmntName,
+  }) async {
+    state = const AsyncValue.loading();
+
+    final user = ref.read(currentUserProvider);
+    if (user == null) {
+      state = AsyncValue.error('User not logged in', StackTrace.current);
+      return;
+    }
+
+    try {
+      final repository = ref.read(cupRepositoryProvider);
+      final success = await repository.acceptDeclineCupRequest(
+        userId: user.id,
+        tournamentId: tournamentId,
+        teamId: teamId,
+        accept: accept,
+        parentId: parentId,
+        teamName: teamName,
+        tmntName: tmntName,
+      );
+      state = AsyncValue.data(success);
+      if (success) ref.invalidate(checkCupInvitesProvider(tournamentId));
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
+  }
+}
+
+final cupInviteResponseProvider = StateNotifierProvider.family<
+    CupInviteResponseNotifier, AsyncValue<bool>, String>(
+  (ref, tournamentId) => CupInviteResponseNotifier(ref),
+);
+
 /// Parameter classes for family providers
 
 class CupGroupMatchesParams {

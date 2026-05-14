@@ -52,12 +52,14 @@ class PlayerBioHeader extends StatelessWidget {
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(
                             color: AppColors.socaGrey,
-                            child: const Icon(Icons.person, size: 60, color: Colors.white),
+                            child: const Icon(Icons.person,
+                                size: 60, color: Colors.white),
                           ),
                         )
                       : Container(
                           color: AppColors.socaGrey,
-                          child: const Icon(Icons.person, size: 60, color: Colors.white),
+                          child: const Icon(Icons.person,
+                              size: 60, color: Colors.white),
                         ),
                 ),
               ),
@@ -107,7 +109,8 @@ class PlayerBioHeader extends StatelessWidget {
               if (preferredJersey != null && preferredJersey.isNotEmpty) ...[
                 const SizedBox(width: 10),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(6),
@@ -152,11 +155,29 @@ class PlayerBioHeader extends StatelessWidget {
                 borderRadius: BorderRadius.circular(2),
               ),
               child: Image.network(
-                 'https://flagcdn.com/w40/in.png',
-                 fit: BoxFit.cover,
-                 errorBuilder: (_, __, ___) => const Icon(Icons.flag, color: Colors.green),
+                'https://flagcdn.com/w40/in.png',
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) =>
+                    const Icon(Icons.flag, color: Colors.green),
               ),
             ),
+          const SizedBox(
+            height: 12,
+          ),
+          const Text(
+            "SocaLoca ID: ",
+            style: TextStyle(
+                color: AppColors.socaBlack,
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                fontWeight: FontWeight.w700),
+          ),
+          Text("${playerBio.sclId}",
+              style: const TextStyle(
+                  color: AppColors.socaBlack,
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700)),
         ],
       ),
     );

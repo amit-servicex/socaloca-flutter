@@ -628,4 +628,128 @@ class CupRepository {
       return false;
     }
   }
+
+  /// Check pending join requests for cup organizer
+  /// Matches Android CHECK_REQ_FOR_CUP: {userId, tournamentId} → {status, teams[]}
+  Future<List<CupTeamModel>> checkCupPendingInvites({
+    required String userId,
+    required String tournamentId,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'userId': userId,
+        'tournamentId': tournamentId,
+      };
+
+      final data = await ApiClient.instance.post(
+        ApiConstants.checkReqForCup,
+        body: body,
+      );
+
+      final response = data['response'] as Map<String, dynamic>?;
+      if (response == null) return [];
+
+      final status = (response['status'] as num?)?.toInt() ?? 0;
+      if (status != 1) return [];
+
+      final teamsData = response['teams'] as List?;
+      if (teamsData == null) return [];
+
+      return teamsData
+          .map((json) => CupTeamModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } on ApiException catch (e) {
+      log('Error checking cup pending invites: ${e.message}');
+      return [];
+    } catch (e) {
+      log('Error checking cup pending invites: $e');
+      return [];
+    }
+  }
+
+  /// Get itinerary URL for a cup tournament (if canView is true)
+  /// Returns null when itinerary is unavailable or not accessible
+  Future<String?> getCupItineraryUrl({
+    required String userId,
+    required String tournamentId,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'userId': userId,
+        'tournamentId': tournamentId,
+      };
+
+      final data = await ApiClient.instance.post(
+        ApiConstants.getCupDetails,
+        body: body,
+      );
+
+      final response = data['response'] as Map<String, dynamic>?;
+      if (response == null) return null;
+
+      final status = (response['status'] as num?)?.toInt() ?? 0;
+      if (status != 1) return null;
+
+      final itinerary = response['itinerary'] as Map<String, dynamic>?;
+      if (itinerary == null) return null;
+
+      final canView = itinerary['canView'] as bool? ?? false;
+      if (!canView) return null;
+
+      final doc = itinerary['doc'] as String?;
+      if (doc == null || doc.isEmpty) return null;
+
+      return doc;
+    } on ApiException catch (e) {
+      log('Error getting cup itinerary: ${e.message}');
+      return null;
+    } catch (e) {
+      log('Error getting cup itinerary: $e');
+      return null;
+    }
+  }
+
+  /// Accept or decline a pending cup join request (organizer action)
+  /// Matches Android ACCEPT_CUP_REQUEST: {userId, tournamentId, teamId, accept, parentId, teamName, tmntName}
+  Future<bool> acceptDeclineCupRequest({
+    required String userId,
+    required String tournamentId,
+    required String teamId,
+    required bool accept,
+    String? parentId,
+    String? teamName,
+    String? tmntName,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'userId': userId,
+        'tournamentId': tournamentId,
+        'teamId': teamId,
+        'accept': accept,
+      };
+
+      if (parentId != null) body['parentId'] = parentId;
+      if (teamName != null) body['teamName'] = teamName;
+      if (tmntName != null) body['tmntName'] = tmntName;
+
+      final data = await ApiClient.instance.post(
+        ApiConstants.acceptCupRequest,
+        body: body,
+      );
+
+      final response = data['response'] as Map<String, dynamic>?;
+      if (response == null) return false;
+
+      final status = (response['status'] as num?)?.toInt() ?? 0;
+      final success = response['success'] as bool? ?? false;
+
+      return status == 1 && success;
+    } on ApiException catch (e) {
+      log('Error accepting/declining cup request: ${e.message}');
+      return false;
+    } catch (e) {
+      log('Error accepting/declining cup request: $e');
+      return false;
+    }
+  }
 }

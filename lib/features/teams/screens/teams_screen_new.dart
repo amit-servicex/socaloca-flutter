@@ -56,18 +56,6 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew> {
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.socaBlack,
-        title: const Text(
-          'Teams',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-            color: Colors.white,
-          ),
-        ),
-      ),
       body: Column(
         children: [
           // Filter Section

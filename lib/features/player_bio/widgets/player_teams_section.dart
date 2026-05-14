@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -25,6 +27,7 @@ class PlayerTeamsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("this is the teams url in the player bio section ${teams.map((t) => t.imageUrl).toList()}");
     if (isLoadingTeams) {
       return const Center(
         child: Padding(
@@ -98,7 +101,7 @@ class PlayerTeamsSection extends StatelessWidget {
                     // TODO: Navigate to team bio
                   },
                   child: Container(
-                    width: 80,
+                    width: 90,
                     margin: const EdgeInsets.only(right: 12),
                     child: Column(
                       children: [
@@ -113,10 +116,9 @@ class PlayerTeamsSection extends StatelessWidget {
                             child: _isValidImageUrl(team.imageUrl)
                                 ? CachedNetworkImage(
                                     imageUrl:
-                                        '${ApiConstants.mediaBaseUrl}${team.imageUrl}',
+                                        ApiConstants.getImageUrl(team.imageUrl),
                                     fit: BoxFit.cover,
-                                    placeholder: (context, url) =>
-                                        const Center(
+                                    placeholder: (context, url) => const Center(
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
                                         color: AppColors.socaYellow,

@@ -58,6 +58,9 @@ class AppRoutes {
   static const String teamBio = '/teams/:teamId';
   static const String teamPlayers = '/teams/:teamId/players';
   static const String playerBio = '/players/:userId';
+  static const String playerJoinedTeams = '/players/:userId/joined-teams';
+  static const String playerPendingTeams = '/players/:userId/pending-teams';
+  static const String playerReceivedTeams = '/player-invitations';
   static const String clubBio = '/clubs/:clubId';
   static const String tournamentDetail = '/tournaments/:tmntId';
   static const String cupDetail = '/cups/:cupId';
