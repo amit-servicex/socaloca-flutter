@@ -6,6 +6,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class PlayerReceivedTeamsScreen extends ConsumerStatefulWidget {
   const PlayerReceivedTeamsScreen({super.key});
@@ -170,8 +171,7 @@ class _PlayerReceivedTeamsScreenState
         elevation: 0,
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.socaYellow))
+          ? const AppLoader()
           : _error != null
               ? Center(
                   child: Text('Error: $_error',
@@ -191,13 +191,7 @@ class _PlayerReceivedTeamsScreenState
                       separatorBuilder: (_, __) => const SizedBox(height: 8),
                       itemBuilder: (context, i) {
                         if (i == _teams.length) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(16),
-                              child: CircularProgressIndicator(
-                                  color: AppColors.socaYellow),
-                            ),
-                          );
+                          return const AppLoader();
                         }
                         final team = _teams[i];
                         final teamId = team['teamId'] as String? ??

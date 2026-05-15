@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/match_training_status_model.dart';
 import '../data/models/player_bio_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// My Matches Section for Endorse Tab
 /// Shows Football and Futsal matches separately
@@ -59,14 +60,7 @@ class MyMatchesSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: isLoadingMatches
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: CircularProgressIndicator(
-                          color: AppColors.socaYellow,
-                        ),
-                      ),
-                    )
+                  ? const AppLoader()
                   : Column(
                       children: [
                         IntrinsicHeight(

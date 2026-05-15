@@ -6,6 +6,7 @@ import '../../../../../core/constants/api_constants.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../data/models/cup_models.dart';
 import '../../../providers/cup_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Cup Stats Tab
 /// Shows tournament statistics for both Group Mode and Match Mode
@@ -294,9 +295,7 @@ class _CupStatsList extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      ),
+      loading: () => const AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

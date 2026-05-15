@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/referee_bio_model.dart';
 import '../providers/referee_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyActivitiesScreen extends ConsumerStatefulWidget {
   const RefereeMyActivitiesScreen({super.key});
@@ -120,8 +121,7 @@ class _RefereeMyActivitiesScreenState
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow));
+      return const AppLoader();
     }
 
     if (_error != null) {
@@ -177,9 +177,7 @@ class _RefereeMyActivitiesScreenState
           if (i == _activities.length) {
             return const Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(
-                  child: CircularProgressIndicator(
-                      color: AppColors.socaYellow, strokeWidth: 2)),
+              child: const AppLoader(),
             );
           }
           return _ActivityCard(activity: _activities[i]);

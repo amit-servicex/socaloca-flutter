@@ -14,6 +14,7 @@ import '../../../core/theme/app_colors.dart';
 import '../data/models/club_bio_model.dart';
 import '../data/repositories/club_repository.dart';
 import 'club_home_screen.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 final _clubBioAdminProvider =
@@ -52,8 +53,7 @@ class _ClubBioAdminScreenState extends ConsumerState<ClubBioAdminScreen> {
     final async = ref.watch(_clubBioAdminProvider);
 
     return async.when(
-      loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow)),
+      loading: () => const AppLoader(),
       error: (e, _) => Center(child: Text('Error: $e')),
       data: (bio) {
         if (bio == null) {

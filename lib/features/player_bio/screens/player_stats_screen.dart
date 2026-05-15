@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
 import '../widgets/stats_tab_content.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class PlayerStatsScreen extends ConsumerWidget {
   final String playerId;
@@ -21,9 +22,7 @@ class PlayerStatsScreen extends ConsumerWidget {
       backgroundColor: AppColors.socaPageBg,
     
       body: state.isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.socaYellow),
-            )
+          ? const AppLoader()
           : state.playerBio == null
               ? const Center(
                   child: Text(

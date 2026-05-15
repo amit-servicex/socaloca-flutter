@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../data/models/referee_match_model.dart';
 import '../providers/referee_providers.dart';
 import '../widgets/referee_shared_widgets.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyRequestsScreen extends ConsumerStatefulWidget {
   const RefereeMyRequestsScreen({super.key});
@@ -56,9 +57,7 @@ class _RefereeMyRequestsScreenState
         ),
         Expanded(
           child: matchesState.when(
-            loading: () => const Center(
-              child: CircularProgressIndicator(color: AppColors.socaYellow),
-            ),
+            loading: () => const AppLoader(),
             error: (e, _) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

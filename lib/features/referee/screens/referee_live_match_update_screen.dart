@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/referee_match_model.dart';
 import '../providers/referee_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeLiveMatchUpdateScreen extends ConsumerStatefulWidget {
   const RefereeLiveMatchUpdateScreen({
@@ -282,33 +283,7 @@ class _RefereeLiveMatchUpdateScreenState
             ],
 
             // Save button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isSaving ? null : _saveUpdate,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      _matchState == 'FINISH' ? Colors.red : AppColors.socaBlack,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6)),
-                ),
-                child: _isSaving
-                    ? const SizedBox(
-                        height: 18,
-                        width: 18,
-                        child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2))
-                    : Text(
-                        _matchState == 'FINISH' ? 'FINISH MATCH' : 'SAVE UPDATE',
-                        style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14),
-                      ),
-              ),
-            ),
+            const AppLoader(size: 24, centered: false),
           ],
         ),
       ),

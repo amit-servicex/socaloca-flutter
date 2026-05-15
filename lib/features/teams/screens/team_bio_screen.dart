@@ -7,6 +7,7 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/team_bio_model.dart';
 import '../providers/team_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class TeamBioScreen extends ConsumerWidget {
   final String teamId;
@@ -28,11 +29,7 @@ class TeamBioScreen extends ConsumerWidget {
 
   Widget _buildBody(BuildContext context, WidgetRef ref, TeamBioState state) {
     if (state.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.socaYellow,
-        ),
-      );
+      return const AppLoader();
     }
 
     if (state.error != null) {
@@ -254,9 +251,7 @@ class TeamBioScreen extends ConsumerWidget {
               fit: BoxFit.cover,
               placeholder: (_, __) => Container(
                 color: Colors.grey[200],
-                child: const Center(
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
+                child: const AppLoader(),
               ),
               errorWidget: (_, __, ___) => _buildDefaultLogo(),
             )
@@ -621,9 +616,7 @@ class TeamBioScreen extends ConsumerWidget {
           width: size,
           height: size,
           color: Colors.grey[200],
-          child: const Center(
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
+          child: const AppLoader(),
         ),
         errorWidget: (context, url, error) => Container(
           width: size,
@@ -688,9 +681,7 @@ class TeamBioScreen extends ConsumerWidget {
         width: size,
         height: size,
         color: Colors.grey[200],
-        child: const Center(
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
+        child: const AppLoader(),
       ),
       errorWidget: (context, url, error) => Container(
         width: size,

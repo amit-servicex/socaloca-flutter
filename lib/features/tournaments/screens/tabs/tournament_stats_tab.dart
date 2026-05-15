@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/providers/auth_provider.dart';
 import '../../data/tournament_models.dart';
 import '../../data/tournament_repository.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Stats tab — mirrors Android LeagueStatsFragment with sub-tabs:
 /// Goals | Assists | Cards | MOM
@@ -156,9 +157,7 @@ class _StatsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      );
+      return const AppLoader();
     }
 
     if (stats.isEmpty) {

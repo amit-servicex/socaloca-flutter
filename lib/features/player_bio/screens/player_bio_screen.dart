@@ -21,6 +21,7 @@ import '../widgets/endorsements_section.dart';
 import '../widgets/academies_section.dart';
 import '../widgets/tournaments_section.dart';
 import '../widgets/tagged_videos_section.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Player Bio Screen with Stats and Endorse tabs
 class PlayerBioScreen extends ConsumerStatefulWidget {
@@ -215,11 +216,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       body: state.isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.socaYellow,
-              ),
-            )
+          ? const AppLoader()
           : state.error != null
               ? Center(
                   child: Column(

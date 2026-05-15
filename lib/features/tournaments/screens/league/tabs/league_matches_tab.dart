@@ -7,6 +7,7 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../data/tournament_models.dart';
 import '../../../providers/tournament_providers.dart';
 import '../../../widgets/match_card.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// League Matches Tab
 /// Shows upcoming and played matches in sub-tabs
@@ -214,14 +215,7 @@ class _MatchesListState extends ConsumerState<_MatchesList>
         itemCount: _matches.length + (_isLoadingMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index >= _matches.length) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(
-                  color: AppColors.socaYellow,
-                ),
-              ),
-            );
+            return const AppLoader();
           }
 
           final match = _matches[index];

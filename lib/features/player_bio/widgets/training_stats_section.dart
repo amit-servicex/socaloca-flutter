@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/match_training_status_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Training Stats Section for Endorse Tab
 /// Shows current and previous month training stats
@@ -58,14 +59,7 @@ class TrainingStatsSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: isLoadingMatches
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: CircularProgressIndicator(
-                          color: AppColors.socaYellow,
-                        ),
-                      ),
-                    )
+                  ? const AppLoader()
                   : Column(
                       children: [
                         IntrinsicHeight(

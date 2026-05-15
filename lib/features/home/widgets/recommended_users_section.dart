@@ -8,6 +8,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/feed_rec_user_model.dart';
 import '../providers/home_feed_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RecommendedUsersSection extends ConsumerStatefulWidget {
   const RecommendedUsersSection({super.key});
@@ -153,7 +154,7 @@ class _RecommendedUsersSectionState
                 },
                 itemBuilder: (context, index) {
                   if (index == state.items.length) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const AppLoader();
                   }
 
                   final user = state.items[index];

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class PlayerPendingTeamsScreen extends ConsumerStatefulWidget {
   final String playerId;
@@ -98,8 +99,7 @@ class _PlayerPendingTeamsScreenState
         elevation: 0,
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.socaYellow))
+          ? const AppLoader()
           : _error != null
               ? Center(
                   child: Text('Error: $_error',

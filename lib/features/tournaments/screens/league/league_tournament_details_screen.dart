@@ -10,6 +10,7 @@ import 'tabs/league_info_tab.dart';
 import 'tabs/league_matches_tab.dart';
 import 'tabs/league_stats_tab.dart';
 import 'tabs/league_match_management_tab.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// League Tournament Details Screen
 /// Tabs: INFO, MATCHES, STATS (+ optional MANAGE for admins/coaches/referees)
@@ -85,9 +86,7 @@ class _LeagueTournamentDetailsScreenState
           }
           return _buildContent(tournament);
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow),
-        ),
+        loading: () => const AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -193,9 +192,7 @@ class _LeagueTournamentDetailsScreenState
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => const Center(
-            child: CircularProgressIndicator(color: AppColors.socaYellow),
-          ),
+          builder: (context) => const AppLoader(),
         );
       },
       error: (error, stack) {
@@ -271,9 +268,7 @@ class _LeagueTournamentDetailsScreenState
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      ),
+      builder: (context) => const AppLoader(),
     );
 
     final notifier =

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/tournament_models.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Tournament list card — logo left, info right, VIEW + optional FOLLOW buttons.
 ///
@@ -270,12 +271,7 @@ class _TournamentLogo extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.socaYellow,
-                  ),
-                ),
+                placeholder: (context, url) => const AppLoader(),
                 errorWidget: (context, url, error) => const Center(
                   child: Icon(
                     Icons.emoji_events,

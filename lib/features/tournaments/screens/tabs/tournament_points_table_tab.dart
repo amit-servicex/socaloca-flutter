@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/providers/auth_provider.dart';
 import '../../data/tournament_models.dart';
 import '../../data/tournament_repository.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Points table tab — mirrors Android TournamentsPointTableFragment
 class TournamentPointsTableTab extends ConsumerStatefulWidget {
@@ -61,9 +62,7 @@ class _TournamentPointsTableTabState
     super.build(context);
 
     if (_loading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      );
+      return const AppLoader();
     }
 
     if (_table.isEmpty) {

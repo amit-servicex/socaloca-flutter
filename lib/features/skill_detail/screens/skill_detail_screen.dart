@@ -8,6 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/router/app_routes.dart';
 import '../data/skill_rater_model.dart';
 import '../widgets/skill_rater_tile.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Shows all raters (coaches / players / managers / fans) for one skill.
 /// Mirrors Android SkillDetailsFragment.
@@ -104,8 +105,7 @@ class _SkillDetailScreenState extends State<SkillDetailScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow));
+      return const AppLoader();
     }
     if (_error != null) {
       return Center(

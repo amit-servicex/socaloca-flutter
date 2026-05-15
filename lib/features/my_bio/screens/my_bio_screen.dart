@@ -21,6 +21,7 @@ import '../../player_bio/widgets/endorsements_section.dart';
 import '../../player_bio/widgets/academies_section.dart';
 import '../../player_bio/widgets/tournaments_section.dart';
 import '../../player_bio/widgets/tagged_videos_section.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// My Bio screen — shows the logged-in user's own bio profile.
 /// Single scrollable layout — no tabs.
@@ -150,9 +151,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
 
   Widget _buildBody(PlayerBioState state) {
     if (state.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      );
+      return const AppLoader();
     }
 
     if (state.error != null) {

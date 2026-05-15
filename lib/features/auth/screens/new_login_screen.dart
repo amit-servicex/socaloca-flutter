@@ -16,6 +16,7 @@ import '../../../shared/widgets/app_snackbar.dart';
 import '../../../shared/widgets/socaloca_text_field.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Mirrors fragment_new_login.xml exactly.
 ///
@@ -564,14 +565,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: _isLoading
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    color: _yellow,
-                                    strokeWidth: 2,
-                                  ),
-                                )
+                              ? const AppLoader(size: 24, centered: false)
                               : const Text(
                                   'LOG IN',
                                   style: TextStyle(

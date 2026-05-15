@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../core/theme/app_colors.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Equivalent of Android's MapsActivity.
 /// Auto-detects GPS, shows a full-screen Google Map, lets the user
@@ -253,14 +254,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                         child: _isLocating || _isGeocoding
                             ? const Row(
                                 children: [
-                                  SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: AppColors.socaYellow,
-                                    ),
-                                  ),
+                                  const AppLoader(size: 24, centered: false),
                                   SizedBox(width: 8),
                                   Text(
                                     'Fetching location...',

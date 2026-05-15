@@ -7,6 +7,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/academies_provider.dart';
 import '../widgets/academy_card.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Academies screen - main tab for browsing academies
 class AcademiesScreen extends ConsumerStatefulWidget {
@@ -333,11 +334,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
           // Academies List
           Expanded(
             child: state.isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.socaYellow,
-                    ),
-                  )
+                ? const AppLoader()
                 : state.error != null
                     ? Center(
                         child: Column(
@@ -394,11 +391,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                               if (index == state.academies.length) {
                                 return const Padding(
                                   padding: EdgeInsets.all(16),
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: AppColors.socaYellow,
-                                    ),
-                                  ),
+                                  child: const AppLoader(),
                                 );
                               }
 

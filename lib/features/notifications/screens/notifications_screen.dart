@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/notifications_provider.dart';
 import '../widgets/notification_card.dart';
 import '../widgets/notification_shimmer.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
@@ -73,9 +74,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           if (index == state.notifications.length) {
             return const Padding(
               padding: EdgeInsets.all(16.0),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const AppLoader(),
             );
           }
 

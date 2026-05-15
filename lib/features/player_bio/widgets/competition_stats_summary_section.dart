@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/game_stats_model.dart';
 import '../data/models/player_bio_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Competition Stats Summary Section for Endorse Tab
 /// Shows current year stats without year dropdown
@@ -54,14 +55,7 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: isLoadingStats
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: CircularProgressIndicator(
-                          color: AppColors.socaYellow,
-                        ),
-                      ),
-                    )
+                  ? const AppLoader()
                   : IntrinsicHeight(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,

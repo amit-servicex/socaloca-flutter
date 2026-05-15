@@ -64,7 +64,11 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
     if (_tabs[index].route == 'MENU') {
       _scaffoldKey.currentState?.openEndDrawer();
     } else {
-      context.go(_tabs[index].route);
+      if (_tabs[index].route == 'HOME') {
+        context.go(_tabs[index].route);
+      } else {
+        context.push(_tabs[index].route);
+      }
     }
   }
 

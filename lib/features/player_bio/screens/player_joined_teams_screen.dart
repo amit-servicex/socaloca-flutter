@@ -6,6 +6,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/storage_service.dart';
 import '../providers/player_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 final _playerJoinedTeamsProvider =
     FutureProvider.family<List<Map<String, dynamic>>, String>(
@@ -35,8 +36,7 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
         elevation: 0,
       ),
       body: teamsAsync.when(
-        loading: () => const Center(
-            child: CircularProgressIndicator(color: AppColors.socaYellow)),
+        loading: () => const AppLoader(),
         error: (e, _) => Center(
           child: Text('Error: $e',
               style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),

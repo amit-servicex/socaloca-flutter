@@ -10,6 +10,7 @@ import '../../player_bio/providers/player_bio_provider.dart';
 import '../providers/teams_provider.dart';
 import '../widgets/team_card.dart';
 import '../widgets/team_filter_section.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Teams screen.
 /// - Fans: single "All" view (no tabs).
@@ -157,9 +158,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
           const SliverToBoxAdapter(child: Divider(height: 1)),
           if (state.isLoading && state.teams.isEmpty)
             const SliverFillRemaining(
-              child: Center(
-                child: CircularProgressIndicator(color: AppColors.socaYellow),
-              ),
+              child: const AppLoader(),
             )
           else if (state.error != null && state.teams.isEmpty)
             SliverFillRemaining(child: _buildErrorState(state.error!))
@@ -174,10 +173,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
                     if (index == state.teams.length) {
                       return const Padding(
                         padding: EdgeInsets.all(16),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                              color: AppColors.socaYellow),
-                        ),
+                        child: const AppLoader(),
                       );
                     }
                     return TeamCard(team: state.teams[index]);
@@ -407,8 +403,7 @@ class _JoinedTeamsTabState extends ConsumerState<_JoinedTeamsTab>
   Widget build(BuildContext context) {
     super.build(context);
     if (_isLoading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow));
+      return const AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
     if (_teams.isEmpty) return _emptyTab('No joined teams.');
@@ -511,8 +506,7 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
   Widget build(BuildContext context) {
     super.build(context);
     if (_isLoading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow));
+      return const AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
     if (_teams.isEmpty) return _emptyTab('No pending requests.');
@@ -698,8 +692,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
   Widget build(BuildContext context) {
     super.build(context);
     if (_isLoading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow));
+      return const AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
     if (_teams.isEmpty) return _emptyTab('No team invitations.');
@@ -713,12 +706,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
         separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemBuilder: (context, i) {
           if (i == _teams.length) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(color: AppColors.socaYellow),
-              ),
-            );
+            return const AppLoader();
           }
           final team = _teams[i];
           final teamId =

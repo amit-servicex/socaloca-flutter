@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/theme/app_colors.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Paginated endorsement list screen — mirrors Android EndorsementListFragment.
 /// When [isOwnProfile] = true, shows ALL endorsements (pending + accepted)
@@ -115,9 +116,7 @@ class _MyEndorsementListScreenState
 
   Widget _buildBody() {
     if (_endorsements.isEmpty && _isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      );
+      return const AppLoader();
     }
 
     if (_endorsements.isEmpty && _error != null) {
@@ -229,10 +228,7 @@ class _MyEndorsementListScreenState
                 _loadMore();
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Center(
-                    child:
-                        CircularProgressIndicator(color: AppColors.socaYellow),
-                  ),
+                  child: const AppLoader(),
                 );
               }
               return _EndorsementCard(

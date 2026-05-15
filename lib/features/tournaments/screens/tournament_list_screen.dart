@@ -9,6 +9,7 @@ import '../data/tournament_repository.dart';
 import '../widgets/tournament_card.dart';
 import '../widgets/tournament_filters.dart';
 import 'tournament_featured_screen.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Status integer constants — matches Android Params.java exactly
 const int _kOngoing = 1;
@@ -224,14 +225,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               if (index >= _tournaments.length) {
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 16),
-                                    child: CircularProgressIndicator(
-                                      color: AppColors.socaYellow,
-                                    ),
-                                  ),
-                                );
+                                return const AppLoader();
                               }
 
                               final t = _tournaments[index];

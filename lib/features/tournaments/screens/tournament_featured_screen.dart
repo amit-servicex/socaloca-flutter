@@ -11,6 +11,7 @@ import '../widgets/tournament_header_widget.dart';
 import 'tabs/tournament_matches_tab.dart';
 import 'tabs/tournament_points_table_tab.dart';
 import 'tabs/tournament_stats_tab.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Featured tournament screen — mirrors Android TournamentsFragment
 /// Shows banner slider + header + tabs (Matches, Points Table, Stats)
@@ -119,9 +120,7 @@ class _TournamentFeaturedScreenState
         ),
       ),
       body: _loading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.socaYellow),
-            )
+          ? const AppLoader()
           : _tournament == null
               ? const Center(child: Text('Tournament not found'))
               : Column(

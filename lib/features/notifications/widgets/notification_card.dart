@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/api_constants.dart';
 import '../data/models/notification_model.dart';
 import '../utils/notification_navigation_handler.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class NotificationCard extends StatelessWidget {
   final NotificationModel notification;
@@ -112,9 +113,7 @@ class NotificationCard extends StatelessWidget {
         width: 60,
         height: 60,
         color: Colors.grey[200],
-        child: const Center(
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
+        child: const AppLoader(),
       ),
       errorWidget: (context, url, error) => _buildDefaultImage(),
     );

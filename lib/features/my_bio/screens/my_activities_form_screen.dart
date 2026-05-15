@@ -8,6 +8,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ── Position data ─────────────────────────────────────────────────────────────
 
@@ -755,14 +756,7 @@ class _MyActivitiesFormScreenState
                   ),
                 ),
                 child: _isSubmitting
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppColors.socaYellow,
-                        ),
-                      )
+                    ? const AppLoader(size: 24, centered: false)
                     : const Text(
                         'ADD',
                         style: TextStyle(
@@ -1375,10 +1369,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                       if (i == _results.length) {
                         return const Padding(
                           padding: EdgeInsets.all(16),
-                          child: Center(
-                            child: CircularProgressIndicator(
-                                color: AppColors.socaYellow),
-                          ),
+                          child: const AppLoader(),
                         );
                       }
                       final user = _results[i];

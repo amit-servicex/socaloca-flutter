@@ -8,6 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/players_provider.dart';
 import '../widgets/player_card.dart';
 import '../widgets/player_filter_dropdown.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Players screen matching Android FanPlayersFragment
 class PlayersScreen extends ConsumerStatefulWidget {
@@ -191,14 +192,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: state.isLoading
-                                  ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        color: AppColors.socaYellow,
-                                        strokeWidth: 2,
-                                      ),
-                                    )
+                                  ? const AppLoader(size: 24, centered: false)
                                   : const Text(
                                       'GO',
                                       style: TextStyle(
@@ -218,9 +212,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                     if (state.isLoading && state.players.isEmpty)
                       const Padding(
                         padding: EdgeInsets.all(50),
-                        child: CircularProgressIndicator(
-                          color: AppColors.socaYellow,
-                        ),
+                        child: const AppLoader(),
                       )
                     else if (state.error != null && state.players.isEmpty)
                       Padding(
@@ -279,11 +271,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                           if (index == state.players.length) {
                             return const Padding(
                               padding: EdgeInsets.all(16),
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: AppColors.socaYellow,
-                                ),
-                              ),
+                              child: const AppLoader(),
                             );
                           }
                           

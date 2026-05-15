@@ -12,6 +12,7 @@ import '../../../shared/services/location_service.dart';
 import '../../../shared/widgets/socaloca_text_field.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// NewSignUpFragment equivalent - matches Android XML layout exactly
 /// User enters mobile/email and password to create account
@@ -556,22 +557,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             color: AppColors.socaBlack,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Center(
-                            child: _isLoading
-                                ? const CircularProgressIndicator(
-                                    color: AppColors.socaYellow,
-                                  )
-                                : const Text(
-                                    'continue',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 22,
-                                      color: AppColors.socaYellow,
-                                      height: 1.0,
-                                    ),
-                                  ),
-                          ),
+                          child: const AppLoader(),
                         ),
                       ),
 

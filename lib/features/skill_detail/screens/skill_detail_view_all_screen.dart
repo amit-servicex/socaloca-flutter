@@ -6,6 +6,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/skill_rater_model.dart';
 import '../widgets/skill_rater_tile.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Paginated list of raters for one role (coaches / players / managers / fans).
 /// Mirrors Android SkillViewAllFragment.
@@ -145,8 +146,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
   Widget _buildBody() {
     // Initial load state
     if (_raters.isEmpty && _isLoading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow));
+      return const AppLoader();
     }
 
     // Error on first load
@@ -214,9 +214,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
           if (index == _raters.length) {
             return const Padding(
               padding: EdgeInsets.all(16),
-              child: Center(
-                child: CircularProgressIndicator(color: AppColors.socaYellow),
-              ),
+              child: const AppLoader(),
             );
           }
           return SkillRaterTile(

@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/partners_provider.dart';
 import '../widgets/club_filter_row.dart';
 import '../widgets/partner_card.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ─── Countries list (shared with clubs screen) ────────────────────────────
 
@@ -331,7 +332,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
           ),
           if (state.isLoading && state.fas.isEmpty)
             const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()))
+                child: const AppLoader())
           else if (state.fas.isEmpty)
             const SliverFillRemaining(
                 child: Center(
@@ -348,7 +349,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
                   if (index == state.fas.length) {
                     return const Padding(
                       padding: EdgeInsets.all(16),
-                      child: Center(child: CircularProgressIndicator()),
+                      child: const AppLoader(),
                     );
                   }
                   final fa = state.fas[index];
@@ -437,7 +438,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
           ),
           if (state.isLoading && state.confeds.isEmpty)
             const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()))
+                child: const AppLoader())
           else if (state.confeds.isEmpty)
             const SliverFillRemaining(
                 child: Center(
@@ -454,7 +455,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
                   if (index == state.confeds.length) {
                     return const Padding(
                       padding: EdgeInsets.all(16),
-                      child: Center(child: CircularProgressIndicator()),
+                      child: const AppLoader(),
                     );
                   }
                   final confed = state.confeds[index];
@@ -558,7 +559,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
           ),
           if (state.isLoading && state.sponsors.isEmpty)
             const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()))
+                child: const AppLoader())
           else if (state.sponsors.isEmpty)
             const SliverFillRemaining(
                 child: Center(
@@ -575,7 +576,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
                   if (index == state.sponsors.length) {
                     return const Padding(
                       padding: EdgeInsets.all(16),
-                      child: Center(child: CircularProgressIndicator()),
+                      child: const AppLoader(),
                     );
                   }
                   final sponsor = state.sponsors[index];
@@ -679,7 +680,7 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
           ),
           if (state.isLoading && state.charities.isEmpty)
             const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()))
+                child: const AppLoader())
           else if (state.charities.isEmpty)
             const SliverFillRemaining(
                 child: Center(
@@ -696,7 +697,7 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
                   if (index == state.charities.length) {
                     return const Padding(
                       padding: EdgeInsets.all(16),
-                      child: Center(child: CircularProgressIndicator()),
+                      child: const AppLoader(),
                     );
                   }
                   final charity = state.charities[index];

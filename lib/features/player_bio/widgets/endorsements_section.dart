@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/endorsement_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Endorsements Section for Endorse Tab
 /// Shows latest endorsement with user details
@@ -55,14 +56,7 @@ class EndorsementsSection extends StatelessWidget {
             ),
           ],
         ),
-        child: const Center(
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: CircularProgressIndicator(
-              color: AppColors.socaYellow,
-            ),
-          ),
-        ),
+        child: const AppLoader(),
       );
     }
 
@@ -140,12 +134,7 @@ class EndorsementsSection extends StatelessWidget {
                             imageUrl:
                                 '${ApiConstants.mediaBaseUrl}${user!.imageUrl}',
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppColors.socaYellow,
-                              ),
-                            ),
+                            placeholder: (context, url) => const AppLoader(),
                             errorWidget: (context, url, error) => const Icon(
                               Icons.person,
                               color: AppColors.socaGrey,

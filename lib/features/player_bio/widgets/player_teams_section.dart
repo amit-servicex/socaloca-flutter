@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_team_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Player Teams Section for Endorse Tab
 /// Shows horizontal scrollable list of teams
@@ -30,14 +31,7 @@ class PlayerTeamsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     log("this is the teams url in the player bio section ${teams.map((t) => t.imageUrl).toList()}");
     if (isLoadingTeams) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: CircularProgressIndicator(
-            color: AppColors.socaYellow,
-          ),
-        ),
-      );
+      return const AppLoader();
     }
 
     if (teams.isEmpty) {
@@ -122,12 +116,7 @@ class PlayerTeamsSection extends StatelessWidget {
                                     imageUrl:
                                         ApiConstants.getImageUrl(team.imageUrl),
                                     fit: BoxFit.cover,
-                                    placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: AppColors.socaYellow,
-                                      ),
-                                    ),
+                                    placeholder: (context, url) => const AppLoader(),
                                     errorWidget: (context, url, error) =>
                                         const Icon(
                                       Icons.shield,

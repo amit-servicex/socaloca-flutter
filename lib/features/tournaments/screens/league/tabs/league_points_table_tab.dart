@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/constants/api_constants.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../providers/tournament_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// League Points Table Tab
 /// Displays tournament standings
@@ -161,9 +162,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      ),
+      loading: () => const AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

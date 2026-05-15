@@ -12,6 +12,7 @@ import '../../auth/providers/auth_provider.dart';
 import '../../player_bio/data/models/player_bio_model.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Edit Profile screen — pre-populates fields from the existing PlayerBioModel
 /// and calls editCommonProfile on save.
@@ -949,20 +950,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       color: AppColors.socaBlack,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(
-                      child: _isLoading
-                          ? const CircularProgressIndicator(
-                              color: AppColors.socaYellow)
-                          : const Text(
-                              'SAVE CHANGES',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                                color: AppColors.socaYellow,
-                              ),
-                            ),
-                    ),
+                    child: const AppLoader(),
                   ),
                 ),
 

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class EndorsePlayerScreen extends ConsumerStatefulWidget {
   final String playerId;
@@ -183,14 +184,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                       elevation: 0,
                     ),
                     child: _isSubmitting
-                        ? const SizedBox(
-                            height: 18,
-                            width: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColors.socaBlack,
-                            ),
-                          )
+                        ? const AppLoader(size: 24, centered: false)
                         : const Text(
                             'Submit Endorsement',
                             style: TextStyle(

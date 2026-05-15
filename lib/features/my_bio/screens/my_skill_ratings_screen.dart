@@ -9,6 +9,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import '../data/skill_rating_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ── Skill category constants (mirror Android MyEndorsementsFragment) ──────────
 const _technical = [
@@ -165,9 +166,7 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      );
+      return const AppLoader();
     }
     if (_error != null) {
       return Center(

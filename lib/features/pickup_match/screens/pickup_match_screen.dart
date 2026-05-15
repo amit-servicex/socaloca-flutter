@@ -10,6 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../providers/pickup_match_providers.dart';
 import '../widgets/pickup_match_card.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Pickup Matches Screen - Shows list of pickup matches with host button
 /// Mirrors Android PickUpMatchesFragment
@@ -220,11 +221,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                       if (index == matches.length) {
                         return const Padding(
                           padding: EdgeInsets.all(16),
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.socaYellow,
-                            ),
-                          ),
+                          child: const AppLoader(),
                         );
                       }
 
@@ -241,11 +238,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                   ),
                 );
               },
-              loading: () => const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.socaYellow,
-                ),
-              ),
+              loading: () => const AppLoader(),
               error: (error, stack) => Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/constants/api_constants.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../providers/cup_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Cup Group Point Table Dialog
 /// Shows standings for a specific group
@@ -197,14 +198,7 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(32),
-                    child: CircularProgressIndicator(
-                      color: AppColors.socaYellow,
-                    ),
-                  ),
-                ),
+                loading: () => const AppLoader(),
                 error: (error, stack) => Center(
                   child: Padding(
                     padding: const EdgeInsets.all(32),

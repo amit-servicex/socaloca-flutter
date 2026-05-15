@@ -6,6 +6,7 @@ import '../../../../shared/providers/auth_provider.dart';
 import '../../data/tournament_models.dart';
 import '../../data/tournament_repository.dart';
 import '../../widgets/match_card.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Matches tab — mirrors Android TournamentMatchesFragment
 /// Shows upcoming and played matches (3 each, with "View All" button)
@@ -67,9 +68,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
     super.build(context);
 
     if (_loading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      );
+      return const AppLoader();
     }
 
     return RefreshIndicator(

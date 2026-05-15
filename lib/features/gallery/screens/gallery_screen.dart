@@ -9,6 +9,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../player_bio/data/models/player_post_model.dart';
 import '../../player_bio/data/repositories/player_bio_repository.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// 3-column photo/video grid — mirrors Android HomeFeedGalleryFragment.
 /// limit=30, paginates on scroll.
@@ -109,9 +110,7 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
 
   Widget _buildBody() {
     if (_loading && _posts.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      );
+      return const AppLoader();
     }
 
     if (!_loading && _posts.isEmpty) {

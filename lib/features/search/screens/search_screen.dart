@@ -7,6 +7,7 @@ import '../widgets/filter_dropdowns_row.dart';
 import '../widgets/search_input.dart';
 import '../widgets/search_result_card.dart';
 import '../widgets/search_shimmer.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -121,11 +122,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           if (index == state.users.length) {
             return const Padding(
               padding: EdgeInsets.all(16.0),
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.socaYellow,
-                ),
-              ),
+              child: const AppLoader(),
             );
           }
 

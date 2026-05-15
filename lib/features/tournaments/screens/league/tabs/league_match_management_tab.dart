@@ -7,6 +7,7 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../shared/providers/auth_provider.dart';
 import '../../../data/tournament_models.dart';
 import '../../../providers/tournament_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// League Match Management Tab
 /// Shows list of matches with management options for Admin/Referee/Coach
@@ -213,11 +214,7 @@ class _LeagueMatchManagementTabState
   Widget _buildLoadingIndicator() {
     return const Padding(
       padding: EdgeInsets.all(16.0),
-      child: Center(
-        child: CircularProgressIndicator(
-          color: AppColors.socaYellow,
-        ),
-      ),
+      child: const AppLoader(),
     );
   }
 

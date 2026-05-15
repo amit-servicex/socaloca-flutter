@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import 'app_loader.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
@@ -29,16 +30,7 @@ class PrimaryButton extends StatelessWidget {
     final effectiveColor = color ?? AppColors.primary;
 
     final child = isLoading
-        ? SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(
-                isOutlined ? effectiveColor : Colors.white,
-              ),
-            ),
-          )
+        ? const AppLoader(size: 28, centered: false)
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
