@@ -3,6 +3,21 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'game_stats_model.freezed.dart';
 part 'game_stats_model.g.dart';
 
+int? _toInt(dynamic v) =>
+    v == null ? null : (v is num ? v.toInt() : int.tryParse(v.toString()));
+
+Map<String, dynamic> _sanitize(Map<String, dynamic> json) => {
+      ...json,
+      'matchCount': _toInt(json['matchCount']),
+      'goalCount': _toInt(json['goalCount']),
+      'assistCount': _toInt(json['assistCount']),
+      'yellowCardCount': _toInt(json['yellowCardCount']),
+      'redCardCount': _toInt(json['redCardCount']),
+      'mvpCount': _toInt(json['mvpCount']),
+      'cleanSheetCount': _toInt(json['cleanSheetCount']),
+      'year': _toInt(json['year']),
+    };
+
 /// Model for game stats (Football/Futsal) from getPlayerStats API
 @freezed
 class GameStatsModel with _$GameStatsModel {
@@ -19,5 +34,5 @@ class GameStatsModel with _$GameStatsModel {
   }) = _GameStatsModel;
 
   factory GameStatsModel.fromJson(Map<String, dynamic> json) =>
-      _$GameStatsModelFromJson(json);
+      _$GameStatsModelFromJson(_sanitize(json));
 }

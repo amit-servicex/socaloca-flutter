@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
 import 'endorse_player_screen.dart';
 import 'player_stats_screen.dart';
+import '../../my_bio/screens/my_skill_ratings_screen.dart';
 import '../widgets/player_bio_header.dart';
 import '../widgets/player_bio_stats_counters.dart';
 import '../widgets/player_bio_details_section.dart';
@@ -281,13 +282,14 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
 
                           const Divider(height: 1, color: AppColors.socaBlack),
 
-                          // Tab Buttons (Stats and Endorse)
+                          // Tab Buttons (Stats, Endorse, Rate)
                           Container(
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             color: Colors.white,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                // STATS
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -300,7 +302,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                     );
                                   },
                                   child: Container(
-                                    width: 100,
+                                    width: 90,
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 8),
                                     decoration: BoxDecoration(
@@ -322,9 +324,10 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                const SizedBox(width: 8),
+                                // ENDORSE
                                 Container(
-                                  width: 100,
+                                  width: 90,
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8),
                                   decoration: BoxDecoration(
@@ -342,6 +345,44 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(width: 8),
+                                // RATE
+                                if (!isOwnProfile)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              MySkillRatingsScreen(
+                                            userId: widget.playerId,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 90,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color: AppColors.socaBlack,
+                                            width: 1.5),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: const Text(
+                                        'RATE',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.socaBlack,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),

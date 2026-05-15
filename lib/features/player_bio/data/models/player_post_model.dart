@@ -3,6 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'player_post_model.freezed.dart';
 part 'player_post_model.g.dart';
 
+int? _toInt(dynamic v) =>
+    v == null ? null : (v is num ? v.toInt() : int.tryParse(v.toString()));
+
 /// Model for post media source.
 /// API returns 'imageUrl' for images and 'videoUrl' / 'thumbnail' for videos.
 @freezed
@@ -16,7 +19,7 @@ class PostMediaSource with _$PostMediaSource {
   }) = _PostMediaSource;
 
   factory PostMediaSource.fromJson(Map<String, dynamic> json) =>
-      _$PostMediaSourceFromJson(json);
+      _$PostMediaSourceFromJson({...json, 'seq': _toInt(json['seq'])});
 }
 
 /// Convenience getter — returns the displayable URL for a media source.
@@ -43,5 +46,11 @@ class PlayerPostModel with _$PlayerPostModel {
   }) = _PlayerPostModel;
 
   factory PlayerPostModel.fromJson(Map<String, dynamic> json) =>
-      _$PlayerPostModelFromJson(json);
+      _$PlayerPostModelFromJson({
+        ...json,
+        'addedOn': _toInt(json['addedOn']),
+        'likeCount': _toInt(json['likeCount']),
+        'commentCount': _toInt(json['commentCount']),
+        'shareCount': _toInt(json['shareCount']),
+      });
 }

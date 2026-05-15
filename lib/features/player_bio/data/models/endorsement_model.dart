@@ -3,6 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'endorsement_model.freezed.dart';
 part 'endorsement_model.g.dart';
 
+int? _toInt(dynamic v) =>
+    v == null ? null : (v is num ? v.toInt() : int.tryParse(v.toString()));
+
 /// Model for endorser user details
 @freezed
 class EndorserUserModel with _$EndorserUserModel {
@@ -45,5 +48,9 @@ class EndorsementModel with _$EndorsementModel {
   }) = _EndorsementModel;
 
   factory EndorsementModel.fromJson(Map<String, dynamic> json) =>
-      _$EndorsementModelFromJson(json);
+      _$EndorsementModelFromJson({
+        ...json,
+        'addedOn': _toInt(json['addedOn']),
+        'published': _toInt(json['published']),
+      });
 }

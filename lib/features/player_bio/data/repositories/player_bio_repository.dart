@@ -270,7 +270,10 @@ class PlayerBioRepository {
         }
 
         if (response['response']['overall'] != null) {
-          overall = (response['response']['overall'] as num).toDouble();
+          final rawOverall = response['response']['overall'];
+          overall = rawOverall is num
+              ? rawOverall.toDouble()
+              : double.tryParse(rawOverall.toString());
         }
 
         return {

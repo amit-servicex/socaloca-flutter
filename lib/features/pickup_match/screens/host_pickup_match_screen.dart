@@ -366,7 +366,11 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               text: _selectedDate == null
                   ? 'Match date *'
                   : _formatDate(_selectedDate!),
-              icon: Icons.edit_calendar,
+              icon: Image.asset(
+                'assets/icons/ic_calendar.png',
+                width: 24,
+                height: 24,
+              ),
               onTap: _pickDate,
             ),
 
@@ -380,7 +384,11 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                     text: _startTime == null
                         ? 'Start Time *'
                         : _formatTime(_startTime!),
-                    icon: Icons.schedule,
+                    icon: Image.asset(
+                      'assets/icons/ic_clock.png',
+                      width: 24,
+                      height: 24,
+                    ),
                     onTap: _pickStartTime,
                   ),
                 ),
@@ -390,7 +398,11 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                     text: _endTime == null
                         ? 'End Time *'
                         : _formatTime(_endTime!),
-                    icon: Icons.schedule,
+                    icon: Image.asset(
+                      'assets/icons/ic_clock.png',
+                      width: 24,
+                      height: 24,
+                    ),
                     onTap: _pickEndTime,
                   ),
                 ),
@@ -448,8 +460,11 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.location_on_outlined,
-                        color: AppColors.socaBlack, size: 20),
+                    Image.asset(
+                      "assets/icons/ic_location.png",
+                      width: 24,
+                      height: 24,
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -560,7 +575,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
 
   Widget _buildGreyBox(
       {required String text,
-      required IconData icon,
+      required Image icon,
       required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
@@ -581,7 +596,8 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                 color: AppColors.socaBlack,
               ),
             ),
-            Icon(icon, size: 20, color: Colors.black87),
+            // Icon(icon, size: 20, color: Colors.black87),
+            icon
           ],
         ),
       ),

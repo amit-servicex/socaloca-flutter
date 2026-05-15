@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/router/app_routes.dart';
+import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import '../data/skill_rating_model.dart';
@@ -128,10 +129,36 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
     if (mounted) setState(() => _isLoading = false);
   }
 
+  Widget _buildBannerSection() {
+    return SizedBox(
+      height: 200,
+      child: Stack(
+        children: [
+          // Banner Image (placeholder for now)
+          Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.grey[300]!,
+                    Colors.grey[400]!,
+                  ],
+                ),
+              ),
+              child: Image.asset("assets/images/tournament_defalut_banner.jpg",
+                  fit: BoxFit.cover)),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.socaPageBg,
+      backgroundColor: Colors.white,
       body: SafeArea(child: SafeArea(child: _buildBody())),
     );
   }
@@ -174,6 +201,8 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildBannerSection(),
+
           // ── 1. User Profile Section ──────────────────────────────────────
           _ProfileSection(
             imageUrl: playerBio?.imageUrl,
@@ -284,18 +313,18 @@ class _ProfileSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.socaPageBg,
+      color: Colors.white,
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           // Avatar
           Container(
-            width: 80,
-            height: 80,
+            width: 90,
+            height: 90,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2),
-              color: Colors.grey.shade200,
+              border: Border.all(color: AppColors.socaBlack, width: 3),
+              color: AppColors.socaGrey,
             ),
             child: ClipOval(
               child: imageUrl != null && imageUrl!.isNotEmpty
@@ -305,7 +334,7 @@ class _ProfileSection extends StatelessWidget {
                       errorBuilder: (_, __, ___) => const Icon(
                         Icons.person,
                         size: 40,
-                        color: Colors.grey,
+                        color: AppColors.socaBlack,
                       ),
                     )
                   : const Icon(Icons.person, size: 40, color: Colors.grey),
@@ -427,7 +456,7 @@ class _RatingLegend extends StatelessWidget {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
@@ -435,17 +464,18 @@ class _RatingLegend extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.socaBlack,
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          const Text(
             '1 - Basic  |  2 - Average  |  3 - Good  |  4 - Very Good  |  5 - Outstanding',
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 11,
-              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w600,
+              color: AppColors.socaBlack,
             ),
           ),
         ],
@@ -483,7 +513,8 @@ class _CategoryBox extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              spacing: 5,
               children: [
                 Text(
                   title,
@@ -511,7 +542,7 @@ class _CategoryBox extends StatelessWidget {
           Container(
             margin: const EdgeInsets.fromLTRB(8, 0, 8, 10),
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
+              color: AppColors.socaGrey,
               borderRadius: BorderRadius.circular(5),
             ),
             child: Column(
@@ -533,7 +564,7 @@ class _CategoryBox extends StatelessWidget {
 
 // ── Skill Cell ─────────────────────────────────────────────────────────────────
 
-class _SkillCell extends StatelessWidget {
+class _SkillCell extends StatefulWidget {
   final SkillRatingModel skill;
   final bool isLast;
   final String userId;
@@ -541,69 +572,116 @@ class _SkillCell extends StatelessWidget {
   const _SkillCell(
       {required this.skill, required this.isLast, required this.userId});
 
-  String _displayName(String? raw) {
-    if (raw == null || raw.isEmpty) return '';
-    // The API returns properly formatted names like "First Touch"
-    return raw;
+  @override
+  State<_SkillCell> createState() => _SkillCellState();
+}
+
+class _SkillCellState extends State<_SkillCell> {
+  late double _sliderValue;
+  bool _isSubmitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _sliderValue = widget.skill.myRating > 0
+        ? widget.skill.myRating.toDouble().clamp(1.0, 5.0)
+        : 1.0;
+  }
+
+  String _displayName(String? raw) => raw ?? '';
+
+  Future<void> _submitRating(double rating) async {
+    if (_isSubmitting) return;
+    setState(() => _isSubmitting = true);
+
+    try {
+      final user = StorageService.currentUser;
+      final myId = user?['userId'] ?? user?['_id'] ?? user?['id'] ?? '';
+      final firstName = user?['firstName'] as String? ?? '';
+      final lastName = user?['lastName'] as String? ?? '';
+      final myName = '$firstName $lastName'.trim();
+      final myImageUrl = user?['imageUrl'] as String? ?? '';
+      final isPlayer = user?['isPlayer'] as bool? ?? false;
+      final isCoach = user?['isCoach'] as bool? ?? false;
+      final isAdmin = user?['isAdmin'] as bool? ?? false;
+      final isFan = user?['isFan'] as bool? ?? false;
+
+      await ApiClient.instance.post(
+        ApiConstants.endorsePlayer,
+        body: {
+          'userId': myId,
+          'playerId': widget.userId,
+          'skillShort': widget.skill.skillShort ?? widget.skill.skillName ?? '',
+          'skillName': _displayName(widget.skill.skillName),
+          'isPlayer': isPlayer,
+          'isCoach': isCoach,
+          'isAdmin': isAdmin,
+          'isFan': isFan,
+          'myName': myName,
+          'myImageUrl': myImageUrl,
+          'myRating': rating.toInt(),
+        },
+      );
+    } catch (_) {
+      // silent — slider value is already shown to user
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final count = skill.ratingCounter;
+    final count = widget.skill.ratingCounter;
     final hasRatings = count > 0;
     final endorseText =
         count == 1 ? '1 person endorsed' : '$count people endorsed';
+    final isOwnProfile = StorageService.userId == widget.userId;
 
     return GestureDetector(
       onTap: () {
-        if (skill.skillName == null) return;
+        if (widget.skill.skillName == null) return;
         context.push(
           AppRoutes.skillDetail,
           extra: {
-            'playerId': userId,
-            'skillName': _displayName(skill.skillName),
-            'skillShort': skill.skillShort ?? skill.skillName ?? '',
+            'playerId': widget.userId,
+            'skillName': _displayName(widget.skill.skillName),
+            'skillShort':
+                widget.skill.skillShort ?? widget.skill.skillName ?? '',
           },
         );
       },
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Left: skill name + endorsement count
-                Expanded(
+                // Left: skill name + endorsement badge
+                SizedBox(
+                  width: 110,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        _displayName(skill.skillName),
+                        _displayName(widget.skill.skillName),
                         style: const TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w700,
                           color: AppColors.socaBlack,
                         ),
                       ),
                       if (hasRatings) ...[
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            endorseText,
-                            style: const TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.socaBlack,
-                            ),
+                        const SizedBox(height: 2),
+                        Text(
+                          _isSubmitting ? 'Saving…' : endorseText,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey.shade600,
                           ),
                         ),
                       ],
@@ -611,22 +689,92 @@ class _SkillCell extends StatelessWidget {
                   ),
                 ),
 
-                // Right: average rating (only if rated)
-                if (hasRatings)
-                  Text(
-                    skill.skillAvg.toStringAsFixed(1),
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.socaBlack,
-                    ),
+                // Center: slider with 1 / 5 labels (hidden when viewing own profile)
+                if (!isOwnProfile) ...[
+                  const Spacer(),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        '1',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 150,
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            trackHeight: 2,
+                            activeTrackColor: AppColors.socaBlack,
+                            inactiveTrackColor: Colors.grey.shade300,
+                            thumbColor: AppColors.socaBlack,
+                            thumbShape: const RoundSliderThumbShape(
+                                enabledThumbRadius: 7),
+                            overlayColor:
+                                AppColors.socaBlack.withValues(alpha: 0.12),
+                            overlayShape: const RoundSliderOverlayShape(
+                                overlayRadius: 14),
+                            valueIndicatorColor: AppColors.socaBlack,
+                            valueIndicatorTextStyle: const TextStyle(
+                              color: AppColors.socaYellow,
+                              fontFamily: 'Poppins',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            showValueIndicator: ShowValueIndicator.onDrag,
+                            valueIndicatorShape:
+                                const PaddleSliderValueIndicatorShape(),
+                          ),
+                          child: Slider(
+                            value: _sliderValue,
+                            min: 1,
+                            max: 5,
+                            divisions: 4,
+                            label: _sliderValue.toInt().toString(),
+                            onChanged: (v) => setState(() => _sliderValue = v),
+                            onChangeEnd: _submitRating,
+                          ),
+                        ),
+                      ),
+                      const Text(
+                        '5',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ],
                   ),
+                ], // end if (!isOwnProfile)
+
+                // Right: average rating
+                const SizedBox(width: 8),
               ],
             ),
           ),
-          if (!isLast)
-            const Divider(height: 1, thickness: 0.5, color: Colors.black12),
+          if (hasRatings)
+            SizedBox(
+              width: 32,
+              child: Text(
+                widget.skill.skillAvg.toStringAsFixed(1),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.socaBlack,
+                ),
+              ),
+            ),
+          if (!widget.isLast)
+            const Divider(
+                height: 1, thickness: 0.5, color: AppColors.socaBlack),
         ],
       ),
     );

@@ -13,166 +13,157 @@ class TeamCard extends StatelessWidget {
     required this.team,
   });
 
+  static const double _logoSize = 80;
+
   @override
   Widget build(BuildContext context) {
-    // Safely parse rating to avoid runtime exceptions from String/null mismatches
-    double ratingValue = 0.0;
-    try {
-      dynamic r = team.rating;
-      if (r != null) {
-        if (r is num) {
-          ratingValue = r.toDouble();
-        } else {
-          ratingValue = double.tryParse(r.toString()) ?? 0.0;
-        }
-      }
-    } catch (_) {}
-    double progressValue = (ratingValue / 5.0).clamp(0.0, 1.0);
-    if (progressValue.isNaN) progressValue = 0.0;
+    final ratingValue = team.rating.clamp(0.0, double.infinity);
+    final progressValue = (ratingValue / 5.0).clamp(0.0, 1.0);
 
-    // Safely extract properties to prevent model getter exceptions from crashing layout
-    String safeGameTypeYear = '';
+    String gameTypeYear = '';
     try {
-      safeGameTypeYear = '${team.gameTypeYear}';
+      gameTypeYear = '${team.gameTypeYear}';
     } catch (_) {}
 
-    String safeTeamName = '';
+    String teamName = '';
     try {
-      safeTeamName = '${team.teamName}';
+      teamName = '${team.teamName}';
     } catch (_) {}
 
-    String safeMemberText = '';
+    String memberText = '';
     try {
-      safeMemberText = '${team.memberText}';
+      memberText = '${team.memberText}';
     } catch (_) {}
 
-    String safeCountry = '';
+    String country = '';
     try {
       final c = team.country;
-      if (c != null) safeCountry = c.toString();
+      if (c != null) country = c.toString();
     } catch (_) {}
+
     return Card(
-      margin: const EdgeInsets.fromLTRB(5, 10, 5, 5),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       color: Colors.white,
       elevation: 4,
+      shadowColor: Colors.black12,
       child: InkWell(
-        onTap: () => _handleViewTap(context),
+        onTap: () => _navigate(context),
         borderRadius: BorderRadius.circular(10),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Team Logo
-              _buildTeamLogo(),
-              const SizedBox(width: 17),
-
-              // Team Info
+              _buildLogo(),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Game Type & Year
-                    if (safeGameTypeYear.isNotEmpty)
+                    // Football | 2024
+                    if (gameTypeYear.isNotEmpty) ...[
                       Text(
-                        safeGameTypeYear,
+                        gameTypeYear,
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           color: Colors.grey,
                         ),
                       ),
-                    if (safeGameTypeYear.isNotEmpty) const SizedBox(height: 4),
+                      const SizedBox(height: 2),
+                    ],
 
-                    // Team Name
+                    // BLUE DEVILS FC
                     Text(
-                      safeTeamName,
+                      teamName,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: AppColors.socaBlack,
+                        height: 1.2,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
 
-                    // Country
-                    if (safeCountry.isNotEmpty)
+                    // India
+                    if (country.isNotEmpty) ...[
+                      const SizedBox(height: 3),
                       Text(
-                        safeCountry,
+                        country,
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack,
                         ),
                       ),
-                    if (safeCountry.isNotEmpty) const SizedBox(height: 4),
+                    ],
 
-                    // Member Count
-                    if (safeMemberText.isNotEmpty)
+                    // 0 Member
+                    if (memberText.isNotEmpty) ...[
+                      const SizedBox(height: 3),
                       Text(
-                        safeMemberText,
+                        memberText,
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
-                          color: Colors.grey,
+                          color: AppColors.socaBlack,
                         ),
                       ),
-                    if (safeMemberText.isNotEmpty) const SizedBox(height: 8),
+                    ],
 
-                    // Rating
+                    const SizedBox(height: 8),
+
+                    // Rating ——
                     Row(
                       children: [
                         const Text(
-                          'Rating ',
+                          'Rating  ',
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
-                            color: Colors.grey,
+                            color: AppColors.socaBlack,
                           ),
                         ),
                         Expanded(
-                          child: SizedBox(
-                            height: 4,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(2),
                             child: LinearProgressIndicator(
                               value: progressValue,
-                              backgroundColor: Colors.grey[300],
+                              minHeight: 3,
+                              backgroundColor: AppColors.socaBlack,
                               valueColor: const AlwaysStoppedAnimation<Color>(
-                                AppColors.socaYellow,
+                                AppColors.socaBlack,
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 12),
 
-                    // VIEW Button
-                    SizedBox(
-                      width: 80,
-                      child: ElevatedButton(
-                        onPressed: () => _handleViewTap(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.socaBlack,
-                          foregroundColor: AppColors.socaYellow,
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          elevation: 0,
+                    // VIEW button
+                    GestureDetector(
+                      onTap: () => _navigate(context),
+                      child: Container(
+                        width: 80,
+                        padding: const EdgeInsets.symmetric(vertical: 9),
+                        decoration: BoxDecoration(
+                          color: AppColors.socaBlack,
+                          borderRadius: BorderRadius.circular(5),
                         ),
+                        alignment: Alignment.center,
                         child: const Text(
                           'VIEW',
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
+                            color: AppColors.socaYellow,
                           ),
                         ),
                       ),
@@ -187,62 +178,42 @@ class TeamCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTeamLogo() {
-    String? imageUrl;
+  Widget _buildLogo() {
+    String imageUrl = '';
     try {
-      imageUrl = team.teamImage?.toString();
+      final raw = team.teamImage?.toString() ?? '';
+      imageUrl = raw.isNotEmpty ? ApiConstants.getImageUrl(raw) : '';
     } catch (_) {}
 
-    if (imageUrl == null || imageUrl.isEmpty) {
-      return _buildDefaultLogo();
-    }
-
-    String fullImageUrl = '';
-    try {
-      fullImageUrl = ApiConstants.getImageUrl(imageUrl);
-    } catch (_) {}
-
-    if (fullImageUrl.isEmpty) {
-      return _buildDefaultLogo();
-    }
-
-    return ClipOval(
-      child: CachedNetworkImage(
-        imageUrl: fullImageUrl,
-        width: 60,
-        height: 60,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Container(
-          width: 60,
-          height: 60,
-          color: Colors.grey[200],
-          child: const Center(
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-        ),
-        errorWidget: (context, url, error) => _buildDefaultLogo(),
-      ),
-    );
-  }
-
-  Widget _buildDefaultLogo() {
     return Container(
-      width: 60,
-      height: 60,
+      width: _logoSize,
+      height: _logoSize,
       decoration: BoxDecoration(
-        color: Colors.grey[200],
         shape: BoxShape.circle,
+        color: Colors.grey[200],
       ),
-      child: const Icon(
-        Icons.emoji_events,
-        size: 30,
-        color: Colors.grey,
-      ),
+      clipBehavior: Clip.antiAlias,
+      child: imageUrl.isNotEmpty
+          ? CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              placeholder: (_, __) => const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.socaYellow,
+                ),
+              ),
+              errorWidget: (_, __, ___) => _logoFallback(),
+            )
+          : _logoFallback(),
     );
   }
 
-  void _handleViewTap(BuildContext context) {
-    // Navigate to Team Bio screen
+  Widget _logoFallback() {
+    return const Icon(Icons.emoji_events, size: 32, color: Colors.grey);
+  }
+
+  void _navigate(BuildContext context) {
     context.push('/teams/${team.teamId}');
   }
 }

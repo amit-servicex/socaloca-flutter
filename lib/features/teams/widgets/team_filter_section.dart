@@ -205,6 +205,25 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             ),
           ),
         ),
+        const Divider(
+          color: AppColors.socaBlack,
+        ),
+        const Row(
+          children: [
+            Radio(
+              value: true,
+              autofocus: true,
+              groupValue: true,
+              activeColor: Colors.black,
+              visualDensity: VisualDensity.compact,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            Text("      All temas")
+          ],
+        ),
+        const Divider(
+          color: AppColors.socaBlack,
+        )
       ],
     );
   }
@@ -242,4 +261,3 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
     );
   }
 }
-

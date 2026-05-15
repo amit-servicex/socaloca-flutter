@@ -167,10 +167,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildActionItem(IconData icon, String label) {
+  Widget _buildActionItem(Image icon, String label) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: AppColors.socaBlack),
+        icon,
         const SizedBox(width: 4),
         Text(
           label,
@@ -565,6 +565,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         if (userDetails is Map<String, dynamic>) {
           try {
             user = (cachedUser as dynamic).copyWith(
+              firstName:
+                  userDetails['firstName'] ?? (cachedUser as dynamic).firstName,
+              lastName:
+                  userDetails['lastName'] ?? (cachedUser as dynamic).lastName,
               postCount: userDetails['postCount'],
               likeCount: userDetails['likeCount'],
               followersCount: userDetails['followCount'],
@@ -643,7 +647,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 14)),
-                                    Text(user?.name ?? 'User!',
+                                    Text(user?.firstName ?? 'User!',
                                         style: const TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 16,
@@ -707,7 +711,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   GestureDetector(
                                     onTap: () => context.push(AppRoutes.myBio),
                                     child: _buildActionItem(
-                                        Icons.edit_document, 'My Bio'),
+                                        Image.asset(
+                                            "assets/icons/ic_my_bio.png",
+                                            width: 20,
+                                            height: 20),
+                                        'My Bio'),
                                   ),
                                   Container(
                                       width: 1,
@@ -722,7 +730,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       },
                                     ),
                                     child: _buildActionItem(
-                                        Icons.image_outlined, 'My Posts'),
+                                        Image.asset(
+                                          "assets/icons/ic_my_post_feed.png",
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                        'My Posts'),
                                   ),
                                   Container(
                                       width: 1,
@@ -734,7 +747,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       extra: {'userId': userId},
                                     ),
                                     child: _buildActionItem(
-                                        Icons.star_border, 'My Ratings'),
+                                        Image.asset(
+                                            "assets/icons/ic_endorsements_bottom_black.png",
+                                            width: 20,
+                                            height: 20),
+                                        'My Ratings'),
                                   ),
                                   Container(
                                       width: 1,
@@ -749,7 +766,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       },
                                     ),
                                     child: _buildActionItem(
-                                        Icons.photo_library_outlined,
+                                        Image.asset(
+                                            "assets/icons/ic_gallery.png",
+                                            width: 20,
+                                            height: 20),
                                         'Gallery'),
                                   ),
                                 ],
@@ -810,8 +830,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   color: AppColors.socaBlack, width: 2),
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: const Icon(Icons.add,
-                                size: 16, color: AppColors.socaBlack),
+                            child: const Icon(
+                              Icons.add,
+                              size: 16,
+                              color: AppColors.socaBlack,
+                              weight: 2,
+                            ),
                           ),
                           const SizedBox(width: 12),
                           const Expanded(

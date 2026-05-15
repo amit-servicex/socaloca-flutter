@@ -10,12 +10,20 @@ _$PlayerSkillModelImpl _$$PlayerSkillModelImplFromJson(
         Map<String, dynamic> json) =>
     _$PlayerSkillModelImpl(
       skillName: json['skillName'] as String?,
-      rating: (json['rating'] as num?)?.toDouble(),
+      skillShort: json['skillShort'] as String?,
+      skillAvg: (json['skillAvg'] as num?)?.toDouble(),
+      ratingCounter: (json['ratingCounter'] as num?)?.toInt(),
+      rateByMe: json['rateByMe'] as bool?,
+      myRating: (json['myRating'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$PlayerSkillModelImplToJson(
         _$PlayerSkillModelImpl instance) =>
     <String, dynamic>{
       'skillName': instance.skillName,
-      'rating': instance.rating,
+      'skillShort': instance.skillShort,
+      'skillAvg': instance.skillAvg,
+      'ratingCounter': instance.ratingCounter,
+      'rateByMe': instance.rateByMe,
+      'myRating': instance.myRating,
     };

@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/api_constants.dart';
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/team_bio_model.dart';
 import '../providers/team_players_provider.dart';
@@ -19,24 +21,26 @@ class TeamPlayersScreen extends ConsumerWidget {
     final state = ref.watch(teamPlayersProvider(teamId));
 
     return Scaffold(
-      backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: AppColors.socaYellow,
-        title: const Text(
-          'Players',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-          ),
-        ),
-      ),
+      backgroundColor: Colors.white,
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.socaBlack,
+      //   foregroundColor: AppColors.socaYellow,
+      //   title: const Text(
+      //     'Players',
+      //     style: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontWeight: FontWeight.w600,
+      //       fontSize: 18,
+      //     ),
+      //   ),
+      // ),
+
       body: _buildBody(context, ref, state),
     );
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, TeamPlayersState state) {
+  Widget _buildBody(
+      BuildContext context, WidgetRef ref, TeamPlayersState state) {
     if (state.isLoading) {
       return const Center(
         child: CircularProgressIndicator(
@@ -75,18 +79,26 @@ class TeamPlayersScreen extends ConsumerWidget {
                       'Players',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                         color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      '${state.allPlayers.length} total player${state.allPlayers.length == 1 ? "" : "s"}',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.grey[600],
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: AppColors.socaGrey,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        '${state.allPlayers.length} total player${state.allPlayers.length == 1 ? "" : "s"}',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ),
                   ],
@@ -94,84 +106,111 @@ class TeamPlayersScreen extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 25),
 
             // Goalkeepers
-            if (state.goalkeepers.isNotEmpty)
-              _buildPositionSection('Goalkeepers', state.goalkeepers),
-
+            if (state.goalkeepers.isNotEmpty) ...[
+              _buildPositionSection(context, 'Goalkeepers', state.goalkeepers),
+              const SizedBox(height: 35),
+            ],
             // Defenders
-            if (state.defenders.isNotEmpty)
-              _buildPositionSection('Defenders', state.defenders),
-
+            if (state.defenders.isNotEmpty) ...[
+              _buildPositionSection(context, 'Defenders', state.defenders),
+              const SizedBox(height: 35),
+            ],
             // Midfielders
-            if (state.midfielders.isNotEmpty)
-              _buildPositionSection('Midfielders', state.midfielders),
+            if (state.midfielders.isNotEmpty) ...[
+              _buildPositionSection(context, 'Midfielders', state.midfielders),
+              const SizedBox(height: 35),
+            ],
 
             // Attackers
-            if (state.attackers.isNotEmpty)
-              _buildPositionSection('Attackers', state.attackers),
+            if (state.attackers.isNotEmpty) ...[
+              _buildPositionSection(context, 'Attackers', state.attackers),
+              const SizedBox(height: 35),
+            ],
 
             // Coaches/Managers
-            if (state.coaches.isNotEmpty)
-              _buildPositionSection('Coaches & Managers', state.coaches),
+            if (state.coaches.isNotEmpty) ...[
+              _buildPositionSection(context, 'Coaches & Managers', state.coaches),
+              const SizedBox(height: 35),
+            ]
           ],
         ),
       ),
     );
   }
 
-  Widget _buildPositionSection(String title, List<TeamPlayerModel> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Section Header
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.socaBlack,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: AppColors.socaYellow,
-            ),
-          ),
-        ),
+  Widget _buildPositionSection(BuildContext context, String title, List<TeamPlayerModel> players) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+          color: AppColors.socaGrey, borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              // Players List
+              Container(
+                padding: const EdgeInsets.only(right: 18),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: players.length,
+                  separatorBuilder: (_, index) => const Divider(
+                    height: 1,
+                    thickness: .6,
+                    color: AppColors.socaBlack,
+                    indent: 80,
+                  ),
+                  itemBuilder: (_, index) {
+                    final player = players[index];
+                    return _buildPlayerCard(context, player);
+                  },
+                ),
+              ),
+              // Section Header
+              Positioned(
+                top: -25,
+                left: 0,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.socaBlack,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.socaYellow,
+                    ),
+                  ),
+                ),
+              ),
 
-        // Players List
-        Container(
-          color: Colors.white,
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: players.length,
-            separatorBuilder: (context, index) => Divider(
-              height: 1,
-              color: Colors.grey[300],
-              indent: 80,
-            ),
-            itemBuilder: (context, index) {
-              final player = players[index];
-              return _buildPlayerCard(player);
-            },
+              const SizedBox(height: 8),
+            ],
           ),
-        ),
-
-        const SizedBox(height: 8),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildPlayerCard(TeamPlayerModel player) {
+  Widget _buildPlayerCard(BuildContext context, TeamPlayerModel player) {
     return InkWell(
       onTap: () {
-        // TODO: Navigate to player bio
+        final userId = player.userId;
+        if (userId != null && userId.isNotEmpty) {
+          context.push(
+            AppRoutes.playerBio.replaceFirst(':userId', userId),
+          );
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -211,7 +250,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                     player.fullName,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),
@@ -229,7 +268,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                           _getPositionAbbreviation(player.playPosition!),
                           style: TextStyle(
                             fontFamily: 'Poppins',
-                            fontSize: 14,
+                            fontSize: 12,
                             color: Colors.grey[600],
                           ),
                         ),

@@ -359,19 +359,9 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                       return Opacity(
                         opacity: _heartOpacity.value,
                         child: Transform.scale(
-                          scale: _heartScale.value,
-                          child: const Icon(
-                            Icons.favorite,
-                            color: AppColors.socaYellow,
-                            size: 100,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black38,
-                                blurRadius: 12,
-                              ),
-                            ],
-                          ),
-                        ),
+                            scale: _heartScale.value,
+                            child:
+                                Image.asset("assets/icons/ic_cheers_old.png")),
                       );
                     },
                   ),

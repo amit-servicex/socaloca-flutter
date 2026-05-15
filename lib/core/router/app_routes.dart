@@ -29,6 +29,7 @@ class AppRoutes {
   static const String players = '/players';
   static const String trials = '/trials';
   static const String academies = '/academies';
+  static const String academyBio = '/academies/:academyId';
   static const String matches = '/matches';
   static const String notifications = '/notifications';
   static const String profile = '/profile';

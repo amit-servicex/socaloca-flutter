@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
@@ -90,7 +91,7 @@ class PlayerTeamsSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: SizedBox(
-            height: 100,
+            height: 110,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: teams.length,
@@ -98,7 +99,10 @@ class PlayerTeamsSection extends StatelessWidget {
                 final team = teams[index];
                 return GestureDetector(
                   onTap: () {
-                    // TODO: Navigate to team bio
+                    final teamId = team.teamId;
+                    if (teamId != null && teamId.isNotEmpty) {
+                      context.push('/teams/$teamId');
+                    }
                   },
                   child: Container(
                     width: 90,

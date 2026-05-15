@@ -3,6 +3,20 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'player_bio_model.freezed.dart';
 part 'player_bio_model.g.dart';
 
+int? _toInt(dynamic v) =>
+    v == null ? null : (v is num ? v.toInt() : int.tryParse(v.toString()));
+
+Map<String, dynamic> _sanitizeBioJson(Map<String, dynamic> json) => {
+      ...json,
+      'yearOfBirth': _toInt(json['yearOfBirth']),
+      'height': _toInt(json['height']),
+      'postCount': _toInt(json['postCount']),
+      'likeCount': _toInt(json['likeCount']),
+      'followCount': _toInt(json['followCount']),
+      'followingCount': _toInt(json['followingCount']),
+      'lastOnline': _toInt(json['lastOnline']),
+    };
+
 /// Model for player bio data from getPlayerBio API
 @freezed
 class PlayerBioModel with _$PlayerBioModel {
@@ -48,5 +62,5 @@ class PlayerBioModel with _$PlayerBioModel {
   }) = _PlayerBioModel;
 
   factory PlayerBioModel.fromJson(Map<String, dynamic> json) =>
-      _$PlayerBioModelFromJson(json);
+      _$PlayerBioModelFromJson(_sanitizeBioJson(json));
 }
