@@ -37,20 +37,27 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
   Widget build(BuildContext context) {
     final bioAsync = ref.watch(clubBioProvider(widget.clubId));
 
-    return Scaffold(
-      backgroundColor: AppColors.socaPageBg,
-      body: bioAsync.when(
-        data: (bio) {
-          if (bio == null) return _buildError('Club not found');
+    return bioAsync.when(
+      data: (bio) {
+        if (bio == null) {
+          return Scaffold(
+            backgroundColor: AppColors.socaPageBg,
+            appBar: AppBar(backgroundColor: Colors.white, elevation: 2),
+            body: _buildError('Club not found'),
+          );
+        }
 
-          if (!_followInitialized) {
-            _isFollowing = bio.clubDetails.following;
-            _followInitialized = true;
-          }
+        if (!_followInitialized) {
+          _isFollowing = bio.clubDetails.following;
+          _followInitialized = true;
+        }
 
-          return CustomScrollView(
-            slivers: [
+        return Scaffold(
+          backgroundColor: AppColors.socaPageBg,
+          appBar:
               _buildAppBar(bio.clubDetails.clubName, bio.clubDetails.website),
+          body: CustomScrollView(
+            slivers: [
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,21 +90,26 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                 ),
               ),
             ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => _buildError(error.toString()),
+          ),
+        );
+      },
+      loading: () => const Scaffold(
+        backgroundColor: AppColors.socaPageBg,
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, stack) => Scaffold(
+        backgroundColor: AppColors.socaPageBg,
+        body: _buildError(error.toString()),
       ),
     );
   }
 
   // ─── App Bar ─────────────────────────────────────────────────────────────
 
-  Widget _buildAppBar(String clubName, String? website) {
-    return SliverAppBar(
+  AppBar _buildAppBar(String clubName, String? website) {
+    return AppBar(
       backgroundColor: Colors.white,
       elevation: 2,
-      pinned: true,
       title: Text(
         clubName,
         style: const TextStyle(

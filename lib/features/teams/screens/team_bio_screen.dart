@@ -22,18 +22,6 @@ class TeamBioScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: AppColors.socaYellow,
-        title: const Text(
-          'Team Bio',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-          ),
-        ),
-      ),
       body: _buildBody(context, ref, state),
     );
   }
@@ -75,107 +63,110 @@ class TeamBioScreen extends ConsumerWidget {
             // Team Info Section
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Team Name
+                  // Team Name — sits above the logo row
                   Text(
                     teamDetails.teamName ?? 'Unknown Team',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.w700,
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
 
-                  // Team Details Row
+                  // Logo + Details Row
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Team Logo
+                      // Circular Team Logo
                       _buildTeamLogo(teamDetails.teamImage),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 14),
 
                       // Details Column
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Age Category Badge
-                            if (teamDetails.ageCategory != null &&
-                                teamDetails.ageCategory!.isNotEmpty)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: AppColors.socaBlack,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  teamDetails.ageCategory!,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.socaYellow,
+                            // Age Category badge + Game Type on the same row
+                            Row(
+                              children: [
+                                if (teamDetails.ageCategory != null &&
+                                    teamDetails.ageCategory!.isNotEmpty) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.socaBlack,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      teamDetails.ageCategory!,
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.socaYellow,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            const SizedBox(height: 8),
-
-                            // Game Type
-                            if (teamDetails.gameType != null &&
-                                teamDetails.gameType!.isNotEmpty)
-                              Text(
-                                teamDetails.gameType!,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            const SizedBox(height: 4),
+                                  const SizedBox(width: 8),
+                                ],
+                                if (teamDetails.gameType != null &&
+                                    teamDetails.gameType!.isNotEmpty)
+                                  Text(
+                                    teamDetails.gameType!,
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 13,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
 
                             // Country
                             if (teamDetails.country != null &&
-                                teamDetails.country!.isNotEmpty)
+                                teamDetails.country!.isNotEmpty) ...[
                               Text(
                                 teamDetails.country!,
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   color: Colors.black87,
                                 ),
                               ),
-                            const SizedBox(height: 4),
+                              const SizedBox(height: 4),
+                            ],
 
                             // Member Count
                             Text(
                               '${teamDetails.memberCount} Member${teamDetails.memberCount == 1 ? "" : "s"}',
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(height: 8),
 
                             // Coach Name
                             if (teamDetails.coachName != null &&
-                                teamDetails.coachName!.isNotEmpty)
+                                teamDetails.coachName!.isNotEmpty) ...[
+                              const SizedBox(height: 4),
                               RichText(
                                 text: TextSpan(
                                   style: const TextStyle(
                                     fontFamily: 'Poppins',
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     color: Colors.black87,
                                   ),
                                   children: [
-                                    const TextSpan(text: 'Coach: '),
+                                    const TextSpan(text: 'Coach  '),
                                     TextSpan(
                                       text: teamDetails.coachName!,
                                       style: const TextStyle(
@@ -186,16 +177,18 @@ class TeamBioScreen extends ConsumerWidget {
                                   ],
                                 ),
                               ),
+                            ],
                           ],
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
 
                   // Team Stats
-                  if (teamBio.ratingDetails != null)
+                  if (teamBio.ratingDetails != null) ...[
+                    const SizedBox(height: 20),
                     _buildTeamStats(teamBio.ratingDetails!),
+                  ],
                 ],
               ),
             ),
@@ -223,83 +216,58 @@ class TeamBioScreen extends ConsumerWidget {
         children: [
           // Banner Image (placeholder for now)
           Container(
-            height: 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.grey[300]!,
-                  Colors.grey[400]!,
-                ],
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.grey[300]!,
+                    Colors.grey[400]!,
+                  ],
+                ),
               ),
-            ),
-            child: Icon(
-              Icons.sports_soccer,
-              size: 80,
-              color: Colors.grey[500],
-            ),
-          ),
+              child: Image.asset("assets/images/tournament_defalut_banner.jpg",
+                  fit: BoxFit.cover)),
         ],
       ),
     );
   }
 
   Widget _buildTeamLogo(String? imageUrl) {
-    Widget logoWidget;
-
-    if (imageUrl == null || imageUrl.isEmpty) {
-      logoWidget = _buildDefaultLogo();
-    } else {
-      final fullImageUrl = ApiConstants.getImageUrl(imageUrl);
-
-      if (fullImageUrl.isEmpty) {
-        logoWidget = _buildDefaultLogo();
-      } else {
-        logoWidget = ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: CachedNetworkImage(
-            imageUrl: fullImageUrl,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-            placeholder: (context, url) => Container(
-              width: 80,
-              height: 80,
-              color: Colors.grey[200],
-              child: const Center(
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
-            errorWidget: (context, url, error) => _buildDefaultLogo(),
-          ),
-        );
-      }
-    }
+    final fullImageUrl = (imageUrl != null && imageUrl.isNotEmpty)
+        ? ApiConstants.getImageUrl(imageUrl)
+        : '';
 
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 3),
-        borderRadius: BorderRadius.circular(8),
+      width: 76,
+      height: 76,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
       ),
-      child: logoWidget,
+      clipBehavior: Clip.antiAlias,
+      child: fullImageUrl.isNotEmpty
+          ? CachedNetworkImage(
+              imageUrl: fullImageUrl,
+              fit: BoxFit.cover,
+              placeholder: (_, __) => Container(
+                color: Colors.grey[200],
+                child: const Center(
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+              errorWidget: (_, __, ___) => _buildDefaultLogo(),
+            )
+          : _buildDefaultLogo(),
     );
   }
 
   Widget _buildDefaultLogo() {
     return Container(
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: const Icon(
-        Icons.emoji_events,
-        size: 40,
-        color: Colors.grey,
-      ),
+      color: Colors.grey[200],
+      child: const Icon(Icons.emoji_events, size: 36, color: Colors.grey),
     );
   }
 
@@ -324,28 +292,30 @@ class TeamBioScreen extends ConsumerWidget {
 
   Widget _buildStatBar(String label, double value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Row(
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.black87,
+          SizedBox(
+            width: 120,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 13,
+                color: Colors.black87,
+              ),
             ),
           ),
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
-              value: value / 5.0, // Android uses max value of 5
-              backgroundColor: Colors.grey[300],
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                Colors.grey,
+          const SizedBox(width: 10),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(2),
+              child: LinearProgressIndicator(
+                value: value / 5.0,
+                backgroundColor: Colors.grey[300],
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.grey),
+                minHeight: 3,
               ),
-              minHeight: 12,
             ),
           ),
         ],
@@ -358,10 +328,12 @@ class TeamBioScreen extends ConsumerWidget {
       color: Colors.white,
       padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
                 'Players',
@@ -372,9 +344,51 @@ class TeamBioScreen extends ConsumerWidget {
                   color: Colors.black,
                 ),
               ),
+              Expanded(
+                flex: 2,
+                child: SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount:
+                        teamBio.players.length > 4 ? 4 : teamBio.players.length,
+                    itemBuilder: (context, index) {
+                      final player = teamBio.players[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: AppColors.socaBlack),
+                              ),
+                              child: ClipOval(
+                                child:
+                                    _buildPlayerAvatar(player.profileImage, 35),
+                              ),
+                            ),
+                            // const SizedBox(height: 4),
+                            // Text(
+                            //   player.firstName ?? '',
+                            //   style: const TextStyle(
+                            //     fontFamily: 'Poppins',
+                            //     fontSize: 10,
+                            //     color: Colors.black87,
+                            //   ),
+                            //   maxLines: 1,
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
               Flexible(
                 child: SizedBox(
-                  width: 100,
+                  width: 70,
                   child: ElevatedButton(
                     onPressed: () {
                       context.push('/teams/$teamId/players');
@@ -392,7 +406,7 @@ class TeamBioScreen extends ConsumerWidget {
                       'VIEW ALL',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 12,
+                        fontSize: 10,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -403,38 +417,6 @@ class TeamBioScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           // Show first 4 players in a horizontal row
-          SizedBox(
-            height: 60,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount:
-                  teamBio.players.length > 4 ? 4 : teamBio.players.length,
-              itemBuilder: (context, index) {
-                final player = teamBio.players[index];
-                return Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Column(
-                    children: [
-                      ClipOval(
-                        child: _buildPlayerAvatar(player.profileImage, 40),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        player.firstName ?? '',
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 10,
-                          color: Colors.black87,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
         ],
       ),
     );
@@ -668,6 +650,7 @@ class TeamBioScreen extends ConsumerWidget {
         decoration: BoxDecoration(
           color: Colors.grey[200],
           shape: BoxShape.circle,
+          border: Border.all(color: AppColors.socaBlack),
         ),
         child: Icon(
           Icons.person,
@@ -686,6 +669,7 @@ class TeamBioScreen extends ConsumerWidget {
         decoration: BoxDecoration(
           color: Colors.grey[200],
           shape: BoxShape.circle,
+          border: Border.all(color: AppColors.socaBlack),
         ),
         child: Icon(
           Icons.person,
@@ -714,6 +698,7 @@ class TeamBioScreen extends ConsumerWidget {
         decoration: BoxDecoration(
           color: Colors.grey[200],
           shape: BoxShape.circle,
+          border: Border.all(color: AppColors.socaBlack),
         ),
         child: Icon(
           Icons.person,

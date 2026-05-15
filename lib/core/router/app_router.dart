@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/features/players/screens/players_screen.dart';
+import '../../features/academies/screens/academies_screen.dart';
+import '../../features/academies/screens/academy_bio_screen.dart';
 import '../storage/storage_service.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/login_landing_screen.dart';
@@ -291,16 +293,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.clubsPartners,
             name: 'clubsPartners',
-            builder: (ctx, state) => const ClubsPartnersLandingScreen(),
+            builder: (ctx, state) => Scaffold(
+              body: Center(child: Text('Players - Coming Soon')),
+            ),
+            // const ClubsPartnersLandingScreen(),
           ),
           GoRoute(
             path: AppRoutes.players,
             name: 'players',
-            builder: (ctx, state) =>
-                // Scaffold(
-                //   body: Center(child: Text('Players - Coming Soon')),
-                // ),
-                const PlayersScreen(),
+            builder: (ctx, state) => Scaffold(
+              body: Center(child: Text('Players - Coming Soon')),
+            ),
+            // const PlayersScreen(),
           ),
           GoRoute(
             path: AppRoutes.trials,
@@ -313,11 +317,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.academies,
             name: 'academies',
             builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('AcademiesScreen - Coming Soon')),
+              body: Center(child: Text('academies - Coming Soon')),
             ),
-
             // const AcademiesScreen(),
           ),
+
+          // ─── Academy Bio (detail screen outside shell) ────────────────────
+          GoRoute(
+            path: AppRoutes.academyBio,
+            name: 'academyBio',
+            builder: (ctx, state) {
+              final academyId = state.pathParameters['academyId']!;
+              return AcademyBioScreen(academyId: academyId);
+            },
+          ),
+
           GoRoute(
             path: AppRoutes.matches,
             name: 'matches',

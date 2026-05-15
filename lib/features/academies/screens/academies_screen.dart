@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/academies_provider.dart';
@@ -17,11 +18,11 @@ class AcademiesScreen extends ConsumerStatefulWidget {
 
 class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
   final ScrollController _scrollController = ScrollController();
-  
+
   // Country list
   final List<String> _countries = ['All'];
   String _selectedCountry = 'All';
-  
+
   // Category list
   final List<String> _categories = [
     'CATEGORY',
@@ -38,7 +39,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
     super.initState();
     _initializeCountries();
     _scrollController.addListener(_onScroll);
-    
+
     // Initial load with user's country
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _performInitialSearch();
@@ -48,21 +49,70 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
   void _initializeCountries() {
     // Add common countries (you can expand this list)
     _countries.addAll([
-      'Afghanistan', 'Albania', 'Algeria', 'Argentina', 'Australia',
-      'Austria', 'Bangladesh', 'Belgium', 'Brazil', 'Canada',
-      'Chile', 'China', 'Colombia', 'Denmark', 'Egypt',
-      'England', 'France', 'Germany', 'Ghana', 'India',
-      'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Italy',
-      'Japan', 'Kenya', 'Malaysia', 'Mexico', 'Morocco',
-      'Netherlands', 'New Zealand', 'Nigeria', 'Norway', 'Pakistan',
-      'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar',
-      'Russia', 'Saudi Arabia', 'Scotland', 'Senegal', 'Singapore',
-      'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'Sweden',
-      'Switzerland', 'Thailand', 'Turkey', 'UAE', 'Uganda',
-      'Ukraine', 'United States', 'Uruguay', 'Venezuela', 'Vietnam',
-      'Wales', 'Zimbabwe',
+      'Afghanistan',
+      'Albania',
+      'Algeria',
+      'Argentina',
+      'Australia',
+      'Austria',
+      'Bangladesh',
+      'Belgium',
+      'Brazil',
+      'Canada',
+      'Chile',
+      'China',
+      'Colombia',
+      'Denmark',
+      'Egypt',
+      'England',
+      'France',
+      'Germany',
+      'Ghana',
+      'India',
+      'Indonesia',
+      'Iran',
+      'Iraq',
+      'Ireland',
+      'Italy',
+      'Japan',
+      'Kenya',
+      'Malaysia',
+      'Mexico',
+      'Morocco',
+      'Netherlands',
+      'New Zealand',
+      'Nigeria',
+      'Norway',
+      'Pakistan',
+      'Peru',
+      'Philippines',
+      'Poland',
+      'Portugal',
+      'Qatar',
+      'Russia',
+      'Saudi Arabia',
+      'Scotland',
+      'Senegal',
+      'Singapore',
+      'South Africa',
+      'South Korea',
+      'Spain',
+      'Sri Lanka',
+      'Sweden',
+      'Switzerland',
+      'Thailand',
+      'Turkey',
+      'UAE',
+      'Uganda',
+      'Ukraine',
+      'United States',
+      'Uruguay',
+      'Venezuela',
+      'Vietnam',
+      'Wales',
+      'Zimbabwe',
     ]);
-    
+
     // Set default to user's country if available
     final currentUser = StorageService.currentUser;
     if (currentUser != null && currentUser['country'] != null) {
@@ -75,12 +125,13 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
 
   void _performInitialSearch() {
     final notifier = ref.read(academiesProvider.notifier);
-    
+
     // Set initial country filter
     if (_selectedCountry != 'All') {
-      notifier.setCountry(_selectedCountry, ''); // TODO: Add confederation logic
+      notifier.setCountry(
+          _selectedCountry, ''); // TODO: Add confederation logic
     }
-    
+
     // Perform search
     notifier.search();
   }
@@ -94,11 +145,11 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
 
   void _onCountryChanged(String? country) {
     if (country == null) return;
-    
+
     setState(() {
       _selectedCountry = country;
     });
-    
+
     // Auto-search after country change (with delay)
     Future.delayed(const Duration(milliseconds: 250), () {
       if (mounted) {
@@ -115,11 +166,11 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
 
   void _onCategoryChanged(String? category) {
     if (category == null) return;
-    
+
     setState(() {
       _selectedCategory = category;
     });
-    
+
     final notifier = ref.read(academiesProvider.notifier);
     if (category == 'CATEGORY') {
       notifier.setCategory(null);
@@ -133,15 +184,14 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
   void _onGoPressed() {
     // Hide keyboard
     FocusScope.of(context).unfocus();
-    
+
     // Perform search
     ref.read(academiesProvider.notifier).search();
   }
 
   void _onAcademyTap(String? academyId) {
     if (academyId == null) return;
-    // TODO: Navigate to academy bio screen
-    // context.push('/academy-bio/$academyId');
+    context.push(AppRoutes.academyBio.replaceFirst(':academyId', academyId));
   }
 
   @override
@@ -156,12 +206,13 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: const Text('Academies'),
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: AppColors.socaYellow,
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Academies'),
+      //   backgroundColor: AppColors.socaBlack,
+      //   foregroundColor: AppColors.socaYellow,
+      //   elevation: 0,
+      // ),
+
       body: Column(
         children: [
           // Description and Filters Section
@@ -188,7 +239,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                   height: 42,
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
-                    color: AppColors.socaGrey.withOpacity(0.3),
+                    color: AppColors.socaGrey.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: DropdownButtonHideUnderline(
@@ -220,7 +271,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                   height: 42,
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
-                    color: AppColors.socaGrey.withOpacity(0.3),
+                    color: AppColors.socaGrey.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: DropdownButtonHideUnderline(
@@ -354,7 +405,8 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                               final academy = state.academies[index];
                               return AcademyCard(
                                 academy: academy,
-                                onViewTap: () => _onAcademyTap(academy.academyId),
+                                onViewTap: () =>
+                                    _onAcademyTap(academy.academyId),
                               );
                             },
                           ),

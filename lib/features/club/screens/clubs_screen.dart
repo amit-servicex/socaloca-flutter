@@ -80,98 +80,101 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       body: SafeArea(
-        child: Column(
-          children: [
-            ClubFilterRow(
-              selectedCountry: state.country,
-              selectedPartnership: state.partnership,
-              countries: _countries,
-              onCountryChanged: (country) {
-                ref.read(clubsProvider.notifier).setCountry(country);
-              },
-              onPartnershipChanged: (partnership) {
-                ref.read(clubsProvider.notifier).setPartnership(partnership);
-              },
-            ),
-            Expanded(
-              child: _buildClubsList(state),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildClubsList(ClubsState state) {
-    if (state.isLoading && state.clubs.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (state.error != null && state.clubs.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            const SizedBox(height: 16),
-            const Text(
-              'Error loading clubs',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.socaBlack,
+        child: RefreshIndicator(
+          onRefresh: () => ref.read(clubsProvider.notifier).refresh(),
+          child: CustomScrollView(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: ClubFilterRow(
+                  selectedCountry: state.country,
+                  selectedPartnership: state.partnership,
+                  countries: _countries,
+                  onCountryChanged: (country) {
+                    ref.read(clubsProvider.notifier).setCountry(country);
+                  },
+                  onPartnershipChanged: (partnership) {
+                    ref.read(clubsProvider.notifier).setPartnership(partnership);
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              state.error!,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: AppColors.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => ref.read(clubsProvider.notifier).load(),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (state.clubs.isEmpty) {
-      return const Center(
-        child: Text(
-          'No clubs found',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: AppColors.socaBlack,
+              if (state.isLoading && state.clubs.isEmpty)
+                const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              else if (state.error != null && state.clubs.isEmpty)
+                SliverFillRemaining(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.error_outline,
+                            size: 48, color: AppColors.error),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Error loading clubs',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          state.error!,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            color: AppColors.textSecondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () =>
+                              ref.read(clubsProvider.notifier).load(),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else if (state.clubs.isEmpty)
+                const SliverFillRemaining(
+                  child: Center(
+                    child: Text(
+                      'No clubs found',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      if (index == state.clubs.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      return ClubCard(club: state.clubs[index]);
+                    },
+                    childCount:
+                        state.clubs.length + (state.isLoadingMore ? 1 : 0),
+                  ),
+                ),
+              const SliverToBoxAdapter(child: SizedBox(height: 20)),
+            ],
           ),
         ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: () => ref.read(clubsProvider.notifier).refresh(),
-      child: ListView.builder(
-        controller: _scrollController,
-        padding: const EdgeInsets.only(bottom: 20),
-        itemCount: state.clubs.length + (state.isLoadingMore ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index == state.clubs.length) {
-            return const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-          return ClubCard(club: state.clubs[index]);
-        },
       ),
     );
   }

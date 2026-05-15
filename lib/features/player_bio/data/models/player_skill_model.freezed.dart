@@ -22,8 +22,16 @@ PlayerSkillModel _$PlayerSkillModelFromJson(Map<String, dynamic> json) {
 mixin _$PlayerSkillModel {
   @JsonKey(name: 'skillName')
   String? get skillName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'rating')
-  double? get rating => throw _privateConstructorUsedError;
+  @JsonKey(name: 'skillShort')
+  String? get skillShort => throw _privateConstructorUsedError;
+  @JsonKey(name: 'skillAvg')
+  double? get skillAvg => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ratingCounter')
+  int? get ratingCounter => throw _privateConstructorUsedError;
+  @JsonKey(name: 'rateByMe')
+  bool? get rateByMe => throw _privateConstructorUsedError;
+  @JsonKey(name: 'myRating')
+  double? get myRating => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,7 +47,11 @@ abstract class $PlayerSkillModelCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'skillName') String? skillName,
-      @JsonKey(name: 'rating') double? rating});
+      @JsonKey(name: 'skillShort') String? skillShort,
+      @JsonKey(name: 'skillAvg') double? skillAvg,
+      @JsonKey(name: 'ratingCounter') int? ratingCounter,
+      @JsonKey(name: 'rateByMe') bool? rateByMe,
+      @JsonKey(name: 'myRating') double? myRating});
 }
 
 /// @nodoc
@@ -56,16 +68,36 @@ class _$PlayerSkillModelCopyWithImpl<$Res, $Val extends PlayerSkillModel>
   @override
   $Res call({
     Object? skillName = freezed,
-    Object? rating = freezed,
+    Object? skillShort = freezed,
+    Object? skillAvg = freezed,
+    Object? ratingCounter = freezed,
+    Object? rateByMe = freezed,
+    Object? myRating = freezed,
   }) {
     return _then(_value.copyWith(
       skillName: freezed == skillName
           ? _value.skillName
           : skillName // ignore: cast_nullable_to_non_nullable
               as String?,
-      rating: freezed == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
+      skillShort: freezed == skillShort
+          ? _value.skillShort
+          : skillShort // ignore: cast_nullable_to_non_nullable
+              as String?,
+      skillAvg: freezed == skillAvg
+          ? _value.skillAvg
+          : skillAvg // ignore: cast_nullable_to_non_nullable
+              as double?,
+      ratingCounter: freezed == ratingCounter
+          ? _value.ratingCounter
+          : ratingCounter // ignore: cast_nullable_to_non_nullable
+              as int?,
+      rateByMe: freezed == rateByMe
+          ? _value.rateByMe
+          : rateByMe // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      myRating: freezed == myRating
+          ? _value.myRating
+          : myRating // ignore: cast_nullable_to_non_nullable
               as double?,
     ) as $Val);
   }
@@ -81,7 +113,11 @@ abstract class _$$PlayerSkillModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'skillName') String? skillName,
-      @JsonKey(name: 'rating') double? rating});
+      @JsonKey(name: 'skillShort') String? skillShort,
+      @JsonKey(name: 'skillAvg') double? skillAvg,
+      @JsonKey(name: 'ratingCounter') int? ratingCounter,
+      @JsonKey(name: 'rateByMe') bool? rateByMe,
+      @JsonKey(name: 'myRating') double? myRating});
 }
 
 /// @nodoc
@@ -96,16 +132,36 @@ class __$$PlayerSkillModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? skillName = freezed,
-    Object? rating = freezed,
+    Object? skillShort = freezed,
+    Object? skillAvg = freezed,
+    Object? ratingCounter = freezed,
+    Object? rateByMe = freezed,
+    Object? myRating = freezed,
   }) {
     return _then(_$PlayerSkillModelImpl(
       skillName: freezed == skillName
           ? _value.skillName
           : skillName // ignore: cast_nullable_to_non_nullable
               as String?,
-      rating: freezed == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
+      skillShort: freezed == skillShort
+          ? _value.skillShort
+          : skillShort // ignore: cast_nullable_to_non_nullable
+              as String?,
+      skillAvg: freezed == skillAvg
+          ? _value.skillAvg
+          : skillAvg // ignore: cast_nullable_to_non_nullable
+              as double?,
+      ratingCounter: freezed == ratingCounter
+          ? _value.ratingCounter
+          : ratingCounter // ignore: cast_nullable_to_non_nullable
+              as int?,
+      rateByMe: freezed == rateByMe
+          ? _value.rateByMe
+          : rateByMe // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      myRating: freezed == myRating
+          ? _value.myRating
+          : myRating // ignore: cast_nullable_to_non_nullable
               as double?,
     ));
   }
@@ -116,7 +172,11 @@ class __$$PlayerSkillModelImplCopyWithImpl<$Res>
 class _$PlayerSkillModelImpl implements _PlayerSkillModel {
   const _$PlayerSkillModelImpl(
       {@JsonKey(name: 'skillName') this.skillName,
-      @JsonKey(name: 'rating') this.rating});
+      @JsonKey(name: 'skillShort') this.skillShort,
+      @JsonKey(name: 'skillAvg') this.skillAvg,
+      @JsonKey(name: 'ratingCounter') this.ratingCounter,
+      @JsonKey(name: 'rateByMe') this.rateByMe,
+      @JsonKey(name: 'myRating') this.myRating});
 
   factory _$PlayerSkillModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlayerSkillModelImplFromJson(json);
@@ -125,12 +185,24 @@ class _$PlayerSkillModelImpl implements _PlayerSkillModel {
   @JsonKey(name: 'skillName')
   final String? skillName;
   @override
-  @JsonKey(name: 'rating')
-  final double? rating;
+  @JsonKey(name: 'skillShort')
+  final String? skillShort;
+  @override
+  @JsonKey(name: 'skillAvg')
+  final double? skillAvg;
+  @override
+  @JsonKey(name: 'ratingCounter')
+  final int? ratingCounter;
+  @override
+  @JsonKey(name: 'rateByMe')
+  final bool? rateByMe;
+  @override
+  @JsonKey(name: 'myRating')
+  final double? myRating;
 
   @override
   String toString() {
-    return 'PlayerSkillModel(skillName: $skillName, rating: $rating)';
+    return 'PlayerSkillModel(skillName: $skillName, skillShort: $skillShort, skillAvg: $skillAvg, ratingCounter: $ratingCounter, rateByMe: $rateByMe, myRating: $myRating)';
   }
 
   @override
@@ -140,12 +212,22 @@ class _$PlayerSkillModelImpl implements _PlayerSkillModel {
             other is _$PlayerSkillModelImpl &&
             (identical(other.skillName, skillName) ||
                 other.skillName == skillName) &&
-            (identical(other.rating, rating) || other.rating == rating));
+            (identical(other.skillShort, skillShort) ||
+                other.skillShort == skillShort) &&
+            (identical(other.skillAvg, skillAvg) ||
+                other.skillAvg == skillAvg) &&
+            (identical(other.ratingCounter, ratingCounter) ||
+                other.ratingCounter == ratingCounter) &&
+            (identical(other.rateByMe, rateByMe) ||
+                other.rateByMe == rateByMe) &&
+            (identical(other.myRating, myRating) ||
+                other.myRating == myRating));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, skillName, rating);
+  int get hashCode => Object.hash(runtimeType, skillName, skillShort, skillAvg,
+      ratingCounter, rateByMe, myRating);
 
   @JsonKey(ignore: true)
   @override
@@ -164,8 +246,13 @@ class _$PlayerSkillModelImpl implements _PlayerSkillModel {
 
 abstract class _PlayerSkillModel implements PlayerSkillModel {
   const factory _PlayerSkillModel(
-      {@JsonKey(name: 'skillName') final String? skillName,
-      @JsonKey(name: 'rating') final double? rating}) = _$PlayerSkillModelImpl;
+          {@JsonKey(name: 'skillName') final String? skillName,
+          @JsonKey(name: 'skillShort') final String? skillShort,
+          @JsonKey(name: 'skillAvg') final double? skillAvg,
+          @JsonKey(name: 'ratingCounter') final int? ratingCounter,
+          @JsonKey(name: 'rateByMe') final bool? rateByMe,
+          @JsonKey(name: 'myRating') final double? myRating}) =
+      _$PlayerSkillModelImpl;
 
   factory _PlayerSkillModel.fromJson(Map<String, dynamic> json) =
       _$PlayerSkillModelImpl.fromJson;
@@ -174,8 +261,20 @@ abstract class _PlayerSkillModel implements PlayerSkillModel {
   @JsonKey(name: 'skillName')
   String? get skillName;
   @override
-  @JsonKey(name: 'rating')
-  double? get rating;
+  @JsonKey(name: 'skillShort')
+  String? get skillShort;
+  @override
+  @JsonKey(name: 'skillAvg')
+  double? get skillAvg;
+  @override
+  @JsonKey(name: 'ratingCounter')
+  int? get ratingCounter;
+  @override
+  @JsonKey(name: 'rateByMe')
+  bool? get rateByMe;
+  @override
+  @JsonKey(name: 'myRating')
+  double? get myRating;
   @override
   @JsonKey(ignore: true)
   _$$PlayerSkillModelImplCopyWith<_$PlayerSkillModelImpl> get copyWith =>

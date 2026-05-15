@@ -123,11 +123,20 @@ mixin _$UserModel {
   String? get lastUpdateDeviceType => throw _privateConstructorUsedError;
   int? get lastUpdated => throw _privateConstructorUsedError;
   String? get region => throw _privateConstructorUsedError;
-  int? get endGoalkeeper => throw _privateConstructorUsedError;
-  int? get endMental => throw _privateConstructorUsedError;
-  int? get endOverall => throw _privateConstructorUsedError;
-  int? get endPhysical => throw _privateConstructorUsedError;
-  int? get endTechnical => throw _privateConstructorUsedError;
+  double? get endGoalkeeper => throw _privateConstructorUsedError;
+  double? get endMental => throw _privateConstructorUsedError;
+  double? get endOverall => throw _privateConstructorUsedError;
+  double? get endPhysical => throw _privateConstructorUsedError;
+  double? get endTechnical =>
+      throw _privateConstructorUsedError; // Skill category scores
+  @JsonKey(name: 'FTC')
+  double? get ftc => throw _privateConstructorUsedError;
+  @JsonKey(name: 'DRB')
+  double? get drb => throw _privateConstructorUsedError;
+  @JsonKey(name: 'CRS')
+  double? get crs => throw _privateConstructorUsedError;
+  @JsonKey(name: 'STM')
+  double? get stm => throw _privateConstructorUsedError;
   bool get passChange => throw _privateConstructorUsedError;
   int? get likeCount => throw _privateConstructorUsedError;
   List<dynamic>? get tagVideos => throw _privateConstructorUsedError;
@@ -227,11 +236,15 @@ abstract class $UserModelCopyWith<$Res> {
       String? lastUpdateDeviceType,
       int? lastUpdated,
       String? region,
-      int? endGoalkeeper,
-      int? endMental,
-      int? endOverall,
-      int? endPhysical,
-      int? endTechnical,
+      double? endGoalkeeper,
+      double? endMental,
+      double? endOverall,
+      double? endPhysical,
+      double? endTechnical,
+      @JsonKey(name: 'FTC') double? ftc,
+      @JsonKey(name: 'DRB') double? drb,
+      @JsonKey(name: 'CRS') double? crs,
+      @JsonKey(name: 'STM') double? stm,
       bool passChange,
       int? likeCount,
       List<dynamic>? tagVideos});
@@ -338,6 +351,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? endOverall = freezed,
     Object? endPhysical = freezed,
     Object? endTechnical = freezed,
+    Object? ftc = freezed,
+    Object? drb = freezed,
+    Object? crs = freezed,
+    Object? stm = freezed,
     Object? passChange = null,
     Object? likeCount = freezed,
     Object? tagVideos = freezed,
@@ -678,23 +695,39 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       endGoalkeeper: freezed == endGoalkeeper
           ? _value.endGoalkeeper
           : endGoalkeeper // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       endMental: freezed == endMental
           ? _value.endMental
           : endMental // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       endOverall: freezed == endOverall
           ? _value.endOverall
           : endOverall // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       endPhysical: freezed == endPhysical
           ? _value.endPhysical
           : endPhysical // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       endTechnical: freezed == endTechnical
           ? _value.endTechnical
           : endTechnical // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
+      ftc: freezed == ftc
+          ? _value.ftc
+          : ftc // ignore: cast_nullable_to_non_nullable
+              as double?,
+      drb: freezed == drb
+          ? _value.drb
+          : drb // ignore: cast_nullable_to_non_nullable
+              as double?,
+      crs: freezed == crs
+          ? _value.crs
+          : crs // ignore: cast_nullable_to_non_nullable
+              as double?,
+      stm: freezed == stm
+          ? _value.stm
+          : stm // ignore: cast_nullable_to_non_nullable
+              as double?,
       passChange: null == passChange
           ? _value.passChange
           : passChange // ignore: cast_nullable_to_non_nullable
@@ -803,11 +836,15 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String? lastUpdateDeviceType,
       int? lastUpdated,
       String? region,
-      int? endGoalkeeper,
-      int? endMental,
-      int? endOverall,
-      int? endPhysical,
-      int? endTechnical,
+      double? endGoalkeeper,
+      double? endMental,
+      double? endOverall,
+      double? endPhysical,
+      double? endTechnical,
+      @JsonKey(name: 'FTC') double? ftc,
+      @JsonKey(name: 'DRB') double? drb,
+      @JsonKey(name: 'CRS') double? crs,
+      @JsonKey(name: 'STM') double? stm,
       bool passChange,
       int? likeCount,
       List<dynamic>? tagVideos});
@@ -912,6 +949,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? endOverall = freezed,
     Object? endPhysical = freezed,
     Object? endTechnical = freezed,
+    Object? ftc = freezed,
+    Object? drb = freezed,
+    Object? crs = freezed,
+    Object? stm = freezed,
     Object? passChange = null,
     Object? likeCount = freezed,
     Object? tagVideos = freezed,
@@ -1252,23 +1293,39 @@ class __$$UserModelImplCopyWithImpl<$Res>
       endGoalkeeper: freezed == endGoalkeeper
           ? _value.endGoalkeeper
           : endGoalkeeper // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       endMental: freezed == endMental
           ? _value.endMental
           : endMental // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       endOverall: freezed == endOverall
           ? _value.endOverall
           : endOverall // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       endPhysical: freezed == endPhysical
           ? _value.endPhysical
           : endPhysical // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       endTechnical: freezed == endTechnical
           ? _value.endTechnical
           : endTechnical // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
+      ftc: freezed == ftc
+          ? _value.ftc
+          : ftc // ignore: cast_nullable_to_non_nullable
+              as double?,
+      drb: freezed == drb
+          ? _value.drb
+          : drb // ignore: cast_nullable_to_non_nullable
+              as double?,
+      crs: freezed == crs
+          ? _value.crs
+          : crs // ignore: cast_nullable_to_non_nullable
+              as double?,
+      stm: freezed == stm
+          ? _value.stm
+          : stm // ignore: cast_nullable_to_non_nullable
+              as double?,
       passChange: null == passChange
           ? _value.passChange
           : passChange // ignore: cast_nullable_to_non_nullable
@@ -1377,6 +1434,10 @@ class _$UserModelImpl implements _UserModel {
       this.endOverall,
       this.endPhysical,
       this.endTechnical,
+      @JsonKey(name: 'FTC') this.ftc,
+      @JsonKey(name: 'DRB') this.drb,
+      @JsonKey(name: 'CRS') this.crs,
+      @JsonKey(name: 'STM') this.stm,
       this.passChange = false,
       this.likeCount,
       final List<dynamic>? tagVideos})
@@ -1601,15 +1662,28 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String? region;
   @override
-  final int? endGoalkeeper;
+  final double? endGoalkeeper;
   @override
-  final int? endMental;
+  final double? endMental;
   @override
-  final int? endOverall;
+  final double? endOverall;
   @override
-  final int? endPhysical;
+  final double? endPhysical;
   @override
-  final int? endTechnical;
+  final double? endTechnical;
+// Skill category scores
+  @override
+  @JsonKey(name: 'FTC')
+  final double? ftc;
+  @override
+  @JsonKey(name: 'DRB')
+  final double? drb;
+  @override
+  @JsonKey(name: 'CRS')
+  final double? crs;
+  @override
+  @JsonKey(name: 'STM')
+  final double? stm;
   @override
   @JsonKey()
   final bool passChange;
@@ -1627,7 +1701,7 @@ class _$UserModelImpl implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, firstName: $firstName, lastName: $lastName, email: $email, username: $username, profileImage: $profileImage, coverImage: $coverImage, userType: $userType, bio: $bio, country: $country, city: $city, phone: $phone, dob: $dob, isVerified: $isVerified, isPrivate: $isPrivate, isBlocked: $isBlocked, policyAccepted: $policyAccepted, profile: $profile, isPlayer: $isPlayer, isCoach: $isCoach, isAdmin: $isAdmin, isFan: $isFan, isReferee: $isReferee, followersCount: $followersCount, followingCount: $followingCount, matchesCount: $matchesCount, post: $post, preferredPosition: $preferredPosition, nationality: $nationality, token: $token, sclId: $sclId, socialId: $socialId, media: $media, countryIso: $countryIso, countryCode: $countryCode, signUpTime: $signUpTime, lastOnline: $lastOnline, lastDevice: $lastDevice, autoverify: $autoverify, verifyBadge: $verifyBadge, ageGroup: $ageGroup, passKey: $passKey, deviceType: $deviceType, deviceId: $deviceId, deviceModel: $deviceModel, consentId: $consentId, isDelete: $isDelete, postCount: $postCount, brands: $brands, fa: $fa, faName: $faName, gender: $gender, height: $height, isParentalConsent: $isParentalConsent, jerseySize: $jerseySize, leagueFollow: $leagueFollow, nationalityIso: $nationalityIso, parentComment: $parentComment, parentLikeFollow: $parentLikeFollow, parentPhotoVideo: $parentPhotoVideo, parentPin: $parentPin, playLevel: $playLevel, playPositionType: $playPositionType, preferredFoot: $preferredFoot, preferredJersey: $preferredJersey, referByUserId: $referByUserId, referCode: $referCode, referId: $referId, registerCountry: $registerCountry, shoeSize: $shoeSize, shoeSizeUnit: $shoeSizeUnit, teamFollow: $teamFollow, university: $university, userLat: $userLat, userLatLng: $userLatLng, userLng: $userLng, acceptPolicyOn: $acceptPolicyOn, age: $age, lastUpdateDeviceModel: $lastUpdateDeviceModel, lastUpdateDeviceType: $lastUpdateDeviceType, lastUpdated: $lastUpdated, region: $region, endGoalkeeper: $endGoalkeeper, endMental: $endMental, endOverall: $endOverall, endPhysical: $endPhysical, endTechnical: $endTechnical, passChange: $passChange, likeCount: $likeCount, tagVideos: $tagVideos)';
+    return 'UserModel(id: $id, name: $name, firstName: $firstName, lastName: $lastName, email: $email, username: $username, profileImage: $profileImage, coverImage: $coverImage, userType: $userType, bio: $bio, country: $country, city: $city, phone: $phone, dob: $dob, isVerified: $isVerified, isPrivate: $isPrivate, isBlocked: $isBlocked, policyAccepted: $policyAccepted, profile: $profile, isPlayer: $isPlayer, isCoach: $isCoach, isAdmin: $isAdmin, isFan: $isFan, isReferee: $isReferee, followersCount: $followersCount, followingCount: $followingCount, matchesCount: $matchesCount, post: $post, preferredPosition: $preferredPosition, nationality: $nationality, token: $token, sclId: $sclId, socialId: $socialId, media: $media, countryIso: $countryIso, countryCode: $countryCode, signUpTime: $signUpTime, lastOnline: $lastOnline, lastDevice: $lastDevice, autoverify: $autoverify, verifyBadge: $verifyBadge, ageGroup: $ageGroup, passKey: $passKey, deviceType: $deviceType, deviceId: $deviceId, deviceModel: $deviceModel, consentId: $consentId, isDelete: $isDelete, postCount: $postCount, brands: $brands, fa: $fa, faName: $faName, gender: $gender, height: $height, isParentalConsent: $isParentalConsent, jerseySize: $jerseySize, leagueFollow: $leagueFollow, nationalityIso: $nationalityIso, parentComment: $parentComment, parentLikeFollow: $parentLikeFollow, parentPhotoVideo: $parentPhotoVideo, parentPin: $parentPin, playLevel: $playLevel, playPositionType: $playPositionType, preferredFoot: $preferredFoot, preferredJersey: $preferredJersey, referByUserId: $referByUserId, referCode: $referCode, referId: $referId, registerCountry: $registerCountry, shoeSize: $shoeSize, shoeSizeUnit: $shoeSizeUnit, teamFollow: $teamFollow, university: $university, userLat: $userLat, userLatLng: $userLatLng, userLng: $userLng, acceptPolicyOn: $acceptPolicyOn, age: $age, lastUpdateDeviceModel: $lastUpdateDeviceModel, lastUpdateDeviceType: $lastUpdateDeviceType, lastUpdated: $lastUpdated, region: $region, endGoalkeeper: $endGoalkeeper, endMental: $endMental, endOverall: $endOverall, endPhysical: $endPhysical, endTechnical: $endTechnical, ftc: $ftc, drb: $drb, crs: $crs, stm: $stm, passChange: $passChange, likeCount: $likeCount, tagVideos: $tagVideos)';
   }
 
   @override
@@ -1766,6 +1840,10 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.endOverall, endOverall) || other.endOverall == endOverall) &&
             (identical(other.endPhysical, endPhysical) || other.endPhysical == endPhysical) &&
             (identical(other.endTechnical, endTechnical) || other.endTechnical == endTechnical) &&
+            (identical(other.ftc, ftc) || other.ftc == ftc) &&
+            (identical(other.drb, drb) || other.drb == drb) &&
+            (identical(other.crs, crs) || other.crs == crs) &&
+            (identical(other.stm, stm) || other.stm == stm) &&
             (identical(other.passChange, passChange) || other.passChange == passChange) &&
             (identical(other.likeCount, likeCount) || other.likeCount == likeCount) &&
             const DeepCollectionEquality().equals(other._tagVideos, _tagVideos));
@@ -1863,6 +1941,10 @@ class _$UserModelImpl implements _UserModel {
         endOverall,
         endPhysical,
         endTechnical,
+        ftc,
+        drb,
+        crs,
+        stm,
         passChange,
         likeCount,
         const DeepCollectionEquality().hash(_tagVideos)
@@ -1967,11 +2049,15 @@ abstract class _UserModel implements UserModel {
       final String? lastUpdateDeviceType,
       final int? lastUpdated,
       final String? region,
-      final int? endGoalkeeper,
-      final int? endMental,
-      final int? endOverall,
-      final int? endPhysical,
-      final int? endTechnical,
+      final double? endGoalkeeper,
+      final double? endMental,
+      final double? endOverall,
+      final double? endPhysical,
+      final double? endTechnical,
+      @JsonKey(name: 'FTC') final double? ftc,
+      @JsonKey(name: 'DRB') final double? drb,
+      @JsonKey(name: 'CRS') final double? crs,
+      @JsonKey(name: 'STM') final double? stm,
       final bool passChange,
       final int? likeCount,
       final List<dynamic>? tagVideos}) = _$UserModelImpl;
@@ -2160,15 +2246,27 @@ abstract class _UserModel implements UserModel {
   @override
   String? get region;
   @override
-  int? get endGoalkeeper;
+  double? get endGoalkeeper;
   @override
-  int? get endMental;
+  double? get endMental;
   @override
-  int? get endOverall;
+  double? get endOverall;
   @override
-  int? get endPhysical;
+  double? get endPhysical;
   @override
-  int? get endTechnical;
+  double? get endTechnical;
+  @override // Skill category scores
+  @JsonKey(name: 'FTC')
+  double? get ftc;
+  @override
+  @JsonKey(name: 'DRB')
+  double? get drb;
+  @override
+  @JsonKey(name: 'CRS')
+  double? get crs;
+  @override
+  @JsonKey(name: 'STM')
+  double? get stm;
   @override
   bool get passChange;
   @override

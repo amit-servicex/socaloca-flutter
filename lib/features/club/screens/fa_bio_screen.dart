@@ -10,6 +10,8 @@ import '../data/models/fa_bio_model.dart';
 import '../providers/fa_bio_provider.dart';
 import '../widgets/club_bio_info_row.dart';
 import '../widgets/club_bio_section_header.dart';
+import 'fa_all_competitions_screen.dart';
+import 'fa_all_teams_screen.dart';
 
 class FaBioScreen extends ConsumerStatefulWidget {
   final String faId;
@@ -41,11 +43,67 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
           return CustomScrollView(
             slivers: [
-              _buildAppBar(bio.faDetails.faName, bio.faDetails.website),
+              // _buildAppBar(bio.faDetails.faName, bio.faDetails.website),
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * .6,
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    bio.faDetails.faName,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.socaBlack,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              const VerticalDivider(
+                                color: AppColors.socaBlack,
+                                thickness: 1,
+                                width: 20,
+                              ),
+                              IconButton(
+                                icon: Image.asset(
+                                  "assets/images/ic_gallery.png",
+                                  width: 24,
+                                  height: 24,
+                                ),
+                                onPressed: () {},
+                              ),
+                              if (bio.faDetails.website != null)
+                                IconButton(
+                                  icon: const Icon(Icons.language,
+                                      size: 25, color: AppColors.socaBlack),
+                                  onPressed: () =>
+                                      _launchUrl(bio.faDetails.website ?? ''),
+                                ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
                     // White box: large FA name again (matches faName2 in XML)
                     _buildNameBox(bio.faDetails.faName),
 
@@ -63,14 +121,15 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                     if (bio.compList.isNotEmpty) ...[
                       const SizedBox(height: 12),
                       _buildDivider(),
-                      _buildCompetitionsSection(bio.compList),
+                      _buildCompetitionsSection(
+                          bio.faDetails.faName, bio.compList),
                     ],
 
                     // Featured Teams
                     if (bio.teamList.isNotEmpty) ...[
                       const SizedBox(height: 12),
                       _buildDivider(),
-                      _buildTeamsSection(bio.teamList),
+                      _buildTeamsSection(bio.faDetails.faName, bio.teamList),
                     ],
 
                     // Sponsors
@@ -111,12 +170,14 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.photo_library, size: 25, color: AppColors.socaBlack),
+          icon: const Icon(Icons.photo_library,
+              size: 25, color: AppColors.socaBlack),
           onPressed: () {},
         ),
         if (website != null && website.isNotEmpty)
           IconButton(
-            icon: const Icon(Icons.language, size: 25, color: AppColors.socaBlack),
+            icon: const Icon(Icons.language,
+                size: 25, color: AppColors.socaBlack),
             onPressed: () => _launchUrl(website),
           ),
       ],
@@ -211,7 +272,8 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                 if (fa.president != null && fa.president!.isNotEmpty)
                   ClubBioInfoRow(label: 'President', value: fa.president!),
                 if (fa.genSecretary != null && fa.genSecretary!.isNotEmpty)
-                  ClubBioInfoRow(label: 'General Secretary', value: fa.genSecretary!),
+                  ClubBioInfoRow(
+                      label: 'General Secretary', value: fa.genSecretary!),
 
                 // Partnership badge
                 if (fa.partnerType != null &&
@@ -260,7 +322,8 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
   Widget _imageFallback() => Container(
         color: AppColors.socaGrey,
-        child: const Icon(Icons.sports_soccer, color: AppColors.socaBlack, size: 40),
+        child: const Icon(Icons.sports_soccer,
+            color: AppColors.socaBlack, size: 40),
       );
 
   Widget _buildDivider() => Container(height: 8, color: AppColors.socaPageBg);
@@ -274,13 +337,20 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const ClubBioSectionHeader(title: 'News & Announcements'),
+          Divider(
+            color: AppColors.socaBlack,
+            thickness: .7,
+          ),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             itemCount: newsList.length,
-            separatorBuilder: (_, __) =>
-                const Divider(height: 1, color: AppColors.socaGrey),
+            separatorBuilder: (_, __) => const Divider(
+              height: 1,
+              color: AppColors.socaBlack,
+              thickness: .7,
+            ),
             itemBuilder: (context, i) => _buildNewsRow(newsList[i]),
           ),
         ],
@@ -357,14 +427,14 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
   // ─── Competitions ────────────────────────────────────────────────────────
 
-  Widget _buildCompetitionsSection(List<FaCompModel> comps) {
+  Widget _buildCompetitionsSection(String faName, List<FaCompModel> comps) {
     return Container(
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(20, 12, 16, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -378,7 +448,15 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FaAllCompetitionsScreen(
+                        faName: faName,
+                        competitions: comps,
+                      ),
+                    ),
+                  ),
                   child: const Text(
                     'view all competitions',
                     style: TextStyle(
@@ -392,18 +470,32 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
               ],
             ),
           ),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+          const SizedBox(
+            height: 5,
+          ),
+          const Divider(
+            color: AppColors.socaBlack,
+            thickness: .7,
+            height: 0,
+          ),
+          Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1.2,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
+            child: ProviderScope(
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.2,
+                  mainAxisExtent: 100,
+                  crossAxisSpacing: 1,
+                  mainAxisSpacing: 1,
+                ),
+                itemCount: comps.length,
+                itemBuilder: (context, i) => _buildCompCard(comps[i]),
+              ),
             ),
-            itemCount: comps.length,
-            itemBuilder: (context, i) => _buildCompCard(comps[i]),
           ),
         ],
       ),
@@ -414,8 +506,10 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     final imageUrl = comp.fullImageUrl;
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.socaGrey, width: 0.5),
+        color: Colors.white,
+        border: Border(right: BorderSide(color: AppColors.socaBlack)),
       ),
+      width: 200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -425,27 +519,28 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
               width: 64,
               height: 64,
               fit: BoxFit.contain,
-              errorWidget: (_, __, ___) =>
-                  const Icon(Icons.emoji_events, size: 40, color: AppColors.socaBlack),
+              errorWidget: (_, __, ___) => const Icon(Icons.emoji_events,
+                  size: 40, color: AppColors.socaBlack),
             )
           else
-            const Icon(Icons.emoji_events, size: 40, color: AppColors.socaBlack),
-          const SizedBox(height: 6),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              comp.compName,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: AppColors.socaBlack,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+            const Icon(Icons.emoji_events,
+                size: 40, color: AppColors.socaBlack),
+          // const SizedBox(height: 6),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 8),
+          //   child: Text(
+          //     comp.compName,
+          //     style: const TextStyle(
+          //       fontFamily: 'Poppins',
+          //       fontSize: 11,
+          //       fontWeight: FontWeight.w600,
+          //       color: AppColors.socaBlack,
+          //     ),
+          //     textAlign: TextAlign.center,
+          //     maxLines: 2,
+          //     overflow: TextOverflow.ellipsis,
+          //   ),
+          // ),
         ],
       ),
     );
@@ -453,7 +548,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
   // ─── Featured Teams ──────────────────────────────────────────────────────
 
-  Widget _buildTeamsSection(List<FaTeamModel> teams) {
+  Widget _buildTeamsSection(String faName, List<FaTeamModel> teams) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -474,7 +569,15 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FaAllTeamsScreen(
+                        faName: faName,
+                        teams: teams,
+                      ),
+                    ),
+                  ),
                   child: const Text(
                     'view all teams',
                     style: TextStyle(
@@ -487,6 +590,10 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                 ),
               ],
             ),
+          ),
+          Divider(
+            color: AppColors.socaBlack,
+            thickness: .7,
           ),
           ListView.separated(
             shrinkWrap: true,
@@ -521,10 +628,11 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) =>
-                          const Icon(Icons.group, size: 24, color: AppColors.socaBlack),
+                      errorWidget: (_, __, ___) => const Icon(Icons.group,
+                          size: 24, color: AppColors.socaBlack),
                     )
-                  : const Icon(Icons.group, size: 24, color: AppColors.socaBlack),
+                  : const Icon(Icons.group,
+                      size: 24, color: AppColors.socaBlack),
             ),
           ),
           const SizedBox(width: 12),
@@ -605,10 +713,11 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) =>
-                          const Icon(Icons.business, size: 32, color: AppColors.socaBlack),
+                      errorWidget: (_, __, ___) => const Icon(Icons.business,
+                          size: 32, color: AppColors.socaBlack),
                     )
-                  : const Icon(Icons.business, size: 32, color: AppColors.socaBlack),
+                  : const Icon(Icons.business,
+                      size: 32, color: AppColors.socaBlack),
             ),
           ),
           const SizedBox(height: 4),

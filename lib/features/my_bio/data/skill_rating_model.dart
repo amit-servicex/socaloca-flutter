@@ -6,19 +6,28 @@ class SkillRatingModel {
   final String? skillShort;
   final double skillAvg;
   final int ratingCounter;
+  final int myRating;
 
   const SkillRatingModel({
     this.skillName,
     this.skillShort,
     this.skillAvg = 0,
     this.ratingCounter = 0,
+    this.myRating = 0,
   });
+
+  static int _parseInt(dynamic v) =>
+      v == null ? 0 : (v is num ? v.toInt() : int.tryParse(v.toString()) ?? 0);
+
+  static double _parseDouble(dynamic v) =>
+      v == null ? 0 : (v is num ? v.toDouble() : double.tryParse(v.toString()) ?? 0);
 
   factory SkillRatingModel.fromJson(Map<String, dynamic> json) =>
       SkillRatingModel(
         skillName: json['skillName'] as String?,
         skillShort: json['skillShort'] as String?,
-        skillAvg: (json['skillAvg'] as num?)?.toDouble() ?? 0,
-        ratingCounter: (json['ratingCounter'] as num?)?.toInt() ?? 0,
+        skillAvg: _parseDouble(json['skillAvg']),
+        ratingCounter: _parseInt(json['ratingCounter']),
+        myRating: _parseInt(json['myRating']),
       );
 }

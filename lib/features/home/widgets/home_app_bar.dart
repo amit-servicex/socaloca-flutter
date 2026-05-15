@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/shared/providers/auth_provider.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
@@ -20,7 +21,7 @@ const _rootRoutes = {
 /// Maps route paths → display titles. Longer keys take priority over shorter
 /// ones so sub-routes match before their parents.
 const _routeTitles = {
-  AppRoutes.mySkillRatings: 'My Ratings',
+  AppRoutes.mySkillRatings: 'Endorsements',
   AppRoutes.skillDetailViewAll: 'Skill Detail',
   AppRoutes.myEndorsementList: 'Endorsements',
   AppRoutes.myActivities: 'Activities',
@@ -82,7 +83,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
     final isHome = location == AppRoutes.home;
     final title = isHome ? null : _titleForPath(location);
     final showBack = !isRoot;
-
+    final user = ref.read(currentUserProvider);
     return SafeArea(
       child: Container(
         height: 56,
@@ -103,19 +104,16 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
               // Back button or spacer
               if (showBack)
                 IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/icons/ic_left_arrow.svg',
+                  padding: const EdgeInsets.all(0),
+                  icon: Image.asset(
+                    'assets/icons/ic_back_new_black.png',
                     width: 50,
                     height: 50,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.socaBlack,
-                      BlendMode.srcIn,
-                    ),
                   ),
                   onPressed: () => context.pop(),
                 )
               else
-                const SizedBox(width: 48),
+                const SizedBox(width: 30),
 
               // Title or spacer (pushes logo to center when no title)
               if (title != null)
@@ -141,13 +139,19 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 width: 40,
                 height: 40,
               ),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.014),
+              SizedBox(
+                  width: !(user?.isFan ?? false)
+                      ? MediaQuery.of(context).size.width * 0.18
+                      : MediaQuery.of(context).size.width * 0.014),
               // const Spacer(),
 
               // Search
               IconButton(
-                icon: const Icon(Icons.search,
-                    size: 25, color: AppColors.socaBlack),
+                icon: Image.asset(
+                  "assets/icons/ic_search.png",
+                  width: 24,
+                  height: 24,
+                ),
                 onPressed: () => context.push(AppRoutes.search),
               ),
 
@@ -155,8 +159,11 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
               Stack(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.notifications,
-                        size: 25, color: AppColors.socaBlack),
+                    icon: Image.asset(
+                      "assets/icons/ic_notification.png",
+                      width: 24,
+                      height: 24,
+                    ),
                     onPressed: () => context.push(AppRoutes.notifications),
                   ),
                   if (notificationCount > 0)
@@ -174,11 +181,15 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     ),
                 ],
               ),
-              IconButton(
-                icon: const Icon(Icons.menu,
-                    size: 25, color: AppColors.socaBlack),
-                onPressed: () => Scaffold.of(context).openEndDrawer(),
-              ),
+              if (user?.isFan ?? false)
+                IconButton(
+                  icon: Image.asset(
+                    "assets/icons/ic_hamburger_menu.png",
+                    width: 24,
+                    height: 24,
+                  ),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                ),
               const SizedBox(width: 10),
             ],
           ),
