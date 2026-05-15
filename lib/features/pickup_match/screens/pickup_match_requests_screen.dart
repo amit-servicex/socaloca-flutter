@@ -7,6 +7,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../data/repositories/pickup_match_repository.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Model for pickup match request
 class PickupMatchRequest {
@@ -254,11 +255,7 @@ class _PickupMatchRequestsScreenState
           // Requests List
           Expanded(
             child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.socaYellow,
-                    ),
-                  )
+                ? const AppLoader()
                 : _errorMessage != null
                     ? Center(
                         child: Column(

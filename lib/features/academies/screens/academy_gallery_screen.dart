@@ -7,6 +7,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/academy_bio_models.dart';
 import '../providers/academies_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class AcademyGalleryScreen extends ConsumerStatefulWidget {
   final String academyId;
@@ -130,8 +131,7 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
         elevation: 0,
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.socaYellow))
+          ? const AppLoader()
           : _error != null
               ? Center(
                   child: Column(
@@ -171,13 +171,7 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
                       itemCount: _posts.length + (_isLoadingMore ? 1 : 0),
                       itemBuilder: (_, i) {
                         if (i == _posts.length) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(8),
-                              child: CircularProgressIndicator(
-                                  color: AppColors.socaYellow),
-                            ),
-                          );
+                          return const AppLoader();
                         }
                         final post = _posts[i];
                         final imgUrl = ApiConstants.getImageUrl(

@@ -6,6 +6,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_snackbar.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Mirrors Android FanChangePasswordFragment.
 /// Payload: { userId, currentPassword, newPassword }
@@ -186,14 +187,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: _isLoading
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: AppColors.socaYellow,
-                          strokeWidth: 2,
-                        ),
-                      )
+                    ? const AppLoader(size: 24, centered: false)
                     : const Text(
                         'SUBMIT',
                         style: TextStyle(

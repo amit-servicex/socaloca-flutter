@@ -7,6 +7,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Mirrors Android LoginClubFragment.
 /// POST clubLogin with { uKey, passKey }.
@@ -260,38 +261,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                 const SizedBox(height: 24),
 
                 // Login button
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.socaBlack,
-                      foregroundColor: AppColors.socaYellow,
-                      disabledBackgroundColor:
-                          AppColors.socaBlack.withValues(alpha: 0.4),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
-                    ),
-                    child: _isLoading
-                        ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              color: AppColors.socaYellow,
-                            ),
-                          )
-                        : const Text(
-                            'CLUB LOGIN',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                            ),
-                          ),
-                  ),
-                ),
+                const AppLoader(size: 24, centered: false),
               ],
             ),
           ),

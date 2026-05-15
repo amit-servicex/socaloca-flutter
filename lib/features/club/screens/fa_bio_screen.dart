@@ -12,6 +12,7 @@ import '../widgets/club_bio_info_row.dart';
 import '../widgets/club_bio_section_header.dart';
 import 'fa_all_competitions_screen.dart';
 import 'fa_all_teams_screen.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class FaBioScreen extends ConsumerStatefulWidget {
   final String faId;
@@ -146,7 +147,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
             ],
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const AppLoader(),
         error: (e, _) => _buildError(e.toString()),
       ),
     );

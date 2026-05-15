@@ -6,6 +6,7 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../shared/providers/auth_provider.dart';
 import '../../../data/tournament_models.dart';
 import '../../../data/repositories/match_management_repository.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Score Entry Tab
 /// Allows authorized users to enter and submit match scores
@@ -149,39 +150,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
             const SizedBox(height: 24),
 
             // Submit Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isSubmitting ? null : _submitScore,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.socaYellow,
-                  foregroundColor: AppColors.socaBlack,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  elevation: 0,
-                  disabledBackgroundColor: Colors.grey[300],
-                ),
-                child: _isSubmitting
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppColors.socaBlack,
-                        ),
-                      )
-                    : const Text(
-                        'Submit Score',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
-              ),
-            ),
+            const AppLoader(size: 24, centered: false),
 
             const SizedBox(height: 16),
 

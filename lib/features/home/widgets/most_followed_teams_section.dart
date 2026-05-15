@@ -9,6 +9,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
 import 'feed_section_header.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Most Followed Teams Section
 /// Matches Android CommonHomeFeedFragment teams section
@@ -56,16 +57,7 @@ class MostFollowedTeamsSection extends ConsumerWidget {
 
               // Show loading indicator
               if (index == state.items.length) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  ),
-                );
+                return const AppLoader();
               }
 
               final team = state.items[index];
@@ -75,7 +67,7 @@ class MostFollowedTeamsSection extends ConsumerWidget {
                   context.push('${AppRoutes.teams}/${team.id}');
                 },
                 child: Container(
-                  width: 80,
+                  // width: 50,
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

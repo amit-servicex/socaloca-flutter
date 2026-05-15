@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/one_off_matches_providers.dart';
 import '../widgets/recent_match_card.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Full list of recent matches with pagination
 class RecentMatchesScreen extends ConsumerStatefulWidget {
@@ -86,9 +87,7 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
                 if (index == matches.length) {
                   return const Padding(
                     padding: EdgeInsets.all(16),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const AppLoader(),
                   );
                 }
 
@@ -103,7 +102,7 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

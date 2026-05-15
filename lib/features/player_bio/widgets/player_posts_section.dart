@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_post_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Player Top Posts Section for Endorse Tab
 /// Shows horizontal scrollable list of posts
@@ -38,14 +39,7 @@ class PlayerPostsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingPosts) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: CircularProgressIndicator(
-            color: AppColors.socaYellow,
-          ),
-        ),
-      );
+      return const AppLoader();
     }
 
     if (posts.isEmpty) {
@@ -95,12 +89,7 @@ class PlayerPostsSection extends StatelessWidget {
                                 CachedNetworkImage(
                                   imageUrl: ApiConstants.getImageUrl(mediaUrl),
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: AppColors.socaYellow,
-                                    ),
-                                  ),
+                                  placeholder: (context, url) => const AppLoader(),
                                   errorWidget: (context, url, error) =>
                                       const Center(
                                     child: Icon(

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/academies_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class AcademyTrialRegisterDialog extends ConsumerStatefulWidget {
   final String academyId;
@@ -150,14 +151,7 @@ class _AcademyTrialRegisterDialogState
             foregroundColor: AppColors.socaYellow,
           ),
           child: _isSubmitting
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.socaYellow,
-                  ),
-                )
+              ? const AppLoader(size: 24, centered: false)
               : const Text(
                   'Register',
                   style: TextStyle(fontFamily: 'Poppins'),

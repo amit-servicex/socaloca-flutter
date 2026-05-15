@@ -12,6 +12,7 @@ import '../providers/academy_bio_provider.dart';
 import '../providers/academies_provider.dart';
 import 'academy_gallery_screen.dart';
 import 'academy_trial_register_dialog.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class AcademyBioScreen extends ConsumerStatefulWidget {
   final String academyId;
@@ -142,9 +143,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           }
           return _buildContent(bio);
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow),
-        ),
+        loading: () => const AppLoader(),
         error: (e, _) => _buildError(e.toString()),
       ),
     );
@@ -313,12 +312,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                       ? CachedNetworkImage(
                           imageUrl: imageUrl,
                           fit: BoxFit.cover,
-                          placeholder: (_, __) => const Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColors.socaYellow,
-                            ),
-                          ),
+                          placeholder: (_, __) => const AppLoader(),
                           errorWidget: (_, __, ___) => Image.asset(
                             'assets/images/logo.png',
                             fit: BoxFit.cover,
@@ -394,16 +388,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildJoinButtons() {
     if (_isJoining) {
-      return const Center(
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: AppColors.socaYellow,
-          ),
-        ),
-      );
+      return const AppLoader();
     }
     if (_joinedStatus == 'ACCEPTED') {
       return Container(

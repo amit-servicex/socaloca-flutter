@@ -11,6 +11,7 @@ import '../../player_bio/data/models/player_post_model.dart';
 import '../../player_bio/data/models/player_bio_model.dart';
 import '../../player_bio/data/repositories/player_bio_repository.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Vertical list of a user's posts — mirrors Android MyGalleryNewFragment.
 /// limit=10, paginates on scroll.
@@ -113,9 +114,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
 
   Widget _buildBody(PlayerBioModel? playerBio) {
     if (_loading && _posts.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      );
+      return const AppLoader();
     }
 
     if (!_loading && _posts.isEmpty) {
@@ -140,12 +139,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
         separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemBuilder: (context, index) {
           if (index == _posts.length) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(color: AppColors.socaYellow),
-              ),
-            );
+            return const AppLoader();
           }
           return _PostCard(post: _posts[index], playerBio: playerBio);
         },
@@ -285,12 +279,7 @@ class _PostCard extends StatelessWidget {
                   placeholder: (_, __) => Container(
                     height: 350,
                     color: AppColors.socaGrey.withValues(alpha: 0.15),
-                    child: const Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.socaYellow,
-                      ),
-                    ),
+                    child: const AppLoader(),
                   ),
                   errorWidget: (_, __, ___) => Container(
                     height: 350,

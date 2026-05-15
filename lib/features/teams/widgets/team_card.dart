@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/team_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class TeamCard extends StatelessWidget {
   final TeamModel team;
@@ -197,12 +198,7 @@ class TeamCard extends StatelessWidget {
           ? CachedNetworkImage(
               imageUrl: imageUrl,
               fit: BoxFit.cover,
-              placeholder: (_, __) => const Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppColors.socaYellow,
-                ),
-              ),
+              placeholder: (_, __) => const AppLoader(),
               errorWidget: (_, __, ___) => _logoFallback(),
             )
           : _logoFallback(),

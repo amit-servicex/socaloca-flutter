@@ -9,6 +9,7 @@ import '../data/models/club_player_model.dart';
 import '../data/models/club_player_stats_model.dart';
 import '../data/repositories/club_repository.dart';
 import 'club_home_screen.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class _BioState {
   final ClubPlayerModel? player;
@@ -79,8 +80,7 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow));
+      return const AppLoader();
     }
     final d = _data;
     if (d == null || d.player == null) {

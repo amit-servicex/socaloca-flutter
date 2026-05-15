@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../data/models/game_stats_model.dart';
 import '../data/models/player_bio_model.dart';
 import '../providers/player_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Stats tab content showing Football and Futsal statistics.
 /// Set [embedded] = true when placed inside a parent scroll view — content
@@ -145,14 +146,7 @@ class StatsTabContent extends ConsumerWidget {
           const SizedBox(height: 15),
 
           if (isLoading)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(
-                  color: AppColors.socaYellow,
-                ),
-              ),
-            )
+            const AppLoader()
           else if (stats == null)
             const Center(
               child: Padding(

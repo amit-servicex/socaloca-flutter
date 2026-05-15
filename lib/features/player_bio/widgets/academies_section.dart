@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/academy_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Academies Section for Endorse Tab
 /// Shows horizontal scrollable list of academies
@@ -26,14 +27,7 @@ class AcademiesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingAcademies) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: CircularProgressIndicator(
-            color: AppColors.socaYellow,
-          ),
-        ),
-      );
+      return const AppLoader();
     }
 
     if (academies.isEmpty) {
@@ -116,12 +110,7 @@ class AcademiesSection extends StatelessWidget {
                                         '${ApiConstants.mediaBaseUrl}${academy.imageUrl}',
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) =>
-                                        const Center(
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: AppColors.socaYellow,
-                                      ),
-                                    ),
+                                        const AppLoader(),
                                     errorWidget: (context, url, error) =>
                                         const Icon(
                                       Icons.school,

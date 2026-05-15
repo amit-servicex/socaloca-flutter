@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../data/models/club_post_model.dart';
 import '../data/repositories/club_repository.dart';
 import 'club_home_screen.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Club Gallery / Posts — Screen 4 of the Club shell.
 class ClubGalleryScreen extends ConsumerStatefulWidget {
@@ -67,8 +68,7 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
   @override
   Widget build(BuildContext context) {
     if (_posts.isEmpty && _loading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow));
+      return const AppLoader();
     }
     if (_posts.isEmpty) {
       return const Center(
@@ -82,11 +82,7 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
         itemCount: _posts.length + (_loading ? 1 : 0),
         itemBuilder: (_, i) {
           if (i >= _posts.length) {
-            return const Center(
-                child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: CircularProgressIndicator(
-                        color: AppColors.socaYellow)));
+            return const AppLoader();
           }
           return _PostCard(post: _posts[i]);
         },

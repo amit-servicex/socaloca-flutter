@@ -7,6 +7,7 @@ import '../../../providers/cup_providers.dart';
 import '../../../widgets/match_card.dart';
 import '../../../data/tournament_models.dart';
 import 'cup_group_point_table_dialog.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Cup Group Stage View
 /// Shows matches for selected group with point table access
@@ -256,9 +257,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
           ),
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      ),
+      loading: () => const AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/clubs_provider.dart';
 import '../widgets/club_card.dart';
 import '../widgets/club_filter_row.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class ClubsScreen extends ConsumerStatefulWidget {
   const ClubsScreen({super.key});
@@ -101,7 +102,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
               ),
               if (state.isLoading && state.clubs.isEmpty)
                 const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator()),
+                  child: const AppLoader(),
                 )
               else if (state.error != null && state.clubs.isEmpty)
                 SliverFillRemaining(
@@ -162,7 +163,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                       if (index == state.clubs.length) {
                         return const Padding(
                           padding: EdgeInsets.all(16),
-                          child: Center(child: CircularProgressIndicator()),
+                          child: const AppLoader(),
                         );
                       }
                       return ClubCard(club: state.clubs[index]);

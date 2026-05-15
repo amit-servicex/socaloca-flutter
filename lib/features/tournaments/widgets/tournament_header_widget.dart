@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/tournament_models.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Tournament header — logo, name, info, follow button
 /// Mirrors Android TournamentsFragment header section
@@ -52,12 +53,7 @@ class TournamentHeaderWidget extends StatelessWidget {
                     ? CachedNetworkImage(
                         imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.socaYellow,
-                          ),
-                        ),
+                        placeholder: (context, url) => const AppLoader(),
                         errorWidget: (context, url, error) => const Icon(
                           Icons.emoji_events,
                           color: AppColors.socaBlack,

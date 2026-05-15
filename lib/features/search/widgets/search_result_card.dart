@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/api_constants.dart';
 import '../data/models/search_user_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class SearchResultCard extends StatelessWidget {
   final SearchUserModel user;
@@ -177,9 +178,7 @@ class SearchResultCard extends StatelessWidget {
           width: 60,
           height: 60,
           color: Colors.grey[200],
-          child: const Center(
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
+          child: const AppLoader(),
         ),
         errorWidget: (context, url, error) => _buildDefaultAvatar(),
       ),

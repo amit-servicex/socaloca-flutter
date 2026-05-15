@@ -7,6 +7,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/team_bio_model.dart';
 import '../providers/team_players_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class TeamPlayersScreen extends ConsumerWidget {
   final String teamId;
@@ -42,11 +43,7 @@ class TeamPlayersScreen extends ConsumerWidget {
   Widget _buildBody(
       BuildContext context, WidgetRef ref, TeamPlayersState state) {
     if (state.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.socaYellow,
-        ),
-      );
+      return const AppLoader();
     }
 
     if (state.error != null) {
@@ -395,9 +392,7 @@ class TeamPlayersScreen extends ConsumerWidget {
         width: size,
         height: size,
         color: Colors.grey[200],
-        child: const Center(
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
+        child: const AppLoader(),
       ),
       errorWidget: (context, url, error) => Container(
         width: size,

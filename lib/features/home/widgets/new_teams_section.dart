@@ -9,6 +9,7 @@ import 'package:socaloca/features/home/data/models/feed_new_team_model.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class NewTeamsSection extends ConsumerStatefulWidget {
   const NewTeamsSection({super.key});
@@ -141,16 +142,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
             itemCount: itemCount,
             itemBuilder: (context, index) {
               if (index == state.items.length) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  ),
-                );
+                return const AppLoader();
               }
 
               final team = state.items[index];

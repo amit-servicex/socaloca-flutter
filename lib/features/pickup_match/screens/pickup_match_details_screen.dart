@@ -10,6 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../data/models/pickup_match_model.dart';
 import '../data/repositories/pickup_match_repository.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Pickup Match Details Screen
 /// Shows detailed information about a pickup match
@@ -167,11 +168,7 @@ class _PickupMatchDetailsScreenState
         iconTheme: const IconThemeData(color: AppColors.socaBlack),
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.socaYellow,
-              ),
-            )
+          ? const AppLoader()
           : _errorMessage != null
               ? Center(
                   child: Column(
@@ -527,14 +524,7 @@ class _PickupMatchDetailsScreenState
             ),
           ),
           child: _isRequesting
-              ? const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation(AppColors.socaYellow),
-                  ),
-                )
+              ? const AppLoader(size: 24, centered: false)
               : Text(
                   buttonText,
                   style: TextStyle(

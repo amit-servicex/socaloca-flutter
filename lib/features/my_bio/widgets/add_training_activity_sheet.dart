@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Bottom sheet for adding a training session activity.
 /// Mirrors Android's CommonMyActivitiesFragment training tab.
@@ -231,37 +232,7 @@ class _AddTrainingActivitySheetState
                       const SizedBox(height: 24),
 
                       // Submit
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _isSubmitting ? null : _submit,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.socaBlack,
-                            foregroundColor: AppColors.socaYellow,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: _isSubmitting
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    color: AppColors.socaYellow,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : const Text(
-                                  'Add Training',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                        ),
-                      ),
+                      const AppLoader(size: 24, centered: false),
                     ],
                   ),
                 ),

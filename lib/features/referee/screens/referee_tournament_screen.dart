@@ -9,6 +9,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/referee_tournament_model.dart';
 import '../providers/referee_providers.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeTournamentScreen extends StatelessWidget {
   const RefereeTournamentScreen({super.key});
@@ -42,9 +43,7 @@ class RefereeTournamentScreen extends StatelessWidget {
 //     final tournamentsState = ref.watch(refereeTournamentsProvider);
 
 //     return tournamentsState.when(
-//       loading: () => const Center(
-//         child: CircularProgressIndicator(color: AppColors.socaYellow),
-//       ),
+//       loading: () => const AppLoader(),
 //       error: (e, _) => Center(
 //         child: Column(
 //           mainAxisAlignment: MainAxisAlignment.center,

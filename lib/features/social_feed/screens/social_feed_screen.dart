@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/feed_providers.dart';
 import '../widgets/feed_header.dart';
 import '../widgets/feed_post_card.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Social Feed Screen matching Android CommonHomeFeedFragment.
 class SocialFeedScreen extends ConsumerStatefulWidget {
@@ -58,9 +59,7 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
       ),
       loading: () => const Padding(
         padding: EdgeInsets.all(32),
-        child: Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow),
-        ),
+        child: const AppLoader(),
       ),
       error: (error, stack) => Padding(
         padding: const EdgeInsets.all(32),

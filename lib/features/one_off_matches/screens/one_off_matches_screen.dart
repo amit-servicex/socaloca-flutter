@@ -8,6 +8,7 @@ import '../providers/one_off_matches_providers.dart';
 import '../widgets/recent_match_card.dart';
 import '../widgets/todays_match_card.dart';
 import '../widgets/upcoming_match_card.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Main One-Off Matches screen with 3 sections:
 /// - Today's Match (featured)
@@ -67,7 +68,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
                   },
                   loading: () => const SizedBox(
                     height: 200,
-                    child: Center(child: CircularProgressIndicator()),
+                    child: const AppLoader(),
                   ),
                   error: (_, __) => const SizedBox.shrink(),
                 ),
@@ -136,7 +137,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
                   },
                   loading: () => const SizedBox(
                     height: 150,
-                    child: Center(child: CircularProgressIndicator()),
+                    child: const AppLoader(),
                   ),
                   error: (_, __) => const Padding(
                     padding: EdgeInsets.all(16),
@@ -216,7 +217,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
                   },
                   loading: () => const SizedBox(
                     height: 150,
-                    child: Center(child: CircularProgressIndicator()),
+                    child: const AppLoader(),
                   ),
                   error: (_, __) => const Padding(
                     padding: EdgeInsets.all(16),

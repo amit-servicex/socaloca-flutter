@@ -16,6 +16,7 @@ import '../providers/club_bio_provider.dart';
 import '../widgets/club_bio_info_row.dart';
 import '../widgets/club_bio_section_header.dart';
 import '../../../shared/models/match_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class ClubBioScreen extends ConsumerStatefulWidget {
   final String clubId;
@@ -95,7 +96,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       },
       loading: () => const Scaffold(
         backgroundColor: AppColors.socaPageBg,
-        body: Center(child: CircularProgressIndicator()),
+        body: const AppLoader(),
       ),
       error: (error, stack) => Scaffold(
         backgroundColor: AppColors.socaPageBg,

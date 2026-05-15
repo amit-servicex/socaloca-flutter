@@ -15,6 +15,7 @@ import '../../widgets/teams_horizontal_list.dart';
 import '../../widgets/sponsors_horizontal_list.dart';
 import '../../../tournaments/data/tournament_models.dart';
 import 'tabs/cup_info_tab.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Cup Tournament Details Screen
 /// Comprehensive cup tournament details with banner, info, teams, sponsors, and tabs
@@ -79,9 +80,7 @@ class _CupTournamentDetailsScreenState
           }
           return _buildContent(cup);
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.socaYellow),
-        ),
+        loading: () => const AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -191,9 +190,7 @@ class _CupTournamentDetailsScreenState
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => const Center(
-            child: CircularProgressIndicator(color: AppColors.socaYellow),
-          ),
+          builder: (context) => const AppLoader(),
         );
       },
       error: (error, stack) {
@@ -269,9 +266,7 @@ class _CupTournamentDetailsScreenState
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(color: AppColors.socaYellow),
-      ),
+      builder: (context) => const AppLoader(),
     );
 
     final notifier =

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:socaloca/features/my_bio/screens/my_bio_screen.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyBioScreen extends StatelessWidget {
   const RefereeMyBioScreen({super.key});
@@ -40,9 +41,7 @@ class RefereeMyBioScreen extends StatelessWidget {
 //     final state = ref.watch(refereeBioProvider);
 
 //     if (state.isLoading) {
-//       return const Center(
-//         child: CircularProgressIndicator(color: AppColors.socaYellow),
-//       );
+//       return const AppLoader();
 //     }
 
 //     if (state.error != null) {
@@ -372,8 +371,7 @@ class RefereeMyBioScreen extends StatelessWidget {
 //     final isLoading = ref.watch(refereeBioProvider).isLoadingActivities;
 
 //     if (isLoading) {
-//       return const Center(
-//           child: CircularProgressIndicator(color: AppColors.socaYellow));
+//       return const AppLoader();
 //     }
 //     if (activities.isEmpty) return const SizedBox.shrink();
 

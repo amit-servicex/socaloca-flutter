@@ -7,6 +7,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../data/repositories/pickup_match_repository.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Host Pickup Match Screen - Form to create a new pickup match
 /// Mirrors Android PickUpHostMatchFragment
@@ -546,15 +547,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                 ),
               ),
               child: _isSubmitting
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor:
-                            AlwaysStoppedAnimation(AppColors.socaYellow),
-                      ),
-                    )
+                  ? const AppLoader(size: 24, centered: false)
                   : const Text(
                       'HOST MATCH',
                       style: TextStyle(

@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_snackbar.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Youth Consent Screen (13-15 years old)
 /// Collects parent/guardian information before signup
@@ -255,26 +256,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                       color: AppColors.socaBlack,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(
-                      child: _isLoading
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                color: AppColors.socaYellow,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : const Text(
-                              'PROCEED',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                                color: AppColors.socaYellow,
-                              ),
-                            ),
-                    ),
+                    child: const AppLoader(),
                   ),
                 ),
 

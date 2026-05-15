@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../data/models/club_trial_model.dart';
 import '../data/repositories/club_repository.dart';
 import 'club_home_screen.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Club Trials — Screen 5 of the Club shell.
 class ClubTrialsScreen extends ConsumerStatefulWidget {
@@ -195,9 +196,7 @@ class _ClubTrialsScreenState extends ConsumerState<ClubTrialsScreen> {
         // ── List ──────────────────────────────────────────────────────────
         Expanded(
           child: _trials.isEmpty && _loading
-              ? const Center(
-                  child: CircularProgressIndicator(
-                      color: AppColors.socaYellow))
+              ? const AppLoader()
               : _trials.isEmpty
                   ? const Center(
                       child: Text('No Trials Found',
@@ -211,11 +210,7 @@ class _ClubTrialsScreenState extends ConsumerState<ClubTrialsScreen> {
                             _trials.length + (_loading ? 1 : 0),
                         itemBuilder: (_, i) {
                           if (i >= _trials.length) {
-                            return const Center(
-                                child: Padding(
-                                    padding: EdgeInsets.all(16),
-                                    child: CircularProgressIndicator(
-                                        color: AppColors.socaYellow)));
+                            return const AppLoader();
                           }
                           return _TrialCard(trial: _trials[i]);
                         },

@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/tournament_models.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Sponsors Horizontal List Widget
 /// Displays tournament sponsors in a horizontal scrollable list
@@ -158,9 +159,7 @@ class SponsorsHorizontalList extends StatelessWidget {
           width: size,
           height: size,
           color: Colors.grey[200],
-          child: const Center(
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
+          child: const AppLoader(),
         ),
         errorWidget: (context, url, error) => Container(
           width: size,

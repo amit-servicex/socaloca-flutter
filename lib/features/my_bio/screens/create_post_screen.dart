@@ -11,6 +11,7 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ── Post category constants (from Android Params.java) ────────────────────────
 const _kSkillVideo = 'skill';
@@ -317,34 +318,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   }
 
   Widget _buildUploadProgress() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const CircularProgressIndicator(color: AppColors.socaYellow),
-            const SizedBox(height: 24),
-            Text(
-              _uploadStatus,
-              style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: AppColors.socaBlack),
-              textAlign: TextAlign.center,
-            ),
-            if (_uploadProgress > 0) ...[
-              const SizedBox(height: 16),
-              LinearProgressIndicator(
-                value: _uploadProgress,
-                backgroundColor: AppColors.socaGrey,
-                color: AppColors.socaYellow,
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
+    return const AppLoader();
   }
 
   Widget _buildForm() {
@@ -1204,7 +1178,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
             if (_isSearching)
               const Padding(
                 padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(color: AppColors.socaYellow),
+                child: const AppLoader(),
               )
             else
               Expanded(

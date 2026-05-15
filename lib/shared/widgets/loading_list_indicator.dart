@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../core/theme/app_colors.dart';
+import 'app_loader.dart';
 
 /// Bottom-of-list loading spinner for paginated lists.
 class LoadingListIndicator extends StatelessWidget {
@@ -10,17 +10,8 @@ class LoadingListIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.all(16),
-      child: Center(
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation(AppColors.primary),
-          ),
-        ),
-      ),
+      padding: EdgeInsets.all(8),
+      child: AppLoader(size: 48),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_skill_model.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class PlayerSkillsSection extends StatelessWidget {
   final List<PlayerSkillModel> skills;
@@ -23,12 +24,7 @@ class PlayerSkillsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingSkills) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: CircularProgressIndicator(color: AppColors.socaYellow),
-        ),
-      );
+      return const AppLoader();
     }
 
     if (skills.isEmpty) return const SizedBox.shrink();
