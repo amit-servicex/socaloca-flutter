@@ -25,7 +25,8 @@ class PlayerBioStatsCounters extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       color: Colors.white,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 8,
         children: [
           // Posts
           _buildCounter(

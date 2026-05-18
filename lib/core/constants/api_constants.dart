@@ -201,6 +201,7 @@ class ApiConstants {
   // ─── Referee ──────────────────────────────────────────────────────────────
   static const String getRefMatchList = 'getRefMatchList';
   static const String getRefLiveList = 'getRefLiveList';
+  static const String getLiveMatchList = 'getLiveMatchList';
   static const String getRefTmntsDrop = 'getRefTmntsDrop';
   static const String getRefMatchReqs = 'getRefMatchReqs';
   static const String respondRefMatch = 'respondRefMatch';

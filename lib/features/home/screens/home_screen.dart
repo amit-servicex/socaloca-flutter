@@ -901,7 +901,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 // TODO: navigate to feedback form
               },
             ),
-          // LiveMatchBanner(onTap: () => context.push(AppRoutes.matches)),
+          LiveMatchBanner(
+            onTap: () => context.push(AppRoutes.playerLiveMatches),
+          ),
         ],
       ),
     );

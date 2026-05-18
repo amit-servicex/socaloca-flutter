@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class EndorsePlayerScreen extends ConsumerStatefulWidget {
   final String playerId;
@@ -26,10 +25,17 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
   bool _hasError = false;
   bool _isSubmitting = false;
 
+  static const int _maxChars = 200;
+
   @override
   void dispose() {
     _commentController.dispose();
     super.dispose();
+  }
+
+  void _reset() {
+    _commentController.clear();
+    setState(() => _hasError = false);
   }
 
   Future<void> _submit() async {
@@ -105,121 +111,164 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text('Endorse Player'),
         backgroundColor: AppColors.socaBlack,
         foregroundColor: AppColors.socaYellow,
         elevation: 0,
+        titleSpacing: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Write your endorsement for ${widget.playerName}',
-              style: const TextStyle(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Black header banner ───────────────────────────────────────────
+          Container(
+            width: double.infinity,
+            color: AppColors.socaBlack,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: const Text(
+              'Endorse',
+              style: TextStyle(
                 fontFamily: 'Poppins',
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: AppColors.socaBlack,
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: AppColors.socaYellow,
               ),
             ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _commentController,
-              maxLines: 5,
-              onChanged: (_) {
-                if (_hasError) setState(() => _hasError = false);
-              },
-              decoration: InputDecoration(
-                hintText: 'Share your thoughts about this player...',
-                hintStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: _hasError ? Colors.red : Colors.grey.shade300,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: _hasError ? Colors.red : Colors.grey.shade300,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    color: _hasError ? Colors.red : AppColors.socaYellow,
-                    width: 2,
-                  ),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            if (_hasError)
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: Text(
-                  'Please enter your endorsement comment.',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _isSubmitting ? null : _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.socaYellow,
-                      foregroundColor: AppColors.socaBlack,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      elevation: 0,
-                    ),
-                    child: _isSubmitting
-                        ? const AppLoader(size: 24, centered: false)
-                        : const Text(
-                            'Submit Endorsement',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                            ),
-                          ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                OutlinedButton(
-                  onPressed: () {
-                    _commentController.clear();
-                    setState(() => _hasError = false);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 20),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: const Text(
-                    'Reset',
+          ),
+
+          // ── Body ─────────────────────────────────────────────────────────
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Subtitle
+                  const Text(
+                    'Assist other Players & Coaches by giving an endorsement',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.socaBlack,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+
+                  // Text input with plain border
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: _hasError
+                            ? AppColors.socaYellow
+                            : Colors.grey.shade400,
+                      ),
+                    ),
+                    child: TextField(
+                      controller: _commentController,
+                      maxLines: 8,
+                      maxLength: _maxChars,
+                      buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
+                          null,
+                      onChanged: (_) {
+                        if (_hasError) setState(() => _hasError = false);
+                        setState(() {});
+                      },
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: AppColors.socaBlack,
+                      ),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(12),
+                      ),
+                    ),
+                  ),
+
+                  // max characters label
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Text(
+                        'max $_maxChars characters',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // ADD / RESET buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _ActionButton(
+                        label: 'ADD',
+                        onPressed: _isSubmitting ? null : _submit,
+                        isLoading: _isSubmitting,
+                      ),
+                      const SizedBox(width: 16),
+                      _ActionButton(
+                        label: 'RESET',
+                        onPressed: _isSubmitting ? null : _reset,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.label,
+    required this.onPressed,
+    this.isLoading = false,
+  });
+
+  final String label;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 100,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        color: onPressed == null ? Colors.grey.shade400 : AppColors.socaBlack,
+        alignment: Alignment.center,
+        child: isLoading
+            ? const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.socaYellow,
+                ),
+              )
+            : Text(
+                label,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                  color: AppColors.socaYellow,
+                ),
+              ),
       ),
     );
   }
