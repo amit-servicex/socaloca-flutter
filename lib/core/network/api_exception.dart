@@ -25,9 +25,7 @@ class ApiException implements Exception {
         final data = e.response?.data;
         String msg = 'Server error ($statusCode)';
         if (data is Map) {
-          msg = (data['message'] as String?) ??
-              (data['msg'] as String?) ??
-              msg;
+          msg = (data['message'] as String?) ?? (data['msg'] as String?) ?? msg;
         }
         return ApiException(message: msg, statusCode: statusCode);
       case DioExceptionType.cancel:

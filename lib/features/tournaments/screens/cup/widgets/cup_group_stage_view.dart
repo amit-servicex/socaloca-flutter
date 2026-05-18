@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -17,7 +18,7 @@ class CupGroupStageView extends ConsumerStatefulWidget {
   final String roundId;
   final TournamentCupModel cup;
 
-  const CupGroupStageView({
+  CupGroupStageView({
     super.key,
     required this.tournamentId,
     required this.roundId,
@@ -71,9 +72,9 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
               size: 64,
               color: Colors.grey[400],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
-              'No groups available',
+              'No groups available'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -91,20 +92,20 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
         if (_groups.length > 1)
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.group_work,
                   color: AppColors.socaBlack,
                   size: 20,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     value: _selectedGroupId,
-                    decoration: const InputDecoration(
-                      labelText: 'Select Group',
+                    decoration: InputDecoration(
+                      labelText: 'Select Group'.tr,
                       labelStyle: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -120,7 +121,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                         value: group.groupId,
                         child: Text(
                           group.groupName ?? 'Group',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                           ),
@@ -144,14 +145,14 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
         Expanded(
           child: _selectedGroupId != null
               ? _buildGroupMatches(_selectedGroupId!)
-              : const SizedBox.shrink(),
+              : SizedBox.shrink(),
         ),
 
         // View Standings Button
         if (_selectedGroupId != null)
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -159,14 +160,14 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   elevation: 0,
                 ),
-                child: const Text(
-                  'View Group Standings',
+                child: Text(
+                  'View Group Standings'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -192,7 +193,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
     return groupAsync.when(
       data: (group) {
         if (group == null) {
-          return const Center(child: Text('Group not found'));
+          return Center(child: Text('Group not found'.tr));
         }
 
         final allMatches = [...group.leg1, ...group.leg2];
@@ -207,9 +208,9 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                   size: 64,
                   color: Colors.grey[400],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Text(
-                  'No matches in this group',
+                  'No matches in this group'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -226,7 +227,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
             ref.invalidate(cupGroupMatchesProvider(params));
           },
           child: ListView.builder(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12),
             itemCount: allMatches.length,
             itemBuilder: (context, index) {
               final match = allMatches[index];
@@ -257,20 +258,20 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
           ),
         );
       },
-      loading: () => const AppLoader(),
+      loading: () => AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline, size: 64, color: Colors.red),
+            SizedBox(height: 16),
             Text('Error loading matches: $error'),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(cupGroupMatchesProvider(params));
               },
-              child: const Text('Retry'),
+              child: Text('Retry'.tr),
             ),
           ],
         ),

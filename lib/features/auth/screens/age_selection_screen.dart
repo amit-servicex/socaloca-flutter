@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +11,7 @@ import '../providers/auth_provider.dart';
 /// AgeSelectionFragment equivalent - matches Android XML layout exactly
 /// User selects age group: Adult (16+), Youth (13-15), or Child (7-12)
 class AgeSelectionScreen extends ConsumerWidget {
-  const AgeSelectionScreen({super.key});
+  AgeSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +22,7 @@ class AgeSelectionScreen extends ConsumerWidget {
           child: Column(
             children: [
               // Logo Box - marginTop 50dp
-              const SizedBox(height: 50),
+              SizedBox(height: 50),
               Center(
                 child: SvgPicture.asset(
                   'assets/icons/socaloca_logo.svg',
@@ -35,19 +36,21 @@ class AgeSelectionScreen extends ConsumerWidget {
               ),
               // Top Box - marginLeft/Right 40dp
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
+                padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   children: [
                     // Adult Button - 16+ years old
                     InkWell(
                       onTap: () {
-                        ref.read(signupTempProvider.notifier).setAgeGroup('adult');
+                        ref
+                            .read(signupTempProvider.notifier)
+                            .setAgeGroup('adult');
                         context.push(AppRoutes.signup);
                       },
                       child: Container(
                         width: double.infinity,
                         height: 100,
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        margin: EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(5),
@@ -55,8 +58,8 @@ class AgeSelectionScreen extends ConsumerWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              'I am over',
+                            Text(
+                              'I am over'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
@@ -69,8 +72,8 @@ class AgeSelectionScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const Text(
-                                  '16 years',
+                                Text(
+                                  '16 years'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -79,9 +82,9 @@ class AgeSelectionScreen extends ConsumerWidget {
                                     height: 1.0,
                                   ),
                                 ),
-                                const SizedBox(width: 5),
-                                const Text(
-                                  'old',
+                                SizedBox(width: 5),
+                                Text(
+                                  'old'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -97,18 +100,20 @@ class AgeSelectionScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30),
 
                     // Youth Button - 13-15 years old
                     InkWell(
                       onTap: () {
-                        ref.read(signupTempProvider.notifier).setAgeGroup('youth');
+                        ref
+                            .read(signupTempProvider.notifier)
+                            .setAgeGroup('youth');
                         context.push(AppRoutes.youthConsent);
                       },
                       child: Container(
                         width: double.infinity,
                         height: 100,
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        margin: EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(5),
@@ -116,8 +121,8 @@ class AgeSelectionScreen extends ConsumerWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              'I am',
+                            Text(
+                              'I am'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
@@ -130,8 +135,8 @@ class AgeSelectionScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const Text(
-                                  '13-15 years',
+                                Text(
+                                  '13-15 years'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -140,9 +145,9 @@ class AgeSelectionScreen extends ConsumerWidget {
                                     height: 1.0,
                                   ),
                                 ),
-                                const SizedBox(width: 5),
-                                const Text(
-                                  'old',
+                                SizedBox(width: 5),
+                                Text(
+                                  'old'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -158,18 +163,20 @@ class AgeSelectionScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30),
 
                     // Child Button - 7-12 years old (parent/guardian)
                     InkWell(
                       onTap: () {
-                        ref.read(signupTempProvider.notifier).setAgeGroup('child');
+                        ref
+                            .read(signupTempProvider.notifier)
+                            .setAgeGroup('child');
                         context.push(AppRoutes.childConsent);
                       },
                       child: Container(
                         width: double.infinity,
                         height: 100,
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        margin: EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(5),
@@ -177,8 +184,9 @@ class AgeSelectionScreen extends ConsumerWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              'I am a parent/guardian\nregistering on behalf of a',
+                            Text(
+                              'I am a parent/guardian\nregistering on behalf of a'
+                                  .tr,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
@@ -188,13 +196,13 @@ class AgeSelectionScreen extends ConsumerWidget {
                                 height: 1.0,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const Text(
-                                  '7-12',
+                                Text(
+                                  '7-12'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -203,9 +211,9 @@ class AgeSelectionScreen extends ConsumerWidget {
                                     height: 1.0,
                                   ),
                                 ),
-                                const SizedBox(width: 5),
-                                const Text(
-                                  'years',
+                                SizedBox(width: 5),
+                                Text(
+                                  'years'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -214,9 +222,9 @@ class AgeSelectionScreen extends ConsumerWidget {
                                     height: 1.0,
                                   ),
                                 ),
-                                const SizedBox(width: 5),
-                                const Text(
-                                  'old',
+                                SizedBox(width: 5),
+                                Text(
+                                  'old'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,

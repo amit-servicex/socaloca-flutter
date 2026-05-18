@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -13,7 +14,7 @@ class CupStageTab extends ConsumerStatefulWidget {
   final String tournamentId;
   final TournamentCupModel cup;
 
-  const CupStageTab({
+  CupStageTab({
     super.key,
     required this.tournamentId,
     required this.cup,
@@ -60,9 +61,9 @@ class _CupStageTabState extends ConsumerState<CupStageTab>
               size: 64,
               color: Colors.grey[400],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
-              'No rounds available',
+              'No rounds available'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -80,20 +81,20 @@ class _CupStageTabState extends ConsumerState<CupStageTab>
         if (widget.cup.roundsList!.length > 1)
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.filter_list,
                   color: AppColors.socaBlack,
                   size: 20,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     value: _selectedRoundId,
-                    decoration: const InputDecoration(
-                      labelText: 'Select Round',
+                    decoration: InputDecoration(
+                      labelText: 'Select Round'.tr,
                       labelStyle: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -109,7 +110,7 @@ class _CupStageTabState extends ConsumerState<CupStageTab>
                         value: round.roundId,
                         child: Text(
                           round.roundName ?? 'Round ${round.seq}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                           ),

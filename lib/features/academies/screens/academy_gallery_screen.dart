@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +14,7 @@ class AcademyGalleryScreen extends ConsumerStatefulWidget {
   final String academyId;
   final String academyName;
 
-  const AcademyGalleryScreen({
+  AcademyGalleryScreen({
     super.key,
     required this.academyId,
     required this.academyName,
@@ -31,7 +32,7 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
   bool _isLoadingMore = false;
   bool _hasMore = true;
   int _start = 0;
-  static const int _limit = 10;
+  static int _limit = 10;
   String? _error;
 
   @override
@@ -63,12 +64,13 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
       _error = null;
     });
     try {
-      final posts = await ref.read(academiesRepositoryProvider).getAcademyPostList(
-            userId: userId,
-            academyId: widget.academyId,
-            start: 0,
-            limit: _limit,
-          );
+      final posts =
+          await ref.read(academiesRepositoryProvider).getAcademyPostList(
+                userId: userId,
+                academyId: widget.academyId,
+                start: 0,
+                limit: _limit,
+              );
       if (mounted) {
         setState(() {
           _posts
@@ -94,12 +96,13 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
     setState(() => _isLoadingMore = true);
     final userId = StorageService.userId ?? '';
     try {
-      final posts = await ref.read(academiesRepositoryProvider).getAcademyPostList(
-            userId: userId,
-            academyId: widget.academyId,
-            start: _start,
-            limit: _limit,
-          );
+      final posts =
+          await ref.read(academiesRepositoryProvider).getAcademyPostList(
+                userId: userId,
+                academyId: widget.academyId,
+                start: _start,
+                limit: _limit,
+              );
       if (mounted) {
         setState(() {
           _posts.addAll(posts);
@@ -120,7 +123,7 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
       appBar: AppBar(
         title: Text(
           widget.academyName.isNotEmpty ? widget.academyName : 'Gallery',
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 16,
@@ -131,39 +134,38 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
         elevation: 0,
       ),
       body: _isLoading
-          ? const AppLoader()
+          ? AppLoader()
           : _error != null
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(_error!,
-                          style: const TextStyle(
-                              fontFamily: 'Poppins', fontSize: 14)),
-                      const SizedBox(height: 12),
+                          style:
+                              TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+                      SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: _load,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.socaBlack,
                           foregroundColor: AppColors.socaYellow,
                         ),
-                        child: const Text('Retry'),
+                        child: Text('Retry'.tr),
                       ),
                     ],
                   ),
                 )
               : _posts.isEmpty
-                  ? const Center(
-                      child: Text('No posts yet.',
+                  ? Center(
+                      child: Text('No posts yet.'.tr,
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack)))
                   : GridView.builder(
                       controller: _scrollController,
-                      padding: const EdgeInsets.all(8),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      padding: EdgeInsets.all(8),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 4,
                         mainAxisSpacing: 4,
@@ -171,7 +173,7 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
                       itemCount: _posts.length + (_isLoadingMore ? 1 : 0),
                       itemBuilder: (_, i) {
                         if (i == _posts.length) {
-                          return const AppLoader();
+                          return AppLoader();
                         }
                         final post = _posts[i];
                         final imgUrl = ApiConstants.getImageUrl(
@@ -186,12 +188,10 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
                               ? CachedNetworkImage(
                                   imageUrl: imgUrl,
                                   fit: BoxFit.cover,
-                                  errorWidget: (_, __, ___) => const Icon(
-                                      Icons.image,
+                                  errorWidget: (_, __, ___) => Icon(Icons.image,
                                       color: AppColors.socaBlack),
                                 )
-                              : const Icon(Icons.image,
-                                  color: AppColors.socaBlack),
+                              : Icon(Icons.image, color: AppColors.socaBlack),
                         );
                       },
                     ),

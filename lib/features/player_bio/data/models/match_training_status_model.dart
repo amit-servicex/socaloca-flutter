@@ -6,8 +6,9 @@ part 'match_training_status_model.g.dart';
 int? _toInt(dynamic v) =>
     v == null ? null : (v is num ? v.toInt() : int.tryParse(v.toString()));
 
-double? _toDouble(dynamic v) =>
-    v == null ? null : (v is num ? v.toDouble() : double.tryParse(v.toString()));
+double? _toDouble(dynamic v) => v == null
+    ? null
+    : (v is num ? v.toDouble() : double.tryParse(v.toString()));
 
 Map<String, dynamic> _sanitize(Map<String, dynamic> json) => {
       ...json,

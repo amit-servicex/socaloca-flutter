@@ -186,7 +186,10 @@ class AcademyPostModel {
       files = sources.map((s) => Map<String, dynamic>.from(s as Map)).toList();
     }
     return AcademyPostModel(
-      postId: json['postId'] as String? ?? json['acaPostId'] as String? ?? json['acaVdoPostId'] as String? ?? json['_id'] as String?,
+      postId: json['postId'] as String? ??
+          json['acaPostId'] as String? ??
+          json['acaVdoPostId'] as String? ??
+          json['_id'] as String?,
       description: json['description'] as String?,
       imageUrl: json['imageUrl'] as String?,
       videoUrl: json['videoUrl'] as String?,

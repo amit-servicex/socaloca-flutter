@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,13 +13,13 @@ import 'tournament_featured_screen.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Status integer constants — matches Android Params.java exactly
-const int _kOngoing = 1;
-const int _kUpcoming = 2;
-const int _kClosed = 3;
+int _kOngoing = 1;
+int _kUpcoming = 2;
+int _kClosed = 3;
 
 /// CommonOngoingTournamentsFragment / CommonUpcomingTournamentsFragment equivalent
 class TournamentListScreen extends ConsumerStatefulWidget {
-  const TournamentListScreen({
+  TournamentListScreen({
     super.key,
     required this.status,
   });
@@ -40,7 +41,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   int _start = 0;
   final int _limit = 10;
 
-  TournamentFilters _filters = const TournamentFilters();
+  TournamentFilters _filters = TournamentFilters();
 
   @override
   bool get wantKeepAlive => true;
@@ -188,9 +189,9 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                               size: 64,
                               color: AppColors.socaBlack.withOpacity(0.3),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             Text(
-                              'No tournaments found',
+                              'No tournaments found'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
@@ -220,12 +221,12 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
 
                       // Tournament cards
                       SliverPadding(
-                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                        padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               if (index >= _tournaments.length) {
-                                return const AppLoader();
+                                return AppLoader();
                               }
 
                               final t = _tournaments[index];

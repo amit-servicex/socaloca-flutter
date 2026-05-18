@@ -94,7 +94,7 @@ class LegacyContactNotifier extends StateNotifier<LegacyContactState> {
   }
 }
 
-final legacyContactProvider =
-    StateNotifierProvider.autoDispose<LegacyContactNotifier, LegacyContactState>(
+final legacyContactProvider = StateNotifierProvider.autoDispose<
+    LegacyContactNotifier, LegacyContactState>(
   (ref) => LegacyContactNotifier(ref.read(settingsRepositoryProvider)),
 );

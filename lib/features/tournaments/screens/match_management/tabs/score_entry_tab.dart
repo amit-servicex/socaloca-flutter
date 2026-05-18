@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +17,7 @@ class ScoreEntryTab extends ConsumerStatefulWidget {
   final TournamentMatchModel match;
   final String tournamentId;
 
-  const ScoreEntryTab({
+  ScoreEntryTab({
     super.key,
     required this.matchId,
     required this.match,
@@ -55,7 +56,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Form(
         key: _formKey,
         child: Column(
@@ -63,7 +64,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
           children: [
             // Instructions
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.socaYellow.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
@@ -73,15 +74,16 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.info_outline,
                     color: AppColors.socaYellow,
                     size: 24,
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Enter the final score for this match. The score will be submitted for approval.',
+                      'Enter the final score for this match. The score will be submitted for approval.'
+                          .tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
@@ -93,7 +95,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // Score Entry Card
             Card(
@@ -102,7 +104,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
                     // Home Team Score
@@ -112,16 +114,16 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
                       logo: widget.match.homeTeamLogo,
                     ),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
                     // VS Divider
                     Row(
                       children: [
                         Expanded(child: Divider(color: Colors.grey[300])),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
-                            'VS',
+                            'VS'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16,
@@ -134,7 +136,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
                       ],
                     ),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
                     // Away Team Score
                     _buildScoreField(
@@ -147,12 +149,12 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // Submit Button
-            const AppLoader(size: 24, centered: false),
+            AppLoader(size: 24, centered: false),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Clear Button
             SizedBox(
@@ -161,14 +163,14 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
                 onPressed: _isSubmitting ? null : _clearScores,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.socaBlack,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  side: const BorderSide(color: AppColors.socaBlack),
+                  side: BorderSide(color: AppColors.socaBlack),
                 ),
-                child: const Text(
-                  'Clear',
+                child: Text(
+                  'Clear'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
@@ -196,26 +198,26 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
             logo,
             width: 40,
             height: 40,
-            errorBuilder: (_, __, ___) => const Icon(
+            errorBuilder: (_, __, ___) => Icon(
               Icons.shield,
               size: 40,
               color: Colors.grey,
             ),
           )
         else
-          const Icon(
+          Icon(
             Icons.shield,
             size: 40,
             color: Colors.grey,
           ),
 
-        const SizedBox(width: 16),
+        SizedBox(width: 16),
 
         // Team Name
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -223,7 +225,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
           ),
         ),
 
-        const SizedBox(width: 16),
+        SizedBox(width: 16),
 
         // Score Input
         SizedBox(
@@ -236,13 +238,13 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(2),
             ],
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 24,
               fontWeight: FontWeight.w700,
             ),
             decoration: InputDecoration(
-              hintText: '0',
+              hintText: '0'.tr,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.grey[300]!),
@@ -253,12 +255,12 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
+                borderSide: BorderSide(
                   color: AppColors.socaYellow,
                   width: 2,
                 ),
               ),
-              contentPadding: const EdgeInsets.symmetric(
+              contentPadding: EdgeInsets.symmetric(
                 horizontal: 12,
                 vertical: 16,
               ),
@@ -326,18 +328,18 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Success',
+        title: Text(
+          'Success'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
           message,
-          style: const TextStyle(fontFamily: 'Poppins'),
+          style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),
@@ -348,18 +350,18 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Error',
+        title: Text(
+          'Error'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
           message,
-          style: const TextStyle(fontFamily: 'Poppins'),
+          style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),

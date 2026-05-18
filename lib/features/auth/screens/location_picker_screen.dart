@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -16,7 +17,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// tap anywhere to pick a location, then returns via context.pop():
 ///   {'placeName': String, 'placeLat': double, 'placeLong': double}
 class LocationPickerScreen extends StatefulWidget {
-  const LocationPickerScreen({super.key});
+  LocationPickerScreen({super.key});
 
   @override
   State<LocationPickerScreen> createState() => _LocationPickerScreenState();
@@ -25,7 +26,7 @@ class LocationPickerScreen extends StatefulWidget {
 class _LocationPickerScreenState extends State<LocationPickerScreen> {
   final Completer<GoogleMapController> _mapController = Completer();
 
-  static const _defaultLatLng = LatLng(20.5937, 78.9629); // center of India
+  static final _defaultLatLng = LatLng(20.5937, 78.9629); // center of India
 
   LatLng _markerPosition = _defaultLatLng;
   String _displayAddress = 'Detecting location...';
@@ -35,7 +36,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
 
   Set<Marker> get _markers => {
         Marker(
-          markerId: const MarkerId('selected'),
+          markerId: MarkerId('selected'),
           position: _markerPosition,
           draggable: true,
           onDragEnd: _onMarkerDragEnd,
@@ -55,8 +56,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
 
       if (!granted) {
         setState(() {
-          _isLocating = false;
-          _displayAddress = 'Location permission denied';
+          final _isLocating = false;
+          final _displayAddress = 'Location permission denied';
         });
         return;
       }
@@ -64,18 +65,18 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
       // Use .timeout() instead of LocationSettings.timeLimit so a timeout
       // always throws a catchable Dart exception (no native fatal on Android).
       final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
+        locationSettings: LocationSettings(
           accuracy: LocationAccuracy.high,
         ),
-      ).timeout(const Duration(seconds: 15));
+      ).timeout(Duration(seconds: 15));
 
       final latLng = LatLng(position.latitude, position.longitude);
       await _moveToPosition(latLng);
     } catch (e) {
       if (mounted) {
         setState(() {
-          _isLocating = false;
-          _displayAddress = 'Could not detect location';
+          final _isLocating = false;
+          final _displayAddress = 'Could not detect location';
         });
       }
     }
@@ -92,8 +93,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
 
   Future<void> _moveToPosition(LatLng latLng) async {
     setState(() {
-      _markerPosition = latLng;
-      _isLocating = false;
+      final _markerPosition = latLng;
+      final _isLocating = false;
     });
 
     final controller = await _mapController.future;
@@ -112,8 +113,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     if (nominatimAddress != null) {
       if (mounted) {
         setState(() {
-          _displayAddress = nominatimAddress;
-          _isGeocoding = false;
+          final _displayAddress = nominatimAddress;
+          final _isGeocoding = false;
         });
       }
       return;
@@ -132,16 +133,15 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
           if (p.subLocality != null && p.subLocality!.isNotEmpty)
             p.subLocality!,
           if (p.locality != null && p.locality!.isNotEmpty) p.locality!,
-          if (p.administrativeArea != null &&
-              p.administrativeArea!.isNotEmpty)
+          if (p.administrativeArea != null && p.administrativeArea!.isNotEmpty)
             p.administrativeArea!,
           if (p.country != null && p.country!.isNotEmpty) p.country!,
         ];
         if (mounted) {
           setState(() {
-            _displayAddress =
+            final _displayAddress =
                 parts.isNotEmpty ? parts.join(', ') : _coordFallback(latLng);
-            _isGeocoding = false;
+            final _isGeocoding = false;
           });
         }
         return;
@@ -151,8 +151,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     // 3. Last resort: raw coordinates.
     if (mounted) {
       setState(() {
-        _displayAddress = _coordFallback(latLng);
-        _isGeocoding = false;
+        final _displayAddress = _coordFallback(latLng);
+        final _isGeocoding = false;
       });
     }
   }
@@ -171,12 +171,14 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               'addressdetails': '1',
             },
             options: Options(
-              headers: {'User-Agent': 'SocaLoca/1.0 (contact@socaloca.football)'},
-              receiveTimeout: const Duration(seconds: 10),
-              sendTimeout: const Duration(seconds: 10),
+              headers: {
+                'User-Agent': 'SocaLoca/1.0 (contact@socaloca.football)'
+              },
+              receiveTimeout: Duration(seconds: 10),
+              sendTimeout: Duration(seconds: 10),
             ),
           )
-          .timeout(const Duration(seconds: 12));
+          .timeout(Duration(seconds: 12));
 
       final data = response.data is String
           ? jsonDecode(response.data as String) as Map<String, dynamic>
@@ -216,7 +218,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
         children: [
           // Full-screen map
           GoogleMap(
-            initialCameraPosition: const CameraPosition(
+            initialCameraPosition: CameraPosition(
               target: _defaultLatLng,
               zoom: 5,
             ),
@@ -231,7 +233,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
           // Top search bar with back arrow + address
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Material(
                 elevation: 4,
                 borderRadius: BorderRadius.circular(8),
@@ -245,19 +247,19 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                     children: [
                       // Back arrow
                       IconButton(
-                        icon: const Icon(Icons.arrow_back,
-                            color: AppColors.socaBlack),
+                        icon:
+                            Icon(Icons.arrow_back, color: AppColors.socaBlack),
                         onPressed: () => context.pop(),
                       ),
                       // Address text
                       Expanded(
                         child: _isLocating || _isGeocoding
-                            ? const Row(
+                            ? Row(
                                 children: [
-                                  const AppLoader(size: 24, centered: false),
+                                  AppLoader(size: 24, centered: false),
                                   SizedBox(width: 8),
                                   Text(
-                                    'Fetching location...',
+                                    'Fetching location...'.tr,
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 13,
@@ -270,14 +272,14 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                                 _displayAddress,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 13,
                                   color: AppColors.socaBlack,
                                 ),
                               ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                     ],
                   ),
                 ),
@@ -293,7 +295,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             child: SafeArea(
               top: false,
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 child: GestureDetector(
                   onTap: (_isLocating || _isGeocoding) ? null : _selectLocation,
                   child: Container(
@@ -305,8 +307,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     alignment: Alignment.center,
-                    child: const Text(
-                      'SELECT LOCATION',
+                    child: Text(
+                      'SELECT LOCATION'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,

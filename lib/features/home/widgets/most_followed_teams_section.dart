@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/api_constants.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
@@ -18,6 +20,7 @@ class MostFollowedTeamsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(localeProvider);
     final state = ref.watch(feedTeamsProvider);
 
     if (state.isLoading) return const SizedBox.shrink();
@@ -28,7 +31,7 @@ class MostFollowedTeamsSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FeedSectionHeader(title: 'Most Followed Teams'),
+        FeedSectionHeader(title: AppStrings.mostFollowedTeams),
         Divider(
           color: AppColors.socaBlack,
           thickness: .7,

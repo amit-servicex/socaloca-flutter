@@ -21,7 +21,9 @@ enum UserType {
       ].contains(this);
 
   bool get hasTeams =>
-      this == UserType.player || this == UserType.coach || this == UserType.club;
+      this == UserType.player ||
+      this == UserType.coach ||
+      this == UserType.club;
 }
 
 /// Match status values from Params.java
@@ -61,9 +63,9 @@ enum NotificationType {
 
 /// Age consent tier — from AgeSelectionFragment/ChildConsentFragment flow
 enum AgeTier {
-  adult,    // 18+
-  youth,    // 13–17: requires parental consent
-  child,    // under 13: full parental lockdown
+  adult, // 18+
+  youth, // 13–17: requires parental consent
+  child, // under 13: full parental lockdown
 }
 
 /// Pick-up match slot status

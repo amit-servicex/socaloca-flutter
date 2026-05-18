@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,7 +18,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class FaBioScreen extends ConsumerStatefulWidget {
   final String faId;
 
-  const FaBioScreen({super.key, required this.faId});
+  FaBioScreen({super.key, required this.faId});
 
   @override
   ConsumerState<FaBioScreen> createState() => _FaBioScreenState();
@@ -51,8 +52,8 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   children: [
                     Container(
                       color: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -64,7 +65,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                                   child: Text(
                                     bio.faDetails.faName,
                                     maxLines: 2,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -77,7 +78,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                           ),
                           Row(
                             children: [
-                              const VerticalDivider(
+                              VerticalDivider(
                                 color: AppColors.socaBlack,
                                 thickness: 1,
                                 width: 20,
@@ -92,7 +93,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                               ),
                               if (bio.faDetails.website != null)
                                 IconButton(
-                                  icon: const Icon(Icons.language,
+                                  icon: Icon(Icons.language,
                                       size: 25, color: AppColors.socaBlack),
                                   onPressed: () =>
                                       _launchUrl(bio.faDetails.website ?? ''),
@@ -113,14 +114,14 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
                     // News & Announcements
                     if (bio.newsList.isNotEmpty) ...[
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       _buildDivider(),
                       _buildNewsSection(bio.newsList),
                     ],
 
                     // Competitions
                     if (bio.compList.isNotEmpty) ...[
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       _buildDivider(),
                       _buildCompetitionsSection(
                           bio.faDetails.faName, bio.compList),
@@ -128,26 +129,26 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
                     // Featured Teams
                     if (bio.teamList.isNotEmpty) ...[
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       _buildDivider(),
                       _buildTeamsSection(bio.faDetails.faName, bio.teamList),
                     ],
 
                     // Sponsors
                     if (bio.sponsorList.isNotEmpty) ...[
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       _buildDivider(),
                       _buildSponsorsSection(bio.sponsorList),
                     ],
 
-                    const SizedBox(height: 40),
+                    SizedBox(height: 40),
                   ],
                 ),
               ),
             ],
           );
         },
-        loading: () => const AppLoader(),
+        loading: () => AppLoader(),
         error: (e, _) => _buildError(e.toString()),
       ),
     );
@@ -162,7 +163,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
       pinned: true,
       title: Text(
         faName,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 18,
           fontWeight: FontWeight.w700,
@@ -171,14 +172,12 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.photo_library,
-              size: 25, color: AppColors.socaBlack),
+          icon: Icon(Icons.photo_library, size: 25, color: AppColors.socaBlack),
           onPressed: () {},
         ),
         if (website != null && website.isNotEmpty)
           IconButton(
-            icon: const Icon(Icons.language,
-                size: 25, color: AppColors.socaBlack),
+            icon: Icon(Icons.language, size: 25, color: AppColors.socaBlack),
             onPressed: () => _launchUrl(website),
           ),
       ],
@@ -191,10 +190,10 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
       child: Text(
         faName,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           fontWeight: FontWeight.w700,
@@ -210,7 +209,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     final fa = bio.faDetails;
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+      padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -218,7 +217,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
           Column(
             children: [
               _buildFaImage(fa.fullImageUrl),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               SizedBox(
                 width: 100,
                 child: ElevatedButton(
@@ -228,12 +227,12 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6),
                     elevation: 0,
                   ),
                   child: Text(
                     _isFollowing ? 'FOLLOWING' : 'FOLLOW',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -242,10 +241,10 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 '${fa.followCount} ${fa.followCount == 1 ? "Follower" : "Followers"}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
@@ -255,7 +254,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
               ),
             ],
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
 
           // Right: info rows
           Expanded(
@@ -280,10 +279,10 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                 if (fa.partnerType != null &&
                     fa.partnerType!.isNotEmpty &&
                     fa.partnerType!.toLowerCase() != 'nopartner') ...[
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     fa.displayPartnerLabel,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -323,8 +322,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
   Widget _imageFallback() => Container(
         color: AppColors.socaGrey,
-        child: const Icon(Icons.sports_soccer,
-            color: AppColors.socaBlack, size: 40),
+        child: Icon(Icons.sports_soccer, color: AppColors.socaBlack, size: 40),
       );
 
   Widget _buildDivider() => Container(height: 8, color: AppColors.socaPageBg);
@@ -337,17 +335,17 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ClubBioSectionHeader(title: 'News & Announcements'),
+          ClubBioSectionHeader(title: 'News & Announcements'),
           Divider(
             color: AppColors.socaBlack,
             thickness: .7,
           ),
           ListView.separated(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             itemCount: newsList.length,
-            separatorBuilder: (_, __) => const Divider(
+            separatorBuilder: (_, __) => Divider(
               height: 1,
               color: AppColors.socaBlack,
               thickness: .7,
@@ -362,7 +360,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
   Widget _buildNewsRow(ClubNewsModel news) {
     final imageUrl = news.fullImageUrl;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -379,7 +377,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                     Container(width: 80, height: 80, color: AppColors.socaGrey),
               ),
             ),
-          if (imageUrl.isNotEmpty) const SizedBox(width: 12),
+          if (imageUrl.isNotEmpty) SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -387,7 +385,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                 if (news.newsDate != null && news.newsDate!.isNotEmpty)
                   Text(
                     news.newsDate!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
@@ -397,7 +395,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                 if (news.title != null && news.title!.isNotEmpty)
                   Text(
                     news.title!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
@@ -409,7 +407,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                 if (news.description != null && news.description!.isNotEmpty)
                   Text(
                     news.description!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
@@ -435,12 +433,12 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 16, 0),
+            padding: EdgeInsets.fromLTRB(20, 12, 16, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Competitions',
+                Text(
+                  'Competitions'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -458,8 +456,8 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                       ),
                     ),
                   ),
-                  child: const Text(
-                    'view all competitions',
+                  child: Text(
+                    'view all competitions'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
@@ -471,22 +469,22 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
               ],
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 5,
           ),
-          const Divider(
+          Divider(
             color: AppColors.socaBlack,
             thickness: .7,
             height: 0,
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: ProviderScope(
               child: GridView.builder(
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 1.2,
                   mainAxisExtent: 100,
@@ -520,18 +518,17 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
               width: 64,
               height: 64,
               fit: BoxFit.contain,
-              errorWidget: (_, __, ___) => const Icon(Icons.emoji_events,
+              errorWidget: (_, __, ___) => Icon(Icons.emoji_events,
                   size: 40, color: AppColors.socaBlack),
             )
           else
-            const Icon(Icons.emoji_events,
-                size: 40, color: AppColors.socaBlack),
-          // const SizedBox(height: 6),
+            Icon(Icons.emoji_events, size: 40, color: AppColors.socaBlack),
+          // SizedBox(height: 6),
           // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 8),
+          //   padding: EdgeInsets.symmetric(horizontal: 8),
           //   child: Text(
           //     comp.compName,
-          //     style: const TextStyle(
+          //     style: TextStyle(
           //       fontFamily: 'Poppins',
           //       fontSize: 11,
           //       fontWeight: FontWeight.w600,
@@ -556,12 +553,12 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 16, 8),
+            padding: EdgeInsets.fromLTRB(20, 12, 16, 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Featured Teams',
+                Text(
+                  'Featured Teams'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -579,8 +576,8 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                       ),
                     ),
                   ),
-                  child: const Text(
-                    'view all teams',
+                  child: Text(
+                    'view all teams'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
@@ -598,14 +595,14 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
           ),
           ListView.separated(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             itemCount: teams.length,
             separatorBuilder: (_, __) =>
-                const Divider(height: 1, color: AppColors.socaGrey),
+                Divider(height: 1, color: AppColors.socaGrey),
             itemBuilder: (context, i) => _buildTeamRow(teams[i]),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
         ],
       ),
     );
@@ -614,13 +611,13 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
   Widget _buildTeamRow(FaTeamModel team) {
     final imageUrl = team.fullImageUrl;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
           Container(
             width: 44,
             height: 44,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.socaGrey,
             ),
@@ -629,21 +626,20 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const Icon(Icons.group,
+                      errorWidget: (_, __, ___) => Icon(Icons.group,
                           size: 24, color: AppColors.socaBlack),
                     )
-                  : const Icon(Icons.group,
-                      size: 24, color: AppColors.socaBlack),
+                  : Icon(Icons.group, size: 24, color: AppColors.socaBlack),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   team.teamName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -655,7 +651,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                 if (team.teamTypeLabel.isNotEmpty)
                   Text(
                     team.teamTypeLabel,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
@@ -678,12 +674,12 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ClubBioSectionHeader(title: 'Sponsors'),
+          ClubBioSectionHeader(title: 'Sponsors'),
           SizedBox(
             height: 110,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
               itemCount: sponsors.length,
               itemBuilder: (context, i) => _buildSponsorItem(sponsors[i]),
             ),
@@ -697,7 +693,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     final imageUrl = sponsor.fullImageUrl;
     return Container(
       width: 90,
-      margin: const EdgeInsets.only(right: 10),
+      margin: EdgeInsets.only(right: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -714,17 +710,16 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const Icon(Icons.business,
+                      errorWidget: (_, __, ___) => Icon(Icons.business,
                           size: 32, color: AppColors.socaBlack),
                     )
-                  : const Icon(Icons.business,
-                      size: 32, color: AppColors.socaBlack),
+                  : Icon(Icons.business, size: 32, color: AppColors.socaBlack),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             sponsor.name ?? '',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 10,
               fontWeight: FontWeight.w600,
@@ -746,11 +741,11 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-          const SizedBox(height: 16),
+          Icon(Icons.error_outline, size: 48, color: AppColors.error),
+          SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               color: AppColors.socaBlack,

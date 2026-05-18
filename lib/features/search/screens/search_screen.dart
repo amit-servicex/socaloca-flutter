@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/search_provider.dart';
@@ -10,7 +11,7 @@ import '../widgets/search_shimmer.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({super.key});
+  SearchScreen({super.key});
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
@@ -23,7 +24,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    
+
     // Initial search
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(searchProvider.notifier).search();
@@ -50,7 +51,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text('Search'),
+        title: Text('Search'.tr),
         backgroundColor: AppColors.socaBlack,
         foregroundColor: AppColors.socaYellow,
         elevation: 0,
@@ -60,7 +61,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           // Search Input
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: SearchInput(
               onSearch: (query) {
                 ref.read(searchProvider.notifier).setSearchQuery(query);
@@ -72,20 +73,20 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           // Filter Dropdowns
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: const FilterDropdownsRow(),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: FilterDropdownsRow(),
           ),
 
           // Filter Chips
           if (state.filters.isNotEmpty)
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: const FilterChipsRow(),
+              padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: FilterChipsRow(),
             ),
 
           // Divider
-          const Divider(height: 1),
+          Divider(height: 1),
 
           // Search Results
           Expanded(
@@ -98,7 +99,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   Widget _buildBody(SearchState state) {
     if (state.isLoading) {
-      return const SearchShimmer();
+      return SearchShimmer();
     }
 
     if (state.error != null && state.users.isEmpty) {
@@ -115,14 +116,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       },
       child: ListView.separated(
         controller: _scrollController,
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(vertical: 8),
         itemCount: state.users.length + (state.isLoadingMore ? 1 : 0),
-        separatorBuilder: (context, index) => const Divider(height: 1),
+        separatorBuilder: (context, index) => Divider(height: 1),
         itemBuilder: (context, index) {
           if (index == state.users.length) {
-            return const Padding(
+            return Padding(
               padding: EdgeInsets.all(16.0),
-              child: const AppLoader(),
+              child: AppLoader(),
             );
           }
 
@@ -143,9 +144,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             size: 80,
             color: Colors.grey[400],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'No searches',
+            'No searches'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -153,9 +154,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            'Try adjusting your search or filters',
+            'Try adjusting your search or filters'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -178,9 +179,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             size: 80,
             color: Colors.red[300],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'Failed to load results',
+            'Failed to load results'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -188,9 +189,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               error,
               style: TextStyle(
@@ -201,7 +202,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               ref.read(searchProvider.notifier).refresh();
@@ -209,9 +210,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
-            child: const Text('Retry'),
+            child: Text('Retry'.tr),
           ),
         ],
       ),

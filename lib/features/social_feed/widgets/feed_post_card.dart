@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart' show SharePlus, ShareParams;
 
@@ -10,7 +11,7 @@ import '../models/feed_post.dart';
 /// Feed post card widget matching Android feed item design.
 /// Implements double-tap to cheer (like) with animated heart overlay.
 class FeedPostCard extends ConsumerStatefulWidget {
-  const FeedPostCard({super.key, required this.post});
+  FeedPostCard({super.key, required this.post});
 
   final FeedPost post;
 
@@ -41,7 +42,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
 
     _heartController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: Duration(milliseconds: 800),
     );
 
     // Scale: 0 → 1.2 (elastic overshoot) in first 400ms, then 1.2 → 0
@@ -94,7 +95,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     if (userId.isEmpty) return;
 
     try {
-      final success = await const FeedRepository().likePost(
+      final success = await FeedRepository().likePost(
         userId: userId,
         postId: widget.post.id,
         postType: widget.post.type,
@@ -135,7 +136,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
       final myName = '$firstName $lastName'.trim();
       final myImageUrl = user['imageUrl'] as String? ?? '';
 
-      final result = await const FeedRepository().followUser(
+      final result = await FeedRepository().followUser(
         userId: userId,
         toUserId: widget.post.userId,
         myName: myName,
@@ -179,13 +180,13 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // User Header
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -200,14 +201,14 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           widget.post.userName.isNotEmpty
                               ? widget.post.userName[0].toUpperCase()
                               : 'U',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: AppColors.socaBlack,
                           ),
                         )
                       : null,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +218,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           Flexible(
                             child: Text(
                               widget.post.userName,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16,
@@ -231,15 +232,15 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                             width: 1,
                             height: 14,
                             color: AppColors.socaBlack,
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
                           ),
-                          const Text('🌍', style: TextStyle(fontSize: 18)),
+                          Text('🌍'.tr, style: TextStyle(fontSize: 18)),
                         ],
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2),
                       Text(
                         _formatDate(widget.post.createdAt),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack,
@@ -249,7 +250,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.more_vert, color: AppColors.socaBlack),
+                  icon: Icon(Icons.more_vert, color: AppColors.socaBlack),
                   onPressed: () {},
                 ),
               ],
@@ -259,10 +260,10 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
           // Content text
           if (widget.post.content != null && widget.post.content!.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Text(
                 widget.post.content!,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -271,7 +272,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
               ),
             ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
 
           // Media (image or video) — GestureDetector wraps both
           if (widget.post.images.isNotEmpty || widget.post.videoUrl != null)
@@ -300,7 +301,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                         width: double.infinity,
                         height: 400,
                         color: AppColors.socaBlack,
-                        child: const Icon(Icons.image,
+                        child: Icon(Icons.image,
                             size: 48, color: AppColors.socaGrey),
                       ),
                     )
@@ -323,7 +324,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                         width: double.infinity,
                         color: AppColors.socaBlack,
                       ),
-                    const Icon(Icons.play_circle_outline,
+                    Icon(Icons.play_circle_outline,
                         size: 64, color: Colors.white),
                   ],
 
@@ -331,14 +332,14 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   Positioned(
                     bottom: 180,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(24),
                       ),
-                      child: const Text(
-                        'Double Tap to Cheer',
+                      child: Text(
+                        'Double Tap to Cheer'.tr,
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Poppins',
@@ -354,7 +355,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                     animation: _heartController,
                     builder: (_, __) {
                       if (_heartController.isDismissed) {
-                        return const SizedBox.shrink();
+                        return SizedBox.shrink();
                       }
                       return Opacity(
                         opacity: _heartOpacity.value,
@@ -378,7 +379,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
 
           // Cheers Count Row
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
                 GestureDetector(
@@ -390,10 +391,10 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                         _isLiked ? AppColors.socaYellow : AppColors.socaBlack,
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   '$_likeCount ${_likeCount == 1 ? 'cheer' : 'cheers'}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 15,
                     color: AppColors.socaBlack,
@@ -418,7 +419,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   child: InkWell(
                     onTap: _followLoading ? null : _onFollow,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: EdgeInsets.symmetric(vertical: 14),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -431,7 +432,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                                 ? AppColors.socaYellow
                                 : AppColors.socaBlack,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Text(
                             _isFollowing ? 'Following' : 'Follow',
                             style: TextStyle(
@@ -452,7 +453,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
               Expanded(
                 child: InkWell(
                   onTap: _onShare,
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 14),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -461,7 +462,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                             size: 22, color: AppColors.socaBlack),
                         SizedBox(width: 8),
                         Text(
-                          'SHARE',
+                          'SHARE'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
@@ -482,7 +483,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
   }
 
   String _formatDate(DateTime date) {
-    const months = [
+    final months = [
       'Jan',
       'Feb',
       'Mar',
@@ -508,7 +509,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
 class _FullScreenImageScreen extends StatelessWidget {
   final String imageUrl;
 
-  const _FullScreenImageScreen({required this.imageUrl});
+  _FullScreenImageScreen({required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -523,7 +524,7 @@ class _FullScreenImageScreen extends StatelessWidget {
                 width: double.infinity,
                 fit: BoxFit.contain,
                 errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.error, color: Colors.white, size: 64),
+                    Icon(Icons.error, color: Colors.white, size: 64),
               ),
             ),
             Positioned(
@@ -535,7 +536,7 @@ class _FullScreenImageScreen extends StatelessWidget {
                 child: Image.asset(
                   'assets/images/logo_transparent.png',
                   color: AppColors.socaBlack,
-                  errorBuilder: (_, __, ___) => const Icon(
+                  errorBuilder: (_, __, ___) => Icon(
                     Icons.sports_soccer,
                     color: AppColors.socaBlack,
                     size: 32,
@@ -548,14 +549,14 @@ class _FullScreenImageScreen extends StatelessWidget {
               left: 16,
               child: GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.arrow_back_ios_new,
                         color: Colors.white, size: 22),
                     SizedBox(width: 6),
                     Text(
-                      'Back',
+                      'Back'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: Colors.white,

@@ -7,12 +7,14 @@ import 'package:socaloca/core/storage/storage_service.dart';
 import 'package:socaloca/features/home/data/models/feed_new_team_model.dart';
 
 import '../../../core/constants/api_constants.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class NewTeamsSection extends ConsumerStatefulWidget {
-  const NewTeamsSection({super.key});
+  NewTeamsSection({super.key});
 
   @override
   ConsumerState<NewTeamsSection> createState() => _NewTeamsSectionState();
@@ -31,7 +33,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
 
   void _startAutoSlide() {
     _autoSlideTimer?.cancel();
-    _autoSlideTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    _autoSlideTimer = Timer.periodic(Duration(seconds: 5), (timer) {
       if (!_pageController.hasClients) return;
 
       final state = ref.read(feedNewTeamsProvider);
@@ -45,13 +47,13 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
           // Loop back to the beginning if no more items
           _pageController.animateToPage(
             0,
-            duration: const Duration(milliseconds: 500),
+            duration: Duration(milliseconds: 500),
             curve: Curves.easeInOut,
           );
         }
       } else {
         _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       }
@@ -68,8 +70,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
   void _onShareTeam(FeedNewTeamModel team) {
     final currentUserId = StorageService.userId ?? '';
     final teamId = team.teamId ?? team.id ?? '';
-    final url =
-        'https://share.socaloca.football/team/$teamId/u/$currentUserId';
+    final url = 'https://share.socaloca.football/team/$teamId/u/$currentUserId';
     final name = team.teamName ?? 'Team';
     SharePlus.instance.share(ShareParams(
       text: '$name - Check out this post on SocaLoca. $url',
@@ -78,11 +79,12 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(localeProvider);
     final state = ref.watch(feedNewTeamsProvider);
     // log("this is the data of the recently joined teams ${state.items}");
 
-    if (state.isLoading) return const SizedBox.shrink();
-    if (state.items.isEmpty) return const SizedBox.shrink();
+    if (state.isLoading) return SizedBox.shrink();
+    if (state.items.isEmpty) return SizedBox.shrink();
 
     final itemCount = state.items.length + (state.isLoadingMore ? 1 : 0);
 
@@ -93,12 +95,12 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
         Container(
           width: double.infinity,
           color: AppColors.socaBlack,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Recently Joined Teams',
+              Text(
+                AppStrings.recentlyJoinedTeams,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -110,8 +112,8 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                 onTap: () {
                   // TODO: Navigate to view all recently joined teams
                 },
-                child: const Text(
-                  'View All',
+                child: Text(
+                  AppStrings.viewAll,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -142,7 +144,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
             itemCount: itemCount,
             itemBuilder: (context, index) {
               if (index == state.items.length) {
-                return const AppLoader();
+                return AppLoader();
               }
 
               final team = state.items[index];
@@ -163,7 +165,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                   children: [
                     // ── Announcement section ───────────────────────────
                     Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -174,26 +176,26 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                 radius: 20,
                                 backgroundColor: Colors.black,
                                 child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
+                                  padding: EdgeInsets.all(4.0),
                                   child: Image.asset(
                                     'assets/images/logo_transparent.png',
                                     color: Colors.white,
-                                    errorBuilder: (_, __, ___) => const Icon(
+                                    errorBuilder: (_, __, ___) => Icon(
                                       Icons.sports_soccer,
                                       color: Colors.white,
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      children: const [
+                                      children: [
                                         Text(
-                                          'SocaLoca',
+                                          'SocaLoca'.tr,
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 16,
@@ -209,10 +211,10 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 2),
+                                    SizedBox(height: 2),
                                     Text(
                                       joinedText ?? '',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
@@ -224,10 +226,10 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16),
                           RichText(
                             text: TextSpan(
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: AppColors.socaBlack,
@@ -237,7 +239,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                   text:
                                       '${team.teamName ?? 'Team'} has joined SocaLoca!!!\n',
                                 ),
-                                const TextSpan(
+                                TextSpan(
                                   text: 'Check team bio',
                                   style: TextStyle(fontWeight: FontWeight.w700),
                                 ),
@@ -255,16 +257,15 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
 
                     // ── Profile row with chevron navigation ───────────
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 24),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8, vertical: 24),
                       child: Row(
                         children: [
                           GestureDetector(
                             onTap: isFirst
                                 ? null
                                 : () => _pageController.previousPage(
-                                      duration:
-                                          const Duration(milliseconds: 350),
+                                      duration: Duration(milliseconds: 350),
                                       curve: Curves.easeInOut,
                                     ),
                             child: Icon(
@@ -275,7 +276,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                   : AppColors.socaBlack,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12),
                           CircleAvatar(
                             radius: 40,
                             backgroundColor: AppColors.socaGrey.withAlpha(36),
@@ -288,11 +289,11 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                             child: team.teamLogo == null ||
                                     team.teamLogo!.isEmpty ||
                                     team.teamLogo!.startsWith('file:///')
-                                ? const Icon(Icons.groups,
+                                ? Icon(Icons.groups,
                                     size: 40, color: AppColors.socaGrey)
                                 : null,
                           ),
-                          const SizedBox(width: 16),
+                          SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +303,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                     Flexible(
                                       child: Text(
                                         team.teamName ?? 'Team',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
@@ -315,28 +316,28 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                     if (team.country != null &&
                                         team.country!.isNotEmpty)
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8),
+                                        padding: EdgeInsets.only(left: 8),
                                         child: Text(
                                           _countryFlag(team.country),
-                                          style: const TextStyle(fontSize: 18),
+                                          style: TextStyle(fontSize: 18),
                                         ),
                                       ),
                                   ],
                                 ),
-                                const SizedBox(height: 6),
+                                SizedBox(height: 6),
                                 Text(
                                   team.teamType ?? 'Club',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                     color: AppColors.socaBlack,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4),
                                 Text(
                                   teamLocation,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
@@ -346,13 +347,12 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                               ],
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12),
                           GestureDetector(
                             onTap: isLast
                                 ? null
                                 : () => _pageController.nextPage(
-                                      duration:
-                                          const Duration(milliseconds: 350),
+                                      duration: Duration(milliseconds: 350),
                                       curve: Curves.easeInOut,
                                     ),
                             child: Icon(
@@ -376,16 +376,16 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                     InkWell(
                       onTap: () => _onShareTeam(team),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(Icons.share,
                                 size: 18, color: AppColors.socaBlack),
                             SizedBox(width: 8),
                             Text(
-                              'SHARE',
+                              'SHARE'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
@@ -407,14 +407,14 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
         // ── Page indicator dots ──────────────────────────────────────────
         if (state.items.length > 1)
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 state.items.length.clamp(0, 8),
                 (i) => AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  duration: Duration(milliseconds: 250),
+                  margin: EdgeInsets.symmetric(horizontal: 3),
                   width: _currentPage == i ? 18 : 6,
                   height: 6,
                   decoration: BoxDecoration(
@@ -428,7 +428,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
             ),
           ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
       ],
     );
   }
@@ -447,7 +447,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
   }
 
   String _monthName(int month) {
-    const names = [
+    final names = [
       'Jan',
       'Feb',
       'Mar',
@@ -468,7 +468,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
 /// Naive flag emoji helper — replace with a proper package if needed.
 String _countryFlag(String? country) {
   if (country == null) return '';
-  const map = {
+  final map = {
     'Ghana': '🇬🇭',
     'Nigeria': '🇳🇬',
     'USA': '🇺🇸',
@@ -481,4 +481,3 @@ String _countryFlag(String? country) {
   };
   return map[country] ?? '🇬🇭'; // Default to Ghana as fallback if unknown
 }
-

@@ -27,8 +27,7 @@ class PickupMatchesRepository {
       if (data != null && data['status'] == 1) {
         final matches = data['matches'] as List? ?? data['data'] as List? ?? [];
         return matches
-            .map((m) =>
-                PickupMatchData.fromJson(m as Map<String, dynamic>))
+            .map((m) => PickupMatchData.fromJson(m as Map<String, dynamic>))
             .toList();
       }
       return [];

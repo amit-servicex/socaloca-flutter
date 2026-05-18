@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,7 +10,7 @@ import '../../../core/theme/app_colors.dart';
 /// User selects their role: Player, Coach, Manager, Referee, Fan, or Professional Club.
 /// After selection, navigates to appropriate login/signup flow.
 class RoleChoiceScreen extends StatefulWidget {
-  const RoleChoiceScreen({super.key});
+  RoleChoiceScreen({super.key});
 
   @override
   State<RoleChoiceScreen> createState() => _RoleChoiceScreenState();
@@ -42,12 +43,11 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
           SingleChildScrollView(
             child: SafeArea(
               child: Padding(
-                padding:
-                    const EdgeInsets.only(bottom: 80), // Space for bottom text
+                padding: EdgeInsets.only(bottom: 80), // Space for bottom text
                 child: Column(
                   children: [
                     // Logo Box - marginTop 50dp
-                    const SizedBox(height: 100),
+                    SizedBox(height: 100),
                     Center(
                       child: SvgPicture.asset(
                         'assets/icons/socaloca_logo.svg',
@@ -60,14 +60,14 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                     // Top Box - marginTop 30dp, marginLeft/Right 50dp
                     SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      padding: EdgeInsets.symmetric(horizontal: 50),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // "I AM" label with rounded background (3dp radius)
                           Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            padding: const EdgeInsets.only(
+                            margin: EdgeInsets.only(left: 5),
+                            padding: EdgeInsets.only(
                               left: 10,
                               right: 125,
                               top: 5,
@@ -77,8 +77,8 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                               color: AppColors.socaBlack, // new_black (#1c1c1c)
                               borderRadius: BorderRadius.circular(3),
                             ),
-                            child: const Text(
-                              'I AM',
+                            child: Text(
+                              'I AM'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700, // poppins_bold
@@ -91,7 +91,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           ),
 
                           // Radio Group - marginTop 12dp (first item only)
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12),
 
                           // Player
                           _RadioOption(
@@ -158,9 +158,10 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
             right: 20,
             bottom: 20,
             child: Text(
-              '*SocaLoca only collects the data is necessary to provides its service and\nstores it in the anonymised way in our own self-hosted analytics system.',
+              '*SocaLoca only collects the data is necessary to provides its service and\nstores it in the anonymised way in our own self-hosted analytics system.'
+                  .tr,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400, // poppins_regular
                 fontSize: 8,
@@ -177,7 +178,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
 
 /// Radio button option matching Android RadioButton style
 class _RadioOption extends StatelessWidget {
-  const _RadioOption({
+  _RadioOption({
     required this.value,
     required this.groupValue,
     required this.label,
@@ -197,7 +198,7 @@ class _RadioOption extends StatelessWidget {
       onTap: () => onChanged(value),
       child: Padding(
         // paddingVertical="10dp" paddingStart="7dp" paddingEnd="20dp"
-        padding: const EdgeInsets.only(
+        padding: EdgeInsets.only(
           top: 10,
           bottom: 10,
           left: 7,
@@ -222,7 +223,7 @@ class _RadioOption extends StatelessWidget {
                       child: Container(
                         width: 10,
                         height: 10,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.socaYellow,
                         ),
@@ -231,12 +232,12 @@ class _RadioOption extends StatelessWidget {
                   : null,
             ),
 
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
 
             // Label - poppins_bold, 16sp, new_black color
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700, // poppins_bold
                 fontSize: 16,

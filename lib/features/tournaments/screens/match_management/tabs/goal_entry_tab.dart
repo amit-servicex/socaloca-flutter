@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +17,7 @@ class GoalEntryTab extends ConsumerStatefulWidget {
   final TournamentMatchModel match;
   final String tournamentId;
 
-  const GoalEntryTab({
+  GoalEntryTab({
     super.key,
     required this.matchId,
     required this.match,
@@ -40,7 +41,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
           child: _goals.isEmpty
               ? _buildEmptyView()
               : ListView.builder(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   itemCount: _goals.length,
                   itemBuilder: (context, index) {
                     return _buildGoalCard(_goals[index], index);
@@ -50,14 +51,14 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
 
         // Add Goal Button
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
                 blurRadius: 10,
-                offset: const Offset(0, -2),
+                offset: Offset(0, -2),
               ),
             ],
           ),
@@ -65,12 +66,12 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: _isLoading ? null : _showAddGoalDialog,
-              icon: const Icon(Icons.add),
-              label: const Text('Add Goal'),
+              icon: Icon(Icons.add),
+              label: Text('Add Goal'.tr),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -93,9 +94,9 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
             size: 64,
             color: Colors.grey[400],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'No Goals Recorded',
+            'No Goals Recorded'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -103,9 +104,9 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
               color: Colors.grey[700],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            'Tap the button below to add goals',
+            'Tap the button below to add goals'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -119,13 +120,13 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
 
   Widget _buildGoalCard(MatchGoalModel goal, int index) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Row(
           children: [
             // Goal Icon
@@ -136,14 +137,14 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                 color: AppColors.socaYellow.withOpacity(0.2),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.sports_soccer,
                 color: AppColors.socaYellow,
                 size: 24,
               ),
             ),
 
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
 
             // Goal Details
             Expanded(
@@ -152,13 +153,13 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                 children: [
                   Text(
                     goal.playerName ?? 'Unknown Player',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text(
@@ -169,9 +170,9 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                           color: Colors.grey[600],
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 2,
                         ),
@@ -181,7 +182,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                         ),
                         child: Text(
                           "${goal.minute}'",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -198,7 +199,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
             // Delete Button
             IconButton(
               onPressed: () => _deleteGoal(index),
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              icon: Icon(Icons.delete_outline, color: Colors.red),
             ),
           ],
         ),
@@ -215,8 +216,8 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text(
-            'Add Goal',
+          title: Text(
+            'Add Goal'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
@@ -228,22 +229,22 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Team Selection
-                const Text(
-                  'Team',
+                Text(
+                  'Team'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: RadioListTile<String>(
                         title: Text(
                           widget.match.homeTeamName ?? 'Home',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,
                           ),
@@ -261,7 +262,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                       child: RadioListTile<String>(
                         title: Text(
                           widget.match.awayTeamName ?? 'Away',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,
                           ),
@@ -278,20 +279,20 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                   ],
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // Player Name
                 TextField(
                   controller: playerNameController,
                   decoration: InputDecoration(
-                    labelText: 'Player Name',
-                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
+                    labelText: 'Player Name'.tr,
+                    labelStyle: TextStyle(fontFamily: 'Poppins'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
+                      borderSide: BorderSide(
                         color: AppColors.socaYellow,
                         width: 2,
                       ),
@@ -299,7 +300,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // Minute
                 TextField(
@@ -310,15 +311,15 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                     LengthLimitingTextInputFormatter(3),
                   ],
                   decoration: InputDecoration(
-                    labelText: 'Minute',
-                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
-                    hintText: 'e.g., 23',
+                    labelText: 'Minute'.tr,
+                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    hintText: 'e.g., 23'.tr,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
+                      borderSide: BorderSide(
                         color: AppColors.socaYellow,
                         width: 2,
                       ),
@@ -331,7 +332,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text('Cancel'.tr),
             ),
             ElevatedButton(
               onPressed: () {
@@ -349,7 +350,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
               ),
-              child: const Text('Add'),
+              child: Text('Add'.tr),
             ),
           ],
         ),
@@ -418,18 +419,18 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Delete Goal',
+        title: Text(
+          'Delete Goal'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
-        content: const Text(
-          'Are you sure you want to delete this goal?',
+        content: Text(
+          'Are you sure you want to delete this goal?'.tr,
           style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel'.tr),
           ),
           ElevatedButton(
             onPressed: () {
@@ -440,7 +441,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Delete'),
+            child: Text('Delete'.tr),
           ),
         ],
       ),
@@ -451,18 +452,18 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Error',
+        title: Text(
+          'Error'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
           message,
-          style: const TextStyle(fontFamily: 'Poppins'),
+          style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),

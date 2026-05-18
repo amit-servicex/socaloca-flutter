@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +13,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Stats tab — mirrors Android LeagueStatsFragment with sub-tabs:
 /// Goals | Assists | Cards | MOM
 class TournamentStatsTab extends ConsumerStatefulWidget {
-  const TournamentStatsTab({super.key, required this.tournamentId});
+  TournamentStatsTab({super.key, required this.tournamentId});
   final String tournamentId;
 
   @override
@@ -61,11 +62,12 @@ class _TournamentStatsTabState extends ConsumerState<TournamentStatsTab>
 
     setState(() => _loading[type] = true);
 
-    final data = await ref.read(tournamentRepositoryProvider).getTournamentStats(
-          userId: user.id,
-          tournamentId: widget.tournamentId,
-          statType: type,
-        );
+    final data =
+        await ref.read(tournamentRepositoryProvider).getTournamentStats(
+              userId: user.id,
+              tournamentId: widget.tournamentId,
+              statType: type,
+            );
 
     if (mounted) {
       setState(() {
@@ -90,17 +92,17 @@ class _TournamentStatsTabState extends ConsumerState<TournamentStatsTab>
             unselectedLabelColor: AppColors.socaBlack.withOpacity(0.4),
             indicatorColor: AppColors.socaYellow,
             indicatorWeight: 3,
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 13,
             ),
-            unselectedLabelStyle: const TextStyle(
+            unselectedLabelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 13,
             ),
-            tabs: const [
+            tabs: [
               Tab(text: 'Goals'),
               Tab(text: 'Assists'),
               Tab(text: 'Cards'),
@@ -142,7 +144,7 @@ class _TournamentStatsTabState extends ConsumerState<TournamentStatsTab>
 }
 
 class _StatsList extends StatelessWidget {
-  const _StatsList({
+  _StatsList({
     required this.type,
     required this.stats,
     required this.loading,
@@ -157,13 +159,13 @@ class _StatsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     if (stats.isEmpty) {
       return Center(
         child: Text(
-          'No data available',
+          'No data available'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
@@ -174,7 +176,7 @@ class _StatsList extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       itemCount: stats.length,
       itemBuilder: (context, index) {
         final stat = stats[index];
@@ -189,7 +191,7 @@ class _StatsList extends StatelessWidget {
 }
 
 class _StatCard extends StatelessWidget {
-  const _StatCard({
+  _StatCard({
     required this.stat,
     required this.position,
     this.isCards = false,
@@ -204,8 +206,8 @@ class _StatCard extends StatelessWidget {
     final imageUrl = ApiConstants.getImageUrl(stat.playerImage);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
+      margin: EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -213,7 +215,7 @@ class _StatCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -224,7 +226,7 @@ class _StatCard extends StatelessWidget {
             width: 28,
             child: Text(
               '$position',
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -233,13 +235,13 @@ class _StatCard extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
 
           // Player photo
           Container(
             width: 44,
             height: 44,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.socaGrey,
             ),
@@ -248,17 +250,16 @@ class _StatCard extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const Icon(
+                      errorWidget: (_, __, ___) => Icon(
                         Icons.person,
                         color: AppColors.socaBlack,
                         size: 22,
                       ),
                     )
-                  : const Icon(Icons.person,
-                      color: AppColors.socaBlack, size: 22),
+                  : Icon(Icons.person, color: AppColors.socaBlack, size: 22),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // Name + team
           Expanded(
@@ -267,7 +268,7 @@ class _StatCard extends StatelessWidget {
               children: [
                 Text(
                   stat.playerName ?? '',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
@@ -300,17 +301,17 @@ class _StatCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(
                     '${stat.yellowCards}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                 ],
                 if (stat.redCards > 0) ...[
                   Container(
@@ -321,10 +322,10 @@ class _StatCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(
                     '${stat.redCards}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
@@ -338,14 +339,14 @@ class _StatCard extends StatelessWidget {
             Container(
               width: 36,
               height: 36,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.socaBlack,
               ),
               child: Center(
                 child: Text(
                   '${stat.count}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 14,

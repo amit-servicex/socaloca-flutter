@@ -15,7 +15,8 @@ final todaysMatchProvider = FutureProvider<TournamentMatchModel?>((ref) async {
   final userId = StorageService.userId;
   final country = StorageService.currentUser?['country'] as String? ?? '';
 
-  print('🔍 [OneOff] Loading today\'s match - userId: $userId, country: $country');
+  print(
+      '🔍 [OneOff] Loading today\'s match - userId: $userId, country: $country');
 
   if (userId == null || userId.isEmpty) {
     print('❌ [OneOff] No userId found');
@@ -28,7 +29,7 @@ final todaysMatchProvider = FutureProvider<TournamentMatchModel?>((ref) async {
     country: country,
     dateToday: _getCurrentDate(),
   );
-  
+
   print('✅ [OneOff] Today\'s match loaded: ${match?.matchId ?? "null"}');
   return match;
 });
@@ -39,7 +40,8 @@ final upcomingMatchesPreviewProvider =
   final userId = StorageService.userId;
   final country = StorageService.currentUser?['country'] as String? ?? '';
 
-  print('🔍 [OneOff] Loading upcoming matches - userId: $userId, country: $country');
+  print(
+      '🔍 [OneOff] Loading upcoming matches - userId: $userId, country: $country');
 
   if (userId == null || userId.isEmpty) {
     print('❌ [OneOff] No userId found for upcoming');
@@ -52,7 +54,7 @@ final upcomingMatchesPreviewProvider =
     country: country,
     limit: 3,
   );
-  
+
   print('✅ [OneOff] Upcoming matches loaded: ${matches.length} matches');
   return matches;
 });
@@ -63,7 +65,8 @@ final recentMatchesPreviewProvider =
   final userId = StorageService.userId;
   final country = StorageService.currentUser?['country'] as String? ?? '';
 
-  print('🔍 [OneOff] Loading recent matches - userId: $userId, country: $country');
+  print(
+      '🔍 [OneOff] Loading recent matches - userId: $userId, country: $country');
 
   if (userId == null || userId.isEmpty) {
     print('❌ [OneOff] No userId found for recent');
@@ -76,7 +79,7 @@ final recentMatchesPreviewProvider =
     country: country,
     limit: 3,
   );
-  
+
   print('✅ [OneOff] Recent matches loaded: ${matches.length} matches');
   return matches;
 });

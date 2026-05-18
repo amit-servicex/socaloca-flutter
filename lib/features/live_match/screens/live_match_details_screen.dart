@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +15,7 @@ import '../providers/live_match_providers.dart';
 // ─── Screen entry point ───────────────────────────────────────────────────────
 
 class LiveMatchDetailsScreen extends ConsumerStatefulWidget {
-  const LiveMatchDetailsScreen({
+  LiveMatchDetailsScreen({
     super.key,
     required this.matchId,
     required this.tournamentId,
@@ -38,7 +39,7 @@ class _LiveMatchDetailsScreenState
   void initState() {
     super.initState();
     _clockTimer = Timer.periodic(
-      const Duration(seconds: 60),
+      Duration(seconds: 60),
       (_) {
         if (mounted) setState(() => _elapsedMinutes++);
       },
@@ -65,8 +66,8 @@ class _LiveMatchDetailsScreenState
       appBar: AppBar(
         backgroundColor: AppColors.socaBlack,
         foregroundColor: Colors.white,
-        title: const Text(
-          'Live Match',
+        title: Text(
+          'Live Match'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -79,10 +80,13 @@ class _LiveMatchDetailsScreenState
             TextButton(
               onPressed: () => context.push(
                 '/referee/match/${widget.matchId}/live-update',
-                extra: {'matchId': widget.matchId, 'tournamentId': widget.tournamentId},
+                extra: {
+                  'matchId': widget.matchId,
+                  'tournamentId': widget.tournamentId
+                },
               ),
-              child: const Text(
-                'MANAGE',
+              child: Text(
+                'MANAGE'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -94,12 +98,13 @@ class _LiveMatchDetailsScreenState
         ],
       ),
       body: detailState.isLoading && detailState.detail == null
-          ? const AppLoader()
+          ? AppLoader()
           : detailState.error != null && detailState.detail == null
               ? _ErrorView(
                   error: detailState.error!,
-                  onRetry: () =>
-                      ref.read(liveMatchDetailProvider(args).notifier).refresh(),
+                  onRetry: () => ref
+                      .read(liveMatchDetailProvider(args).notifier)
+                      .refresh(),
                 )
               : detailState.detail != null
                   ? _DetailBody(
@@ -109,10 +114,13 @@ class _LiveMatchDetailsScreenState
                       isReferee: isReferee,
                       onManageTap: () => context.push(
                         '/referee/match/${widget.matchId}/live-update',
-                        extra: {'matchId': widget.matchId, 'tournamentId': widget.tournamentId},
+                        extra: {
+                          'matchId': widget.matchId,
+                          'tournamentId': widget.tournamentId
+                        },
                       ),
                     )
-                  : const SizedBox.shrink(),
+                  : SizedBox.shrink(),
     );
   }
 }
@@ -124,7 +132,7 @@ enum _TabType { goals, cards, substitutions, penalty }
 // ─── Main body ────────────────────────────────────────────────────────────────
 
 class _DetailBody extends StatelessWidget {
-  const _DetailBody({
+  _DetailBody({
     required this.detail,
     required this.activeTab,
     required this.onTabSelected,
@@ -167,7 +175,7 @@ class _DetailBody extends StatelessWidget {
 // ─── Score header ─────────────────────────────────────────────────────────────
 
 class _ScoreHeader extends StatelessWidget {
-  const _ScoreHeader({required this.detail});
+  _ScoreHeader({required this.detail});
 
   final LiveMatchDetail detail;
 
@@ -179,8 +187,8 @@ class _ScoreHeader extends StatelessWidget {
     // Format match date/time
     String dateTimeStr = '';
     if (detail.matchDateTimeGmt != null) {
-      final dt = DateTime.fromMillisecondsSinceEpoch(
-          detail.matchDateTimeGmt! * 1000);
+      final dt =
+          DateTime.fromMillisecondsSinceEpoch(detail.matchDateTimeGmt! * 1000);
       final local = dt.toLocal();
       dateTimeStr =
           '${local.day.toString().padLeft(2, '0')}/${local.month.toString().padLeft(2, '0')}/${local.year} '
@@ -189,21 +197,21 @@ class _ScoreHeader extends StatelessWidget {
 
     return Container(
       color: AppColors.socaBlack,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       child: Column(
         children: [
           // Date/time
           if (dateTimeStr.isNotEmpty)
             Text(
               dateTimeStr,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 11,
                 color: Colors.white54,
               ),
             ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Teams + Score row
           Row(
@@ -213,13 +221,13 @@ class _ScoreHeader extends StatelessWidget {
                 child: Column(
                   children: [
                     _TeamLogo(imageUrl: homeTeam?.imageUrl, size: 52),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
                       homeTeam?.teamName ?? '',
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
@@ -229,7 +237,7 @@ class _ScoreHeader extends StatelessWidget {
                     if (homeTeam?.teamShortName?.isNotEmpty == true)
                       Text(
                         '(${homeTeam!.teamShortName})',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Lato',
                           fontSize: 10,
                           color: Colors.white60,
@@ -241,17 +249,17 @@ class _ScoreHeader extends StatelessWidget {
 
               // Score
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Column(
                   children: [
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _ScoreDigit(score: detail.displayHomeGoals),
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(horizontal: 6),
                           child: Text(
-                            '—',
+                            '—'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w800,
@@ -267,13 +275,13 @@ class _ScoreHeader extends StatelessWidget {
                     if (detail.hasPenalties)
                       Text(
                         'Pen: ${detail.myPenalty} — ${detail.opponentPenalty}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           color: AppColors.socaYellow,
                         ),
                       ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     // Match state label
                     _MatchStateBadge(state: detail.state),
                   ],
@@ -285,13 +293,13 @@ class _ScoreHeader extends StatelessWidget {
                 child: Column(
                   children: [
                     _TeamLogo(imageUrl: awayTeam?.imageUrl, size: 52),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
                       awayTeam?.teamName ?? '',
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
@@ -301,7 +309,7 @@ class _ScoreHeader extends StatelessWidget {
                     if (awayTeam?.teamShortName?.isNotEmpty == true)
                       Text(
                         '(${awayTeam!.teamShortName})',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Lato',
                           fontSize: 10,
                           color: Colors.white60,
@@ -319,14 +327,14 @@ class _ScoreHeader extends StatelessWidget {
 }
 
 class _ScoreDigit extends StatelessWidget {
-  const _ScoreDigit({required this.score});
+  _ScoreDigit({required this.score});
   final int score;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       '$score',
-      style: const TextStyle(
+      style: TextStyle(
         fontFamily: 'Poppins',
         fontWeight: FontWeight.w900,
         fontSize: 36,
@@ -337,21 +345,21 @@ class _ScoreDigit extends StatelessWidget {
 }
 
 class _MatchStateBadge extends StatelessWidget {
-  const _MatchStateBadge({required this.state});
+  _MatchStateBadge({required this.state});
   final MatchState state;
 
   @override
   Widget build(BuildContext context) {
     final isLive = state.isLive;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
         color: isLive ? Colors.red : Colors.white24,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         state.label.toUpperCase(),
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w700,
           fontSize: 10,
@@ -363,7 +371,7 @@ class _MatchStateBadge extends StatelessWidget {
 }
 
 class _TeamLogo extends StatelessWidget {
-  const _TeamLogo({this.imageUrl, this.size = 52});
+  _TeamLogo({this.imageUrl, this.size = 52});
   final String? imageUrl;
   final double size;
 
@@ -385,14 +393,14 @@ class _TeamLogo extends StatelessWidget {
               child: Image.network(
                 url,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(
+                errorBuilder: (_, __, ___) => Icon(
                   Icons.sports_soccer,
                   color: Colors.white54,
                   size: 24,
                 ),
               ),
             )
-          : const Icon(Icons.sports_soccer, color: Colors.white54, size: 24),
+          : Icon(Icons.sports_soccer, color: Colors.white54, size: 24),
     );
   }
 }
@@ -400,7 +408,7 @@ class _TeamLogo extends StatelessWidget {
 // ─── Tab bar ──────────────────────────────────────────────────────────────────
 
 class _TabBar extends StatelessWidget {
-  const _TabBar({
+  _TabBar({
     required this.activeTab,
     required this.hasPenalty,
     required this.onSelected,
@@ -444,7 +452,7 @@ class _TabBar extends StatelessWidget {
 }
 
 class _TabButton extends StatelessWidget {
-  const _TabButton({
+  _TabButton({
     required this.label,
     required this.isActive,
     required this.onTap,
@@ -460,7 +468,7 @@ class _TabButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
@@ -488,7 +496,7 @@ class _TabButton extends StatelessWidget {
 // ─── Tab content ──────────────────────────────────────────────────────────────
 
 class _TabContent extends StatelessWidget {
-  const _TabContent({required this.detail, required this.activeTab});
+  _TabContent({required this.detail, required this.activeTab});
 
   final LiveMatchDetail detail;
   final _TabType activeTab;
@@ -511,7 +519,7 @@ class _TabContent extends StatelessWidget {
 // ─── Goals tab ────────────────────────────────────────────────────────────────
 
 class _GoalsTimeline extends StatelessWidget {
-  const _GoalsTimeline({required this.detail});
+  _GoalsTimeline({required this.detail});
   final LiveMatchDetail detail;
 
   @override
@@ -538,11 +546,11 @@ class _GoalsTimeline extends StatelessWidget {
     }).toList();
 
     if (entries.isEmpty) {
-      return const _EmptyTimeline(message: 'No goals recorded yet');
+      return _EmptyTimeline(message: 'No goals recorded yet');
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       itemCount: entries.length,
       itemBuilder: (_, i) => entries[i],
     );
@@ -550,7 +558,7 @@ class _GoalsTimeline extends StatelessWidget {
 }
 
 class _GoalEntry extends StatelessWidget {
-  const _GoalEntry({
+  _GoalEntry({
     required this.goal,
     required this.sequence,
     required this.isHome,
@@ -571,7 +579,7 @@ class _GoalEntry extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           if (isHome) ...[
@@ -582,20 +590,18 @@ class _GoalEntry extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                        goal.missed
-                            ? Icons.close
-                            : Icons.sports_soccer,
+                        goal.missed ? Icons.close : Icons.sports_soccer,
                         size: 16,
                         color: goal.missed ? Colors.red : AppColors.socaBlack,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       if (!goal.missed && sequence > 0)
                         _OrdinalChip(ordinal: ordinal),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           label,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Lato',
                             fontSize: 13,
                             color: AppColors.socaBlack,
@@ -608,9 +614,9 @@ class _GoalEntry extends StatelessWidget {
               ),
             ),
             _MinuteBubble(minute: goal.goalTime, isHome: true),
-            const Expanded(child: SizedBox()),
+            Expanded(child: SizedBox()),
           ] else ...[
-            const Expanded(child: SizedBox()),
+            Expanded(child: SizedBox()),
             _MinuteBubble(minute: goal.goalTime, isHome: false),
             Expanded(
               child: Column(
@@ -623,21 +629,19 @@ class _GoalEntry extends StatelessWidget {
                         child: Text(
                           label,
                           textAlign: TextAlign.end,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Lato',
                             fontSize: 13,
                             color: AppColors.socaBlack,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       if (!goal.missed && sequence > 0)
                         _OrdinalChip(ordinal: ordinal),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Icon(
-                        goal.missed
-                            ? Icons.close
-                            : Icons.sports_soccer,
+                        goal.missed ? Icons.close : Icons.sports_soccer,
                         size: 16,
                         color: goal.missed ? Colors.red : AppColors.socaBlack,
                       ),
@@ -656,19 +660,19 @@ class _GoalEntry extends StatelessWidget {
 // ─── Cards tab ────────────────────────────────────────────────────────────────
 
 class _CardsTimeline extends StatelessWidget {
-  const _CardsTimeline({required this.detail});
+  _CardsTimeline({required this.detail});
   final LiveMatchDetail detail;
 
   @override
   Widget build(BuildContext context) {
     final cards = detail.cards;
     if (cards.isEmpty) {
-      return const _EmptyTimeline(message: 'No cards recorded yet');
+      return _EmptyTimeline(message: 'No cards recorded yet');
     }
     final myTeamId = detail.myTeam?.teamId ?? '';
 
     return ListView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       itemCount: cards.length,
       itemBuilder: (_, i) {
         final card = cards[i];
@@ -680,7 +684,7 @@ class _CardsTimeline extends StatelessWidget {
 }
 
 class _CardEntry extends StatelessWidget {
-  const _CardEntry({required this.card, required this.isHome});
+  _CardEntry({required this.card, required this.isHome});
   final LiveCardEvent card;
   final bool isHome;
 
@@ -693,31 +697,31 @@ class _CardEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           if (isHome) ...[
             _CardIcon(color: _cardColor),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Expanded(
               child: Text(
                 card.playerName,
-                style: const TextStyle(fontFamily: 'Lato', fontSize: 13),
+                style: TextStyle(fontFamily: 'Lato', fontSize: 13),
               ),
             ),
             _MinuteBubble(minute: card.cardTime, isHome: true),
-            const Expanded(child: SizedBox()),
+            Expanded(child: SizedBox()),
           ] else ...[
-            const Expanded(child: SizedBox()),
+            Expanded(child: SizedBox()),
             _MinuteBubble(minute: card.cardTime, isHome: false),
             Expanded(
               child: Text(
                 card.playerName,
                 textAlign: TextAlign.end,
-                style: const TextStyle(fontFamily: 'Lato', fontSize: 13),
+                style: TextStyle(fontFamily: 'Lato', fontSize: 13),
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             _CardIcon(color: _cardColor),
           ],
         ],
@@ -727,7 +731,7 @@ class _CardEntry extends StatelessWidget {
 }
 
 class _CardIcon extends StatelessWidget {
-  const _CardIcon({required this.color});
+  _CardIcon({required this.color});
   final Color color;
 
   @override
@@ -746,19 +750,19 @@ class _CardIcon extends StatelessWidget {
 // ─── Substitutions tab ────────────────────────────────────────────────────────
 
 class _SubsTimeline extends StatelessWidget {
-  const _SubsTimeline({required this.detail});
+  _SubsTimeline({required this.detail});
   final LiveMatchDetail detail;
 
   @override
   Widget build(BuildContext context) {
     final subs = detail.subs;
     if (subs.isEmpty) {
-      return const _EmptyTimeline(message: 'No substitutions recorded yet');
+      return _EmptyTimeline(message: 'No substitutions recorded yet');
     }
     final myTeamId = detail.myTeam?.teamId ?? '';
 
     return ListView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       itemCount: subs.length,
       itemBuilder: (_, i) {
         final sub = subs[i];
@@ -770,7 +774,7 @@ class _SubsTimeline extends StatelessWidget {
 }
 
 class _SubEntry extends StatelessWidget {
-  const _SubEntry({required this.sub, required this.isHome});
+  _SubEntry({required this.sub, required this.isHome});
   final LiveSubEvent sub;
   final bool isHome;
 
@@ -781,32 +785,32 @@ class _SubEntry extends StatelessWidget {
         : '▲ ${sub.playerName}';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           if (isHome) ...[
-            const Icon(Icons.swap_horiz, size: 16, color: Colors.green),
-            const SizedBox(width: 6),
+            Icon(Icons.swap_horiz, size: 16, color: Colors.green),
+            SizedBox(width: 6),
             Expanded(
               child: Text(
                 inOut,
-                style: const TextStyle(fontFamily: 'Lato', fontSize: 13),
+                style: TextStyle(fontFamily: 'Lato', fontSize: 13),
               ),
             ),
             _MinuteBubble(minute: sub.subTime, isHome: true),
-            const Expanded(child: SizedBox()),
+            Expanded(child: SizedBox()),
           ] else ...[
-            const Expanded(child: SizedBox()),
+            Expanded(child: SizedBox()),
             _MinuteBubble(minute: sub.subTime, isHome: false),
             Expanded(
               child: Text(
                 inOut,
                 textAlign: TextAlign.end,
-                style: const TextStyle(fontFamily: 'Lato', fontSize: 13),
+                style: TextStyle(fontFamily: 'Lato', fontSize: 13),
               ),
             ),
-            const SizedBox(width: 6),
-            const Icon(Icons.swap_horiz, size: 16, color: Colors.green),
+            SizedBox(width: 6),
+            Icon(Icons.swap_horiz, size: 16, color: Colors.green),
           ],
         ],
       ),
@@ -817,19 +821,19 @@ class _SubEntry extends StatelessWidget {
 // ─── Penalty tab ──────────────────────────────────────────────────────────────
 
 class _PenaltyTimeline extends StatelessWidget {
-  const _PenaltyTimeline({required this.detail});
+  _PenaltyTimeline({required this.detail});
   final LiveMatchDetail detail;
 
   @override
   Widget build(BuildContext context) {
     final shots = detail.penaltyShots;
     if (shots.isEmpty) {
-      return const _EmptyTimeline(message: 'No penalty data');
+      return _EmptyTimeline(message: 'No penalty data');
     }
     final myTeamId = detail.myTeam?.teamId ?? '';
 
     return ListView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       itemCount: shots.length,
       itemBuilder: (_, i) {
         final shot = shots[i];
@@ -841,18 +845,17 @@ class _PenaltyTimeline extends StatelessWidget {
 }
 
 class _PenaltyEntry extends StatelessWidget {
-  const _PenaltyEntry({required this.shot, required this.isHome});
+  _PenaltyEntry({required this.shot, required this.isHome});
   final LivePenaltyEvent shot;
   final bool isHome;
 
   @override
   Widget build(BuildContext context) {
     final ordinal = _ordinal(shot.goalSequence);
-    final label =
-        '$ordinal penalty${shot.missed ? ' (Missed)' : ''}';
+    final label = '$ordinal penalty${shot.missed ? ' (Missed)' : ''}';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           if (isHome) ...[
@@ -861,24 +864,24 @@ class _PenaltyEntry extends StatelessWidget {
               size: 18,
               color: shot.missed ? Colors.red : Colors.green,
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 6),
             Expanded(
               child: Text(
                 '${shot.playerName}  $label',
-                style: const TextStyle(fontFamily: 'Lato', fontSize: 13),
+                style: TextStyle(fontFamily: 'Lato', fontSize: 13),
               ),
             ),
-            const Expanded(child: SizedBox()),
+            Expanded(child: SizedBox()),
           ] else ...[
-            const Expanded(child: SizedBox()),
+            Expanded(child: SizedBox()),
             Expanded(
               child: Text(
                 '$label  ${shot.playerName}',
                 textAlign: TextAlign.end,
-                style: const TextStyle(fontFamily: 'Lato', fontSize: 13),
+                style: TextStyle(fontFamily: 'Lato', fontSize: 13),
               ),
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 6),
             Icon(
               shot.missed ? Icons.close : Icons.check_circle,
               size: 18,
@@ -894,22 +897,22 @@ class _PenaltyEntry extends StatelessWidget {
 // ─── Shared timeline widgets ──────────────────────────────────────────────────
 
 class _MinuteBubble extends StatelessWidget {
-  const _MinuteBubble({required this.minute, required this.isHome});
+  _MinuteBubble({required this.minute, required this.isHome});
   final int minute;
   final bool isHome;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      margin: EdgeInsets.symmetric(horizontal: 6),
+      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: AppColors.socaBlack,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
         "$minute'",
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w700,
           fontSize: 11,
@@ -921,20 +924,20 @@ class _MinuteBubble extends StatelessWidget {
 }
 
 class _OrdinalChip extends StatelessWidget {
-  const _OrdinalChip({required this.ordinal});
+  _OrdinalChip({required this.ordinal});
   final String ordinal;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
       decoration: BoxDecoration(
         color: AppColors.socaGrey,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         ordinal,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 10,
           fontWeight: FontWeight.w600,
@@ -946,7 +949,7 @@ class _OrdinalChip extends StatelessWidget {
 }
 
 class _EmptyTimeline extends StatelessWidget {
-  const _EmptyTimeline({required this.message});
+  _EmptyTimeline({required this.message});
   final String message;
 
   @override
@@ -955,12 +958,11 @@ class _EmptyTimeline extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.hourglass_empty,
-              size: 48, color: AppColors.textSecondary),
-          const SizedBox(height: 12),
+          Icon(Icons.hourglass_empty, size: 48, color: AppColors.textSecondary),
+          SizedBox(height: 12),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.textSecondary,
@@ -975,7 +977,7 @@ class _EmptyTimeline extends StatelessWidget {
 // ─── Error view ───────────────────────────────────────────────────────────────
 
 class _ErrorView extends StatelessWidget {
-  const _ErrorView({required this.error, required this.onRetry});
+  _ErrorView({required this.error, required this.onRetry});
   final String error;
   final VoidCallback onRetry;
 
@@ -983,27 +985,25 @@ class _ErrorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline,
-                size: 48, color: AppColors.error),
-            const SizedBox(height: 12),
+            Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            SizedBox(height: 12),
             Text(
               error,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: onRetry,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow,
               ),
-              child: const Text('Retry',
-                  style: TextStyle(fontFamily: 'Poppins')),
+              child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),

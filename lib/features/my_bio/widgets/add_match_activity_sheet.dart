@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +13,7 @@ class AddMatchActivitySheet extends ConsumerStatefulWidget {
   final String userId;
   final String gameType; // 'Football' or 'Futsal'
 
-  const AddMatchActivitySheet({
+  AddMatchActivitySheet({
     super.key,
     required this.userId,
     required this.gameType,
@@ -40,8 +41,8 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
   int _rating = 0;
   bool _isSubmitting = false;
 
-  static const _positions = ['Goalkeeper', 'Defender', 'Midfield', 'Attack'];
-  static const _positionTypes = {
+  static final _positions = ['Goalkeeper', 'Defender', 'Midfield', 'Attack'];
+  static final _positionTypes = {
     'Goalkeeper': ['Goalkeeper (GK)'],
     'Defender': ['Centre Back (CB)', 'Right Back (RB)', 'Left Back (LB)'],
     'Midfield': [
@@ -59,7 +60,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
     ],
   };
 
-  static const _monthNames = [
+  static final _monthNames = [
     'Jan',
     'Feb',
     'Mar',
@@ -95,7 +96,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
       lastDate: DateTime.now(),
       builder: (ctx, child) => Theme(
         data: Theme.of(ctx).copyWith(
-          colorScheme: const ColorScheme.light(
+          colorScheme: ColorScheme.light(
             primary: AppColors.socaBlack,
             onPrimary: AppColors.socaYellow,
           ),
@@ -167,7 +168,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Match details added')),
+        SnackBar(content: Text('Match details added'.tr)),
       );
       Navigator.of(context).pop(true);
     } else {
@@ -199,7 +200,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
           children: [
             // ── Handle ──────────────────────────────────────────────────
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 8),
+              margin: EdgeInsets.symmetric(vertical: 8),
               width: 40,
               height: 4,
               decoration: BoxDecoration(
@@ -209,13 +210,13 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
             ),
             // ── Title ────────────────────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Add ${widget.gameType} Match',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -223,50 +224,50 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close),
+                    icon: Icon(Icons.close),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
             ),
-            const Divider(height: 1),
+            Divider(height: 1),
             // ── Form ─────────────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollCtrl,
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Match Date
-                      const _SectionLabel('Match Date *'),
+                      _SectionLabel('Match Date *'),
                       _DateField(
                         date: _selectedDate,
                         placeholder: 'Select match date',
                         onTap: _pickDate,
                         formatter: _formatDateDisplay,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Playing Position
-                      const _SectionLabel('Playing Position *'),
+                      _SectionLabel('Playing Position *'),
                       _Dropdown<String>(
                         value: _position,
                         hint: 'Select playing position',
                         items: _positions,
                         itemLabel: (v) => v,
                         onChanged: (v) => setState(() {
-                          _position = v;
-                          _positionType = null;
+                          final _position = v;
+                          final _positionType = null;
                         }),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Position Type
                       if (_position != null) ...[
-                        const _SectionLabel('Position Type *'),
+                        _SectionLabel('Position Type *'),
                         _Dropdown<String>(
                           value: _positionType,
                           hint: 'Select position type',
@@ -274,7 +275,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                           itemLabel: (v) => v,
                           onChanged: (v) => setState(() => _positionType = v),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                       ],
 
                       // Goals / Goal Saved
@@ -285,60 +286,60 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                         hint: _isGoalkeeper ? 'e.g. 3' : 'e.g. 2',
                         label: _isGoalkeeper ? 'Goals saved' : 'Goals scored',
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Assists
-                      const _SectionLabel('Number of Assists *'),
+                      _SectionLabel('Number of Assists *'),
                       _NumberField(
                         controller: _assistsCtrl,
                         hint: 'e.g. 1',
                         label: 'Assists',
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Minutes Played
-                      const _SectionLabel('Minutes Played *'),
+                      _SectionLabel('Minutes Played *'),
                       _NumberField(
                         controller: _minutesCtrl,
                         hint: 'e.g. 90',
                         label: 'Minutes played',
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // My Team Name
-                      const _SectionLabel('My Team Name *'),
+                      _SectionLabel('My Team Name *'),
                       _TextField(
                         controller: _myTeamCtrl,
                         hint: 'Enter your team name',
                         label: 'Team name',
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Opponent Team Name
-                      const _SectionLabel('Opponent Team Name *'),
+                      _SectionLabel('Opponent Team Name *'),
                       _TextField(
                         controller: _opponentCtrl,
                         hint: 'Enter opponent team name',
                         label: 'Opponent team name',
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Rate Performance 1–10
-                      const _SectionLabel('Rate Your Performance (1–10) *'),
-                      const SizedBox(height: 8),
+                      _SectionLabel('Rate Your Performance (1–10) *'),
+                      SizedBox(height: 8),
                       _RatingRow(
                         value: _rating,
                         onChanged: (v) => setState(() => _rating = v),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Notes
-                      const _SectionLabel('How I Performed (optional)'),
+                      _SectionLabel('How I Performed (optional)'),
                       _NotesField(controller: _notesCtrl),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Submit button
-                      const AppLoader(size: 24, centered: false),
+                      AppLoader(size: 24, centered: false),
                     ],
                   ),
                 ),
@@ -355,14 +356,14 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
 
 class _SectionLabel extends StatelessWidget {
   final String text;
-  const _SectionLabel(this.text);
+  _SectionLabel(this.text);
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 6),
+        padding: EdgeInsets.only(bottom: 6),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -378,7 +379,7 @@ class _DateField extends StatelessWidget {
   final VoidCallback onTap;
   final String Function(DateTime) formatter;
 
-  const _DateField({
+  _DateField({
     required this.date,
     required this.placeholder,
     required this.onTap,
@@ -389,7 +390,7 @@ class _DateField extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade300),
             borderRadius: BorderRadius.circular(8),
@@ -408,7 +409,7 @@ class _DateField extends StatelessWidget {
                   ),
                 ),
               ),
-              const Icon(Icons.calendar_today_outlined,
+              Icon(Icons.calendar_today_outlined,
                   size: 18, color: AppColors.socaGrey),
             ],
           ),
@@ -423,7 +424,7 @@ class _Dropdown<T> extends StatelessWidget {
   final String Function(T) itemLabel;
   final void Function(T?) onChanged;
 
-  const _Dropdown({
+  _Dropdown({
     required this.value,
     required this.hint,
     required this.items,
@@ -433,7 +434,7 @@ class _Dropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(8),
@@ -450,13 +451,13 @@ class _Dropdown<T> extends StatelessWidget {
               ),
             ),
             isExpanded: true,
-            icon: const Icon(Icons.keyboard_arrow_down),
+            icon: Icon(Icons.keyboard_arrow_down),
             items: items
                 .map((item) => DropdownMenuItem<T>(
                       value: item,
                       child: Text(
                         itemLabel(item),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack,
@@ -475,7 +476,7 @@ class _NumberField extends StatelessWidget {
   final String hint;
   final String label;
 
-  const _NumberField({
+  _NumberField({
     required this.controller,
     required this.hint,
     required this.label,
@@ -493,8 +494,7 @@ class _NumberField extends StatelessWidget {
             fontSize: 13,
             color: Colors.grey.shade400,
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -506,7 +506,7 @@ class _NumberField extends StatelessWidget {
         ),
         validator: (v) =>
             (v == null || v.trim().isEmpty) ? 'Enter $label' : null,
-        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
       );
 }
 
@@ -515,7 +515,7 @@ class _TextField extends StatelessWidget {
   final String hint;
   final String label;
 
-  const _TextField({
+  _TextField({
     required this.controller,
     required this.hint,
     required this.label,
@@ -531,8 +531,7 @@ class _TextField extends StatelessWidget {
             fontSize: 13,
             color: Colors.grey.shade400,
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -544,28 +543,27 @@ class _TextField extends StatelessWidget {
         ),
         validator: (v) =>
             (v == null || v.trim().isEmpty) ? 'Enter $label' : null,
-        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
       );
 }
 
 class _NotesField extends StatelessWidget {
   final TextEditingController controller;
 
-  const _NotesField({required this.controller});
+  _NotesField({required this.controller});
 
   @override
   Widget build(BuildContext context) => TextFormField(
         controller: controller,
         maxLines: 3,
         decoration: InputDecoration(
-          hintText: 'Describe how you performed...',
+          hintText: 'Describe how you performed...'.tr,
           hintStyle: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             color: Colors.grey.shade400,
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -575,7 +573,7 @@ class _NotesField extends StatelessWidget {
             borderSide: BorderSide(color: Colors.grey.shade300),
           ),
         ),
-        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
       );
 }
 
@@ -583,7 +581,7 @@ class _RatingRow extends StatelessWidget {
   final int value;
   final void Function(int) onChanged;
 
-  const _RatingRow({required this.value, required this.onChanged});
+  _RatingRow({required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) => Wrap(

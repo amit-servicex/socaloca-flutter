@@ -92,7 +92,8 @@ class AppTheme {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
-            borderSide: const BorderSide(color: AppColors.socaBlack, width: 1.5),
+            borderSide:
+                const BorderSide(color: AppColors.socaBlack, width: 1.5),
           ),
           hintStyle: TextStyle(
             fontFamily: 'Poppins',

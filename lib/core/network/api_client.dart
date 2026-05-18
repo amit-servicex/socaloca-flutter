@@ -132,7 +132,8 @@ class ApiClient {
       return data;
     } on DioException catch (e) {
       if (kDebugMode) {
-        developer.log('❌ GET Error: $endpoint', name: 'ApiClient', error: e.message);
+        developer.log('❌ GET Error: $endpoint',
+            name: 'ApiClient', error: e.message);
       }
       throw ApiException.fromDioException(e);
     }

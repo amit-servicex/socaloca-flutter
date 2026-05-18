@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
 
@@ -36,7 +37,7 @@ class ClubFilterRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+          Text(
             "These are the Professional Football Clubs that have partnered with SOCALOCA to provide content and services to our users.\n\n"
             "If you are a Professional Football Club, you can request to become a SOCALOCA partner and gain access to a wide range of features, including an individualized hub with your logo and branding, in-app uploads of game highlights, training sessions, and interviews, the ability to advertise upcoming trials through your club’s dedicated hub, showcase your club teams and top players, engage fans with news, announcements, and recent results, display sponsors, and much more.",
             style: TextStyle(

@@ -45,8 +45,8 @@ class CupRepository {
       if (details['banners'] != null && details['banners'] is List) {
         final bannersData = details['banners'] as List;
         banners = bannersData
-            .map((json) =>
-                CupBannerModel.fromJson(json as Map<String, dynamic>))
+            .map(
+                (json) => CupBannerModel.fromJson(json as Map<String, dynamic>))
             .toList();
       }
 
@@ -55,8 +55,7 @@ class CupRepository {
       if (response['teams'] != null && response['teams'] is List) {
         final teamsData = response['teams'] as List;
         teams = teamsData
-            .map(
-                (json) => CupTeamModel.fromJson(json as Map<String, dynamic>))
+            .map((json) => CupTeamModel.fromJson(json as Map<String, dynamic>))
             .toList();
       }
 
@@ -75,8 +74,7 @@ class CupRepository {
       if (response['rounds'] != null && response['rounds'] is List) {
         final roundsData = response['rounds'] as List;
         roundsList = roundsData
-            .map((json) =>
-                CupRoundModel.fromJson(json as Map<String, dynamic>))
+            .map((json) => CupRoundModel.fromJson(json as Map<String, dynamic>))
             .toList();
       }
 
@@ -127,8 +125,8 @@ class CupRepository {
       if (details['banners'] != null && details['banners'] is List) {
         final bannersData = details['banners'] as List;
         banners = bannersData
-            .map((json) =>
-                CupBannerModel.fromJson(json as Map<String, dynamic>))
+            .map(
+                (json) => CupBannerModel.fromJson(json as Map<String, dynamic>))
             .toList();
       }
 
@@ -136,8 +134,7 @@ class CupRepository {
       if (response['teams'] != null && response['teams'] is List) {
         final teamsData = response['teams'] as List;
         teams = teamsData
-            .map(
-                (json) => CupTeamModel.fromJson(json as Map<String, dynamic>))
+            .map((json) => CupTeamModel.fromJson(json as Map<String, dynamic>))
             .toList();
       }
 
@@ -154,8 +151,7 @@ class CupRepository {
       if (response['rounds'] != null && response['rounds'] is List) {
         final roundsData = response['rounds'] as List;
         roundsList = roundsData
-            .map((json) =>
-                CupRoundModel.fromJson(json as Map<String, dynamic>))
+            .map((json) => CupRoundModel.fromJson(json as Map<String, dynamic>))
             .toList();
       }
 

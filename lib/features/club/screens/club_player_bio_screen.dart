@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,12 +16,12 @@ class _BioState {
   final ClubPlayerModel? player;
   final ClubPlayerStatsModel? football;
   final ClubPlayerStatsModel? futsal;
-  const _BioState({this.player, this.football, this.futsal});
+  _BioState({this.player, this.football, this.futsal});
 }
 
 /// Club Player Bio Screen — Screen 3 of the Club shell.
 class ClubPlayerBioScreen extends ConsumerStatefulWidget {
-  const ClubPlayerBioScreen({super.key, required this.playerId});
+  ClubPlayerBioScreen({super.key, required this.playerId});
   final String playerId;
   @override
   ConsumerState<ClubPlayerBioScreen> createState() =>
@@ -43,10 +44,12 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
 
     // Parallel API calls
     final results = await Future.wait([
-      ref.read(clubRepositoryProvider).getClubPlayerDetails(
-          playerId: widget.playerId, clubId: clubId),
-      ref.read(clubRepositoryProvider).getPlayerStats(
-          playerId: widget.playerId, year: year),
+      ref
+          .read(clubRepositoryProvider)
+          .getClubPlayerDetails(playerId: widget.playerId, clubId: clubId),
+      ref
+          .read(clubRepositoryProvider)
+          .getPlayerStats(playerId: widget.playerId, year: year),
     ]);
 
     final player = results[0] as ClubPlayerModel?;
@@ -66,8 +69,7 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
 
     if (!mounted) return;
 
-    final name =
-        '${player?.firstName ?? ''} ${player?.lastName ?? ''}'.trim();
+    final name = '${player?.firstName ?? ''} ${player?.lastName ?? ''}'.trim();
     ref.read(clubAppBarTitleProvider.notifier).state =
         name.isNotEmpty ? name : 'Player';
 
@@ -80,17 +82,17 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const AppLoader();
+      return AppLoader();
     }
     final d = _data;
     if (d == null || d.player == null) {
-      return const Center(child: Text('Player not found'));
+      return Center(child: Text('Player not found'.tr));
     }
     final p = d.player!;
     final url = ApiConstants.getImageUrl(p.imageUrl);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -108,25 +110,25 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
                               width: 112,
                               height: 112,
                               fit: BoxFit.cover))
-                      : const Icon(Icons.person, size: 56),
+                      : Icon(Icons.person, size: 56),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Basic info section
           _SectionHeader('Basic Info'),
           _InfoRow('Position', p.position ?? '—'),
           _InfoRow('Jersey', '#${p.jersey}'),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Football stats
           if (d.football != null && d.football!.matchCount > 0) ...[
             _SectionHeader('Football Stats (${DateTime.now().year})'),
             _StatsGrid(stats: d.football!),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
           ],
 
           // Futsal stats
@@ -141,13 +143,13 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
 }
 
 class _SectionHeader extends StatelessWidget {
-  const _SectionHeader(this.title);
+  _SectionHeader(this.title);
   final String title;
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
+        padding: EdgeInsets.only(bottom: 8),
         child: Text(title,
-            style: const TextStyle(
+            style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -156,12 +158,12 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow(this.label, this.value);
+  _InfoRow(this.label, this.value);
   final String label;
   final String value;
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 6),
+        padding: EdgeInsets.only(bottom: 6),
         child: Row(
           children: [
             SizedBox(
@@ -174,7 +176,7 @@ class _InfoRow extends StatelessWidget {
             ),
             Expanded(
               child: Text(value,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 13)),
@@ -185,13 +187,13 @@ class _InfoRow extends StatelessWidget {
 }
 
 class _StatsGrid extends StatelessWidget {
-  const _StatsGrid({required this.stats});
+  _StatsGrid({required this.stats});
   final ClubPlayerStatsModel stats;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -199,7 +201,7 @@ class _StatsGrid extends StatelessWidget {
             BoxShadow(
                 color: Colors.black.withOpacity(0.06),
                 blurRadius: 6,
-                offset: const Offset(0, 2))
+                offset: Offset(0, 2))
           ]),
       child: Column(
         children: [
@@ -211,18 +213,18 @@ class _StatsGrid extends StatelessWidget {
               _StatCell('MVP', '${stats.mvpCount}'),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Row(
             children: [
-              const Icon(Icons.square, color: Colors.yellow, size: 16),
-              const SizedBox(width: 4),
+              Icon(Icons.square, color: Colors.yellow, size: 16),
+              SizedBox(width: 4),
               Text('${stats.yellowCardCount}',
-                  style: const TextStyle(fontFamily: 'Poppins')),
-              const SizedBox(width: 16),
-              const Icon(Icons.square, color: Colors.red, size: 16),
-              const SizedBox(width: 4),
+                  style: TextStyle(fontFamily: 'Poppins')),
+              SizedBox(width: 16),
+              Icon(Icons.square, color: Colors.red, size: 16),
+              SizedBox(width: 4),
               Text('${stats.redCardCount}',
-                  style: const TextStyle(fontFamily: 'Poppins')),
+                  style: TextStyle(fontFamily: 'Poppins')),
             ],
           ),
         ],
@@ -232,7 +234,7 @@ class _StatsGrid extends StatelessWidget {
 }
 
 class _StatCell extends StatelessWidget {
-  const _StatCell(this.label, this.value);
+  _StatCell(this.label, this.value);
   final String label;
   final String value;
   @override
@@ -240,7 +242,7 @@ class _StatCell extends StatelessWidget {
         child: Column(
           children: [
             Text(value,
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w800,
                     fontSize: 18)),

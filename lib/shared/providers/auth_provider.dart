@@ -59,6 +59,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = AuthState(token: token, user: user);
   }
 
+  Future<void> updateUser(UserModel user) async {
+    await StorageService.setCurrentUser(user.toJson());
+    state = state.copyWith(user: user);
+  }
+
   Future<void> setClubSession({
     required String token,
     required ClubUserModel clubUser,

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +17,7 @@ class CupKnockoutBracketView extends ConsumerWidget {
   final String roundId;
   final TournamentCupModel cup;
 
-  const CupKnockoutBracketView({
+  CupKnockoutBracketView({
     super.key,
     required this.tournamentId,
     required this.roundId,
@@ -44,9 +45,9 @@ class CupKnockoutBracketView extends ConsumerWidget {
                   size: 64,
                   color: Colors.grey[400],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Text(
-                  'No knockout matches yet',
+                  'No knockout matches yet'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -63,38 +64,38 @@ class CupKnockoutBracketView extends ConsumerWidget {
             ref.invalidate(cupKnockoutMatchesProvider(params));
           },
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Round Info
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.emoji_events,
                         color: AppColors.socaYellow,
                         size: 20,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         _getRoundName(matches.first.level),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: AppColors.socaYellow,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Text(
                         '${matches.length} ${matches.length == 1 ? "Match" : "Matches"}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           color: AppColors.socaYellow,
@@ -104,7 +105,7 @@ class CupKnockoutBracketView extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // Matches List
                 ...matches.map((match) => _buildMatchCard(match)),
@@ -113,20 +114,20 @@ class CupKnockoutBracketView extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const AppLoader(),
+      loading: () => AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline, size: 64, color: Colors.red),
+            SizedBox(height: 16),
             Text('Error loading bracket: $error'),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(cupKnockoutMatchesProvider(params));
               },
-              child: const Text('Retry'),
+              child: Text('Retry'.tr),
             ),
           ],
         ),
@@ -136,23 +137,26 @@ class CupKnockoutBracketView extends ConsumerWidget {
 
   Widget _buildMatchCard(CupMatchModel match) {
     final hasScore = match.homeScore != null && match.awayScore != null;
-    final hasExtraTime = match.homeExtraTimeScore != null && match.awayExtraTimeScore != null;
-    final hasPenalties = match.homePenaltyScore != null && match.awayPenaltyScore != null;
+    final hasExtraTime =
+        match.homeExtraTimeScore != null && match.awayExtraTimeScore != null;
+    final hasPenalties =
+        match.homePenaltyScore != null && match.awayPenaltyScore != null;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: match.winnerId != null ? AppColors.socaYellow : Colors.grey[300]!,
+          color:
+              match.winnerId != null ? AppColors.socaYellow : Colors.grey[300]!,
           width: match.winnerId != null ? 2 : 1,
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -186,10 +190,10 @@ class CupKnockoutBracketView extends ConsumerWidget {
           // Match Info
           if (match.matchDate != null || match.venue != null)
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Colors.grey[50],
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
                 ),
@@ -198,8 +202,8 @@ class CupKnockoutBracketView extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (match.matchDate != null) ...[
-                    const Icon(Icons.calendar_today, size: 14, color: Colors.grey),
-                    const SizedBox(width: 4),
+                    Icon(Icons.calendar_today, size: 14, color: Colors.grey),
+                    SizedBox(width: 4),
                     Text(
                       match.matchDate!,
                       style: TextStyle(
@@ -211,7 +215,7 @@ class CupKnockoutBracketView extends ConsumerWidget {
                   ],
                   if (match.matchDate != null && match.venue != null)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Container(
                         width: 4,
                         height: 4,
@@ -222,8 +226,8 @@ class CupKnockoutBracketView extends ConsumerWidget {
                       ),
                     ),
                   if (match.venue != null) ...[
-                    const Icon(Icons.location_on, size: 14, color: Colors.grey),
-                    const SizedBox(width: 4),
+                    Icon(Icons.location_on, size: 14, color: Colors.grey),
+                    SizedBox(width: 4),
                     Flexible(
                       child: Text(
                         match.venue!,
@@ -254,11 +258,11 @@ class CupKnockoutBracketView extends ConsumerWidget {
     required bool isTop,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isWinner ? AppColors.socaYellow.withOpacity(0.1) : Colors.white,
         borderRadius: isTop
-            ? const BorderRadius.only(
+            ? BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
               )
@@ -271,7 +275,7 @@ class CupKnockoutBracketView extends ConsumerWidget {
             child: _buildTeamLogo(teamLogo, 40),
           ),
 
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // Team Name
           Expanded(
@@ -298,7 +302,8 @@ class CupKnockoutBracketView extends ConsumerWidget {
                     fontFamily: 'Poppins',
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
-                    color: isWinner ? AppColors.socaYellow : AppColors.socaBlack,
+                    color:
+                        isWinner ? AppColors.socaYellow : AppColors.socaBlack,
                   ),
                 ),
                 // Extra Time & Penalties
@@ -317,7 +322,7 @@ class CupKnockoutBracketView extends ConsumerWidget {
 
           // Winner Icon
           if (isWinner)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 8),
               child: Icon(
                 Icons.emoji_events,
@@ -393,7 +398,7 @@ class CupKnockoutBracketView extends ConsumerWidget {
 
   String _getRoundName(String? level) {
     if (level == null) return 'Knockout Round';
-    
+
     switch (level) {
       case '1':
         return 'Final';

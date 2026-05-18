@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,7 +12,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class AddTrainingActivitySheet extends ConsumerStatefulWidget {
   final String userId;
 
-  const AddTrainingActivitySheet({super.key, required this.userId});
+  AddTrainingActivitySheet({super.key, required this.userId});
 
   @override
   ConsumerState<AddTrainingActivitySheet> createState() =>
@@ -28,8 +29,8 @@ class _AddTrainingActivitySheetState
   String? _trainType;
   bool _isSubmitting = false;
 
-  static const _trainTypes = ['Individual', 'One-To-One', 'Group'];
-  static const _monthNames = [
+  static final _trainTypes = ['Individual', 'One-To-One', 'Group'];
+  static final _monthNames = [
     'Jan',
     'Feb',
     'Mar',
@@ -59,7 +60,7 @@ class _AddTrainingActivitySheetState
       lastDate: DateTime.now(),
       builder: (ctx, child) => Theme(
         data: Theme.of(ctx).copyWith(
-          colorScheme: const ColorScheme.light(
+          colorScheme: ColorScheme.light(
             primary: AppColors.socaBlack,
             onPrimary: AppColors.socaYellow,
           ),
@@ -112,7 +113,7 @@ class _AddTrainingActivitySheetState
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Training session added')),
+        SnackBar(content: Text('Training session added'.tr)),
       );
       Navigator.of(context).pop(true);
     } else {
@@ -141,7 +142,7 @@ class _AddTrainingActivitySheetState
           children: [
             // ── Handle ──────────────────────────────────────────────────
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 8),
+              margin: EdgeInsets.symmetric(vertical: 8),
               width: 40,
               height: 4,
               decoration: BoxDecoration(
@@ -151,12 +152,12 @@ class _AddTrainingActivitySheetState
             ),
             // ── Title ────────────────────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Add Training Session',
+                  Text(
+                    'Add Training Session'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -165,18 +166,18 @@ class _AddTrainingActivitySheetState
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close),
+                    icon: Icon(Icons.close),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
             ),
-            const Divider(height: 1),
+            Divider(height: 1),
             // ── Form ─────────────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollCtrl,
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -190,7 +191,7 @@ class _AddTrainingActivitySheetState
                         onTap: _pickDate,
                         formatter: _formatDisplay,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Training Type
                       _label('Training Type *'),
@@ -200,7 +201,7 @@ class _AddTrainingActivitySheetState
                         items: _trainTypes,
                         onChanged: (v) => setState(() => _trainType = v),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Minutes
                       _label('Training Minutes *'),
@@ -214,10 +215,9 @@ class _AddTrainingActivitySheetState
                         validator: (v) => (v == null || v.trim().isEmpty)
                             ? 'Enter training minutes'
                             : null,
-                        style: const TextStyle(
-                            fontFamily: 'Poppins', fontSize: 13),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Notes
                       _label('Notes (optional)'),
@@ -226,13 +226,12 @@ class _AddTrainingActivitySheetState
                         maxLines: 3,
                         decoration: _inputDecoration(
                             'Describe your training session...'),
-                        style: const TextStyle(
-                            fontFamily: 'Poppins', fontSize: 13),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Submit
-                      const AppLoader(size: 24, centered: false),
+                      AppLoader(size: 24, centered: false),
                     ],
                   ),
                 ),
@@ -245,10 +244,10 @@ class _AddTrainingActivitySheetState
   }
 
   Widget _label(String text) => Padding(
-        padding: const EdgeInsets.only(bottom: 6),
+        padding: EdgeInsets.only(bottom: 6),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -264,8 +263,7 @@ class _AddTrainingActivitySheetState
           fontSize: 13,
           color: Colors.grey.shade400,
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -283,7 +281,7 @@ class _DatePicker extends StatelessWidget {
   final VoidCallback onTap;
   final String Function(DateTime) formatter;
 
-  const _DatePicker({
+  _DatePicker({
     required this.date,
     required this.placeholder,
     required this.onTap,
@@ -294,7 +292,7 @@ class _DatePicker extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade300),
             borderRadius: BorderRadius.circular(8),
@@ -313,7 +311,7 @@ class _DatePicker extends StatelessWidget {
                   ),
                 ),
               ),
-              const Icon(Icons.calendar_today_outlined,
+              Icon(Icons.calendar_today_outlined,
                   size: 18, color: AppColors.socaGrey),
             ],
           ),
@@ -327,7 +325,7 @@ class _DropdownField extends StatelessWidget {
   final List<String> items;
   final void Function(String?) onChanged;
 
-  const _DropdownField({
+  _DropdownField({
     required this.value,
     required this.hint,
     required this.items,
@@ -336,7 +334,7 @@ class _DropdownField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(8),
@@ -353,13 +351,13 @@ class _DropdownField extends StatelessWidget {
               ),
             ),
             isExpanded: true,
-            icon: const Icon(Icons.keyboard_arrow_down),
+            icon: Icon(Icons.keyboard_arrow_down),
             items: items
                 .map((item) => DropdownMenuItem<String>(
                       value: item,
                       child: Text(
                         item,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack,

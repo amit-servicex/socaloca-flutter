@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +16,7 @@ class CardEntryTab extends ConsumerStatefulWidget {
   final TournamentMatchModel match;
   final String tournamentId;
 
-  const CardEntryTab({
+  CardEntryTab({
     super.key,
     required this.matchId,
     required this.match,
@@ -38,7 +39,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
           child: _cards.isEmpty
               ? _buildEmptyView()
               : ListView.builder(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   itemCount: _cards.length,
                   itemBuilder: (context, index) {
                     return _buildCardCard(_cards[index], index);
@@ -46,14 +47,14 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                 ),
         ),
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
                 blurRadius: 10,
-                offset: const Offset(0, -2),
+                offset: Offset(0, -2),
               ),
             ],
           ),
@@ -61,12 +62,12 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: _isLoading ? null : _showAddCardDialog,
-              icon: const Icon(Icons.add),
-              label: const Text('Add Card'),
+              icon: Icon(Icons.add),
+              label: Text('Add Card'.tr),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -85,9 +86,9 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.style, size: 64, color: Colors.grey[400]),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'No Cards Recorded',
+            'No Cards Recorded'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -95,9 +96,9 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
               color: Colors.grey[700],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            'Tap the button below to add cards',
+            'Tap the button below to add cards'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -114,13 +115,13 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
     final cardColor = isRed ? Colors.red : Colors.yellow[700]!;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Row(
           children: [
             Container(
@@ -132,20 +133,20 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
               ),
               child: Icon(Icons.style, color: cardColor, size: 24),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     card.playerName ?? 'Unknown Player',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text(
@@ -156,9 +157,9 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                           color: Colors.grey[600],
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 2,
                         ),
@@ -183,7 +184,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
             ),
             IconButton(
               onPressed: () => _deleteCard(index),
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              icon: Icon(Icons.delete_outline, color: Colors.red),
             ),
           ],
         ),
@@ -201,8 +202,8 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text(
-            'Add Card',
+          title: Text(
+            'Add Card'.tr,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
           ),
@@ -211,8 +212,8 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Card Type',
+                Text(
+                  'Card Type'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -223,7 +224,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                   children: [
                     Expanded(
                       child: RadioListTile<String>(
-                        title: const Text('Yellow',
+                        title: Text('Yellow'.tr,
                             style:
                                 TextStyle(fontFamily: 'Poppins', fontSize: 13)),
                         value: 'YELLOW',
@@ -235,7 +236,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     ),
                     Expanded(
                       child: RadioListTile<String>(
-                        title: const Text('Red',
+                        title: Text('Red'.tr,
                             style:
                                 TextStyle(fontFamily: 'Poppins', fontSize: 13)),
                         value: 'RED',
@@ -247,20 +248,20 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                const Text('Team',
+                SizedBox(height: 16),
+                Text('Team'.tr,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         fontWeight: FontWeight.w600)),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: RadioListTile<String>(
                         title: Text(widget.match.homeTeamName ?? 'Home',
-                            style: const TextStyle(
-                                fontFamily: 'Poppins', fontSize: 13)),
+                            style:
+                                TextStyle(fontFamily: 'Poppins', fontSize: 13)),
                         value: 'home',
                         groupValue: selectedTeam,
                         onChanged: (value) =>
@@ -272,8 +273,8 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     Expanded(
                       child: RadioListTile<String>(
                         title: Text(widget.match.awayTeamName ?? 'Away',
-                            style: const TextStyle(
-                                fontFamily: 'Poppins', fontSize: 13)),
+                            style:
+                                TextStyle(fontFamily: 'Poppins', fontSize: 13)),
                         value: 'away',
                         groupValue: selectedTeam,
                         onChanged: (value) =>
@@ -284,22 +285,22 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 TextField(
                   controller: playerNameController,
                   decoration: InputDecoration(
-                    labelText: 'Player Name',
-                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
+                    labelText: 'Player Name'.tr,
+                    labelStyle: TextStyle(fontFamily: 'Poppins'),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                          color: AppColors.socaYellow, width: 2),
+                      borderSide:
+                          BorderSide(color: AppColors.socaYellow, width: 2),
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 TextField(
                   controller: minuteController,
                   keyboardType: TextInputType.number,
@@ -308,15 +309,15 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     LengthLimitingTextInputFormatter(3)
                   ],
                   decoration: InputDecoration(
-                    labelText: 'Minute',
-                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
-                    hintText: 'e.g., 45',
+                    labelText: 'Minute'.tr,
+                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    hintText: 'e.g., 45'.tr,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                          color: AppColors.socaYellow, width: 2),
+                      borderSide:
+                          BorderSide(color: AppColors.socaYellow, width: 2),
                     ),
                   ),
                 ),
@@ -326,7 +327,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel')),
+                child: Text('Cancel'.tr)),
             ElevatedButton(
               onPressed: () {
                 if (playerNameController.text.isNotEmpty &&
@@ -344,7 +345,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
               ),
-              child: const Text('Add'),
+              child: Text('Add'.tr),
             ),
           ],
         ),
@@ -409,15 +410,15 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Card',
+        title: Text('Delete Card'.tr,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: const Text('Are you sure you want to delete this card?',
+        content: Text('Are you sure you want to delete this card?'.tr,
             style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+              child: Text('Cancel'.tr)),
           ElevatedButton(
             onPressed: () {
               setState(() => _cards.removeAt(index));
@@ -425,7 +426,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: const Text('Delete'),
+            child: Text('Delete'.tr),
           ),
         ],
       ),
@@ -436,13 +437,13 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Error',
+        title: Text('Error'.tr,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: Text(message, style: const TextStyle(fontFamily: 'Poppins')),
+        content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: const Text('OK'))
+              onPressed: () => Navigator.pop(context), child: Text('OK'.tr))
         ],
       ),
     );

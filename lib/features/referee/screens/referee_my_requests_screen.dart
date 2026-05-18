@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -8,7 +9,7 @@ import '../widgets/referee_shared_widgets.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyRequestsScreen extends ConsumerStatefulWidget {
-  const RefereeMyRequestsScreen({super.key});
+  RefereeMyRequestsScreen({super.key});
 
   @override
   ConsumerState<RefereeMyRequestsScreen> createState() =>
@@ -27,8 +28,7 @@ class _RefereeMyRequestsScreenState
   }
 
   void _onTournamentChanged(String? tournamentId) {
-    ref.read(refereeSelectedTmntRequestsProvider.notifier).state =
-        tournamentId;
+    ref.read(refereeSelectedTmntRequestsProvider.notifier).state = tournamentId;
     ref.read(refereeRequestsProvider.notifier).load(
           tournamentId: tournamentId,
         );
@@ -44,32 +44,30 @@ class _RefereeMyRequestsScreenState
       children: [
         // Tournament filter dropdown
         Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+          padding: EdgeInsets.fromLTRB(12, 12, 12, 4),
           child: dropdownAsync.when(
             data: (items) => RefereeTournamentDropdown(
               items: items,
               selectedId: selectedTmnt,
               onChanged: _onTournamentChanged,
             ),
-            loading: () => const RefereeDropdownLoading(),
-            error: (_, __) => const SizedBox.shrink(),
+            loading: () => RefereeDropdownLoading(),
+            error: (_, __) => SizedBox.shrink(),
           ),
         ),
         Expanded(
           child: matchesState.when(
-            loading: () => const AppLoader(),
+            loading: () => AppLoader(),
             error: (e, _) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline,
-                      size: 48, color: AppColors.error),
-                  const SizedBox(height: 12),
+                  Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                  SizedBox(height: 12),
                   Text(e.toString(),
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontFamily: 'Poppins', fontSize: 13)),
-                  const SizedBox(height: 12),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                  SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () =>
                         ref.read(refereeRequestsProvider.notifier).load(
@@ -78,19 +76,19 @@ class _RefereeMyRequestsScreenState
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.socaBlack,
                         foregroundColor: AppColors.socaYellow),
-                    child: const Text('Retry',
+                    child: Text('Retry'.tr,
                         style: TextStyle(fontFamily: 'Poppins')),
                   ),
                 ],
               ),
             ),
             data: (matches) => matches.isEmpty
-                ? const RefereeEmptyState(
+                ? RefereeEmptyState(
                     message: 'No pending match requests',
                     icon: Icons.inbox_outlined,
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(12),
                     itemCount: matches.length,
                     itemBuilder: (ctx, i) => _RequestCard(
                       match: matches[i],
@@ -115,7 +113,9 @@ class _RefereeMyRequestsScreenState
     );
     if (!mounted) return;
     if (ok) {
-      ref.read(refereeRequestsProvider.notifier).removeMatch(match.matchId ?? '');
+      ref
+          .read(refereeRequestsProvider.notifier)
+          .removeMatch(match.matchId ?? '');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(accept ? 'Request accepted' : 'Request declined'),
@@ -124,8 +124,8 @@ class _RefereeMyRequestsScreenState
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Action failed. Please try again.'),
+        SnackBar(
+          content: Text('Action failed. Please try again.'.tr),
           backgroundColor: Colors.red,
         ),
       );
@@ -137,7 +137,7 @@ class _RefereeMyRequestsScreenState
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Decline Reason',
+        title: Text('Decline Reason'.tr,
             style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
@@ -146,16 +146,15 @@ class _RefereeMyRequestsScreenState
           controller: controller,
           maxLines: 3,
           decoration: InputDecoration(
-            hintText: 'Enter reason...',
-            hintStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6)),
+            hintText: 'Enter reason...'.tr,
+            hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel',
+            child: Text('Cancel'.tr,
                 style: TextStyle(
                     fontFamily: 'Poppins', color: AppColors.socaBlack)),
           ),
@@ -164,8 +163,7 @@ class _RefereeMyRequestsScreenState
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow),
-            child: const Text('Submit',
-                style: TextStyle(fontFamily: 'Poppins')),
+            child: Text('Submit'.tr, style: TextStyle(fontFamily: 'Poppins')),
           ),
         ],
       ),
@@ -180,7 +178,7 @@ class _RefereeMyRequestsScreenState
 // ─── Shared widgets used across multiple referee screens ─────────────────────
 
 class _RequestCard extends StatelessWidget {
-  const _RequestCard({
+  _RequestCard({
     required this.match,
     required this.onAccept,
     required this.onDecline,
@@ -193,35 +191,35 @@ class _RequestCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFE0E0E0)),
+        border: Border.all(color: Color(0xFFE0E0E0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Tournament + round
             Text(
               '${match.tournamentName ?? ''}${match.roundName != null ? ' — ${match.roundName}' : ''}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
                 color: AppColors.socaBlack,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             // Teams
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -230,16 +228,16 @@ class _RequestCard extends StatelessWidget {
                   child: Text(
                     match.teamA ?? '',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
                         color: AppColors.socaBlack),
                   ),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text('vs',
+                  child: Text('vs'.tr,
                       style: TextStyle(
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
@@ -250,7 +248,7 @@ class _RequestCard extends StatelessWidget {
                   child: Text(
                     match.teamB ?? '',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
@@ -259,31 +257,33 @@ class _RequestCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             // Date · Time · Venue
             Wrap(
               spacing: 12,
               runSpacing: 4,
               children: [
                 if (match.matchDate != null)
-                  RefereeInfoChip(icon: Icons.calendar_today, text: match.matchDate!),
+                  RefereeInfoChip(
+                      icon: Icons.calendar_today, text: match.matchDate!),
                 if (match.matchTime != null)
-                  RefereeInfoChip(icon: Icons.access_time, text: match.matchTime!),
+                  RefereeInfoChip(
+                      icon: Icons.access_time, text: match.matchTime!),
                 if (match.venue != null)
                   RefereeInfoChip(icon: Icons.location_on, text: match.venue!),
                 if (match.ageGroup != null)
                   RefereeInfoChip(icon: Icons.group, text: match.ageGroup!),
               ],
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             // Accept / Decline buttons
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: onAccept,
-                    icon: const Icon(Icons.check, size: 16),
-                    label: const Text('ACCEPT',
+                    icon: Icon(Icons.check, size: 16),
+                    label: Text('ACCEPT'.tr,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
@@ -291,26 +291,26 @@ class _RequestCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.socaBlack,
                       foregroundColor: AppColors.socaYellow,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 10),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6)),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: onDecline,
-                    icon: const Icon(Icons.close, size: 16),
-                    label: const Text('DECLINE',
+                    icon: Icon(Icons.close, size: 16),
+                    label: Text('DECLINE'.tr,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
                             fontSize: 12)),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.socaBlack,
-                      side: const BorderSide(color: AppColors.socaBlack),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      side: BorderSide(color: AppColors.socaBlack),
+                      padding: EdgeInsets.symmetric(vertical: 10),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6)),
                     ),
@@ -323,5 +323,4 @@ class _RequestCard extends StatelessWidget {
       ),
     );
   }
-
 }

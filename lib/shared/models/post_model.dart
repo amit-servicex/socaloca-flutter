@@ -20,7 +20,8 @@ class PostModel with _$PostModel {
     @Default(false) bool isLiked,
     @Default(false) bool isBlocked,
     String? createdAt,
-    String? postType,     // 'user', 'club', 'academy', 'fa', 'confed', 'spon', 'charity'
+    String?
+        postType, // 'user', 'club', 'academy', 'fa', 'confed', 'spon', 'charity'
     String? language,
     String? translatedText,
   }) = _PostModel;

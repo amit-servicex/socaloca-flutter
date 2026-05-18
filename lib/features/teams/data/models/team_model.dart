@@ -40,4 +40,3 @@ extension TeamModelX on TeamModel {
   String get memberText =>
       '$memberCount ${memberCount == 1 ? "Member" : "Members"}';
 }
-

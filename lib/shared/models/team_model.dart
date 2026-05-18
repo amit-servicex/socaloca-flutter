@@ -33,7 +33,7 @@ class TeamPlayer with _$TeamPlayer {
     String? profileImage,
     String? position,
     int? jerseyNumber,
-    String? role,            // 'player', 'admin', 'coach_manager'
+    String? role, // 'player', 'admin', 'coach_manager'
     @Default(false) bool isAdmin,
   }) = _TeamPlayer;
 

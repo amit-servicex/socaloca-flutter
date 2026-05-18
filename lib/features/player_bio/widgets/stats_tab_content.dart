@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -15,7 +16,7 @@ class StatsTabContent extends ConsumerWidget {
   final PlayerBioModel playerBio;
   final bool embedded;
 
-  const StatsTabContent({
+  StatsTabContent({
     super.key,
     required this.playerId,
     required this.playerBio,
@@ -45,7 +46,7 @@ class StatsTabContent extends ConsumerWidget {
           year: state.selectedYear,
           onYearTap: () => _showYearPicker(context, ref),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         _buildStatsSection(
           context: context,
           ref: ref,
@@ -60,11 +61,11 @@ class StatsTabContent extends ConsumerWidget {
     );
 
     if (embedded) {
-      return Padding(padding: const EdgeInsets.all(20), child: content);
+      return Padding(padding: EdgeInsets.all(20), child: content);
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       child: content,
     );
   }
@@ -80,7 +81,7 @@ class StatsTabContent extends ConsumerWidget {
     required VoidCallback onYearTap,
   }) {
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -88,7 +89,7 @@ class StatsTabContent extends ConsumerWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -101,7 +102,7 @@ class StatsTabContent extends ConsumerWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -111,7 +112,7 @@ class StatsTabContent extends ConsumerWidget {
               GestureDetector(
                 onTap: onYearTap,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 6,
                   ),
@@ -123,15 +124,15 @@ class StatsTabContent extends ConsumerWidget {
                     children: [
                       Text(
                         year.toString(),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: AppColors.socaBlack,
                         ),
                       ),
-                      const SizedBox(width: 5),
-                      const Icon(
+                      SizedBox(width: 5),
+                      Icon(
                         Icons.arrow_drop_down,
                         size: 20,
                         color: AppColors.socaBlack,
@@ -143,16 +144,16 @@ class StatsTabContent extends ConsumerWidget {
             ],
           ),
 
-          const SizedBox(height: 15),
+          SizedBox(height: 15),
 
           if (isLoading)
-            const AppLoader()
+            AppLoader()
           else if (stats == null)
-            const Center(
+            Center(
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: Text(
-                  'No stats available for this year',
+                  'No stats available for this year'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -206,13 +207,13 @@ class StatsTabContent extends ConsumerWidget {
             ),
 
           // Past Years link
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           GestureDetector(
             onTap: () {
               // TODO: Navigate to all stats screen
             },
-            child: const Text(
-              'View Past Years →',
+            child: Text(
+              'View Past Years →'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
@@ -238,7 +239,7 @@ class StatsTabContent extends ConsumerWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w400,
@@ -247,7 +248,7 @@ class StatsTabContent extends ConsumerWidget {
           ),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -266,16 +267,16 @@ class StatsTabContent extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Select Year',
+            Text(
+              'Select Year'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 18,
@@ -283,11 +284,11 @@ class StatsTabContent extends ConsumerWidget {
                 color: AppColors.socaBlack,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             ...years.map((year) => ListTile(
                   title: Text(
                     year.toString(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

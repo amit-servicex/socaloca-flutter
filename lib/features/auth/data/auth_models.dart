@@ -44,6 +44,9 @@ class LoginResponse {
       country: json['country'] as String?,
       dob: json['dob'] as String?,
       userType: json['type'] as String?,
+      firstName: json['firstName'] as String?,
+      lastName: json['lastName'] as String?,
+      sclId: readSclId(json),
       isVerified: (json['verified'] as bool?) ?? false,
       policyAccepted: (json['acceptPolicy'] as bool?) ?? false,
       profile: (json['profile'] as bool?) ?? false,
@@ -200,6 +203,22 @@ class PreRegisterResponse {
       ageGroup: json['ageGroup'] as String?,
     );
   }
+}
+
+/// Result from forgetPassw (step 1 of the forgot-password OTP flow).
+/// Mirrors Android FORGET_ALL_PASS_WORD response fields.
+class ForgotPasswordResult {
+  const ForgotPasswordResult({
+    required this.userId,
+    required this.userFound,
+    required this.contactExist,
+  });
+
+  final String userId;
+  final bool userFound;
+
+  /// false when the user signed up via SocaLoca ID but has no email/mobile on file.
+  final bool contactExist;
 }
 
 /// Minimal success/failure wrapper — used instead of a full Either type

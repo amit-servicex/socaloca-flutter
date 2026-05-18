@@ -6,8 +6,9 @@ final teamPlayersRepositoryProvider = Provider<TeamPlayersRepository>((ref) {
   return TeamPlayersRepository();
 });
 
-final teamPlayersProvider = StateNotifierProvider.family<TeamPlayersNotifier,
-    TeamPlayersState, String>((ref, teamId) {
+final teamPlayersProvider =
+    StateNotifierProvider.family<TeamPlayersNotifier, TeamPlayersState, String>(
+        (ref, teamId) {
   final repository = ref.watch(teamPlayersRepositoryProvider);
   return TeamPlayersNotifier(repository, teamId);
 });
@@ -80,14 +81,14 @@ class TeamPlayersNotifier extends StateNotifier<TeamPlayersState> {
 
       for (final player in players) {
         final position = player.playPosition?.toLowerCase();
-        
+
         // Check if player is coach/manager (no position or special jersey)
         final jerseyNo = player.jerseyNumber?.toLowerCase() ?? '';
-        final isCoachManager = jerseyNo.contains('coach') || 
-                               jerseyNo.contains('manager') ||
-                               position == null || 
-                               position.isEmpty;
-        
+        final isCoachManager = jerseyNo.contains('coach') ||
+            jerseyNo.contains('manager') ||
+            position == null ||
+            position.isEmpty;
+
         if (isCoachManager) {
           coaches.add(player);
         } else if (position != null) {

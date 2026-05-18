@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -14,16 +15,16 @@ import '../../../core/theme/app_colors.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ── Post category constants (from Android Params.java) ────────────────────────
-const _kSkillVideo = 'skill';
-const _kFootballMoments = 'moment';
-const _kPostTypeImage = 'image';
-const _kPostTypeVideo = 'video';
+final _kSkillVideo = 'skill';
+final _kFootballMoments = 'moment';
+final _kPostTypeImage = 'image';
+final _kPostTypeVideo = 'video';
 
 /// Create Post screen — mirrors Android CreatePostFragment.
 /// Video mode: space bar → write+tag → post type → choose category → notify → media
 /// Image mode: write+tag → post type → media
 class CreatePostScreen extends ConsumerStatefulWidget {
-  const CreatePostScreen({super.key});
+  CreatePostScreen({super.key});
 
   @override
   ConsumerState<CreatePostScreen> createState() => _CreatePostScreenState();
@@ -53,7 +54,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   double _maxMB = 1024;
   bool _spaceLoaded = false;
 
-  static const int _maxImages = 10;
+  static int _maxImages = 10;
 
   @override
   void initState() {
@@ -82,10 +83,10 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         final max = (raw['max'] as num?)?.toDouble() ?? 0;
         final available = (raw['available'] as num?)?.toDouble() ?? 0;
         setState(() {
-          _usedMB = used / (1024 * 1024);
-          _maxMB = max / (1024 * 1024);
-          _availableMB = available / (1024 * 1024);
-          _spaceLoaded = true;
+          final _usedMB = used / (1024 * 1024);
+          final _maxMB = max / (1024 * 1024);
+          final _availableMB = available / (1024 * 1024);
+          final _spaceLoaded = true;
         });
       }
     } catch (_) {}
@@ -122,7 +123,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   Future<void> _pickVideo() async {
     final file = await _imagePicker.pickVideo(
       source: ImageSource.gallery,
-      maxDuration: const Duration(minutes: 10),
+      maxDuration: Duration(minutes: 10),
     );
     if (file != null) {
       // Check file size against available space
@@ -131,7 +132,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       if (_spaceLoaded && fileMB > _availableMB) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Video larger than available space')),
+            SnackBar(content: Text('Video larger than available space'.tr)),
           );
         }
         return;
@@ -179,27 +180,27 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please write something')),
+        SnackBar(content: Text('Please write something'.tr)),
       );
       return;
     }
     if (_postType == _kPostTypeImage && _selectedImages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select at least one photo')),
+        SnackBar(content: Text('Please select at least one photo'.tr)),
       );
       return;
     }
     if (_postType == _kPostTypeVideo && _selectedVideo == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a video')),
+        SnackBar(content: Text('Please select a video'.tr)),
       );
       return;
     }
 
     setState(() {
-      _isUploading = true;
-      _uploadProgress = 0;
-      _uploadStatus = 'Uploading...';
+      final _isUploading = true;
+      final _uploadProgress = 0;
+      final _uploadStatus = 'Uploading...';
     });
 
     try {
@@ -211,9 +212,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         for (int i = 0; i < _selectedImages.length; i++) {
           final img = _selectedImages[i];
           setState(() {
-            _uploadStatus =
+            final _uploadStatus =
                 'Uploading photo ${i + 1} of ${_selectedImages.length}...';
-            _uploadProgress = i / _selectedImages.length;
+            final _uploadProgress = i / _selectedImages.length;
           });
 
           final size = File(img.path).lengthSync().toDouble();
@@ -282,7 +283,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       final status = (result['response']?['status'] as num?)?.toInt() ?? 0;
       if (status == 1) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Post published successfully!')),
+          SnackBar(content: Text('Post published successfully!'.tr)),
         );
         context.pop();
       } else {
@@ -297,9 +298,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     } finally {
       if (mounted) {
         setState(() {
-          _isUploading = false;
-          _uploadProgress = 0;
-          _uploadStatus = '';
+          final _isUploading = false;
+          final _uploadProgress = 0;
+          final _uploadStatus = '';
         });
       }
     }
@@ -318,7 +319,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   }
 
   Widget _buildUploadProgress() {
-    return const AppLoader();
+    return AppLoader();
   }
 
   Widget _buildForm() {
@@ -326,7 +327,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     final showNotify = isVideo && _postCat == _kSkillVideo;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -338,7 +339,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               maxMB: _maxMB,
               loaded: _spaceLoaded,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
           ],
 
           // ── 2. Write something + TAG PEOPLE (same row) ────────────────────
@@ -347,7 +348,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -356,12 +357,12 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     controller: _titleController,
                     maxLength: 200,
                     maxLines: 1,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack),
-                    decoration: const InputDecoration(
-                      hintText: 'Write something',
+                    decoration: InputDecoration(
+                      hintText: 'Write something'.tr,
                       hintStyle: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -373,18 +374,17 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 GestureDetector(
                   onTap: _openTagPlayers,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     decoration: BoxDecoration(
                       color: AppColors.socaBlack,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Text(
-                      'TAG PEOPLE',
+                    child: Text(
+                      'TAG PEOPLE'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
@@ -400,7 +400,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
 
           // Tagged chips
           if (_taggedUsers.isNotEmpty) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 6,
@@ -417,7 +417,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     child: imageUrl.isEmpty
                         ? Text(
                             name.isNotEmpty ? name[0].toUpperCase() : '?',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 10,
                                 color: AppColors.socaBlack),
@@ -426,31 +426,31 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   ),
                   label: Text(
                     name.isNotEmpty ? name : u['userId'].toString(),
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         color: AppColors.socaBlack),
                   ),
-                  deleteIcon: const Icon(Icons.close,
-                      size: 14, color: AppColors.socaBlack),
+                  deleteIcon:
+                      Icon(Icons.close, size: 14, color: AppColors.socaBlack),
                   onDeleted: () => _removeTag(u['userId'].toString()),
                   backgroundColor: AppColors.socaGrey,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 4),
                 );
               }).toList(),
             ),
           ],
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // ── 3. Post Type — Videos first, Photos second ─────────────────────
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
               children: [
-                const Text(
-                  'Post Type',
+                Text(
+                  'Post Type'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
@@ -458,42 +458,42 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     color: AppColors.socaBlack,
                   ),
                 ),
-                const SizedBox(width: 20),
+                SizedBox(width: 20),
                 _RadioOption(
                   value: _kPostTypeVideo,
                   groupValue: _postType,
                   label: 'Videos',
                   onChanged: (v) => setState(() {
-                    _postType = v!;
+                    final _postType = v!;
                     _selectedImages.clear();
                   }),
                 ),
-                const SizedBox(width: 20),
+                SizedBox(width: 20),
                 _RadioOption(
                   value: _kPostTypeImage,
                   groupValue: _postType,
                   label: 'Photos',
                   onChanged: (v) => setState(() {
-                    _postType = v!;
-                    _selectedVideo = null;
+                    final _postType = v!;
+                    final _selectedVideo = null;
                   }),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // ── 4. Choose section (video only) ────────────────────────────────
           if (isVideo) ...[
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 16),
+              padding: EdgeInsets.fromLTRB(14, 12, 14, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Choose',
+                  Text(
+                    'Choose'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
@@ -501,7 +501,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _CategoryOption(
                     value: _kSkillVideo,
                     groupValue: _postCat,
@@ -510,7 +510,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                         '(Share videos of you displaying your football skills in matches or in training to be endorsed or rated by SocaLoca users, including coaches and scouts.)',
                     onChanged: (v) => setState(() => _postCat = v!),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   _CategoryOption(
                     value: _kFootballMoments,
                     groupValue: _postCat,
@@ -522,14 +522,14 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
           ],
 
           // ── 5. Notify checkbox (video + skill video only) ──────────────────
           if (showNotify) ...[
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
               child: GestureDetector(
                 onTap: () =>
                     setState(() => _notifyFollowers = !_notifyFollowers),
@@ -541,9 +541,10 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                       activeColor: AppColors.socaBlack,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Notify all coaches/managers/scounts to endorse video',
+                        'Notify all coaches/managers/scounts to endorse video'
+                            .tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -555,13 +556,13 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
           ],
 
           // ── 6. Media section ───────────────────────────────────────────────
           if (isVideo) _buildVideoSection() else _buildImageSection(),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // ── 7. Invite players ──────────────────────────────────────────────
           Row(
@@ -569,10 +570,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: _invitePlayers,
-                  icon: const Icon(Icons.share,
-                      size: 16, color: AppColors.socaBlack),
-                  label: const Text(
-                    'INVITE PLAYERS',
+                  icon: Icon(Icons.share, size: 16, color: AppColors.socaBlack),
+                  label: Text(
+                    'INVITE PLAYERS'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
@@ -581,15 +581,15 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.socaBlack),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    side: BorderSide(color: AppColors.socaBlack),
+                    padding: EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // ── 8. CREATE POST button ──────────────────────────────────────────
           GestureDetector(
@@ -601,9 +601,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'CREATE POST',
+                  'CREATE POST'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -615,7 +615,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             ),
           ),
 
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
         ],
       ),
     );
@@ -630,8 +630,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         if (_selectedImages.isNotEmpty) ...[
           GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
@@ -651,44 +651,43 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   child: GestureDetector(
                     onTap: () => _removeImage(i),
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                           color: Colors.black54, shape: BoxShape.circle),
-                      padding: const EdgeInsets.all(4),
-                      child: const Icon(Icons.close,
-                          color: Colors.white, size: 16),
+                      padding: EdgeInsets.all(4),
+                      child: Icon(Icons.close, color: Colors.white, size: 16),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
         ],
         if (_selectedImages.length < _maxImages) ...[
           Text(
             'Add Photos (${_selectedImages.length}/$_maxImages)',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: AppColors.socaBlack,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Row(
             children: [
               _MediaBtn(
                   icon: Icons.camera_alt_outlined,
                   label: 'Camera',
                   onTap: () => _pickImages(ImageSource.camera)),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _MediaBtn(
                   icon: Icons.photo_library_outlined,
                   label: 'Gallery',
                   onTap: () => _pickImages(ImageSource.gallery)),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             '(max $_maxImages photos allowed)',
             style: TextStyle(
@@ -717,7 +716,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                const Icon(Icons.play_circle_fill,
+                Icon(Icons.play_circle_fill,
                     color: AppColors.socaYellow, size: 60),
                 Positioned(
                   top: 8,
@@ -725,11 +724,10 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   child: GestureDetector(
                     onTap: () => setState(() => _selectedVideo = null),
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                           color: Colors.black54, shape: BoxShape.circle),
-                      padding: const EdgeInsets.all(4),
-                      child: const Icon(Icons.close,
-                          color: Colors.white, size: 18),
+                      padding: EdgeInsets.all(4),
+                      child: Icon(Icons.close, color: Colors.white, size: 18),
                     ),
                   ),
                 ),
@@ -739,7 +737,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   right: 8,
                   child: Text(
                     _selectedVideo!.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         color: Colors.white70),
@@ -750,7 +748,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
         ],
         _MediaBtn(
           icon: Icons.videocam_outlined,
@@ -758,9 +756,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           onTap: _pickVideo,
           fullWidth: true,
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
-          '(max 10 videos allowed)',
+          '(max 10 videos allowed)'.tr,
           style: TextStyle(
               fontFamily: 'Poppins', fontSize: 11, color: Colors.grey.shade600),
         ),
@@ -777,7 +775,7 @@ class _SpaceBar extends StatelessWidget {
   final double maxMB;
   final bool loaded;
 
-  const _SpaceBar({
+  _SpaceBar({
     required this.availableMB,
     required this.usedMB,
     required this.maxMB,
@@ -790,14 +788,14 @@ class _SpaceBar extends StatelessWidget {
 
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      padding: EdgeInsets.fromLTRB(14, 12, 14, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Text(
-                'Available Space : ',
+              Text(
+                'Available Space : '.tr,
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
@@ -805,7 +803,7 @@ class _SpaceBar extends StatelessWidget {
               ),
               Text(
                 loaded ? '${availableMB.toStringAsFixed(2)} MB' : '—',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -814,11 +812,11 @@ class _SpaceBar extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           Row(
             children: [
-              const Text(
-                'Used Space : ',
+              Text(
+                'Used Space : '.tr,
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
@@ -826,7 +824,7 @@ class _SpaceBar extends StatelessWidget {
               ),
               Text(
                 loaded ? '${usedMB.toStringAsFixed(2)} MB' : '—',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -835,7 +833,7 @@ class _SpaceBar extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
@@ -845,16 +843,16 @@ class _SpaceBar extends StatelessWidget {
               minHeight: 8,
             ),
           ),
-          const SizedBox(height: 4),
-          const Row(
+          SizedBox(height: 4),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('0MB',
+              Text('0MB'.tr,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       color: AppColors.socaBlack)),
-              Text('1024MB',
+              Text('1024MB'.tr,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
@@ -876,7 +874,7 @@ class _CategoryOption extends StatelessWidget {
   final String description;
   final ValueChanged<String?> onChanged;
 
-  const _CategoryOption({
+  _CategoryOption({
     required this.value,
     required this.groupValue,
     required this.title,
@@ -898,22 +896,22 @@ class _CategoryOption extends StatelessWidget {
             activeColor: AppColors.socaBlack,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: AppColors.socaBlack,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   description,
                   style: TextStyle(
@@ -940,7 +938,7 @@ class _RadioOption extends StatelessWidget {
   final String label;
   final ValueChanged<String?> onChanged;
 
-  const _RadioOption({
+  _RadioOption({
     required this.value,
     required this.groupValue,
     required this.label,
@@ -962,7 +960,7 @@ class _RadioOption extends StatelessWidget {
             ),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,
@@ -981,7 +979,7 @@ class _MediaBtn extends StatelessWidget {
   final VoidCallback onTap;
   final bool fullWidth;
 
-  const _MediaBtn({
+  _MediaBtn({
     required this.icon,
     required this.label,
     required this.onTap,
@@ -993,7 +991,7 @@ class _MediaBtn extends StatelessWidget {
     final btn = GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -1003,9 +1001,9 @@ class _MediaBtn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: AppColors.socaBlack, size: 20),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -1028,7 +1026,7 @@ class _TagPlayersSheet extends StatefulWidget {
   final List<Map<String, dynamic>> selected;
   final ValueChanged<List<Map<String, dynamic>>> onDone;
 
-  const _TagPlayersSheet({
+  _TagPlayersSheet({
     required this.userId,
     required this.selected,
     required this.onDone,
@@ -1047,7 +1045,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
   @override
   void initState() {
     super.initState();
-    _selected = List.from(widget.selected);
+    final _selected = List.from(widget.selected);
   }
 
   @override
@@ -1100,13 +1098,13 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
       maxChildSize: 0.95,
       minChildSize: 0.4,
       builder: (ctx, scrollController) => Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
         child: Column(
           children: [
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Container(
               width: 40,
               height: 4,
@@ -1116,12 +1114,12 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Tag Players',
+                      'Tag Players'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -1135,8 +1133,8 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                       widget.onDone(_selected);
                       Navigator.of(context).pop();
                     },
-                    child: const Text(
-                      'Done',
+                    child: Text(
+                      'Done'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -1149,18 +1147,17 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
                 controller: _searchController,
                 onChanged: _search,
                 decoration: InputDecoration(
-                  hintText: 'Search players...',
-                  hintStyle: const TextStyle(
+                  hintText: 'Search players...'.tr,
+                  hintStyle: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaGrey),
-                  prefixIcon:
-                      const Icon(Icons.search, color: AppColors.socaGrey),
+                  prefixIcon: Icon(Icons.search, color: AppColors.socaGrey),
                   filled: true,
                   fillColor: Colors.grey.shade100,
                   border: OutlineInputBorder(
@@ -1168,17 +1165,17 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             if (_isSearching)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(16),
-                child: const AppLoader(),
+                child: AppLoader(),
               )
             else
               Expanded(
@@ -1188,7 +1185,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                           _searchController.text.length < 2
                               ? 'Type at least 2 characters to search'
                               : 'No players found',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,
                             color: AppColors.socaGrey,
@@ -1218,7 +1215,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                                       name.isNotEmpty
                                           ? name[0].toUpperCase()
                                           : '?',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 14,
                                         color: AppColors.socaBlack,
@@ -1228,7 +1225,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                             ),
                             title: Text(
                               name.isNotEmpty ? name : id,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -1237,7 +1234,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                             subtitle: user['playPosition'] != null
                                 ? Text(
                                     user['playPosition'].toString(),
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 11,
                                       color: AppColors.socaGrey,
@@ -1245,7 +1242,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                                   )
                                 : null,
                             trailing: sel
-                                ? const Icon(Icons.check_circle,
+                                ? Icon(Icons.check_circle,
                                     color: AppColors.socaBlack)
                                 : Icon(Icons.radio_button_unchecked,
                                     color: Colors.grey.shade400),

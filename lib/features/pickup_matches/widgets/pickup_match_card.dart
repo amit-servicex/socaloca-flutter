@@ -63,8 +63,7 @@ class PickupMatchCard extends StatelessWidget {
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
               ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               child: Row(
                 children: [
                   _Badge(label: match.ageGroup),
@@ -144,8 +143,7 @@ class PickupMatchCard extends StatelessWidget {
                   // Footer: creator info + max players
                   Row(
                     children: [
-                      _CreatorAvatar(
-                          imageUrl: match.creatorDetails?.imageUrl),
+                      _CreatorAvatar(imageUrl: match.creatorDetails?.imageUrl),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -276,8 +274,8 @@ class _CreatorAvatar extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) =>
-                    const Icon(Icons.person, size: 16, color: AppColors.socaBlack),
+                errorWidget: (_, __, ___) => const Icon(Icons.person,
+                    size: 16, color: AppColors.socaBlack),
               )
             : const Icon(Icons.person, size: 16, color: AppColors.socaBlack),
       ),

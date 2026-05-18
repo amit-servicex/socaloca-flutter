@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,7 +12,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Academies screen - main tab for browsing academies
 class AcademiesScreen extends ConsumerStatefulWidget {
-  const AcademiesScreen({super.key});
+  AcademiesScreen({super.key});
 
   @override
   ConsumerState<AcademiesScreen> createState() => _AcademiesScreenState();
@@ -152,7 +153,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
     });
 
     // Auto-search after country change (with delay)
-    Future.delayed(const Duration(milliseconds: 250), () {
+    Future.delayed(Duration(milliseconds: 250), () {
       if (mounted) {
         final notifier = ref.read(academiesProvider.notifier);
         if (country == 'All') {
@@ -208,7 +209,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       // appBar: AppBar(
-      //   title: const Text('Academies'),
+      //   title: Text('Academies'.tr),
       //   backgroundColor: AppColors.socaBlack,
       //   foregroundColor: AppColors.socaYellow,
       //   elevation: 0,
@@ -219,13 +220,14 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
           // Description and Filters Section
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Description Text
-                const Text(
-                  'SocaLoca is the home for football academies of any scale, age category, playing level, or location. SocaLoca provides an innovative and intuitive platform designed around the modern needs of a football academy.',
+                Text(
+                  'SocaLoca is the home for football academies of any scale, age category, playing level, or location. SocaLoca provides an innovative and intuitive platform designed around the modern needs of a football academy.'
+                      .tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -233,12 +235,12 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 15),
+                SizedBox(height: 15),
 
                 // Country Dropdown
                 Container(
                   height: 42,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
                     color: AppColors.socaGrey.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(5),
@@ -247,8 +249,8 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                     child: DropdownButton<String>(
                       value: _selectedCountry,
                       isExpanded: true,
-                      icon: const Icon(Icons.arrow_drop_down, size: 20),
-                      style: const TextStyle(
+                      icon: Icon(Icons.arrow_drop_down, size: 20),
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -265,12 +267,12 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
 
                 // Category Dropdown
                 Container(
                   height: 42,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
                     color: AppColors.socaGrey.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(5),
@@ -279,8 +281,8 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                     child: DropdownButton<String>(
                       value: _selectedCategory,
                       isExpanded: true,
-                      icon: const Icon(Icons.arrow_drop_down, size: 20),
-                      style: const TextStyle(
+                      icon: Icon(Icons.arrow_drop_down, size: 20),
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -297,7 +299,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 15),
+                SizedBox(height: 15),
 
                 // GO Button
                 GestureDetector(
@@ -308,9 +310,9 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                       color: AppColors.socaBlack,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'GO',
+                        'GO'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -334,43 +336,43 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
           // Academies List
           Expanded(
             child: state.isLoading
-                ? const AppLoader()
+                ? AppLoader()
                 : state.error != null
                     ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.error_outline,
                               size: 48,
                               color: AppColors.error,
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             Text(
                               state.error!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: AppColors.socaBlack,
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: _onGoPressed,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.socaBlack,
                                 foregroundColor: AppColors.socaYellow,
                               ),
-                              child: const Text('Retry'),
+                              child: Text('Retry'.tr),
                             ),
                           ],
                         ),
                       )
                     : state.academies.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Text(
-                              'No academies found.',
+                              'No academies found.'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
@@ -381,7 +383,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                           )
                         : ListView.builder(
                             controller: _scrollController,
-                            padding: const EdgeInsets.symmetric(
+                            padding: EdgeInsets.symmetric(
                               horizontal: 15,
                               vertical: 10,
                             ),
@@ -389,9 +391,9 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                                 (state.isLoadingMore ? 1 : 0),
                             itemBuilder: (context, index) {
                               if (index == state.academies.length) {
-                                return const Padding(
+                                return Padding(
                                   padding: EdgeInsets.all(16),
-                                  child: const AppLoader(),
+                                  child: AppLoader(),
                                 );
                               }
 

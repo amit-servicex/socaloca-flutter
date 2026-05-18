@@ -54,7 +54,8 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
     print('🔵 loadFeed: User loaded');
     print('  id: ${user.id}');
     print('  name: ${user.name}');
-    print('  isFan: ${user.isFan}, isPlayer: ${user.isPlayer}, isCoach: ${user.isCoach}, isAdmin: ${user.isAdmin}');
+    print(
+        '  isFan: ${user.isFan}, isPlayer: ${user.isPlayer}, isCoach: ${user.isCoach}, isAdmin: ${user.isAdmin}');
 
     try {
       final repository = ref.read(feedRepositoryProvider);
@@ -120,6 +121,7 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
   }
 }
 
-final feedProvider = StateNotifierProvider<FeedNotifier, AsyncValue<List<FeedPost>>>((ref) {
+final feedProvider =
+    StateNotifierProvider<FeedNotifier, AsyncValue<List<FeedPost>>>((ref) {
   return FeedNotifier(ref);
 });

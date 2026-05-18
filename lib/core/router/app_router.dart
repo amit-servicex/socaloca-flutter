@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -76,6 +77,7 @@ import '../../features/club/screens/club_trials_screen.dart';
 import '../../features/settings/screens/change_password_screen.dart';
 import '../../features/settings/screens/privacy_settings_screen.dart';
 import '../../shared/providers/auth_provider.dart';
+import '../services/navigation_service.dart';
 import 'app_routes.dart';
 
 // Bridges Riverpod auth state into GoRouter's refreshListenable so the router
@@ -91,6 +93,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   ref.onDispose(refreshNotifier.dispose);
 
   return GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: true,
     refreshListenable: refreshNotifier,
@@ -149,28 +152,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // ─── Splash ───────────────────────────────────────────────────────
       GoRoute(
         path: AppRoutes.splash,
-        builder: (ctx, state) => const SplashScreen(),
+        builder: (ctx, state) => SplashScreen(),
       ),
 
       // ─── Auth shell ───────────────────────────────────────────────────
       GoRoute(
         path: AppRoutes.loginLanding,
-        builder: (ctx, state) => const LoginLandingScreen(),
+        builder: (ctx, state) => LoginLandingScreen(),
         routes: [
           GoRoute(
             path: 'login',
             name: 'login',
-            builder: (ctx, state) => const NewLoginScreen(),
+            builder: (ctx, state) => NewLoginScreen(),
           ),
           GoRoute(
             path: 'club-login',
             name: 'clubLogin',
-            builder: (ctx, state) => const ClubLoginScreen(),
+            builder: (ctx, state) => ClubLoginScreen(),
           ),
           GoRoute(
             path: 'signup',
             name: 'signup',
-            builder: (ctx, state) => const SignupScreen(),
+            builder: (ctx, state) => SignupScreen(),
           ),
           GoRoute(
             path: 'otp',
@@ -195,29 +198,40 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'reset-password',
             name: 'resetPassword',
             builder: (ctx, state) {
-              final isClub = state.extra == true;
-              return ResetPasswordScreen(isClubPath: isClub);
+              // Extras are a Map passed from ForgotPasswordScreen on the user
+              // path, or a plain bool (true) on the club path.
+              if (state.extra is Map) {
+                final extra = state.extra as Map<String, dynamic>;
+                return ResetPasswordScreen(
+                  userId: extra['userId'] as String? ?? '',
+                  signType: extra['signType'] as String? ?? 'email',
+                  identifier: extra['identifier'] as String? ?? '',
+                  countryCode: extra['countryCode'] as String? ?? '',
+                );
+              }
+              // Club path — legacy token-based reset
+              return ResetPasswordScreen(isClubPath: state.extra == true);
             },
           ),
           GoRoute(
             path: 'role-choice',
             name: 'roleChoice',
-            builder: (ctx, state) => const RoleChoiceScreen(),
+            builder: (ctx, state) => RoleChoiceScreen(),
           ),
           GoRoute(
             path: 'age-selection',
             name: 'ageSelection',
-            builder: (ctx, state) => const AgeSelectionScreen(),
+            builder: (ctx, state) => AgeSelectionScreen(),
           ),
           GoRoute(
             path: 'youth-consent',
             name: 'youthConsent',
-            builder: (ctx, state) => const YouthConsentScreen(),
+            builder: (ctx, state) => YouthConsentScreen(),
           ),
           GoRoute(
             path: 'child-consent',
             name: 'childConsent',
-            builder: (ctx, state) => const ChildConsentScreen(),
+            builder: (ctx, state) => ChildConsentScreen(),
           ),
           GoRoute(
             path: 'pin-setup',
@@ -242,12 +256,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'social-age',
             name: 'socialAge',
-            builder: (ctx, state) => const SocialAgeSelectionScreen(),
+            builder: (ctx, state) => SocialAgeSelectionScreen(),
           ),
           GoRoute(
             path: 'create-profile',
             name: 'createProfile',
-            builder: (ctx, state) => const CreateProfileScreen(),
+            builder: (ctx, state) => CreateProfileScreen(),
           ),
         ],
       ),
@@ -255,14 +269,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // ─── Onboarding ───────────────────────────────────────────────────
       GoRoute(
         path: AppRoutes.onboarding,
-        builder: (ctx, state) => const OnboardingScreen(),
+        builder: (ctx, state) => OnboardingScreen(),
       ),
 
       // ─── Location Picker ──────────────────────────────────────────────
       GoRoute(
         path: AppRoutes.locationPicker,
         name: 'locationPicker',
-        builder: (ctx, state) => const LocationPickerScreen(),
+        builder: (ctx, state) => LocationPickerScreen(),
       ),
 
       // ─── Main app (shell with bottom nav) ────────────────────────────
@@ -275,54 +289,52 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (ctx, state) =>
 
                 // Scaffold(
-                //   body: Center(child: Text('Home - Coming Soon')),
+                //   body: Center(child: Text('Home - Coming Soon'.tr)),
                 // ),
-                const HomeScreen(),
+                HomeScreen(),
           ),
           GoRoute(
             path: AppRoutes.teams,
             name: 'teams',
-            builder: (ctx, state) => const TeamsScreenNew(),
+            builder: (ctx, state) => TeamsScreenNew(),
           ),
           GoRoute(
             path: AppRoutes.tournaments,
             name: 'tournaments',
             builder: (ctx, state) =>
                 // Scaffold(
-                //   body: Center(child: Text('tournaments - Coming Soon')),
+                //   body: Center(child: Text('tournaments - Coming Soon'.tr)),
                 // ),
-                const TournamentsLandingScreen(),
+                TournamentsLandingScreen(),
           ),
           GoRoute(
             path: AppRoutes.clubsPartners,
             name: 'clubsPartners',
             builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Players - Coming Soon')),
+              body: Center(child: Text('Players - Coming Soon'.tr)),
             ),
-            // const ClubsPartnersLandingScreen(),
+            // ClubsPartnersLandingScreen(),
           ),
           GoRoute(
             path: AppRoutes.players,
             name: 'players',
             builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Players - Coming Soon')),
+              body: Center(child: Text('Players - Coming Soon'.tr)),
             ),
-            // const PlayersScreen(),
+            // PlayersScreen(),
           ),
           GoRoute(
             path: AppRoutes.trials,
             name: 'trials',
-            builder: (ctx, state) => const Scaffold(
-              body: Center(child: Text('Trials - Coming Soon')),
-            ),
+            builder: (ctx, state) => const TrialsLandingScreen(),
           ),
           GoRoute(
             path: AppRoutes.academies,
             name: 'academies',
             builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('academies - Coming Soon')),
+              body: Center(child: Text('academies - Coming Soon'.tr)),
             ),
-            // const AcademiesScreen(),
+            // AcademiesScreen(),
           ),
 
           // ─── Academy Bio (detail screen outside shell) ────────────────────
@@ -338,25 +350,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.matches,
             name: 'matches',
-            builder: (ctx, state) => const SizedBox(),
+            builder: (ctx, state) => SizedBox(),
           ),
           GoRoute(
             path: AppRoutes.notifications,
             name: 'notifications',
             builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Notifications - Coming Soon')),
+              body: Center(child: Text('Notifications - Coming Soon'.tr)),
             ),
-            // const NotificationsScreen(),
+            // NotificationsScreen(),
           ),
           GoRoute(
             path: AppRoutes.profile,
             name: 'profile',
-            builder: (ctx, state) => const SizedBox(),
+            builder: (ctx, state) => SizedBox(),
           ),
           GoRoute(
             path: AppRoutes.myBio,
             name: 'myBio',
-            builder: (ctx, state) => const MyBioScreen(),
+            builder: (ctx, state) => MyBioScreen(),
           ),
 
           // ─── My Bio sub-screens (outside shell) ──────────────────────────
@@ -422,7 +434,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.createPost,
             name: 'createPost',
-            builder: (ctx, state) => const CreatePostScreen(),
+            builder: (ctx, state) => CreatePostScreen(),
           ),
           GoRoute(
             path: AppRoutes.editProfile,
@@ -488,6 +500,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             },
           ),
           GoRoute(
+            path: AppRoutes.changePassword,
+            name: 'changePassword',
+            builder: (ctx, state) => ChangePasswordScreen(),
+          ),
+          GoRoute(
             path: AppRoutes.playerPendingTeams,
             name: 'playerPendingTeams',
             builder: (ctx, state) {
@@ -498,7 +515,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.playerReceivedTeams,
             name: 'playerReceivedTeams',
-            builder: (ctx, state) => const PlayerReceivedTeamsScreen(),
+            builder: (ctx, state) => PlayerReceivedTeamsScreen(),
           ),
 
           // ─── Search (full screen outside shell) ──────────────────────────
@@ -506,9 +523,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.search,
             name: 'search',
             builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Search - Coming Soon')),
+              body: Center(child: Text('Search - Coming Soon'.tr)),
             ),
-            // const SearchScreen(),
+            // SearchScreen(),
           ),
 
           // ─── Team Bio (detail screen outside shell) ──────────────────────
@@ -581,22 +598,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.confedBio,
             name: 'confedBio',
-            builder: (ctx, state) => const Scaffold(
-              body: Center(child: Text('Confederation Bio — Coming Soon')),
+            builder: (ctx, state) => Scaffold(
+              body: Center(child: Text('Confederation Bio — Coming Soon'.tr)),
             ),
           ),
           GoRoute(
             path: AppRoutes.sponsorBio,
             name: 'sponsorBio',
-            builder: (ctx, state) => const Scaffold(
-              body: Center(child: Text('Sponsor Bio — Coming Soon')),
+            builder: (ctx, state) => Scaffold(
+              body: Center(child: Text('Sponsor Bio — Coming Soon'.tr)),
             ),
           ),
           GoRoute(
             path: AppRoutes.charityBio,
             name: 'charityBio',
-            builder: (ctx, state) => const Scaffold(
-              body: Center(child: Text('Charity Bio — Coming Soon')),
+            builder: (ctx, state) => Scaffold(
+              body: Center(child: Text('Charity Bio — Coming Soon'.tr)),
             ),
           ),
 
@@ -604,19 +621,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.upcomingMatches,
             name: 'upcomingMatches',
-            builder: (ctx, state) => const UpcomingMatchesScreen(),
+            builder: (ctx, state) => UpcomingMatchesScreen(),
           ),
           GoRoute(
             path: AppRoutes.recentMatches,
             name: 'recentMatches',
-            builder: (ctx, state) => const RecentMatchesScreen(),
+            builder: (ctx, state) => RecentMatchesScreen(),
           ),
 
           // ─── Pickup Matches (outside shell) ──────────────────────────────
           GoRoute(
             path: AppRoutes.hostPickupMatch,
             name: 'hostPickupMatch',
-            builder: (ctx, state) => const HostPickupMatchScreen(),
+            builder: (ctx, state) => HostPickupMatchScreen(),
           ),
           GoRoute(
             path: AppRoutes.pickupMatchDetail,
@@ -639,7 +656,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.playerLiveMatches,
             name: 'playerLiveMatches',
-            builder: (ctx, state) => const PlayerLiveMatchListScreen(),
+            builder: (ctx, state) => PlayerLiveMatchListScreen(),
           ),
 
           // ─── Live Match Details (all roles, view-only) ────────────────────
@@ -660,7 +677,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.privacySettings,
             name: 'privacySettings',
-            builder: (ctx, state) => const PrivacySettingsScreen(),
+            builder: (ctx, state) => PrivacySettingsScreen(),
           ),
           GoRoute(
             path: AppRoutes.lagecy_contact,
@@ -689,39 +706,39 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.refereeTournament,
             name: 'refereeTournament',
-            builder: (_, __) => const RefereeTournamentScreen(),
+            builder: (_, __) => RefereeTournamentScreen(),
           ),
           GoRoute(
             path: AppRoutes.refereeRequests,
             name: 'refereeRequests',
             builder: (_, __) => Scaffold(
-              body: Center(child: Text('refereeRequests - Coming Soon')),
+              body: Center(child: Text('refereeRequests - Coming Soon'.tr)),
             ),
-            // const RefereeMyRequestsScreen(),
+            // RefereeMyRequestsScreen(),
           ),
           GoRoute(
             path: AppRoutes.refereeMatches,
             name: 'refereeMatches',
             builder: (_, __) => Scaffold(
-              body: Center(child: Text('refereeMatches - Coming Soon')),
+              body: Center(child: Text('refereeMatches - Coming Soon'.tr)),
             ),
-            //  const RefereeMyMatchesScreen(),
+            //  RefereeMyMatchesScreen(),
           ),
           GoRoute(
             path: AppRoutes.refereeLive,
             name: 'refereeLive',
-            builder: (_, __) => const RefereeLiveMatchesScreen(),
+            builder: (_, __) => RefereeLiveMatchesScreen(),
           ),
           GoRoute(
             path: AppRoutes.refereeBio,
             name: 'refereeBio',
-            builder: (_, __) => const RefereeMyBioScreen(),
+            builder: (_, __) => RefereeMyBioScreen(),
           ),
           GoRoute(
             path: AppRoutes.refereeActivities,
             name: 'refereeActivities',
-            builder: (_, __) => const Scaffold(
-              body: Center(child: Text('Referee Activities — Phase 9')),
+            builder: (_, __) => Scaffold(
+              body: Center(child: Text('Referee Activities — Phase 9'.tr)),
             ),
           ),
           GoRoute(
@@ -754,12 +771,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.clubBioAdmin,
             name: 'clubBioAdmin',
-            builder: (_, __) => const ClubBioAdminScreen(),
+            builder: (_, __) => ClubBioAdminScreen(),
           ),
           GoRoute(
             path: AppRoutes.clubPlayers,
             name: 'clubPlayers',
-            builder: (_, __) => const ClubPlayersScreen(),
+            builder: (_, __) => ClubPlayersScreen(),
           ),
           GoRoute(
             path: AppRoutes.clubPlayerBio,
@@ -771,21 +788,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.clubGallery,
             name: 'clubGallery',
-            builder: (_, __) => const ClubGalleryScreen(),
+            builder: (_, __) => ClubGalleryScreen(),
           ),
           GoRoute(
             path: AppRoutes.clubTrials,
             name: 'clubTrials',
-            builder: (_, __) => const ClubTrialsScreen(),
+            builder: (_, __) => ClubTrialsScreen(),
           ),
         ],
       ),
       // ─── Settings screens (full-screen, no shell nav) ────────────────
-      GoRoute(
-        path: AppRoutes.changePassword,
-        name: 'changePassword',
-        builder: (ctx, state) => const ChangePasswordScreen(),
-      ),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(child: Text('Page not found: ${state.error}')),

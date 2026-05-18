@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +14,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class LeagueStatsTab extends ConsumerStatefulWidget {
   final String tournamentId;
 
-  const LeagueStatsTab({
+  LeagueStatsTab({
     super.key,
     required this.tournamentId,
   });
@@ -56,17 +57,17 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
             indicatorColor: AppColors.socaYellow,
             indicatorWeight: 2,
             isScrollable: true,
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 13,
             ),
-            unselectedLabelStyle: const TextStyle(
+            unselectedLabelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 13,
             ),
-            tabs: const [
+            tabs: [
               Tab(text: 'TABLE'),
               Tab(text: 'GOALS'),
               Tab(text: 'ASSISTS'),
@@ -81,7 +82,8 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
             children: [
               _PointsTableView(tournamentId: widget.tournamentId),
               _StatsList(tournamentId: widget.tournamentId, statType: 'goals'),
-              _StatsList(tournamentId: widget.tournamentId, statType: 'assists'),
+              _StatsList(
+                  tournamentId: widget.tournamentId, statType: 'assists'),
               _StatsList(tournamentId: widget.tournamentId, statType: 'cards'),
               _StatsList(tournamentId: widget.tournamentId, statType: 'mom'),
             ],
@@ -96,7 +98,7 @@ class _StatsList extends ConsumerWidget {
   final String tournamentId;
   final String statType;
 
-  const _StatsList({
+  _StatsList({
     required this.tournamentId,
     required this.statType,
   });
@@ -122,7 +124,7 @@ class _StatsList extends ConsumerWidget {
                   size: 64,
                   color: Colors.grey[400],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Text(
                   'No ${_getStatTypeLabel()} yet',
                   style: TextStyle(
@@ -141,7 +143,7 @@ class _StatsList extends ConsumerWidget {
             ref.invalidate(tournamentStatsProvider(params));
           },
           child: ListView.builder(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12),
             itemCount: stats.length,
             itemBuilder: (context, index) {
               final stat = stats[index];
@@ -150,20 +152,20 @@ class _StatsList extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const AppLoader(),
+      loading: () => AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline, size: 64, color: Colors.red),
+            SizedBox(height: 16),
             Text('Error loading stats: $error'),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(tournamentStatsProvider(params));
               },
-              child: const Text('Retry'),
+              child: Text('Retry'.tr),
             ),
           ],
         ),
@@ -173,7 +175,7 @@ class _StatsList extends ConsumerWidget {
 
   Widget _buildStatCard(dynamic stat, int position) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -181,12 +183,12 @@ class _StatsList extends ConsumerWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -205,12 +207,13 @@ class _StatsList extends ConsumerWidget {
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: position <= 3 ? AppColors.socaBlack : Colors.grey[600],
+                    color:
+                        position <= 3 ? AppColors.socaBlack : Colors.grey[600],
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             // Player Photo
             ClipOval(
               child: _buildPlayerPhoto(stat.playerImage, 48),
@@ -219,7 +222,7 @@ class _StatsList extends ConsumerWidget {
         ),
         title: Text(
           stat.playerName ?? 'Unknown',
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 15,
             fontWeight: FontWeight.w600,
@@ -318,10 +321,10 @@ class _StatsList extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
                   '${stat.yellowCards}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -341,10 +344,10 @@ class _StatsList extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
                   '${stat.redCards}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -357,14 +360,14 @@ class _StatsList extends ConsumerWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.socaYellow,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
         '${stat.count}',
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           fontWeight: FontWeight.w700,
@@ -409,7 +412,7 @@ class _StatsList extends ConsumerWidget {
 class _PointsTableView extends ConsumerWidget {
   final String tournamentId;
 
-  const _PointsTableView({required this.tournamentId});
+  _PointsTableView({required this.tournamentId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -423,9 +426,9 @@ class _PointsTableView extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.table_chart, size: 64, color: Colors.grey[400]),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Text(
-                  'No standings available',
+                  'No standings available'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -446,7 +449,7 @@ class _PointsTableView extends ConsumerWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
-                margin: const EdgeInsets.all(12),
+                margin: EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -454,37 +457,36 @@ class _PointsTableView extends ConsumerWidget {
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
                 child: DataTable(
-                  headingRowColor:
-                      WidgetStateProperty.all(AppColors.socaBlack),
-                  headingTextStyle: const TextStyle(
+                  headingRowColor: WidgetStateProperty.all(AppColors.socaBlack),
+                  headingTextStyle: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: AppColors.socaYellow,
                   ),
-                  dataTextStyle: const TextStyle(
+                  dataTextStyle: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     color: AppColors.socaBlack,
                   ),
                   columnSpacing: 16,
                   horizontalMargin: 12,
-                  columns: const [
-                    DataColumn(label: Text('#')),
-                    DataColumn(label: Text('Team')),
-                    DataColumn(label: Text('P'), numeric: true),
-                    DataColumn(label: Text('W'), numeric: true),
-                    DataColumn(label: Text('D'), numeric: true),
-                    DataColumn(label: Text('L'), numeric: true),
-                    DataColumn(label: Text('GF'), numeric: true),
-                    DataColumn(label: Text('GA'), numeric: true),
-                    DataColumn(label: Text('GD'), numeric: true),
-                    DataColumn(label: Text('Pts'), numeric: true),
+                  columns: [
+                    DataColumn(label: Text('#'.tr)),
+                    DataColumn(label: Text('Team'.tr)),
+                    DataColumn(label: Text('P'.tr), numeric: true),
+                    DataColumn(label: Text('W'.tr), numeric: true),
+                    DataColumn(label: Text('D'.tr), numeric: true),
+                    DataColumn(label: Text('L'.tr), numeric: true),
+                    DataColumn(label: Text('GF'.tr), numeric: true),
+                    DataColumn(label: Text('GA'.tr), numeric: true),
+                    DataColumn(label: Text('GD'.tr), numeric: true),
+                    DataColumn(label: Text('Pts'.tr), numeric: true),
                   ],
                   rows: table.asMap().entries.map((entry) {
                     final index = entry.key;
@@ -501,13 +503,13 @@ class _PointsTableView extends ConsumerWidget {
                           Row(
                             children: [
                               _buildTeamLogo(team.teamLogo, 24),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8),
                               SizedBox(
                                 width: 120,
                                 child: Text(
                                   team.teamName ?? 'Unknown',
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -537,7 +539,7 @@ class _PointsTableView extends ConsumerWidget {
                         DataCell(
                           Text(
                             '${team.points}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
                               color: AppColors.socaBlack,
                             ),
@@ -552,20 +554,20 @@ class _PointsTableView extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const AppLoader(),
+      loading: () => AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline, size: 64, color: Colors.red),
+            SizedBox(height: 16),
             Text('Error loading standings: $error'),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(pointsTableProvider(tournamentId));
               },
-              child: const Text('Retry'),
+              child: Text('Retry'.tr),
             ),
           ],
         ),
@@ -618,8 +620,7 @@ class _PointsTableView extends ConsumerWidget {
             color: Colors.grey[200],
             shape: BoxShape.circle,
           ),
-          child:
-              Icon(Icons.shield, size: size * 0.6, color: Colors.grey[400]),
+          child: Icon(Icons.shield, size: size * 0.6, color: Colors.grey[400]),
         ),
       ),
     );

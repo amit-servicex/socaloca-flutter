@@ -22,6 +22,7 @@ class ClubUserModel with _$ClubUserModel {
     @JsonKey(name: 'competitions') String? competitions,
     @JsonKey(name: 'website') String? website,
     @JsonKey(name: 'followCount') int? followCount,
+
     /// 'PLATINUM' | 'GOLD' | 'SILVER' | null
     @JsonKey(name: 'partnerType') String? partnerType,
     @JsonKey(name: 'isPartner') bool? isPartner,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,7 +16,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// - Upcoming Matches (next 3)
 /// - Recent Matches (last 3 with scores)
 class OneOffMatchesScreen extends ConsumerWidget {
-  const OneOffMatchesScreen({super.key});
+  OneOffMatchesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +33,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
             ref.invalidate(recentMatchesPreviewProvider);
           },
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -40,15 +41,15 @@ class OneOffMatchesScreen extends ConsumerWidget {
                 todaysMatch.when(
                   data: (match) {
                     if (match == null) {
-                      return const SizedBox.shrink();
+                      return SizedBox.shrink();
                     }
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                           child: Text(
-                            'TODAY\'S MATCH',
+                            'TODAY\'S MATCH'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -66,23 +67,23 @@ class OneOffMatchesScreen extends ConsumerWidget {
                       ],
                     );
                   },
-                  loading: () => const SizedBox(
+                  loading: () => SizedBox(
                     height: 200,
-                    child: const AppLoader(),
+                    child: AppLoader(),
                   ),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, __) => SizedBox.shrink(),
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // Upcoming Matches Section
                 upcomingMatches.when(
                   data: (matches) {
                     if (matches.isEmpty) {
-                      return const Padding(
+                      return Padding(
                         padding: EdgeInsets.all(16),
                         child: Text(
-                          'No upcoming matches',
+                          'No upcoming matches'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
@@ -96,12 +97,12 @@ class OneOffMatchesScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                'UPCOMING MATCHES',
+                              Text(
+                                'UPCOMING MATCHES'.tr,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w700,
@@ -113,8 +114,8 @@ class OneOffMatchesScreen extends ConsumerWidget {
                                 onPressed: () {
                                   context.push(AppRoutes.upcomingMatches);
                                 },
-                                child: const Text(
-                                  'View All',
+                                child: Text(
+                                  'View All'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -135,14 +136,14 @@ class OneOffMatchesScreen extends ConsumerWidget {
                       ],
                     );
                   },
-                  loading: () => const SizedBox(
+                  loading: () => SizedBox(
                     height: 150,
-                    child: const AppLoader(),
+                    child: AppLoader(),
                   ),
-                  error: (_, __) => const Padding(
+                  error: (_, __) => Padding(
                     padding: EdgeInsets.all(16),
                     child: Text(
-                      'Error loading upcoming matches',
+                      'Error loading upcoming matches'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -153,16 +154,16 @@ class OneOffMatchesScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // Recent Matches Section
                 recentMatches.when(
                   data: (matches) {
                     if (matches.isEmpty) {
-                      return const Padding(
+                      return Padding(
                         padding: EdgeInsets.all(16),
                         child: Text(
-                          'No recent matches',
+                          'No recent matches'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
@@ -176,12 +177,12 @@ class OneOffMatchesScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                'RECENT MATCHES',
+                              Text(
+                                'RECENT MATCHES'.tr,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w700,
@@ -193,8 +194,8 @@ class OneOffMatchesScreen extends ConsumerWidget {
                                 onPressed: () {
                                   context.push(AppRoutes.recentMatches);
                                 },
-                                child: const Text(
-                                  'View All',
+                                child: Text(
+                                  'View All'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -215,14 +216,14 @@ class OneOffMatchesScreen extends ConsumerWidget {
                       ],
                     );
                   },
-                  loading: () => const SizedBox(
+                  loading: () => SizedBox(
                     height: 150,
-                    child: const AppLoader(),
+                    child: AppLoader(),
                   ),
-                  error: (_, __) => const Padding(
+                  error: (_, __) => Padding(
                     padding: EdgeInsets.all(16),
                     child: Text(
-                      'Error loading recent matches',
+                      'Error loading recent matches'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -233,7 +234,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
               ],
             ),
           ),

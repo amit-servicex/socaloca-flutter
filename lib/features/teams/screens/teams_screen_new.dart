@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/shared/providers/auth_provider.dart';
@@ -16,7 +17,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// - Fans: single "All" view (no tabs).
 /// - Players / Coaches / Managers: 4 tabs — ALL, JOINED, PENDING, RECEIVED.
 class TeamsScreenNew extends ConsumerStatefulWidget {
-  const TeamsScreenNew({super.key});
+  TeamsScreenNew({super.key});
 
   @override
   ConsumerState<TeamsScreenNew> createState() => _TeamsScreenNewState();
@@ -88,17 +89,17 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
                 unselectedLabelColor: AppColors.socaBlack,
                 indicatorColor: AppColors.socaBlack,
                 indicatorWeight: 3,
-                labelStyle: const TextStyle(
+                labelStyle: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                 ),
-                unselectedLabelStyle: const TextStyle(
+                unselectedLabelStyle: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
-                tabs: const [
+                tabs: [
                   Tab(text: 'ALL'),
                   Tab(text: 'JOINED'),
                   Tab(text: 'PENDING'),
@@ -132,19 +133,19 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
       onRefresh: () async => ref.read(teamsProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Container(
               color: Colors.white,
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: TeamFilterSection(
                 userCountry: userCountry,
                 onSearch: () {
                   if (!state.filters.hasAnyFilter) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please select at least one filter'),
+                      SnackBar(
+                        content: Text('Please select at least one filter'.tr),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -155,10 +156,10 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
               ),
             ),
           ),
-          const SliverToBoxAdapter(child: Divider(height: 1)),
+          SliverToBoxAdapter(child: Divider(height: 1)),
           if (state.isLoading && state.teams.isEmpty)
-            const SliverFillRemaining(
-              child: const AppLoader(),
+            SliverFillRemaining(
+              child: AppLoader(),
             )
           else if (state.error != null && state.teams.isEmpty)
             SliverFillRemaining(child: _buildErrorState(state.error!))
@@ -166,14 +167,14 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
             SliverFillRemaining(child: _buildEmptyState())
           else ...[
             SliverPadding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.symmetric(vertical: 8),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     if (index == state.teams.length) {
-                      return const Padding(
+                      return Padding(
                         padding: EdgeInsets.all(16),
-                        child: const AppLoader(),
+                        child: AppLoader(),
                       );
                     }
                     return TeamCard(team: state.teams[index]);
@@ -195,9 +196,9 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.groups_outlined, size: 80, color: Colors.grey[400]),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'No teams found',
+            'No teams found'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -205,9 +206,9 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            'Try adjusting your filters',
+            'Try adjusting your filters'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -226,9 +227,9 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.error_outline, size: 80, color: Colors.red[300]),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'Failed to load teams',
+            'Failed to load teams'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -236,9 +237,9 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               error,
               style: TextStyle(
@@ -249,15 +250,15 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => ref.read(teamsProvider.notifier).refresh(),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
-            child: const Text('Retry'),
+            child: Text('Retry'.tr),
           ),
         ],
       ),
@@ -286,17 +287,17 @@ Widget _errorTab(String error, VoidCallback onRetry) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(Icons.error_outline, size: 48, color: Colors.red[300]),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Text('Error: $error',
-            style: const TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-        const SizedBox(height: 16),
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+        SizedBox(height: 16),
         ElevatedButton(
           onPressed: onRetry,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.socaBlack,
             foregroundColor: AppColors.socaYellow,
           ),
-          child: const Text('Retry', style: TextStyle(fontFamily: 'Poppins')),
+          child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
         ),
       ],
     ),
@@ -320,20 +321,20 @@ Widget _teamListTile(
         backgroundImage: imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
         backgroundColor: AppColors.socaGrey,
         child: imageUrl.isEmpty
-            ? const Icon(Icons.group, color: AppColors.socaBlack)
+            ? Icon(Icons.group, color: AppColors.socaBlack)
             : null,
       ),
       title: Text(
         teamName,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w600,
           fontSize: 14,
           color: AppColors.socaBlack,
         ),
       ),
-      trailing: trailing ??
-          const Icon(Icons.chevron_right, color: AppColors.socaBlack),
+      trailing:
+          trailing ?? Icon(Icons.chevron_right, color: AppColors.socaBlack),
       onTap: teamId.isNotEmpty
           ? () => context.push('${AppRoutes.teams}/$teamId')
           : null,
@@ -345,7 +346,7 @@ Widget _teamListTile(
 
 class _JoinedTeamsTab extends ConsumerStatefulWidget {
   final String userId;
-  const _JoinedTeamsTab({required this.userId});
+  _JoinedTeamsTab({required this.userId});
 
   @override
   ConsumerState<_JoinedTeamsTab> createState() => _JoinedTeamsTabState();
@@ -403,7 +404,7 @@ class _JoinedTeamsTabState extends ConsumerState<_JoinedTeamsTab>
   Widget build(BuildContext context) {
     super.build(context);
     if (_isLoading) {
-      return const AppLoader();
+      return AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
     if (_teams.isEmpty) return _emptyTab('No joined teams.');
@@ -411,9 +412,9 @@ class _JoinedTeamsTabState extends ConsumerState<_JoinedTeamsTab>
     return RefreshIndicator(
       onRefresh: _load,
       child: ListView.separated(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         itemCount: _teams.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        separatorBuilder: (_, __) => SizedBox(height: 8),
         itemBuilder: (context, i) => _teamListTile(context, _teams[i]),
       ),
     );
@@ -424,7 +425,7 @@ class _JoinedTeamsTabState extends ConsumerState<_JoinedTeamsTab>
 
 class _PendingTeamsTab extends ConsumerStatefulWidget {
   final String userId;
-  const _PendingTeamsTab({required this.userId});
+  _PendingTeamsTab({required this.userId});
 
   @override
   ConsumerState<_PendingTeamsTab> createState() => _PendingTeamsTabState();
@@ -482,8 +483,8 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
       if (success && mounted) {
         setState(() => _teams.removeAt(index));
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Request cancelled.',
+          SnackBar(
+            content: Text('Request cancelled.'.tr,
                 style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.green,
           ),
@@ -493,8 +494,7 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e',
-                style: const TextStyle(fontFamily: 'Poppins')),
+            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -506,7 +506,7 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
   Widget build(BuildContext context) {
     super.build(context);
     if (_isLoading) {
-      return const AppLoader();
+      return AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
     if (_teams.isEmpty) return _emptyTab('No pending requests.');
@@ -514,16 +514,16 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
     return RefreshIndicator(
       onRefresh: _load,
       child: ListView.separated(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         itemCount: _teams.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        separatorBuilder: (_, __) => SizedBox(height: 8),
         itemBuilder: (context, i) => _teamListTile(
           context,
           _teams[i],
           trailing: TextButton(
             onPressed: () => _cancel(i),
-            child: const Text(
-              'Cancel',
+            child: Text(
+              'Cancel'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: Colors.red,
@@ -541,7 +541,7 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
 
 class _ReceivedTeamsTab extends ConsumerStatefulWidget {
   final String userId;
-  const _ReceivedTeamsTab({required this.userId});
+  _ReceivedTeamsTab({required this.userId});
 
   @override
   ConsumerState<_ReceivedTeamsTab> createState() => _ReceivedTeamsTabState();
@@ -557,7 +557,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
   bool _isLoadingMore = false;
   String? _error;
   int _start = 0;
-  static const int _limit = 5;
+  static int _limit = 5;
   bool _hasMore = true;
   late ScrollController _scrollController;
 
@@ -669,7 +669,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
           SnackBar(
             content: Text(
               accept ? 'Invitation accepted.' : 'Invitation declined.',
-              style: const TextStyle(fontFamily: 'Poppins'),
+              style: TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: accept ? Colors.green : Colors.orange,
           ),
@@ -679,8 +679,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e',
-                style: const TextStyle(fontFamily: 'Poppins')),
+            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -692,7 +691,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
   Widget build(BuildContext context) {
     super.build(context);
     if (_isLoading) {
-      return const AppLoader();
+      return AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
     if (_teams.isEmpty) return _emptyTab('No team invitations.');
@@ -701,12 +700,12 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
       onRefresh: _load,
       child: ListView.separated(
         controller: _scrollController,
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         itemCount: _teams.length + (_isLoadingMore ? 1 : 0),
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        separatorBuilder: (_, __) => SizedBox(height: 8),
         itemBuilder: (context, i) {
           if (i == _teams.length) {
-            return const AppLoader();
+            return AppLoader();
           }
           final team = _teams[i];
           final teamId =
@@ -719,7 +718,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: Row(
                 children: [
                   CircleAvatar(
@@ -727,10 +726,10 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
                         imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
                     backgroundColor: AppColors.socaGrey,
                     child: imageUrl.isEmpty
-                        ? const Icon(Icons.group, color: AppColors.socaBlack)
+                        ? Icon(Icons.group, color: AppColors.socaBlack)
                         : null,
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: GestureDetector(
                       onTap: teamId.isNotEmpty
@@ -738,7 +737,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
                           : null,
                       child: Text(
                         teamName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
@@ -747,37 +746,37 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () => _respond(i, true),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 6),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6)),
                       elevation: 0,
                     ),
-                    child: const Text('Accept',
+                    child: Text('Accept'.tr,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 12)),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6),
                   ElevatedButton(
                     onPressed: () => _respond(i, false),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 6),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6)),
                       elevation: 0,
                     ),
-                    child: const Text('Decline',
+                    child: Text('Decline'.tr,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,

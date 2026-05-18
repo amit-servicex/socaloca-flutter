@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/match_training_status_model.dart';
@@ -13,7 +14,7 @@ class TrainingStatsSection extends StatelessWidget {
   final bool isLoadingMatches;
   final VoidCallback? onAdd;
 
-  const TrainingStatsSection({
+  TrainingStatsSection({
     super.key,
     required this.trainCurrMonth,
     required this.trainPrevMonth,
@@ -24,7 +25,7 @@ class TrainingStatsSection extends StatelessWidget {
 
   String _getMonthName(int? month) {
     if (month == null) return '';
-    const months = [
+    final months = [
       'January',
       'February',
       'March',
@@ -53,13 +54,13 @@ class TrainingStatsSection extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.socaGrey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: isLoadingMatches
-                  ? const AppLoader()
+                  ? AppLoader()
                   : Column(
                       children: [
                         IntrinsicHeight(
@@ -91,18 +92,18 @@ class TrainingStatsSection extends StatelessWidget {
                           ),
                         ),
                         if (isOwnProfile && onAdd != null) ...[
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20),
                           GestureDetector(
                             onTap: onAdd,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 8),
                               decoration: BoxDecoration(
                                 color: AppColors.socaBlack,
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: const Text(
-                                'ADD',
+                              child: Text(
+                                'ADD'.tr,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
@@ -125,14 +126,14 @@ class TrainingStatsSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.socaBlack,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Text(
-                        'TRAINING STATS',
+                      child: Text(
+                        'TRAINING STATS'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -145,8 +146,8 @@ class TrainingStatsSection extends StatelessWidget {
                       onTap: () {
                         // TODO: Navigate to all stats
                       },
-                      child: const Text(
-                        'view all',
+                      child: Text(
+                        'view all'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -171,16 +172,16 @@ class TrainingStatsSection extends StatelessWidget {
       children: [
         Text(
           monthName.isNotEmpty ? monthName : 'Month',
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: AppColors.socaBlack,
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         _buildStatItem('Number of Sessions', sessions.toString()),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         _buildStatItem('Training Minutes', minutes.toString()),
       ],
     );
@@ -193,17 +194,17 @@ class TrainingStatsSection extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               color: AppColors.socaBlack,
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w600,

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +16,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Pickup Matches Screen - Shows list of pickup matches with host button
 /// Mirrors Android PickUpMatchesFragment
 class PickupMatchScreen extends ConsumerStatefulWidget {
-  const PickupMatchScreen({super.key});
+  PickupMatchScreen({super.key});
 
   @override
   ConsumerState<PickupMatchScreen> createState() => _PickupMatchScreenState();
@@ -63,16 +64,17 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text(
-          'Cannot Host Match',
+        title: Text(
+          'Cannot Host Match'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 18,
           ),
         ),
-        content: const Text(
-          'Only Players, Coaches, Admins, and Referees can host pickup matches.',
+        content: Text(
+          'Only Players, Coaches, Admins, and Referees can host pickup matches.'
+              .tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
@@ -81,8 +83,8 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
-              'OK',
+            child: Text(
+              'OK'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
@@ -119,10 +121,11 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
       body: Column(
         children: [
           // Descriptive Text
-          const Padding(
+          Padding(
             padding: EdgeInsets.fromLTRB(16, 20, 16, 16),
             child: Text(
-              "Can't get 2 full teams to make a match? Fret not. Pick-Up matches allows you to organise an informal kick-about at a specified place and time. Shout out to all nearby that you are organising a pick-up match and get your game on!",
+              "Can't get 2 full teams to make a match? Fret not. Pick-Up matches allows you to organise an informal kick-about at a specified place and time. Shout out to all nearby that you are organising a pick-up match and get your game on!"
+                  .tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
@@ -135,19 +138,19 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
 
           // Host Match Button
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: GestureDetector(
               onTap: _onHostMatch,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
                   color: AppColors.socaBlack,
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: const Center(
+                child: Center(
                   child: Text(
-                    'HOST MATCH',
+                    'HOST MATCH'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
@@ -160,11 +163,11 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Upcoming Matches Title
-          const Text(
-            'Upcoming Matches',
+          Text(
+            'Upcoming Matches'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
@@ -174,7 +177,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
             textAlign: TextAlign.center,
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Matches List
           Expanded(
@@ -192,9 +195,9 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                           size: 64,
                           color: AppColors.socaBlack.withOpacity(0.3),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         Text(
-                          'No upcoming pickup matches',
+                          'No upcoming pickup matches'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -214,14 +217,14 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                   },
                   child: ListView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(12),
                     itemCount: matches.length + (state.isLoadingMore ? 1 : 0),
                     itemBuilder: (context, index) {
                       // Show loading indicator at the end if loading more
                       if (index == matches.length) {
-                        return const Padding(
+                        return Padding(
                           padding: EdgeInsets.all(16),
-                          child: const AppLoader(),
+                          child: AppLoader(),
                         );
                       }
 
@@ -238,13 +241,13 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                   ),
                 );
               },
-              loading: () => const AppLoader(),
+              loading: () => AppLoader(),
               error: (error, stack) => Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Error loading matches',
+                    Text(
+                      'Error loading matches'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
@@ -252,7 +255,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                         color: Colors.red,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
                         ref
@@ -262,8 +265,8 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.socaYellow,
                       ),
-                      child: const Text(
-                        'Retry',
+                      child: Text(
+                        'Retry'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,

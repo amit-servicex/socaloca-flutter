@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,7 +22,7 @@ final _playerJoinedTeamsProvider =
 class PlayerJoinedTeamsScreen extends ConsumerWidget {
   final String playerId;
 
-  const PlayerJoinedTeamsScreen({super.key, required this.playerId});
+  PlayerJoinedTeamsScreen({super.key, required this.playerId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,22 +31,22 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text('Joined Teams'),
+        title: Text('Joined Teams'.tr),
         backgroundColor: AppColors.socaBlack,
         foregroundColor: AppColors.socaYellow,
         elevation: 0,
       ),
       body: teamsAsync.when(
-        loading: () => const AppLoader(),
+        loading: () => AppLoader(),
         error: (e, _) => Center(
           child: Text('Error: $e',
-              style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
         ),
         data: (teams) {
           if (teams.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                'No joined teams.',
+                'No joined teams.'.tr,
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -61,9 +62,9 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
             return bSort.compareTo(aSort);
           });
           return ListView.separated(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12),
             itemCount: sorted.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            separatorBuilder: (_, __) => SizedBox(height: 8),
             itemBuilder: (context, i) {
               final team = sorted[i];
               final teamId =
@@ -76,25 +77,24 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(8)),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: imageUrl.isNotEmpty
-                        ? NetworkImage(imageUrl)
-                        : null,
+                    backgroundImage:
+                        imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
                     backgroundColor: AppColors.socaGrey,
                     child: imageUrl.isEmpty
-                        ? const Icon(Icons.group, color: AppColors.socaBlack)
+                        ? Icon(Icons.group, color: AppColors.socaBlack)
                         : null,
                   ),
                   title: Text(
                     teamName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  trailing: const Icon(Icons.chevron_right,
-                      color: AppColors.socaBlack),
+                  trailing:
+                      Icon(Icons.chevron_right, color: AppColors.socaBlack),
                   onTap: teamId.isNotEmpty
                       ? () => context.push('${AppRoutes.teams}/$teamId')
                       : null,

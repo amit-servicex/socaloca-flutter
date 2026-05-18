@@ -3,8 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'player_skill_model.freezed.dart';
 part 'player_skill_model.g.dart';
 
-double? _toDouble(dynamic v) =>
-    v == null ? null : (v is num ? v.toDouble() : double.tryParse(v.toString()));
+double? _toDouble(dynamic v) => v == null
+    ? null
+    : (v is num ? v.toDouble() : double.tryParse(v.toString()));
 
 int? _toInt(dynamic v) =>
     v == null ? null : (v is num ? v.toInt() : int.tryParse(v.toString()));

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -8,7 +9,7 @@ import '../data/models/pickup_match_model.dart';
 
 /// Pickup Match Card Widget
 class PickupMatchCard extends StatelessWidget {
-  const PickupMatchCard({
+  PickupMatchCard({
     super.key,
     required this.match,
     this.onTap,
@@ -32,7 +33,7 @@ class PickupMatchCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -40,12 +41,12 @@ class PickupMatchCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               blurRadius: 4,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -53,23 +54,23 @@ class PickupMatchCard extends StatelessWidget {
               Row(
                 children: [
                   _HostAvatar(imageUrl: match.createdByImage),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           match.createdByName ?? 'Host',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                             color: AppColors.socaBlack,
                           ),
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
-                          'Host',
+                          'Host'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -82,15 +83,15 @@ class PickupMatchCard extends StatelessWidget {
                   // Request count badge
                   if (match.requestCount > 0)
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.socaYellow.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         '${match.requestCount} requests',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -101,9 +102,9 @@ class PickupMatchCard extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 12),
-              const Divider(height: 1),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
+              Divider(height: 1),
+              SizedBox(height: 12),
 
               // Match details
               Row(
@@ -123,7 +124,7 @@ class PickupMatchCard extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
 
               Row(
                 children: [
@@ -142,22 +143,22 @@ class PickupMatchCard extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
 
               // Game type and age group
               Row(
                 children: [
                   if (match.gameType != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.socaGrey,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         match.gameType!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
@@ -166,18 +167,18 @@ class PickupMatchCard extends StatelessWidget {
                       ),
                     ),
                   if (match.gameType != null && match.avgAge != null)
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                   if (match.avgAge != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.socaGrey,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         match.avgAge!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
@@ -186,17 +187,17 @@ class PickupMatchCard extends StatelessWidget {
                       ),
                     ),
                   if (match.gender != null) ...[
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.socaGrey,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         match.gender!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
@@ -210,7 +211,7 @@ class PickupMatchCard extends StatelessWidget {
 
               // Match note
               if (match.matchNote != null && match.matchNote!.isNotEmpty) ...[
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Text(
                   match.matchNote!,
                   style: TextStyle(
@@ -231,7 +232,7 @@ class PickupMatchCard extends StatelessWidget {
 }
 
 class _HostAvatar extends StatelessWidget {
-  const _HostAvatar({this.imageUrl});
+  _HostAvatar({this.imageUrl});
   final String? imageUrl;
 
   @override
@@ -240,7 +241,7 @@ class _HostAvatar extends StatelessWidget {
     return Container(
       width: 48,
       height: 48,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -249,20 +250,20 @@ class _HostAvatar extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => const Icon(
+                errorWidget: (_, __, ___) => Icon(
                   Icons.person,
                   color: AppColors.socaBlack,
                   size: 24,
                 ),
               )
-            : const Icon(Icons.person, color: AppColors.socaBlack, size: 24),
+            : Icon(Icons.person, color: AppColors.socaBlack, size: 24),
       ),
     );
   }
 }
 
 class _DetailItem extends StatelessWidget {
-  const _DetailItem({
+  _DetailItem({
     required this.icon,
     required this.text,
   });
@@ -279,7 +280,7 @@ class _DetailItem extends StatelessWidget {
           size: 14,
           color: AppColors.socaBlack.withOpacity(0.6),
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Expanded(
           child: Text(
             text,

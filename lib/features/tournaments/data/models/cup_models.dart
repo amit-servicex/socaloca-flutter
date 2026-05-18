@@ -106,7 +106,8 @@ class CupGroupModel with _$CupGroupModel {
     String? fixture, // Fixture format
     @Default(false) bool isDelete, // Soft-delete flag
     @Default([]) List<CupLeagueModel> leg1, // First leg matches
-    @Default([]) List<CupLeagueModel> leg2, // Second leg matches (if applicable)
+    @Default([])
+    List<CupLeagueModel> leg2, // Second leg matches (if applicable)
   }) = _CupGroupModel;
 
   factory CupGroupModel.fromJson(Map<String, dynamic> json) =>

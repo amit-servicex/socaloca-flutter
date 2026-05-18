@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,7 +12,7 @@ import '../data/tournament_models.dart';
 class TournamentInfoCard extends StatelessWidget {
   final TournamentModel tournament;
 
-  const TournamentInfoCard({
+  TournamentInfoCard({
     super.key,
     required this.tournament,
   });
@@ -19,7 +20,7 @@ class TournamentInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(12),
+      margin: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -27,7 +28,7 @@ class TournamentInfoCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -36,24 +37,24 @@ class TournamentInfoCard extends StatelessWidget {
         children: [
           // Header
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColors.socaBlack,
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
               ),
             ),
             child: Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.info_outline,
                   color: AppColors.socaYellow,
                   size: 20,
                 ),
-                const SizedBox(width: 8),
-                const Text(
-                  'Tournament Information',
+                SizedBox(width: 8),
+                Text(
+                  'Tournament Information'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -67,7 +68,7 @@ class TournamentInfoCard extends StatelessWidget {
 
           // Info Grid
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: Column(
               children: [
                 _buildInfoRow('Age Category', tournament.ageCat ?? 'N/A'),
@@ -88,7 +89,8 @@ class TournamentInfoCard extends StatelessWidget {
                 _buildDivider(),
                 _buildInfoRow('Total Teams', '${tournament.teamCount}'),
                 _buildDivider(),
-                _buildInfoRow('Players Per Team', '${tournament.teamPlayerLimit}'),
+                _buildInfoRow(
+                    'Players Per Team', '${tournament.teamPlayerLimit}'),
               ],
             ),
           ),
@@ -97,8 +99,10 @@ class TournamentInfoCard extends StatelessWidget {
           if (tournament.notes != null && tournament.notes!.isNotEmpty)
             _buildOptionalSection('Notes', tournament.notes!),
 
-          if (tournament.description != null && tournament.description!.isNotEmpty)
-            _buildOptionalSection('Description', tournament.description!, isHtml: true),
+          if (tournament.description != null &&
+              tournament.description!.isNotEmpty)
+            _buildOptionalSection('Description', tournament.description!,
+                isHtml: true),
 
           if (tournament.prize != null && tournament.prize!.isNotEmpty)
             _buildOptionalSection('Prizes', tournament.prize!),
@@ -106,7 +110,8 @@ class TournamentInfoCard extends StatelessWidget {
           if (tournament.regFee != null && tournament.regFee!.isNotEmpty)
             _buildOptionalSection('Registration Fees', tournament.regFee!),
 
-          if (tournament.orgDetails != null && tournament.orgDetails!.isNotEmpty)
+          if (tournament.orgDetails != null &&
+              tournament.orgDetails!.isNotEmpty)
             _buildOptionalSection('Organizer Details', tournament.orgDetails!),
         ],
       ),
@@ -115,7 +120,7 @@ class TournamentInfoCard extends StatelessWidget {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -131,12 +136,12 @@ class TournamentInfoCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             flex: 3,
             child: Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -157,10 +162,11 @@ class TournamentInfoCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOptionalSection(String title, String content, {bool isHtml = false}) {
+  Widget _buildOptionalSection(String title, String content,
+      {bool isHtml = false}) {
     return Container(
-      margin: const EdgeInsets.only(top: 8),
-      padding: const EdgeInsets.all(16),
+      margin: EdgeInsets.only(top: 8),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
         border: Border(
@@ -172,14 +178,14 @@ class TournamentInfoCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: AppColors.socaBlack,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           isHtml
               ? _buildHtmlText(content)
               : Text(
@@ -205,7 +211,7 @@ class TournamentInfoCard extends StatelessWidget {
     );
 
     final matches = urlPattern.allMatches(htmlContent);
-    
+
     if (matches.isEmpty) {
       return Text(
         htmlContent,
@@ -238,14 +244,13 @@ class TournamentInfoCard extends StatelessWidget {
       final url = match.group(0)!;
       spans.add(TextSpan(
         text: url,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 13,
           color: Colors.blue,
           decoration: TextDecoration.underline,
         ),
-        recognizer: TapGestureRecognizer()
-          ..onTap = () => _launchUrl(url),
+        recognizer: TapGestureRecognizer()..onTap = () => _launchUrl(url),
       ));
 
       lastMatchEnd = match.end;

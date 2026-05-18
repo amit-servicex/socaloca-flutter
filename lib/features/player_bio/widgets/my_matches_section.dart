@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/match_training_status_model.dart';
@@ -16,7 +17,7 @@ class MyMatchesSection extends StatelessWidget {
   final VoidCallback? onAddFootball;
   final VoidCallback? onAddFutsal;
 
-  const MyMatchesSection({
+  MyMatchesSection({
     super.key,
     required this.footballMatches,
     required this.futsalMatches,
@@ -32,7 +33,7 @@ class MyMatchesSection extends StatelessWidget {
     return Column(
       children: [
         _buildMatchSection(context, 'Football', footballMatches, onAddFootball),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         _buildMatchSection(context, 'Futsal', futsalMatches, onAddFutsal),
       ],
     );
@@ -54,13 +55,13 @@ class MyMatchesSection extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.socaGrey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: isLoadingMatches
-                  ? const AppLoader()
+                  ? AppLoader()
                   : Column(
                       children: [
                         IntrinsicHeight(
@@ -75,12 +76,12 @@ class MyMatchesSection extends StatelessWidget {
                                       'Number of matches',
                                       matches?.matches?.toString() ?? '0',
                                     ),
-                                    const SizedBox(height: 16),
+                                    SizedBox(height: 16),
                                     _buildStatItem(
                                       'Minutes played',
                                       matches?.mins?.toString() ?? '0',
                                     ),
-                                    const SizedBox(height: 16),
+                                    SizedBox(height: 16),
                                     _buildStatItem(
                                       'Number of goals',
                                       matches?.goals?.toString() ?? '0',
@@ -108,7 +109,7 @@ class MyMatchesSection extends StatelessWidget {
                                           : (matches?.assists?.toString() ??
                                               '0'),
                                     ),
-                                    const SizedBox(height: 16),
+                                    SizedBox(height: 16),
                                     _buildStatItem(
                                       'Average match rating',
                                       matches?.rating != null
@@ -122,18 +123,18 @@ class MyMatchesSection extends StatelessWidget {
                           ),
                         ),
                         if (isOwnProfile && onAdd != null) ...[
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20),
                           GestureDetector(
                             onTap: onAdd,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 8),
                               decoration: BoxDecoration(
                                 color: AppColors.socaBlack,
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: const Text(
-                                'ADD',
+                              child: Text(
+                                'ADD'.tr,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
@@ -158,14 +159,14 @@ class MyMatchesSection extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: AppColors.socaBlack,
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: const Text(
-                            'MY MATCHES',
+                          child: Text(
+                            'MY MATCHES'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
@@ -174,10 +175,10 @@ class MyMatchesSection extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           '$type, ${matches?.year ?? DateTime.now().year}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -190,8 +191,8 @@ class MyMatchesSection extends StatelessWidget {
                       onTap: () {
                         // TODO: Navigate to all matches
                       },
-                      child: const Text(
-                        'view all',
+                      child: Text(
+                        'view all'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -216,16 +217,16 @@ class MyMatchesSection extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 12,
             color: AppColors.socaBlack,
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w600,

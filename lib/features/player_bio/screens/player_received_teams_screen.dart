@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,7 +10,7 @@ import '../providers/player_bio_provider.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class PlayerReceivedTeamsScreen extends ConsumerStatefulWidget {
-  const PlayerReceivedTeamsScreen({super.key});
+  PlayerReceivedTeamsScreen({super.key});
 
   @override
   ConsumerState<PlayerReceivedTeamsScreen> createState() =>
@@ -23,7 +24,7 @@ class _PlayerReceivedTeamsScreenState
   bool _isLoadingMore = false;
   String? _error;
   int _start = 0;
-  static const int _limit = 5;
+  static int _limit = 5;
   bool _hasMore = true;
   late ScrollController _scrollController;
 
@@ -119,8 +120,7 @@ class _PlayerReceivedTeamsScreenState
     final currentUser = StorageService.currentUser;
     if (userId == null || currentUser == null) return;
 
-    final teamId =
-        team['teamId'] as String? ?? team['_id'] as String? ?? '';
+    final teamId = team['teamId'] as String? ?? team['_id'] as String? ?? '';
     if (teamId.isEmpty) return;
 
     try {
@@ -141,7 +141,7 @@ class _PlayerReceivedTeamsScreenState
           SnackBar(
             content: Text(
               accept ? 'Invitation accepted.' : 'Invitation declined.',
-              style: const TextStyle(fontFamily: 'Poppins'),
+              style: TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: accept ? Colors.green : Colors.orange,
           ),
@@ -151,8 +151,7 @@ class _PlayerReceivedTeamsScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e',
-                style: const TextStyle(fontFamily: 'Poppins')),
+            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -165,33 +164,32 @@ class _PlayerReceivedTeamsScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text('Team Invitations'),
+        title: Text('Team Invitations'.tr),
         backgroundColor: AppColors.socaBlack,
         foregroundColor: AppColors.socaYellow,
         elevation: 0,
       ),
       body: _isLoading
-          ? const AppLoader()
+          ? AppLoader()
           : _error != null
               ? Center(
                   child: Text('Error: $_error',
-                      style: const TextStyle(
-                          fontFamily: 'Poppins', fontSize: 14)))
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14)))
               : _teams.isEmpty
-                  ? const Center(
-                      child: Text('No team invitations.',
+                  ? Center(
+                      child: Text('No team invitations.'.tr,
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack)))
                   : ListView.separated(
                       controller: _scrollController,
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12),
                       itemCount: _teams.length + (_isLoadingMore ? 1 : 0),
-                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      separatorBuilder: (_, __) => SizedBox(height: 8),
                       itemBuilder: (context, i) {
                         if (i == _teams.length) {
-                          return const AppLoader();
+                          return AppLoader();
                         }
                         final team = _teams[i];
                         final teamId = team['teamId'] as String? ??
@@ -205,7 +203,7 @@ class _PlayerReceivedTeamsScreenState
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
+                            padding: EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 10),
                             child: Row(
                               children: [
@@ -215,20 +213,20 @@ class _PlayerReceivedTeamsScreenState
                                       : null,
                                   backgroundColor: AppColors.socaGrey,
                                   child: imageUrl.isEmpty
-                                      ? const Icon(Icons.group,
+                                      ? Icon(Icons.group,
                                           color: AppColors.socaBlack)
                                       : null,
                                 ),
-                                const SizedBox(width: 12),
+                                SizedBox(width: 12),
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: teamId.isNotEmpty
-                                        ? () => context.push(
-                                            '${AppRoutes.teams}/$teamId')
+                                        ? () => context
+                                            .push('${AppRoutes.teams}/$teamId')
                                         : null,
                                     child: Text(
                                       teamName,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w600,
                                         fontSize: 14,
@@ -237,37 +235,37 @@ class _PlayerReceivedTeamsScreenState
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 ElevatedButton(
                                   onPressed: () => _respond(team, i, true),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green,
                                     foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
+                                    padding: EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 6),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(6)),
                                     elevation: 0,
                                   ),
-                                  child: const Text('Accept',
+                                  child: Text('Accept'.tr,
                                       style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12)),
                                 ),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6),
                                 ElevatedButton(
                                   onPressed: () => _respond(team, i, false),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,
                                     foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
+                                    padding: EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 6),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(6)),
                                     elevation: 0,
                                   ),
-                                  child: const Text('Decline',
+                                  child: Text('Decline'.tr,
                                       style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,

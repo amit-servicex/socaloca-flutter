@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,7 +9,7 @@ import '../providers/referee_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyActivitiesScreen extends ConsumerStatefulWidget {
-  const RefereeMyActivitiesScreen({super.key});
+  RefereeMyActivitiesScreen({super.key});
 
   @override
   ConsumerState<RefereeMyActivitiesScreen> createState() =>
@@ -23,7 +24,7 @@ class _RefereeMyActivitiesScreenState
   bool _isLoadingMore = false;
   String? _error;
   int _start = 0;
-  static const int _limit = 10;
+  static int _limit = 10;
 
   final _scrollController = ScrollController();
 
@@ -102,11 +103,11 @@ class _RefereeMyActivitiesScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
           onPressed: () => context.pop(),
         ),
-        title: const Text(
-          'My Activities',
+        title: Text(
+          'My Activities'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -121,7 +122,7 @@ class _RefereeMyActivitiesScreenState
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     if (_error != null) {
@@ -129,20 +130,18 @@ class _RefereeMyActivitiesScreenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            const SizedBox(height: 12),
+            Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            SizedBox(height: 12),
             Text(_error!,
                 textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-            const SizedBox(height: 12),
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+            SizedBox(height: 12),
             ElevatedButton(
               onPressed: _load,
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow),
-              child:
-                  const Text('Retry', style: TextStyle(fontFamily: 'Poppins')),
+              child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),
@@ -150,17 +149,15 @@ class _RefereeMyActivitiesScreenState
     }
 
     if (_activities.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.history_outlined, size: 60, color: AppColors.socaGrey),
             SizedBox(height: 16),
-            Text('No activities yet',
+            Text('No activities yet'.tr,
                 style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: Colors.grey)),
+                    fontFamily: 'Poppins', fontSize: 14, color: Colors.grey)),
           ],
         ),
       );
@@ -171,13 +168,13 @@ class _RefereeMyActivitiesScreenState
       onRefresh: _load,
       child: ListView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         itemCount: _activities.length + (_isLoadingMore ? 1 : 0),
         itemBuilder: (ctx, i) {
           if (i == _activities.length) {
-            return const Padding(
+            return Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
-              child: const AppLoader(),
+              child: AppLoader(),
             );
           }
           return _ActivityCard(activity: _activities[i]);
@@ -188,26 +185,25 @@ class _RefereeMyActivitiesScreenState
 }
 
 class _ActivityCard extends StatelessWidget {
-  const _ActivityCard({required this.activity});
+  _ActivityCard({required this.activity});
   final RefereeActivityModel activity;
 
   @override
   Widget build(BuildContext context) {
-    final hasScore =
-        activity.teamAScore != null && activity.teamBScore != null;
+    final hasScore = activity.teamAScore != null && activity.teamBScore != null;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFE0E0E0)),
+        border: Border.all(color: Color(0xFFE0E0E0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -217,7 +213,7 @@ class _ActivityCard extends StatelessWidget {
           // Tournament + round
           Text(
             activity.tournamentName ?? '',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 13,
@@ -225,14 +221,14 @@ class _ActivityCard extends StatelessWidget {
             ),
           ),
           if (activity.roundName?.isNotEmpty == true) ...[
-            const SizedBox(height: 2),
+            SizedBox(height: 2),
             Text(
               activity.roundName!,
-              style: const TextStyle(
+              style: TextStyle(
                   fontFamily: 'Lato', fontSize: 12, color: Colors.grey),
             ),
           ],
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
 
           // Teams + score
           Row(
@@ -241,7 +237,7 @@ class _ActivityCard extends StatelessWidget {
                 child: Text(
                   activity.teamA ?? '',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
@@ -249,8 +245,7 @@ class _ActivityCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                 decoration: BoxDecoration(
                   color: AppColors.socaBlack,
                   borderRadius: BorderRadius.circular(5),
@@ -259,7 +254,7 @@ class _ActivityCard extends StatelessWidget {
                   hasScore
                       ? '${activity.teamAScore} - ${activity.teamBScore}'
                       : 'vs',
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
@@ -270,7 +265,7 @@ class _ActivityCard extends StatelessWidget {
                 child: Text(
                   activity.teamB ?? '',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
@@ -279,29 +274,27 @@ class _ActivityCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
 
           // Date + cards
           Row(
             children: [
               if (activity.matchDate?.isNotEmpty == true) ...[
-                const Icon(Icons.calendar_today, size: 12, color: Colors.grey),
-                const SizedBox(width: 4),
+                Icon(Icons.calendar_today, size: 12, color: Colors.grey),
+                SizedBox(width: 4),
                 Text(activity.matchDate!,
-                    style: const TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 12,
-                        color: Colors.grey)),
-                const SizedBox(width: 14),
+                    style: TextStyle(
+                        fontFamily: 'Lato', fontSize: 12, color: Colors.grey)),
+                SizedBox(width: 14),
               ],
               Text(
                 '🟡 ${activity.yellowCardsGiven ?? 0}',
-                style: const TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 12),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 '🔴 ${activity.redCardsGiven ?? 0}',
-                style: const TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 12),
               ),
             ],
           ),

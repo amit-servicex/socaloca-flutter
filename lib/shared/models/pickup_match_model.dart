@@ -20,7 +20,7 @@ class PickupMatchModel with _$PickupMatchModel {
     double? longitude,
     @Default(0) int totalSlots,
     @Default(0) int filledSlots,
-    @Default('open') String status,   // 'open', 'full', 'cancelled'
+    @Default('open') String status, // 'open', 'full', 'cancelled'
     @Default(false) bool hasRequested,
     @Default(false) bool isAccepted,
     String? description,

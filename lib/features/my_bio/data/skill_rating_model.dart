@@ -19,8 +19,9 @@ class SkillRatingModel {
   static int _parseInt(dynamic v) =>
       v == null ? 0 : (v is num ? v.toInt() : int.tryParse(v.toString()) ?? 0);
 
-  static double _parseDouble(dynamic v) =>
-      v == null ? 0 : (v is num ? v.toDouble() : double.tryParse(v.toString()) ?? 0);
+  static double _parseDouble(dynamic v) => v == null
+      ? 0
+      : (v is num ? v.toDouble() : double.tryParse(v.toString()) ?? 0);
 
   factory SkillRatingModel.fromJson(Map<String, dynamic> json) =>
       SkillRatingModel(

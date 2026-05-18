@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +14,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Club Gallery / Posts — Screen 4 of the Club shell.
 class ClubGalleryScreen extends ConsumerStatefulWidget {
-  const ClubGalleryScreen({super.key});
+  ClubGalleryScreen({super.key});
   @override
   ConsumerState<ClubGalleryScreen> createState() => _ClubGalleryScreenState();
 }
@@ -35,7 +36,8 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
     _load();
     _scroll.addListener(() {
       if (_scroll.position.pixels >= _scroll.position.maxScrollExtent * 0.8 &&
-          !_loading && _hasMore) {
+          !_loading &&
+          _hasMore) {
         _start += _limit;
         _load();
       }
@@ -46,21 +48,22 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
     if (_loading) return;
     setState(() => _loading = true);
     final clubId = StorageService.clubId ?? '';
-    final raw = await ref.read(clubRepositoryProvider).getClubPostList(
-        clubId: clubId, start: _start, limit: _limit);
+    final raw = await ref
+        .read(clubRepositoryProvider)
+        .getClubPostList(clubId: clubId, start: _start, limit: _limit);
     final parsed = raw.map((e) => ClubPostModel.fromJson(e)).toList();
     setState(() {
       _posts.addAll(parsed);
-      _hasMore = parsed.length >= _limit;
-      _loading = false;
+      final _hasMore = parsed.length >= _limit;
+      final _loading = false;
     });
   }
 
   Future<void> _refresh() async {
     setState(() {
       _posts.clear();
-      _start = 0;
-      _hasMore = true;
+      final _start = 0;
+      final _hasMore = true;
     });
     await _load();
   }
@@ -68,11 +71,11 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
   @override
   Widget build(BuildContext context) {
     if (_posts.isEmpty && _loading) {
-      return const AppLoader();
+      return AppLoader();
     }
     if (_posts.isEmpty) {
-      return const Center(
-          child: Text('No Posts', style: TextStyle(fontFamily: 'Poppins')));
+      return Center(
+          child: Text('No Posts'.tr, style: TextStyle(fontFamily: 'Poppins')));
     }
 
     return RefreshIndicator(
@@ -82,7 +85,7 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
         itemCount: _posts.length + (_loading ? 1 : 0),
         itemBuilder: (_, i) {
           if (i >= _posts.length) {
-            return const AppLoader();
+            return AppLoader();
           }
           return _PostCard(post: _posts[i]);
         },
@@ -92,19 +95,19 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
 }
 
 class _PostCard extends StatelessWidget {
-  const _PostCard({required this.post});
+  _PostCard({required this.post});
   final ClubPostModel post;
 
   @override
   Widget build(BuildContext context) {
     final imageUrl = ApiConstants.getImageUrl(post.imageUrl);
     final ts = post.timestamp != null
-        ? DateFormat('MMM d, yyyy · HH:mm').format(
-            DateTime.fromMillisecondsSinceEpoch(post.timestamp!))
+        ? DateFormat('MMM d, yyyy · HH:mm')
+            .format(DateTime.fromMillisecondsSinceEpoch(post.timestamp!))
         : '';
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+      margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,29 +126,25 @@ class _PostCard extends StatelessWidget {
             Container(
               height: 200,
               color: AppColors.socaGrey,
-              child: const Center(
-                  child: Icon(Icons.image_not_supported, size: 48)),
+              child: Center(child: Icon(Icons.image_not_supported, size: 48)),
             ),
 
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (post.postCaption != null && post.postCaption!.isNotEmpty)
                   Text(post.postCaption!,
-                      style: const TextStyle(
-                          fontFamily: 'Poppins', fontSize: 13)),
-                const SizedBox(height: 6),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                SizedBox(height: 6),
                 Row(
                   children: [
-                    const Icon(Icons.favorite_border,
-                        size: 15, color: Colors.grey),
-                    const SizedBox(width: 4),
+                    Icon(Icons.favorite_border, size: 15, color: Colors.grey),
+                    SizedBox(width: 4),
                     Text('${post.likeCount ?? 0}',
-                        style: const TextStyle(
-                            fontFamily: 'Poppins', fontSize: 12)),
-                    const Spacer(),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
+                    Spacer(),
                     Text(ts,
                         style: TextStyle(
                             fontFamily: 'Poppins',

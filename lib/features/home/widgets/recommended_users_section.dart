@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -11,7 +12,7 @@ import '../providers/home_feed_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RecommendedUsersSection extends ConsumerStatefulWidget {
-  const RecommendedUsersSection({super.key});
+  RecommendedUsersSection({super.key});
 
   @override
   ConsumerState<RecommendedUsersSection> createState() =>
@@ -31,7 +32,7 @@ class _RecommendedUsersSectionState
 
   void _startAutoSlide() {
     _autoSlideTimer?.cancel();
-    _autoSlideTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    _autoSlideTimer = Timer.periodic(Duration(seconds: 5), (timer) {
       if (!_pageController.hasClients) return;
 
       final state = ref.read(feedRecUsersProvider);
@@ -45,13 +46,13 @@ class _RecommendedUsersSectionState
           // Loop back to the beginning if no more items
           _pageController.animateToPage(
             0,
-            duration: const Duration(milliseconds: 500),
+            duration: Duration(milliseconds: 500),
             curve: Curves.easeInOut,
           );
         }
       } else {
         _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       }
@@ -68,7 +69,7 @@ class _RecommendedUsersSectionState
   void _nextPage() {
     if (_pageController.hasClients) {
       _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
+        duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
@@ -77,7 +78,7 @@ class _RecommendedUsersSectionState
   void _prevPage() {
     if (_pageController.hasClients) {
       _pageController.previousPage(
-        duration: const Duration(milliseconds: 300),
+        duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
@@ -100,8 +101,8 @@ class _RecommendedUsersSectionState
   Widget build(BuildContext context) {
     final state = ref.watch(feedRecUsersProvider);
 
-    if (state.isLoading) return const SizedBox.shrink();
-    if (state.items.isEmpty) return const SizedBox.shrink();
+    if (state.isLoading) return SizedBox.shrink();
+    if (state.items.isEmpty) return SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,12 +110,12 @@ class _RecommendedUsersSectionState
         // Custom Black Header
         Container(
           color: AppColors.socaBlack,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
-                'Recently Joined',
+                'Recently Joined'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -123,7 +124,7 @@ class _RecommendedUsersSectionState
                 ),
               ),
               Text(
-                'View All',
+                'View All'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -154,7 +155,7 @@ class _RecommendedUsersSectionState
                 },
                 itemBuilder: (context, index) {
                   if (index == state.items.length) {
-                    return const AppLoader();
+                    return AppLoader();
                   }
 
                   final user = state.items[index];
@@ -169,7 +170,7 @@ class _RecommendedUsersSectionState
               Positioned(
                 left: 0,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new,
+                  icon: Icon(Icons.arrow_back_ios_new,
                       size: 32, color: Colors.black54),
                   onPressed: _prevPage,
                 ),
@@ -179,7 +180,7 @@ class _RecommendedUsersSectionState
               Positioned(
                 right: 0,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios,
+                  icon: Icon(Icons.arrow_forward_ios,
                       size: 32, color: Colors.black54),
                   onPressed: _nextPage,
                 ),
@@ -197,28 +198,28 @@ class _RecommendedUsersSectionState
       children: [
         // Top bar: Socaloca profile
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           child: Row(
             children: [
               CircleAvatar(
                 radius: 20,
                 backgroundColor: AppColors.socaBlack,
                 child: Padding(
-                  padding: const EdgeInsets.all(6.0),
+                  padding: EdgeInsets.all(6.0),
                   child: Image.asset(
                     'assets/images/logo_transparent.png',
                     color: Colors.white,
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Text(
-                        'SocaLoca',
+                        'SocaLoca'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
@@ -231,8 +232,8 @@ class _RecommendedUsersSectionState
                           size: 16, color: AppColors.socaBlack),
                     ],
                   ),
-                  const Text(
-                    '5 hrs', // Static placeholder as per design
+                  Text(
+                    '5 hrs'.tr, // Static placeholder as per design
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: Colors.grey,
@@ -247,10 +248,10 @@ class _RecommendedUsersSectionState
 
         // Announcement text
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: RichText(
             text: TextSpan(
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 color: AppColors.socaBlack,
                 fontSize: 15,
@@ -259,7 +260,7 @@ class _RecommendedUsersSectionState
                 TextSpan(
                     text:
                         '${user.firstName ?? 'A user'} has joined SocaLoca!!! '),
-                const TextSpan(
+                TextSpan(
                   text: 'Check his bio',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
@@ -268,13 +269,13 @@ class _RecommendedUsersSectionState
           ),
         ),
 
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
 
         // Grey section with photo and details
         Expanded(
           child: Container(
-            color: const Color(0xFFF9F9F9),
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            color: Color(0xFFF9F9F9),
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -293,16 +294,16 @@ class _RecommendedUsersSectionState
                       child: user.imageUrl == null ||
                               user.imageUrl!.isEmpty ||
                               user.imageUrl!.startsWith('file:///')
-                          ? const Icon(Icons.person,
+                          ? Icon(Icons.person,
                               size: 40, color: AppColors.socaGrey)
                           : null,
                     ),
-                    const SizedBox(height: 8),
-                    const Text('🇬🇭',
+                    SizedBox(height: 8),
+                    Text('🇬🇭'.tr,
                         style: TextStyle(fontSize: 24)), // Hardcoded for now
                   ],
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 // Name and Details
                 Expanded(
                   child: Column(
@@ -310,7 +311,7 @@ class _RecommendedUsersSectionState
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 15,
@@ -319,11 +320,11 @@ class _RecommendedUsersSectionState
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
+                          color: Color(0xFFEEEEEE),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -334,9 +335,9 @@ class _RecommendedUsersSectionState
                               child: Column(
                                 children: [
                                   _buildDetailRow('Born', '-'),
-                                  const SizedBox(height: 16),
+                                  SizedBox(height: 16),
                                   _buildDetailRow('Height (cms)', '-'),
-                                  const SizedBox(height: 16),
+                                  SizedBox(height: 16),
                                   _buildDetailRow('Preferred Foot', '-'),
                                 ],
                               ),
@@ -345,8 +346,7 @@ class _RecommendedUsersSectionState
                               width: 1,
                               height: 90,
                               color: Colors.grey.shade400,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 12),
+                              margin: EdgeInsets.symmetric(horizontal: 12),
                             ),
                             Expanded(
                               flex: 4,
@@ -354,7 +354,7 @@ class _RecommendedUsersSectionState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   _buildDetailRow('Playing Level', '-'),
-                                  const SizedBox(height: 16),
+                                  SizedBox(height: 16),
                                   _buildDetailRow('Jersey Size', '-'),
                                 ],
                               ),
@@ -379,15 +379,15 @@ class _RecommendedUsersSectionState
               border:
                   Border(top: BorderSide(color: AppColors.socaGrey, width: 1)),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: EdgeInsets.symmetric(vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.ios_share_rounded,
                     size: 22, color: AppColors.socaBlack),
                 SizedBox(width: 8),
                 Text(
-                  'SHARE',
+                  'SHARE'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -417,7 +417,7 @@ class _RecommendedUsersSectionState
         ),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 12,
             fontWeight: FontWeight.w700,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/teams_provider.dart';
@@ -7,7 +8,7 @@ class TeamFilterSection extends ConsumerStatefulWidget {
   final String userCountry;
   final VoidCallback onSearch;
 
-  const TeamFilterSection({
+  TeamFilterSection({
     super.key,
     required this.userCountry,
     required this.onSearch,
@@ -75,15 +76,14 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
           children: [
             Expanded(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   widget.userCountry,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: Colors.black87,
@@ -91,12 +91,12 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: TextField(
                 controller: _locationController,
                 decoration: InputDecoration(
-                  hintText: 'Location',
+                  hintText: 'Location'.tr,
                   hintStyle: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -109,7 +109,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                     borderSide: BorderSide.none,
                   ),
                   contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 onChanged: (value) {
                   ref.read(teamsProvider.notifier).setLocation(value);
@@ -118,7 +118,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
 
         // Game Type and Gender Row
         Row(
@@ -136,7 +136,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                 },
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: _buildDropdown(
                 value: _selectedGender,
@@ -152,7 +152,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
 
         // Age Range Dropdown
         _buildDropdown(
@@ -166,7 +166,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                 .setAgeRange(value == 'Age Range' ? '' : value);
           },
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
 
         // Age Category Dropdown
         _buildDropdown(
@@ -180,7 +180,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                 .setAgeCategory(value == 'Age Category' ? '' : value);
           },
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // GO Button
         SizedBox(
@@ -190,13 +190,13 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            child: const Text(
-              'GO',
+            child: Text(
+              'GO'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -205,10 +205,10 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             ),
           ),
         ),
-        const Divider(
+        Divider(
           color: AppColors.socaBlack,
         ),
-        const Row(
+        Row(
           children: [
             Radio(
               value: true,
@@ -218,10 +218,10 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
               visualDensity: VisualDensity.compact,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            Text("      All temas")
+            Text("      All temas".tr)
           ],
         ),
-        const Divider(
+        Divider(
           color: AppColors.socaBlack,
         )
       ],
@@ -234,7 +234,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
     required ValueChanged<String?> onChanged,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(4),
@@ -243,8 +243,8 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
-          icon: const Icon(Icons.arrow_drop_down, color: Colors.black54),
-          style: const TextStyle(
+          icon: Icon(Icons.arrow_drop_down, color: Colors.black54),
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             color: Colors.black87,

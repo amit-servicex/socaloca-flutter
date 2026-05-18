@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class TeamPlayersScreen extends ConsumerWidget {
   final String teamId;
 
-  const TeamPlayersScreen({
+  TeamPlayersScreen({
     super.key,
     required this.teamId,
   });
@@ -26,7 +27,7 @@ class TeamPlayersScreen extends ConsumerWidget {
       // appBar: AppBar(
       //   backgroundColor: AppColors.socaBlack,
       //   foregroundColor: AppColors.socaYellow,
-      //   title: const Text(
+      //   title: Text(
       //     'Players',
       //     style: TextStyle(
       //       fontFamily: 'Poppins',
@@ -43,7 +44,7 @@ class TeamPlayersScreen extends ConsumerWidget {
   Widget _buildBody(
       BuildContext context, WidgetRef ref, TeamPlayersState state) {
     if (state.isLoading) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     if (state.error != null) {
@@ -51,8 +52,8 @@ class TeamPlayersScreen extends ConsumerWidget {
     }
 
     if (state.allPlayers.isEmpty) {
-      return const Center(
-        child: Text('No players found'),
+      return Center(
+        child: Text('No players found'.tr),
       );
     }
 
@@ -61,19 +62,19 @@ class TeamPlayersScreen extends ConsumerWidget {
         await ref.read(teamPlayersProvider(teamId).notifier).refresh();
       },
       child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header with total count
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: Center(
                 child: Column(
                   children: [
-                    const Text(
-                      'Players',
+                    Text(
+                      'Players'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 20,
@@ -81,10 +82,10 @@ class TeamPlayersScreen extends ConsumerWidget {
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 12),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                       decoration: BoxDecoration(
                         color: AppColors.socaGrey,
                         borderRadius: BorderRadius.circular(4),
@@ -103,34 +104,35 @@ class TeamPlayersScreen extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 25),
+            SizedBox(height: 25),
 
             // Goalkeepers
             if (state.goalkeepers.isNotEmpty) ...[
               _buildPositionSection(context, 'Goalkeepers', state.goalkeepers),
-              const SizedBox(height: 35),
+              SizedBox(height: 35),
             ],
             // Defenders
             if (state.defenders.isNotEmpty) ...[
               _buildPositionSection(context, 'Defenders', state.defenders),
-              const SizedBox(height: 35),
+              SizedBox(height: 35),
             ],
             // Midfielders
             if (state.midfielders.isNotEmpty) ...[
               _buildPositionSection(context, 'Midfielders', state.midfielders),
-              const SizedBox(height: 35),
+              SizedBox(height: 35),
             ],
 
             // Attackers
             if (state.attackers.isNotEmpty) ...[
               _buildPositionSection(context, 'Attackers', state.attackers),
-              const SizedBox(height: 35),
+              SizedBox(height: 35),
             ],
 
             // Coaches/Managers
             if (state.coaches.isNotEmpty) ...[
-              _buildPositionSection(context, 'Coaches & Managers', state.coaches),
-              const SizedBox(height: 35),
+              _buildPositionSection(
+                  context, 'Coaches & Managers', state.coaches),
+              SizedBox(height: 35),
             ]
           ],
         ),
@@ -138,9 +140,10 @@ class TeamPlayersScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPositionSection(BuildContext context, String title, List<TeamPlayerModel> players) {
+  Widget _buildPositionSection(
+      BuildContext context, String title, List<TeamPlayerModel> players) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
           color: AppColors.socaGrey, borderRadius: BorderRadius.circular(8)),
       child: Column(
@@ -150,12 +153,12 @@ class TeamPlayersScreen extends ConsumerWidget {
             children: [
               // Players List
               Container(
-                padding: const EdgeInsets.only(right: 18),
+                padding: EdgeInsets.only(right: 18),
                 child: ListView.separated(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: players.length,
-                  separatorBuilder: (_, index) => const Divider(
+                  separatorBuilder: (_, index) => Divider(
                     height: 1,
                     thickness: .6,
                     color: AppColors.socaBlack,
@@ -172,16 +175,15 @@ class TeamPlayersScreen extends ConsumerWidget {
                 top: -25,
                 left: 0,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                  margin: EdgeInsets.only(left: 16, right: 16, bottom: 8),
                   child: Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -191,7 +193,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
             ],
           ),
         ],
@@ -210,7 +212,7 @@ class TeamPlayersScreen extends ConsumerWidget {
         }
       },
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Row(
           children: [
             // Jersey Number
@@ -218,7 +220,7 @@ class TeamPlayersScreen extends ConsumerWidget {
               width: 40,
               child: Text(
                 player.jerseyNumber ?? '',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -228,14 +230,14 @@ class TeamPlayersScreen extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
 
             // Player Avatar
             ClipOval(
               child: _buildPlayerAvatar(player.profileImage, 50),
             ),
 
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
 
             // Player Info
             Expanded(
@@ -245,7 +247,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                   // Player Name
                   Text(
                     player.fullName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -254,7 +256,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
 
                   // Position and Country
                   Row(
@@ -272,7 +274,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                       if (player.playPosition != null &&
                           player.playPosition!.isNotEmpty)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Container(
                             width: 4,
                             height: 4,
@@ -300,7 +302,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                           player.jerseyNumber != null &&
                           player.jerseyNumber!.isNotEmpty)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Container(
                             width: 4,
                             height: 4,
@@ -311,7 +313,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                           ),
                         ),
                       Text(
-                        'India', // TODO: Get from player data if available
+                        'India'.tr, // TODO: Get from player data if available
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -392,7 +394,7 @@ class TeamPlayersScreen extends ConsumerWidget {
         width: size,
         height: size,
         color: Colors.grey[200],
-        child: const AppLoader(),
+        child: AppLoader(),
       ),
       errorWidget: (context, url, error) => Container(
         width: size,
@@ -420,9 +422,9 @@ class TeamPlayersScreen extends ConsumerWidget {
             size: 80,
             color: Colors.red[300],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'Failed to load players',
+            'Failed to load players'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -430,9 +432,9 @@ class TeamPlayersScreen extends ConsumerWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               error,
               style: TextStyle(
@@ -443,7 +445,7 @@ class TeamPlayersScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               ref.read(teamPlayersProvider(teamId).notifier).refresh();
@@ -451,9 +453,9 @@ class TeamPlayersScreen extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
-            child: const Text('Retry'),
+            child: Text('Retry'.tr),
           ),
         ],
       ),

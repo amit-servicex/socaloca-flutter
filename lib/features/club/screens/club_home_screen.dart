@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/router/app_routes.dart';
@@ -11,7 +12,7 @@ final clubAppBarTitleProvider = StateProvider<String>((ref) => 'Club');
 
 /// Club Admin home shell — AppBar + body only. No bottom navigation.
 class ClubHomeScreen extends ConsumerWidget {
-  const ClubHomeScreen({super.key, required this.child});
+  ClubHomeScreen({super.key, required this.child});
   final Widget child;
 
   @override
@@ -27,10 +28,10 @@ class ClubHomeScreen extends ConsumerWidget {
         elevation: 0,
         leadingWidth: 160,
 
-        leading: const Padding(
+        leading: Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(
-            'Club Bio',
+            'Club Bio'.tr,
             // displayTitle,
             style: TextStyle(
               fontFamily: 'Poppins',
@@ -42,16 +43,16 @@ class ClubHomeScreen extends ConsumerWidget {
         ),
         title: Image.asset("assets/images/logo.png", height: 30),
         // centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
         // leading: context.canPop()
         //     ? IconButton(
-        //         icon: const Icon(Icons.arrow_back),
+        //         icon: Icon(Icons.arrow_back),
         //         onPressed: () => context.pop(),
         //       )
         //     : null,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: AppColors.playedGray),
+            icon: Icon(Icons.logout, color: AppColors.playedGray),
             tooltip: 'Logout',
             onPressed: () async {
               await StorageService.setClubLogin(false);

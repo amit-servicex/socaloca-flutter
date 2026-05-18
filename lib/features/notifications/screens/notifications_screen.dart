@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/notifications_provider.dart';
 import '../widgets/notification_card.dart';
@@ -6,10 +7,11 @@ import '../widgets/notification_shimmer.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
-  const NotificationsScreen({super.key});
+  NotificationsScreen({super.key});
 
   @override
-  ConsumerState<NotificationsScreen> createState() => _NotificationsScreenState();
+  ConsumerState<NotificationsScreen> createState() =>
+      _NotificationsScreenState();
 }
 
 class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
@@ -19,7 +21,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    Future.microtask(() => ref.read(notificationsProvider.notifier).loadNotifications());
+    Future.microtask(
+        () => ref.read(notificationsProvider.notifier).loadNotifications());
   }
 
   @override
@@ -29,7 +32,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
       ref.read(notificationsProvider.notifier).loadMoreNotifications();
     }
   }
@@ -40,7 +44,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text('Notifications'.tr),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,
@@ -51,7 +55,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
   Widget _buildBody(NotificationsState state) {
     if (state.isLoading) {
-      return const NotificationShimmer();
+      return NotificationShimmer();
     }
 
     if (state.error != null && state.notifications.isEmpty) {
@@ -69,12 +73,12 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       child: ListView.separated(
         controller: _scrollController,
         itemCount: state.notifications.length + (state.isLoadingMore ? 1 : 0),
-        separatorBuilder: (context, index) => const Divider(height: 1),
+        separatorBuilder: (context, index) => Divider(height: 1),
         itemBuilder: (context, index) {
           if (index == state.notifications.length) {
-            return const Padding(
+            return Padding(
               padding: EdgeInsets.all(16.0),
-              child: const AppLoader(),
+              child: AppLoader(),
             );
           }
 
@@ -95,18 +99,18 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             size: 80,
             color: Colors.grey[400],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'No notifications yet',
+            'No notifications yet'.tr,
             style: TextStyle(
               fontSize: 18,
               color: Colors.grey[600],
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            'When you get notifications, they\'ll show up here',
+            'When you get notifications, they\'ll show up here'.tr,
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[500],
@@ -128,18 +132,18 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             size: 80,
             color: Colors.red[300],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'Failed to load notifications',
+            'Failed to load notifications'.tr,
             style: TextStyle(
               fontSize: 18,
               color: Colors.grey[600],
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               error,
               style: TextStyle(
@@ -149,7 +153,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               ref.read(notificationsProvider.notifier).refresh();
@@ -157,9 +161,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
-            child: const Text('Retry'),
+            child: Text('Retry'.tr),
           ),
         ],
       ),

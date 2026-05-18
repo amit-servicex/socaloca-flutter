@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -12,7 +13,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Host Pickup Match Screen - Form to create a new pickup match
 /// Mirrors Android PickUpHostMatchFragment
 class HostPickupMatchScreen extends ConsumerStatefulWidget {
-  const HostPickupMatchScreen({super.key});
+  HostPickupMatchScreen({super.key});
 
   @override
   ConsumerState<HostPickupMatchScreen> createState() =>
@@ -62,11 +63,11 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
       context: context,
       initialDate: now,
       firstDate: now,
-      lastDate: now.add(const Duration(days: 365)),
+      lastDate: now.add(Duration(days: 365)),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
+            colorScheme: ColorScheme.light(
               primary: AppColors.socaYellow,
               onPrimary: AppColors.socaBlack,
             ),
@@ -88,7 +89,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
+            colorScheme: ColorScheme.light(
               primary: AppColors.socaYellow,
               onPrimary: AppColors.socaBlack,
             ),
@@ -110,7 +111,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
+            colorScheme: ColorScheme.light(
               primary: AppColors.socaYellow,
               onPrimary: AppColors.socaBlack,
             ),
@@ -235,8 +236,8 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
 
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Match hosted successfully!'),
+          SnackBar(
+            content: Text('Match hosted successfully!'.tr),
             backgroundColor: Colors.green,
           ),
         );
@@ -272,11 +273,11 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           children: [
-            const Center(
+            Center(
               child: Text(
-                "Host a Pick-Up Match",
+                "Host a Pick-Up Match".tr,
                 style: TextStyle(
                   color: AppColors.socaBlack,
                   fontSize: 18,
@@ -285,18 +286,18 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // Average Age
-            const Text(
-              'Average Age *',
+            Text(
+              'Average Age *'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
@@ -306,10 +307,10 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                 child: DropdownButton<String>(
                   isExpanded: true,
                   value: _selectedAgeGroup,
-                  hint: const Padding(
+                  hint: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      'Select',
+                      'Select'.tr,
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -317,7 +318,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                     ),
                   ),
                   icon: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Image.asset("assets/images/dropdown.png",
                         width: 12, height: 12),
                   ),
@@ -325,10 +326,10 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                     return DropdownMenuItem(
                       value: age,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Text(age,
-                            style: const TextStyle(
-                                fontFamily: 'Poppins', fontSize: 14)),
+                            style:
+                                TextStyle(fontFamily: 'Poppins', fontSize: 14)),
                       ),
                     );
                   }).toList(),
@@ -338,29 +339,29 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Gender
             Row(
               children: [
-                const Text(
-                  'Gender *',
+                Text(
+                  'Gender *'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     color: AppColors.socaBlack,
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _buildGenderRadio('Male'),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 _buildGenderRadio('Female'),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 _buildGenderRadio('Mixed'),
               ],
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Match Date
             _buildGreyBox(
@@ -375,7 +376,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               onTap: _pickDate,
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Start and End Time
             Row(
@@ -393,7 +394,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                     onTap: _pickStartTime,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: _buildGreyBox(
                     text: _endTime == null
@@ -410,19 +411,19 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               ],
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Country (read-only)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 country,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack,
@@ -430,7 +431,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Venue Name
             TextFormField(
@@ -447,14 +448,13 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               },
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Location
             GestureDetector(
               onTap: _pickLocation,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(8),
@@ -466,13 +466,13 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                       width: 24,
                       height: 24,
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         _locationController.text.isEmpty
                             ? 'Select location from map *'
                             : _locationController.text,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           color: AppColors.socaBlack,
@@ -484,10 +484,10 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               ),
             ),
             if (_locationController.text.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 4, left: 4),
                 child: Text(
-                  'Location is required',
+                  'Location is required'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -496,7 +496,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                 ),
               ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Max Players
             TextFormField(
@@ -515,7 +515,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               },
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Match Note
             TextFormField(
@@ -524,32 +524,32 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               maxLines: 5,
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
-              '* mandatory fields',
+            Text(
+              '* mandatory fields'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 color: AppColors.socaBlack,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             // Host Button
             ElevatedButton(
               onPressed: _isSubmitting ? null : _hostMatch,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: _isSubmitting
-                  ? const AppLoader(size: 24, centered: false)
-                  : const Text(
-                      'HOST MATCH',
+                  ? AppLoader(size: 24, centered: false)
+                  : Text(
+                      'HOST MATCH'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
@@ -559,7 +559,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                     ),
             ),
 
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
           ],
         ),
       ),
@@ -573,7 +573,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
           borderRadius: BorderRadius.circular(8),
@@ -583,7 +583,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
           children: [
             Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 color: AppColors.socaBlack,
@@ -612,7 +612,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           Text(label,
-              style: const TextStyle(
+              style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   color: AppColors.socaBlack)),
@@ -624,7 +624,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(
+      hintStyle: TextStyle(
         fontFamily: 'Poppins',
         fontSize: 14,
         color: AppColors.socaBlack,
@@ -645,9 +645,9 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: Colors.red),
+        borderSide: BorderSide(color: Colors.red),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,7 +17,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Featured tournament screen — mirrors Android TournamentsFragment
 /// Shows banner slider + header + tabs (Matches, Points Table, Stats)
 class TournamentFeaturedScreen extends ConsumerStatefulWidget {
-  const TournamentFeaturedScreen({
+  TournamentFeaturedScreen({
     super.key,
     required this.tournamentId,
     this.isReferee = false,
@@ -103,8 +104,8 @@ class _TournamentFeaturedScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text(
-          'Tournament',
+        title: Text(
+          'Tournament'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -115,14 +116,14 @@ class _TournamentFeaturedScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
           onPressed: () => context.pop(),
         ),
       ),
       body: _loading
-          ? const AppLoader()
+          ? AppLoader()
           : _tournament == null
-              ? const Center(child: Text('Tournament not found'))
+              ? Center(child: Text('Tournament not found'.tr))
               : Column(
                   children: [
                     // Banner slider
@@ -145,7 +146,7 @@ class _TournamentFeaturedScreenState
                     // "View Tournament Details" button
                     Container(
                       color: Colors.white,
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -154,13 +155,13 @@ class _TournamentFeaturedScreenState
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.socaBlack,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            padding: EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
-                          child: const Text(
-                            'View Tournament Details',
+                          child: Text(
+                            'View Tournament Details'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -182,17 +183,17 @@ class _TournamentFeaturedScreenState
                             AppColors.socaBlack.withValues(alpha: 0.5),
                         indicatorColor: AppColors.socaYellow,
                         indicatorWeight: 3,
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
-                        unselectedLabelStyle: const TextStyle(
+                        unselectedLabelStyle: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
                           fontSize: 14,
                         ),
-                        tabs: const [
+                        tabs: [
                           Tab(text: 'Matches'),
                           Tab(text: 'Points Table'),
                           Tab(text: 'Stats'),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_skill_model.dart';
@@ -10,7 +11,7 @@ class PlayerSkillsSection extends StatelessWidget {
   final bool isLoadingSkills;
   final bool isOwnProfile;
 
-  const PlayerSkillsSection({
+  PlayerSkillsSection({
     super.key,
     required this.skills,
     required this.overallRating,
@@ -24,10 +25,10 @@ class PlayerSkillsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingSkills) {
-      return const AppLoader();
+      return AppLoader();
     }
 
-    if (skills.isEmpty) return const SizedBox.shrink();
+    if (skills.isEmpty) return SizedBox.shrink();
 
     return Column(
       children: [
@@ -48,14 +49,14 @@ class PlayerSkillsSection extends StatelessWidget {
                 children: [
                   // Column headers
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+                    padding: EdgeInsets.fromLTRB(12, 12, 12, 4),
                     child: Row(
                       children: [
-                        const Expanded(child: SizedBox()),
+                        Expanded(child: SizedBox()),
                         SizedBox(
                           width: 110,
                           child: Text(
-                            'Average Rating | Endorsed By',
+                            'Average Rating | Endorsed By'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 10,
@@ -71,7 +72,7 @@ class PlayerSkillsSection extends StatelessWidget {
                   // Skill rows
                   ...skills.map((skill) => _buildRow(skill)),
 
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                 ],
               ),
             ),
@@ -85,14 +86,14 @@ class PlayerSkillsSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.socaBlack,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Text(
-                        'RATINGS',
+                      child: Text(
+                        'RATINGS'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -101,8 +102,8 @@ class PlayerSkillsSection extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Text(
-                      'view all',
+                    Text(
+                      'view all'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
@@ -122,7 +123,7 @@ class PlayerSkillsSection extends StatelessWidget {
 
   Widget _buildRow(PlayerSkillModel skill) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
@@ -135,7 +136,7 @@ class PlayerSkillsSection extends StatelessWidget {
           Expanded(
             child: Text(
               skill.skillName ?? '',
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,
@@ -160,7 +161,7 @@ class PlayerSkillsSection extends StatelessWidget {
 
           // Divider
           Text(
-            '|',
+            '|'.tr,
             style: TextStyle(color: Colors.grey[400], fontSize: 13),
           ),
 

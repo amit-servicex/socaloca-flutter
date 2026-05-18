@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,13 +16,13 @@ import '../../../core/theme/app_colors.dart';
 ///   • "Sign Up" button — filled black, 5dp radius — height 80dp, hPad 50dp, yellow text
 ///   • Privacy text pinned at bottom of screen
 class LoginLandingScreen extends StatelessWidget {
-  const LoginLandingScreen({super.key});
+  LoginLandingScreen({super.key});
 
-  static const Color _black = AppColors.socaBlack; // #1C1C1C
-  static const Color _yellow = AppColors.socaYellow; // #EEFF41
-  static const Color _pageBg = AppColors.socaPageBg; // #F6F6F6
+  static Color _black = AppColors.socaBlack; // #1C1C1C
+  static Color _yellow = AppColors.socaYellow; // #EEFF41
+  static Color _pageBg = AppColors.socaPageBg; // #F6F6F6
 
-  static const String _privacyText =
+  static String _privacyText =
       '*SocaLoca only collects the data is necessary to provides its service and\n'
       'stores it in the anonymised way in our own self-hosted analytics system.';
 
@@ -35,11 +36,11 @@ class LoginLandingScreen extends StatelessWidget {
             // ── Scrollable content ────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
+                physics: ClampingScrollPhysics(),
                 child: Column(
                   children: [
                     // Logo  — 150×150dp, centred, marginTop 50dp
-                    const SizedBox(height: 50),
+                    SizedBox(height: 50),
                     Center(
                       child: SvgPicture.asset(
                         'assets/icons/socaloca_logo.svg',
@@ -50,11 +51,11 @@ class LoginLandingScreen extends StatelessWidget {
                     ),
 
                     // Buttons block — marginTop 50dp
-                    const SizedBox(height: 50),
+                    SizedBox(height: 50),
 
                     // ── LOGIN button — outlined stroke, no fill ───────────
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      padding: EdgeInsets.symmetric(horizontal: 50),
                       child: GestureDetector(
                         onTap: () => context.push(AppRoutes.login),
                         child: Container(
@@ -65,8 +66,8 @@ class LoginLandingScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: _black, width: 1),
                           ),
-                          child: const Text(
-                            'Login',
+                          child: Text(
+                            'Login'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -80,8 +81,8 @@ class LoginLandingScreen extends StatelessWidget {
 
                     // ── OR divider ────────────────────────────────────────
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 20),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -90,9 +91,9 @@ class LoginLandingScreen extends StatelessWidget {
                           // "or" text with page-bg background to mask line
                           Container(
                             color: _pageBg,
-                            padding: const EdgeInsets.symmetric(horizontal: 25),
-                            child: const Text(
-                              'or',
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            child: Text(
+                              'or'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
@@ -107,7 +108,7 @@ class LoginLandingScreen extends StatelessWidget {
 
                     // ── SIGN UP button — filled black ─────────────────────
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      padding: EdgeInsets.symmetric(horizontal: 50),
                       child: GestureDetector(
                         onTap: () => context.push(AppRoutes.ageSelection),
                         child: Container(
@@ -117,8 +118,8 @@ class LoginLandingScreen extends StatelessWidget {
                             color: _black,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: const Text(
-                            'Sign Up',
+                          child: Text(
+                            'Sign Up'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -135,7 +136,7 @@ class LoginLandingScreen extends StatelessWidget {
             ),
 
             // ── Privacy text — pinned at bottom ──────────────────────────
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(20, 8, 20, 20),
               child: Text(
                 _privacyText,

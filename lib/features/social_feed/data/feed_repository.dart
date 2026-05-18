@@ -19,9 +19,10 @@ class FeedRepository {
     try {
       print('🔵 getFeed called with:');
       print('  userId: $userId');
-      print('  isFan: $isFan, isPlayer: $isPlayer, isCoach: $isCoach, isAdmin: $isAdmin');
+      print(
+          '  isFan: $isFan, isPlayer: $isPlayer, isCoach: $isCoach, isAdmin: $isAdmin');
       print('  lastId: $lastId, limit: $limit');
-      
+
       final body = <String, dynamic>{
         'userId': userId,
         'isFan': isFan,
@@ -31,22 +32,22 @@ class FeedRepository {
         'limit': limit,
         'deviceType': 'android', // Match Android app
       };
-      
+
       // Only add lastId if it's not null (Android behavior)
       if (lastId != null) {
         body['lastId'] = lastId;
       }
-      
+
       final data = await ApiClient.instance.post(
         ApiConstants.getFeed,
         body: body,
       );
 
       print('🟢 getFeed raw response keys: ${data.keys.toList()}');
-      
+
       // The API returns nested response: { response: { status, feed, lastId, socaFeed } }
       final responseData = data['response'] as Map<String, dynamic>?;
-      
+
       if (responseData == null) {
         print('🔴 No response data found');
         return [];
@@ -58,21 +59,22 @@ class FeedRepository {
       if (responseData['status'] == 1) {
         final feedList = responseData['feed'] as List<dynamic>?;
         print('🟢 Feed list length: ${feedList?.length ?? 0}');
-        
+
         if (feedList != null && feedList.isNotEmpty) {
           print('🟢 Parsing ${feedList.length} posts...');
-          
+
           final posts = <FeedPost>[];
           for (var i = 0; i < feedList.length; i++) {
             try {
-              final post = FeedPost.fromJson(feedList[i] as Map<String, dynamic>);
+              final post =
+                  FeedPost.fromJson(feedList[i] as Map<String, dynamic>);
               posts.add(post);
             } catch (e) {
               print('❌ Error parsing post $i: $e');
               print('Post JSON: ${feedList[i]}');
             }
           }
-          
+
           print('✅ Successfully parsed ${posts.length} posts');
           return posts;
         }

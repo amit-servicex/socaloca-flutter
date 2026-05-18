@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../core/theme/app_colors.dart';
 
 class CountryInfo {
-  const CountryInfo({
+  CountryInfo({
     required this.name,
     required this.phoneCode,
     required this.iso,
@@ -66,18 +67,19 @@ class LocationService {
       Position? position = await Geolocator.getLastKnownPosition();
       if (position != null) {
         log('LocationService: using last-known position lat=${position.latitude} lng=${position.longitude}');
-        final country = _isoFromCoordinates(position.latitude, position.longitude);
+        final country =
+            _isoFromCoordinates(position.latitude, position.longitude);
         if (country != null) return country;
       }
 
       // 2. Request a fresh fix — use network-quality accuracy (faster than GPS).
       log('LocationService: requesting fresh position...');
       position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
+        locationSettings: LocationSettings(
           accuracy: LocationAccuracy.lowest, // network/cell-tower — much faster
         ),
       ).timeout(
-        const Duration(seconds: 20),
+        Duration(seconds: 20),
         onTimeout: () {
           log('LocationService: getCurrentPosition timed out');
           throw Exception('location timeout');
@@ -104,10 +106,10 @@ class LocationService {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(24, 28, 24, 16),
               child: Text(
-                'Location Permission',
+                'Location Permission'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -117,7 +119,7 @@ class LocationService {
                 ),
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 'SocaLoca asks for your location access to align you with your '
@@ -135,8 +137,8 @@ class LocationService {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            const Divider(height: 1, color: Color(0xFFE0E0E0)),
+            SizedBox(height: 24),
+            Divider(height: 1, color: Color(0xFFE0E0E0)),
             IntrinsicHeight(
               child: Row(
                 children: [
@@ -144,15 +146,15 @@ class LocationService {
                     child: TextButton(
                       onPressed: () => Navigator.of(ctx).pop(false),
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: const RoundedRectangleBorder(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(14),
                           ),
                         ),
                       ),
-                      child: const Text(
-                        'Learn more',
+                      child: Text(
+                        'Learn more'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
@@ -162,20 +164,20 @@ class LocationService {
                       ),
                     ),
                   ),
-                  const VerticalDivider(width: 1, color: Color(0xFFE0E0E0)),
+                  VerticalDivider(width: 1, color: Color(0xFFE0E0E0)),
                   Expanded(
                     child: TextButton(
                       onPressed: () => Navigator.of(ctx).pop(true),
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: const RoundedRectangleBorder(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(14),
                           ),
                         ),
                       ),
-                      child: const Text(
-                        'OK',
+                      child: Text(
+                        'OK'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
@@ -219,36 +221,113 @@ class LocationService {
 
   // ─── Static data ──────────────────────────────────────────────────────────
 
-  static const _nameMap = {
-    'US': 'USA', 'CA': 'Canada', 'GB': 'England', 'IN': 'India',
-    'AU': 'Australia', 'DE': 'Germany', 'FR': 'France', 'IT': 'Italy',
-    'ES': 'Spain', 'BR': 'Brazil', 'MX': 'Mexico', 'AR': 'Argentina',
-    'CL': 'Chile', 'CO': 'Colombia', 'PE': 'Peru', 'CN': 'China',
-    'JP': 'Japan', 'KR': 'Korea Republic', 'SG': 'Singapore', 'MY': 'Malaysia',
-    'TH': 'Thailand', 'VN': 'Vietnam', 'PH': 'Philippines', 'ID': 'Indonesia',
-    'PK': 'Pakistan', 'BD': 'Bangladesh', 'NG': 'Nigeria', 'ZA': 'South Africa',
-    'EG': 'Egypt', 'KE': 'Kenya', 'SA': 'Saudi Arabia', 'AE': 'United Arab Emirates',
-    'TR': 'Türkiye', 'RU': 'Russia', 'UA': 'Ukraine', 'PL': 'Poland',
-    'NL': 'Netherlands', 'BE': 'Belgium', 'SE': 'Sweden', 'NO': 'Norway',
-    'DK': 'Denmark', 'FI': 'Finland', 'PT': 'Portugal', 'GR': 'Greece',
-    'IE': 'Republic of Ireland', 'NZ': 'New Zealand', 'CH': 'Switzerland',
-    'AT': 'Austria', 'CZ': 'Czech Republic', 'HU': 'Hungary',
+  static final _nameMap = {
+    'US': 'USA',
+    'CA': 'Canada',
+    'GB': 'England',
+    'IN': 'India',
+    'AU': 'Australia',
+    'DE': 'Germany',
+    'FR': 'France',
+    'IT': 'Italy',
+    'ES': 'Spain',
+    'BR': 'Brazil',
+    'MX': 'Mexico',
+    'AR': 'Argentina',
+    'CL': 'Chile',
+    'CO': 'Colombia',
+    'PE': 'Peru',
+    'CN': 'China',
+    'JP': 'Japan',
+    'KR': 'Korea Republic',
+    'SG': 'Singapore',
+    'MY': 'Malaysia',
+    'TH': 'Thailand',
+    'VN': 'Vietnam',
+    'PH': 'Philippines',
+    'ID': 'Indonesia',
+    'PK': 'Pakistan',
+    'BD': 'Bangladesh',
+    'NG': 'Nigeria',
+    'ZA': 'South Africa',
+    'EG': 'Egypt',
+    'KE': 'Kenya',
+    'SA': 'Saudi Arabia',
+    'AE': 'United Arab Emirates',
+    'TR': 'Türkiye',
+    'RU': 'Russia',
+    'UA': 'Ukraine',
+    'PL': 'Poland',
+    'NL': 'Netherlands',
+    'BE': 'Belgium',
+    'SE': 'Sweden',
+    'NO': 'Norway',
+    'DK': 'Denmark',
+    'FI': 'Finland',
+    'PT': 'Portugal',
+    'GR': 'Greece',
+    'IE': 'Republic of Ireland',
+    'NZ': 'New Zealand',
+    'CH': 'Switzerland',
+    'AT': 'Austria',
+    'CZ': 'Czech Republic',
+    'HU': 'Hungary',
   };
 
-  static const _phoneMap = {
-    'US': '+1', 'CA': '+1', 'GB': '+44', 'IN': '+91', 'AU': '+61',
-    'DE': '+49', 'FR': '+33', 'IT': '+39', 'ES': '+34', 'BR': '+55',
-    'MX': '+52', 'AR': '+54', 'CL': '+56', 'CO': '+57', 'PE': '+51',
-    'CN': '+86', 'JP': '+81', 'KR': '+82', 'SG': '+65', 'MY': '+60',
-    'TH': '+66', 'VN': '+84', 'PH': '+63', 'ID': '+62', 'PK': '+92',
-    'BD': '+880', 'NG': '+234', 'ZA': '+27', 'EG': '+20', 'KE': '+254',
-    'SA': '+966', 'AE': '+971', 'TR': '+90', 'RU': '+7', 'UA': '+380',
-    'PL': '+48', 'NL': '+31', 'BE': '+32', 'SE': '+46', 'NO': '+47',
-    'DK': '+45', 'FI': '+358', 'PT': '+351', 'GR': '+30', 'IE': '+353',
-    'NZ': '+64', 'CH': '+41', 'AT': '+43', 'CZ': '+420', 'HU': '+36',
+  static final _phoneMap = {
+    'US': '+1',
+    'CA': '+1',
+    'GB': '+44',
+    'IN': '+91',
+    'AU': '+61',
+    'DE': '+49',
+    'FR': '+33',
+    'IT': '+39',
+    'ES': '+34',
+    'BR': '+55',
+    'MX': '+52',
+    'AR': '+54',
+    'CL': '+56',
+    'CO': '+57',
+    'PE': '+51',
+    'CN': '+86',
+    'JP': '+81',
+    'KR': '+82',
+    'SG': '+65',
+    'MY': '+60',
+    'TH': '+66',
+    'VN': '+84',
+    'PH': '+63',
+    'ID': '+62',
+    'PK': '+92',
+    'BD': '+880',
+    'NG': '+234',
+    'ZA': '+27',
+    'EG': '+20',
+    'KE': '+254',
+    'SA': '+966',
+    'AE': '+971',
+    'TR': '+90',
+    'RU': '+7',
+    'UA': '+380',
+    'PL': '+48',
+    'NL': '+31',
+    'BE': '+32',
+    'SE': '+46',
+    'NO': '+47',
+    'DK': '+45',
+    'FI': '+358',
+    'PT': '+351',
+    'GR': '+30',
+    'IE': '+353',
+    'NZ': '+64',
+    'CH': '+41',
+    'AT': '+43',
+    'CZ': '+420',
+    'HU': '+36',
   };
 
-  static const _boundingBoxes = [
+  static final _boundingBoxes = [
     _Box('US', 24.4, 49.4, -125.0, -66.9),
     _Box('CA', 41.7, 83.1, -141.0, -52.6),
     _Box('GB', 49.9, 60.9, -8.6, 1.8),
@@ -302,7 +381,7 @@ class LocationService {
 }
 
 class _Box {
-  const _Box(this.iso, this.minLat, this.maxLat, this.minLng, this.maxLng);
+  _Box(this.iso, this.minLat, this.maxLat, this.minLng, this.maxLng);
   final String iso;
   final double minLat, maxLat, minLng, maxLng;
 }

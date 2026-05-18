@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_bio_model.dart';
@@ -10,7 +11,7 @@ class PlayerBioDetailsSection extends StatelessWidget {
   final PlayerBioModel playerBio;
   final bool isOwnProfile;
 
-  const PlayerBioDetailsSection({
+  PlayerBioDetailsSection({
     super.key,
     required this.playerBio,
     required this.isOwnProfile,
@@ -59,14 +60,14 @@ class PlayerBioDetailsSection extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: AppColors.socaGrey.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   playerBio.aboutMe!,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack,
@@ -86,7 +87,7 @@ class PlayerBioDetailsSection extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.socaGrey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(8),
@@ -101,14 +102,14 @@ class PlayerBioDetailsSection extends StatelessWidget {
                       children: [
                         _buildGridRow('Born', _getBornDisplay(),
                             isBoldValue: true),
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         _buildGridRowWithUpdate('Height (cms)',
                             playerBio.height?.toString() ?? '', context),
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         _buildGridRow(
                             'Preferred Foot', playerBio.preferredFoot ?? '',
                             isBoldValue: true),
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         _buildGridRow(
                             'Playing Level', playerBio.playLevel ?? '',
                             isBoldValue: true),
@@ -120,7 +121,7 @@ class PlayerBioDetailsSection extends StatelessWidget {
                     width: 1,
                     height: 150,
                     color: Colors.grey.shade400,
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    margin: EdgeInsets.symmetric(horizontal: 10),
                   ),
                   // Right Column
                   Expanded(
@@ -130,12 +131,12 @@ class PlayerBioDetailsSection extends StatelessWidget {
                         _buildGridRow('Position', playerBio.playPosition ?? '',
                             isBoldValue: true),
                         if (playerBio.playPositionType != null) ...[
-                          const SizedBox(height: 5),
+                          SizedBox(height: 5),
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
                               playerBio.playPositionType!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -144,10 +145,10 @@ class PlayerBioDetailsSection extends StatelessWidget {
                             ),
                           ),
                         ],
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         _buildGridRowWithUpdate('Nationality',
                             playerBio.nationality ?? '', context),
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         _buildGridRow('Location', playerBio.country ?? '',
                             isBoldValue: true),
                       ],
@@ -165,15 +166,15 @@ class PlayerBioDetailsSection extends StatelessWidget {
 
   Widget _buildSectionTitle(String title) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      margin: EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.socaBlack,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14,
           fontWeight: FontWeight.w700,
@@ -191,7 +192,7 @@ class PlayerBioDetailsSection extends StatelessWidget {
           flex: 3,
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               color: AppColors.socaBlack,
@@ -226,7 +227,7 @@ class PlayerBioDetailsSection extends StatelessWidget {
           // flex: 3,
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               color: AppColors.socaBlack,
@@ -239,13 +240,13 @@ class PlayerBioDetailsSection extends StatelessWidget {
               context.push(AppRoutes.editProfile, extra: playerBio);
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: const Text(
-                'UPDATE',
+              child: Text(
+                'UPDATE'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 10,
@@ -261,7 +262,7 @@ class PlayerBioDetailsSection extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 fontWeight: FontWeight.w700,

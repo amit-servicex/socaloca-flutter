@@ -18,9 +18,8 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = notification.seen
-        ? const Color(0xFFF5F5F5)
-        : Colors.white;
+    final backgroundColor =
+        notification.seen ? const Color(0xFFF5F5F5) : Colors.white;
 
     return InkWell(
       onTap: () => _handleCardTap(context),
@@ -50,7 +49,8 @@ class NotificationCard extends StatelessWidget {
                     onOpen: (link) async {
                       final uri = Uri.parse(link.url);
                       if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                        await launchUrl(uri,
+                            mode: LaunchMode.externalApplication);
                       }
                     },
                     style: const TextStyle(
@@ -93,13 +93,15 @@ class NotificationCard extends StatelessWidget {
 
   Widget _buildImage() {
     final imageUrl = notification.imageUrl;
-    
-    if (imageUrl == null || imageUrl.isEmpty || imageUrl.startsWith('file:///')) {
+
+    if (imageUrl == null ||
+        imageUrl.isEmpty ||
+        imageUrl.startsWith('file:///')) {
       return _buildDefaultImage();
     }
 
     final fullImageUrl = ApiConstants.getImageUrl(imageUrl);
-    
+
     if (fullImageUrl.isEmpty) {
       return _buildDefaultImage();
     }

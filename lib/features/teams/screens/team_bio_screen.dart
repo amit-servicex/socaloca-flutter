@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:socaloca/features/teams/data/models/team_match_model.dart';
 import '../../../core/constants/api_constants.dart';
+import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/team_bio_model.dart';
 import '../providers/team_bio_provider.dart';
@@ -12,7 +15,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class TeamBioScreen extends ConsumerWidget {
   final String teamId;
 
-  const TeamBioScreen({
+  TeamBioScreen({
     super.key,
     required this.teamId,
   });
@@ -29,7 +32,7 @@ class TeamBioScreen extends ConsumerWidget {
 
   Widget _buildBody(BuildContext context, WidgetRef ref, TeamBioState state) {
     if (state.isLoading) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     if (state.error != null) {
@@ -37,8 +40,8 @@ class TeamBioScreen extends ConsumerWidget {
     }
 
     if (state.teamBio == null) {
-      return const Center(
-        child: Text('No team data available'),
+      return Center(
+        child: Text('No team data available'.tr),
       );
     }
 
@@ -50,7 +53,7 @@ class TeamBioScreen extends ConsumerWidget {
         await ref.read(teamBioProvider(teamId).notifier).refresh();
       },
       child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,145 +61,15 @@ class TeamBioScreen extends ConsumerWidget {
             _buildBannerSection(teamDetails),
 
             // Team Info Section
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Team Name — sits above the logo row
-                  Text(
-                    teamDetails.teamName ?? 'Unknown Team',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
+            _buildTeamInfoSection(context, ref, teamBio, state),
 
-                  // Logo + Details Row
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Circular Team Logo
-                      _buildTeamLogo(teamDetails.teamImage),
-                      const SizedBox(width: 14),
-
-                      // Details Column
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Age Category badge + Game Type on the same row
-                            Row(
-                              children: [
-                                if (teamDetails.ageCategory != null &&
-                                    teamDetails.ageCategory!.isNotEmpty) ...[
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.socaBlack,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      teamDetails.ageCategory!,
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.socaYellow,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                ],
-                                if (teamDetails.gameType != null &&
-                                    teamDetails.gameType!.isNotEmpty)
-                                  Text(
-                                    teamDetails.gameType!,
-                                    style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 13,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-
-                            // Country
-                            if (teamDetails.country != null &&
-                                teamDetails.country!.isNotEmpty) ...[
-                              Text(
-                                teamDetails.country!,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 13,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                            ],
-
-                            // Member Count
-                            Text(
-                              '${teamDetails.memberCount} Member${teamDetails.memberCount == 1 ? "" : "s"}',
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 13,
-                                color: Colors.black87,
-                              ),
-                            ),
-
-                            // Coach Name
-                            if (teamDetails.coachName != null &&
-                                teamDetails.coachName!.isNotEmpty) ...[
-                              const SizedBox(height: 4),
-                              RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 13,
-                                    color: Colors.black87,
-                                  ),
-                                  children: [
-                                    const TextSpan(text: 'Coach  '),
-                                    TextSpan(
-                                      text: teamDetails.coachName!,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // Team Stats
-                  if (teamBio.ratingDetails != null) ...[
-                    const SizedBox(height: 20),
-                    _buildTeamStats(teamBio.ratingDetails!),
-                  ],
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             // Players Section
             if (teamBio.players.isNotEmpty)
               _buildPlayersSection(context, teamBio),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             // Recent Matches Section
             _buildRecentMatchesSection(teamBio),
@@ -232,17 +105,306 @@ class TeamBioScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTeamLogo(String? imageUrl) {
+  Widget _buildTeamInfoSection(
+    BuildContext context,
+    WidgetRef ref,
+    TeamBioModel teamBio,
+    TeamBioState state,
+  ) {
+    final teamDetails = teamBio.teamDetails;
+    final currentUserId = StorageService.userId;
+    final isCreator = currentUserId != null &&
+        state.createdBy != null &&
+        currentUserId == state.createdBy;
+    final canFollow = !state.isArchive && !isCreator;
+    final canRequest = !state.isArchive &&
+        !state.isMember &&
+        !state.isPending &&
+        !state.joinRequest;
+
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(18, 18, 18, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            teamDetails.teamName ?? 'Unknown Team'.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: AppColors.socaBlack,
+            ),
+          ),
+          SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 84,
+                child: Column(
+                  children: [
+                    _buildTeamLogo(
+                      teamDetails.teamImage,
+                      shortName: teamDetails.teamShortName,
+                    ),
+                    if (canFollow) ...[
+                      SizedBox(height: 8),
+                      _buildTeamActionButton(
+                        label: state.isFollowing ? 'FOLLOWING'.tr : 'FOLLOW'.tr,
+                        isLoading: state.isFollowLoading,
+                        onPressed: state.isFollowLoading
+                            ? null
+                            : () async {
+                                try {
+                                  await ref
+                                      .read(teamBioProvider(teamId).notifier)
+                                      .toggleFollow();
+                                } catch (e) {
+                                  _showActionError(context, e);
+                                }
+                              },
+                      ),
+                    ],
+                    SizedBox(height: 4),
+                    Text(
+                      _followerCountText(state.followCount),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 12,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (teamDetails.ageCategory != null &&
+                            teamDetails.ageCategory!.isNotEmpty) ...[
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 9,
+                              vertical: 3,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.socaBlack,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              teamDetails.ageCategory!,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.socaYellow,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 6),
+                        ],
+                        Flexible(
+                          child: Text(
+                            teamDetails.gameType ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 13,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (teamDetails.country != null &&
+                        teamDetails.country!.isNotEmpty) ...[
+                      SizedBox(height: 3),
+                      Text(
+                        teamDetails.country!,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 13,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ],
+                    SizedBox(height: 3),
+                    Text(
+                      '${teamDetails.memberCount} Member${teamDetails.memberCount == 1 ? "" : "s"}',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                    if (teamDetails.coachName != null &&
+                        teamDetails.coachName!.isNotEmpty) ...[
+                      SizedBox(height: 3),
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 13,
+                            color: AppColors.socaBlack,
+                          ),
+                          children: [
+                            TextSpan(text: '${'Coach'.tr}  '),
+                            TextSpan(
+                              text: teamDetails.coachName!,
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    if (state.isArchive) ...[
+                      SizedBox(height: 10),
+                      Text(
+                        'This team is archived'.tr,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ] else if (canRequest || state.isPending) ...[
+                      SizedBox(height: 12),
+                      _buildTeamActionButton(
+                        label: state.isPending
+                            ? 'REQUEST PENDING'.tr
+                            : 'SEND REQUEST'.tr,
+                        width: state.isPending ? 132 : 112,
+                        isLoading: state.isRequestLoading,
+                        onPressed: (!canRequest || state.isRequestLoading)
+                            ? null
+                            : () async {
+                                try {
+                                  await ref
+                                      .read(teamBioProvider(teamId).notifier)
+                                      .requestToJoin();
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Request sent'.tr,
+                                          style:
+                                              TextStyle(fontFamily: 'Poppins'),
+                                        ),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  _showActionError(context, e);
+                                }
+                              },
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (teamBio.ratingDetails != null) ...[
+            SizedBox(height: 20),
+            _buildTeamStats(teamBio.ratingDetails!),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTeamActionButton({
+    required String label,
+    required bool isLoading,
+    required VoidCallback? onPressed,
+    double width = 78,
+  }) {
+    return SizedBox(
+      width: width,
+      height: 28,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.socaBlack,
+          disabledBackgroundColor: AppColors.socaBlack,
+          foregroundColor: AppColors.socaYellow,
+          disabledForegroundColor: AppColors.socaYellow,
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          minimumSize: Size(width, 28),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          elevation: 0,
+        ),
+        child: isLoading
+            ? SizedBox(
+                width: 14,
+                height: 14,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColors.socaYellow,
+                  ),
+                ),
+              )
+            : FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+      ),
+    );
+  }
+
+  String _followerCountText(int count) {
+    final label = count == 1 ? 'Follower'.tr : 'Followers'.tr;
+    return '$count $label';
+  }
+
+  void _showActionError(BuildContext context, Object error) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          error.toString(),
+          style: TextStyle(fontFamily: 'Poppins'),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  Widget _buildTeamLogo(String? imageUrl, {String? shortName}) {
     final fullImageUrl = (imageUrl != null && imageUrl.isNotEmpty)
         ? ApiConstants.getImageUrl(imageUrl)
         : '';
 
     return Container(
-      width: 76,
-      height: 76,
-      decoration: const BoxDecoration(
+      width: 72,
+      height: 72,
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
+        border: Border.all(color: Colors.grey.shade300),
       ),
       clipBehavior: Clip.antiAlias,
       child: fullImageUrl.isNotEmpty
@@ -251,18 +413,37 @@ class TeamBioScreen extends ConsumerWidget {
               fit: BoxFit.cover,
               placeholder: (_, __) => Container(
                 color: Colors.grey[200],
-                child: const AppLoader(),
+                child: AppLoader(),
               ),
-              errorWidget: (_, __, ___) => _buildDefaultLogo(),
+              errorWidget: (_, __, ___) => _buildDefaultLogo(shortName),
             )
-          : _buildDefaultLogo(),
+          : _buildDefaultLogo(shortName),
     );
   }
 
-  Widget _buildDefaultLogo() {
+  Widget _buildDefaultLogo([String? shortName]) {
+    final initials = shortName?.trim();
+    if (initials != null && initials.isNotEmpty) {
+      return Container(
+        color: AppColors.socaBlack,
+        alignment: Alignment.center,
+        child: Text(
+          initials,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: AppColors.socaYellow,
+          ),
+        ),
+      );
+    }
+
     return Container(
       color: Colors.grey[200],
-      child: const Icon(Icons.emoji_events, size: 36, color: Colors.grey),
+      child: Icon(Icons.emoji_events, size: 36, color: Colors.grey),
     );
   }
 
@@ -287,28 +468,28 @@ class TeamBioScreen extends ConsumerWidget {
 
   Widget _buildStatBar(String label, double value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: EdgeInsets.only(bottom: 14),
       child: Row(
         children: [
           SizedBox(
             width: 120,
             child: Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: Colors.black87,
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(2),
               child: LinearProgressIndicator(
                 value: value / 5.0,
                 backgroundColor: Colors.grey[300],
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.grey),
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
                 minHeight: 3,
               ),
             ),
@@ -321,7 +502,7 @@ class TeamBioScreen extends ConsumerWidget {
   Widget _buildPlayersSection(BuildContext context, TeamBioModel teamBio) {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -330,8 +511,8 @@ class TeamBioScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                'Players',
+              Text(
+                'Players'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 18,
@@ -350,7 +531,7 @@ class TeamBioScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final player = teamBio.players[index];
                       return Padding(
-                        padding: const EdgeInsets.only(right: 5),
+                        padding: EdgeInsets.only(right: 5),
                         child: Column(
                           children: [
                             Container(
@@ -363,10 +544,10 @@ class TeamBioScreen extends ConsumerWidget {
                                     _buildPlayerAvatar(player.profileImage, 35),
                               ),
                             ),
-                            // const SizedBox(height: 4),
+                            // SizedBox(height: 4),
                             // Text(
                             //   player.firstName ?? '',
-                            //   style: const TextStyle(
+                            //   style: TextStyle(
                             //     fontFamily: 'Poppins',
                             //     fontSize: 10,
                             //     color: Colors.black87,
@@ -391,14 +572,13 @@ class TeamBioScreen extends ConsumerWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.socaBlack,
                       foregroundColor: AppColors.socaYellow,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    child: const Text(
-                      'VIEW ALL',
+                    child: Text(
+                      'VIEW ALL'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 10,
@@ -410,7 +590,7 @@ class TeamBioScreen extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           // Show first 4 players in a horizontal row
         ],
       ),
@@ -420,12 +600,12 @@ class TeamBioScreen extends ConsumerWidget {
   Widget _buildRecentMatchesSection(TeamBioModel teamBio) {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Recent Matches',
+          Text(
+            'Recent Matches'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -433,11 +613,11 @@ class TeamBioScreen extends ConsumerWidget {
               color: Colors.black,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           if (teamBio.recentMatches.isEmpty)
-            const Center(
+            Center(
               child: Text(
-                'No matches played yet',
+                'No matches played yet'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -449,9 +629,9 @@ class TeamBioScreen extends ConsumerWidget {
           else
             ListView.separated(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               itemCount: teamBio.recentMatches.length,
-              separatorBuilder: (context, index) => const Divider(height: 24),
+              separatorBuilder: (context, index) => SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final match = teamBio.recentMatches[index];
                 return _buildMatchCard(context, match);
@@ -465,9 +645,12 @@ class TeamBioScreen extends ConsumerWidget {
   Widget _buildMatchCard(BuildContext context, TeamMatchModel match) {
     final team1 = match.teams.isNotEmpty ? match.teams[0] : null;
     final team2 = match.teams.length > 1 ? match.teams[1] : null;
-    final score = match.score;
+    final scoreText = _matchScoreText(match);
+    final title = _matchVenueTitle(match);
+    final dateText = _formatMatchDate(match.matchDate);
 
     return InkWell(
+      borderRadius: BorderRadius.circular(12),
       onTap: () {
         // Navigate to match details if matchId is available
         if (match.matchId != null && match.matchId!.isNotEmpty) {
@@ -476,99 +659,170 @@ class TeamBioScreen extends ConsumerWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Match details: ${match.matchId}'),
-              duration: const Duration(seconds: 2),
+              duration: Duration(seconds: 2),
             ),
           );
         }
       },
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.fromLTRB(18, 18, 18, 16),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[300]!),
-          borderRadius: BorderRadius.circular(8),
+          color: Color(0xFFF7F7F7),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.12),
+              blurRadius: 10,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Match Date & Time
-            if (match.matchDate != null || match.matchTime != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Text(
-                  '${match.matchDate ?? ''} ${match.matchTime ?? ''}',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+            if (title.isNotEmpty) ...[
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black87,
                 ),
               ),
-
-            // Teams Row
+              SizedBox(height: 8),
+            ],
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Team 1
                 Expanded(
-                  child: Column(
-                    children: [
-                      _buildTeamMatchLogo(team1?.teamImage, 40),
-                      const SizedBox(height: 8),
-                      Text(
-                        team1?.teamName ?? 'Team 1',
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                  child: _buildScoreTeam(
+                    imageUrl: team1?.teamImage,
+                    name: team1?.teamName ?? 'Team 1',
+                    alignEnd: false,
                   ),
                 ),
-
-                // Score
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                SizedBox(
+                  width: 82,
                   child: Text(
-                    score != null ? '${score.team1} - ${score.team2}' : 'vs',
-                    style: const TextStyle(
+                    scoreText,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: 24,
+                      fontSize: 31,
                       fontWeight: FontWeight.w700,
                       color: Colors.black,
+                      height: 1.0,
                     ),
                   ),
                 ),
-
-                // Team 2
                 Expanded(
-                  child: Column(
-                    children: [
-                      _buildTeamMatchLogo(team2?.teamImage, 40),
-                      const SizedBox(height: 8),
-                      Text(
-                        team2?.teamName ?? 'Team 2',
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                  child: _buildScoreTeam(
+                    imageUrl: team2?.teamImage,
+                    name: team2?.teamName ?? 'Team 2',
+                    alignEnd: true,
                   ),
                 ),
               ],
             ),
+            SizedBox(height: 6),
+            Text(
+              'Full time'.tr,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 13,
+                color: Colors.black87,
+              ),
+            ),
+            if (dateText.isNotEmpty) ...[
+              SizedBox(height: 14),
+              Text(
+                dateText,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildScoreTeam({
+    required String? imageUrl,
+    required String name,
+    required bool alignEnd,
+  }) {
+    return Column(
+      crossAxisAlignment:
+          alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: alignEnd ? Alignment.centerRight : Alignment.centerLeft,
+          child: _buildTeamMatchLogo(imageUrl, 40),
+        ),
+        SizedBox(height: 7),
+        Text(
+          name,
+          textAlign: alignEnd ? TextAlign.right : TextAlign.left,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+            height: 1.1,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _matchScoreText(TeamMatchModel match) {
+    final score = match.score;
+    if (score == null) return 'vs';
+
+    final myTeamIsFirst = match.myTeamId != null &&
+        match.teams.isNotEmpty &&
+        match.teams.first.teamId == match.myTeamId;
+    final firstGoals = myTeamIsFirst ? score.myGoals : score.opponentGoals;
+    final secondGoals = myTeamIsFirst ? score.opponentGoals : score.myGoals;
+    return '$firstGoals : $secondGoals';
+  }
+
+  String _matchVenueTitle(TeamMatchModel match) {
+    final candidates = [
+      match.stadiumName,
+      match.fieldName,
+      match.locationName,
+      match.matchName,
+    ];
+    for (final value in candidates) {
+      final text = value?.trim();
+      if (text != null && text.isNotEmpty) return text;
+    }
+    return '';
+  }
+
+  String _formatMatchDate(String? value) {
+    if (value == null || value.trim().isEmpty) return '';
+    final raw = value.trim();
+    for (final pattern in ['dd-MM-yyyy', 'yyyy-MM-dd', 'MM-dd-yyyy']) {
+      try {
+        final date = DateFormat(pattern).parseStrict(raw);
+        return DateFormat('MMM d, yyyy').format(date);
+      } catch (_) {
+        // Try the next known API date format.
+      }
+    }
+    return raw;
   }
 
   Widget _buildTeamMatchLogo(String? imageUrl, double size) {
@@ -616,7 +870,7 @@ class TeamBioScreen extends ConsumerWidget {
           width: size,
           height: size,
           color: Colors.grey[200],
-          child: const AppLoader(),
+          child: AppLoader(),
         ),
         errorWidget: (context, url, error) => Container(
           width: size,
@@ -681,7 +935,7 @@ class TeamBioScreen extends ConsumerWidget {
         width: size,
         height: size,
         color: Colors.grey[200],
-        child: const AppLoader(),
+        child: AppLoader(),
       ),
       errorWidget: (context, url, error) => Container(
         width: size,
@@ -710,9 +964,9 @@ class TeamBioScreen extends ConsumerWidget {
             size: 80,
             color: Colors.red[300],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'Failed to load team bio',
+            'Failed to load team bio'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -720,9 +974,9 @@ class TeamBioScreen extends ConsumerWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               error,
               style: TextStyle(
@@ -733,7 +987,7 @@ class TeamBioScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               ref.read(teamBioProvider(teamId).notifier).refresh();
@@ -741,9 +995,9 @@ class TeamBioScreen extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
-            child: const Text('Retry'),
+            child: Text('Retry'.tr),
           ),
         ],
       ),

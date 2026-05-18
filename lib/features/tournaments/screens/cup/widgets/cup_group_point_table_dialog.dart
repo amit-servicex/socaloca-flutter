@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,7 +15,7 @@ class CupGroupPointTableDialog extends ConsumerWidget {
   final String tournamentId;
   final String groupId;
 
-  const CupGroupPointTableDialog({
+  CupGroupPointTableDialog({
     super.key,
     required this.tournamentId,
     required this.groupId,
@@ -31,9 +32,9 @@ class CupGroupPointTableDialog extends ConsumerWidget {
 
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.all(16),
+      insetPadding: EdgeInsets.all(16),
       child: Container(
-        constraints: const BoxConstraints(maxHeight: 600),
+        constraints: BoxConstraints(maxHeight: 600),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -43,8 +44,8 @@ class CupGroupPointTableDialog extends ConsumerWidget {
           children: [
             // Header
             Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
@@ -53,15 +54,15 @@ class CupGroupPointTableDialog extends ConsumerWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.table_chart,
                     color: AppColors.socaYellow,
                     size: 20,
                   ),
-                  const SizedBox(width: 8),
-                  const Expanded(
+                  SizedBox(width: 8),
+                  Expanded(
                     child: Text(
-                      'Group Standings',
+                      'Group Standings'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
@@ -71,10 +72,10 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: AppColors.socaYellow),
+                    icon: Icon(Icons.close, color: AppColors.socaYellow),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
+                    constraints: BoxConstraints(),
                   ),
                 ],
               ),
@@ -85,11 +86,11 @@ class CupGroupPointTableDialog extends ConsumerWidget {
               child: tableAsync.when(
                 data: (table) {
                   if (table.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Padding(
                         padding: EdgeInsets.all(32),
                         child: Text(
-                          'No standings available',
+                          'No standings available'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
@@ -103,35 +104,35 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                     scrollDirection: Axis.horizontal,
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: EdgeInsets.all(16),
                         child: DataTable(
                           headingRowColor: MaterialStateProperty.all(
                             Colors.grey[100],
                           ),
-                          headingTextStyle: const TextStyle(
+                          headingTextStyle: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                             color: AppColors.socaBlack,
                           ),
-                          dataTextStyle: const TextStyle(
+                          dataTextStyle: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             color: AppColors.socaBlack,
                           ),
                           columnSpacing: 16,
                           horizontalMargin: 12,
-                          columns: const [
-                            DataColumn(label: Text('#')),
-                            DataColumn(label: Text('Team')),
-                            DataColumn(label: Text('P'), numeric: true),
-                            DataColumn(label: Text('W'), numeric: true),
-                            DataColumn(label: Text('D'), numeric: true),
-                            DataColumn(label: Text('L'), numeric: true),
-                            DataColumn(label: Text('GF'), numeric: true),
-                            DataColumn(label: Text('GA'), numeric: true),
-                            DataColumn(label: Text('GD'), numeric: true),
-                            DataColumn(label: Text('Pts'), numeric: true),
+                          columns: [
+                            DataColumn(label: Text('#'.tr)),
+                            DataColumn(label: Text('Team'.tr)),
+                            DataColumn(label: Text('P'.tr), numeric: true),
+                            DataColumn(label: Text('W'.tr), numeric: true),
+                            DataColumn(label: Text('D'.tr), numeric: true),
+                            DataColumn(label: Text('L'.tr), numeric: true),
+                            DataColumn(label: Text('GF'.tr), numeric: true),
+                            DataColumn(label: Text('GA'.tr), numeric: true),
+                            DataColumn(label: Text('GD'.tr), numeric: true),
+                            DataColumn(label: Text('Pts'.tr), numeric: true),
                           ],
                           rows: table.asMap().entries.map((entry) {
                             final index = entry.key;
@@ -148,13 +149,13 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                                   Row(
                                     children: [
                                       _buildTeamLogo(team.teamLogo, 24),
-                                      const SizedBox(width: 8),
+                                      SizedBox(width: 8),
                                       SizedBox(
                                         width: 100,
                                         child: Text(
                                           team.teamName ?? 'Unknown',
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -184,7 +185,7 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                                 DataCell(
                                   Text(
                                     '${team.points}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.socaBlack,
                                     ),
@@ -198,17 +199,17 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => const AppLoader(),
+                loading: () => AppLoader(),
                 error: (error, stack) => Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(32),
+                    padding: EdgeInsets.all(32),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.error_outline, color: Colors.red),
-                        const SizedBox(height: 8),
+                        Icon(Icons.error_outline, color: Colors.red),
+                        SizedBox(height: 8),
                         Text(
-                          'Error loading standings',
+                          'Error loading standings'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,

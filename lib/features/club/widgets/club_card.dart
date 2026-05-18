@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,7 +13,7 @@ import '../data/models/club_model.dart';
 class ClubCard extends StatelessWidget {
   final ClubModel club;
 
-  const ClubCard({
+  ClubCard({
     super.key,
     required this.club,
   });
@@ -20,30 +21,30 @@ class ClubCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(5, 10, 5, 5),
+      margin: EdgeInsets.fromLTRB(5, 10, 5, 5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       color: Colors.white,
       elevation: 4,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildClubImage(),
-            const SizedBox(width: 17),
+            SizedBox(width: 17),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (club.trialBadge) ...[
                     _buildTrialBadge(),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                   ],
                   Text(
                     club.clubName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -54,7 +55,7 @@ class ClubCard extends StatelessWidget {
                   ),
                   Text(
                     club.partnerLabel,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
@@ -66,14 +67,14 @@ class ClubCard extends StatelessWidget {
                   if (club.country != null && club.country!.isNotEmpty)
                     Text(
                       club.country!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: AppColors.socaBlack,
                       ),
                     ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   _buildViewButton(context),
                 ],
               ),
@@ -88,8 +89,8 @@ class ClubCard extends StatelessWidget {
     return Container(
       width: 80,
       height: 80,
-      padding: const EdgeInsets.all(3),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.all(3),
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -98,10 +99,11 @@ class ClubCard extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: club.fullImageUrl,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Container(color: AppColors.socaGrey),
+                placeholder: (context, url) =>
+                    Container(color: AppColors.socaGrey),
                 errorWidget: (context, url, error) => Container(
                   color: AppColors.socaGrey,
-                  child: const Icon(
+                  child: Icon(
                     Icons.sports_soccer,
                     color: AppColors.socaBlack,
                     size: 40,
@@ -110,7 +112,7 @@ class ClubCard extends StatelessWidget {
               )
             : Container(
                 color: AppColors.socaGrey,
-                child: const Icon(
+                child: Icon(
                   Icons.sports_soccer,
                   color: AppColors.socaBlack,
                   size: 40,
@@ -122,14 +124,14 @@ class ClubCard extends StatelessWidget {
 
   Widget _buildTrialBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: AppColors.socaBlack, width: 1),
         borderRadius: BorderRadius.circular(5),
       ),
-      child: const Text(
-        'LIVE TRIAL',
+      child: Text(
+        'LIVE TRIAL'.tr,
         style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 12,
@@ -152,11 +154,11 @@ class ClubCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8),
           elevation: 0,
         ),
-        child: const Text(
-          'VIEW',
+        child: Text(
+          'VIEW'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 12,

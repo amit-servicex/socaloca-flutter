@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
@@ -9,7 +10,7 @@ class PlayerCard extends StatelessWidget {
   final PlayerModel player;
   final VoidCallback? onTap;
 
-  const PlayerCard({
+  PlayerCard({
     super.key,
     required this.player,
     this.onTap,
@@ -18,14 +19,14 @@ class PlayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -52,7 +53,7 @@ class PlayerCard extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) => Container(
                               color: AppColors.socaGrey,
-                              child: const Icon(
+                              child: Icon(
                                 Icons.person,
                                 size: 40,
                                 color: Colors.white,
@@ -61,7 +62,7 @@ class PlayerCard extends StatelessWidget {
                           )
                         : Container(
                             color: AppColors.socaGrey,
-                            child: const Icon(
+                            child: Icon(
                               Icons.person,
                               size: 40,
                               color: Colors.white,
@@ -69,13 +70,13 @@ class PlayerCard extends StatelessWidget {
                           ),
                   ),
                 ),
-                
+
                 // Jersey number badge
                 if (player.teamJerseyNo != null &&
                     player.teamJerseyNo!.isNotEmpty)
                   Container(
-                    margin: const EdgeInsets.only(top: 5),
-                    padding: const EdgeInsets.symmetric(
+                    margin: EdgeInsets.only(top: 5),
+                    padding: EdgeInsets.symmetric(
                       horizontal: 7,
                       vertical: 4,
                     ),
@@ -86,8 +87,8 @@ class PlayerCard extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
-                          'Jersey N°',
+                        Text(
+                          'Jersey N°'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 10,
@@ -96,10 +97,10 @@ class PlayerCard extends StatelessWidget {
                             height: 1,
                           ),
                         ),
-                        const SizedBox(width: 5),
+                        SizedBox(width: 5),
                         Text(
                           player.teamJerseyNo!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -112,9 +113,9 @@ class PlayerCard extends StatelessWidget {
                   ),
               ],
             ),
-            
-            const SizedBox(width: 10),
-            
+
+            SizedBox(width: 10),
+
             // Right side: Player info and button
             Expanded(
               child: Column(
@@ -126,7 +127,7 @@ class PlayerCard extends StatelessWidget {
                       if (player.firstName != null)
                         Text(
                           player.firstName!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
@@ -135,12 +136,12 @@ class PlayerCard extends StatelessWidget {
                           ),
                         ),
                       if (player.firstName != null && player.lastName != null)
-                        const SizedBox(width: 3),
+                        SizedBox(width: 3),
                       if (player.lastName != null)
                         Flexible(
                           child: Text(
                             player.lastName!,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -152,16 +153,16 @@ class PlayerCard extends StatelessWidget {
                         ),
                     ],
                   ),
-                  
-                  const SizedBox(height: 3),
-                  
+
+                  SizedBox(height: 3),
+
                   // Position info
                   Row(
                     children: [
                       if (player.playPosition != null)
                         Text(
                           player.playPosition!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -170,21 +171,21 @@ class PlayerCard extends StatelessWidget {
                         ),
                       if (player.playPosition != null &&
                           player.playPositionType != null) ...[
-                        const SizedBox(width: 3),
+                        SizedBox(width: 3),
                         Container(
                           width: 5,
                           height: 5,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             color: AppColors.socaBlack,
                             shape: BoxShape.circle,
                           ),
                         ),
-                        const SizedBox(width: 3),
+                        SizedBox(width: 3),
                       ],
                       if (player.playPositionType != null)
                         Text(
                           player.playPositionType!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
@@ -193,16 +194,16 @@ class PlayerCard extends StatelessWidget {
                         ),
                     ],
                   ),
-                  
-                  const SizedBox(height: 10),
-                  
+
+                  SizedBox(height: 10),
+
                   // View details button
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: onTap,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,
                         ),
@@ -210,8 +211,8 @@ class PlayerCard extends StatelessWidget {
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        child: const Text(
-                          'VIEW DETAILS',
+                        child: Text(
+                          'VIEW DETAILS'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,

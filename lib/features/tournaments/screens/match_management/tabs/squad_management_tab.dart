@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -14,7 +15,7 @@ class SquadManagementTab extends ConsumerStatefulWidget {
   final TournamentMatchModel match;
   final String tournamentId;
 
-  const SquadManagementTab({
+  SquadManagementTab({
     super.key,
     required this.matchId,
     required this.match,
@@ -59,11 +60,11 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
             unselectedLabelColor: AppColors.socaBlack.withOpacity(0.5),
             indicatorColor: AppColors.socaYellow,
             indicatorWeight: 3,
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 14),
-            unselectedLabelStyle: const TextStyle(
+            unselectedLabelStyle: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,
                 fontSize: 14),
@@ -87,26 +88,26 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
 
         // Save Button
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
               BoxShadow(
                   color: Colors.black.withOpacity(0.05),
                   blurRadius: 10,
-                  offset: const Offset(0, -2))
+                  offset: Offset(0, -2))
             ],
           ),
           child: SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: _isLoading ? null : _saveSquad,
-              icon: const Icon(Icons.save),
-              label: const Text('Save Squad'),
+              icon: Icon(Icons.save),
+              label: Text('Save Squad'.tr),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 elevation: 0,
@@ -123,7 +124,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
     final substitutes = isHome ? _homeSubstitutes : _awaySubstitutes;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -131,7 +132,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Starting XI',
+              Text('Starting XI'.tr,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -143,31 +144,31 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
                       color: Colors.grey[600])),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           if (starting.isEmpty)
             _buildEmptySection('No starting players added')
           else
             ...starting.asMap().entries.map((entry) =>
                 _buildPlayerCard(entry.value, entry.key, isHome, true)),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           OutlinedButton.icon(
             onPressed:
                 starting.length >= 11 ? null : () => _addPlayer(isHome, true),
-            icon: const Icon(Icons.add, size: 18),
-            label: const Text('Add Starting Player'),
+            icon: Icon(Icons.add, size: 18),
+            label: Text('Add Starting Player'.tr),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.socaBlack,
-              side: const BorderSide(color: AppColors.socaYellow),
+              side: BorderSide(color: AppColors.socaYellow),
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Substitutes
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Substitutes',
+              Text('Substitutes'.tr,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -179,22 +180,22 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
                       color: Colors.grey[600])),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           if (substitutes.isEmpty)
             _buildEmptySection('No substitute players added')
           else
             ...substitutes.asMap().entries.map((entry) =>
                 _buildPlayerCard(entry.value, entry.key, isHome, false)),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           OutlinedButton.icon(
             onPressed: substitutes.length >= 7
                 ? null
                 : () => _addPlayer(isHome, false),
-            icon: const Icon(Icons.add, size: 18),
-            label: const Text('Add Substitute'),
+            icon: Icon(Icons.add, size: 18),
+            label: Text('Add Substitute'.tr),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.socaBlack,
-              side: const BorderSide(color: AppColors.socaYellow),
+              side: BorderSide(color: AppColors.socaYellow),
             ),
           ),
         ],
@@ -204,7 +205,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
 
   Widget _buildEmptySection(String message) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
@@ -221,25 +222,25 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
   Widget _buildPlayerCard(
       String playerName, int index, bool isHome, bool isStarting) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.only(bottom: 8),
       elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: AppColors.socaYellow.withOpacity(0.2),
           child: Text('${index + 1}',
-              style: const TextStyle(
+              style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   color: AppColors.socaBlack)),
         ),
         title: Text(playerName,
-            style: const TextStyle(
+            style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 fontWeight: FontWeight.w600)),
         trailing: IconButton(
-          icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
+          icon: Icon(Icons.delete_outline, color: Colors.red, size: 20),
           onPressed: () => _removePlayer(isHome, isStarting, index),
         ),
       ),
@@ -252,24 +253,23 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Add ${isStarting ? "Starting" : "Substitute"} Player',
-            style: const TextStyle(
-                fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
+            style:
+                TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
         content: TextField(
           controller: controller,
           decoration: InputDecoration(
-            labelText: 'Player Name',
-            labelStyle: const TextStyle(fontFamily: 'Poppins'),
+            labelText: 'Player Name'.tr,
+            labelStyle: TextStyle(fontFamily: 'Poppins'),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide:
-                    const BorderSide(color: AppColors.socaYellow, width: 2)),
+                borderSide: BorderSide(color: AppColors.socaYellow, width: 2)),
           ),
         ),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+              child: Text('Cancel'.tr)),
           ElevatedButton(
             onPressed: () {
               if (controller.text.isNotEmpty) {
@@ -294,7 +294,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack),
-            child: const Text('Add'),
+            child: Text('Add'.tr),
           ),
         ],
       ),
@@ -408,13 +408,13 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Success',
+        title: Text('Success'.tr,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: Text(message, style: const TextStyle(fontFamily: 'Poppins')),
+        content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: const Text('OK'))
+              onPressed: () => Navigator.pop(context), child: Text('OK'.tr))
         ],
       ),
     );
@@ -424,13 +424,13 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Error',
+        title: Text('Error'.tr,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: Text(message, style: const TextStyle(fontFamily: 'Poppins')),
+        content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: const Text('OK'))
+              onPressed: () => Navigator.pop(context), child: Text('OK'.tr))
         ],
       ),
     );

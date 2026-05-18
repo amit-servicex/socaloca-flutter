@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
@@ -13,7 +14,7 @@ class EndorsementsSection extends StatelessWidget {
   final List<EndorsementModel> endorsements;
   final bool isLoadingEndorsements;
 
-  const EndorsementsSection({
+  EndorsementsSection({
     super.key,
     required this.endorsements,
     required this.isLoadingEndorsements,
@@ -44,7 +45,7 @@ class EndorsementsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isLoadingEndorsements) {
       return Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -52,23 +53,23 @@ class EndorsementsSection extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               blurRadius: 4,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
-        child: const AppLoader(),
+        child: AppLoader(),
       );
     }
 
     if (endorsements.isEmpty) {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
 
     final endorsement = endorsements.first;
     final user = endorsement.userDetails;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -76,7 +77,7 @@ class EndorsementsSection extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -86,8 +87,8 @@ class EndorsementsSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Endorsements',
+              Text(
+                'Endorsements'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -99,8 +100,8 @@ class EndorsementsSection extends StatelessWidget {
                 onPressed: () {
                   // TODO: Navigate to all endorsements
                 },
-                child: const Text(
-                  'View All',
+                child: Text(
+                  'View All'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -110,7 +111,7 @@ class EndorsementsSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // User Info Row
           Row(
@@ -134,14 +135,14 @@ class EndorsementsSection extends StatelessWidget {
                             imageUrl:
                                 '${ApiConstants.mediaBaseUrl}${user!.imageUrl}',
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => const AppLoader(),
-                            errorWidget: (context, url, error) => const Icon(
+                            placeholder: (context, url) => AppLoader(),
+                            errorWidget: (context, url, error) => Icon(
                               Icons.person,
                               color: AppColors.socaGrey,
                               size: 25,
                             ),
                           )
-                        : const Icon(
+                        : Icon(
                             Icons.person,
                             color: AppColors.socaGrey,
                             size: 25,
@@ -150,7 +151,7 @@ class EndorsementsSection extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
 
               // User Details and Comment
               Expanded(
@@ -164,7 +165,7 @@ class EndorsementsSection extends StatelessWidget {
                           child: Text(
                             '${user?.firstName ?? ''} ${user?.lastName ?? ''}'
                                 .trim(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -174,7 +175,7 @@ class EndorsementsSection extends StatelessWidget {
                         ),
                         if (_getUserRole(user).isNotEmpty)
                           Container(
-                            padding: const EdgeInsets.symmetric(
+                            padding: EdgeInsets.symmetric(
                               horizontal: 8,
                               vertical: 2,
                             ),
@@ -184,7 +185,7 @@ class EndorsementsSection extends StatelessWidget {
                             ),
                             child: Text(
                               _getUserRole(user),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
@@ -197,14 +198,14 @@ class EndorsementsSection extends StatelessWidget {
 
                     // Academy Name (if available)
                     if (endorsement.academy?.name != null) ...[
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       GestureDetector(
                         onTap: () {
                           // TODO: Navigate to academy
                         },
                         child: Text(
                           endorsement.academy!.name!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             color: AppColors.socaYellow,
@@ -214,14 +215,14 @@ class EndorsementsSection extends StatelessWidget {
                       ),
                     ],
 
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // Comment
                     if (endorsement.comment != null &&
                         endorsement.comment!.isNotEmpty)
                       Text(
                         endorsement.comment!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack,
@@ -230,12 +231,12 @@ class EndorsementsSection extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // Date
                     Text(
                       _formatDate(endorsement.addedOn),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         color: AppColors.socaGrey,

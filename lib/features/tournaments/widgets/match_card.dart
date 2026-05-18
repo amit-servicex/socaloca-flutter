@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/api_constants.dart';
@@ -7,7 +8,7 @@ import '../data/tournament_models.dart';
 
 /// Match card widget — mirrors Android TournamentUpcomingMatchesAdapter / TournamentPlayedMatchesAdapter
 class MatchCard extends StatelessWidget {
-  const MatchCard({
+  MatchCard({
     super.key,
     required this.match,
     this.onTap,
@@ -16,15 +17,14 @@ class MatchCard extends StatelessWidget {
   final TournamentMatchModel match;
   final VoidCallback? onTap;
 
-  bool get _isPlayed =>
-      match.homeScore != null && match.awayScore != null;
+  bool get _isPlayed => match.homeScore != null && match.awayScore != null;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
+        margin: EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -32,12 +32,12 @@ class MatchCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               blurRadius: 4,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(12),
           child: Column(
             children: [
               // Teams row
@@ -48,10 +48,10 @@ class MatchCard extends StatelessWidget {
                     child: Column(
                       children: [
                         _TeamLogo(logoPath: match.homeTeamLogo),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6),
                         Text(
                           match.homeTeamName ?? 'TBD',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
@@ -67,13 +67,13 @@ class MatchCard extends StatelessWidget {
 
                   // Score / VS
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 12),
                     child: _isPlayed
                         ? Column(
                             children: [
                               Text(
                                 '${match.homeScore} - ${match.awayScore}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w800,
                                   fontSize: 20,
@@ -81,14 +81,14 @@ class MatchCard extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(
+                                padding: EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(4),
                                 ),
-                                child: const Text(
-                                  'FT',
+                                child: Text(
+                                  'FT'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 10,
@@ -99,8 +99,8 @@ class MatchCard extends StatelessWidget {
                               ),
                             ],
                           )
-                        : const Text(
-                            'VS',
+                        : Text(
+                            'VS'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w800,
@@ -115,10 +115,10 @@ class MatchCard extends StatelessWidget {
                     child: Column(
                       children: [
                         _TeamLogo(logoPath: match.awayTeamLogo),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6),
                         Text(
                           match.awayTeamName ?? 'TBD',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
@@ -136,16 +136,16 @@ class MatchCard extends StatelessWidget {
 
               // Date + venue
               if (match.matchDate != null || match.venue != null) ...[
-                const SizedBox(height: 8),
-                const Divider(height: 1),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
+                Divider(height: 1),
+                SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (match.matchDate != null) ...[
-                      const Icon(Icons.calendar_today,
+                      Icon(Icons.calendar_today,
                           size: 12, color: AppColors.socaBlack),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         match.matchDate!,
                         style: TextStyle(
@@ -156,11 +156,10 @@ class MatchCard extends StatelessWidget {
                       ),
                     ],
                     if (match.matchDate != null && match.venue != null)
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                     if (match.venue != null) ...[
-                      const Icon(Icons.stadium,
-                          size: 12, color: AppColors.socaBlack),
-                      const SizedBox(width: 4),
+                      Icon(Icons.stadium, size: 12, color: AppColors.socaBlack),
+                      SizedBox(width: 4),
                       Flexible(
                         child: Text(
                           match.venue!,
@@ -186,7 +185,7 @@ class MatchCard extends StatelessWidget {
 }
 
 class _TeamLogo extends StatelessWidget {
-  const _TeamLogo({this.logoPath});
+  _TeamLogo({this.logoPath});
   final String? logoPath;
 
   @override
@@ -195,7 +194,7 @@ class _TeamLogo extends StatelessWidget {
     return Container(
       width: 48,
       height: 48,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -204,13 +203,13 @@ class _TeamLogo extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => const Icon(
+                errorWidget: (_, __, ___) => Icon(
                   Icons.shield,
                   color: AppColors.socaBlack,
                   size: 24,
                 ),
               )
-            : const Icon(Icons.shield, color: AppColors.socaBlack, size: 24),
+            : Icon(Icons.shield, color: AppColors.socaBlack, size: 24),
       ),
     );
   }

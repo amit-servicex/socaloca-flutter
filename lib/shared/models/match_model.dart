@@ -19,7 +19,7 @@ class MatchModel with _$MatchModel {
     String? matchDate,
     String? matchTime,
     String? venue,
-    String? status,          // 'live', 'upcoming', 'played', 'pending', etc.
+    String? status, // 'live', 'upcoming', 'played', 'pending', etc.
     MatchScore? score,
     String? tournamentId,
     String? tournamentName,
@@ -53,12 +53,12 @@ class MatchScore with _$MatchScore {
 @freezed
 class MatchEvent with _$MatchEvent {
   const factory MatchEvent({
-    required String type,    // 'goal', 'card', 'sub', 'foul'
+    required String type, // 'goal', 'card', 'sub', 'foul'
     required String playerId,
     required String playerName,
     int? minute,
     String? teamId,
-    String? detail,          // 'yellow', 'red', 'assist', etc.
+    String? detail, // 'yellow', 'red', 'assist', etc.
   }) = _MatchEvent;
 
   factory MatchEvent.fromJson(Map<String, dynamic> json) =>

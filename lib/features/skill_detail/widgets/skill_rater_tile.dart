@@ -45,19 +45,19 @@ class SkillRaterTile extends StatelessWidget {
                       color: Colors.grey.shade200,
                     ),
                     child: ClipOval(
-                      child: rater.imageUrl != null &&
-                              rater.imageUrl!.isNotEmpty
-                          ? Image.network(
-                              rater.imageUrl!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => const Icon(
-                                Icons.person,
-                                size: 24,
-                                color: Colors.grey,
-                              ),
-                            )
-                          : const Icon(Icons.person,
-                              size: 24, color: Colors.grey),
+                      child:
+                          rater.imageUrl != null && rater.imageUrl!.isNotEmpty
+                              ? Image.network(
+                                  rater.imageUrl!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => const Icon(
+                                    Icons.person,
+                                    size: 24,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              : const Icon(Icons.person,
+                                  size: 24, color: Colors.grey),
                     ),
                   ),
                   if (rater.isOnline)
@@ -70,8 +70,7 @@ class SkillRaterTile extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.green,
-                          border:
-                              Border.all(color: Colors.white, width: 1.5),
+                          border: Border.all(color: Colors.white, width: 1.5),
                         ),
                       ),
                     ),

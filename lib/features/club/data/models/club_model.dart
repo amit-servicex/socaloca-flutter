@@ -44,7 +44,9 @@ class ClubModel with _$ClubModel {
       // Parse stadiums if present - handle both array and null cases
       final stadiumsList = <StadiumModel>[];
       final stadiumData = json['stadium'] ?? json['stadiums'];
-      if (stadiumData != null && stadiumData is List && stadiumData.isNotEmpty) {
+      if (stadiumData != null &&
+          stadiumData is List &&
+          stadiumData.isNotEmpty) {
         try {
           for (var s in stadiumData) {
             if (s is Map<String, dynamic>) {

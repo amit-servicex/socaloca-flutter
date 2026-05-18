@@ -66,10 +66,8 @@ class PlayerLiveMatchState {
       );
 }
 
-class PlayerLiveMatchNotifier
-    extends StateNotifier<PlayerLiveMatchState> {
-  PlayerLiveMatchNotifier(this._repo)
-      : super(const PlayerLiveMatchState()) {
+class PlayerLiveMatchNotifier extends StateNotifier<PlayerLiveMatchState> {
+  PlayerLiveMatchNotifier(this._repo) : super(const PlayerLiveMatchState()) {
     load();
     _startAutoRefresh();
   }
@@ -197,8 +195,7 @@ class LiveMatchDetailState {
       );
 }
 
-class LiveMatchDetailNotifier
-    extends StateNotifier<LiveMatchDetailState> {
+class LiveMatchDetailNotifier extends StateNotifier<LiveMatchDetailState> {
   LiveMatchDetailNotifier(
     this._repo,
     this._matchId,

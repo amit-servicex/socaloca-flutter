@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +18,7 @@ class GalleryScreen extends ConsumerStatefulWidget {
   final String userId;
   final bool isOwnProfile;
 
-  const GalleryScreen({
+  GalleryScreen({
     super.key,
     required this.userId,
     this.isOwnProfile = false,
@@ -64,8 +65,8 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
   Future<void> _loadPosts({bool refresh = false}) async {
     if (_loading) return;
     if (refresh) {
-      _start = 0;
-      _hasMore = true;
+      final _start = 0;
+      final _hasMore = true;
       _posts.clear();
     }
 
@@ -84,8 +85,8 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
         setState(() {
           _posts.addAll(newPosts);
           _start += newPosts.length;
-          _hasMore = newPosts.length == _limit;
-          _loading = false;
+          final _hasMore = newPosts.length == _limit;
+          final _loading = false;
         });
       }
     } catch (_) {
@@ -101,7 +102,7 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
           ? FloatingActionButton(
               backgroundColor: AppColors.socaBlack,
               onPressed: () => context.push(AppRoutes.createPost),
-              child: const Icon(Icons.add, color: AppColors.socaYellow),
+              child: Icon(Icons.add, color: AppColors.socaYellow),
             )
           : null,
       body: _buildBody(),
@@ -110,13 +111,13 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
 
   Widget _buildBody() {
     if (_loading && _posts.isEmpty) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     if (!_loading && _posts.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'No posts found',
+          'No posts found'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 16,
@@ -131,8 +132,8 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
       color: AppColors.socaYellow,
       child: GridView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.all(2),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        padding: EdgeInsets.all(2),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
@@ -152,7 +153,7 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
 class _GalleryCell extends StatelessWidget {
   final PlayerPostModel post;
 
-  const _GalleryCell({required this.post});
+  _GalleryCell({required this.post});
 
   String? _mediaUrl() {
     if (post.sources?.isNotEmpty != true) return null;
@@ -170,7 +171,7 @@ class _GalleryCell extends StatelessWidget {
   String _formatDate(int? addedOn) {
     if (addedOn == null) return '';
     final dt = DateTime.fromMillisecondsSinceEpoch(addedOn).toLocal();
-    const months = [
+    final months = [
       'Jan',
       'Feb',
       'Mar',
@@ -207,20 +208,20 @@ class _GalleryCell extends StatelessWidget {
                 fit: BoxFit.cover,
                 placeholder: (_, __) =>
                     Container(color: AppColors.socaGrey.withValues(alpha: 0.1)),
-                errorWidget: (_, __, ___) => const Icon(
+                errorWidget: (_, __, ___) => Icon(
                   Icons.image,
                   color: AppColors.socaGrey,
                   size: 32,
                 ),
               )
             else
-              const Center(
+              Center(
                 child: Icon(Icons.article_outlined,
                     color: AppColors.socaGrey, size: 32),
               ),
 
             if (isVideo)
-              const Center(
+              Center(
                 child: Icon(Icons.play_circle_outline,
                     color: Colors.white, size: 28),
               ),
@@ -231,7 +232,7 @@ class _GalleryCell extends StatelessWidget {
               left: 0,
               right: 0,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 3),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
@@ -244,7 +245,7 @@ class _GalleryCell extends StatelessWidget {
                 ),
                 child: Text(
                   _formatDate(post.addedOn),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 9,
                     color: Colors.white,

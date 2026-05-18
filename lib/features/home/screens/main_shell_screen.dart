@@ -5,6 +5,8 @@ import 'package:socaloca/features/home/widgets/home_app_bar.dart';
 import 'package:socaloca/features/home/widgets/home_drawer.dart';
 import 'package:socaloca/shared/providers/auth_provider.dart';
 
+import '../../../core/constants/app_strings.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 
@@ -72,14 +74,36 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
     }
   }
 
+  String _labelForTab(_NavTab tab) {
+    switch (tab.route) {
+      case AppRoutes.home:
+        return AppStrings.home.toUpperCase();
+      case AppRoutes.teams:
+        return AppStrings.teams.toUpperCase();
+      case AppRoutes.tournaments:
+        return AppStrings.tournaments.toUpperCase();
+      case AppRoutes.clubsPartners:
+        return AppStrings.clubs.toUpperCase();
+      case AppRoutes.players:
+        return AppStrings.players.toUpperCase();
+      case AppRoutes.academies:
+        return AppStrings.academies.toUpperCase();
+      case 'MENU':
+        return AppStrings.menu.toUpperCase();
+      default:
+        return tab.label;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.watch(localeProvider);
     final user = ref.read(currentUserProvider);
 
     return Scaffold(
       key: _scaffoldKey,
       appBar: const HomeAppBar(),
-      endDrawer: const HomeDrawer(),
+      endDrawer: HomeDrawer(),
       body: widget.child,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -100,10 +124,10 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
               children: List.generate(_tabs.length, (index) {
                 final tab = _tabs[index];
                 final isActive = _currentIndex == index;
-                if (!(user?.isFan ?? false) && tab.label == "PLAYERS") {
+                if (!(user?.isFan ?? false) && tab.route == AppRoutes.players) {
                   return SizedBox();
                 }
-                if ((user?.isFan ?? false) && tab.label == "MENU") {
+                if ((user?.isFan ?? false) && tab.route == "MENU") {
                   return SizedBox();
                 }
                 return Expanded(
@@ -131,7 +155,7 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
                         const SizedBox(height: 2),
                         // Label - uppercase, 8sp
                         Text(
-                          tab.label,
+                          _labelForTab(tab),
                           style: const TextStyle(
                             fontFamily: 'Lato',
                             fontWeight: FontWeight.w700,

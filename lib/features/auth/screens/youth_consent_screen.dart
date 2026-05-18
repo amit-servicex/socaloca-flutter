@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,7 +14,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Collects parent/guardian information before signup
 /// Matches fragment_youth_consent.xml layout
 class YouthConsentScreen extends ConsumerStatefulWidget {
-  const YouthConsentScreen({super.key});
+  YouthConsentScreen({super.key});
 
   @override
   ConsumerState<YouthConsentScreen> createState() => _YouthConsentScreenState();
@@ -140,15 +141,16 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 40),
+                SizedBox(height: 40),
 
                 // Title
-                const Text(
-                  'Accounts of users between the ages of 13 and 15 can only be created and managed with a parent or guardian\'s consent.',
+                Text(
+                  'Accounts of users between the ages of 13 and 15 can only be created and managed with a parent or guardian\'s consent.'
+                      .tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -158,10 +160,10 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
-                const Text(
-                  'Please fill out the fields below and tick the checkbox.',
+                Text(
+                  'Please fill out the fields below and tick the checkbox.'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
@@ -170,10 +172,11 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
-                const Text(
-                  'This is confirm that you are the legal guardian and will take full control and accountability of this account upon registering on behalf of a minor.',
+                Text(
+                  'This is confirm that you are the legal guardian and will take full control and accountability of this account upon registering on behalf of a minor.'
+                      .tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
@@ -183,7 +186,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 36),
+                SizedBox(height: 36),
 
                 // Parent/Guardian Name
                 _buildField(
@@ -194,7 +197,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                   onChanged: (_) => _removeErrors(),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Parent/Guardian Email
                 _buildField(
@@ -205,7 +208,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                   onChanged: (_) => _removeErrors(),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Parent/Guardian Phone
                 _buildField(
@@ -217,7 +220,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                   onChanged: (_) => _removeErrors(),
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 // Consent checkbox
                 Row(
@@ -230,9 +233,10 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                       activeColor: AppColors.socaBlack,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'I consent that I am registering on behalf of a minor and will take full control of this SocaLoca account.',
+                        'I consent that I am registering on behalf of a minor and will take full control of this SocaLoca account.'
+                            .tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
@@ -244,23 +248,23 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 40),
+                SizedBox(height: 40),
 
                 // Proceed button
                 InkWell(
                   onTap: _isLoading ? null : _handleProceed,
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    padding: EdgeInsets.symmetric(vertical: 18),
                     decoration: BoxDecoration(
                       color: AppColors.socaBlack,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const AppLoader(),
+                    child: AppLoader(),
                   ),
                 ),
 
-                const SizedBox(height: 50),
+                SizedBox(height: 50),
               ],
             ),
           ),
@@ -282,14 +286,14 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 15,
             color: AppColors.socaBlack,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
             color: AppColors.socaGrey,
@@ -300,12 +304,12 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
             keyboardType: inputType,
             maxLength: maxLength,
             onChanged: onChanged,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -315,10 +319,10 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
         ),
         if (error != null)
           Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: EdgeInsets.only(top: 5),
             child: Text(
               error,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
                 fontSize: 12,

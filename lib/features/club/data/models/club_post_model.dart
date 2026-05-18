@@ -20,6 +20,5 @@ class ClubPostModel with _$ClubPostModel {
 }
 
 extension ClubPostModelX on ClubPostModel {
-  bool get isVideo =>
-      videoUrl != null && videoUrl!.isNotEmpty;
+  bool get isVideo => videoUrl != null && videoUrl!.isNotEmpty;
 }

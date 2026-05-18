@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +17,7 @@ class MyEndorsementListScreen extends ConsumerStatefulWidget {
   final String userId;
   final bool isOwnProfile;
 
-  const MyEndorsementListScreen({
+  MyEndorsementListScreen({
     super.key,
     required this.userId,
     this.isOwnProfile = false,
@@ -33,7 +34,7 @@ class _MyEndorsementListScreenState
   bool _isLoading = false;
   bool _hasMore = true;
   int _start = 0;
-  static const int _limit = 5;
+  static int _limit = 5;
   String? _error;
 
   // endType: 0 = all (own), 2 = accepted (other)
@@ -116,7 +117,7 @@ class _MyEndorsementListScreenState
 
   Widget _buildBody() {
     if (_endorsements.isEmpty && _isLoading) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     if (_endorsements.isEmpty && _error != null) {
@@ -124,18 +125,18 @@ class _MyEndorsementListScreenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            SizedBox(height: 16),
             Text(_error!,
-                style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
-            const SizedBox(height: 16),
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: _refresh,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow,
               ),
-              child: const Text('Retry',
+              child: Text('Retry'.tr,
                   style: TextStyle(
                       fontFamily: 'Poppins', color: AppColors.socaBlack)),
             ),
@@ -146,17 +147,17 @@ class _MyEndorsementListScreenState
 
     if (_endorsements.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 16,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
               color: AppColors.socaBlack,
-              child: const Text(
-                "Endorsements",
+              child: Text(
+                "Endorsements".tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 20,
@@ -165,8 +166,9 @@ class _MyEndorsementListScreenState
                 ),
               ),
             ),
-            const Text(
-              "View your Endorsements received by other Players &amp; Coaches Choose to either Publish or Reject the Endorsements received by you.",
+            Text(
+              "View your Endorsements received by other Players &amp; Coaches Choose to either Publish or Reject the Endorsements received by you."
+                  .tr,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -177,8 +179,8 @@ class _MyEndorsementListScreenState
               height: 16,
             ),
             Center(
-              child: const Text(
-                'No endorsements yet.',
+              child: Text(
+                'No endorsements yet.'.tr,
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -196,10 +198,10 @@ class _MyEndorsementListScreenState
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             color: AppColors.socaBlack,
-            child: const Text(
-              "Endorsements",
+            child: Text(
+              "Endorsements".tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 20,
@@ -208,8 +210,9 @@ class _MyEndorsementListScreenState
               ),
             ),
           ),
-          const Text(
-            "View your Endorsements received by other Players &amp; Coaches Choose to either Publish or Reject the Endorsements received by you.",
+          Text(
+            "View your Endorsements received by other Players &amp; Coaches Choose to either Publish or Reject the Endorsements received by you."
+                .tr,
             style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
@@ -220,15 +223,15 @@ class _MyEndorsementListScreenState
             height: 16,
           ),
           ListView.separated(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             itemCount: _endorsements.length + (_hasMore ? 1 : 0),
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            separatorBuilder: (_, __) => SizedBox(height: 12),
             itemBuilder: (ctx, i) {
               if (i == _endorsements.length) {
                 _loadMore();
-                return const Padding(
+                return Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  child: const AppLoader(),
+                  child: AppLoader(),
                 );
               }
               return _EndorsementCard(
@@ -253,7 +256,7 @@ class _EndorsementCard extends StatelessWidget {
   final VoidCallback onPublish;
   final VoidCallback onReject;
 
-  const _EndorsementCard({
+  _EndorsementCard({
     required this.raw,
     required this.isPublishable,
     required this.onPublish,
@@ -293,7 +296,7 @@ class _EndorsementCard extends StatelessWidget {
     final isPending = published == 0;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -301,7 +304,7 @@ class _EndorsementCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -312,14 +315,14 @@ class _EndorsementCard extends StatelessWidget {
           Row(
             children: [
               _Avatar(imageUrl: imageUrl),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       name.isEmpty ? 'Unknown' : name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -329,7 +332,7 @@ class _EndorsementCard extends StatelessWidget {
                     if (role.isNotEmpty)
                       Text(
                         role,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           color: AppColors.socaGrey,
@@ -338,7 +341,7 @@ class _EndorsementCard extends StatelessWidget {
                     if (academyName != null && academyName.isNotEmpty)
                       Text(
                         academyName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           color: AppColors.socaGrey,
@@ -350,7 +353,7 @@ class _EndorsementCard extends StatelessWidget {
               if (publishedOn.isNotEmpty)
                 Text(
                   publishedOn,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 10,
                     color: AppColors.socaGrey,
@@ -361,10 +364,10 @@ class _EndorsementCard extends StatelessWidget {
 
           // ── Review text ─────────────────────────────────────────────
           if (reviewText != null && reviewText.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               reviewText,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,
@@ -375,7 +378,7 @@ class _EndorsementCard extends StatelessWidget {
 
           // ── Publish / Reject buttons (own profile, pending) ─────────
           if (isPublishable && isPending) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Row(
               children: [
                 Expanded(
@@ -383,26 +386,26 @@ class _EndorsementCard extends StatelessWidget {
                     onPressed: onReject,
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.error,
-                      side: const BorderSide(color: AppColors.error),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      side: BorderSide(color: AppColors.error),
+                      padding: EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: const Text(
-                      'Reject',
+                    child: Text(
+                      'Reject'.tr,
                       style: TextStyle(fontFamily: 'Poppins', fontSize: 12),
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: onPublish,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.socaBlack,
                       foregroundColor: AppColors.socaYellow,
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: const Text(
-                      'Publish',
+                    child: Text(
+                      'Publish'.tr,
                       style: TextStyle(fontFamily: 'Poppins', fontSize: 12),
                     ),
                   ),
@@ -419,7 +422,7 @@ class _EndorsementCard extends StatelessWidget {
 class _Avatar extends StatelessWidget {
   final String? imageUrl;
 
-  const _Avatar({this.imageUrl});
+  _Avatar({this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -434,7 +437,7 @@ class _Avatar extends StatelessWidget {
     return CircleAvatar(
       radius: 22,
       backgroundColor: Colors.grey.shade200,
-      child: const Icon(Icons.person, color: AppColors.socaGrey, size: 24),
+      child: Icon(Icons.person, color: AppColors.socaGrey, size: 24),
     );
   }
 }

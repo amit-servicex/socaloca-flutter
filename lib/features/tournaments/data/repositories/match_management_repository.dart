@@ -119,18 +119,20 @@ class MatchManagementRepository {
         'userId': userId,
         'matchId': matchId,
         'tournamentId': tournamentId,
-        'goals': goals.map((goal) => {
-              'playerId': goal.playerId,
-              'playerName': goal.playerName,
-              'playerImage': goal.playerImage,
-              'teamId': goal.teamId,
-              'teamName': goal.teamName,
-              'minute': goal.minute,
-              'isOwnGoal': goal.isOwnGoal,
-              'isPenalty': goal.isPenalty,
-              'assistPlayerId': goal.assistPlayerId,
-              'assistPlayerName': goal.assistPlayerName,
-            }).toList(),
+        'goals': goals
+            .map((goal) => {
+                  'playerId': goal.playerId,
+                  'playerName': goal.playerName,
+                  'playerImage': goal.playerImage,
+                  'teamId': goal.teamId,
+                  'teamName': goal.teamName,
+                  'minute': goal.minute,
+                  'isOwnGoal': goal.isOwnGoal,
+                  'isPenalty': goal.isPenalty,
+                  'assistPlayerId': goal.assistPlayerId,
+                  'assistPlayerName': goal.assistPlayerName,
+                })
+            .toList(),
       };
 
       final data = await ApiClient.instance.post(
@@ -167,16 +169,18 @@ class MatchManagementRepository {
         'userId': userId,
         'matchId': matchId,
         'tournamentId': tournamentId,
-        'cards': cards.map((card) => {
-              'playerId': card.playerId,
-              'playerName': card.playerName,
-              'playerImage': card.playerImage,
-              'teamId': card.teamId,
-              'teamName': card.teamName,
-              'cardType': card.cardType,
-              'minute': card.minute,
-              'reason': card.reason,
-            }).toList(),
+        'cards': cards
+            .map((card) => {
+                  'playerId': card.playerId,
+                  'playerName': card.playerName,
+                  'playerImage': card.playerImage,
+                  'teamId': card.teamId,
+                  'teamName': card.teamName,
+                  'cardType': card.cardType,
+                  'minute': card.minute,
+                  'reason': card.reason,
+                })
+            .toList(),
       };
 
       final data = await ApiClient.instance.post(
@@ -261,18 +265,20 @@ class MatchManagementRepository {
         'matchId': matchId,
         'tournamentId': tournamentId,
         'teamId': teamId,
-        'players': players.map((player) => {
-              'playerId': player.playerId,
-              'playerName': player.playerName,
-              'playerImage': player.playerImage,
-              'position': player.position,
-              'jerseyNumber': player.jerseyNumber,
-              'isStarting': player.isStarting,
-              'isPlaying': player.isPlaying,
-              'minuteIn': player.minuteIn,
-              'minuteOut': player.minuteOut,
-              'replacedPlayerId': player.replacedPlayerId,
-            }).toList(),
+        'players': players
+            .map((player) => {
+                  'playerId': player.playerId,
+                  'playerName': player.playerName,
+                  'playerImage': player.playerImage,
+                  'position': player.position,
+                  'jerseyNumber': player.jerseyNumber,
+                  'isStarting': player.isStarting,
+                  'isPlaying': player.isPlaying,
+                  'minuteIn': player.minuteIn,
+                  'minuteOut': player.minuteOut,
+                  'replacedPlayerId': player.replacedPlayerId,
+                })
+            .toList(),
       };
 
       final data = await ApiClient.instance.post(
@@ -393,14 +399,16 @@ class MatchManagementRepository {
         'userId': userId,
         'matchId': matchId,
         'tournamentId': tournamentId,
-        'ratings': ratings.map((rating) => {
-              'playerId': rating.playerId,
-              'playerName': rating.playerName,
-              'playerImage': rating.playerImage,
-              'teamId': rating.teamId,
-              'rating': rating.rating,
-              'comment': rating.comment,
-            }).toList(),
+        'ratings': ratings
+            .map((rating) => {
+                  'playerId': rating.playerId,
+                  'playerName': rating.playerName,
+                  'playerImage': rating.playerImage,
+                  'teamId': rating.teamId,
+                  'rating': rating.rating,
+                  'comment': rating.comment,
+                })
+            .toList(),
       };
 
       final data = await ApiClient.instance.post(
@@ -486,8 +494,7 @@ class MatchManagementRepository {
       if (photosData == null) return [];
 
       return photosData
-          .map((json) =>
-              MatchPhotoModel.fromJson(json as Map<String, dynamic>))
+          .map((json) => MatchPhotoModel.fromJson(json as Map<String, dynamic>))
           .toList();
     } on ApiException catch (e) {
       log('Error getting match photos: ${e.message}');
@@ -522,8 +529,7 @@ class MatchManagementRepository {
       if (videosData == null) return [];
 
       return videosData
-          .map((json) =>
-              MatchVideoModel.fromJson(json as Map<String, dynamic>))
+          .map((json) => MatchVideoModel.fromJson(json as Map<String, dynamic>))
           .toList();
     } on ApiException catch (e) {
       log('Error getting match videos: ${e.message}');
