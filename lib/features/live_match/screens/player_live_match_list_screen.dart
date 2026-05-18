@@ -1,0 +1,648 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+import '../../../core/constants/api_constants.dart';
+import '../../../core/router/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/app_loader.dart';
+import '../models/live_match_models.dart';
+import '../providers/live_match_providers.dart';
+
+class PlayerLiveMatchListScreen extends ConsumerStatefulWidget {
+  const PlayerLiveMatchListScreen({super.key});
+
+  @override
+  ConsumerState<PlayerLiveMatchListScreen> createState() =>
+      _PlayerLiveMatchListScreenState();
+}
+
+class _PlayerLiveMatchListScreenState
+    extends ConsumerState<PlayerLiveMatchListScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.invalidate(liveMatchTournamentDropdownProvider);
+      ref.invalidate(liveMatchCountryDropdownProvider);
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final pos = _scrollController.position;
+    if (pos.pixels >= pos.maxScrollExtent - 200) {
+      ref.read(playerLiveMatchProvider.notifier).loadMore();
+    }
+  }
+
+  void _onTournamentChanged(String? id) {
+    ref.read(playerLiveSelectedTournamentProvider.notifier).state = id;
+    ref.read(playerLiveMatchProvider.notifier).load(
+          tournamentId: id,
+          country: ref.read(playerLiveSelectedCountryProvider),
+        );
+  }
+
+  void _onCountryChanged(String? country) {
+    ref.read(playerLiveSelectedCountryProvider.notifier).state = country;
+    ref.read(playerLiveMatchProvider.notifier).load(
+          tournamentId: ref.read(playerLiveSelectedTournamentProvider),
+          country: country,
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final matchState = ref.watch(playerLiveMatchProvider);
+    final tournamentAsync = ref.watch(liveMatchTournamentDropdownProvider);
+    final countryAsync = ref.watch(liveMatchCountryDropdownProvider);
+    final selectedTmnt = ref.watch(playerLiveSelectedTournamentProvider);
+    final selectedCountry = ref.watch(playerLiveSelectedCountryProvider);
+
+    return Scaffold(
+      backgroundColor: AppColors.socaPageBg,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            // width: 250,
+            decoration: const BoxDecoration(color: AppColors.socaBlack),
+            child: const Text(
+              'Live Matches',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: AppColors.socaYellow,
+              ),
+            ),
+          ),
+          // ── Filter row ─────────────────────────────────────────────────────
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              children: [
+                // Tournament dropdown
+                Expanded(
+                  child: tournamentAsync.when(
+                    data: (items) => _FilterDropdown<String?>(
+                      hint: 'All Tournaments',
+                      value: selectedTmnt,
+                      items: [
+                        const DropdownMenuItem(
+                          value: null,
+                          child: Text('All Tournaments',
+                              style: TextStyle(
+                                  fontFamily: 'Poppins', fontSize: 12)),
+                        ),
+                        ...items.map(
+                          (t) => DropdownMenuItem(
+                            value: t['tournamentId'],
+                            child: Text(
+                              t['tournamentName'] ?? '',
+                              style: const TextStyle(
+                                  fontFamily: 'Poppins', fontSize: 12),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                      onChanged: _onTournamentChanged,
+                    ),
+                    loading: () => const SizedBox(
+                      height: 36,
+                      child: Center(
+                          child: SizedBox(
+                              width: 16,
+                              height: 16,
+                              child:
+                                  CircularProgressIndicator(strokeWidth: 2))),
+                    ),
+                    error: (_, __) => const SizedBox.shrink(),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Country dropdown
+                Expanded(
+                  child: countryAsync.when(
+                    data: (countries) => _FilterDropdown<String?>(
+                      hint: 'All Countries',
+                      value: selectedCountry,
+                      items: [
+                        const DropdownMenuItem(
+                          value: null,
+                          child: Text('All Countries',
+                              style: TextStyle(
+                                  fontFamily: 'Poppins', fontSize: 12)),
+                        ),
+                        ...countries.map(
+                          (c) => DropdownMenuItem(
+                            value: c,
+                            child: Text(c,
+                                style: const TextStyle(
+                                    fontFamily: 'Poppins', fontSize: 12),
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                        ),
+                      ],
+                      onChanged: _onCountryChanged,
+                    ),
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ── Match list ─────────────────────────────────────────────────────
+          Expanded(
+            child: matchState.isLoading && matchState.matches.isEmpty
+                ? const AppLoader()
+                : matchState.error != null && matchState.matches.isEmpty
+                    ? _ErrorState(
+                        onRetry: () =>
+                            ref.read(playerLiveMatchProvider.notifier).load(),
+                      )
+                    : matchState.matches.isEmpty
+                        ? const _EmptyState()
+                        : ListView.builder(
+                            controller: _scrollController,
+                            padding: const EdgeInsets.all(12),
+                            itemCount: matchState.matches.length +
+                                (matchState.isLoadingMore ? 1 : 0),
+                            itemBuilder: (ctx, i) {
+                              if (i == matchState.matches.length) {
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  child: Center(
+                                      child: CircularProgressIndicator()),
+                                );
+                              }
+                              final item = matchState.matches[i];
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (item.uniqueTournamentId &&
+                                      item.tournamentName?.isNotEmpty == true)
+                                    _TournamentHeader(
+                                      name: item.tournamentName!,
+                                      logoUrl: item.tournamentLogoUrl,
+                                      country: item.tournamentCountry,
+                                    ),
+                                  _LiveMatchCard(
+                                    item: item,
+                                    onTap: () => context.push(
+                                      AppRoutes.liveMatchDetails.replaceFirst(
+                                          ':matchId', item.matchId),
+                                      extra: {
+                                        'tournamentId': item.tournamentId,
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Filter dropdown ──────────────────────────────────────────────────────────
+
+class _FilterDropdown<T> extends StatelessWidget {
+  const _FilterDropdown({
+    required this.hint,
+    required this.value,
+    required this.items,
+    required this.onChanged,
+  });
+
+  final String hint;
+  final T value;
+  final List<DropdownMenuItem<T>> items;
+  final ValueChanged<T?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 36,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: AppColors.socaGrey,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<T>(
+          value: value,
+          hint: Text(hint,
+              style: const TextStyle(fontFamily: 'Poppins', fontSize: 12)),
+          isExpanded: true,
+          icon: const Icon(Icons.expand_more, size: 18),
+          items: items,
+          onChanged: onChanged,
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Tournament section header ────────────────────────────────────────────────
+
+class _TournamentHeader extends StatelessWidget {
+  const _TournamentHeader({
+    required this.name,
+    this.logoUrl,
+    this.country,
+  });
+  final String name;
+  final String? logoUrl;
+  final String? country;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 4),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.socaBlack,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          children: [
+            if (logoUrl != null && logoUrl!.isNotEmpty) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+                child: Image.network(
+                  ApiConstants.getImageUrl(logoUrl!),
+                  width: 24,
+                  height: 24,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) =>
+                      const SizedBox(width: 24, height: 24),
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
+            Expanded(
+              child: Text(
+                name,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                  color: AppColors.socaYellow,
+                ),
+              ),
+            ),
+            if (country != null && country!.isNotEmpty)
+              Text(
+                country!,
+                style: const TextStyle(
+                  fontFamily: 'Lato',
+                  fontSize: 11,
+                  color: Colors.white60,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Match card ───────────────────────────────────────────────────────────────
+
+class _LiveMatchCard extends StatelessWidget {
+  const _LiveMatchCard({required this.item, required this.onTap});
+
+  final LiveMatchListItem item;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasScore = item.homeGoals > 0 || item.awayGoals > 0;
+    final state = item.state ?? MatchState.unknown;
+
+    // Format match date
+    String dateStr = '';
+    if (item.matchDateTimeGmt != null) {
+      final dt =
+          DateTime.fromMillisecondsSinceEpoch(item.matchDateTimeGmt! * 1000)
+              .toLocal();
+      dateStr = DateFormat('d MMM yyyy, HH:mm').format(dt);
+    }
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: state.isLive ? Colors.red.shade400 : AppColors.border,
+            width: state.isLive ? 1.5 : 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            children: [
+              // Live badge + date
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (state.isLive) _LivePulseBadge(stateLabel: state.label),
+                  if (!state.isLive)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.socaGrey,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        state.label,
+                        style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 10,
+                            color: AppColors.socaBlack),
+                      ),
+                    ),
+                  if (dateStr.isNotEmpty)
+                    Text(
+                      dateStr,
+                      style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 10,
+                          color: AppColors.textSecondary),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Teams + score
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Home team
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _SmallTeamLogo(imageUrl: item.homeTeam?.imageUrl),
+                        const SizedBox(height: 4),
+                        Text(
+                          item.homeTeam?.teamName ?? '',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Score
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(
+                      hasScore
+                          ? '${item.homeGoals}  —  ${item.awayGoals}'
+                          : 'vs',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w800,
+                        fontSize: hasScore ? 22 : 16,
+                        color: state.isLive ? Colors.red : AppColors.socaBlack,
+                      ),
+                    ),
+                  ),
+
+                  // Away team
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _SmallTeamLogo(imageUrl: item.awayTeam?.imageUrl),
+                        const SizedBox(height: 4),
+                        Text(
+                          item.awayTeam?.teamName ?? '',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SmallTeamLogo extends StatelessWidget {
+  const _SmallTeamLogo({this.imageUrl});
+  final String? imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final url = imageUrl != null && imageUrl!.isNotEmpty
+        ? ApiConstants.getImageUrl(imageUrl)
+        : '';
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.socaGrey,
+        border: Border.all(color: AppColors.border),
+      ),
+      child: url.isNotEmpty
+          ? ClipOval(
+              child: Image.network(
+                url,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.sports_soccer,
+                  size: 20,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            )
+          : const Icon(Icons.sports_soccer,
+              size: 20, color: AppColors.textSecondary),
+    );
+  }
+}
+
+// ─── Animated live badge ──────────────────────────────────────────────────────
+
+class _LivePulseBadge extends StatefulWidget {
+  const _LivePulseBadge({required this.stateLabel});
+  final String stateLabel;
+
+  @override
+  State<_LivePulseBadge> createState() => _LivePulseBadgeState();
+}
+
+class _LivePulseBadgeState extends State<_LivePulseBadge>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  late Animation<double> _opacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _opacity = Tween<double>(begin: 0.4, end: 1.0).animate(_ctrl);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.circle, size: 7, color: Colors.white),
+            const SizedBox(width: 4),
+            Text(
+              'LIVE · ${widget.stateLabel}',
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 10,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Empty / error states ─────────────────────────────────────────────────────
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.live_tv_outlined,
+              size: 56, color: AppColors.textSecondary),
+          SizedBox(height: 12),
+          Text(
+            'No live matches right now',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          SizedBox(height: 6),
+          Text(
+            'Matches update automatically every minute',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              color: AppColors.textHint,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.onRetry});
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+          const SizedBox(height: 12),
+          const Text(
+            'Failed to load live matches',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton(
+            onPressed: onRetry,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.socaBlack,
+              foregroundColor: AppColors.socaYellow,
+            ),
+            child: const Text('Retry', style: TextStyle(fontFamily: 'Poppins')),
+          ),
+        ],
+      ),
+    );
+  }
+}

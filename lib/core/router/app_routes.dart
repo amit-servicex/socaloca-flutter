@@ -46,6 +46,10 @@ class AppRoutes {
 
   static const String matchDetail = '/matches/:matchId';
   static const String liveMatch = '/matches/:matchId/live';
+
+  // Live Matches (player/fan + all roles view)
+  static const String playerLiveMatches = '/live-matches';
+  static const String liveMatchDetails = '/live-match/:matchId';
   static const String pickupMatches = '/pickup';
   static const String hostPickupMatch = '/pickup/host';
   static const String pickupMatchDetail = '/pickup/:matchId';
@@ -76,7 +80,8 @@ class AppRoutes {
   static const String refereeBio = '/referee/bio';
 
   // ─── Referee detail screens ────────────────────────────────────────────────
-  static const String refereeTournamentView = '/referee/tournament/:tmntId/view';
+  static const String refereeTournamentView =
+      '/referee/tournament/:tmntId/view';
   static const String refereeManageMatch = '/referee/match/:matchId/manage';
   static const String refereeLiveUpdate = '/referee/match/:matchId/live-update';
   static const String refereeActivities = '/referee/activities';
@@ -87,14 +92,15 @@ class AppRoutes {
   static const String charityBio = '/charity/:charityId';
 
   // ─── Settings screens ─────────────────────────────────────────────────────
-  static const String changePassword  = '/settings/change-password';
+  static const String changePassword = '/settings/change-password';
   static const String privacySettings = '/settings/privacy';
+  static const String lagecy_contact = '/settings/lagecy_contact';
 
   // ─── Club admin shell ──────────────────────────────────────────────────────
-  static const String clubHome        = '/club';
-  static const String clubBioAdmin    = '/club/bio';
-  static const String clubPlayers     = '/club/players';
-  static const String clubPlayerBio   = '/club/players/:playerId';
-  static const String clubGallery     = '/club/gallery';
-  static const String clubTrials      = '/club/trials';
+  static const String clubHome = '/club';
+  static const String clubBioAdmin = '/club/bio';
+  static const String clubPlayers = '/club/players';
+  static const String clubPlayerBio = '/club/players/:playerId';
+  static const String clubGallery = '/club/gallery';
+  static const String clubTrials = '/club/trials';
 }

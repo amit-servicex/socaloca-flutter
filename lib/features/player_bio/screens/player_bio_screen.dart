@@ -323,22 +323,40 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
                                 const SizedBox(width: 8),
                                 // ENDORSE
-                                Container(
-                                  width: 90,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.socaBlack,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: const Text(
-                                    'ENDORSE',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.socaYellow,
+                                InkWell(
+                                  onTap: () {
+                                    final playerBio = state.playerBio;
+                                    final playerName = playerBio != null
+                                        ? '${playerBio.firstName ?? ''} ${playerBio.lastName ?? ''}'
+                                            .trim()
+                                        : 'Player';
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => EndorsePlayerScreen(
+                                          playerId: widget.playerId,
+                                          playerName: playerName,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 90,
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.socaBlack,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: const Text(
+                                      'ENDORSE',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.socaYellow,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -350,8 +368,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) =>
-                                              MySkillRatingsScreen(
+                                          builder: (_) => MySkillRatingsScreen(
                                             userId: widget.playerId,
                                           ),
                                         ),
@@ -362,10 +379,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8),
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                            color: AppColors.socaBlack,
-                                            width: 1.5),
+                                        color: AppColors.socaBlack,
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: const Text(
@@ -375,7 +389,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                           fontFamily: 'Poppins',
                                           fontSize: 12,
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.socaBlack,
+                                          color: AppColors.socaYellow,
                                         ),
                                       ),
                                     ),
@@ -394,42 +408,38 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                             ),
                             color: Colors.white,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 0,
                               children: [
                                 // Follow Button
                                 if (!isOwnProfile)
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () => ref
-                                          .read(
-                                              playerBioProvider(widget.playerId)
-                                                  .notifier)
-                                          .toggleFollow(),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 8,
-                                        ),
-                                        decoration: BoxDecoration(
+                                  GestureDetector(
+                                    onTap: () => ref
+                                        .read(playerBioProvider(widget.playerId)
+                                            .notifier)
+                                        .toggleFollow(),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 8),
+                                      decoration: BoxDecoration(
+                                        color: state.isFollowing
+                                            ? AppColors.socaYellow
+                                            : AppColors.socaBlack,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Text(
+                                        state.isFollowing
+                                            ? 'FOLLOWING'
+                                            : 'FOLLOW',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
                                           color: state.isFollowing
-                                              ? AppColors.socaYellow
-                                              : AppColors.socaBlack,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
+                                              ? AppColors.socaBlack
+                                              : AppColors.socaYellow,
                                         ),
-                                        child: Text(
-                                          state.isFollowing
-                                              ? 'FOLLOWING'
-                                              : 'FOLLOW',
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            color: state.isFollowing
-                                                ? AppColors.socaBlack
-                                                : AppColors.socaYellow,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
+                                        textAlign: TextAlign.center,
                                       ),
                                     ),
                                   ),
@@ -440,111 +450,91 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 GestureDetector(
                                   onTap: _handleShare,
                                   child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.socaPageBg,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: const Icon(
-                                      Icons.share,
-                                      size: 20,
-                                      color: AppColors.socaBlack,
-                                    ),
-                                  ),
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        // color: AppColors.socaPageBg,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Image.asset(
+                                        "assets/icons/ic_share.png",
+                                        width: 24,
+                                        height: 24,
+                                      )),
                                 ),
 
                                 const SizedBox(width: 10),
 
                                 // Like Button
-                                if (!isOwnProfile)
-                                  GestureDetector(
-                                    onTap: () => ref
-                                        .read(playerBioProvider(widget.playerId)
-                                            .notifier)
-                                        .toggleLike(),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.socaPageBg,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Icon(
-                                        state.isLiked
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        size: 20,
-                                        color: state.isLiked
-                                            ? Colors.red
-                                            : AppColors.socaBlack,
-                                      ),
-                                    ),
-                                  ),
+                                // if (!isOwnProfile)
+                                //   GestureDetector(
+                                //     onTap: () => ref
+                                //         .read(playerBioProvider(widget.playerId)
+                                //             .notifier)
+                                //         .toggleLike(),
+                                //     child: Container(
+                                //       padding: const EdgeInsets.all(8),
+                                //       decoration: BoxDecoration(
+                                //         color: AppColors.socaPageBg,
+                                //         borderRadius: BorderRadius.circular(5),
+                                //       ),
+                                //       child: Icon(
+                                //         state.isLiked
+                                //             ? Icons.favorite
+                                //             : Icons.favorite_border,
+                                //         size: 20,
+                                //         color: state.isLiked
+                                //             ? Colors.red
+                                //             : AppColors.socaBlack,
+                                //       ),
+                                //     ),
+                                //   ),
 
                                 // Endorse, Block & Report buttons
                                 if (!isOwnProfile) ...[
                                   const SizedBox(width: 10),
                                   GestureDetector(
                                     onTap: () {
-                                      final playerBio = state.playerBio;
-                                      final playerName = playerBio != null
-                                          ? '${playerBio.firstName ?? ''} ${playerBio.lastName ?? ''}'
-                                              .trim()
-                                          : 'Player';
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => EndorsePlayerScreen(
-                                            playerId: widget.playerId,
-                                            playerName: playerName,
-                                          ),
-                                        ),
-                                      );
+                                      ref
+                                          .read(
+                                              playerBioProvider(widget.playerId)
+                                                  .notifier)
+                                          .toggleLike();
                                     },
                                     child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.socaPageBg,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: const Icon(
-                                        Icons.thumb_up_alt_outlined,
-                                        size: 20,
-                                        color: AppColors.socaBlack,
-                                      ),
-                                    ),
+                                        padding: const EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.socaPageBg,
+                                          border: Border.all(
+                                              color: AppColors.socaBlack),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Image.asset(
+                                          "assets/icons/ic_like.png",
+                                          width: 18,
+                                          height: 18,
+                                          color: state.isLiked
+                                              ? AppColors.socaYellow
+                                              : AppColors.socaBlack,
+                                        )),
                                   ),
                                   const SizedBox(width: 10),
                                   GestureDetector(
                                     onTap: () => _showBlockDialog(context),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.socaPageBg,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: const Icon(
-                                        Icons.person_off_outlined,
-                                        size: 20,
-                                        color: AppColors.socaBlack,
-                                      ),
+                                    child: Image.asset(
+                                      "assets/icons/block_user.png",
+                                      width: 32,
+                                      height: 32,
                                     ),
                                   ),
                                   const SizedBox(width: 10),
                                   GestureDetector(
-                                    onTap: () => _showReportDialog(context),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.socaPageBg,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: const Icon(
-                                        Icons.assignment_ind_outlined,
-                                        size: 20,
-                                        color: AppColors.socaBlack,
-                                      ),
-                                    ),
-                                  ),
+                                      onTap: () => _showReportDialog(context),
+                                      child: Image.asset(
+                                        "assets/icons/report_user.png",
+                                        width: 32,
+                                        height: 32,
+                                      )),
                                 ],
                               ],
                             ),

@@ -19,9 +19,8 @@ class PrivacySettingsScreen extends ConsumerStatefulWidget {
       _PrivacySettingsScreenState();
 }
 
-class _PrivacySettingsScreenState
-    extends ConsumerState<PrivacySettingsScreen> {
-  bool _aboutExpanded = false;
+class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
+  bool _aboutExpanded = true;
   bool _manageExpanded = false;
 
   static const String _aboutText =
@@ -48,50 +47,18 @@ class _PrivacySettingsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: AppColors.socaYellow,
-        title: const Text(
-          'Privacy Settings',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-          ),
-        ),
-        centerTitle: true,
-      ),
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
           // ── Header banner ─────────────────────────────────────────────
-          Container(
-            height: 170,
-            width: double.infinity,
-            color: AppColors.socaBlack,
-            child: const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.privacy_tip, color: AppColors.socaYellow, size: 56),
-                  SizedBox(height: 8),
-                  Text(
-                    'Your Privacy',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      color: AppColors.socaYellow,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          Center(
+              child: Image.asset(
+            "assets/images/privacy_settings.jpg",
+          )),
 
           // ── About SocaLoca (expandable) ───────────────────────────────
           _SettingsItem(
-            icon: Icons.info_outline,
+            icon: Image.asset("none"),
             title: 'About SocaLoca',
             trailing: Icon(
               _aboutExpanded
@@ -117,10 +84,24 @@ class _PrivacySettingsScreenState
               ),
             ),
           const Divider(height: 1, thickness: 0.5, color: AppColors.socaBlack),
-
+          _SettingsItem(
+              icon: Image.asset(
+                "assets/icons/ic_phone_book.png",
+                height: 24,
+                width: 24,
+              ),
+              title: 'Legacy Contact',
+              onTap: () {
+                context.push(AppRoutes.lagecy_contact);
+              }),
+          const Divider(height: 1, thickness: 0.5, color: AppColors.socaBlack),
           // ── Manage Account (expandable) ───────────────────────────────
           _SettingsItem(
-            icon: Icons.manage_accounts_outlined,
+            icon: Image.asset(
+              "assets/icons/ic_management.png",
+              height: 24,
+              width: 24,
+            ),
             title: 'Manage Account',
             trailing: Icon(
               _manageExpanded
@@ -148,9 +129,15 @@ class _PrivacySettingsScreenState
           ],
           const Divider(height: 1, thickness: 0.5, color: AppColors.socaBlack),
 
+          // ── Legacy Contact ────────────────────────────────────────────
+
           // ── Data Privacy ──────────────────────────────────────────────
           _SettingsItem(
-            icon: Icons.security_outlined,
+            icon: Image.asset(
+              "assets/icons/ic_secure_data.png",
+              height: 24,
+              width: 24,
+            ),
             title: 'Data Privacy',
             onTap: () => _launch('https://socaloca.football/privacy-policy/'),
           ),
@@ -158,39 +145,53 @@ class _PrivacySettingsScreenState
 
           // ── Terms & Conditions ────────────────────────────────────────
           _SettingsItem(
-            icon: Icons.article_outlined,
+            icon: Image.asset(
+              "assets/icons/ic_terms_and_conditions.png",
+              height: 24,
+              width: 24,
+            ),
             title: 'Terms & Conditions',
-            onTap: () =>
-                _launch('https://socaloca.football/terms-of-service/'),
+            onTap: () => _launch('https://socaloca.football/terms-of-service/'),
           ),
           const Divider(height: 1, thickness: 0.5, color: AppColors.socaBlack),
-
+          _SettingsItem(
+            icon: Image.asset(
+              "assets/icons/ic_sign_out.png",
+              height: 24,
+              width: 24,
+            ),
+            title: 'Sign Out',
+            onTap: () {
+              _signOut();
+            },
+          ),
           const SizedBox(height: 32),
 
           // ── Sign Out ──────────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: ElevatedButton.icon(
-              onPressed: _signOut,
-              icon: const Icon(Icons.logout),
-              label: const Text(
-                'SIGN OUT',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.socaBlack,
-                foregroundColor: AppColors.socaYellow,
-                minimumSize: const Size(double.infinity, 52),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 24),
+          //   child: ElevatedButton.icon(
+          //     onPressed: _signOut,
+          //     icon: const Icon(Icons.logout),
+          //     label: const Text(
+          //       'SIGN OUT',
+          //       style: TextStyle(
+          //         fontFamily: 'Poppins',
+          //         fontWeight: FontWeight.w700,
+          //         fontSize: 14,
+          //       ),
+          //     ),
+          //     style: ElevatedButton.styleFrom(
+          //       backgroundColor: AppColors.socaBlack,
+          //       foregroundColor: AppColors.socaYellow,
+          //       minimumSize: const Size(double.infinity, 52),
+          //       shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(8),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+
           const SizedBox(height: 32),
         ],
       ),
@@ -206,7 +207,7 @@ class _SettingsItem extends StatelessWidget {
     this.trailing,
   });
 
-  final IconData icon;
+  final Image icon;
   final String title;
   final VoidCallback onTap;
   final Widget? trailing;
@@ -220,22 +221,22 @@ class _SettingsItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Row(
           children: [
-            Icon(icon, size: 24, color: AppColors.socaBlack),
+            if (title != 'About SocaLoca') icon,
             const SizedBox(width: 16),
             Expanded(
               child: Text(
                 title,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
                   color: AppColors.socaBlack,
                 ),
               ),
             ),
-            trailing ??
-                const Icon(Icons.chevron_right,
-                    size: 22, color: AppColors.socaBlack),
+            if (title == 'Manage Account' || title == 'About SocaLoca')
+              const Icon(Icons.chevron_right,
+                  size: 22, color: AppColors.socaBlack),
           ],
         ),
       ),

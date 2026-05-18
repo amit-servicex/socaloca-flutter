@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/features/players/screens/players_screen.dart';
+import 'package:socaloca/features/settings/screens/legacy_contact_screen.dart';
+import '../../features/live_match/screens/live_match_details_screen.dart';
+import '../../features/live_match/screens/player_live_match_list_screen.dart';
 import '../../features/academies/screens/academies_screen.dart';
 import '../../features/academies/screens/academy_bio_screen.dart';
 import '../storage/storage_service.dart';
@@ -631,6 +634,41 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               return PickupMatchRequestsScreen(matchId: matchId);
             },
           ),
+
+          // ─── Live Matches (player/fan list) ──────────────────────────────
+          GoRoute(
+            path: AppRoutes.playerLiveMatches,
+            name: 'playerLiveMatches',
+            builder: (ctx, state) => const PlayerLiveMatchListScreen(),
+          ),
+
+          // ─── Live Match Details (all roles, view-only) ────────────────────
+          GoRoute(
+            path: AppRoutes.liveMatchDetails,
+            name: 'liveMatchDetails',
+            builder: (ctx, state) {
+              final matchId = state.pathParameters['matchId']!;
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+              final tournamentId = extra['tournamentId'] as String? ?? '';
+              return LiveMatchDetailsScreen(
+                matchId: matchId,
+                tournamentId: tournamentId,
+              );
+            },
+          ),
+
+          GoRoute(
+            path: AppRoutes.privacySettings,
+            name: 'privacySettings',
+            builder: (ctx, state) => const PrivacySettingsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.lagecy_contact,
+            name: 'lagecy_contact',
+            builder: (ctx, state) {
+              return LegacyContactScreen();
+            },
+          ),
         ],
       ),
 
@@ -672,10 +710,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.refereeLive,
             name: 'refereeLive',
-            builder: (_, __) => Scaffold(
-              body: Center(child: Text('refereeLive - Coming Soon')),
-            ),
-            //  const RefereeLiveMatchesScreen(),
+            builder: (_, __) => const RefereeLiveMatchesScreen(),
           ),
           GoRoute(
             path: AppRoutes.refereeBio,
@@ -750,11 +785,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.changePassword,
         name: 'changePassword',
         builder: (ctx, state) => const ChangePasswordScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.privacySettings,
-        name: 'privacySettings',
-        builder: (ctx, state) => const PrivacySettingsScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

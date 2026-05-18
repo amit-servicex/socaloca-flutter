@@ -93,6 +93,10 @@ class _RefereeLiveMatchesScreenState
                     itemCount: matches.length,
                     itemBuilder: (ctx, i) => _LiveMatchCard(
                       match: matches[i],
+                      onViewDetails: () => context.push(
+                        '/live-match/${matches[i].matchId}',
+                        extra: {'tournamentId': matches[i].tournamentId ?? ''},
+                      ),
                       onUpdate: () => context.push(
                         '/referee/match/${matches[i].matchId}/live-update',
                         extra: matches[i],
@@ -107,9 +111,14 @@ class _RefereeLiveMatchesScreenState
 }
 
 class _LiveMatchCard extends StatelessWidget {
-  const _LiveMatchCard({required this.match, required this.onUpdate});
+  const _LiveMatchCard({
+    required this.match,
+    required this.onViewDetails,
+    required this.onUpdate,
+  });
 
   final RefereeMatchModel match;
+  final VoidCallback onViewDetails;
   final VoidCallback onUpdate;
 
   @override
@@ -119,7 +128,7 @@ class _LiveMatchCard extends StatelessWidget {
         match.teamAScore != null && match.teamBScore != null;
 
     return GestureDetector(
-      onTap: onUpdate,
+      onTap: onViewDetails,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(

@@ -118,6 +118,26 @@ class ApiClient {
     }
   }
 
+  /// GET request — no body, no params (matches Android GetApiRequest).
+  Future<Map<String, dynamic>> get(String endpoint) async {
+    try {
+      if (kDebugMode) {
+        developer.log('🌐 GET: $endpoint', name: 'ApiClient');
+      }
+      final response = await _dio.get<Map<String, dynamic>>(endpoint);
+      final data = response.data;
+      if (data == null) {
+        throw ApiException(message: 'Empty response from $endpoint');
+      }
+      return data;
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        developer.log('❌ GET Error: $endpoint', name: 'ApiClient', error: e.message);
+      }
+      throw ApiException.fromDioException(e);
+    }
+  }
+
   /// Multipart file upload (images, videos)
   Future<Map<String, dynamic>> uploadFile(
     String endpoint, {
