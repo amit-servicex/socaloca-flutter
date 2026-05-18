@@ -73,4 +73,3 @@ class TeamPlayerModel with _$TeamPlayerModel {
 extension TeamPlayerModelX on TeamPlayerModel {
   String get fullName => '${firstName ?? ""} ${lastName ?? ""}'.trim();
 }
-

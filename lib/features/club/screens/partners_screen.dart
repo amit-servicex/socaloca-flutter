@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +11,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ─── Countries list (shared with clubs screen) ────────────────────────────
 
-const List<String> _countries = [
+List<String> _countries = [
   'Afghanistan',
   'Albania',
   'Algeria',
@@ -193,7 +194,7 @@ const List<String> _countries = [
 // ─── Partners landing (nested 4-tab screen) ───────────────────────────────
 
 class PartnersScreen extends StatefulWidget {
-  const PartnersScreen({super.key});
+  PartnersScreen({super.key});
 
   @override
   State<PartnersScreen> createState() => _PartnersScreenState();
@@ -232,17 +233,17 @@ class _PartnersScreenState extends State<PartnersScreen>
             indicatorWeight: 3,
             labelColor: AppColors.socaBlack,
             unselectedLabelColor: AppColors.textSecondary,
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
-            unselectedLabelStyle: const TextStyle(
+            unselectedLabelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w400,
             ),
-            tabs: const [
+            tabs: [
               Tab(text: 'FAs'),
               Tab(text: 'Confederations'),
               Tab(text: 'Sponsors'),
@@ -253,7 +254,7 @@ class _PartnersScreenState extends State<PartnersScreen>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: const [
+            children: [
               _FAsTab(),
               _ConfedsTab(),
               _SponsorsTab(),
@@ -271,7 +272,7 @@ class _PartnersScreenState extends State<PartnersScreen>
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _FAsTab extends ConsumerStatefulWidget {
-  const _FAsTab();
+  _FAsTab();
 
   @override
   ConsumerState<_FAsTab> createState() => _FAsTabState();
@@ -314,9 +315,9 @@ class _FAsTabState extends ConsumerState<_FAsTab>
       onRefresh: () => ref.read(fasProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scroll,
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         slivers: [
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Text(
@@ -331,12 +332,11 @@ class _FAsTabState extends ConsumerState<_FAsTab>
             ),
           ),
           if (state.isLoading && state.fas.isEmpty)
-            const SliverFillRemaining(
-                child: const AppLoader())
+            SliverFillRemaining(child: AppLoader())
           else if (state.fas.isEmpty)
-            const SliverFillRemaining(
+            SliverFillRemaining(
                 child: Center(
-                    child: Text('No FAs found',
+                    child: Text('No FAs found'.tr,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -347,9 +347,9 @@ class _FAsTabState extends ConsumerState<_FAsTab>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == state.fas.length) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.all(16),
-                      child: const AppLoader(),
+                      child: AppLoader(),
                     );
                   }
                   final fa = state.fas[index];
@@ -365,7 +365,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
                 childCount: state.fas.length + (state.isLoadingMore ? 1 : 0),
               ),
             ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
     );
@@ -377,7 +377,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _ConfedsTab extends ConsumerStatefulWidget {
-  const _ConfedsTab();
+  _ConfedsTab();
 
   @override
   ConsumerState<_ConfedsTab> createState() => _ConfedsTabState();
@@ -420,9 +420,9 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
       onRefresh: () => ref.read(confedsProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scroll,
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         slivers: [
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Text(
@@ -437,12 +437,11 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
             ),
           ),
           if (state.isLoading && state.confeds.isEmpty)
-            const SliverFillRemaining(
-                child: const AppLoader())
+            SliverFillRemaining(child: AppLoader())
           else if (state.confeds.isEmpty)
-            const SliverFillRemaining(
+            SliverFillRemaining(
                 child: Center(
-                    child: Text('No confederations found',
+                    child: Text('No confederations found'.tr,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -453,9 +452,9 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == state.confeds.length) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.all(16),
-                      child: const AppLoader(),
+                      child: AppLoader(),
                     );
                   }
                   final confed = state.confeds[index];
@@ -471,7 +470,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
                     state.confeds.length + (state.isLoadingMore ? 1 : 0),
               ),
             ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
     );
@@ -483,7 +482,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _SponsorsTab extends ConsumerStatefulWidget {
-  const _SponsorsTab();
+  _SponsorsTab();
 
   @override
   ConsumerState<_SponsorsTab> createState() => _SponsorsTabState();
@@ -526,15 +525,15 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
       onRefresh: () => ref.read(sponsorsProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scroll,
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "These are the Sponsors that have partnered with SOCALOCA to provide content and services to our users.\n\n"
                     "If you are a Sponsor, you can request to become a SOCALOCA partner and gain access to an individualized hub featuring your logo, branding, and a wide range of features. These include the ability to showcase merchandise and services, promote your company through news and announcements, expand your reach, send push notifications to segmented audiences, measure your CSR impact, and much more.",
                     style: TextStyle(
@@ -543,7 +542,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
                         fontWeight: FontWeight.w500,
                         fontSize: 12),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   ClubFilterRow(
                     selectedCountry: state.country,
                     selectedPartnership: state.partnership,
@@ -558,12 +557,11 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
             ),
           ),
           if (state.isLoading && state.sponsors.isEmpty)
-            const SliverFillRemaining(
-                child: const AppLoader())
+            SliverFillRemaining(child: AppLoader())
           else if (state.sponsors.isEmpty)
-            const SliverFillRemaining(
+            SliverFillRemaining(
                 child: Center(
-                    child: Text('No sponsors found',
+                    child: Text('No sponsors found'.tr,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -574,9 +572,9 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == state.sponsors.length) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.all(16),
-                      child: const AppLoader(),
+                      child: AppLoader(),
                     );
                   }
                   final sponsor = state.sponsors[index];
@@ -592,7 +590,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
                     state.sponsors.length + (state.isLoadingMore ? 1 : 0),
               ),
             ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
     );
@@ -604,7 +602,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _CharitiesTab extends ConsumerStatefulWidget {
-  const _CharitiesTab();
+  _CharitiesTab();
 
   @override
   ConsumerState<_CharitiesTab> createState() => _CharitiesTabState();
@@ -647,15 +645,15 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
       onRefresh: () => ref.read(charitiesProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scroll,
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "These are the Charities, NGOs, and Social Enterprises that have partnered with SOCALOCA to provide content and services to our users.\n\n"
                     "If you are a Charity, NGO, or Social Enterprise, you can request to become a SOCALOCA partner and gain access to an individualized hub featuring your logo, branding, and a wide range of features. These include the ability to showcase your projects and initiatives, reach a wider audience, upload videos and photos, engage with followers, measure the impact of your CSR activities, and positively influence the SOCALOCA community.",
                     style: TextStyle(
@@ -664,7 +662,7 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
                         fontWeight: FontWeight.w500,
                         fontSize: 12),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   ClubFilterRow(
                     selectedCountry: state.country,
                     selectedPartnership: state.partnership,
@@ -679,12 +677,11 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
             ),
           ),
           if (state.isLoading && state.charities.isEmpty)
-            const SliverFillRemaining(
-                child: const AppLoader())
+            SliverFillRemaining(child: AppLoader())
           else if (state.charities.isEmpty)
-            const SliverFillRemaining(
+            SliverFillRemaining(
                 child: Center(
-                    child: Text('No charities & NGOs found',
+                    child: Text('No charities & NGOs found'.tr,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -695,9 +692,9 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == state.charities.length) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.all(16),
-                      child: const AppLoader(),
+                      child: AppLoader(),
                     );
                   }
                   final charity = state.charities[index];
@@ -713,7 +710,7 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
                     state.charities.length + (state.isLoadingMore ? 1 : 0),
               ),
             ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
     );

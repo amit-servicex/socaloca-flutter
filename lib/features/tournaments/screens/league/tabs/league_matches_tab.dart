@@ -156,7 +156,8 @@ class _MatchesListState extends ConsumerState<_MatchesList>
       limit: _limit,
     );
 
-    final matchesAsync = await ref.read(tournamentMatchesProvider(params).future);
+    final matchesAsync =
+        await ref.read(tournamentMatchesProvider(params).future);
 
     if (mounted) {
       setState(() {

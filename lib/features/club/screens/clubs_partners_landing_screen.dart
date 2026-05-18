@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
 import 'clubs_screen.dart';
@@ -7,15 +8,15 @@ import 'partners_screen.dart';
 /// Top-level landing matching Android CommonClubsPartnersLandingFragment:
 /// TabLayout (fixed, 2 tabs) → Clubs | Partners
 class ClubsPartnersLandingScreen extends StatefulWidget {
-  const ClubsPartnersLandingScreen({super.key});
+  ClubsPartnersLandingScreen({super.key});
 
   @override
   State<ClubsPartnersLandingScreen> createState() =>
       _ClubsPartnersLandingScreenState();
 }
 
-class _ClubsPartnersLandingScreenState
-    extends State<ClubsPartnersLandingScreen> with SingleTickerProviderStateMixin {
+class _ClubsPartnersLandingScreenState extends State<ClubsPartnersLandingScreen>
+    with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
@@ -37,8 +38,8 @@ class _ClubsPartnersLandingScreenState
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Clubs & Partners',
+        title: Text(
+          'Clubs & Partners'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 18,
@@ -52,17 +53,17 @@ class _ClubsPartnersLandingScreenState
           indicatorWeight: 3,
           labelColor: AppColors.socaBlack,
           unselectedLabelColor: AppColors.textSecondary,
-          labelStyle: const TextStyle(
+          labelStyle: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w700,
           ),
-          unselectedLabelStyle: const TextStyle(
+          unselectedLabelStyle: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
-          tabs: const [
+          tabs: [
             Tab(text: 'Clubs'),
             Tab(text: 'Partners'),
           ],
@@ -70,7 +71,7 @@ class _ClubsPartnersLandingScreenState
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [
+        children: [
           ClubsScreen(),
           PartnersScreen(),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/shared/providers/auth_provider.dart';
@@ -18,7 +19,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class LeagueTournamentDetailsScreen extends ConsumerStatefulWidget {
   final String tournamentId;
 
-  const LeagueTournamentDetailsScreen({
+  LeagueTournamentDetailsScreen({
     super.key,
     required this.tournamentId,
   });
@@ -63,8 +64,8 @@ class _LeagueTournamentDetailsScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text(
-          'Tournament Details',
+        title: Text(
+          'Tournament Details'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -75,32 +76,32 @@ class _LeagueTournamentDetailsScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
           onPressed: () => context.pop(),
         ),
       ),
       body: tournamentAsync.when(
         data: (tournament) {
           if (tournament == null) {
-            return const Center(child: Text('Tournament not found'));
+            return Center(child: Text('Tournament not found'.tr));
           }
           return _buildContent(tournament);
         },
-        loading: () => const AppLoader(),
+        loading: () => AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
+              Icon(Icons.error_outline, size: 64, color: Colors.red),
+              SizedBox(height: 16),
               Text('Error loading tournament: $error'),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   ref.invalidate(
                       tournamentDetailsProvider(widget.tournamentId));
                 },
-                child: const Text('Retry'),
+                child: Text('Retry'.tr),
               ),
             ],
           ),
@@ -122,21 +123,21 @@ class _LeagueTournamentDetailsScreenState
             indicatorColor: AppColors.socaYellow,
             indicatorWeight: 3,
             isScrollable: _tabCount > 3,
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 14,
             ),
-            unselectedLabelStyle: const TextStyle(
+            unselectedLabelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 14,
             ),
             tabs: [
-              const Tab(text: 'INFO'),
-              const Tab(text: 'MATCHES'),
-              const Tab(text: 'STATS'),
-              if (_tabCount == 4) const Tab(text: 'MANAGE'),
+              Tab(text: 'INFO'),
+              Tab(text: 'MATCHES'),
+              Tab(text: 'STATS'),
+              if (_tabCount == 4) Tab(text: 'MANAGE'),
             ],
           ),
         ),
@@ -192,7 +193,7 @@ class _LeagueTournamentDetailsScreenState
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => const AppLoader(),
+          builder: (context) => AppLoader(),
         );
       },
       error: (error, stack) {
@@ -205,18 +206,18 @@ class _LeagueTournamentDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'No Eligible Teams',
+        title: Text(
+          'No Eligible Teams'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
-        content: const Text(
-          'You don\'t have any teams eligible for this tournament.',
+        content: Text(
+          'You don\'t have any teams eligible for this tournament.'.tr,
           style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),
@@ -228,8 +229,8 @@ class _LeagueTournamentDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Select Team',
+        title: Text(
+          'Select Team'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: SizedBox(
@@ -242,7 +243,7 @@ class _LeagueTournamentDetailsScreenState
               return ListTile(
                 title: Text(
                   team.teamName ?? 'Unknown',
-                  style: const TextStyle(fontFamily: 'Poppins'),
+                  style: TextStyle(fontFamily: 'Poppins'),
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -255,7 +256,7 @@ class _LeagueTournamentDetailsScreenState
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel'.tr),
           ),
         ],
       ),
@@ -268,7 +269,7 @@ class _LeagueTournamentDetailsScreenState
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const AppLoader(),
+      builder: (context) => AppLoader(),
     );
 
     final notifier =
@@ -305,18 +306,18 @@ class _LeagueTournamentDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Success',
+        title: Text(
+          'Success'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
           message,
-          style: const TextStyle(fontFamily: 'Poppins'),
+          style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),
@@ -327,18 +328,18 @@ class _LeagueTournamentDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Error',
+        title: Text(
+          'Error'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
           message,
-          style: const TextStyle(fontFamily: 'Poppins'),
+          style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),

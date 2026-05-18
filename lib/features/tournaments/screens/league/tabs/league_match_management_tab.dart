@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/features/tournaments/data/tournament_repository.dart';
@@ -15,7 +16,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class LeagueMatchManagementTab extends ConsumerStatefulWidget {
   final String tournamentId;
 
-  const LeagueMatchManagementTab({
+  LeagueMatchManagementTab({
     super.key,
     required this.tournamentId,
   });
@@ -124,7 +125,7 @@ class _LeagueMatchManagementTabState
           return false;
         },
         child: ListView.builder(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           itemCount: _allMatches.length + (_hasMore ? 1 : 0),
           itemBuilder: (context, index) {
             if (index == _allMatches.length) {
@@ -152,9 +153,9 @@ class _LeagueMatchManagementTabState
             size: 64,
             color: Colors.grey[400],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'Access Restricted',
+            'Access Restricted'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -162,9 +163,9 @@ class _LeagueMatchManagementTabState
               color: Colors.grey[700],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            'Only admins, coaches, and referees\ncan manage matches',
+            'Only admins, coaches, and referees\ncan manage matches'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Poppins',
@@ -187,9 +188,9 @@ class _LeagueMatchManagementTabState
             size: 64,
             color: Colors.grey[400],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            'No Matches',
+            'No Matches'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -197,9 +198,9 @@ class _LeagueMatchManagementTabState
               color: Colors.grey[700],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            'No matches available for management',
+            'No matches available for management'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -212,9 +213,9 @@ class _LeagueMatchManagementTabState
   }
 
   Widget _buildLoadingIndicator() {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.all(16.0),
-      child: const AppLoader(),
+      child: AppLoader(),
     );
   }
 
@@ -223,7 +224,7 @@ class _LeagueMatchManagementTabState
     final isLive = match.status == 'LIVE';
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -232,7 +233,7 @@ class _LeagueMatchManagementTabState
         onTap: () => _navigateToMatchManagement(match),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -240,7 +241,7 @@ class _LeagueMatchManagementTabState
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 4,
                     ),
@@ -264,7 +265,7 @@ class _LeagueMatchManagementTabState
                       ),
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   if (match.matchDate != null)
                     Text(
                       match.matchDate!,
@@ -276,7 +277,7 @@ class _LeagueMatchManagementTabState
                     ),
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               // Teams
               Row(
@@ -289,23 +290,23 @@ class _LeagueMatchManagementTabState
                             match.homeTeamLogo!,
                             width: 40,
                             height: 40,
-                            errorBuilder: (_, __, ___) => const Icon(
+                            errorBuilder: (_, __, ___) => Icon(
                               Icons.shield,
                               size: 40,
                               color: Colors.grey,
                             ),
                           )
                         else
-                          const Icon(
+                          Icon(
                             Icons.shield,
                             size: 40,
                             color: Colors.grey,
                           ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Text(
                           match.homeTeamName ?? 'Team A',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -315,7 +316,7 @@ class _LeagueMatchManagementTabState
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
                         if (!isUpcoming &&
@@ -323,7 +324,7 @@ class _LeagueMatchManagementTabState
                             match.awayScore != null)
                           Text(
                             '${match.homeScore} - ${match.awayScore}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
@@ -331,8 +332,8 @@ class _LeagueMatchManagementTabState
                             ),
                           )
                         else
-                          const Text(
-                            'VS',
+                          Text(
+                            'VS'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 18,
@@ -351,23 +352,23 @@ class _LeagueMatchManagementTabState
                             match.awayTeamLogo!,
                             width: 40,
                             height: 40,
-                            errorBuilder: (_, __, ___) => const Icon(
+                            errorBuilder: (_, __, ___) => Icon(
                               Icons.shield,
                               size: 40,
                               color: Colors.grey,
                             ),
                           )
                         else
-                          const Icon(
+                          Icon(
                             Icons.shield,
                             size: 40,
                             color: Colors.grey,
                           ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Text(
                           match.awayTeamName ?? 'Team B',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -378,19 +379,19 @@ class _LeagueMatchManagementTabState
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // Manage button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () => _navigateToMatchManagement(match),
-                  icon: const Icon(Icons.edit, size: 18),
-                  label: const Text('Manage Match'),
+                  icon: Icon(Icons.edit, size: 18),
+                  label: Text('Manage Match'.tr),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.socaYellow,
                     foregroundColor: AppColors.socaBlack,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

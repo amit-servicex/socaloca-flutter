@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/api_constants.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
 import 'feed_section_header.dart';
@@ -12,6 +14,7 @@ class MostEndorsedSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(localeProvider);
     final state = ref.watch(mostEndorsedProvider);
 
     if (state.isLoading) return const SizedBox.shrink();
@@ -22,8 +25,8 @@ class MostEndorsedSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FeedSectionHeader(
-          title: 'Most Endorsed Players',
+        FeedSectionHeader(
+          title: AppStrings.mostEndorsedPlayers,
         ),
         Divider(
           color: AppColors.socaBlack,

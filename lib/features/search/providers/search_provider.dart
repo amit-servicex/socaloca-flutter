@@ -60,9 +60,7 @@ class SearchState {
   /// Get active filter value by type
   String? getFilterValue(String filterType) {
     try {
-      return filters
-          .firstWhere((filter) => filter.type == filterType)
-          .value;
+      return filters.firstWhere((filter) => filter.type == filterType).value;
     } catch (e) {
       return null;
     }
@@ -92,22 +90,21 @@ class SearchNotifier extends StateNotifier<SearchState> {
   /// Add or update filter
   void addFilter(String filterType, String filterValue) {
     final filters = List<SearchFilterModel>.from(state.filters);
-    
+
     // Remove existing filter of same type
     filters.removeWhere((filter) => filter.type == filterType);
-    
+
     // Add new filter
     filters.add(SearchFilterModel(type: filterType, value: filterValue));
-    
+
     // If referee selected, remove choice filter
     if (filterType == SearchFilterType.type &&
         filterValue == UserTypeFilter.referee) {
-      filters.removeWhere(
-          (filter) => filter.type == SearchFilterType.choice);
+      filters.removeWhere((filter) => filter.type == SearchFilterType.choice);
     }
-    
+
     state = state.copyWith(filters: filters);
-    
+
     // Trigger new search
     search();
   }
@@ -116,9 +113,9 @@ class SearchNotifier extends StateNotifier<SearchState> {
   void removeFilter(String filterType) {
     final filters = List<SearchFilterModel>.from(state.filters);
     filters.removeWhere((filter) => filter.type == filterType);
-    
+
     state = state.copyWith(filters: filters);
-    
+
     // Trigger new search
     search();
   }
@@ -141,7 +138,7 @@ class SearchNotifier extends StateNotifier<SearchState> {
 
     try {
       final users = await _fetchUsers(start: 0);
-      
+
       // Sort users based on choice filter
       final sortedUsers = _sortUsers(users);
 
@@ -168,7 +165,7 @@ class SearchNotifier extends StateNotifier<SearchState> {
     try {
       final nextPage = state.currentPage + 1;
       final moreUsers = await _fetchUsers(start: nextPage * _itemsPerPage);
-      
+
       // Sort new users
       final sortedMoreUsers = _sortUsers(moreUsers);
 
@@ -233,10 +230,11 @@ class SearchNotifier extends StateNotifier<SearchState> {
   /// Sort users based on choice filter
   List<SearchUserModel> _sortUsers(List<SearchUserModel> users) {
     final choiceFilter = state.getFilterValue(SearchFilterType.choice);
-    
+
     if (choiceFilter == null) {
       // Default sort by name
-      users.sort((a, b) => a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
+      users.sort((a, b) =>
+          a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
       return users;
     }
 
@@ -246,7 +244,9 @@ class SearchNotifier extends StateNotifier<SearchState> {
           if (a.appearance != b.appearance) {
             return b.appearance.compareTo(a.appearance); // DESC
           }
-          return a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()); // ASC
+          return a.fullName
+              .toLowerCase()
+              .compareTo(b.fullName.toLowerCase()); // ASC
         });
         break;
       case SortingFilter.mostPosts:
@@ -254,7 +254,9 @@ class SearchNotifier extends StateNotifier<SearchState> {
           if (a.postCount != b.postCount) {
             return b.postCount.compareTo(a.postCount); // DESC
           }
-          return a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()); // ASC
+          return a.fullName
+              .toLowerCase()
+              .compareTo(b.fullName.toLowerCase()); // ASC
         });
         break;
       case SortingFilter.mostGoals:
@@ -262,11 +264,14 @@ class SearchNotifier extends StateNotifier<SearchState> {
           if (a.goals != b.goals) {
             return b.goals.compareTo(a.goals); // DESC
           }
-          return a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()); // ASC
+          return a.fullName
+              .toLowerCase()
+              .compareTo(b.fullName.toLowerCase()); // ASC
         });
         break;
       default:
-        users.sort((a, b) => a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
+        users.sort((a, b) =>
+            a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
     }
 
     return users;

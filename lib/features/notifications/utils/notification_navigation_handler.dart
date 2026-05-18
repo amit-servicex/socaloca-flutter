@@ -364,7 +364,8 @@ class NotificationNavigationHandler {
   }
 
   // Navigation helper methods
-  static void _navigateToUserBio(BuildContext context, Map<String, dynamic> payload) {
+  static void _navigateToUserBio(
+      BuildContext context, Map<String, dynamic> payload) {
     final userId = payload['userId'] as String?;
     if (userId != null && userId.isNotEmpty) {
       context.push('/player-bio/$userId');
@@ -373,7 +374,8 @@ class NotificationNavigationHandler {
     }
   }
 
-  static void _navigateToTeamBio(BuildContext context, Map<String, dynamic> payload) {
+  static void _navigateToTeamBio(
+      BuildContext context, Map<String, dynamic> payload) {
     final teamId = payload['teamId'] as String?;
     if (teamId != null && teamId.isNotEmpty) {
       _showNotImplemented(context, 'Team Bio');
@@ -382,10 +384,11 @@ class NotificationNavigationHandler {
     }
   }
 
-  static void _navigateToTournament(BuildContext context, Map<String, dynamic> payload) {
+  static void _navigateToTournament(
+      BuildContext context, Map<String, dynamic> payload) {
     final tournamentId = payload['tournamentId'] as String?;
     final tmntType = payload['tmntType'] as String?;
-    
+
     if (tournamentId != null && tournamentId.isNotEmpty) {
       if (tmntType == 'CUP') {
         _showNotImplemented(context, 'Cup Details');
@@ -397,7 +400,8 @@ class NotificationNavigationHandler {
     }
   }
 
-  static void _navigateToClubBio(BuildContext context, Map<String, dynamic> payload) {
+  static void _navigateToClubBio(
+      BuildContext context, Map<String, dynamic> payload) {
     final clubId = payload['clubId'] as String?;
     if (clubId != null && clubId.isNotEmpty) {
       context.push('/club-bio/$clubId');
@@ -406,7 +410,8 @@ class NotificationNavigationHandler {
     }
   }
 
-  static void _navigateToAcademyBio(BuildContext context, Map<String, dynamic> payload) {
+  static void _navigateToAcademyBio(
+      BuildContext context, Map<String, dynamic> payload) {
     final academyId = payload['academyId'] as String?;
     if (academyId != null && academyId.isNotEmpty) {
       _showNotImplemented(context, 'Academy Bio');

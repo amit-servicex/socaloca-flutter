@@ -42,7 +42,8 @@ class FeedPost {
     final userName = '$firstName $lastName'.trim();
     final userImagePath = userDetails?['imageUrl'] as String?;
     final userImage = ApiConstants.getImageUrl(userImagePath);
-    final userId = json['addedBy'] as String? ?? userDetails?['userId'] as String? ?? '';
+    final userId =
+        json['addedBy'] as String? ?? userDetails?['userId'] as String? ?? '';
 
     // Extract sources (images/videos)
     final sources = json['sources'] as List<dynamic>? ?? [];
@@ -80,7 +81,9 @@ class FeedPost {
 
     return FeedPost(
       id: json['postId'] as String? ?? json['_id'] as String? ?? '',
-      type: json['feedType'] as String? ?? json['postType'] as String? ?? 'userPost',
+      type: json['feedType'] as String? ??
+          json['postType'] as String? ??
+          'userPost',
       userId: userId,
       userName: userName.isEmpty ? 'Unknown' : userName,
       userImage: userImage.isEmpty ? null : userImage,

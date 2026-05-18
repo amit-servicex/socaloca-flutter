@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/api_constants.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
-import 'feed_section_header.dart';
 
 class LiveTournamentsSection extends ConsumerStatefulWidget {
-  const LiveTournamentsSection({super.key});
+  LiveTournamentsSection({super.key});
 
   @override
   ConsumerState<LiveTournamentsSection> createState() =>
@@ -29,7 +30,7 @@ class _LiveTournamentsSectionState
   }
 
   void _startAutoSlide() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       if (_pageController.hasClients) {
         final state = ref.read(feedLiveTmntsProvider);
         if (state.items.isEmpty) return;
@@ -40,7 +41,7 @@ class _LiveTournamentsSectionState
         }
         _pageController.animateToPage(
           nextPage,
-          duration: const Duration(milliseconds: 500),
+          duration: Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       }
@@ -56,10 +57,11 @@ class _LiveTournamentsSectionState
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(localeProvider);
     final state = ref.watch(feedLiveTmntsProvider);
 
-    if (state.isLoading && state.items.isEmpty) return const SizedBox.shrink();
-    if (state.items.isEmpty) return const SizedBox.shrink();
+    if (state.isLoading && state.items.isEmpty) return SizedBox.shrink();
+    if (state.items.isEmpty) return SizedBox.shrink();
 
     log("this is the data of the ongoing tournaments ${state.items}");
 
@@ -70,12 +72,12 @@ class _LiveTournamentsSectionState
         Container(
           width: double.infinity,
           color: AppColors.socaBlack,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Ongoing Tournaments',
+              Text(
+                AppStrings.ongoingTournaments,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -87,8 +89,8 @@ class _LiveTournamentsSectionState
                 onTap: () {
                   // TODO: Navigate to view all live tournaments
                 },
-                child: const Text(
-                  'View All',
+                child: Text(
+                  AppStrings.viewAll,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -121,7 +123,7 @@ class _LiveTournamentsSectionState
               final tournament = state.items[index];
 
               return Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -141,11 +143,11 @@ class _LiveTournamentsSectionState
                           child: tournament.imageUrl == null ||
                                   tournament.imageUrl!.isEmpty ||
                                   tournament.imageUrl!.startsWith('file:///')
-                              ? const Icon(Icons.sports_soccer,
+                              ? Icon(Icons.sports_soccer,
                                   color: AppColors.socaGrey)
                               : null,
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +158,7 @@ class _LiveTournamentsSectionState
                                     child: Text(
                                       (tournament.tmntName ?? 'Tournament')
                                           .toUpperCase(),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
@@ -169,13 +171,13 @@ class _LiveTournamentsSectionState
                                   if (tournament.country != null &&
                                       tournament.country!.isNotEmpty)
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 4),
+                                      padding: EdgeInsets.only(left: 4),
                                       child: _buildCountryFlag(
                                           tournament.country!),
                                     ),
                                 ],
                               ),
-                              const SizedBox(height: 2),
+                              SizedBox(height: 2),
                               Text(
                                 tournament.startDate ?? 'Unknown Date',
                                 style: TextStyle(
@@ -191,12 +193,12 @@ class _LiveTournamentsSectionState
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     // Banner Text
                     RichText(
                       text: TextSpan(
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           color: AppColors.socaBlack,
@@ -205,7 +207,7 @@ class _LiveTournamentsSectionState
                           TextSpan(
                               text:
                                   '${tournament.tmntName ?? 'Tournament'} is live!!! '),
-                          const TextSpan(
+                          TextSpan(
                             text: 'Check tournament details',
                             style: TextStyle(fontWeight: FontWeight.w700),
                           ),
@@ -213,7 +215,7 @@ class _LiveTournamentsSectionState
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
                     // Details block
                     Expanded(
@@ -238,12 +240,12 @@ class _LiveTournamentsSectionState
                                         tournament.imageUrl!.isEmpty ||
                                         tournament.imageUrl!
                                             .startsWith('file:///')
-                                    ? const Icon(Icons.sports_soccer,
+                                    ? Icon(Icons.sports_soccer,
                                         size: 40, color: AppColors.socaGrey)
                                     : null,
                               ),
                               if (index > 0)
-                                const Icon(
+                                Icon(
                                   Icons.arrow_back_ios_new,
                                   color: AppColors.socaBlack,
                                   size: 32,
@@ -251,7 +253,7 @@ class _LiveTournamentsSectionState
                             ],
                           ),
 
-                          const SizedBox(width: 16),
+                          SizedBox(width: 16),
 
                           // Right side details
                           Expanded(
@@ -307,7 +309,7 @@ class _LiveTournamentsSectionState
                                 ),
                                 if (index < state.items.length - 1 ||
                                     state.isLoadingMore)
-                                  const Icon(
+                                  Icon(
                                     Icons.arrow_forward_ios,
                                     color: AppColors.socaBlack,
                                     size: 32,
@@ -330,23 +332,23 @@ class _LiveTournamentsSectionState
 
   Widget _buildDetailItem(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 0),
+      padding: EdgeInsets.only(bottom: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 10,
               fontWeight: FontWeight.w400,
               color: AppColors.socaBlack,
             ),
           ),
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -362,10 +364,10 @@ class _LiveTournamentsSectionState
 
   Widget _buildCountryFlag(String country) {
     if (country.toLowerCase() == 'ghana') {
-      return const Text('🇬🇭', style: TextStyle(fontSize: 18));
+      return Text('🇬🇭'.tr, style: TextStyle(fontSize: 18));
     } else if (country.toLowerCase() == 'india') {
-      return const Text('🇮🇳', style: TextStyle(fontSize: 18));
+      return Text('🇮🇳'.tr, style: TextStyle(fontSize: 18));
     }
-    return const Icon(Icons.flag, size: 18);
+    return Icon(Icons.flag, size: 18);
   }
 }

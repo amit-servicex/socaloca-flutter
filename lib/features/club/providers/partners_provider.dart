@@ -47,7 +47,8 @@ class FasNotifier extends StateNotifier<FasState> {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final items = await _ref.read(partnersRepositoryProvider).getFAs(start: 0);
+      final items =
+          await _ref.read(partnersRepositoryProvider).getFAs(start: 0);
       state = state.copyWith(
         fas: items,
         isLoading: false,
@@ -273,8 +274,7 @@ class SponsorsNotifier extends StateNotifier<SponsorsState> {
   }
 }
 
-final sponsorsProvider =
-    StateNotifierProvider<SponsorsNotifier, SponsorsState>(
+final sponsorsProvider = StateNotifierProvider<SponsorsNotifier, SponsorsState>(
   (ref) => SponsorsNotifier(ref),
 );
 

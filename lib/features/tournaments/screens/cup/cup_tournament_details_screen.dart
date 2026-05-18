@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/features/tournaments/screens/cup/tabs/cup_stage_tab.dart';
@@ -23,7 +24,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class CupTournamentDetailsScreen extends ConsumerStatefulWidget {
   final String tournamentId;
 
-  const CupTournamentDetailsScreen({
+  CupTournamentDetailsScreen({
     super.key,
     required this.tournamentId,
   });
@@ -57,8 +58,8 @@ class _CupTournamentDetailsScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text(
-          'Cup Tournament',
+        title: Text(
+          'Cup Tournament'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -69,31 +70,31 @@ class _CupTournamentDetailsScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
           onPressed: () => context.pop(),
         ),
       ),
       body: cupAsync.when(
         data: (cup) {
           if (cup == null) {
-            return const Center(child: Text('Cup tournament not found'));
+            return Center(child: Text('Cup tournament not found'.tr));
           }
           return _buildContent(cup);
         },
-        loading: () => const AppLoader(),
+        loading: () => AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
+              Icon(Icons.error_outline, size: 64, color: Colors.red),
+              SizedBox(height: 16),
               Text('Error loading cup: $error'),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   ref.invalidate(cupDetailsProvider(widget.tournamentId));
                 },
-                child: const Text('Retry'),
+                child: Text('Retry'.tr),
               ),
             ],
           ),
@@ -114,17 +115,17 @@ class _CupTournamentDetailsScreenState
             unselectedLabelColor: AppColors.socaBlack.withOpacity(0.5),
             indicatorColor: AppColors.socaYellow,
             indicatorWeight: 3,
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 14,
             ),
-            unselectedLabelStyle: const TextStyle(
+            unselectedLabelStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 14,
             ),
-            tabs: const [
+            tabs: [
               Tab(text: 'INFO'),
               Tab(text: 'STAGE'),
               Tab(text: 'STATS'),
@@ -190,7 +191,7 @@ class _CupTournamentDetailsScreenState
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => const AppLoader(),
+          builder: (context) => AppLoader(),
         );
       },
       error: (error, stack) {
@@ -203,18 +204,18 @@ class _CupTournamentDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'No Eligible Teams',
+        title: Text(
+          'No Eligible Teams'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
-        content: const Text(
-          'You don\'t have any teams eligible for this cup.',
+        content: Text(
+          'You don\'t have any teams eligible for this cup.'.tr,
           style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),
@@ -226,8 +227,8 @@ class _CupTournamentDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Select Team',
+        title: Text(
+          'Select Team'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: SizedBox(
@@ -240,7 +241,7 @@ class _CupTournamentDetailsScreenState
               return ListTile(
                 title: Text(
                   team.teamName ?? 'Unknown',
-                  style: const TextStyle(fontFamily: 'Poppins'),
+                  style: TextStyle(fontFamily: 'Poppins'),
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -253,7 +254,7 @@ class _CupTournamentDetailsScreenState
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel'.tr),
           ),
         ],
       ),
@@ -266,7 +267,7 @@ class _CupTournamentDetailsScreenState
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const AppLoader(),
+      builder: (context) => AppLoader(),
     );
 
     final notifier =
@@ -303,18 +304,18 @@ class _CupTournamentDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Success',
+        title: Text(
+          'Success'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
           message,
-          style: const TextStyle(fontFamily: 'Poppins'),
+          style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),
@@ -325,18 +326,18 @@ class _CupTournamentDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Error',
+        title: Text(
+          'Error'.tr,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
           message,
-          style: const TextStyle(fontFamily: 'Poppins'),
+          style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text('OK'.tr),
           ),
         ],
       ),

@@ -221,54 +221,186 @@ class AuthRepository {
     }
   }
 
-  // ─── Forgot password — dual path ─────────────────────────────────────────
+  // ─── Forgot password — step 1 (ForgetPasswordFragmentNew) ──────────────────
+  //
+  // Mirrors Android FORGET_ALL_PASS_WORD ("forgetPassw") call.
+  // Sends OTP to the user's email/mobile/sclId.
+  //
+  // [signType]    — 'email' | 'mobile' | 'sclId'
+  // [identifier]  — the value entered in the input field
+  // [countryCode] — e.g. "+44"; required when signType='mobile'
+  // [isClubPath]  — true → uses legacy forgetPass (club path)
+  //
+  // Returns ForgotPasswordResult containing userId on success.
 
-  /// [isClubPath] = false → forgetAllPass (user path)
-  /// [isClubPath] = true  → forgetPass (club path)
-  Future<AuthResult<bool>> forgotPassword({
-    required String email,
-    required bool isClubPath,
+  Future<AuthResult<ForgotPasswordResult>> forgotPassword({
+    required String signType,
+    required String identifier,
+    String countryCode = '',
+    bool isClubPath = false,
   }) async {
     try {
-      final endpoint =
-          isClubPath ? ApiConstants.forgetPass : ApiConstants.forgetAllPass;
+      if (isClubPath) {
+        // Club path — legacy single-email endpoint
+        final data = await ApiClient.instance.post(
+          ApiConstants.forgetPass,
+          body: {'email': identifier},
+        );
+        final status = (data['status'] as num?)?.toInt() ?? 0;
+        if (status != 1) {
+          return AuthFailure(
+              (data['message'] as String?) ?? 'Failed to send reset link');
+        }
+        return const AuthSuccess(ForgotPasswordResult(
+          userId: '',
+          userFound: true,
+          contactExist: true,
+        ));
+      }
+
+      // User path — multi-identifier OTP initiation
+      final body = <String, dynamic>{
+        'signType': signType,
+        'deviceType': 'android',
+        'email': '',
+        'mobile': '',
+        'countryCode': '',
+        'sclId': '',
+      };
+      switch (signType) {
+        case 'mobile':
+          body['mobile'] = identifier;
+          body['countryCode'] = countryCode;
+          break;
+        case 'email':
+          body['email'] = identifier;
+          break;
+        case 'sclId':
+          body['sclId'] = identifier;
+          break;
+      }
+
       final data = await ApiClient.instance.post(
-        endpoint,
-        body: {'email': email},
+        ApiConstants.forgetPassw,
+        body: body,
       );
       final status = (data['status'] as num?)?.toInt() ?? 0;
       if (status != 1) {
         return AuthFailure(
-          (data['message'] as String?) ?? 'Failed to send reset link',
-        );
+            (data['message'] as String?) ?? 'Failed to send OTP');
       }
-      return const AuthSuccess(true);
+
+      final userFound = data['userFound'] as bool? ?? false;
+      final contactExist = data['contactExist'] as bool? ?? false;
+      final userId = data['userId'] as String? ?? '';
+
+      if (!userFound) {
+        // Return failure with type-specific error message
+        final msg = switch (signType) {
+          'email' => 'Email is not registered',
+          'mobile' => 'Mobile number is not registered',
+          _ => 'Please enter valid SOCALOCA ID',
+        };
+        return AuthFailure(msg);
+      }
+
+      return AuthSuccess(ForgotPasswordResult(
+        userId: userId,
+        userFound: userFound,
+        contactExist: contactExist,
+      ));
     } on ApiException catch (e) {
       return AuthFailure(e.message);
     }
   }
 
-  // ─── Reset password — dual path ───────────────────────────────────────────
+  // ─── Resend OTP (forgetAllPass) ───────────────────────────────────────────
 
-  /// [isClubPath] = false → resetAllPass (user path)
-  /// [isClubPath] = true  → resetPass (club path)
-  Future<AuthResult<bool>> resetPassword({
-    required String token,
-    required String password,
-    required bool isClubPath,
+  Future<AuthResult<String>> resendForgotPasswordOtp({
+    required String signType,
+    required String identifier,
+    String countryCode = '',
   }) async {
     try {
-      final endpoint =
-          isClubPath ? ApiConstants.resetPass : ApiConstants.resetAllPass;
+      final body = <String, dynamic>{
+        'signType': signType,
+        'deviceType': 'android',
+        'email': '',
+        'mobile': '',
+        'countryCode': '',
+        'sclId': '',
+      };
+      switch (signType) {
+        case 'mobile':
+          body['mobile'] = identifier;
+          body['countryCode'] = countryCode;
+          break;
+        case 'email':
+          body['email'] = identifier;
+          break;
+        case 'sclId':
+          body['sclId'] = identifier;
+          break;
+      }
       final data = await ApiClient.instance.post(
-        endpoint,
-        body: {'token': token, 'password': password},
+        ApiConstants.forgetAllPass,
+        body: body,
       );
       final status = (data['status'] as num?)?.toInt() ?? 0;
       if (status != 1) {
         return AuthFailure(
-          (data['message'] as String?) ?? 'Password reset failed',
+            (data['message'] as String?) ?? 'Failed to resend OTP');
+      }
+      final userId = data['userId'] as String? ?? '';
+      return AuthSuccess(userId);
+    } on ApiException catch (e) {
+      return AuthFailure(e.message);
+    }
+  }
+
+  // ─── Reset password — step 2 (ResetPasswordFragmentNew) ──────────────────
+  //
+  // Mirrors Android RESET_ALL_PASS ("resetAllPass") call.
+  // Verifies OTP and sets the new password.
+  //
+  // [isClubPath] = true → uses legacy resetPass with token (club path)
+
+  Future<AuthResult<bool>> resetPassword({
+    required String userId,
+    required String otp,
+    required String password,
+    bool isClubPath = false,
+  }) async {
+    try {
+      if (isClubPath) {
+        final data = await ApiClient.instance.post(
+          ApiConstants.resetPass,
+          body: {'token': userId, 'password': password},
         );
+        final status = (data['status'] as num?)?.toInt() ?? 0;
+        if (status != 1) {
+          return AuthFailure(
+              (data['message'] as String?) ?? 'Password reset failed');
+        }
+        return const AuthSuccess(true);
+      }
+
+      final data = await ApiClient.instance.post(
+        ApiConstants.resetAllPass,
+        body: {
+          'userId': userId,
+          'otp': int.tryParse(otp) ?? otp,
+          'passKey': password,
+        },
+      );
+      final status = (data['status'] as num?)?.toInt() ?? 0;
+      if (status != 1) {
+        return AuthFailure(
+            (data['message'] as String?) ?? 'Password reset failed');
+      }
+      final success = data['success'] as bool? ?? false;
+      if (!success) {
+        return const AuthFailure('Incorrect OTP');
       }
       return const AuthSuccess(true);
     } on ApiException catch (e) {

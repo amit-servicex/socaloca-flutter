@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +16,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Pickup Match Details Screen
 /// Shows detailed information about a pickup match
 class PickupMatchDetailsScreen extends ConsumerStatefulWidget {
-  const PickupMatchDetailsScreen({
+  PickupMatchDetailsScreen({
     super.key,
     required this.matchId,
   });
@@ -108,8 +109,8 @@ class _PickupMatchDetailsScreenState
       if (mounted) {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Request sent successfully!'),
+            SnackBar(
+              content: Text('Request sent successfully!'.tr),
               backgroundColor: Colors.green,
             ),
           );
@@ -154,8 +155,8 @@ class _PickupMatchDetailsScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text(
-          'Match Details',
+        title: Text(
+          'Match Details'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -165,10 +166,10 @@ class _PickupMatchDetailsScreenState
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.socaBlack),
+        iconTheme: IconThemeData(color: AppColors.socaBlack),
       ),
       body: _isLoading
-          ? const AppLoader()
+          ? AppLoader()
           : _errorMessage != null
               ? Center(
                   child: Column(
@@ -176,21 +177,21 @@ class _PickupMatchDetailsScreenState
                     children: [
                       Text(
                         _errorMessage!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                           color: Colors.red,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: _loadMatchDetails,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.socaYellow,
                         ),
-                        child: const Text(
-                          'Retry',
+                        child: Text(
+                          'Retry'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -203,24 +204,24 @@ class _PickupMatchDetailsScreenState
                   ),
                 )
               : _match == null
-                  ? const Center(child: Text('Match not found'))
+                  ? Center(child: Text('Match not found'.tr))
                   : Column(
                       children: [
                         Expanded(
                           child: SingleChildScrollView(
-                            padding: const EdgeInsets.all(16),
+                            padding: EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // Match Info Card
                                 _buildMatchInfoCard(),
 
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
 
                                 // Host Info Card
                                 _buildHostInfoCard(),
 
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
 
                                 // Location Card
                                 if (_match!.locationName != null &&
@@ -240,7 +241,7 @@ class _PickupMatchDetailsScreenState
 
   Widget _buildMatchInfoCard() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -248,7 +249,7 @@ class _PickupMatchDetailsScreenState
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -256,8 +257,8 @@ class _PickupMatchDetailsScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title
-          const Text(
-            'Match Information',
+          Text(
+            'Match Information'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
@@ -266,7 +267,7 @@ class _PickupMatchDetailsScreenState
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Badges
           Wrap(
@@ -282,27 +283,27 @@ class _PickupMatchDetailsScreenState
             ],
           ),
 
-          const SizedBox(height: 16),
-          const Divider(height: 1),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
+          Divider(height: 1),
+          SizedBox(height: 16),
 
           // Details
           _buildDetailRow(Icons.stadium, 'Venue', _match!.venueName ?? 'N/A'),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           _buildDetailRow(
               Icons.people, 'Max Players', '${_match!.maxPlayer} players'),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           _buildDetailRow(Icons.calendar_today, 'Date', _formatDate()),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           _buildDetailRow(Icons.access_time, 'Time', _formatTime()),
 
           // Match Note
           if (_match!.matchNote != null && _match!.matchNote!.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            const Divider(height: 1),
-            const SizedBox(height: 16),
-            const Text(
-              'Match Note',
+            SizedBox(height: 16),
+            Divider(height: 1),
+            SizedBox(height: 16),
+            Text(
+              'Match Note'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
@@ -310,7 +311,7 @@ class _PickupMatchDetailsScreenState
                 color: AppColors.socaBlack,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               _match!.matchNote!,
               style: TextStyle(
@@ -331,7 +332,7 @@ class _PickupMatchDetailsScreenState
         // TODO: Navigate to host profile
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -339,7 +340,7 @@ class _PickupMatchDetailsScreenState
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               blurRadius: 4,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -347,25 +348,25 @@ class _PickupMatchDetailsScreenState
           children: [
             // Host Avatar
             _buildHostAvatar(),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
 
             // Host Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Hosted by',
+                  Text(
+                    'Hosted by'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
                       color: Colors.grey,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     _match!.createdByName ?? 'Host',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -377,7 +378,7 @@ class _PickupMatchDetailsScreenState
             ),
 
             // Arrow
-            const Icon(
+            Icon(
               Icons.chevron_right,
               color: Colors.grey,
             ),
@@ -389,7 +390,7 @@ class _PickupMatchDetailsScreenState
 
   Widget _buildLocationCard() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -397,34 +398,34 @@ class _PickupMatchDetailsScreenState
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             Icons.location_on,
             color: AppColors.socaYellow,
             size: 24,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Location',
+                Text(
+                  'Location'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     color: Colors.grey,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   _match!.locationName!,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
@@ -439,7 +440,7 @@ class _PickupMatchDetailsScreenState
             onPressed: () {
               // TODO: Open map with location
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.map,
               color: AppColors.socaBlack,
             ),
@@ -501,14 +502,14 @@ class _PickupMatchDetailsScreenState
     }
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 4,
-            offset: const Offset(0, -2),
+            offset: Offset(0, -2),
           ),
         ],
       ),
@@ -518,13 +519,13 @@ class _PickupMatchDetailsScreenState
           style: ElevatedButton.styleFrom(
             backgroundColor: buttonColor,
             disabledBackgroundColor: buttonColor.withOpacity(0.6),
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
           ),
           child: _isRequesting
-              ? const AppLoader(size: 24, centered: false)
+              ? AppLoader(size: 24, centered: false)
               : Text(
                   buttonText,
                   style: TextStyle(
@@ -544,7 +545,7 @@ class _PickupMatchDetailsScreenState
     return Container(
       width: 56,
       height: 56,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -553,20 +554,20 @@ class _PickupMatchDetailsScreenState
             ? CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => const Icon(
+                errorWidget: (_, __, ___) => Icon(
                   Icons.person,
                   color: AppColors.socaBlack,
                   size: 28,
                 ),
               )
-            : const Icon(Icons.person, color: AppColors.socaBlack, size: 28),
+            : Icon(Icons.person, color: AppColors.socaBlack, size: 28),
       ),
     );
   }
 
   Widget _buildBadge(String text, IconData icon) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.socaYellow.withOpacity(0.2),
         borderRadius: BorderRadius.circular(16),
@@ -575,10 +576,10 @@ class _PickupMatchDetailsScreenState
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: AppColors.socaBlack),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -598,7 +599,7 @@ class _PickupMatchDetailsScreenState
           size: 20,
           color: AppColors.socaBlack.withOpacity(0.6),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -611,10 +612,10 @@ class _PickupMatchDetailsScreenState
                   color: AppColors.socaBlack.withOpacity(0.6),
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 14,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -9,7 +10,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Social Feed Screen matching Android CommonHomeFeedFragment.
 class SocialFeedScreen extends ConsumerStatefulWidget {
-  const SocialFeedScreen({super.key});
+  SocialFeedScreen({super.key});
 
   @override
   ConsumerState<SocialFeedScreen> createState() => _SocialFeedScreenState();
@@ -34,12 +35,12 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
     return feedState.when(
       data: (posts) => Column(
         children: [
-          const FeedHeaderWidget(),
+          FeedHeaderWidget(),
           if (posts.isEmpty)
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(32),
               child: Text(
-                'No posts yet',
+                'No posts yet'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -50,51 +51,51 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
           else
             ListView.builder(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(vertical: 8),
               itemCount: posts.length,
               itemBuilder: (context, index) => FeedPostCard(post: posts[index]),
             ),
         ],
       ),
-      loading: () => const Padding(
+      loading: () => Padding(
         padding: EdgeInsets.all(32),
-        child: const AppLoader(),
+        child: AppLoader(),
       ),
       error: (error, stack) => Padding(
-        padding: const EdgeInsets.all(32),
+        padding: EdgeInsets.all(32),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-              const SizedBox(height: 16),
-              const Text(
-                'Error loading feed',
+              Icon(Icons.error_outline, size: 48, color: AppColors.error),
+              SizedBox(height: 16),
+              Text(
+                'Error loading feed'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   color: AppColors.socaBlack,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 error.toString(),
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 12,
                   color: Colors.grey,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref.read(feedProvider.notifier).refresh(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow,
                 ),
-                child: const Text('Retry'),
+                child: Text('Retry'.tr),
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class TeamsHorizontalList extends StatelessWidget {
   final VoidCallback? onViewAllTap;
   final Function(String teamId)? onTeamTap;
 
-  const TeamsHorizontalList({
+  TeamsHorizontalList({
     super.key,
     required this.teams,
     this.onViewAllTap,
@@ -25,31 +26,31 @@ class TeamsHorizontalList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (teams.isEmpty) return const SizedBox.shrink();
+    if (teams.isEmpty) return SizedBox.shrink();
 
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.groups,
                       color: AppColors.socaBlack,
                       size: 20,
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text(
                       'Teams Playing (${teams.length})',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -61,8 +62,8 @@ class TeamsHorizontalList extends StatelessWidget {
                 if (onViewAllTap != null && teams.length > 4)
                   TextButton(
                     onPressed: onViewAllTap,
-                    child: const Text(
-                      'View All',
+                    child: Text(
+                      'View All'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
@@ -75,14 +76,14 @@ class TeamsHorizontalList extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Horizontal List
           SizedBox(
             height: 120,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               itemCount: teams.length,
               itemBuilder: (context, index) {
                 final team = teams[index];
@@ -101,7 +102,7 @@ class TeamsHorizontalList extends StatelessWidget {
       onTap: onTeamTap != null ? () => onTeamTap!(team.effectiveId) : null,
       child: Container(
         width: 100,
-        margin: const EdgeInsets.symmetric(horizontal: 4),
+        margin: EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -116,14 +117,14 @@ class TeamsHorizontalList extends StatelessWidget {
                   _buildTeamLogo(ApiConstants.getImageUrl(team.imageUrl), 50),
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             // Team Name
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+              padding: EdgeInsets.symmetric(horizontal: 4),
               child: Text(
                 team.teamName ?? 'Unknown',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -184,7 +185,7 @@ class TeamsHorizontalList extends StatelessWidget {
         width: size,
         height: size,
         color: Colors.grey[200],
-        child: const AppLoader(),
+        child: AppLoader(),
       ),
       errorWidget: (context, url, error) => Container(
         width: size,

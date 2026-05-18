@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +13,7 @@ import '../../../core/theme/app_colors.dart';
 /// Shown once to first-time users. On completion marks onboarding done
 /// and sends the user to RoleChoiceScreen.
 class OnboardingScreen extends ConsumerStatefulWidget {
-  const OnboardingScreen({super.key});
+  OnboardingScreen({super.key});
 
   @override
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -24,7 +25,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int _currentPage = 0;
 
   // Image slider pages matching Android onboarding
-  static const _pages = [
+  static final _pages = [
     _OnboardingPage(
       imagePath: 'assets/images/sp_one.jpg',
       title: 'Welcome to SocaLoca',
@@ -62,15 +63,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _startAutoAdvance() {
     // Auto-scroll every 3 seconds (matching Android interval)
-    _autoTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+    final _autoTimer = Timer.periodic(Duration(seconds: 3), (_) {
       if (_currentPage < _pages.length - 1) {
         _pageController.nextPage(
-          duration: const Duration(milliseconds: 500),
+          duration: Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       } else {
         // On last page, auto-navigate after 2.5 seconds
-        Future.delayed(const Duration(milliseconds: 2500), () {
+        Future.delayed(Duration(milliseconds: 2500), () {
           if (mounted) _complete();
         });
       }
@@ -85,7 +86,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1C), // new_black color
+      backgroundColor: Color(0xFF1C1C1C), // new_black color
       body: Stack(
         children: [
           // ── Image Slider ──────────────────────────────────────────
@@ -109,13 +110,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               onPressed: _complete,
               style: TextButton.styleFrom(
                 backgroundColor: Colors.black.withValues(alpha: 0.5),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child: const Text(
-                'Skip',
+              child: Text(
+                'Skip'.tr,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Poppins',
@@ -136,8 +137,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               children: List.generate(
                 _pages.length,
                 (i) => AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  duration: Duration(milliseconds: 300),
+                  margin: EdgeInsets.symmetric(horizontal: 4),
                   width: _currentPage == i ? 32 : 8,
                   height: 8,
                   decoration: BoxDecoration(
@@ -157,7 +158,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 }
 
 class _OnboardingPage {
-  const _OnboardingPage({
+  _OnboardingPage({
     required this.imagePath,
     required this.title,
     required this.subtitle,
@@ -169,7 +170,7 @@ class _OnboardingPage {
 }
 
 class _OnboardingSlide extends StatelessWidget {
-  const _OnboardingSlide({required this.page});
+  _OnboardingSlide({required this.page});
 
   final _OnboardingPage page;
 
@@ -191,7 +192,7 @@ class _OnboardingSlide extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     AppColors.primary.withValues(alpha: 0.8),
-                    const Color(0xFF1C1C1C),
+                    Color(0xFF1C1C1C),
                   ],
                 ),
               ),
@@ -223,7 +224,7 @@ class _OnboardingSlide extends StatelessWidget {
             children: [
               Text(
                 page.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 32,
@@ -231,7 +232,7 @@ class _OnboardingSlide extends StatelessWidget {
                   height: 1.2,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 page.subtitle,
                 style: TextStyle(

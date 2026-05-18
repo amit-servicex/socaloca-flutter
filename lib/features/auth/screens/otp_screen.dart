@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +17,7 @@ import '../providers/auth_provider.dart';
 /// Receives `userId` and `type` via GoRouter extras (Map<String, String>).
 /// 6-digit OTP with auto-advance, 60 s resend countdown.
 class OtpScreen extends ConsumerStatefulWidget {
-  const OtpScreen({super.key, required this.userId, required this.type});
+  OtpScreen({super.key, required this.userId, required this.type});
 
   final String userId;
   final String type; // 'email' | 'phone'
@@ -46,15 +47,19 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   @override
   void dispose() {
     _resendTimer?.cancel();
-    for (final c in _controllers) { c.dispose(); }
-    for (final f in _focusNodes) { f.dispose(); }
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    for (final f in _focusNodes) {
+      f.dispose();
+    }
     super.dispose();
   }
 
   void _startResendTimer() {
     _resendSeconds = 60;
     _resendTimer?.cancel();
-    _resendTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+    _resendTimer = Timer.periodic(Duration(seconds: 1), (_) {
       if (!mounted) return;
       setState(() {
         if (_resendSeconds > 0) {
@@ -66,12 +71,12 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     });
   }
 
-  String get _enteredOtp =>
-      _controllers.map((c) => c.text).join();
+  String get _enteredOtp => _controllers.map((c) => c.text).join();
 
   Future<void> _verify() async {
     if (_enteredOtp.length < _otpLength) {
-      AppSnackBar.showError(context, 'Please enter the full $_otpLength-digit code');
+      AppSnackBar.showError(
+          context, 'Please enter the full $_otpLength-digit code');
       return;
     }
 
@@ -96,7 +101,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       case AuthFailure(:final error):
         AppSnackBar.showError(context, error);
         // Clear fields on failure
-        for (final c in _controllers) { c.clear(); }
+        for (final c in _controllers) {
+          c.clear();
+        }
         _focusNodes.first.requestFocus();
     }
   }
@@ -130,25 +137,25 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verify Code'),
+        title: Text('Verify Code'.tr),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: AppColors.textPrimary,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // ── Header ────────────────────────────────────────────
-            const Icon(
+            Icon(
               Icons.mark_email_read_outlined,
               size: 64,
               color: AppColors.primary,
             ),
-            const SizedBox(height: 24),
-            const Text(
-              'Enter verification code',
+            SizedBox(height: 24),
+            Text(
+              'Enter verification code'.tr,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins',
@@ -157,17 +164,17 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               'We sent a 6-digit code to your ${widget.type}.',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.textSecondary,
                 fontFamily: 'Poppins',
                 fontSize: 14,
               ),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
 
             // ── OTP cells ─────────────────────────────────────────
             Row(
@@ -186,7 +193,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                       textAlign: TextAlign.center,
                       maxLength: 1,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Poppins',
@@ -197,11 +204,13 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                         contentPadding: EdgeInsets.zero,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: AppColors.border, width: 1.5),
+                          borderSide:
+                              BorderSide(color: AppColors.border, width: 1.5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                          borderSide:
+                              BorderSide(color: AppColors.primary, width: 2),
                         ),
                         filled: true,
                         fillColor: AppColors.inputBackground,
@@ -212,7 +221,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 );
               }),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
 
             // ── Verify button ──────────────────────────────────────
             PrimaryButton(
@@ -220,15 +229,15 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               onPressed: _verify,
               isLoading: _isLoading,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // ── Resend ─────────────────────────────────────────────
             Center(
               child: canResend
                   ? TextButton(
                       onPressed: _startResendTimer,
-                      child: const Text(
-                        'Resend Code',
+                      child: Text(
+                        'Resend Code'.tr,
                         style: TextStyle(
                           color: AppColors.primary,
                           fontFamily: 'Poppins',
@@ -238,7 +247,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                     )
                   : Text(
                       'Resend code in ${_resendSeconds}s',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textSecondary,
                         fontFamily: 'Poppins',
                         fontSize: 13,

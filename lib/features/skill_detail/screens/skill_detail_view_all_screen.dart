@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
@@ -17,7 +18,7 @@ class SkillDetailViewAllScreen extends StatefulWidget {
   final String role;
   final String roleLabel;
 
-  const SkillDetailViewAllScreen({
+  SkillDetailViewAllScreen({
     super.key,
     required this.playerId,
     required this.skillName,
@@ -32,7 +33,7 @@ class SkillDetailViewAllScreen extends StatefulWidget {
 }
 
 class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
-  static const int _limit = 20;
+  static int _limit = 20;
 
   final List<SkillRaterModel> _raters = [];
   final ScrollController _scrollController = ScrollController();
@@ -125,13 +126,13 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
         backgroundColor: AppColors.socaBlack,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new,
+          icon: Icon(Icons.arrow_back_ios_new,
               color: Color.fromARGB(255, 65, 141, 255), size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           widget.roleLabel,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -146,7 +147,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
   Widget _buildBody() {
     // Initial load state
     if (_raters.isEmpty && _isLoading) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     // Error on first load
@@ -155,11 +156,11 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            const SizedBox(height: 12),
+            Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            SizedBox(height: 12),
             Text(_error!,
-                style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
-            const SizedBox(height: 12),
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+            SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
                 _start = 0;
@@ -171,8 +172,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow,
               ),
-              child:
-                  const Text('Retry', style: TextStyle(fontFamily: 'Poppins')),
+              child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),
@@ -184,7 +184,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
       return Center(
         child: Text(
           _emptyText,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -195,7 +195,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
     }
 
     return Container(
-      margin: const EdgeInsets.all(12),
+      margin: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -203,7 +203,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -212,9 +212,9 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
         itemCount: _raters.length + (_isLoading || _hasMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index == _raters.length) {
-            return const Padding(
+            return Padding(
               padding: EdgeInsets.all(16),
-              child: const AppLoader(),
+              child: AppLoader(),
             );
           }
           return SkillRaterTile(

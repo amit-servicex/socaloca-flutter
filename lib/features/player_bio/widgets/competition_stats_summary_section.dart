@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/game_stats_model.dart';
@@ -13,7 +14,7 @@ class CompetitionStatsSummarySection extends StatelessWidget {
   final PlayerBioModel playerBio;
   final bool isLoadingStats;
 
-  const CompetitionStatsSummarySection({
+  CompetitionStatsSummarySection({
     super.key,
     required this.footballStats,
     required this.futsalStats,
@@ -29,7 +30,7 @@ class CompetitionStatsSummarySection extends StatelessWidget {
       children: [
         _buildCompetitionSection(
             context, 'Football', footballStats, isGoalkeeper),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         _buildCompetitionSection(context, 'Futsal', futsalStats, isGoalkeeper),
       ],
     );
@@ -43,19 +44,19 @@ class CompetitionStatsSummarySection extends StatelessWidget {
   ) {
     return Column(
       children: [
-        const SizedBox(height: 15),
+        SizedBox(height: 15),
         Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.socaGrey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: isLoadingStats
-                  ? const AppLoader()
+                  ? AppLoader()
                   : IntrinsicHeight(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,10 +67,10 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                               children: [
                                 _buildStatItem('Appearances',
                                     stats?.matchCount?.toString() ?? '0'),
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
                                 _buildStatItem('Goals',
                                     stats?.goalCount?.toString() ?? '0'),
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
                                 _buildStatItem(
                                     'POM', stats?.mvpCount?.toString() ?? '0'),
                               ],
@@ -91,10 +92,10 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                                           '0')
                                       : (stats?.assistCount?.toString() ?? '0'),
                                 ),
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
                                 _buildStatItem('Yellow Cards',
                                     stats?.yellowCardCount?.toString() ?? '0'),
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
                                 _buildStatItem('Red Cards',
                                     stats?.redCardCount?.toString() ?? '0'),
                               ],
@@ -115,14 +116,14 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4, vertical: 4),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                           decoration: BoxDecoration(
                             color: AppColors.socaBlack,
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: const Text(
-                            'COMPETITION STATS',
+                          child: Text(
+                            'COMPETITION STATS'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 12,
@@ -131,10 +132,10 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           '$type, ${DateTime.now().year}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -147,8 +148,8 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                       onTap: () {
                         // TODO: Navigate to past years
                       },
-                      child: const Text(
-                        'past years',
+                      child: Text(
+                        'past years'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -174,17 +175,17 @@ class CompetitionStatsSummarySection extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               color: AppColors.socaBlack,
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w600,

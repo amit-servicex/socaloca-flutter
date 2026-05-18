@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -27,7 +28,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class PlayerBioScreen extends ConsumerStatefulWidget {
   final String playerId;
 
-  const PlayerBioScreen({
+  PlayerBioScreen({
     super.key,
     required this.playerId,
   });
@@ -67,15 +68,15 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Block User',
+        title: Text('Block User'.tr,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: const Text('Are you sure you want to block this user?',
+        content: Text('Are you sure you want to block this user?'.tr,
             style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel',
+            child: Text('Cancel'.tr,
                 style: TextStyle(
                     fontFamily: 'Poppins', color: AppColors.socaBlack)),
           ),
@@ -83,7 +84,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
             onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: const Text('Block',
+            child: Text('Block'.tr,
                 style: TextStyle(
                     fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
           ),
@@ -98,9 +99,9 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
       await repo.blockUser(userId: userId, toUserId: widget.playerId);
       if (!mounted) return;
       messenger.showSnackBar(
-        const SnackBar(
+        SnackBar(
           content:
-              Text('User blocked.', style: TextStyle(fontFamily: 'Poppins')),
+              Text('User blocked.'.tr, style: TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.green,
         ),
       );
@@ -109,8 +110,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
       if (!mounted) return;
       messenger.showSnackBar(
         SnackBar(
-          content:
-              Text('Error: $e', style: const TextStyle(fontFamily: 'Poppins')),
+          content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.red,
         ),
       );
@@ -118,7 +118,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
   }
 
   Future<void> _showReportDialog(BuildContext context) async {
-    const causes = [
+    final causes = [
       'Fake Account',
       'Fake Name',
       'Inappropriate Post',
@@ -130,15 +130,15 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          title: const Text('Report User',
+          title: Text('Report User'.tr,
               style: TextStyle(
                   fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Select a reason:',
+              Text('Select a reason:'.tr,
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               RadioGroup<String>(
                 groupValue: selectedCause,
                 onChanged: (v) => setDialogState(() => selectedCause = v),
@@ -149,7 +149,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                         (cause) => RadioListTile<String>(
                           value: cause,
                           title: Text(cause,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontFamily: 'Poppins', fontSize: 13)),
                           contentPadding: EdgeInsets.zero,
                           dense: true,
@@ -163,7 +163,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel',
+              child: Text('Cancel'.tr,
                   style: TextStyle(
                       fontFamily: 'Poppins', color: AppColors.socaBlack)),
             ),
@@ -172,7 +172,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow),
-              child: const Text('Report',
+              child: Text('Report'.tr,
                   style: TextStyle(
                       fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
             ),
@@ -189,8 +189,8 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
           userId: userId, toUserId: widget.playerId, cause: confirmed);
       if (!mounted) return;
       messenger.showSnackBar(
-        const SnackBar(
-          content: Text('Report submitted. Thank you.',
+        SnackBar(
+          content: Text('Report submitted. Thank you.'.tr,
               style: TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.green,
         ),
@@ -199,8 +199,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
       if (!mounted) return;
       messenger.showSnackBar(
         SnackBar(
-          content:
-              Text('Error: $e', style: const TextStyle(fontFamily: 'Poppins')),
+          content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.red,
         ),
       );
@@ -216,28 +215,28 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       body: state.isLoading
-          ? const AppLoader()
+          ? AppLoader()
           : state.error != null
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.error_outline,
                         size: 48,
                         color: AppColors.error,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       Text(
                         state.error!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           color: AppColors.socaBlack,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () => ref
                             .read(playerBioProvider(widget.playerId).notifier)
@@ -246,15 +245,15 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                           backgroundColor: AppColors.socaBlack,
                           foregroundColor: AppColors.socaYellow,
                         ),
-                        child: const Text('Retry'),
+                        child: Text('Retry'.tr),
                       ),
                     ],
                   ),
                 )
               : state.playerBio == null
-                  ? const Center(
+                  ? Center(
                       child: Text(
-                        'Player not found',
+                        'Player not found'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -270,18 +269,18 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                             playerBio: state.playerBio!,
                             isOwnProfile: isOwnProfile,
                           ),
-                          const Divider(height: 1, color: AppColors.socaBlack),
+                          Divider(height: 1, color: AppColors.socaBlack),
 
                           // Stats Counters
                           PlayerBioStatsCounters(
                             playerBio: state.playerBio!,
                           ),
 
-                          const Divider(height: 1, color: AppColors.socaBlack),
+                          Divider(height: 1, color: AppColors.socaBlack),
 
                           // Tab Buttons (Stats, Endorse, Rate)
                           Container(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            padding: EdgeInsets.symmetric(vertical: 15),
                             color: Colors.white,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -300,8 +299,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   },
                                   child: Container(
                                     width: 90,
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
+                                    padding: EdgeInsets.symmetric(vertical: 8),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
@@ -309,8 +307,8 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                           width: 1.5),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    child: const Text(
-                                      'STATS',
+                                    child: Text(
+                                      'STATS'.tr,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Poppins',
@@ -321,7 +319,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 // ENDORSE
                                 InkWell(
                                   onTap: () {
@@ -342,14 +340,13 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   },
                                   child: Container(
                                     width: 90,
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
+                                    padding: EdgeInsets.symmetric(vertical: 8),
                                     decoration: BoxDecoration(
                                       color: AppColors.socaBlack,
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    child: const Text(
-                                      'ENDORSE',
+                                    child: Text(
+                                      'ENDORSE'.tr,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Poppins',
@@ -360,7 +357,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 // RATE
                                 if (!isOwnProfile)
                                   GestureDetector(
@@ -376,14 +373,14 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                     },
                                     child: Container(
                                       width: 90,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8),
                                       decoration: BoxDecoration(
                                         color: AppColors.socaBlack,
                                         borderRadius: BorderRadius.circular(5),
                                       ),
-                                      child: const Text(
-                                        'RATE',
+                                      child: Text(
+                                        'RATE'.tr,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: 'Poppins',
@@ -398,11 +395,11 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                             ),
                           ),
 
-                          const Divider(height: 1, color: AppColors.socaBlack),
+                          Divider(height: 1, color: AppColors.socaBlack),
 
                           // Action Buttons Row
                           Container(
-                            padding: const EdgeInsets.symmetric(
+                            padding: EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 10,
                             ),
@@ -419,7 +416,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                             .notifier)
                                         .toggleFollow(),
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(
+                                      padding: EdgeInsets.symmetric(
                                           vertical: 8, horizontal: 8),
                                       decoration: BoxDecoration(
                                         color: state.isFollowing
@@ -444,13 +441,13 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                     ),
                                   ),
 
-                                if (!isOwnProfile) const SizedBox(width: 10),
+                                if (!isOwnProfile) SizedBox(width: 10),
 
                                 // Share Button
                                 GestureDetector(
                                   onTap: _handleShare,
                                   child: Container(
-                                      padding: const EdgeInsets.all(8),
+                                      padding: EdgeInsets.all(8),
                                       decoration: BoxDecoration(
                                         // color: AppColors.socaPageBg,
                                         borderRadius: BorderRadius.circular(5),
@@ -462,7 +459,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                       )),
                                 ),
 
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10),
 
                                 // Like Button
                                 // if (!isOwnProfile)
@@ -472,7 +469,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 //             .notifier)
                                 //         .toggleLike(),
                                 //     child: Container(
-                                //       padding: const EdgeInsets.all(8),
+                                //       padding: EdgeInsets.all(8),
                                 //       decoration: BoxDecoration(
                                 //         color: AppColors.socaPageBg,
                                 //         borderRadius: BorderRadius.circular(5),
@@ -491,7 +488,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
 
                                 // Endorse, Block & Report buttons
                                 if (!isOwnProfile) ...[
-                                  const SizedBox(width: 10),
+                                  SizedBox(width: 10),
                                   GestureDetector(
                                     onTap: () {
                                       ref
@@ -501,7 +498,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                           .toggleLike();
                                     },
                                     child: Container(
-                                        padding: const EdgeInsets.all(6),
+                                        padding: EdgeInsets.all(6),
                                         decoration: BoxDecoration(
                                           color: AppColors.socaPageBg,
                                           border: Border.all(
@@ -518,7 +515,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                               : AppColors.socaBlack,
                                         )),
                                   ),
-                                  const SizedBox(width: 10),
+                                  SizedBox(width: 10),
                                   GestureDetector(
                                     onTap: () => _showBlockDialog(context),
                                     child: Image.asset(
@@ -527,7 +524,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                       height: 32,
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
+                                  SizedBox(width: 10),
                                   GestureDetector(
                                       onTap: () => _showReportDialog(context),
                                       child: Image.asset(
@@ -542,7 +539,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
 
                           // Main View
                           Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: EdgeInsets.all(20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -552,7 +549,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   isOwnProfile: isOwnProfile,
                                 ),
 
-                                const SizedBox(height: 20),
+                                SizedBox(height: 20),
 
                                 // Competition Stats Summary
                                 CompetitionStatsSummarySection(
@@ -562,7 +559,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   isLoadingStats: state.isLoadingStats,
                                 ),
 
-                                const SizedBox(height: 20),
+                                SizedBox(height: 20),
 
                                 // My Matches (Football & Futsal)
                                 MyMatchesSection(
@@ -573,7 +570,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   isLoadingMatches: state.isLoadingMatches,
                                 ),
 
-                                const SizedBox(height: 20),
+                                SizedBox(height: 20),
 
                                 // Training Stats
                                 TrainingStatsSection(
@@ -583,7 +580,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   isLoadingMatches: state.isLoadingMatches,
                                 ),
 
-                                const SizedBox(height: 20),
+                                SizedBox(height: 20),
 
                                 // Endorsements
                                 EndorsementsSection(
@@ -593,7 +590,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
 
                                 if (state.endorsements.isNotEmpty)
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: 20),
 
                                 // Teams List
                                 PlayerTeamsSection(
@@ -602,7 +599,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
 
                                 if (state.teams.isNotEmpty)
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: 20),
 
                                 // Academies List
                                 AcademiesSection(
@@ -611,7 +608,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
 
                                 if (state.academies.isNotEmpty)
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: 20),
 
                                 // Tournaments List
                                 TournamentsSection(
@@ -621,7 +618,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
 
                                 if (state.tournaments.isNotEmpty)
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: 20),
 
                                 // Skills & Ratings
                                 PlayerSkillsSection(
@@ -631,7 +628,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   isOwnProfile: isOwnProfile,
                                 ),
 
-                                const SizedBox(height: 20),
+                                SizedBox(height: 20),
 
                                 // Top Posts
                                 PlayerPostsSection(
@@ -640,7 +637,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
 
                                 if (state.posts.isNotEmpty)
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: 20),
 
                                 // Tagged Videos
                                 TaggedVideosSection(
@@ -650,7 +647,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
 
                                 if (state.taggedVideos.isNotEmpty)
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: 20),
                               ],
                             ),
                           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,7 +9,7 @@ import '../providers/referee_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeLiveMatchUpdateScreen extends ConsumerStatefulWidget {
-  const RefereeLiveMatchUpdateScreen({
+  RefereeLiveMatchUpdateScreen({
     super.key,
     required this.matchId,
     required this.match,
@@ -29,7 +30,7 @@ class _RefereeLiveMatchUpdateScreenState
   String _matchState = 'NOT_STARTED';
   bool _isSaving = false;
 
-  static const _states = [
+  static final _states = [
     'NOT_STARTED',
     'FIRST_HALF_START',
     'FIRST_HALF_END',
@@ -37,7 +38,7 @@ class _RefereeLiveMatchUpdateScreenState
     'FINISH',
   ];
 
-  static const _stateLabels = {
+  static final _stateLabels = {
     'NOT_STARTED': 'Not Started',
     'FIRST_HALF_START': '1st Half',
     'FIRST_HALF_END': 'Half Time',
@@ -50,8 +51,8 @@ class _RefereeLiveMatchUpdateScreenState
     super.initState();
     final m = widget.match;
     if (m != null) {
-      _scoreA = int.tryParse(m.teamAScore ?? '0') ?? 0;
-      _scoreB = int.tryParse(m.teamBScore ?? '0') ?? 0;
+      final _scoreA = int.tryParse(m.teamAScore ?? '0') ?? 0;
+      final _scoreB = int.tryParse(m.teamBScore ?? '0') ?? 0;
     }
   }
 
@@ -75,7 +76,8 @@ class _RefereeLiveMatchUpdateScreenState
     if (!mounted) return;
     setState(() => _isSaving = false);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(ok ? 'Match updated successfully' : 'Update failed. Try again.'),
+      content:
+          Text(ok ? 'Match updated successfully' : 'Update failed. Try again.'),
       backgroundColor: ok ? AppColors.socaBlack : Colors.red,
     ));
     if (ok && _matchState == 'FINISH') {
@@ -91,11 +93,11 @@ class _RefereeLiveMatchUpdateScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
           onPressed: () => context.pop(),
         ),
-        title: const Text(
-          'Live Match Update',
+        title: Text(
+          'Live Match Update'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -105,18 +107,18 @@ class _RefereeLiveMatchUpdateScreenState
         ),
         actions: [
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.red,
               borderRadius: BorderRadius.circular(4),
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.circle, size: 7, color: Colors.white),
                 SizedBox(width: 4),
-                Text('LIVE',
+                Text('LIVE'.tr,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -128,7 +130,7 @@ class _RefereeLiveMatchUpdateScreenState
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -137,7 +139,7 @@ class _RefereeLiveMatchUpdateScreenState
               _infoText(
                 '${widget.match!.tournamentName}${widget.match!.roundName != null ? ' — ${widget.match!.roundName}' : ''}',
               ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Score controls
             _card(
@@ -153,26 +155,26 @@ class _RefereeLiveMatchUpdateScreenState
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
                                     color: AppColors.socaBlack)),
-                            const SizedBox(height: 12),
+                            SizedBox(height: 12),
                             _scoreStepper(
                               value: _scoreA,
                               onInc: () => setState(() => _scoreA++),
-                              onDec: () =>
-                                  setState(() => _scoreA = (_scoreA - 1).clamp(0, 99)),
+                              onDec: () => setState(
+                                  () => _scoreA = (_scoreA - 1).clamp(0, 99)),
                             ),
                           ],
                         ),
                       ),
 
                       // Divider
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Text('–',
+                        child: Text('–'.tr,
                             style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
@@ -188,17 +190,17 @@ class _RefereeLiveMatchUpdateScreenState
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
                                     color: AppColors.socaBlack)),
-                            const SizedBox(height: 12),
+                            SizedBox(height: 12),
                             _scoreStepper(
                               value: _scoreB,
                               onInc: () => setState(() => _scoreB++),
-                              onDec: () =>
-                                  setState(() => _scoreB = (_scoreB - 1).clamp(0, 99)),
+                              onDec: () => setState(
+                                  () => _scoreB = (_scoreB - 1).clamp(0, 99)),
                             ),
                           ],
                         ),
@@ -208,20 +210,20 @@ class _RefereeLiveMatchUpdateScreenState
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Match state selector
             _card(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Match State',
+                  Text('Match State'.tr,
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
                           color: AppColors.socaBlack)),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -230,17 +232,21 @@ class _RefereeLiveMatchUpdateScreenState
                       return GestureDetector(
                         onTap: () => setState(() => _matchState = s),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
                             color: selected
-                                ? (s == 'FINISH' ? Colors.red : AppColors.socaBlack)
+                                ? (s == 'FINISH'
+                                    ? Colors.red
+                                    : AppColors.socaBlack)
                                 : Colors.white,
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(
                               color: selected
-                                  ? (s == 'FINISH' ? Colors.red : AppColors.socaBlack)
-                                  : const Color(0xFFE0E0E0),
+                                  ? (s == 'FINISH'
+                                      ? Colors.red
+                                      : AppColors.socaBlack)
+                                  : Color(0xFFE0E0E0),
                             ),
                           ),
                           child: Text(
@@ -249,7 +255,9 @@ class _RefereeLiveMatchUpdateScreenState
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
-                              color: selected ? AppColors.socaYellow : AppColors.socaBlack,
+                              color: selected
+                                  ? AppColors.socaYellow
+                                  : AppColors.socaBlack,
                             ),
                           ),
                         ),
@@ -259,7 +267,7 @@ class _RefereeLiveMatchUpdateScreenState
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             // Meta info
             if (widget.match != null) ...[
@@ -279,11 +287,11 @@ class _RefereeLiveMatchUpdateScreenState
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
             ],
 
             // Save button
-            const AppLoader(size: 24, centered: false),
+            AppLoader(size: 24, centered: false),
           ],
         ),
       ),
@@ -299,16 +307,16 @@ class _RefereeLiveMatchUpdateScreenState
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _stepBtn(Icons.remove, onDec),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Text(
           '$value',
-          style: const TextStyle(
+          style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w800,
               fontSize: 32,
               color: Colors.red),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         _stepBtn(Icons.add, onInc),
       ],
     );
@@ -332,11 +340,11 @@ class _RefereeLiveMatchUpdateScreenState
   Widget _card({required Widget child}) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFE0E0E0)),
+        border: Border.all(color: Color(0xFFE0E0E0)),
       ),
       child: child,
     );
@@ -345,17 +353,17 @@ class _RefereeLiveMatchUpdateScreenState
   Widget _infoText(String text) => Text(
         text,
         textAlign: TextAlign.center,
-        style: const TextStyle(
-            fontFamily: 'Poppins', fontSize: 12, color: Colors.grey),
+        style:
+            TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey),
       );
 
   Widget _metaChip(IconData icon, String text) => Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 12, color: Colors.grey),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(text,
-              style: const TextStyle(
+              style: TextStyle(
                   fontFamily: 'Lato', fontSize: 12, color: Colors.grey)),
         ],
       );

@@ -1,0 +1,525 @@
+{
+  "@@locale": "en",
+
+  "appName": "SocaLoca",
+  "@appName": {"description": "App name"},
+
+  "cancel": "Cancel",
+  "@cancel": {"description": "Cancel button"},
+
+  "submit": "Submit",
+  "@submit": {"description": "Submit button"},
+
+  "yes": "YES",
+  "@yes": {"description": "Yes confirmation"},
+
+  "no": "No",
+  "@no": {"description": "No confirmation"},
+
+  "search": "Search",
+  "@search": {"description": "Search placeholder/label"},
+
+  "back": "Back",
+  "@back": {"description": "Back navigation"},
+
+  "save": "SAVE",
+  "@save": {"description": "Save button"},
+
+  "delete": "Delete",
+  "@delete": {"description": "Delete action"},
+
+  "deactivate": "Deactivate",
+  "@deactivate": {"description": "Deactivate action"},
+
+  "report": "Report",
+  "@report": {"description": "Report action"},
+
+  "follow": "Follow",
+  "@follow": {"description": "Follow button"},
+
+  "following": "Following",
+  "@following": {"description": "Following state"},
+
+  "followers": "Followers",
+  "@followers": {"description": "Followers count label"},
+
+  "viewAll": "View All",
+  "@viewAll": {"description": "View all link"},
+
+  "comingSoon": "Coming Soon",
+  "@comingSoon": {"description": "Coming soon placeholder"},
+
+  "somethingWentWrong": "Something went wrong!",
+  "@somethingWentWrong": {"description": "Generic error message"},
+
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {"description": "Language selection bottom sheet header"},
+
+  "selectLanguageDesc": "SocaLoca is available in multiple languages. Please select one to continue.",
+  "@selectLanguageDesc": {"description": "Language selection description"},
+
+  "pleaseSelectLanguage": "Please select a language",
+  "@pleaseSelectLanguage": {"description": "Language selection validation error"},
+
+  "signIn": "SIGN IN",
+  "@signIn": {"description": "Sign in button"},
+
+  "signUp": "SIGN UP",
+  "@signUp": {"description": "Sign up button"},
+
+  "signOut": "Sign Out",
+  "@signOut": {"description": "Sign out menu item"},
+
+  "login": "Login",
+  "@login": {"description": "Login label"},
+
+  "email": "Email *",
+  "@email": {"description": "Email field label"},
+
+  "emailPlain": "Email",
+  "@emailPlain": {"description": "Email label without asterisk"},
+
+  "enterYourEmail": "Enter your email",
+  "@enterYourEmail": {"description": "Email field hint"},
+
+  "password": "Password *",
+  "@password": {"description": "Password field label"},
+
+  "enterYourPassword": "Enter your password",
+  "@enterYourPassword": {"description": "Password field hint"},
+
+  "newPassword": "New Password *",
+  "@newPassword": {"description": "New password field label"},
+
+  "enterYourNewPassword": "Enter your new password",
+  "@enterYourNewPassword": {"description": "New password field hint"},
+
+  "confirmPassword": "Confirm Password *",
+  "@confirmPassword": {"description": "Confirm password field label"},
+
+  "currentPassword": "Current Password *",
+  "@currentPassword": {"description": "Current password field label"},
+
+  "enterYourCurrentPassword": "Enter your current password",
+  "@enterYourCurrentPassword": {"description": "Current password field hint"},
+
+  "changePassword": "Change Password",
+  "@changePassword": {"description": "Change password screen title"},
+
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {"description": "Forgot password link"},
+
+  "resetPassword": "RESET",
+  "@resetPassword": {"description": "Reset password button"},
+
+  "sendOtp": "SEND OTP",
+  "@sendOtp": {"description": "Send OTP button on forgot password screen"},
+
+  "resend": "RESEND",
+  "@resend": {"description": "Resend OTP link"},
+
+  "haventReceivedCode": "Haven't received the code?  ",
+  "@haventReceivedCode": {"description": "Resend prompt prefix"},
+
+  "otpLabel": "OTP *",
+  "@otpLabel": {"description": "OTP field label"},
+
+  "pleaseEnterEmail": "Please enter email",
+  "@pleaseEnterEmail": {"description": "Email validation error"},
+
+  "pleaseEnterValidEmail": "Please enter valid email",
+  "@pleaseEnterValidEmail": {"description": "Email format validation error"},
+
+  "pleaseEnterPassword": "Please enter a password",
+  "@pleaseEnterPassword": {"description": "Password empty validation"},
+
+  "minimumSixCharacters": "Minimum 6 characters",
+  "@minimumSixCharacters": {"description": "Password length validation"},
+
+  "pleaseConfirmPassword": "Please confirm password",
+  "@pleaseConfirmPassword": {"description": "Confirm password empty validation"},
+
+  "passwordDoesNotMatch": "Password doesn't match",
+  "@passwordDoesNotMatch": {"description": "Password mismatch validation"},
+
+  "passwordChangedSuccessfully": "Password changed successfully",
+  "@passwordChangedSuccessfully": {"description": "Password change success toast"},
+
+  "passwordDoNotMatch": "Passwords don't match",
+  "@passwordDoNotMatch": {"description": "Passwords do not match error"},
+
+  "invalidCurrentPassword": "Invalid current password",
+  "@invalidCurrentPassword": {"description": "Wrong current password error"},
+
+  "pleaseEnterCurrentPassword": "Please enter current password",
+  "@pleaseEnterCurrentPassword": {"description": "Current password validation"},
+
+  "pleaseEnterNewPassword": "Please enter new password",
+  "@pleaseEnterNewPassword": {"description": "New password validation"},
+
+  "pleaseConfirmNewPassword": "Please confirm new password",
+  "@pleaseConfirmNewPassword": {"description": "Confirm new password validation"},
+
+  "firstName": "First Name *",
+  "@firstName": {"description": "First name field label"},
+
+  "lastName": "Last Name *",
+  "@lastName": {"description": "Last name field label"},
+
+  "profileName": "Profile Name *",
+  "@profileName": {"description": "Profile name field label"},
+
+  "enterYourName": "Enter your name",
+  "@enterYourName": {"description": "Name field hint"},
+
+  "dateOfBirth": "Date Of Birth *",
+  "@dateOfBirth": {"description": "Date of birth field label"},
+
+  "country": "Country",
+  "@country": {"description": "Country field label"},
+
+  "gender": "Gender *",
+  "@gender": {"description": "Gender field label"},
+
+  "male": "Male",
+  "@male": {"description": "Male gender option"},
+
+  "female": "Female",
+  "@female": {"description": "Female gender option"},
+
+  "nationality": "Nationality",
+  "@nationality": {"description": "Nationality field label"},
+
+  "playingPosition": "Playing Position *",
+  "@playingPosition": {"description": "Playing position field label"},
+
+  "preferredFoot": "Preferred Foot",
+  "@preferredFoot": {"description": "Preferred foot field label"},
+
+  "right": "Right",
+  "@right": {"description": "Right foot option"},
+
+  "left": "Left",
+  "@left": {"description": "Left foot option"},
+
+  "height": "Height",
+  "@height": {"description": "Height field label"},
+
+  "heightCms": "Height (cms)",
+  "@heightCms": {"description": "Height in cms field label"},
+
+  "editProfile": "Edit Profile",
+  "@editProfile": {"description": "Edit profile menu item / screen title"},
+
+  "createProfile": "Create Profile",
+  "@createProfile": {"description": "Create profile screen title"},
+
+  "uploadProfilePhoto": "Upload your profile photo",
+  "@uploadProfilePhoto": {"description": "Upload profile photo prompt"},
+
+  "takeAPhoto": "Take a photo",
+  "@takeAPhoto": {"description": "Camera option in image picker"},
+
+  "chooseFromGallery": "Choose from gallery",
+  "@chooseFromGallery": {"description": "Gallery option in image picker"},
+
+  "selectImage": "Select Image",
+  "@selectImage": {"description": "Select image dialog title"},
+
+  "home": "Home",
+  "@home": {"description": "Home tab label"},
+
+  "teams": "Teams",
+  "@teams": {"description": "Teams tab/section label"},
+
+  "players": "Players",
+  "@players": {"description": "Players tab/section label"},
+
+  "matches": "Matches",
+  "@matches": {"description": "Matches tab/section label"},
+
+  "clubsAndPartners": "Clubs and Partners",
+  "@clubsAndPartners": {"description": "Clubs and partners section label"},
+
+  "notifications": "Notifications",
+  "@notifications": {"description": "Notifications screen title"},
+
+  "noNotifications": "No notification for now",
+  "@noNotifications": {"description": "Empty notifications message"},
+
+  "tournaments": "Tournaments",
+  "@tournaments": {"description": "Tournaments section label"},
+
+  "clubs": "Clubs",
+  "@clubs": {"description": "Clubs section label"},
+
+  "partners": "Partners",
+  "@partners": {"description": "Partners section label"},
+
+  "academy": "Academy",
+  "@academy": {"description": "Academy section label"},
+
+  "recentMatches": "Recent Matches",
+  "@recentMatches": {"description": "Recent matches section label"},
+
+  "upcomingMatches": "Upcoming Matches",
+  "@upcomingMatches": {"description": "Upcoming matches section label"},
+
+  "noUpcomingMatches": "No upcoming matches",
+  "@noUpcomingMatches": {"description": "Empty upcoming matches message"},
+
+  "playedMatches": "Played Matches",
+  "@playedMatches": {"description": "Played matches section label"},
+
+  "noPlayedMatches": "No played matches",
+  "@noPlayedMatches": {"description": "Empty played matches message"},
+
+  "todaysMatches": "Today's Matches",
+  "@todaysMatches": {"description": "Today's matches section label"},
+
+  "hostMatch": "Host Match",
+  "@hostMatch": {"description": "Host match button"},
+
+  "manageRequests": "Manage Requests",
+  "@manageRequests": {"description": "Manage requests label"},
+
+  "ongoing": "Ongoing",
+  "@ongoing": {"description": "Ongoing match status"},
+
+  "today": "Today",
+  "@today": {"description": "Today label"},
+
+  "endorsements": "Endorsements",
+  "@endorsements": {"description": "Endorsements section label"},
+
+  "noEndorsementsYet": "No Endorsements yet",
+  "@noEndorsementsYet": {"description": "Empty endorsements message"},
+
+  "endorsedSuccessfully": "Endorsed successfully",
+  "@endorsedSuccessfully": {"description": "Endorse success toast"},
+
+  "alreadyEndorsed": "Already endorsed",
+  "@alreadyEndorsed": {"description": "Already endorsed message"},
+
+  "playerBio": "Player Bio",
+  "@playerBio": {"description": "Player bio section label"},
+
+  "clubBio": "Club Bio",
+  "@clubBio": {"description": "Club bio section label"},
+
+  "league": "League",
+  "@league": {"description": "League label"},
+
+  "stadium": "Stadium",
+  "@stadium": {"description": "Stadium label"},
+
+  "featuredPlayers": "Featured Players",
+  "@featuredPlayers": {"description": "Featured players section label"},
+
+  "myTeams": "My Teams",
+  "@myTeams": {"description": "My teams section label"},
+
+  "createTeam": "Create Team",
+  "@createTeam": {"description": "Create team button"},
+
+  "noTeamsFound": "No teams found.",
+  "@noTeamsFound": {"description": "Empty teams message"},
+
+  "noClubsFound": "No clubs found.",
+  "@noClubsFound": {"description": "Empty clubs message"},
+
+  "noTournamentsFound": "No tournaments found.",
+  "@noTournamentsFound": {"description": "Empty tournaments message"},
+
+  "noPostsFound": "No posts found.",
+  "@noPostsFound": {"description": "Empty posts message"},
+
+  "posts": "Posts",
+  "@posts": {"description": "Posts section label"},
+
+  "location": "Location",
+  "@location": {"description": "Location field label"},
+
+  "selectLocation": "Select Location",
+  "@selectLocation": {"description": "Location picker title"},
+
+  "ageGroup": "Age Group",
+  "@ageGroup": {"description": "Age group filter label"},
+
+  "game": "Game",
+  "@game": {"description": "Game type filter label"},
+
+  "competitions": "Competitions",
+  "@competitions": {"description": "Competitions section label"},
+
+  "noCompetitionsFound": "No competitions found.",
+  "@noCompetitionsFound": {"description": "Empty competitions message"},
+
+  "register": "Register",
+  "@register": {"description": "Register button"},
+
+  "registered": "Registered",
+  "@registered": {"description": "Registered status"},
+
+  "liveTrialRegistration": "Live Trial Registration",
+  "@liveTrialRegistration": {"description": "Live trial registration label"},
+
+  "gotIt": "Got It",
+  "@gotIt": {"description": "Confirmation button"},
+
+  "upgrade": "UPGRADE",
+  "@upgrade": {"description": "Upgrade button"},
+
+  "helpdesk": "Helpdesk",
+  "@helpdesk": {"description": "Helpdesk menu item"},
+
+  "deleteAccount": "Deactivate/Delete Account",
+  "@deleteAccount": {"description": "Delete account option"},
+
+  "deleteAccountConfirmation": "Are you sure you want to Delete your Account?",
+  "@deleteAccountConfirmation": {"description": "Delete account confirmation"},
+
+  "deactivateAccountConfirmation": "Are you sure you want to Deactivate your Account?",
+  "@deactivateAccountConfirmation": {"description": "Deactivate account confirmation"},
+
+  "downloadActivities": "Download Activities",
+  "@downloadActivities": {"description": "Download activities option"},
+
+  "pleaseEnterFirstName": "Please enter first name",
+  "@pleaseEnterFirstName": {"description": "First name validation"},
+
+  "pleaseEnterLastName": "Please enter last name",
+  "@pleaseEnterLastName": {"description": "Last name validation"},
+
+  "pleaseEnterProfileName": "Please enter profile name",
+  "@pleaseEnterProfileName": {"description": "Profile name validation"},
+
+  "pleaseEnterDateOfBirth": "Please enter date of birth",
+  "@pleaseEnterDateOfBirth": {"description": "DOB validation"},
+
+  "pleaseSelectNationality": "Please select nationality",
+  "@pleaseSelectNationality": {"description": "Nationality validation"},
+
+  "pleaseSelectAtLeastOneFilter": "Please select at least one filter",
+  "@pleaseSelectAtLeastOneFilter": {"description": "Filter validation"},
+
+  "reportThisPost": "Report This Post",
+  "@reportThisPost": {"description": "Report post dialog title"},
+
+  "pleaseSelectACause": "Please select a cause",
+  "@pleaseSelectACause": {"description": "Report cause validation"},
+
+  "socialLoginNoPassword": "Hey there… You have used social login. No need of passwords.",
+  "@socialLoginNoPassword": {"description": "Social login password change warning"},
+
+  "welcomeBack": "Welcome back!!!",
+  "@welcomeBack": {"description": "Welcome back message"},
+
+  "weTrulyMissedYou": "We truly missed you.",
+  "@weTrulyMissedYou": {"description": "Welcome back sub-message"},
+
+  "addPlayers": "Add Players",
+  "@addPlayers": {"description": "Add players button"},
+
+  "noPlayerJoinedYet": "No player joined yet",
+  "@noPlayerJoinedYet": {"description": "Empty players message"},
+
+  "mandatory_fields": "* mandatory fields",
+  "@mandatory_fields": {"description": "Mandatory fields note"},
+
+  "strong": "Strong",
+  "@strong": {"description": "Strong password indicator"},
+
+  "weak": "Weak",
+  "@weak": {"description": "Weak password indicator"},
+
+  "goToHome": "Go to Home",
+  "@goToHome": {"description": "Go to home button"},
+
+  "na": "N/A",
+  "@na": {"description": "Not available placeholder"},
+
+  "born": "Born",
+  "@born": {"description": "Born label on player bio"},
+
+  "goalScored": "Goal Scored",
+  "@goalScored": {"description": "Goals scored stat label"},
+
+  "assists": "Assists",
+  "@assists": {"description": "Assists stat label"},
+
+  "yellowCard": "Yellow Card",
+  "@yellowCard": {"description": "Yellow card stat label"},
+
+  "redCard": "Red Card",
+  "@redCard": {"description": "Red card stat label"},
+
+  "mvp": "MVP",
+  "@mvp": {"description": "MVP stat label"},
+
+  "liked": "Liked",
+  "@liked": {"description": "Liked state label"},
+
+  "tapToLike": "Tap to like",
+  "@tapToLike": {"description": "Like action hint"},
+
+  "tapToFollow": "Tap to follow",
+  "@tapToFollow": {"description": "Follow action hint"},
+
+  "createPost": "Create Post",
+  "@createPost": {"description": "Create post button"},
+
+  "uploadImage": "Upload Images",
+  "@uploadImage": {"description": "Upload images label"},
+
+  "uploadVideo": "Upload Video",
+  "@uploadVideo": {"description": "Upload video label"},
+
+  "verificationCodeSent": "Verification code sent successfully",
+  "@verificationCodeSent": {"description": "OTP sent success toast"},
+
+  "passwordResetSuccess": "Password reset successfully. Please Sign In.",
+  "@passwordResetSuccess": {"description": "Password reset success toast"},
+
+  "pleaseEnterOtp": "Please enter OTP",
+  "@pleaseEnterOtp": {"description": "OTP field validation"},
+
+  "socaLocaId": "SocaLoca ID",
+  "@socaLocaId": {"description": "SocaLoca ID sign-in type label"},
+
+  "mobile": "Mobile",
+  "@mobile": {"description": "Mobile sign-in type label"},
+
+  "enterSocaLocaId": "Enter SocaLoca ID",
+  "@enterSocaLocaId": {"description": "SocaLoca ID field hint"},
+
+  "enterMobileNumber": "Enter Mobile Number",
+  "@enterMobileNumber": {"description": "Mobile field hint"},
+
+  "sendResetLink": "SEND RESET LINK",
+  "@sendResetLink": {"description": "Send reset link button for club path"},
+
+  "myGallery": "My Gallery",
+  "@myGallery": {"description": "My gallery menu item"},
+
+  "fas": "FAs",
+  "@fas": {"description": "Football Associations label"},
+
+  "confederations": "Confederations",
+  "@confederations": {"description": "Confederations section label"},
+
+  "sponsors": "Sponsors",
+  "@sponsors": {"description": "Sponsors section label"},
+
+  "charitiesAndNgos": "Charities & NGOs",
+  "@charitiesAndNgos": {"description": "Charities and NGOs section label"},
+
+  "pickup": "Pick-Up",
+  "@pickup": {"description": "Pick-up match type"},
+
+  "oneOff": "One-off",
+  "@oneOff": {"description": "One-off match type"},
+
+  "noMatchForToday": "No match for today",
+  "@noMatchForToday": {"description": "Empty today matches message"}
+}

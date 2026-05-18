@@ -58,7 +58,7 @@ class _RefereeHomeScreenState extends ConsumerState<RefereeHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const HomeAppBar(),
-      endDrawer: const HomeDrawer(),
+      endDrawer: HomeDrawer(),
       body: widget.child,
       bottomNavigationBar: _RefereeBottomNav(
         currentIndex: _currentIndex,

@@ -10,7 +10,7 @@ class TournamentModel with _$TournamentModel {
     required String name,
     String? logo,
     String? coverImage,
-    String? status,           // 'upcoming', 'ongoing', 'closed'
+    String? status, // 'upcoming', 'ongoing', 'closed'
     String? startDate,
     String? endDate,
     String? country,
@@ -19,7 +19,7 @@ class TournamentModel with _$TournamentModel {
     String? organizerName,
     @Default(0) int teamsCount,
     @Default(false) bool isFollowing,
-    String? format,           // 'league', 'cup_group', 'cup_knockout'
+    String? format, // 'league', 'cup_group', 'cup_knockout'
     String? description,
   }) = _TournamentModel;
 
@@ -55,7 +55,7 @@ class TrialModel with _$TrialModel {
     required String organizerId,
     required String organizerName,
     String? organizerLogo,
-    String? organizerType,    // 'club', 'academy', 'fa'
+    String? organizerType, // 'club', 'academy', 'fa'
     required String title,
     String? description,
     String? trialDate,

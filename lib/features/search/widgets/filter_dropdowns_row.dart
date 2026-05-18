@@ -18,13 +18,13 @@ class FilterDropdownsRow extends ConsumerWidget {
           child: _CountryDropdown(),
         ),
         const SizedBox(width: 8),
-        
+
         // By Type
         Expanded(
           child: _TypeDropdown(),
         ),
         const SizedBox(width: 8),
-        
+
         // By Choice
         Expanded(
           child: Opacity(

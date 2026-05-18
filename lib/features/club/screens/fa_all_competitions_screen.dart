@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -8,7 +9,7 @@ class FaAllCompetitionsScreen extends StatelessWidget {
   final String faName;
   final List<FaCompModel> competitions;
 
-  const FaAllCompetitionsScreen({
+  FaAllCompetitionsScreen({
     super.key,
     required this.faName,
     required this.competitions,
@@ -23,19 +24,19 @@ class FaAllCompetitionsScreen extends StatelessWidget {
         elevation: 1,
         title: Text(
           faName,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 16,
             fontWeight: FontWeight.w700,
             color: AppColors.socaBlack,
           ),
         ),
-        iconTheme: const IconThemeData(color: AppColors.socaBlack),
+        iconTheme: IconThemeData(color: AppColors.socaBlack),
       ),
       body: competitions.isEmpty
-          ? const Center(
+          ? Center(
               child: Text(
-                'No competitions found.',
+                'No competitions found.'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -46,7 +47,7 @@ class FaAllCompetitionsScreen extends StatelessWidget {
           : ListView.separated(
               padding: EdgeInsets.zero,
               itemCount: competitions.length,
-              separatorBuilder: (_, __) => const Divider(
+              separatorBuilder: (_, __) => Divider(
                 height: 1,
                 thickness: 0.8,
                 color: AppColors.socaGrey,
@@ -59,13 +60,13 @@ class FaAllCompetitionsScreen extends StatelessWidget {
   Widget _buildRow(FaCompModel comp) {
     final imageUrl = comp.fullImageUrl;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           Container(
             width: 44,
             height: 44,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.socaGrey,
             ),
@@ -74,24 +75,24 @@ class FaAllCompetitionsScreen extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const Icon(
+                      errorWidget: (_, __, ___) => Icon(
                         Icons.emoji_events,
                         size: 24,
                         color: AppColors.socaBlack,
                       ),
                     )
-                  : const Icon(
+                  : Icon(
                       Icons.emoji_events,
                       size: 24,
                       color: AppColors.socaBlack,
                     ),
             ),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Text(
               comp.compName,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w600,

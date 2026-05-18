@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +38,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 ///   • Club login box (invisible by default — shown on demand by future impl)
 ///   • Privacy text scrolls with content (inside ScrollView)
 class NewLoginScreen extends ConsumerStatefulWidget {
-  const NewLoginScreen({super.key});
+  NewLoginScreen({super.key});
 
   @override
   ConsumerState<NewLoginScreen> createState() => _NewLoginScreenState();
@@ -126,11 +127,11 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
       builder: (context) => Dialog(
         child: Container(
           height: MediaQuery.of(context).size.height * 0.7,
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           child: Column(
             children: [
-              const Text(
-                'Select Country',
+              Text(
+                'Select Country'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -138,7 +139,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                   color: AppColors.socaBlack,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
                   itemCount: countries.length,
@@ -147,14 +148,14 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                     return ListTile(
                       title: Text(
                         country['name']!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                         ),
                       ),
                       trailing: Text(
                         country['code']!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -418,12 +419,12 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
 
   // ─── UI helpers ──────────────────────────────────────────────────────────
 
-  static const Color _black = AppColors.socaBlack;
-  static const Color _yellow = AppColors.socaYellow;
-  static const Color _pageBg = AppColors.socaPageBg;
-  static const Color _inputFill = AppColors.socaGrey;
+  static Color _black = AppColors.socaBlack;
+  static Color _yellow = AppColors.socaYellow;
+  static Color _pageBg = AppColors.socaPageBg;
+  static Color _inputFill = AppColors.socaGrey;
 
-  static const String _privacyText =
+  static String _privacyText =
       '*SocaLoca only collects the data is necessary to provides its service and\n'
       'stores it in the anonymised way in our own self-hosted analytics system.';
 
@@ -432,7 +433,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
         color: _inputFill,
         borderRadius: BorderRadius.circular(2),
         border: Border.all(color: Colors.black, width: 0.8),
-        boxShadow: const [BoxShadow(color: Color(0x22000000), blurRadius: 8)],
+        boxShadow: [BoxShadow(color: Color(0x22000000), blurRadius: 8)],
       );
 
   // ─── Build ───────────────────────────────────────────────────────────────
@@ -440,7 +441,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
+      value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
       ),
@@ -449,12 +450,12 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
         // No AppBar — matches Android (LoginActivity has no action bar)
         body: SafeArea(
           child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
+            physics: ClampingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // ── Logo ────────────────────────────────────────────────
-                const SizedBox(height: 50),
+                SizedBox(height: 50),
                 Center(
                   child: SvgPicture.asset(
                     'assets/icons/socaloca_logo.svg',
@@ -466,13 +467,13 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
 
                 // ── Form content — 40dp horizontal padding ───────────────
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  padding: EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // "Login" title
-                      const Text(
-                        'Login',
+                      Text(
+                        'Login'.tr,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -483,10 +484,10 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                       ),
 
                       // ── Mobile/Email/SocaLoca ID input box ───────────────
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30),
                       SocaLocaMobileEmailField(
                         controller: _identityCtrl,
-                        hintText: 'Mobile number */Email */SocaLoca ID *',
+                        hintText: 'Mobile number */Email */SocaLoca ID *'.tr,
                         onChanged: _onIdentityChanged,
                         showCountryCode: _showCountryCode,
                         countryCode: _selectedCountryCode,
@@ -494,20 +495,20 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                       ),
 
                       // ── Password input box ───────────────────────────────
-                      const SizedBox(height: 15),
+                      SizedBox(height: 15),
                       SocaLocaPasswordField(
                         controller: _passCtrl,
-                        hintText: 'Password',
+                        hintText: 'Password'.tr,
                         textInputAction: TextInputAction.go,
                       ),
 
                       // ── Mandatory fields + Forgotten Password ────────────
-                      const SizedBox(height: 5),
+                      SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            '* mandatory fields',
+                          Text(
+                            '* mandatory fields'.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
@@ -518,8 +519,8 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                           GestureDetector(
                             onTap: () => context.push(AppRoutes.forgotPassword,
                                 extra: false),
-                            child: const Text(
-                              'Forgotten Password?',
+                            child: Text(
+                              'Forgotten Password?'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
@@ -532,8 +533,8 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                       ),
 
                       // ── Light-bulb SocaLoca ID hint ──────────────────────
-                      const SizedBox(height: 5),
-                      const Row(
+                      SizedBox(height: 5),
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(Icons.lightbulb_outline,
@@ -541,7 +542,8 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                           SizedBox(width: 2),
                           Expanded(
                             child: Text(
-                              'Find your new SocaLoca ID in the sliding hamburger menu',
+                              'Find your new SocaLoca ID in the sliding hamburger menu'
+                                  .tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
@@ -554,7 +556,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                       ),
 
                       // ── LOG IN button ────────────────────────────────────
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30),
                       GestureDetector(
                         onTap: _isLoading ? null : _login,
                         child: Container(
@@ -565,9 +567,9 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: _isLoading
-                              ? const AppLoader(size: 24, centered: false)
-                              : const Text(
-                                  'LOG IN',
+                              ? AppLoader(size: 24, centered: false)
+                              : Text(
+                                  'LOG IN'.tr,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -579,16 +581,16 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                       ),
 
                       // ── "or continue with" divider ───────────────────────
-                      const SizedBox(height: 25),
+                      SizedBox(height: 25),
                       Stack(
                         alignment: Alignment.center,
                         children: [
                           Container(height: 0.5, color: _black),
                           Container(
                             color: _pageBg,
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: const Text(
-                              'or continue with',
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              'or continue with'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
@@ -601,7 +603,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                       ),
 
                       // ── Social buttons — Facebook (left) Google (right) ──
-                      const SizedBox(height: 25),
+                      SizedBox(height: 25),
                       Row(
                         children: [
                           // Facebook button
@@ -617,7 +619,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 20),
+                          SizedBox(width: 20),
                           // Google button
                           Expanded(
                             child: GestureDetector(
@@ -637,23 +639,23 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                       // ── Club login box (invisible by default) ────────────
                       // Mirrors loginAsClub — android:visibility="invisible"
                       // Shown in future when club flow is integrated
-                      const SizedBox(height: 40),
+                      SizedBox(height: 40),
                       Visibility(
                         visible: false,
                         maintainSize: true,
                         maintainAnimation: true,
                         maintainState: true,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          padding: EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
                             color: _inputFill,
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: Colors.black, width: 0.8),
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Text(
-                                'Are you a Professional Football Club?',
+                                'Are you a Professional Football Club?'.tr,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -663,7 +665,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                                 ),
                               ),
                               Text(
-                                'Login/Signup here',
+                                'Login/Signup here'.tr,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -678,8 +680,8 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                       ),
 
                       // ── Privacy text (scrolls with content) ─────────────
-                      const SizedBox(height: 20),
-                      const Padding(
+                      SizedBox(height: 20),
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 0),
                         child: Text(
                           _privacyText,
@@ -691,7 +693,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),

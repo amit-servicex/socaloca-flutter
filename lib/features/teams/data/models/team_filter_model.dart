@@ -36,4 +36,3 @@ class TeamFilterModel {
       ageRange.isNotEmpty ||
       ageCategory.isNotEmpty;
 }
-

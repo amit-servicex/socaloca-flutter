@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,7 +15,7 @@ class PlayerPostsSection extends StatelessWidget {
   final List<PlayerPostModel> posts;
   final bool isLoadingPosts;
 
-  const PlayerPostsSection({
+  PlayerPostsSection({
     super.key,
     required this.posts,
     required this.isLoadingPosts,
@@ -39,11 +40,11 @@ class PlayerPostsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingPosts) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     if (posts.isEmpty) {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
 
     return Column(
@@ -55,7 +56,7 @@ class PlayerPostsSection extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.socaGrey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(8),
@@ -75,7 +76,7 @@ class PlayerPostsSection extends StatelessWidget {
                       },
                       child: Container(
                         width: 120,
-                        margin: const EdgeInsets.only(right: 12),
+                        margin: EdgeInsets.only(right: 12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: AppColors.socaGrey.withOpacity(0.2),
@@ -89,9 +90,8 @@ class PlayerPostsSection extends StatelessWidget {
                                 CachedNetworkImage(
                                   imageUrl: ApiConstants.getImageUrl(mediaUrl),
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) => const AppLoader(),
-                                  errorWidget: (context, url, error) =>
-                                      const Center(
+                                  placeholder: (context, url) => AppLoader(),
+                                  errorWidget: (context, url, error) => Center(
                                     child: Icon(
                                       Icons.image,
                                       color: AppColors.socaGrey,
@@ -100,7 +100,7 @@ class PlayerPostsSection extends StatelessWidget {
                                   ),
                                 )
                               else
-                                const Center(
+                                Center(
                                   child: Icon(
                                     Icons.article,
                                     color: AppColors.socaGrey,
@@ -114,7 +114,7 @@ class PlayerPostsSection extends StatelessWidget {
                                 left: 0,
                                 right: 0,
                                 child: Container(
-                                  padding: const EdgeInsets.all(6),
+                                  padding: EdgeInsets.all(6),
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       begin: Alignment.bottomCenter,
@@ -131,15 +131,15 @@ class PlayerPostsSection extends StatelessWidget {
                                     children: [
                                       Row(
                                         children: [
-                                          const Icon(
+                                          Icon(
                                             Icons.favorite,
                                             color: Colors.white,
                                             size: 12,
                                           ),
-                                          const SizedBox(width: 2),
+                                          SizedBox(width: 2),
                                           Text(
                                             '${post.likeCount ?? 0}',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 10,
                                               color: Colors.white,
@@ -149,15 +149,15 @@ class PlayerPostsSection extends StatelessWidget {
                                       ),
                                       Row(
                                         children: [
-                                          const Icon(
+                                          Icon(
                                             Icons.comment,
                                             color: Colors.white,
                                             size: 12,
                                           ),
-                                          const SizedBox(width: 2),
+                                          SizedBox(width: 2),
                                           Text(
                                             '${post.commentCount ?? 0}',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 10,
                                               color: Colors.white,
@@ -187,14 +187,14 @@ class PlayerPostsSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.socaBlack,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Text(
-                        'TOP POSTS',
+                      child: Text(
+                        'TOP POSTS'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -208,8 +208,8 @@ class PlayerPostsSection extends StatelessWidget {
                         onTap: () {
                           // TODO: Navigate to all posts
                         },
-                        child: const Text(
-                          'view all',
+                        child: Text(
+                          'view all'.tr,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,

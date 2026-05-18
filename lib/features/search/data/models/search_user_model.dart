@@ -33,7 +33,7 @@ class SearchUserModel with _$SearchUserModel {
 /// Extension for computed properties
 extension SearchUserModelX on SearchUserModel {
   String get fullName => '$firstName $lastName'.trim();
-  
+
   String get userType {
     if (isPlayer) return 'Player';
     if (isCoach) return 'Coach';

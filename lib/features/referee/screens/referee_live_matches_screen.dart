@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,7 +10,7 @@ import '../widgets/referee_shared_widgets.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeLiveMatchesScreen extends ConsumerStatefulWidget {
-  const RefereeLiveMatchesScreen({super.key});
+  RefereeLiveMatchesScreen({super.key});
 
   @override
   ConsumerState<RefereeLiveMatchesScreen> createState() =>
@@ -43,32 +44,30 @@ class _RefereeLiveMatchesScreenState
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+          padding: EdgeInsets.fromLTRB(12, 12, 12, 4),
           child: dropdownAsync.when(
             data: (items) => RefereeTournamentDropdown(
               items: items,
               selectedId: selectedTmnt,
               onChanged: _onTournamentChanged,
             ),
-            loading: () => const RefereeDropdownLoading(),
-            error: (_, __) => const SizedBox.shrink(),
+            loading: () => RefereeDropdownLoading(),
+            error: (_, __) => SizedBox.shrink(),
           ),
         ),
         Expanded(
           child: matchesState.when(
-            loading: () => const AppLoader(),
+            loading: () => AppLoader(),
             error: (e, _) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline,
-                      size: 48, color: AppColors.error),
-                  const SizedBox(height: 12),
+                  Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                  SizedBox(height: 12),
                   Text(e.toString(),
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontFamily: 'Poppins', fontSize: 13)),
-                  const SizedBox(height: 12),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                  SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () =>
                         ref.read(refereeLiveMatchesProvider.notifier).load(
@@ -77,19 +76,19 @@ class _RefereeLiveMatchesScreenState
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.socaBlack,
                         foregroundColor: AppColors.socaYellow),
-                    child: const Text('Retry',
+                    child: Text('Retry'.tr,
                         style: TextStyle(fontFamily: 'Poppins')),
                   ),
                 ],
               ),
             ),
             data: (matches) => matches.isEmpty
-                ? const RefereeEmptyState(
+                ? RefereeEmptyState(
                     message: 'No live matches right now',
                     icon: Icons.live_tv_outlined,
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(12),
                     itemCount: matches.length,
                     itemBuilder: (ctx, i) => _LiveMatchCard(
                       match: matches[i],
@@ -111,7 +110,7 @@ class _RefereeLiveMatchesScreenState
 }
 
 class _LiveMatchCard extends StatelessWidget {
-  const _LiveMatchCard({
+  _LiveMatchCard({
     required this.match,
     required this.onViewDetails,
     required this.onUpdate,
@@ -124,13 +123,12 @@ class _LiveMatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final minute = match.currentMinute;
-    final hasScore =
-        match.teamAScore != null && match.teamBScore != null;
+    final hasScore = match.teamAScore != null && match.teamBScore != null;
 
     return GestureDetector(
       onTap: onViewDetails,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -139,12 +137,12 @@ class _LiveMatchCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 4,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -154,7 +152,7 @@ class _LiveMatchCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       '${match.tournamentName ?? ''}${match.roundName != null ? ' — ${match.roundName}' : ''}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
@@ -162,11 +160,11 @@ class _LiveMatchCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   _LiveBadge(minute: minute),
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               // Score row
               Row(
@@ -176,7 +174,7 @@ class _LiveMatchCard extends StatelessWidget {
                     child: Text(
                       match.teamA ?? '',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -184,12 +182,12 @@ class _LiveMatchCard extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
                       hasScore
                           ? '${match.teamAScore} - ${match.teamBScore}'
                           : 'vs',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w800,
                           fontSize: 22,
@@ -200,7 +198,7 @@ class _LiveMatchCard extends StatelessWidget {
                     child: Text(
                       match.teamB ?? '',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -209,7 +207,7 @@ class _LiveMatchCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
 
               // Meta info chips
               Wrap(
@@ -227,12 +225,12 @@ class _LiveMatchCard extends StatelessWidget {
                         icon: Icons.location_on, text: match.venue!),
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               // Referee roles row
               if (_hasRefereeInfo(match)) ...[
                 _RefereeRolesRow(match: match),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
               ],
 
               // UPDATE MATCH button
@@ -240,9 +238,9 @@ class _LiveMatchCard extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: onUpdate,
-                  icon: const Icon(Icons.edit, size: 16),
-                  label: const Text(
-                    'UPDATE MATCH',
+                  icon: Icon(Icons.edit, size: 16),
+                  label: Text(
+                    'UPDATE MATCH'.tr,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -251,7 +249,7 @@ class _LiveMatchCard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6)),
                   ),
@@ -272,7 +270,7 @@ class _LiveMatchCard extends StatelessWidget {
 }
 
 class _LiveBadge extends StatefulWidget {
-  const _LiveBadge({this.minute});
+  _LiveBadge({this.minute});
   final String? minute;
 
   @override
@@ -289,7 +287,7 @@ class _LiveBadgeState extends State<_LiveBadge>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: Duration(milliseconds: 900),
     )..repeat(reverse: true);
     _opacity = Tween<double>(begin: 0.4, end: 1.0).animate(_controller);
   }
@@ -305,7 +303,7 @@ class _LiveBadgeState extends State<_LiveBadge>
     return FadeTransition(
       opacity: _opacity,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(4),
@@ -313,13 +311,13 @@ class _LiveBadgeState extends State<_LiveBadge>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.circle, size: 7, color: Colors.white),
-            const SizedBox(width: 4),
+            Icon(Icons.circle, size: 7, color: Colors.white),
+            SizedBox(width: 4),
             Text(
               widget.minute != null && widget.minute!.isNotEmpty
                   ? "LIVE ${widget.minute}'"
                   : 'LIVE',
-              style: const TextStyle(
+              style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 10,
@@ -333,7 +331,7 @@ class _LiveBadgeState extends State<_LiveBadge>
 }
 
 class _RefereeRolesRow extends StatelessWidget {
-  const _RefereeRolesRow({required this.match});
+  _RefereeRolesRow({required this.match});
   final RefereeMatchModel match;
 
   @override
@@ -342,8 +340,7 @@ class _RefereeRolesRow extends StatelessWidget {
       spacing: 10,
       runSpacing: 4,
       children: [
-        if (match.mainRef?.isNotEmpty == true)
-          _roleChip('REF', match.mainRef!),
+        if (match.mainRef?.isNotEmpty == true) _roleChip('REF', match.mainRef!),
         if (match.asstRef1?.isNotEmpty == true)
           _roleChip('AR1', match.asstRef1!),
         if (match.asstRef2?.isNotEmpty == true)
@@ -356,14 +353,14 @@ class _RefereeRolesRow extends StatelessWidget {
 
   Widget _roleChip(String role, String name) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
         color: AppColors.socaGrey,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         '$role: $name',
-        style: const TextStyle(
+        style: TextStyle(
             fontFamily: 'Lato', fontSize: 11, color: AppColors.socaBlack),
       ),
     );

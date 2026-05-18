@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,7 +13,7 @@ class ParentalSettingsScreen extends ConsumerStatefulWidget {
   final String pin;
   final bool isRegistration;
 
-  const ParentalSettingsScreen({
+  ParentalSettingsScreen({
     super.key,
     required this.consentId,
     required this.pin,
@@ -34,8 +35,8 @@ class _ParentalSettingsScreenState
   void _handleSave() {
     if (!_consentGiven) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please provide consent to continue'),
+        SnackBar(
+          content: Text('Please provide consent to continue'.tr),
         ),
       );
       return;
@@ -55,14 +56,14 @@ class _ParentalSettingsScreenState
       backgroundColor: AppColors.socaPageBg,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              const Spacer(),
+              Spacer(),
 
               // Title
-              const Text(
-                'Parental Controls',
+              Text(
+                'Parental Controls'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -72,11 +73,11 @@ class _ParentalSettingsScreenState
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 28),
+              SizedBox(height: 28),
 
               // Subtitle
-              const Text(
-                'Settings',
+              Text(
+                'Settings'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
@@ -86,7 +87,7 @@ class _ParentalSettingsScreenState
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 36),
+              SizedBox(height: 36),
 
               // Liking and Following Switch
               _buildSwitchRow(
@@ -95,7 +96,7 @@ class _ParentalSettingsScreenState
                 (value) => setState(() => _likingFollowing = value),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               // Uploading Photos & Videos Switch
               _buildSwitchRow(
@@ -104,7 +105,7 @@ class _ParentalSettingsScreenState
                 (value) => setState(() => _uploading = value),
               ),
 
-              const Spacer(),
+              Spacer(),
 
               // Consent Checkbox
               Row(
@@ -117,9 +118,10 @@ class _ParentalSettingsScreenState
                     activeColor: AppColors.socaBlack,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'I consent that I am setting the parental controls on behalf of a child and will take full control of this SOCALOCA account',
+                      'I consent that I am setting the parental controls on behalf of a child and will take full control of this SOCALOCA account'
+                          .tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -132,7 +134,7 @@ class _ParentalSettingsScreenState
                 ],
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Save Button
               InkWell(
@@ -144,9 +146,9 @@ class _ParentalSettingsScreenState
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      'SAVE AND CONTINUE',
+                      'SAVE AND CONTINUE'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -158,14 +160,14 @@ class _ParentalSettingsScreenState
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // Modify PIN Button (only show if not registration)
               if (!widget.isRegistration)
                 TextButton(
                   onPressed: () {},
-                  child: const Text(
-                    'Modify pin',
+                  child: Text(
+                    'Modify pin'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -174,7 +176,7 @@ class _ParentalSettingsScreenState
                   ),
                 ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -195,11 +197,11 @@ class _ParentalSettingsScreenState
           activeThumbColor: AppColors.socaYellow,
           activeTrackColor: AppColors.socaYellow.withValues(alpha: 0.5),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 18,

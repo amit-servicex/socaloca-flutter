@@ -13,8 +13,8 @@ class NotificationModel with _$NotificationModel {
     String? senderId,
     String? senderName,
     String? senderImage,
-    String? referenceId,      // matchId, teamId, tournamentId, etc.
-    String? referenceType,    // 'match', 'team', 'tournament', 'social'
+    String? referenceId, // matchId, teamId, tournamentId, etc.
+    String? referenceType, // 'match', 'team', 'tournament', 'social'
     @Default(false) bool isRead,
     String? createdAt,
     Map<String, dynamic>? data,

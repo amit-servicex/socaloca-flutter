@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,7 +10,7 @@ import '../widgets/referee_shared_widgets.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyMatchesScreen extends ConsumerStatefulWidget {
-  const RefereeMyMatchesScreen({super.key});
+  RefereeMyMatchesScreen({super.key});
 
   @override
   ConsumerState<RefereeMyMatchesScreen> createState() =>
@@ -43,32 +44,30 @@ class _RefereeMyMatchesScreenState
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+          padding: EdgeInsets.fromLTRB(12, 12, 12, 4),
           child: dropdownAsync.when(
             data: (items) => RefereeTournamentDropdown(
               items: items,
               selectedId: selectedTmnt,
               onChanged: _onTournamentChanged,
             ),
-            loading: () => const RefereeDropdownLoading(),
-            error: (_, __) => const SizedBox.shrink(),
+            loading: () => RefereeDropdownLoading(),
+            error: (_, __) => SizedBox.shrink(),
           ),
         ),
         Expanded(
           child: matchesState.when(
-            loading: () => const AppLoader(),
+            loading: () => AppLoader(),
             error: (e, _) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline,
-                      size: 48, color: AppColors.error),
-                  const SizedBox(height: 12),
+                  Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                  SizedBox(height: 12),
                   Text(e.toString(),
                       textAlign: TextAlign.center,
-                      style:
-                          const TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-                  const SizedBox(height: 12),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                  SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () =>
                         ref.read(refereeMatchesProvider.notifier).load(
@@ -77,19 +76,19 @@ class _RefereeMyMatchesScreenState
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.socaBlack,
                         foregroundColor: AppColors.socaYellow),
-                    child: const Text('Retry',
+                    child: Text('Retry'.tr,
                         style: TextStyle(fontFamily: 'Poppins')),
                   ),
                 ],
               ),
             ),
             data: (matches) => matches.isEmpty
-                ? const RefereeEmptyState(
+                ? RefereeEmptyState(
                     message: 'No accepted matches yet',
                     icon: Icons.sports_soccer_outlined,
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(12),
                     itemCount: matches.length,
                     itemBuilder: (ctx, i) => _MatchCard(
                       match: matches[i],
@@ -107,7 +106,7 @@ class _RefereeMyMatchesScreenState
 }
 
 class _MatchCard extends StatelessWidget {
-  const _MatchCard({required this.match, required this.onTap});
+  _MatchCard({required this.match, required this.onTap});
 
   final RefereeMatchModel match;
   final VoidCallback onTap;
@@ -121,24 +120,24 @@ class _MatchCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isLive ? AppColors.socaYellow : const Color(0xFFE0E0E0),
+            color: isLive ? AppColors.socaYellow : Color(0xFFE0E0E0),
             width: isLive ? 1.5 : 1,
           ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 4,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -148,7 +147,7 @@ class _MatchCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       '${match.tournamentName ?? ''}${match.roundName != null ? ' — ${match.roundName}' : ''}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
@@ -158,13 +157,12 @@ class _MatchCard extends StatelessWidget {
                   ),
                   if (isLive)
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text('LIVE',
+                      child: Text('LIVE'.tr,
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -172,11 +170,10 @@ class _MatchCard extends StatelessWidget {
                               color: Colors.white)),
                     )
                   else if (scoreSubmitted)
-                    const Icon(Icons.check_circle,
-                        color: Colors.green, size: 18),
+                    Icon(Icons.check_circle, color: Colors.green, size: 18),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               // Score row
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -185,7 +182,7 @@ class _MatchCard extends StatelessWidget {
                     child: Text(
                       match.teamA ?? '',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -193,7 +190,7 @@ class _MatchCard extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       (isLive || isCompleted) &&
                               match.teamAScore != null &&
@@ -211,7 +208,7 @@ class _MatchCard extends StatelessWidget {
                     child: Text(
                       match.teamB ?? '',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -220,7 +217,7 @@ class _MatchCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Wrap(
                 spacing: 12,
                 runSpacing: 4,
@@ -233,20 +230,19 @@ class _MatchCard extends StatelessWidget {
                     _infoChip(Icons.location_on, match.venue!),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               // Manage button
               Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     isCompleted ? 'VIEW DETAILS' : 'MANAGE MATCH',
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 10,
@@ -266,9 +262,9 @@ class _MatchCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 12, color: Colors.grey),
-        const SizedBox(width: 3),
+        SizedBox(width: 3),
         Text(text,
-            style: const TextStyle(
+            style: TextStyle(
                 fontFamily: 'Lato', fontSize: 12, color: Colors.grey)),
       ],
     );

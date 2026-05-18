@@ -45,7 +45,8 @@ class AcademiesState {
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       error: error,
       selectedCountry: selectedCountry ?? this.selectedCountry,
-      selectedConfederation: selectedConfederation ?? this.selectedConfederation,
+      selectedConfederation:
+          selectedConfederation ?? this.selectedConfederation,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       start: start ?? this.start,
       hasMore: hasMore ?? this.hasMore,

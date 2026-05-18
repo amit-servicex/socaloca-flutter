@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 // TODO: Implement LiveMatchScreen
 // See flutter_migration_docs/screens/ for full spec
 class LiveMatchScreen extends StatelessWidget {
-  const LiveMatchScreen({super.key});
+  LiveMatchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('LiveMatch')),
-      body: const Center(child: Text('TODO: Implement LiveMatch')),
+      appBar: AppBar(title: Text('LiveMatch'.tr)),
+      body: Center(child: Text('TODO: Implement LiveMatch'.tr)),
     );
   }
 }

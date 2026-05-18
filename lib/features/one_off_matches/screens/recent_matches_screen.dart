@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -8,7 +9,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Full list of recent matches with pagination
 class RecentMatchesScreen extends ConsumerStatefulWidget {
-  const RecentMatchesScreen({super.key});
+  RecentMatchesScreen({super.key});
 
   @override
   ConsumerState<RecentMatchesScreen> createState() =>
@@ -44,8 +45,8 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text(
-          'Recent Matches',
+        title: Text(
+          'Recent Matches'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -55,14 +56,14 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.socaBlack),
+        iconTheme: IconThemeData(color: AppColors.socaBlack),
       ),
       body: matchesState.when(
         data: (matches) {
           if (matches.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                'No recent matches',
+                'No recent matches'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
@@ -81,13 +82,13 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
             },
             child: ListView.builder(
               controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
               itemCount: matches.length + 1,
               itemBuilder: (context, index) {
                 if (index == matches.length) {
-                  return const Padding(
+                  return Padding(
                     padding: EdgeInsets.all(16),
-                    child: const AppLoader(),
+                    child: AppLoader(),
                   );
                 }
 
@@ -102,13 +103,13 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
             ),
           );
         },
-        loading: () => const AppLoader(),
+        loading: () => AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Error loading matches',
+              Text(
+                'Error loading matches'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
@@ -116,7 +117,7 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
                   color: Colors.red,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   ref.read(recentMatchesPaginationProvider.notifier).refresh();
@@ -124,8 +125,8 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaYellow,
                 ),
-                child: const Text(
-                  'Retry',
+                child: Text(
+                  'Retry'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,

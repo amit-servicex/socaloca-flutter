@@ -50,7 +50,8 @@ class ClubsNotifier extends StateNotifier<ClubsState> {
   ClubsNotifier(this._ref) : super(const ClubsState());
 
   final Ref _ref;
-  static const int _pageSize = 100; // Match Android pagination size (changed from 10)
+  static const int _pageSize =
+      100; // Match Android pagination size (changed from 10)
 
   /// Load initial clubs list
   Future<void> load() async {

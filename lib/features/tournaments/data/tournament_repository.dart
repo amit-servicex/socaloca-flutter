@@ -40,12 +40,12 @@ class TournamentRepository {
       // Send exactly what Android sends — all fields always present
       final body = <String, dynamic>{
         'userId': userId,
-        'status': status,          // INTEGER: 1, 2, or 3
-        'visibility': visibility,  // 'local' or 'global'
-        'ownCountry': ownCountry,  // user's own country — required
-        'country': country,        // filter country (empty string = all)
-        'confed': confed,          // confederation filter
-        'location': location,      // location text search
+        'status': status, // INTEGER: 1, 2, or 3
+        'visibility': visibility, // 'local' or 'global'
+        'ownCountry': ownCountry, // user's own country — required
+        'country': country, // filter country (empty string = all)
+        'confed': confed, // confederation filter
+        'location': location, // location text search
         'gender': gender.toLowerCase(),
         'ageGroup': ageGroup,
         'gameType': gameType,
@@ -373,8 +373,7 @@ class TournamentRepository {
       if (statsData == null) return [];
 
       return statsData
-          .map((json) =>
-              PlayerStatEntry.fromJson(json as Map<String, dynamic>))
+          .map((json) => PlayerStatEntry.fromJson(json as Map<String, dynamic>))
           .toList();
     } on ApiException catch (e) {
       log('Error getting tournament stats: ${e.message}');

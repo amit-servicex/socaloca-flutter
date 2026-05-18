@@ -5,6 +5,7 @@ import 'package:socaloca/features/club/data/models/club_player_model.dart';
 
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/storage/storage_service.dart';
 import '../models/club_bio_model.dart';
 import '../models/club_model.dart';
 
@@ -318,6 +319,8 @@ class ClubRepository {
 
   /// allClubTrials — paginated platform-wide trials with filters.
   Future<List<Map<String, dynamic>>> allClubTrials({
+    String? userId,
+    String country = '',
     String countryName = '',
     String fromAge = '',
     String toAge = '',
@@ -325,12 +328,44 @@ class ClubRepository {
     int limit = 10,
   }) async {
     try {
+      final resolvedUserId = userId ?? StorageService.userId ?? '';
       final response = await ApiClient.instance.post(
         ApiConstants.allClubTrials,
         body: {
-          'countryName': countryName,
-          'fromAge': fromAge,
-          'toAge': toAge,
+          'userId': resolvedUserId,
+          'country': country.isNotEmpty ? country : countryName,
+          'ageFrom': fromAge,
+          'ageTo': toAge,
+          'start': start,
+          'limit': limit,
+        },
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final raw = data['trials'] as List? ?? [];
+      return raw.cast<Map<String, dynamic>>();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// allAcademyTrials — paginated platform-wide academy trials with filters.
+  Future<List<Map<String, dynamic>>> allAcademyTrials({
+    String? userId,
+    String country = '',
+    String fromAge = '',
+    String toAge = '',
+    int start = 0,
+    int limit = 10,
+  }) async {
+    try {
+      final resolvedUserId = userId ?? StorageService.userId ?? '';
+      final response = await ApiClient.instance.post(
+        ApiConstants.allAcademyTrials,
+        body: {
+          'userId': resolvedUserId,
+          'country': country,
+          'ageFrom': fromAge,
+          'ageTo': toAge,
           'start': start,
           'limit': limit,
         },
@@ -347,11 +382,57 @@ class ClubRepository {
   Future<bool> trialRegisterByTrialId({
     required String trialId,
     required String email,
+    String? clubId,
+    String? clubName,
+    String? clubEmail,
+    String? userId,
+    String? myName,
   }) async {
     try {
+      final user = StorageService.currentUser ?? {};
       final response = await ApiClient.instance.post(
         ApiConstants.trialRegister,
-        body: {'trialId': trialId, 'email': email},
+        body: {
+          'userId': userId ?? StorageService.userId ?? '',
+          'clubId': clubId ?? '',
+          'trialId': trialId,
+          'clubName': clubName ?? '',
+          'myName': myName ??
+              '${user['firstName'] ?? ''} ${user['lastName'] ?? ''}'.trim(),
+          'email': email,
+          'clubEmail': clubEmail ?? '',
+        },
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      return (data['status'] == 1 || data['success'] == true);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> academyTrialRegisterByTrialId({
+    required String trialId,
+    required String email,
+    String? academyId,
+    String? academyName,
+    String? academyEmail,
+    String? userId,
+    String? myName,
+  }) async {
+    try {
+      final user = StorageService.currentUser ?? {};
+      final response = await ApiClient.instance.post(
+        ApiConstants.acaTrialRegister,
+        body: {
+          'userId': userId ?? StorageService.userId ?? '',
+          'academyId': academyId ?? '',
+          'trialId': trialId,
+          'academyName': academyName ?? '',
+          'myName': myName ??
+              '${user['firstName'] ?? ''} ${user['lastName'] ?? ''}'.trim(),
+          'email': email,
+          'academyEmail': academyEmail ?? '',
+        },
       );
       final data = response['response'] as Map<String, dynamic>? ?? response;
       return (data['status'] == 1 || data['success'] == true);

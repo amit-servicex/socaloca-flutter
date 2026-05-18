@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,7 @@ class PinSetupScreen extends ConsumerStatefulWidget {
   final String consentId;
   final bool isRegistration;
 
-  const PinSetupScreen({
+  PinSetupScreen({
     super.key,
     required this.consentId,
     this.isRegistration = true,
@@ -105,16 +106,16 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
       backgroundColor: AppColors.socaPageBg,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Spacer(),
+              Spacer(),
 
               // Title
-              const Center(
+              Center(
                 child: Text(
-                  'Parental Controls',
+                  'Parental Controls'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -125,12 +126,12 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                 ),
               ),
 
-              const Spacer(),
+              Spacer(),
 
               // Subtitle
-              const Center(
+              Center(
                 child: Text(
-                  'Set Your PIN',
+                  'Set Your PIN'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
@@ -140,7 +141,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                 ),
               ),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
 
               // PIN Input Boxes
               Row(
@@ -149,7 +150,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                   return Container(
                     width: 72,
                     height: 72,
-                    margin: const EdgeInsets.symmetric(horizontal: 6),
+                    margin: EdgeInsets.symmetric(horizontal: 6),
                     child: TextField(
                       controller: _pinControllers[index],
                       focusNode: _focusNodes[index],
@@ -157,7 +158,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                       keyboardType: TextInputType.number,
                       obscureText: true,
                       maxLength: 1,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
@@ -169,21 +170,21 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                             color: AppColors.socaBlack,
                             width: 2,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                             color: AppColors.socaBlack,
                             width: 2,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                             color: AppColors.socaYellow,
                             width: 2.5,
                           ),
@@ -205,15 +206,15 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                 }).toList(),
               ),
 
-              const Spacer(),
+              Spacer(),
 
               // Forgot PIN (only show if not registration)
               if (!widget.isRegistration)
                 Center(
                   child: TextButton(
                     onPressed: () {},
-                    child: const Text(
-                      'Forget pin?',
+                    child: Text(
+                      'Forget pin?'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -234,9 +235,9 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      'SAVE AND CONTINUE',
+                      'SAVE AND CONTINUE'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -248,11 +249,12 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                 ),
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // Info Text
-              const Text(
-                '*Please note you can modify the pin from the "Parentals Control" in the hamburger menu, located at the top right of SOCALOCA app.',
+              Text(
+                '*Please note you can modify the pin from the "Parentals Control" in the hamburger menu, located at the top right of SOCALOCA app.'
+                    .tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
@@ -261,7 +263,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
             ],
           ),
         ),

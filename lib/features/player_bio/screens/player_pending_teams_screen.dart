@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +11,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class PlayerPendingTeamsScreen extends ConsumerStatefulWidget {
   final String playerId;
 
-  const PlayerPendingTeamsScreen({super.key, required this.playerId});
+  PlayerPendingTeamsScreen({super.key, required this.playerId});
 
   @override
   ConsumerState<PlayerPendingTeamsScreen> createState() =>
@@ -36,8 +37,7 @@ class _PlayerPendingTeamsScreenState
     });
     try {
       final repo = ref.read(playerBioRepositoryProvider);
-      final teams =
-          await repo.getPlayerPendingTeams(playerId: widget.playerId);
+      final teams = await repo.getPlayerPendingTeams(playerId: widget.playerId);
       if (mounted) {
         setState(() {
           _teams = teams;
@@ -55,8 +55,7 @@ class _PlayerPendingTeamsScreenState
   }
 
   Future<void> _cancel(Map<String, dynamic> team, int index) async {
-    final teamId =
-        team['teamId'] as String? ?? team['_id'] as String? ?? '';
+    final teamId = team['teamId'] as String? ?? team['_id'] as String? ?? '';
     if (teamId.isEmpty) return;
 
     try {
@@ -68,8 +67,8 @@ class _PlayerPendingTeamsScreenState
       if (success && mounted) {
         setState(() => _teams.removeAt(index));
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Request cancelled.',
+          SnackBar(
+            content: Text('Request cancelled.'.tr,
                 style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.green,
           ),
@@ -79,8 +78,7 @@ class _PlayerPendingTeamsScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e',
-                style: const TextStyle(fontFamily: 'Poppins')),
+            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -93,29 +91,28 @@ class _PlayerPendingTeamsScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text('Pending Requests'),
+        title: Text('Pending Requests'.tr),
         backgroundColor: AppColors.socaBlack,
         foregroundColor: AppColors.socaYellow,
         elevation: 0,
       ),
       body: _isLoading
-          ? const AppLoader()
+          ? AppLoader()
           : _error != null
               ? Center(
                   child: Text('Error: $_error',
-                      style: const TextStyle(
-                          fontFamily: 'Poppins', fontSize: 14)))
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14)))
               : _teams.isEmpty
-                  ? const Center(
-                      child: Text('No pending requests.',
+                  ? Center(
+                      child: Text('No pending requests.'.tr,
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack)))
                   : ListView.separated(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12),
                       itemCount: _teams.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      separatorBuilder: (_, __) => SizedBox(height: 8),
                       itemBuilder: (context, i) {
                         final team = _teams[i];
                         final teamId = team['teamId'] as String? ??
@@ -135,13 +132,13 @@ class _PlayerPendingTeamsScreenState
                                   : null,
                               backgroundColor: AppColors.socaGrey,
                               child: imageUrl.isEmpty
-                                  ? const Icon(Icons.group,
+                                  ? Icon(Icons.group,
                                       color: AppColors.socaBlack)
                                   : null,
                             ),
                             title: Text(
                               teamName,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
@@ -150,8 +147,8 @@ class _PlayerPendingTeamsScreenState
                             ),
                             trailing: TextButton(
                               onPressed: () => _cancel(team, i),
-                              child: const Text(
-                                'Cancel',
+                              child: Text(
+                                'Cancel'.tr,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Colors.red,

@@ -7,8 +7,7 @@ final teamsRepositoryProvider = Provider<TeamsRepository>((ref) {
   return TeamsRepository();
 });
 
-final teamsProvider =
-    StateNotifierProvider<TeamsNotifier, TeamsState>((ref) {
+final teamsProvider = StateNotifierProvider<TeamsNotifier, TeamsState>((ref) {
   final repository = ref.watch(teamsRepositoryProvider);
   return TeamsNotifier(repository);
 });
@@ -171,4 +170,3 @@ class TeamsNotifier extends StateNotifier<TeamsState> {
     await search();
   }
 }
-

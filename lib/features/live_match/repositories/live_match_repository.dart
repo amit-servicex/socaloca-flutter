@@ -99,7 +99,10 @@ class LiveMatchRepository {
     final inner = _inner(response);
     if (inner['status'] != 1) return [];
     final List<dynamic> raw = inner['countries'] as List? ?? [];
-    return raw.map((e) => e?.toString() ?? '').where((s) => s.isNotEmpty).toList();
+    return raw
+        .map((e) => e?.toString() ?? '')
+        .where((s) => s.isNotEmpty)
+        .toList();
   }
 
   // ─── Live match details (all roles) ──────────────────────────────────────
@@ -130,7 +133,8 @@ class LiveMatchRepository {
     return raw;
   }
 
-  List<LiveMatchListItem> _markUniqueTournaments(List<LiveMatchListItem> items) {
+  List<LiveMatchListItem> _markUniqueTournaments(
+      List<LiveMatchListItem> items) {
     String prev = '';
     return items.map((item) {
       final isUnique = item.tournamentId != prev;

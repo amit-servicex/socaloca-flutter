@@ -151,8 +151,9 @@ class LiveMatchListItem {
 
   factory LiveMatchListItem.fromJson(Map<String, dynamic> j) {
     final teams = (j['teams'] as List?)
-        ?.map((t) => LiveMatchTeam.fromJson(t as Map<String, dynamic>))
-        .toList() ?? [];
+            ?.map((t) => LiveMatchTeam.fromJson(t as Map<String, dynamic>))
+            .toList() ??
+        [];
 
     final score = j['score'] as Map<String, dynamic>?;
 
@@ -388,12 +389,14 @@ class LiveMatchDetail {
 
     // Extract teams from matchDetails.teams array
     final teams = (matchDetails['teams'] as List?)
-        ?.map((t) => LiveMatchTeam.fromJson(t as Map<String, dynamic>))
-        .toList() ?? [];
+            ?.map((t) => LiveMatchTeam.fromJson(t as Map<String, dynamic>))
+            .toList() ??
+        [];
 
     // The first team is "my team", second is opponent
     // These are indexed by myTeamId / opponentTeamId from matchShort
-    final matchShort = matchDetails['matchShort'] as Map<String, dynamic>? ?? {};
+    final matchShort =
+        matchDetails['matchShort'] as Map<String, dynamic>? ?? {};
     final myTeamId = matchShort['myTeamId']?.toString();
     final opponentTeamId = matchShort['opponentTeamId']?.toString();
 
@@ -413,22 +416,26 @@ class LiveMatchDetail {
     List<LiveGoalEvent> parseGoals(dynamic arr) =>
         (arr as List?)
             ?.map((e) => LiveGoalEvent.fromJson(e as Map<String, dynamic>))
-            .toList() ?? [];
+            .toList() ??
+        [];
 
     List<LiveCardEvent> parseCards(dynamic arr) =>
         (arr as List?)
             ?.map((e) => LiveCardEvent.fromJson(e as Map<String, dynamic>))
-            .toList() ?? [];
+            .toList() ??
+        [];
 
     List<LiveSubEvent> parseSubs(dynamic arr) =>
         (arr as List?)
             ?.map((e) => LiveSubEvent.fromJson(e as Map<String, dynamic>))
-            .toList() ?? [];
+            .toList() ??
+        [];
 
     List<LivePenaltyEvent> parsePenalties(dynamic arr) =>
         (arr as List?)
             ?.map((e) => LivePenaltyEvent.fromJson(e as Map<String, dynamic>))
-            .toList() ?? [];
+            .toList() ??
+        [];
 
     return LiveMatchDetail(
       matchId: matchId,

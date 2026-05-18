@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,7 @@ import '../providers/referee_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeTournamentScreen extends StatelessWidget {
-  const RefereeTournamentScreen({super.key});
+  RefereeTournamentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class RefereeTournamentScreen extends StatelessWidget {
 }
 
 // class RefereeTournamentScreen extends ConsumerStatefulWidget {
-//   const RefereeTournamentScreen({super.key});
+//   RefereeTournamentScreen({super.key});
 
 //   @override
 //   ConsumerState<RefereeTournamentScreen> createState() =>
@@ -43,17 +44,17 @@ class RefereeTournamentScreen extends StatelessWidget {
 //     final tournamentsState = ref.watch(refereeTournamentsProvider);
 
 //     return tournamentsState.when(
-//       loading: () => const AppLoader(),
+//       loading: () => AppLoader(),
 //       error: (e, _) => Center(
 //         child: Column(
 //           mainAxisAlignment: MainAxisAlignment.center,
 //           children: [
-//             const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-//             const SizedBox(height: 12),
+//             Icon(Icons.error_outline, size: 48, color: AppColors.error),
+//             SizedBox(height: 12),
 //             Text(e.toString(),
 //                 textAlign: TextAlign.center,
-//                 style: const TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-//             const SizedBox(height: 12),
+//                 style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+//             SizedBox(height: 12),
 //             ElevatedButton(
 //               onPressed: () =>
 //                   ref.read(refereeTournamentsProvider.notifier).load(),
@@ -61,15 +62,15 @@ class RefereeTournamentScreen extends StatelessWidget {
 //                   backgroundColor: AppColors.socaBlack,
 //                   foregroundColor: AppColors.socaYellow),
 //               child:
-//                   const Text('Retry', style: TextStyle(fontFamily: 'Poppins')),
+//                   Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
 //             ),
 //           ],
 //         ),
 //       ),
 //       data: (tournaments) => tournaments.isEmpty
-//           ? const _EmptyTournaments()
+//           ? _EmptyTournaments()
 //           : ListView.builder(
-//               padding: const EdgeInsets.all(12),
+//               padding: EdgeInsets.all(12),
 //               itemCount: tournaments.length,
 //               itemBuilder: (ctx, i) => _TournamentCard(
 //                 tournament: tournaments[i],
@@ -89,11 +90,11 @@ class RefereeTournamentScreen extends StatelessWidget {
 // }
 
 // class _EmptyTournaments extends StatelessWidget {
-//   const _EmptyTournaments();
+//   _EmptyTournaments();
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return const Center(
+//     return Center(
 //       child: Column(
 //         mainAxisAlignment: MainAxisAlignment.center,
 //         children: [
@@ -112,7 +113,7 @@ class RefereeTournamentScreen extends StatelessWidget {
 // }
 
 // class _TournamentCard extends StatelessWidget {
-//   const _TournamentCard({
+//   _TournamentCard({
 //     required this.tournament,
 //     required this.onTap,
 //   });
@@ -129,24 +130,24 @@ class RefereeTournamentScreen extends StatelessWidget {
 //     return GestureDetector(
 //       onTap: onTap,
 //       child: Container(
-//         margin: const EdgeInsets.only(bottom: 12),
+//         margin: EdgeInsets.only(bottom: 12),
 //         decoration: BoxDecoration(
 //           color: Colors.white,
 //           borderRadius: BorderRadius.circular(8),
 //           border: Border.all(
-//             color: isOngoing ? AppColors.socaYellow : const Color(0xFFE0E0E0),
+//             color: isOngoing ? AppColors.socaYellow : Color(0xFFE0E0E0),
 //             width: isOngoing ? 1.5 : 1,
 //           ),
 //           boxShadow: [
 //             BoxShadow(
 //               color: Colors.black.withValues(alpha: 0.05),
 //               blurRadius: 4,
-//               offset: const Offset(0, 2),
+//               offset: Offset(0, 2),
 //             ),
 //           ],
 //         ),
 //         child: Padding(
-//           padding: const EdgeInsets.all(14),
+//           padding: EdgeInsets.all(14),
 //           child: Row(
 //             crossAxisAlignment: CrossAxisAlignment.start,
 //             children: [
@@ -157,27 +158,27 @@ class RefereeTournamentScreen extends StatelessWidget {
 //                 decoration: BoxDecoration(
 //                   shape: BoxShape.circle,
 //                   color: AppColors.socaGrey,
-//                   border: Border.all(color: const Color(0xFFE0E0E0)),
+//                   border: Border.all(color: Color(0xFFE0E0E0)),
 //                 ),
 //                 child: ClipOval(
 //                   child: imageUrl.isNotEmpty
 //                       ? CachedNetworkImage(
 //                           imageUrl: imageUrl,
 //                           fit: BoxFit.cover,
-//                           errorWidget: (_, __, ___) => const Icon(
+//                           errorWidget: (_, __, ___) => Icon(
 //                             Icons.emoji_events,
 //                             color: AppColors.socaBlack,
 //                             size: 28,
 //                           ),
 //                         )
-//                       : const Icon(
+//                       : Icon(
 //                           Icons.emoji_events,
 //                           color: AppColors.socaBlack,
 //                           size: 28,
 //                         ),
 //                 ),
 //               ),
-//               const SizedBox(width: 12),
+//               SizedBox(width: 12),
 
 //               // Info
 //               Expanded(
@@ -189,7 +190,7 @@ class RefereeTournamentScreen extends StatelessWidget {
 //                         Expanded(
 //                           child: Text(
 //                             tournament.tournamentName ?? '',
-//                             style: const TextStyle(
+//                             style: TextStyle(
 //                               fontFamily: 'Poppins',
 //                               fontWeight: FontWeight.w700,
 //                               fontSize: 14,
@@ -201,16 +202,16 @@ class RefereeTournamentScreen extends StatelessWidget {
 //                       ],
 //                     ),
 //                     if (tournament.organiserName?.isNotEmpty == true) ...[
-//                       const SizedBox(height: 3),
+//                       SizedBox(height: 3),
 //                       Text(
 //                         tournament.organiserName!,
-//                         style: const TextStyle(
+//                         style: TextStyle(
 //                             fontFamily: 'Lato',
 //                             fontSize: 12,
 //                             color: Colors.grey),
 //                       ),
 //                     ],
-//                     const SizedBox(height: 6),
+//                     SizedBox(height: 6),
 //                     Wrap(
 //                       spacing: 12,
 //                       runSpacing: 3,
@@ -227,17 +228,17 @@ class RefereeTournamentScreen extends StatelessWidget {
 //                           _infoChip(Icons.group, tournament.ageGroup!),
 //                       ],
 //                     ),
-//                     const SizedBox(height: 10),
+//                     SizedBox(height: 10),
 //                     Align(
 //                       alignment: Alignment.centerRight,
 //                       child: Container(
-//                         padding: const EdgeInsets.symmetric(
+//                         padding: EdgeInsets.symmetric(
 //                             horizontal: 12, vertical: 6),
 //                         decoration: BoxDecoration(
 //                           color: AppColors.socaBlack,
 //                           borderRadius: BorderRadius.circular(6),
 //                         ),
-//                         child: const Text(
+//                         child: Text(
 //                           'VIEW TOURNAMENT',
 //                           style: TextStyle(
 //                               fontFamily: 'Poppins',
@@ -268,9 +269,9 @@ class RefereeTournamentScreen extends StatelessWidget {
 //       mainAxisSize: MainAxisSize.min,
 //       children: [
 //         Icon(icon, size: 12, color: Colors.grey),
-//         const SizedBox(width: 3),
+//         SizedBox(width: 3),
 //         Text(text,
-//             style: const TextStyle(
+//             style: TextStyle(
 //                 fontFamily: 'Lato', fontSize: 12, color: Colors.grey)),
 //       ],
 //     );
@@ -278,12 +279,12 @@ class RefereeTournamentScreen extends StatelessWidget {
 // }
 
 // class _StatusBadge extends StatelessWidget {
-//   const _StatusBadge({required this.status});
+//   _StatusBadge({required this.status});
 //   final String status;
 
 //   @override
 //   Widget build(BuildContext context) {
-//     if (status.isEmpty) return const SizedBox.shrink();
+//     if (status.isEmpty) return SizedBox.shrink();
 
 //     Color bgColor;
 //     String label;
@@ -306,14 +307,14 @@ class RefereeTournamentScreen extends StatelessWidget {
 //     }
 
 //     return Container(
-//       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+//       padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
 //       decoration: BoxDecoration(
 //         color: bgColor,
 //         borderRadius: BorderRadius.circular(4),
 //       ),
 //       child: Text(
 //         label,
-//         style: const TextStyle(
+//         style: TextStyle(
 //             fontFamily: 'Poppins',
 //             fontWeight: FontWeight.w700,
 //             fontSize: 9,

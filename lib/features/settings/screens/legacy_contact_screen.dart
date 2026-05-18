@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/storage/storage_service.dart';
@@ -7,7 +8,7 @@ import '../../../shared/widgets/app_loader.dart';
 import '../providers/legacy_contact_provider.dart';
 
 class LegacyContactScreen extends ConsumerStatefulWidget {
-  const LegacyContactScreen({super.key});
+  LegacyContactScreen({super.key});
 
   @override
   ConsumerState<LegacyContactScreen> createState() =>
@@ -91,9 +92,9 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
     if (success) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Legacy contact saved successfully.',
+            'Legacy contact saved successfully.'.tr,
             style: TextStyle(fontFamily: 'Poppins'),
           ),
           backgroundColor: Colors.green,
@@ -101,8 +102,8 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to save. Please try again.',
+        SnackBar(
+          content: Text('Failed to save. Please try again.'.tr,
               style: TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.red,
         ),
@@ -118,16 +119,16 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       body: state.isLoading
-          ? const AppLoader()
+          ? AppLoader()
           : SafeArea(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ── Title ──────────────────────────────────────────────
-                    const Text(
-                      'Legacy Contact',
+                    Text(
+                      'Legacy Contact'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -135,10 +136,10 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                         color: AppColors.socaBlack,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     // ── Description ────────────────────────────────────────
-                    const Text(
+                    Text(
                       'Your Legacy Contact the person that you may nominate to '
                       'inherit your account should any unseen circumstances fall '
                       'upon you and you are unable to access your account.',
@@ -149,8 +150,8 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                         height: 1.6,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    const Text(
+                    SizedBox(height: 12),
+                    Text(
                       ' Nominate your legacy contact by providing their full name '
                       'and email address.',
                       style: TextStyle(
@@ -160,7 +161,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                         height: 1.6,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
                     // ── Name field ─────────────────────────────────────────
                     _FormField(
@@ -174,7 +175,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                         }
                       },
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
 
                     // ── Email field ────────────────────────────────────────
                     _FormField(
@@ -188,7 +189,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                         }
                       },
                     ),
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28),
 
                     // ── SAVE button ────────────────────────────────────────
                     SizedBox(
@@ -196,11 +197,11 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                       child: GestureDetector(
                         onTap: state.isSaving ? null : _save,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(vertical: 16),
                           color: AppColors.socaBlack,
                           alignment: Alignment.center,
                           child: state.isSaving
-                              ? const SizedBox(
+                              ? SizedBox(
                                   width: 20,
                                   height: 20,
                                   child: CircularProgressIndicator(
@@ -210,7 +211,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                                 )
                               : Text(
                                   state.hasContact ? 'UPDATE' : 'SAVE',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14,
@@ -230,7 +231,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
 }
 
 class _FormField extends StatelessWidget {
-  const _FormField({
+  _FormField({
     required this.controller,
     required this.hint,
     this.errorText,
@@ -261,30 +262,30 @@ class _FormField extends StatelessWidget {
             controller: controller,
             keyboardType: keyboardType,
             onChanged: onChanged,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
               color: AppColors.socaBlack,
             ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: Colors.grey,
               ),
               border: InputBorder.none,
               contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             ),
           ),
         ),
         if (errorText != null)
           Padding(
-            padding: const EdgeInsets.only(top: 4, left: 4),
+            padding: EdgeInsets.only(top: 4, left: 4),
             child: Text(
               errorText!,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 11,
                 color: Colors.red,

@@ -1,21 +1,47 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
+import 'package:socaloca/core/constants/app_strings.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../shared/widgets/app_snackbar.dart';
-import '../../../shared/widgets/primary_button.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
 
-/// Handles BOTH reset-password flows:
-/// - [isClubPath] = false → calls resetAllPass (user path)
-/// - [isClubPath] = true  → calls resetPass (club path)
+/// Mirrors ResetPasswordFragmentNew.
 ///
-/// See DEAD_CODE_AUDIT.md for clarification on dual-path design.
+/// Layout:
+///   • Page bg #F6F6F6, no AppBar
+///   • Logo centred
+///   • OTP field (numeric)
+///   • New Password field with * masking + eye toggle
+///   • Confirm Password field with * masking + eye toggle
+///   • "RESET" button — full-width, black bg, yellow text 22sp
+///   • "Haven't received the code? RESEND" link
+///
+/// Receives via GoRouter extras (Map<String, dynamic>):
+///   userId, signType, identifier, countryCode
+///
+/// [isClubPath] = true → club reset (token-based, no OTP).
 class ResetPasswordScreen extends ConsumerStatefulWidget {
-  const ResetPasswordScreen({super.key, required this.isClubPath});
+  ResetPasswordScreen({
+    super.key,
+    this.isClubPath = false,
+    this.userId = '',
+    this.signType = 'email',
+    this.identifier = '',
+    this.countryCode = '',
+  });
 
   final bool isClubPath;
+  final String userId;
+  final String signType;
+  final String identifier;
+  final String countryCode;
 
   @override
   ConsumerState<ResetPasswordScreen> createState() =>
@@ -23,30 +49,73 @@ class ResetPasswordScreen extends ConsumerStatefulWidget {
 }
 
 class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _tokenCtrl = TextEditingController();
+  final _otpCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   final _confirmCtrl = TextEditingController();
 
+  String? _otpError;
+  String? _passError;
+  String? _confirmError;
+
   bool _isLoading = false;
+  bool _isResending = false;
   bool _obscurePass = true;
   bool _obscureConfirm = true;
 
+  // Resend cooldown — mirrors Android (no explicit timer, but we add 60 s UX)
+  int _resendSeconds = 0;
+  Timer? _resendTimer;
+
   @override
   void dispose() {
-    _tokenCtrl.dispose();
+    _otpCtrl.dispose();
     _passCtrl.dispose();
     _confirmCtrl.dispose();
+    _resendTimer?.cancel();
     super.dispose();
   }
 
-  Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
+  // ── Validation ───────────────────────────────────────────────────────────
+  bool _validate() {
+    final otp = _otpCtrl.text.trim();
+    final pass = _passCtrl.text;
+    final confirm = _confirmCtrl.text;
 
+    String? otpErr;
+    String? passErr;
+    String? confirmErr;
+
+    if (otp.isEmpty) otpErr = 'Please enter OTP';
+
+    if (pass.isEmpty) {
+      passErr = 'Please enter a password';
+    } else if (pass.length < 6) {
+      passErr = 'Minimum 6 characters';
+    }
+
+    if (confirm.isEmpty) {
+      confirmErr = 'Please confirm password';
+    } else if (confirm != pass) {
+      confirmErr = "Password doesn't match";
+    }
+
+    setState(() {
+      _otpError = otpErr;
+      _passError = passErr;
+      _confirmError = confirmErr;
+    });
+
+    return otpErr == null && passErr == null && confirmErr == null;
+  }
+
+  // ── Reset ────────────────────────────────────────────────────────────────
+  Future<void> _reset() async {
+    if (!_validate()) return;
     setState(() => _isLoading = true);
 
     final result = await ref.read(authRepositoryProvider).resetPassword(
-          token: _tokenCtrl.text.trim(),
+          userId: widget.userId,
+          otp: _otpCtrl.text.trim(),
           password: _passCtrl.text,
           isClubPath: widget.isClubPath,
         );
@@ -56,104 +125,309 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 
     switch (result) {
       case AuthSuccess():
-        AppSnackBar.showSuccess(context, 'Password reset successfully');
-        Navigator.of(context).popUntil((r) => r.isFirst);
-
+        _showToast('Password reset successfully. Please Sign In.');
+        // Mirrors Android: Intent with FLAG_ACTIVITY_NEW_TASK | CLEAR_TASK
+        if (mounted) context.go(AppRoutes.login);
       case AuthFailure(:final error):
-        AppSnackBar.showError(context, error);
+        setState(() => _otpError = error.toLowerCase().contains('otp') ||
+                error.toLowerCase().contains('incorrect')
+            ? error
+            : null);
+        if (_otpError == null) {
+          // Non-OTP error — show as general snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error, style: TextStyle(fontFamily: 'Poppins')),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
     }
   }
 
+  // ── Resend OTP ───────────────────────────────────────────────────────────
+  Future<void> _resend() async {
+    if (_resendSeconds > 0 || _isResending) return;
+    setState(() => _isResending = true);
+
+    final result =
+        await ref.read(authRepositoryProvider).resendForgotPasswordOtp(
+              signType: widget.signType,
+              identifier: widget.identifier,
+              countryCode: widget.countryCode,
+            );
+
+    if (!mounted) return;
+    setState(() => _isResending = false);
+
+    switch (result) {
+      case AuthSuccess():
+        _showToast('Verification code sent successfully');
+        _startResendCooldown();
+      case AuthFailure(:final error):
+        _showToast(error);
+    }
+  }
+
+  void _startResendCooldown() {
+    setState(() => _resendSeconds = 60);
+    _resendTimer?.cancel();
+    _resendTimer = Timer.periodic(Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      setState(() {
+        if (_resendSeconds > 0) {
+          _resendSeconds--;
+        } else {
+          _resendTimer?.cancel();
+        }
+      });
+    });
+  }
+
+  void _showToast(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg, style: TextStyle(fontFamily: 'Poppins')),
+        backgroundColor: AppColors.socaBlack,
+      ),
+    );
+  }
+
+  // ── Field builder ────────────────────────────────────────────────────────
+  Widget _buildField({
+    required TextEditingController controller,
+    required String label,
+    String? error,
+    bool obscure = false,
+    VoidCallback? onToggleObscure,
+    TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter>? formatters,
+    VoidCallback? onClearError,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.socaGrey,
+            borderRadius: BorderRadius.circular(2),
+            border: Border.all(
+              color: error != null ? Colors.red : Colors.black,
+              width: 0.8,
+            ),
+            boxShadow: [BoxShadow(color: Color(0x22000000), blurRadius: 8)],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  obscureText: obscure,
+                  obscuringCharacter: '*',
+                  keyboardType: keyboardType,
+                  inputFormatters: formatters,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: AppColors.socaBlack,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: label,
+                    hintStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: Colors.grey),
+                    border: InputBorder.none,
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  ),
+                  onChanged: (_) {
+                    if (onClearError != null) onClearError();
+                  },
+                ),
+              ),
+              if (onToggleObscure != null)
+                GestureDetector(
+                  onTap: onToggleObscure,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Icon(
+                      obscure
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      size: 20,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (error != null)
+          Padding(
+            padding: EdgeInsets.only(top: 6, left: 2),
+            child: Text(
+              error,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                color: Colors.red,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  // ── Build ────────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:
-            Text(widget.isClubPath ? 'Club Reset Password' : 'Reset Password'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppColors.textPrimary,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Enter the reset token from your email and choose a new password.',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              const SizedBox(height: 24),
-              TextFormField(
-                controller: _tokenCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Reset Token',
-                  prefixIcon: Icon(Icons.vpn_key_outlined),
-                ),
-                validator: (v) => (v == null || v.trim().isEmpty)
-                    ? 'Token is required'
-                    : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passCtrl,
-                obscureText: _obscurePass,
-                decoration: InputDecoration(
-                  labelText: 'New Password',
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePass
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                    ),
-                    onPressed: () =>
-                        setState(() => _obscurePass = !_obscurePass),
+      child: Scaffold(
+        backgroundColor: AppColors.socaPageBg,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // ── Logo ──────────────────────────────────────────────────
+                SizedBox(height: 40),
+                Center(
+                  child: SvgPicture.asset(
+                    'assets/icons/socaloca_logo.svg',
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.contain,
                   ),
                 ),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return 'Password is required';
-                  if (v.length < 6) return 'Minimum 6 characters';
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _confirmCtrl,
-                obscureText: _obscureConfirm,
-                decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureConfirm
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                    ),
-                    onPressed: () =>
-                        setState(() => _obscureConfirm = !_obscureConfirm),
+                SizedBox(height: 24),
+
+                // ── OTP field ────────────────────────────────────────────
+                _buildField(
+                  controller: _otpCtrl,
+                  label: 'OTP *',
+                  error: _otpError,
+                  keyboardType: TextInputType.number,
+                  formatters: [FilteringTextInputFormatter.digitsOnly],
+                  onClearError: () {
+                    if (_otpError != null) setState(() => _otpError = null);
+                  },
+                ),
+                SizedBox(height: 12),
+
+                // ── New Password ─────────────────────────────────────────
+                _buildField(
+                  controller: _passCtrl,
+                  label: 'Password *',
+                  error: _passError,
+                  obscure: _obscurePass,
+                  onToggleObscure: () =>
+                      setState(() => _obscurePass = !_obscurePass),
+                  onClearError: () {
+                    if (_passError != null) setState(() => _passError = null);
+                  },
+                ),
+                SizedBox(height: 12),
+
+                // ── Confirm Password ─────────────────────────────────────
+                _buildField(
+                  controller: _confirmCtrl,
+                  label: 'Confirm Password *',
+                  error: _confirmError,
+                  obscure: _obscureConfirm,
+                  onToggleObscure: () =>
+                      setState(() => _obscureConfirm = !_obscureConfirm),
+                  onClearError: () {
+                    if (_confirmError != null) {
+                      setState(() => _confirmError = null);
+                    }
+                  },
+                ),
+                SizedBox(height: 28),
+
+                // ── RESET button ─────────────────────────────────────────
+                GestureDetector(
+                  onTap: _isLoading ? null : _reset,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 60,
+                    color: AppColors.socaBlack,
+                    child: _isLoading
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.socaYellow,
+                            ),
+                          )
+                        : Text(
+                            'RESET'.tr,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 22,
+                              color: AppColors.socaYellow,
+                            ),
+                          ),
                   ),
                 ),
-                validator: (v) {
-                  if (v == null || v.isEmpty)
-                    return 'Please confirm your password';
-                  if (v != _passCtrl.text) return 'Passwords do not match';
-                  return null;
-                },
-              ),
-              const SizedBox(height: 32),
-              PrimaryButton(
-                label: 'Reset Password',
-                onPressed: _submit,
-                isLoading: _isLoading,
-              ),
-            ],
+                SizedBox(height: 20),
+
+                // ── Resend row ────────────────────────────────────────────
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Haven't received the code?  ".tr,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                    _resendSeconds > 0
+                        ? Text(
+                            'RESEND (${_resendSeconds}s)',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.grey,
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: _isResending ? null : _resend,
+                            child: _isResending
+                                ? SizedBox(
+                                    width: 14,
+                                    height: 14,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.socaBlack,
+                                    ),
+                                  )
+                                : Text(
+                                    'RESEND'.tr,
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.socaBlack,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                          ),
+                  ],
+                ),
+                SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),

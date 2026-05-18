@@ -204,8 +204,8 @@ class RefereeBioNotifier extends StateNotifier<_RefereeBioState> {
     state = state.copyWith(isLoadingActivities: true);
     try {
       final list = await _repo.getActivities();
-      state = state.copyWith(
-          isLoadingActivities: false, recentActivities: list);
+      state =
+          state.copyWith(isLoadingActivities: false, recentActivities: list);
     } catch (_) {
       state = state.copyWith(isLoadingActivities: false);
     }

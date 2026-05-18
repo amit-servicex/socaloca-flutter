@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,7 +22,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class ClubBioScreen extends ConsumerStatefulWidget {
   final String clubId;
 
-  const ClubBioScreen({
+  ClubBioScreen({
     super.key,
     required this.clubId,
   });
@@ -63,30 +64,30 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     _buildBasicInfo(bio),
                     if (bio.newsList.isNotEmpty) ...[
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildNewsSection(bio.newsList),
                     ],
                     if (bio.matchList.isNotEmpty) ...[
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildMatchesSection(bio.matchList),
                     ],
                     if (bio.playerList.isNotEmpty) ...[
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildPlayersSection(bio.playerList),
                     ],
                     if (bio.teamList.isNotEmpty) ...[
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildTeamsSection(bio.teamList),
                     ],
                     _buildKitSection(bio.clubDetails),
                     if (bio.sponsorList.isNotEmpty) ...[
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildSponsorsSection(bio.sponsorList),
                     ],
-                    const SizedBox(height: 40),
+                    SizedBox(height: 40),
                   ],
                 ),
               ),
@@ -94,9 +95,9 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
           ),
         );
       },
-      loading: () => const Scaffold(
+      loading: () => Scaffold(
         backgroundColor: AppColors.socaPageBg,
-        body: const AppLoader(),
+        body: AppLoader(),
       ),
       error: (error, stack) => Scaffold(
         backgroundColor: AppColors.socaPageBg,
@@ -113,7 +114,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       elevation: 2,
       title: Text(
         clubName,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 18,
           fontWeight: FontWeight.w700,
@@ -122,14 +123,12 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.photo_library,
-              size: 25, color: AppColors.socaBlack),
+          icon: Icon(Icons.photo_library, size: 25, color: AppColors.socaBlack),
           onPressed: () {},
         ),
         if (website != null && website.isNotEmpty)
           IconButton(
-            icon: const Icon(Icons.language,
-                size: 25, color: AppColors.socaBlack),
+            icon: Icon(Icons.language, size: 25, color: AppColors.socaBlack),
             onPressed: () => _launchUrl(website),
           ),
       ],
@@ -141,7 +140,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
   Widget _buildBasicInfo(ClubBioModel bio) {
     final club = bio.clubDetails;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -150,7 +149,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildClubImage(club.fullImageUrl),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -163,12 +162,12 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: EdgeInsets.symmetric(vertical: 8),
                         elevation: 0,
                       ),
                       child: Text(
                         _isFollowing ? 'FOLLOWING' : 'FOLLOW',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -177,10 +176,10 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     '${club.followCount} followers',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -191,7 +190,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Info rows
           if (club.orgFifaId != null && club.orgFifaId!.isNotEmpty)
@@ -215,13 +214,13 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
           if (club.partnerType != null &&
               club.partnerType!.isNotEmpty &&
               club.partnerType!.toLowerCase() != 'nopartner') ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildPartnerBadge(club.partnerType!),
           ],
 
           // Trial section
           if (bio.trialDetails?.trialBadge == true) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _buildTrialSection(bio.trialDetails!),
           ],
         ],
@@ -233,8 +232,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Container(
       width: 80,
       height: 80,
-      padding: const EdgeInsets.all(3),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.all(3),
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -253,17 +252,16 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
 
   Widget _imageFallback() => Container(
         color: AppColors.socaGrey,
-        child: const Icon(Icons.sports_soccer,
-            color: AppColors.socaBlack, size: 40),
+        child: Icon(Icons.sports_soccer, color: AppColors.socaBlack, size: 40),
       );
 
   Widget _buildFifaRow(String fifaId) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4),
       child: Row(
         children: [
-          const Text(
-            'FIFA ID: ',
+          Text(
+            'FIFA ID: '.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
@@ -273,15 +271,15 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
           ),
           Text(
             fifaId,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               fontWeight: FontWeight.w700,
               color: AppColors.socaBlack,
             ),
           ),
-          const SizedBox(width: 6),
-          const Icon(Icons.verified, size: 18, color: AppColors.success),
+          SizedBox(width: 6),
+          Icon(Icons.verified, size: 18, color: AppColors.success),
         ],
       ),
     );
@@ -297,7 +295,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             : Colors.grey[600]!;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -305,7 +303,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -313,10 +311,10 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.workspace_premium, size: 28, color: iconColor),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w700,
@@ -331,7 +329,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
   Widget _buildTrialSection(ClubTrialStatusModel trial) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -339,8 +337,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       ),
       child: Column(
         children: [
-          const Text(
-            'LIVE TRIAL',
+          Text(
+            'LIVE TRIAL'.tr,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
@@ -348,10 +346,10 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
               color: AppColors.socaBlack,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           if (trial.isRegistered)
-            const Text(
-              'REGISTERED',
+            Text(
+              'REGISTERED'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
@@ -360,8 +358,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
               ),
             )
           else if (trial.isRegistrationClosed)
-            const Text(
-              'REGISTRATION CLOSED',
+            Text(
+              'REGISTRATION CLOSED'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
@@ -378,8 +376,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
-              child: const Text(
-                'REGISTER',
+              child: Text(
+                'REGISTER'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -399,11 +397,11 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ClubBioSectionHeader(title: 'News & Announcements'),
+        ClubBioSectionHeader(title: 'News & Announcements'),
         ListView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           itemCount: newsList.length,
           itemBuilder: (context, index) => _buildNewsCard(newsList[index]),
         ),
@@ -414,12 +412,12 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
   Widget _buildNewsCard(ClubNewsModel news) {
     final imageUrl = news.fullImageUrl;
     return Card(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -435,7 +433,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                       width: 60, height: 60, color: AppColors.socaGrey),
                 ),
               ),
-            if (imageUrl.isNotEmpty) const SizedBox(width: 10),
+            if (imageUrl.isNotEmpty) SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,7 +441,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   if (news.title != null && news.title!.isNotEmpty)
                     Text(
                       news.title!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -454,10 +452,10 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                     ),
                   if (news.description != null &&
                       news.description!.isNotEmpty) ...[
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       news.description!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         fontWeight: FontWeight.w400,
@@ -482,11 +480,11 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ClubBioSectionHeader(title: 'Recent Matches'),
+        ClubBioSectionHeader(title: 'Recent Matches'),
         ListView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           itemCount: matches.length,
           itemBuilder: (context, index) => _buildMatchCard(matches[index]),
         ),
@@ -501,12 +499,12 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     final awayLogo = ApiConstants.getImageUrl(match.awayTeamLogo);
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
             // Home team
@@ -514,10 +512,10 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
               child: Column(
                 children: [
                   _buildSmallTeamLogo(homeLogo),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     match.homeTeamName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -532,12 +530,12 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             ),
             // Score
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Column(
                 children: [
                   Text(
                     '$homeScore - $awayScore',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -547,7 +545,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   if (match.matchDate != null && match.matchDate!.isNotEmpty)
                     Text(
                       match.matchDate!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
@@ -562,10 +560,10 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
               child: Column(
                 children: [
                   _buildSmallTeamLogo(awayLogo),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     match.awayTeamName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -588,7 +586,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Container(
       width: 44,
       height: 44,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -597,11 +595,10 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             ? CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => const Icon(Icons.sports_soccer,
+                errorWidget: (_, __, ___) => Icon(Icons.sports_soccer,
                     size: 24, color: AppColors.socaBlack),
               )
-            : const Icon(Icons.sports_soccer,
-                size: 24, color: AppColors.socaBlack),
+            : Icon(Icons.sports_soccer, size: 24, color: AppColors.socaBlack),
       ),
     );
   }
@@ -613,12 +610,12 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Featured Players',
+              Text(
+                'Featured Players'.tr,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -630,8 +627,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                 onTap: () {
                   // TODO: navigate to full players list
                 },
-                child: const Text(
-                  'View All Players',
+                child: Text(
+                  'View All Players'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -646,9 +643,9 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
         ),
         GridView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 1.1,
             crossAxisSpacing: 10,
@@ -668,14 +665,14 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               width: 56,
               height: 56,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.socaGrey,
               ),
@@ -684,17 +681,16 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                     ? CachedNetworkImage(
                         imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => const Icon(Icons.person,
+                        errorWidget: (_, __, ___) => Icon(Icons.person,
                             size: 30, color: AppColors.socaBlack),
                       )
-                    : const Icon(Icons.person,
-                        size: 30, color: AppColors.socaBlack),
+                    : Icon(Icons.person, size: 30, color: AppColors.socaBlack),
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Text(
               player.fullName,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
@@ -707,7 +703,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             if (player.position != null && player.position!.isNotEmpty)
               Text(
                 player.position!,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
@@ -720,7 +716,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             if (player.jersey != 0)
               Text(
                 '#${player.jersey}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
@@ -739,12 +735,12 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ClubBioSectionHeader(title: 'Club Teams'),
+        ClubBioSectionHeader(title: 'Club Teams'),
         SizedBox(
           height: 110,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             itemCount: teams.length,
             itemBuilder: (context, index) => _buildTeamCard(teams[index]),
           ),
@@ -757,14 +753,14 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     final imageUrl = team.fullImageUrl;
     return Container(
       width: 90,
-      margin: const EdgeInsets.only(right: 10),
+      margin: EdgeInsets.only(right: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 64,
             height: 64,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.socaGrey,
             ),
@@ -773,17 +769,16 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const Icon(Icons.group,
+                      errorWidget: (_, __, ___) => Icon(Icons.group,
                           size: 32, color: AppColors.socaBlack),
                     )
-                  : const Icon(Icons.group,
-                      size: 32, color: AppColors.socaBlack),
+                  : Icon(Icons.group, size: 32, color: AppColors.socaBlack),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             team.teamName ?? '',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 11,
               fontWeight: FontWeight.w600,
@@ -812,15 +807,15 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       kits.add(('Third', ApiConstants.getImageUrl(clubDetails.thirdKit)));
     }
 
-    if (kits.isEmpty) return const SizedBox.shrink();
+    if (kits.isEmpty) return SizedBox.shrink();
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ClubBioSectionHeader(title: 'Kits'),
-          const SizedBox(height: 8),
+          ClubBioSectionHeader(title: 'Kits'),
+          SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: kits.map((kit) {
@@ -838,16 +833,15 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                       child: CachedNetworkImage(
                         imageUrl: kit.$2,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => const Icon(
-                            Icons.sports_soccer,
+                        errorWidget: (_, __, ___) => Icon(Icons.sports_soccer,
                             color: AppColors.socaBlack),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     kit.$1,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -869,12 +863,12 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ClubBioSectionHeader(title: 'Sponsors'),
+        ClubBioSectionHeader(title: 'Sponsors'),
         SizedBox(
           height: 110,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             itemCount: sponsors.length,
             itemBuilder: (context, index) => _buildSponsorCard(sponsors[index]),
           ),
@@ -887,7 +881,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     final imageUrl = sponsor.fullImageUrl;
     return Container(
       width: 90,
-      margin: const EdgeInsets.only(right: 10),
+      margin: EdgeInsets.only(right: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -904,17 +898,16 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const Icon(Icons.business,
+                      errorWidget: (_, __, ___) => Icon(Icons.business,
                           size: 32, color: AppColors.socaBlack),
                     )
-                  : const Icon(Icons.business,
-                      size: 32, color: AppColors.socaBlack),
+                  : Icon(Icons.business, size: 32, color: AppColors.socaBlack),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             sponsor.name ?? '',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 11,
               fontWeight: FontWeight.w600,
@@ -936,11 +929,11 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-          const SizedBox(height: 16),
+          Icon(Icons.error_outline, size: 48, color: AppColors.error),
+          SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               color: AppColors.socaBlack,
@@ -971,7 +964,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     final email = StorageService.userEmail ?? '';
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email not found')),
+        SnackBar(content: Text('Email not found'.tr)),
       );
       return;
     }

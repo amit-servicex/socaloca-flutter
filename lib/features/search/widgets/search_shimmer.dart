@@ -31,7 +31,7 @@ class SearchShimmer extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              
+
               // Content shimmer
               Expanded(
                 child: Column(

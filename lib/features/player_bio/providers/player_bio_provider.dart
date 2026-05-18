@@ -142,13 +142,15 @@ class PlayerBioState {
       posts: posts ?? this.posts,
       isLoadingPosts: isLoadingPosts ?? this.isLoadingPosts,
       endorsements: endorsements ?? this.endorsements,
-      isLoadingEndorsements: isLoadingEndorsements ?? this.isLoadingEndorsements,
+      isLoadingEndorsements:
+          isLoadingEndorsements ?? this.isLoadingEndorsements,
       academies: academies ?? this.academies,
       isLoadingAcademies: isLoadingAcademies ?? this.isLoadingAcademies,
       tournaments: tournaments ?? this.tournaments,
       isLoadingTournaments: isLoadingTournaments ?? this.isLoadingTournaments,
       taggedVideos: taggedVideos ?? this.taggedVideos,
-      isLoadingTaggedVideos: isLoadingTaggedVideos ?? this.isLoadingTaggedVideos,
+      isLoadingTaggedVideos:
+          isLoadingTaggedVideos ?? this.isLoadingTaggedVideos,
     );
   }
 }
@@ -197,7 +199,7 @@ class PlayerBioNotifier extends StateNotifier<PlayerBioState> {
         await loadTeams();
         await loadSkills();
         await loadPosts();
-        
+
         // Load endorsements, academies, tournaments, and tagged videos
         await loadEndorsements();
         await loadAcademies();

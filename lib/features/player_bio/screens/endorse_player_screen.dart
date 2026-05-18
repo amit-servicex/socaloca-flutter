@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/storage/storage_service.dart';
@@ -9,7 +10,7 @@ class EndorsePlayerScreen extends ConsumerStatefulWidget {
   final String playerId;
   final String playerName;
 
-  const EndorsePlayerScreen({
+  EndorsePlayerScreen({
     super.key,
     required this.playerId,
     required this.playerName,
@@ -25,7 +26,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
   bool _hasError = false;
   bool _isSubmitting = false;
 
-  static const int _maxChars = 200;
+  static int _maxChars = 200;
 
   @override
   void dispose() {
@@ -76,7 +77,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
           SnackBar(
             content: Text(
               'It will update as soon as ${widget.playerName} accepts it.',
-              style: const TextStyle(fontFamily: 'Poppins'),
+              style: TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: Colors.green,
           ),
@@ -84,8 +85,8 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
         Navigator.of(context).pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to submit endorsement. Try again.',
+          SnackBar(
+            content: Text('Failed to submit endorsement. Try again.'.tr,
                 style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
@@ -95,8 +96,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e',
-                style: const TextStyle(fontFamily: 'Poppins')),
+            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -123,10 +123,9 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
           Container(
             width: double.infinity,
             color: AppColors.socaBlack,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: const Text(
-              'Endorse',
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Text(
+              'Endorse'.tr,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
@@ -139,13 +138,14 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
           // ── Body ─────────────────────────────────────────────────────────
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Subtitle
-                  const Text(
-                    'Assist other Players & Coaches by giving an endorsement',
+                  Text(
+                    'Assist other Players & Coaches by giving an endorsement'
+                        .tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
@@ -153,7 +153,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   // Text input with plain border
                   Container(
@@ -169,18 +169,21 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                       controller: _commentController,
                       maxLines: 8,
                       maxLength: _maxChars,
-                      buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
+                      buildCounter: (_,
+                              {required currentLength,
+                              required isFocused,
+                              maxLength}) =>
                           null,
                       onChanged: (_) {
                         if (_hasError) setState(() => _hasError = false);
                         setState(() {});
                       },
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         color: AppColors.socaBlack,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(12),
                       ),
@@ -188,7 +191,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                   ),
 
                   // max characters label
-                  const Align(
+                  Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
                       padding: EdgeInsets.only(top: 4),
@@ -203,7 +206,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // ADD / RESET buttons
                   Row(
@@ -214,7 +217,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                         onPressed: _isSubmitting ? null : _submit,
                         isLoading: _isSubmitting,
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 16),
                       _ActionButton(
                         label: 'RESET',
                         onPressed: _isSubmitting ? null : _reset,
@@ -232,7 +235,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
 }
 
 class _ActionButton extends StatelessWidget {
-  const _ActionButton({
+  _ActionButton({
     required this.label,
     required this.onPressed,
     this.isLoading = false,
@@ -248,11 +251,11 @@ class _ActionButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: 100,
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.symmetric(vertical: 12),
         color: onPressed == null ? Colors.grey.shade400 : AppColors.socaBlack,
         alignment: Alignment.center,
         child: isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 16,
                 height: 16,
                 child: CircularProgressIndicator(
@@ -262,7 +265,7 @@ class _ActionButton extends StatelessWidget {
               )
             : Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 13,

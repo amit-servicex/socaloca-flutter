@@ -14,8 +14,9 @@ class OneOffMatchesRepository {
     required String dateToday,
   }) async {
     try {
-      print('📡 [OneOff API] Calling getFanTodaysMatches with date: $dateToday');
-      
+      print(
+          '📡 [OneOff API] Calling getFanTodaysMatches with date: $dateToday');
+
       final response = await ApiClient.instance.post(
         ApiConstants.getFanTodaysMatches,
         body: {
@@ -36,7 +37,8 @@ class OneOffMatchesRepository {
         print('📡 [OneOff API] Found ${matches.length} today\'s matches');
         if (matches.isNotEmpty) {
           final match = _parseMatch(matches[0]);
-          print('✅ [OneOff API] Parsed match: ${match.homeTeamName} vs ${match.awayTeamName}');
+          print(
+              '✅ [OneOff API] Parsed match: ${match.homeTeamName} vs ${match.awayTeamName}');
           return match;
         }
       }
@@ -58,7 +60,7 @@ class OneOffMatchesRepository {
   }) async {
     try {
       print('📡 [OneOff API] Calling getFanUpcomingMatches');
-      
+
       final response = await ApiClient.instance.post(
         ApiConstants.getFanUpcomingMatches,
         body: {
@@ -69,7 +71,8 @@ class OneOffMatchesRepository {
         },
       );
 
-      print('📡 [OneOff API] Upcoming response keys: ${response.keys.toList()}');
+      print(
+          '📡 [OneOff API] Upcoming response keys: ${response.keys.toList()}');
 
       // Response is nested: {"response": {"status": 1, "matches": [...]}}
       final data = response['response'] as Map<String, dynamic>?;
@@ -98,7 +101,7 @@ class OneOffMatchesRepository {
   }) async {
     try {
       print('📡 [OneOff API] Calling getFanPlayedMatches');
-      
+
       final response = await ApiClient.instance.post(
         ApiConstants.getFanPlayedMatches,
         body: {
@@ -132,7 +135,7 @@ class OneOffMatchesRepository {
   /// Parse match from API response
   TournamentMatchModel _parseMatch(dynamic matchData) {
     print('📝 [OneOff Parse] Parsing match: ${matchData['matchId']}');
-    
+
     final teams = matchData['teams'] as List? ?? [];
     final score = matchData['score'] as Map<String, dynamic>?;
 
@@ -180,7 +183,8 @@ class OneOffMatchesRepository {
       ageGroup: matchData['ageGroup'],
     );
 
-    print('✅ [OneOff Parse] Parsed: ${match.homeTeamName} vs ${match.awayTeamName}');
+    print(
+        '✅ [OneOff Parse] Parsed: ${match.homeTeamName} vs ${match.awayTeamName}');
     return match;
   }
 }

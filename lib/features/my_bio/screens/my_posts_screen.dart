@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,7 +20,7 @@ class MyPostsScreen extends ConsumerStatefulWidget {
   final String userId;
   final bool isOwnProfile;
 
-  const MyPostsScreen({
+  MyPostsScreen({
     super.key,
     required this.userId,
     this.isOwnProfile = false,
@@ -66,8 +67,8 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
   Future<void> _loadPosts({bool refresh = false}) async {
     if (_loading) return;
     if (refresh) {
-      _start = 0;
-      _hasMore = true;
+      final _start = 0;
+      final _hasMore = true;
       _posts.clear();
     }
 
@@ -86,8 +87,8 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
         setState(() {
           _posts.addAll(newPosts);
           _start += newPosts.length;
-          _hasMore = newPosts.length == _limit;
-          _loading = false;
+          final _hasMore = newPosts.length == _limit;
+          final _loading = false;
         });
       }
     } catch (_) {
@@ -105,7 +106,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
           ? FloatingActionButton(
               backgroundColor: AppColors.socaBlack,
               onPressed: () => context.push(AppRoutes.createPost),
-              child: const Icon(Icons.add, color: AppColors.socaYellow),
+              child: Icon(Icons.add, color: AppColors.socaYellow),
             )
           : null,
       body: _buildBody(playerBio),
@@ -114,13 +115,13 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
 
   Widget _buildBody(PlayerBioModel? playerBio) {
     if (_loading && _posts.isEmpty) {
-      return const AppLoader();
+      return AppLoader();
     }
 
     if (!_loading && _posts.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'No posts found',
+          'No posts found'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 16,
@@ -136,10 +137,10 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
       child: ListView.separated(
         controller: _scrollController,
         itemCount: _posts.length + (_loading ? 1 : 0),
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        separatorBuilder: (_, __) => SizedBox(height: 8),
         itemBuilder: (context, index) {
           if (index == _posts.length) {
-            return const AppLoader();
+            return AppLoader();
           }
           return _PostCard(post: _posts[index], playerBio: playerBio);
         },
@@ -152,7 +153,7 @@ class _PostCard extends StatelessWidget {
   final PlayerPostModel post;
   final PlayerBioModel? playerBio;
 
-  const _PostCard({required this.post, this.playerBio});
+  _PostCard({required this.post, this.playerBio});
 
   String? _mediaUrl() {
     if (post.sources?.isNotEmpty != true) return null;
@@ -170,7 +171,7 @@ class _PostCard extends StatelessWidget {
   String _formatDate(int? addedOn) {
     if (addedOn == null) return '';
     final dt = DateTime.fromMillisecondsSinceEpoch(addedOn).toLocal();
-    const months = [
+    final months = [
       'Jan',
       'Feb',
       'Mar',
@@ -197,37 +198,39 @@ class _PostCard extends StatelessWidget {
 
     return Container(
       color: Colors.white,
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header (Avatar + Name + Role)
           if (playerBio != null)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
                   ClipOval(
                     child: CachedNetworkImage(
-                      imageUrl: ApiConstants.getImageUrl(playerBio!.imageUrl ?? ''),
+                      imageUrl:
+                          ApiConstants.getImageUrl(playerBio!.imageUrl ?? ''),
                       width: 40,
                       height: 40,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const CircleAvatar(
+                      errorWidget: (_, __, ___) => CircleAvatar(
                         radius: 20,
                         backgroundColor: AppColors.socaGrey,
                         child: Icon(Icons.person, color: Colors.white),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${playerBio!.firstName ?? ''} ${playerBio!.lastName ?? ''}'.trim(),
-                          style: const TextStyle(
+                          '${playerBio!.firstName ?? ''} ${playerBio!.lastName ?? ''}'
+                              .trim(),
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -236,8 +239,9 @@ class _PostCard extends StatelessWidget {
                         ),
                         if ((playerBio!.playPosition ?? '').isNotEmpty)
                           Text(
-                            '${playerBio!.playPosition} | ${playerBio!.playPositionType ?? ''}'.trim(),
-                            style: const TextStyle(
+                            '${playerBio!.playPosition} | ${playerBio!.playPositionType ?? ''}'
+                                .trim(),
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 12,
                               color: AppColors.socaBlack,
@@ -254,10 +258,10 @@ class _PostCard extends StatelessWidget {
           // Title / Top Text
           if (post.title?.isNotEmpty == true)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Text(
                 post.title!,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -279,7 +283,7 @@ class _PostCard extends StatelessWidget {
                   placeholder: (_, __) => Container(
                     height: 350,
                     color: AppColors.socaGrey.withValues(alpha: 0.15),
-                    child: const AppLoader(),
+                    child: AppLoader(),
                   ),
                   errorWidget: (_, __, ___) => Container(
                     height: 350,
@@ -288,8 +292,8 @@ class _PostCard extends StatelessWidget {
                 ),
 
                 // Double Tap to Cheer Text
-                const Text(
-                  'Double Tap to Cheer',
+                Text(
+                  'Double Tap to Cheer'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -318,12 +322,12 @@ class _PostCard extends StatelessWidget {
                   top: 12,
                   right: 12,
                   child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),
-                    child: const Icon(Icons.more_vert,
+                    child: Icon(Icons.more_vert,
                         color: AppColors.socaBlack, size: 20),
                   ),
                 ),
@@ -338,8 +342,8 @@ class _PostCard extends StatelessWidget {
                   width: double.infinity,
                   color: AppColors.socaBlack,
                 ),
-                const Text(
-                  'Double Tap to Cheer',
+                Text(
+                  'Double Tap to Cheer'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -357,12 +361,12 @@ class _PostCard extends StatelessWidget {
                   top: 12,
                   right: 12,
                   child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),
-                    child: const Icon(Icons.more_vert,
+                    child: Icon(Icons.more_vert,
                         color: AppColors.socaBlack, size: 20),
                   ),
                 ),
@@ -371,15 +375,15 @@ class _PostCard extends StatelessWidget {
 
           // Cheer Section
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
-                const Icon(Icons.pan_tool_alt_outlined,
+                Icon(Icons.pan_tool_alt_outlined,
                     size: 20, color: AppColors.socaBlack),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   '${post.likeCount ?? 0} cheer',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack,
@@ -389,19 +393,18 @@ class _PostCard extends StatelessWidget {
             ),
           ),
 
-          const Divider(height: 1, thickness: 1, color: Color(0xFFE0E0E0)),
+          Divider(height: 1, thickness: 1, color: Color(0xFFE0E0E0)),
 
           // Share Section
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Icon(Icons.ios_share,
-                    size: 20, color: AppColors.socaBlack),
-                const SizedBox(width: 8),
-                const Text(
-                  'SHARE',
+                Icon(Icons.ios_share, size: 20, color: AppColors.socaBlack),
+                SizedBox(width: 8),
+                Text(
+                  'SHARE'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,

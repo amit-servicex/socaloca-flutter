@@ -59,13 +59,18 @@ class ApiConstants {
   static const String socialLogin = 'socialLogin';
   static const String verifyOtp = 'verifyOtp';
 
-  /// Forgot password — user path (NewLoginFragment flow)
+  /// Forgot password step 1 — multi-identifier OTP initiation (ForgetPasswordFragmentNew)
+  /// Body: {signType, deviceType, email|mobile|sclId, countryCode}
+  /// Response: {status, userFound, contactExist, userId}
+  static const String forgetPassw = 'forgetPassw';
+
+  /// Forgot password — resend OTP / legacy user path
   static const String forgetAllPass = 'forgetAllPass';
 
   /// Forgot password — club path (LoginClubFragment flow)
   static const String forgetPass = 'forgetPass';
 
-  /// Reset password — user path
+  /// Reset password — user path (OTP + userId + new password)
   static const String resetAllPass = 'resetAllPass';
 
   /// Reset password — club path

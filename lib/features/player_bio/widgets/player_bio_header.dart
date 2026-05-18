@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
@@ -9,7 +10,7 @@ class PlayerBioHeader extends StatelessWidget {
   final PlayerBioModel playerBio;
   final bool isOwnProfile;
 
-  const PlayerBioHeader({
+  PlayerBioHeader({
     super.key,
     required this.playerBio,
     required this.isOwnProfile,
@@ -26,7 +27,7 @@ class PlayerBioHeader extends StatelessWidget {
     final isOnline = playerBio.isOnline ?? false;
 
     return Container(
-      padding: const EdgeInsets.only(top: 20, bottom: 10),
+      padding: EdgeInsets.only(top: 20, bottom: 10),
       color: Colors.white,
       child: Column(
         children: [
@@ -52,14 +53,14 @@ class PlayerBioHeader extends StatelessWidget {
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(
                             color: AppColors.socaGrey,
-                            child: const Icon(Icons.person,
+                            child: Icon(Icons.person,
                                 size: 60, color: Colors.white),
                           ),
                         )
                       : Container(
                           color: AppColors.socaGrey,
-                          child: const Icon(Icons.person,
-                              size: 60, color: Colors.white),
+                          child:
+                              Icon(Icons.person, size: 60, color: Colors.white),
                         ),
                 ),
               ),
@@ -83,7 +84,7 @@ class PlayerBioHeader extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 15),
+          SizedBox(height: 15),
 
           // Player Name and Jersey
           Row(
@@ -91,7 +92,7 @@ class PlayerBioHeader extends StatelessWidget {
             children: [
               Text(
                 '$firstName $lastName'.trim(),
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
@@ -99,25 +100,24 @@ class PlayerBioHeader extends StatelessWidget {
                 ),
               ),
               if (isVerified) ...[
-                const SizedBox(width: 5),
-                const Icon(
+                SizedBox(width: 5),
+                Icon(
                   Icons.verified,
                   size: 20,
                   color: Colors.blue,
                 ),
               ],
               if (preferredJersey != null && preferredJersey.isNotEmpty) ...[
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     preferredJersey,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -129,13 +129,13 @@ class PlayerBioHeader extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 5),
+          SizedBox(height: 5),
 
           // Profile Name
           if (profileName.isNotEmpty)
             Text(
               profileName,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -143,7 +143,7 @@ class PlayerBioHeader extends StatelessWidget {
               ),
             ),
 
-          const SizedBox(height: 15),
+          SizedBox(height: 15),
 
           // Country Flag Image (placeholder using icon if no image)
           if (playerBio.country != null && playerBio.country!.isNotEmpty)
@@ -158,14 +158,14 @@ class PlayerBioHeader extends StatelessWidget {
                 'https://flagcdn.com/w40/in.png',
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.flag, color: Colors.green),
+                    Icon(Icons.flag, color: Colors.green),
               ),
             ),
-          const SizedBox(
+          SizedBox(
             height: 12,
           ),
-          const Text(
-            "SocaLoca ID: ",
+          Text(
+            "SocaLoca ID: ".tr,
             style: TextStyle(
                 color: AppColors.socaBlack,
                 fontFamily: 'Poppins',
@@ -173,7 +173,7 @@ class PlayerBioHeader extends StatelessWidget {
                 fontWeight: FontWeight.w700),
           ),
           Text("${playerBio.sclId}",
-              style: const TextStyle(
+              style: TextStyle(
                   color: AppColors.socaBlack,
                   fontFamily: 'Poppins',
                   fontSize: 14,

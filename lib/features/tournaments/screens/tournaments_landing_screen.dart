@@ -134,7 +134,7 @@ class _TournamentsLandingScreenState
                   // TOURNAMENTS tab with sub-tabs
                   TabBarView(
                     controller: _tournamentTabController,
-                    children: const [
+                    children: [
                       TournamentListScreen(status: 'ongoing'),
                       TournamentListScreen(status: 'upcoming'),
                       TournamentListScreen(status: 'my'),
@@ -142,9 +142,9 @@ class _TournamentsLandingScreenState
                     ],
                   ),
                   // ONE-OFF tab
-                  const OneOffMatchesScreen(),
+                  OneOffMatchesScreen(),
                   // PICK-UP tab — accessible to all roles
-                  const PickupMatchScreen(),
+                  PickupMatchScreen(),
                 ],
               ),
             ),

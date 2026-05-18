@@ -30,8 +30,8 @@ class PickupMatchesState {
 }
 
 /// State provider for pickup matches pagination
-final pickupMatchesPaginationProvider =
-    StateNotifierProvider<PickupMatchesPagination, AsyncValue<PickupMatchesState>>(
+final pickupMatchesPaginationProvider = StateNotifierProvider<
+    PickupMatchesPagination, AsyncValue<PickupMatchesState>>(
   (ref) => PickupMatchesPagination(ref),
 );
 
@@ -43,23 +43,23 @@ class PickupMatchesPagination
   final int _limit = 10;
 
   PickupMatchesPagination(this.ref)
-      : super(const AsyncValue.data(
-            PickupMatchesState(matches: [], isLoadingMore: false, hasMore: true))) {
+      : super(const AsyncValue.data(PickupMatchesState(
+            matches: [], isLoadingMore: false, hasMore: true))) {
     loadMore();
   }
 
   Future<void> loadMore() async {
     final currentState = state.valueOrNull;
     if (currentState == null) return;
-    
+
     if (!currentState.hasMore || currentState.isLoadingMore) return;
 
     final userId = StorageService.userId;
     final country = StorageService.currentUser?['country'] as String? ?? '';
 
     if (userId == null || userId.isEmpty) {
-      state = const AsyncValue.data(
-          PickupMatchesState(matches: [], isLoadingMore: false, hasMore: false));
+      state = const AsyncValue.data(PickupMatchesState(
+          matches: [], isLoadingMore: false, hasMore: false));
       return;
     }
 
@@ -91,13 +91,13 @@ class PickupMatchesPagination
   Future<void> refresh() async {
     _start = 0;
     state = const AsyncValue.loading();
-    
+
     final userId = StorageService.userId;
     final country = StorageService.currentUser?['country'] as String? ?? '';
 
     if (userId == null || userId.isEmpty) {
-      state = const AsyncValue.data(
-          PickupMatchesState(matches: [], isLoadingMore: false, hasMore: false));
+      state = const AsyncValue.data(PickupMatchesState(
+          matches: [], isLoadingMore: false, hasMore: false));
       return;
     }
 

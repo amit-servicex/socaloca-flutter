@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../core/constants/api_constants.dart';
@@ -11,7 +12,7 @@ class AcademyCard extends StatelessWidget {
   final AcademyModel academy;
   final VoidCallback onViewTap;
 
-  const AcademyCard({
+  AcademyCard({
     super.key,
     required this.academy,
     required this.onViewTap,
@@ -26,13 +27,13 @@ class AcademyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 7.5),
+      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 7.5),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: EdgeInsets.all(15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -50,7 +51,7 @@ class AcademyCard extends StatelessWidget {
                         imageUrl:
                             '${ApiConstants.mediaBaseUrl}${academy.imageUrl}',
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => const AppLoader(),
+                        placeholder: (context, url) => AppLoader(),
                         errorWidget: (context, url, error) => Image.asset(
                           'assets/images/logo.png',
                           fit: BoxFit.cover,
@@ -63,7 +64,7 @@ class AcademyCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 17),
+            SizedBox(width: 17),
 
             // Academy Details
             Expanded(
@@ -73,7 +74,7 @@ class AcademyCard extends StatelessWidget {
                   // Academy Name
                   Text(
                     academy.name ?? '',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -83,13 +84,13 @@ class AcademyCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
 
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
 
                   // Category
                   if (academy.category != null && academy.category!.isNotEmpty)
                     Text(
                       'CATEGORY ${academy.category}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -99,13 +100,13 @@ class AcademyCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
 
                   // City
                   if (academy.city != null && academy.city!.isNotEmpty)
                     Text(
                       academy.city!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -115,20 +116,20 @@ class AcademyCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
 
                   // VIEW Button
                   GestureDetector(
                     onTap: onViewTap,
                     child: Container(
                       width: 80,
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         color: AppColors.socaBlack,
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: const Text(
-                        'VIEW',
+                      child: Text(
+                        'VIEW'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,

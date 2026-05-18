@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 class SearchInput extends StatefulWidget {
   final Function(String) onSearch;
 
-  const SearchInput({
+  SearchInput({
     super.key,
     required this.onSearch,
   });
@@ -29,7 +30,7 @@ class _SearchInputState extends State<SearchInput> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
+        color: Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -37,8 +38,8 @@ class _SearchInputState extends State<SearchInput> {
           Expanded(
             child: TextField(
               controller: _controller,
-              decoration: const InputDecoration(
-                hintText: 'Player/Coach/Manager/Referee',
+              decoration: InputDecoration(
+                hintText: 'Player/Coach/Manager/Referee'.tr,
                 hintStyle: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -50,7 +51,7 @@ class _SearchInputState extends State<SearchInput> {
                   vertical: 12,
                 ),
               ),
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
               ),
@@ -65,7 +66,7 @@ class _SearchInputState extends State<SearchInput> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.black54),
+            icon: Icon(Icons.search, color: Colors.black54),
             onPressed: _handleSearch,
           ),
         ],

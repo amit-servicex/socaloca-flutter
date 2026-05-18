@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +20,7 @@ class MatchManagementScreen extends ConsumerStatefulWidget {
   final TournamentMatchModel match;
   final String tournamentId;
 
-  const MatchManagementScreen({
+  MatchManagementScreen({
     super.key,
     required this.matchId,
     required this.match,
@@ -31,8 +32,7 @@ class MatchManagementScreen extends ConsumerStatefulWidget {
       _MatchManagementScreenState();
 }
 
-class _MatchManagementScreenState
-    extends ConsumerState<MatchManagementScreen>
+class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -53,8 +53,8 @@ class _MatchManagementScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text(
-          'Match Management',
+        title: Text(
+          'Match Management'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -65,7 +65,7 @@ class _MatchManagementScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
           onPressed: () => context.pop(),
         ),
       ),
@@ -84,17 +84,17 @@ class _MatchManagementScreenState
               indicatorColor: AppColors.socaYellow,
               indicatorWeight: 3,
               isScrollable: true,
-              labelStyle: const TextStyle(
+              labelStyle: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
-              unselectedLabelStyle: const TextStyle(
+              unselectedLabelStyle: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
               ),
-              tabs: const [
+              tabs: [
                 Tab(text: 'SCORE'),
                 Tab(text: 'GOALS'),
                 Tab(text: 'CARDS'),
@@ -148,7 +148,7 @@ class _MatchManagementScreenState
 
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       child: Column(
         children: [
           // Teams and Score
@@ -163,23 +163,23 @@ class _MatchManagementScreenState
                         match.homeTeamLogo!,
                         width: 50,
                         height: 50,
-                        errorBuilder: (_, __, ___) => const Icon(
+                        errorBuilder: (_, __, ___) => Icon(
                           Icons.shield,
                           size: 50,
                           color: Colors.grey,
                         ),
                       )
                     else
-                      const Icon(
+                      Icon(
                         Icons.shield,
                         size: 50,
                         color: Colors.grey,
                       ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Text(
                       match.homeTeamName ?? 'Team A',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -191,13 +191,13 @@ class _MatchManagementScreenState
 
               // Score or VS
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   children: [
                     if (hasScore)
                       Text(
                         '${match.homeScore} - ${match.awayScore}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
@@ -205,8 +205,8 @@ class _MatchManagementScreenState
                         ),
                       )
                     else
-                      const Text(
-                        'VS',
+                      Text(
+                        'VS'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 24,
@@ -227,23 +227,23 @@ class _MatchManagementScreenState
                         match.awayTeamLogo!,
                         width: 50,
                         height: 50,
-                        errorBuilder: (_, __, ___) => const Icon(
+                        errorBuilder: (_, __, ___) => Icon(
                           Icons.shield,
                           size: 50,
                           color: Colors.grey,
                         ),
                       )
                     else
-                      const Icon(
+                      Icon(
                         Icons.shield,
                         size: 50,
                         color: Colors.grey,
                       ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Text(
                       match.awayTeamName ?? 'Team B',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -255,15 +255,15 @@ class _MatchManagementScreenState
             ],
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Match Info
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (match.matchDate != null) ...[
-                const Icon(Icons.calendar_today, size: 14, color: Colors.grey),
-                const SizedBox(width: 4),
+                Icon(Icons.calendar_today, size: 14, color: Colors.grey),
+                SizedBox(width: 4),
                 Text(
                   match.matchDate!,
                   style: TextStyle(
@@ -274,9 +274,9 @@ class _MatchManagementScreenState
                 ),
               ],
               if (match.venue != null) ...[
-                const SizedBox(width: 16),
-                const Icon(Icons.location_on, size: 14, color: Colors.grey),
-                const SizedBox(width: 4),
+                SizedBox(width: 16),
+                Icon(Icons.location_on, size: 14, color: Colors.grey),
+                SizedBox(width: 4),
                 Text(
                   match.venue!,
                   style: TextStyle(
@@ -289,18 +289,18 @@ class _MatchManagementScreenState
             ],
           ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
 
           // Status Badge
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: _getStatusColor(match.status),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
               match.status ?? 'UNKNOWN',
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 fontWeight: FontWeight.w700,

@@ -79,7 +79,8 @@ class FaInfoModel {
 
   String get displayPartnerLabel {
     final t = partnerType;
-    if (t == null || t.isEmpty || t.toLowerCase() == 'nopartner') return 'Non-Partner';
+    if (t == null || t.isEmpty || t.toLowerCase() == 'nopartner')
+      return 'Non-Partner';
     return '${t[0].toUpperCase()}${t.substring(1)} Partner';
   }
 }
@@ -104,7 +105,9 @@ class FaCompModel {
       compId: json['compId'] ?? json['_id'] ?? '',
       compName: json['compName'] ?? '',
       imageUrl: json['imageUrl']?.toString(),
-      seq: (json['seq'] is int) ? json['seq'] : int.tryParse(json['seq']?.toString() ?? '0') ?? 0,
+      seq: (json['seq'] is int)
+          ? json['seq']
+          : int.tryParse(json['seq']?.toString() ?? '0') ?? 0,
     );
   }
 
@@ -140,7 +143,9 @@ class FaTeamModel {
       gender: json['gender']?.toString(),
       ageGroup: json['ageGroup']?.toString(),
       ageCat: json['ageCat']?.toString(),
-      seq: (json['seq'] is int) ? json['seq'] : int.tryParse(json['seq']?.toString() ?? '0') ?? 0,
+      seq: (json['seq'] is int)
+          ? json['seq']
+          : int.tryParse(json['seq']?.toString() ?? '0') ?? 0,
     );
   }
 

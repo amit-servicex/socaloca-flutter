@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +14,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class LeaguePointsTableTab extends ConsumerWidget {
   final String tournamentId;
 
-  const LeaguePointsTableTab({
+  LeaguePointsTableTab({
     super.key,
     required this.tournamentId,
   });
@@ -34,9 +35,9 @@ class LeaguePointsTableTab extends ConsumerWidget {
                   size: 64,
                   color: Colors.grey[400],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Text(
-                  'No standings available',
+                  'No standings available'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -57,7 +58,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
-                margin: const EdgeInsets.all(12),
+                margin: EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -65,36 +66,37 @@ class LeaguePointsTableTab extends ConsumerWidget {
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
                       blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
                 child: DataTable(
-                  headingRowColor: MaterialStateProperty.all(AppColors.socaBlack),
-                  headingTextStyle: const TextStyle(
+                  headingRowColor:
+                      MaterialStateProperty.all(AppColors.socaBlack),
+                  headingTextStyle: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: AppColors.socaYellow,
                   ),
-                  dataTextStyle: const TextStyle(
+                  dataTextStyle: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     color: AppColors.socaBlack,
                   ),
                   columnSpacing: 16,
                   horizontalMargin: 12,
-                  columns: const [
-                    DataColumn(label: Text('#')),
-                    DataColumn(label: Text('Team')),
-                    DataColumn(label: Text('P'), numeric: true),
-                    DataColumn(label: Text('W'), numeric: true),
-                    DataColumn(label: Text('D'), numeric: true),
-                    DataColumn(label: Text('L'), numeric: true),
-                    DataColumn(label: Text('GF'), numeric: true),
-                    DataColumn(label: Text('GA'), numeric: true),
-                    DataColumn(label: Text('GD'), numeric: true),
-                    DataColumn(label: Text('Pts'), numeric: true),
+                  columns: [
+                    DataColumn(label: Text('#'.tr)),
+                    DataColumn(label: Text('Team'.tr)),
+                    DataColumn(label: Text('P'.tr), numeric: true),
+                    DataColumn(label: Text('W'.tr), numeric: true),
+                    DataColumn(label: Text('D'.tr), numeric: true),
+                    DataColumn(label: Text('L'.tr), numeric: true),
+                    DataColumn(label: Text('GF'.tr), numeric: true),
+                    DataColumn(label: Text('GA'.tr), numeric: true),
+                    DataColumn(label: Text('GD'.tr), numeric: true),
+                    DataColumn(label: Text('Pts'.tr), numeric: true),
                   ],
                   rows: table.asMap().entries.map((entry) {
                     final index = entry.key;
@@ -111,13 +113,13 @@ class LeaguePointsTableTab extends ConsumerWidget {
                           Row(
                             children: [
                               _buildTeamLogo(team.teamLogo, 24),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8),
                               SizedBox(
                                 width: 120,
                                 child: Text(
                                   team.teamName ?? 'Unknown',
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -147,7 +149,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
                         DataCell(
                           Text(
                             '${team.points}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
                               color: AppColors.socaBlack,
                             ),
@@ -162,20 +164,20 @@ class LeaguePointsTableTab extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const AppLoader(),
+      loading: () => AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
-            const SizedBox(height: 16),
+            Icon(Icons.error_outline, size: 64, color: Colors.red),
+            SizedBox(height: 16),
             Text('Error loading standings: $error'),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(pointsTableProvider(tournamentId));
               },
-              child: const Text('Retry'),
+              child: Text('Retry'.tr),
             ),
           ],
         ),

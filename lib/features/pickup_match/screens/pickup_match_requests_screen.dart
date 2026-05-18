@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,7 +37,7 @@ class PickupMatchRequest {
 /// Pickup Match Requests Screen
 /// Shows list of users who requested to join the match (host only)
 class PickupMatchRequestsScreen extends ConsumerStatefulWidget {
-  const PickupMatchRequestsScreen({
+  PickupMatchRequestsScreen({
     super.key,
     required this.matchId,
   });
@@ -120,8 +121,7 @@ class _PickupMatchRequestsScreenState
     }
   }
 
-  Future<void> _handleRequest(
-      PickupMatchRequest request, String status) async {
+  Future<void> _handleRequest(PickupMatchRequest request, String status) async {
     try {
       final user = ref.read(currentUserProvider);
       if (user == null) {
@@ -142,14 +142,13 @@ class _PickupMatchRequestsScreenState
         }
       });
 
-      final success = await ref
-          .read(pickupMatchRepositoryProvider)
-          .acceptDeclineRequest(
-            userId: user.id,
-            matchId: widget.matchId,
-            requestedUserId: request.userId,
-            status: status,
-          );
+      final success =
+          await ref.read(pickupMatchRepositoryProvider).acceptDeclineRequest(
+                userId: user.id,
+                matchId: widget.matchId,
+                requestedUserId: request.userId,
+                status: status,
+              );
 
       if (mounted) {
         if (success) {
@@ -196,8 +195,8 @@ class _PickupMatchRequestsScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
-        title: const Text(
-          'Match Requests',
+        title: Text(
+          'Match Requests'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -207,14 +206,14 @@ class _PickupMatchRequestsScreenState
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.socaBlack),
+        iconTheme: IconThemeData(color: AppColors.socaBlack),
       ),
       body: Column(
         children: [
           // Filter Chips
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -228,7 +227,7 @@ class _PickupMatchRequestsScreenState
                           .length;
 
                   return Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: EdgeInsets.only(right: 8),
                     child: FilterChip(
                       label: Text('$filter ($count)'),
                       selected: isSelected,
@@ -255,7 +254,7 @@ class _PickupMatchRequestsScreenState
           // Requests List
           Expanded(
             child: _isLoading
-                ? const AppLoader()
+                ? AppLoader()
                 : _errorMessage != null
                     ? Center(
                         child: Column(
@@ -263,21 +262,21 @@ class _PickupMatchRequestsScreenState
                           children: [
                             Text(
                               _errorMessage!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
                                 color: Colors.red,
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: _loadRequests,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.socaYellow,
                               ),
-                              child: const Text(
-                                'Retry',
+                              child: Text(
+                                'Retry'.tr,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w600,
@@ -299,7 +298,7 @@ class _PickupMatchRequestsScreenState
                                   size: 64,
                                   color: AppColors.socaBlack.withOpacity(0.3),
                                 ),
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
                                 Text(
                                   _selectedFilter == 'All'
                                       ? 'No requests yet'
@@ -316,7 +315,7 @@ class _PickupMatchRequestsScreenState
                         : RefreshIndicator(
                             onRefresh: _loadRequests,
                             child: ListView.builder(
-                              padding: const EdgeInsets.all(16),
+                              padding: EdgeInsets.all(16),
                               itemCount: filteredRequests.length,
                               itemBuilder: (context, index) {
                                 final request = filteredRequests[index];
@@ -339,7 +338,7 @@ class _PickupMatchRequestsScreenState
 
 /// Request List Item Widget
 class _RequestListItem extends StatelessWidget {
-  const _RequestListItem({
+  _RequestListItem({
     required this.request,
     required this.onAccept,
     required this.onDecline,
@@ -352,8 +351,8 @@ class _RequestListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -361,7 +360,7 @@ class _RequestListItem extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -369,7 +368,7 @@ class _RequestListItem extends StatelessWidget {
         children: [
           // User Avatar
           _buildAvatar(),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // User Info
           Expanded(
@@ -378,14 +377,14 @@ class _RequestListItem extends StatelessWidget {
               children: [
                 Text(
                   request.userName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 15,
                     color: AppColors.socaBlack,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 _buildStatusBadge(),
               ],
             ),
@@ -393,22 +392,22 @@ class _RequestListItem extends StatelessWidget {
 
           // Action Buttons
           if (request.status == 'pending') ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             IconButton(
               onPressed: onDecline,
-              icon: const Icon(Icons.close, color: Colors.red),
+              icon: Icon(Icons.close, color: Colors.red),
               style: IconButton.styleFrom(
                 backgroundColor: Colors.red.withOpacity(0.1),
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8),
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             IconButton(
               onPressed: onAccept,
-              icon: const Icon(Icons.check, color: Colors.green),
+              icon: Icon(Icons.check, color: Colors.green),
               style: IconButton.styleFrom(
                 backgroundColor: Colors.green.withOpacity(0.1),
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8),
               ),
             ),
           ],
@@ -422,7 +421,7 @@ class _RequestListItem extends StatelessWidget {
     return Container(
       width: 48,
       height: 48,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -431,13 +430,13 @@ class _RequestListItem extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => const Icon(
+                errorWidget: (_, __, ___) => Icon(
                   Icons.person,
                   color: AppColors.socaBlack,
                   size: 24,
                 ),
               )
-            : const Icon(Icons.person, color: AppColors.socaBlack, size: 24),
+            : Icon(Icons.person, color: AppColors.socaBlack, size: 24),
       ),
     );
   }
@@ -461,7 +460,7 @@ class _RequestListItem extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(4),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:socaloca/core/storage/storage_service.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -8,7 +9,7 @@ import '../data/tournament_models.dart';
 /// Rendered separately from [TournamentFiltersWidget] so it stays fixed
 /// at the top of the screen and never scrolls away.
 class TournamentVisibilityToggle extends StatelessWidget {
-  const TournamentVisibilityToggle({
+  TournamentVisibilityToggle({
     super.key,
     required this.visibility,
     required this.onChanged,
@@ -22,7 +23,7 @@ class TournamentVisibilityToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.socaPageBg,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Row(
         children: [
           Expanded(
@@ -32,7 +33,7 @@ class TournamentVisibilityToggle extends StatelessWidget {
               onTap: () => onChanged('local'),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: _ToggleBtn(
               label: 'GLOBAL',
@@ -49,7 +50,7 @@ class TournamentVisibilityToggle extends StatelessWidget {
 /// Tournament filters — filter dropdowns (country, location, game, gender, age).
 /// The NATIONAL/GLOBAL toggle is rendered separately via [TournamentVisibilityToggle].
 class TournamentFiltersWidget extends StatefulWidget {
-  const TournamentFiltersWidget({
+  TournamentFiltersWidget({
     super.key,
     required this.filters,
     required this.onFiltersChanged,
@@ -68,8 +69,8 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
   final TextEditingController _locationController = TextEditingController();
   String? _selectedCountry;
 
-  static const _gameTypes = ['Football', 'Futsal'];
-  static const _ageGroups = [
+  static final _gameTypes = ['Football', 'Futsal'];
+  static final _ageGroups = [
     '<10',
     '<12',
     '<15',
@@ -79,7 +80,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
     '31-40',
     '>40'
   ];
-  static const _genders = ['Male', 'Female'];
+  static final _genders = ['Male', 'Female'];
 
   @override
   void initState() {
@@ -128,7 +129,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
     final result = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) => _PickerSheet(
@@ -144,7 +145,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.socaPageBg,
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -157,12 +158,12 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
               showDialog(
                 context: context,
                 builder: (ctx) => AlertDialog(
-                  title: const Text('Select Country'),
-                  content: const Text('Country picker coming soon'),
+                  title: Text('Select Country'.tr),
+                  content: Text('Country picker coming soon'.tr),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(ctx),
-                      child: const Text('OK'),
+                      child: Text('OK'.tr),
                     ),
                   ],
                 ),
@@ -170,7 +171,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             },
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Location TextField
           _TextField(
@@ -178,7 +179,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             hint: 'Location',
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Game and Gender Row
           Row(
@@ -196,7 +197,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: _DropdownField(
                   hint: _filters.gender ?? 'Gender',
@@ -213,7 +214,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             ],
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Age Group Dropdown
           _DropdownField(
@@ -228,7 +229,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // GO Button
           GestureDetector(
@@ -239,9 +240,9 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'GO',
+                  'GO'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -259,7 +260,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
 }
 
 class _ToggleBtn extends StatelessWidget {
-  const _ToggleBtn({
+  _ToggleBtn({
     required this.label,
     required this.active,
     required this.onTap,
@@ -273,7 +274,7 @@ class _ToggleBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: active ? AppColors.socaBlack : Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -299,7 +300,7 @@ class _ToggleBtn extends StatelessWidget {
 }
 
 class _DropdownField extends StatelessWidget {
-  const _DropdownField({
+  _DropdownField({
     required this.hint,
     required this.onTap,
   });
@@ -311,7 +312,7 @@ class _DropdownField extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
           borderRadius: BorderRadius.circular(8),
@@ -321,7 +322,7 @@ class _DropdownField extends StatelessWidget {
           children: [
             Text(
               hint,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 color: AppColors.socaBlack,
@@ -336,7 +337,7 @@ class _DropdownField extends StatelessWidget {
 }
 
 class _TextField extends StatelessWidget {
-  const _TextField({
+  _TextField({
     required this.controller,
     required this.hint,
   });
@@ -346,14 +347,14 @@ class _TextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextField(
         controller: controller,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14,
           color: AppColors.socaBlack,
@@ -366,7 +367,7 @@ class _TextField extends StatelessWidget {
             color: Colors.grey.shade600,
           ),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 14),
+          contentPadding: EdgeInsets.symmetric(vertical: 14),
         ),
       ),
     );
@@ -375,7 +376,7 @@ class _TextField extends StatelessWidget {
 
 /// Bottom sheet picker for filter options
 class _PickerSheet extends StatelessWidget {
-  const _PickerSheet({
+  _PickerSheet({
     required this.title,
     required this.options,
     required this.current,
@@ -390,7 +391,7 @@ class _PickerSheet extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Container(
           width: 40,
           height: 4,
@@ -399,15 +400,15 @@ class _PickerSheet extends StatelessWidget {
             borderRadius: BorderRadius.circular(2),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
@@ -418,8 +419,8 @@ class _PickerSheet extends StatelessWidget {
               if (current != null)
                 GestureDetector(
                   onTap: () => Navigator.pop(context, null),
-                  child: const Text(
-                    'Clear',
+                  child: Text(
+                    'Clear'.tr,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
@@ -430,7 +431,7 @@ class _PickerSheet extends StatelessWidget {
             ],
           ),
         ),
-        const Divider(),
+        Divider(),
         ...options.map((option) => ListTile(
               title: Text(
                 option,
@@ -443,11 +444,11 @@ class _PickerSheet extends StatelessWidget {
                 ),
               ),
               trailing: option == current
-                  ? const Icon(Icons.check, color: AppColors.socaBlack)
+                  ? Icon(Icons.check, color: AppColors.socaBlack)
                   : null,
               onTap: () => Navigator.pop(context, option),
             )),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
       ],
     );
   }

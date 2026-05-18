@@ -591,7 +591,8 @@ class PlayerBioRepository {
         'myImageUrl': myImageUrl,
       },
     );
-    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+    return response['response']?['status'] == 1 &&
+        response['response']?['success'] == true;
   }
 
   /// Block a user
@@ -607,7 +608,8 @@ class PlayerBioRepository {
         'blocked': true,
       },
     );
-    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+    return response['response']?['status'] == 1 &&
+        response['response']?['success'] == true;
   }
 
   /// Report a user
@@ -624,7 +626,8 @@ class PlayerBioRepository {
         'cause': cause,
       },
     );
-    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+    return response['response']?['status'] == 1 &&
+        response['response']?['success'] == true;
   }
 
   /// Get teams player has joined (PlayerJoinedTeamsFragment)
@@ -639,8 +642,10 @@ class PlayerBioRepository {
         'country': country,
       },
     );
-    if (response['response']?['status'] == 1 && response['response']?['teams'] != null) {
-      return List<Map<String, dynamic>>.from(response['response']['teams'] as List);
+    if (response['response']?['status'] == 1 &&
+        response['response']?['teams'] != null) {
+      return List<Map<String, dynamic>>.from(
+          response['response']['teams'] as List);
     }
     return [];
   }
@@ -653,8 +658,10 @@ class PlayerBioRepository {
       ApiConstants.playerPendingTeams,
       body: {'playerId': playerId},
     );
-    if (response['response']?['status'] == 1 && response['response']?['teams'] != null) {
-      return List<Map<String, dynamic>>.from(response['response']['teams'] as List);
+    if (response['response']?['status'] == 1 &&
+        response['response']?['teams'] != null) {
+      return List<Map<String, dynamic>>.from(
+          response['response']['teams'] as List);
     }
     return [];
   }
@@ -668,7 +675,8 @@ class PlayerBioRepository {
       ApiConstants.cancelTeamJoinRequest,
       body: {'playerId': playerId, 'teamId': teamId},
     );
-    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+    return response['response']?['status'] == 1 &&
+        response['response']?['success'] == true;
   }
 
   /// Get team invitations received by player (paginated)
@@ -681,8 +689,10 @@ class PlayerBioRepository {
       ApiConstants.teamPlayerInvites,
       body: {'userId': userId, 'start': start, 'limit': limit},
     );
-    if (response['response']?['status'] == 1 && response['response']?['teams'] != null) {
-      return List<Map<String, dynamic>>.from(response['response']['teams'] as List);
+    if (response['response']?['status'] == 1 &&
+        response['response']?['teams'] != null) {
+      return List<Map<String, dynamic>>.from(
+          response['response']['teams'] as List);
     }
     return [];
   }
@@ -707,6 +717,7 @@ class PlayerBioRepository {
         'myImageUrl': myImageUrl,
       },
     );
-    return response['response']?['status'] == 1 && response['response']?['success'] == true;
+    return response['response']?['status'] == 1 &&
+        response['response']?['success'] == true;
   }
 }

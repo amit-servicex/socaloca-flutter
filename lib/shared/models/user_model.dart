@@ -26,6 +26,26 @@ Object? _readPost(Map json, String key) {
   return '0';
 }
 
+String? readSclId(Map json) {
+  const keys = [
+    'sclId',
+    'sclID',
+    'scl_id',
+    'SCLID',
+    'socaLocaId',
+    'socaLocaID',
+    'socalocaId',
+    'socalocaID',
+  ];
+
+  for (final key in keys) {
+    final value = json[key]?.toString().trim();
+    if (value != null && value.isNotEmpty) return value;
+  }
+
+  return null;
+}
+
 /// Standard user model (player, coach, referee, fan, etc.)
 /// Mirrors the JSON stored in SharedPreferences key 'Msai1Q'
 @freezed

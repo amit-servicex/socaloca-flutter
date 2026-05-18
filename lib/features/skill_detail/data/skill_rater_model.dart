@@ -35,8 +35,7 @@ class SkillRaterModel {
 
   bool get isOnline {
     if (lastOnline == 0) return false;
-    final diff =
-        DateTime.now().millisecondsSinceEpoch - lastOnline;
+    final diff = DateTime.now().millisecondsSinceEpoch - lastOnline;
     return diff < 300000; // 5 minutes
   }
 }
