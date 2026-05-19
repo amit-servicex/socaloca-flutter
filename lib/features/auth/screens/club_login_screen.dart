@@ -8,7 +8,6 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Mirrors Android LoginClubFragment.
 /// POST clubLogin with { uKey, passKey }.
@@ -257,7 +256,68 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                 SizedBox(height: 24),
 
                 // Login button
-                AppLoader(size: 24, centered: false),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _submit,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.socaBlack,
+                      disabledBackgroundColor:
+                          AppColors.socaBlack.withValues(alpha: 0.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              color: AppColors.socaYellow,
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                        : Text(
+                            'LOGIN'.tr,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 15,
+                              color: AppColors.socaYellow,
+                            ),
+                          ),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                // Register as Club link
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have a club account?".tr,
+                      style: TextStyle(
+                        fontFamily: 'Lato',
+                        fontSize: 13,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => context.push(AppRoutes.registerClub),
+                      child: Text(
+                        'Register as Club'.tr,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

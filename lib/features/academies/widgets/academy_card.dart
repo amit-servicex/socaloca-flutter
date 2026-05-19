@@ -48,8 +48,7 @@ class AcademyCard extends StatelessWidget {
               child: ClipOval(
                 child: _isValidImageUrl(academy.imageUrl)
                     ? CachedNetworkImage(
-                        imageUrl:
-                            '${ApiConstants.mediaBaseUrl}${academy.imageUrl}',
+                        imageUrl: ApiConstants.getImageUrl(academy.imageUrl),
                         fit: BoxFit.cover,
                         placeholder: (context, url) => AppLoader(),
                         errorWidget: (context, url, error) => Image.asset(

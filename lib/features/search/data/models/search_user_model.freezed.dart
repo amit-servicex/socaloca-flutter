@@ -30,16 +30,22 @@ mixin _$SearchUserModel {
   @JsonKey(name: 'imageUrl')
   String? get profileImage => throw _privateConstructorUsedError;
   String? get country => throw _privateConstructorUsedError;
+  String? get nationality => throw _privateConstructorUsedError;
   String? get playPosition => throw _privateConstructorUsedError;
+  String? get playPositionType => throw _privateConstructorUsedError;
   bool get isPlayer => throw _privateConstructorUsedError;
   bool get isCoach => throw _privateConstructorUsedError;
   bool get isAdmin => throw _privateConstructorUsedError;
   bool get isReferee => throw _privateConstructorUsedError;
   bool get isFan => throw _privateConstructorUsedError;
   int get appearance => throw _privateConstructorUsedError;
+  int get appearCount => throw _privateConstructorUsedError;
+  int get selfAppearCount => throw _privateConstructorUsedError;
   int get goals => throw _privateConstructorUsedError;
   int get postCount => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readEndorseBy)
   int get endorsedBy => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readFollowers)
   int get followers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -62,17 +68,21 @@ abstract class $SearchUserModelCopyWith<$Res> {
       String? profileName,
       @JsonKey(name: 'imageUrl') String? profileImage,
       String? country,
+      String? nationality,
       String? playPosition,
+      String? playPositionType,
       bool isPlayer,
       bool isCoach,
       bool isAdmin,
       bool isReferee,
       bool isFan,
       int appearance,
+      int appearCount,
+      int selfAppearCount,
       int goals,
       int postCount,
-      int endorsedBy,
-      int followers});
+      @JsonKey(readValue: _readEndorseBy) int endorsedBy,
+      @JsonKey(readValue: _readFollowers) int followers});
 }
 
 /// @nodoc
@@ -95,13 +105,17 @@ class _$SearchUserModelCopyWithImpl<$Res, $Val extends SearchUserModel>
     Object? profileName = freezed,
     Object? profileImage = freezed,
     Object? country = freezed,
+    Object? nationality = freezed,
     Object? playPosition = freezed,
+    Object? playPositionType = freezed,
     Object? isPlayer = null,
     Object? isCoach = null,
     Object? isAdmin = null,
     Object? isReferee = null,
     Object? isFan = null,
     Object? appearance = null,
+    Object? appearCount = null,
+    Object? selfAppearCount = null,
     Object? goals = null,
     Object? postCount = null,
     Object? endorsedBy = null,
@@ -136,9 +150,17 @@ class _$SearchUserModelCopyWithImpl<$Res, $Val extends SearchUserModel>
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
               as String?,
+      nationality: freezed == nationality
+          ? _value.nationality
+          : nationality // ignore: cast_nullable_to_non_nullable
+              as String?,
       playPosition: freezed == playPosition
           ? _value.playPosition
           : playPosition // ignore: cast_nullable_to_non_nullable
+              as String?,
+      playPositionType: freezed == playPositionType
+          ? _value.playPositionType
+          : playPositionType // ignore: cast_nullable_to_non_nullable
               as String?,
       isPlayer: null == isPlayer
           ? _value.isPlayer
@@ -163,6 +185,14 @@ class _$SearchUserModelCopyWithImpl<$Res, $Val extends SearchUserModel>
       appearance: null == appearance
           ? _value.appearance
           : appearance // ignore: cast_nullable_to_non_nullable
+              as int,
+      appearCount: null == appearCount
+          ? _value.appearCount
+          : appearCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      selfAppearCount: null == selfAppearCount
+          ? _value.selfAppearCount
+          : selfAppearCount // ignore: cast_nullable_to_non_nullable
               as int,
       goals: null == goals
           ? _value.goals
@@ -200,17 +230,21 @@ abstract class _$$SearchUserModelImplCopyWith<$Res>
       String? profileName,
       @JsonKey(name: 'imageUrl') String? profileImage,
       String? country,
+      String? nationality,
       String? playPosition,
+      String? playPositionType,
       bool isPlayer,
       bool isCoach,
       bool isAdmin,
       bool isReferee,
       bool isFan,
       int appearance,
+      int appearCount,
+      int selfAppearCount,
       int goals,
       int postCount,
-      int endorsedBy,
-      int followers});
+      @JsonKey(readValue: _readEndorseBy) int endorsedBy,
+      @JsonKey(readValue: _readFollowers) int followers});
 }
 
 /// @nodoc
@@ -231,13 +265,17 @@ class __$$SearchUserModelImplCopyWithImpl<$Res>
     Object? profileName = freezed,
     Object? profileImage = freezed,
     Object? country = freezed,
+    Object? nationality = freezed,
     Object? playPosition = freezed,
+    Object? playPositionType = freezed,
     Object? isPlayer = null,
     Object? isCoach = null,
     Object? isAdmin = null,
     Object? isReferee = null,
     Object? isFan = null,
     Object? appearance = null,
+    Object? appearCount = null,
+    Object? selfAppearCount = null,
     Object? goals = null,
     Object? postCount = null,
     Object? endorsedBy = null,
@@ -272,9 +310,17 @@ class __$$SearchUserModelImplCopyWithImpl<$Res>
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
               as String?,
+      nationality: freezed == nationality
+          ? _value.nationality
+          : nationality // ignore: cast_nullable_to_non_nullable
+              as String?,
       playPosition: freezed == playPosition
           ? _value.playPosition
           : playPosition // ignore: cast_nullable_to_non_nullable
+              as String?,
+      playPositionType: freezed == playPositionType
+          ? _value.playPositionType
+          : playPositionType // ignore: cast_nullable_to_non_nullable
               as String?,
       isPlayer: null == isPlayer
           ? _value.isPlayer
@@ -300,6 +346,14 @@ class __$$SearchUserModelImplCopyWithImpl<$Res>
           ? _value.appearance
           : appearance // ignore: cast_nullable_to_non_nullable
               as int,
+      appearCount: null == appearCount
+          ? _value.appearCount
+          : appearCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      selfAppearCount: null == selfAppearCount
+          ? _value.selfAppearCount
+          : selfAppearCount // ignore: cast_nullable_to_non_nullable
+              as int,
       goals: null == goals
           ? _value.goals
           : goals // ignore: cast_nullable_to_non_nullable
@@ -324,24 +378,28 @@ class __$$SearchUserModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SearchUserModelImpl implements _SearchUserModel {
   const _$SearchUserModelImpl(
-      {@JsonKey(name: 'userId') required this.userId,
+      {@JsonKey(name: 'userId') this.userId = '',
       @JsonKey(name: '_id') this.id,
-      required this.firstName,
-      required this.lastName,
+      this.firstName = '',
+      this.lastName = '',
       this.profileName,
       @JsonKey(name: 'imageUrl') this.profileImage,
       this.country,
+      this.nationality,
       this.playPosition,
+      this.playPositionType,
       this.isPlayer = false,
       this.isCoach = false,
       this.isAdmin = false,
       this.isReferee = false,
       this.isFan = false,
       this.appearance = 0,
+      this.appearCount = 0,
+      this.selfAppearCount = 0,
       this.goals = 0,
       this.postCount = 0,
-      this.endorsedBy = 0,
-      this.followers = 0});
+      @JsonKey(readValue: _readEndorseBy) this.endorsedBy = 0,
+      @JsonKey(readValue: _readFollowers) this.followers = 0});
 
   factory _$SearchUserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SearchUserModelImplFromJson(json);
@@ -353,8 +411,10 @@ class _$SearchUserModelImpl implements _SearchUserModel {
   @JsonKey(name: '_id')
   final String? id;
   @override
+  @JsonKey()
   final String firstName;
   @override
+  @JsonKey()
   final String lastName;
   @override
   final String? profileName;
@@ -364,7 +424,11 @@ class _$SearchUserModelImpl implements _SearchUserModel {
   @override
   final String? country;
   @override
+  final String? nationality;
+  @override
   final String? playPosition;
+  @override
+  final String? playPositionType;
   @override
   @JsonKey()
   final bool isPlayer;
@@ -385,20 +449,26 @@ class _$SearchUserModelImpl implements _SearchUserModel {
   final int appearance;
   @override
   @JsonKey()
+  final int appearCount;
+  @override
+  @JsonKey()
+  final int selfAppearCount;
+  @override
+  @JsonKey()
   final int goals;
   @override
   @JsonKey()
   final int postCount;
   @override
-  @JsonKey()
+  @JsonKey(readValue: _readEndorseBy)
   final int endorsedBy;
   @override
-  @JsonKey()
+  @JsonKey(readValue: _readFollowers)
   final int followers;
 
   @override
   String toString() {
-    return 'SearchUserModel(userId: $userId, id: $id, firstName: $firstName, lastName: $lastName, profileName: $profileName, profileImage: $profileImage, country: $country, playPosition: $playPosition, isPlayer: $isPlayer, isCoach: $isCoach, isAdmin: $isAdmin, isReferee: $isReferee, isFan: $isFan, appearance: $appearance, goals: $goals, postCount: $postCount, endorsedBy: $endorsedBy, followers: $followers)';
+    return 'SearchUserModel(userId: $userId, id: $id, firstName: $firstName, lastName: $lastName, profileName: $profileName, profileImage: $profileImage, country: $country, nationality: $nationality, playPosition: $playPosition, playPositionType: $playPositionType, isPlayer: $isPlayer, isCoach: $isCoach, isAdmin: $isAdmin, isReferee: $isReferee, isFan: $isFan, appearance: $appearance, appearCount: $appearCount, selfAppearCount: $selfAppearCount, goals: $goals, postCount: $postCount, endorsedBy: $endorsedBy, followers: $followers)';
   }
 
   @override
@@ -417,8 +487,12 @@ class _$SearchUserModelImpl implements _SearchUserModel {
             (identical(other.profileImage, profileImage) ||
                 other.profileImage == profileImage) &&
             (identical(other.country, country) || other.country == country) &&
+            (identical(other.nationality, nationality) ||
+                other.nationality == nationality) &&
             (identical(other.playPosition, playPosition) ||
                 other.playPosition == playPosition) &&
+            (identical(other.playPositionType, playPositionType) ||
+                other.playPositionType == playPositionType) &&
             (identical(other.isPlayer, isPlayer) ||
                 other.isPlayer == isPlayer) &&
             (identical(other.isCoach, isCoach) || other.isCoach == isCoach) &&
@@ -428,6 +502,10 @@ class _$SearchUserModelImpl implements _SearchUserModel {
             (identical(other.isFan, isFan) || other.isFan == isFan) &&
             (identical(other.appearance, appearance) ||
                 other.appearance == appearance) &&
+            (identical(other.appearCount, appearCount) ||
+                other.appearCount == appearCount) &&
+            (identical(other.selfAppearCount, selfAppearCount) ||
+                other.selfAppearCount == selfAppearCount) &&
             (identical(other.goals, goals) || other.goals == goals) &&
             (identical(other.postCount, postCount) ||
                 other.postCount == postCount) &&
@@ -439,26 +517,31 @@ class _$SearchUserModelImpl implements _SearchUserModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      userId,
-      id,
-      firstName,
-      lastName,
-      profileName,
-      profileImage,
-      country,
-      playPosition,
-      isPlayer,
-      isCoach,
-      isAdmin,
-      isReferee,
-      isFan,
-      appearance,
-      goals,
-      postCount,
-      endorsedBy,
-      followers);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        userId,
+        id,
+        firstName,
+        lastName,
+        profileName,
+        profileImage,
+        country,
+        nationality,
+        playPosition,
+        playPositionType,
+        isPlayer,
+        isCoach,
+        isAdmin,
+        isReferee,
+        isFan,
+        appearance,
+        appearCount,
+        selfAppearCount,
+        goals,
+        postCount,
+        endorsedBy,
+        followers
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -477,24 +560,29 @@ class _$SearchUserModelImpl implements _SearchUserModel {
 
 abstract class _SearchUserModel implements SearchUserModel {
   const factory _SearchUserModel(
-      {@JsonKey(name: 'userId') required final String userId,
-      @JsonKey(name: '_id') final String? id,
-      required final String firstName,
-      required final String lastName,
-      final String? profileName,
-      @JsonKey(name: 'imageUrl') final String? profileImage,
-      final String? country,
-      final String? playPosition,
-      final bool isPlayer,
-      final bool isCoach,
-      final bool isAdmin,
-      final bool isReferee,
-      final bool isFan,
-      final int appearance,
-      final int goals,
-      final int postCount,
-      final int endorsedBy,
-      final int followers}) = _$SearchUserModelImpl;
+          {@JsonKey(name: 'userId') final String userId,
+          @JsonKey(name: '_id') final String? id,
+          final String firstName,
+          final String lastName,
+          final String? profileName,
+          @JsonKey(name: 'imageUrl') final String? profileImage,
+          final String? country,
+          final String? nationality,
+          final String? playPosition,
+          final String? playPositionType,
+          final bool isPlayer,
+          final bool isCoach,
+          final bool isAdmin,
+          final bool isReferee,
+          final bool isFan,
+          final int appearance,
+          final int appearCount,
+          final int selfAppearCount,
+          final int goals,
+          final int postCount,
+          @JsonKey(readValue: _readEndorseBy) final int endorsedBy,
+          @JsonKey(readValue: _readFollowers) final int followers}) =
+      _$SearchUserModelImpl;
 
   factory _SearchUserModel.fromJson(Map<String, dynamic> json) =
       _$SearchUserModelImpl.fromJson;
@@ -517,7 +605,11 @@ abstract class _SearchUserModel implements SearchUserModel {
   @override
   String? get country;
   @override
+  String? get nationality;
+  @override
   String? get playPosition;
+  @override
+  String? get playPositionType;
   @override
   bool get isPlayer;
   @override
@@ -531,12 +623,18 @@ abstract class _SearchUserModel implements SearchUserModel {
   @override
   int get appearance;
   @override
+  int get appearCount;
+  @override
+  int get selfAppearCount;
+  @override
   int get goals;
   @override
   int get postCount;
   @override
+  @JsonKey(readValue: _readEndorseBy)
   int get endorsedBy;
   @override
+  @JsonKey(readValue: _readFollowers)
   int get followers;
   @override
   @JsonKey(ignore: true)

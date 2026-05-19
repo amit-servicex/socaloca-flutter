@@ -33,10 +33,9 @@ class SearchRepository {
         },
       );
 
-      // Response structure: { status: 1, result: [...] }
-      if (response['response']['status'] == 1 &&
-          response['response']['result'] != null) {
-        final results = response['response']['result'] as List;
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      if (data['status'] == 1 && data['result'] != null) {
+        final results = data['result'] as List;
         return results
             .map((json) =>
                 SearchUserModel.fromJson(json as Map<String, dynamic>))

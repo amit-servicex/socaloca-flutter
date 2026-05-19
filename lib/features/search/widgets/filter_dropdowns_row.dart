@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import '../data/models/search_filter_model.dart';
 import '../providers/search_provider.dart';
 import '../utils/countries_list.dart';
@@ -50,7 +51,7 @@ class _CountryDropdownState extends ConsumerState<_CountryDropdown> {
   @override
   Widget build(BuildContext context) {
     return _FilterDropdown(
-      hint: 'By Country',
+      hint: 'By Country'.tr,
       value: _selectedCountry,
       items: ['All', ...CountriesList.countries],
       onChanged: (value) {
@@ -79,7 +80,7 @@ class _TypeDropdownState extends ConsumerState<_TypeDropdown> {
   @override
   Widget build(BuildContext context) {
     return _FilterDropdown(
-      hint: 'By Type',
+      hint: 'By Type'.tr,
       value: _selectedType,
       items: const [
         UserTypeFilter.player,
@@ -117,7 +118,7 @@ class _ChoiceDropdownState extends ConsumerState<_ChoiceDropdown> {
   @override
   Widget build(BuildContext context) {
     return _FilterDropdown(
-      hint: 'By Choice',
+      hint: 'By Choice'.tr,
       value: _selectedChoice,
       items: const [
         SortingFilter.mostPosts,
@@ -160,10 +161,11 @@ class _FilterDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      height: 42,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(8),
+        color: const Color(0xFFF1F1F1),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -171,23 +173,29 @@ class _FilterDropdown extends StatelessWidget {
             hint,
             style: const TextStyle(
               fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
               fontSize: 12,
-              color: Colors.grey,
+              color: Colors.black54,
             ),
           ),
           value: value,
           isExpanded: true,
-          icon: const Icon(Icons.arrow_drop_down, size: 20),
+          icon: Image.asset(
+            "assets/images/dropdown.png",
+            width: 14,
+            height: 14,
+          ),
           style: const TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
             color: Colors.black,
           ),
           items: items.map((String item) {
             return DropdownMenuItem<String>(
               value: item,
               child: Text(
-                item,
+                item.tr,
                 overflow: TextOverflow.ellipsis,
               ),
             );

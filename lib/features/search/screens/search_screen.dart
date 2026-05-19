@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../providers/search_provider.dart';
 import '../widgets/filter_chips_row.dart';
@@ -8,10 +10,9 @@ import '../widgets/filter_dropdowns_row.dart';
 import '../widgets/search_input.dart';
 import '../widgets/search_result_card.dart';
 import '../widgets/search_shimmer.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
-  SearchScreen({super.key});
+  const SearchScreen({super.key});
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
@@ -24,8 +25,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-
-    // Initial search
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(searchProvider.notifier).search();
     });
@@ -39,7 +38,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent * 0.8) {
+        _scrollController.position.maxScrollExtent * 0.98) {
       ref.read(searchProvider.notifier).loadMore();
     }
   }
@@ -48,20 +47,13 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(searchProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: Text('Search'.tr),
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: AppColors.socaYellow,
-        elevation: 0,
-      ),
-      body: Column(
+    return Container(
+      color: Colors.white,
+      child: Column(
         children: [
-          // Search Input
           Container(
             color: Colors.white,
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: SearchInput(
               onSearch: (query) {
                 ref.read(searchProvider.notifier).setSearchQuery(query);
@@ -69,152 +61,81 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               },
             ),
           ),
-
-          // Filter Dropdowns
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: FilterDropdownsRow(),
           ),
-
-          // Filter Chips
-          if (state.filters.isNotEmpty)
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          const SizedBox(height: 12),
+          const Divider(
+              height: 0.5, thickness: 0.5, color: AppColors.socaBlack),
+          if (state.filters.isNotEmpty) ...[
+            const Padding(
+              padding: EdgeInsets.only(top: 12),
               child: FilterChipsRow(),
             ),
-
-          // Divider
-          Divider(height: 1),
-
-          // Search Results
-          Expanded(
-            child: _buildBody(state),
-          ),
+            const SizedBox(height: 12),
+            const Divider(
+              height: 0.5,
+              thickness: 0.5,
+              color: AppColors.socaBlack,
+            ),
+          ],
+          Expanded(child: _buildBody(state)),
         ],
       ),
     );
   }
 
   Widget _buildBody(SearchState state) {
-    if (state.isLoading) {
-      return SearchShimmer();
+    if (state.isLoading && state.users.isEmpty) {
+      return const SearchShimmer();
     }
 
     if (state.error != null && state.users.isEmpty) {
-      return _buildErrorState(state.error!);
+      return _buildMessage(AppStrings.somethingWentWrong);
     }
 
     if (state.users.isEmpty) {
-      return _buildEmptyState();
+      return _buildMessage('No results found'.tr);
     }
 
     return RefreshIndicator(
-      onRefresh: () async {
-        ref.read(searchProvider.notifier).refresh();
-      },
-      child: ListView.separated(
+      onRefresh: () async => ref.read(searchProvider.notifier).refresh(),
+      child: ListView.builder(
         controller: _scrollController,
-        padding: EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.only(bottom: 20),
         itemCount: state.users.length + (state.isLoadingMore ? 1 : 0),
-        separatorBuilder: (context, index) => Divider(height: 1),
         itemBuilder: (context, index) {
           if (index == state.users.length) {
-            return Padding(
-              padding: EdgeInsets.all(16.0),
+            return const Padding(
+              padding: EdgeInsets.all(16),
               child: AppLoader(),
             );
           }
-
-          final user = state.users[index];
-          return SearchResultCard(user: user);
+          return SearchResultCard(
+            user: state.users[index],
+            isLast: index == state.users.length - 1,
+          );
         },
       ),
     );
   }
 
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.search_off,
-            size: 80,
-            color: Colors.grey[400],
+  Widget _buildMessage(String message) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 50),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+            color: Colors.black,
           ),
-          SizedBox(height: 16),
-          Text(
-            'No searches'.tr,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 18,
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Try adjusting your search or filters'.tr,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildErrorState(String error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.error_outline,
-            size: 80,
-            color: Colors.red[300],
-          ),
-          SizedBox(height: 16),
-          Text(
-            'Failed to load results'.tr,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 18,
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 8),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              error,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(searchProvider.notifier).refresh();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.socaBlack,
-              foregroundColor: AppColors.socaYellow,
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-            ),
-            child: Text('Retry'.tr),
-          ),
-        ],
+        ),
       ),
     );
   }

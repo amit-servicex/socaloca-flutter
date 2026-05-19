@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_routes.dart';
+import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_bio_model.dart';
 
@@ -33,7 +36,13 @@ class PlayerBioStatsCounters extends StatelessWidget {
             label: 'POSTS',
             count: playerBio.postCount ?? 0,
             onTap: () {
-              // TODO: Navigate to posts list
+              context.push(
+                AppRoutes.myPosts,
+                extra: {
+                  'userId': playerBio.userId ?? '',
+                  'isOwnProfile': StorageService.userId == playerBio.userId,
+                },
+              );
             },
           ),
 
@@ -42,7 +51,9 @@ class PlayerBioStatsCounters extends StatelessWidget {
             label: 'CHEERS',
             count: playerBio.likeCount ?? 0,
             onTap: () {
-              // TODO: Navigate to likes list
+              final path = AppRoutes.playerLikes
+                  .replaceFirst(':userId', playerBio.userId ?? '');
+              context.push(path);
             },
           ),
 
@@ -51,7 +62,9 @@ class PlayerBioStatsCounters extends StatelessWidget {
             label: 'FOLLOWERS',
             count: playerBio.followCount ?? 0,
             onTap: () {
-              // TODO: Navigate to followers list
+              final path = AppRoutes.playerPeople
+                  .replaceFirst(':userId', playerBio.userId ?? '');
+              context.push(path, extra: {'initialTab': 0});
             },
           ),
 
@@ -60,7 +73,9 @@ class PlayerBioStatsCounters extends StatelessWidget {
             label: 'FOLLOWING',
             count: playerBio.followingCount ?? 0,
             onTap: () {
-              // TODO: Navigate to following list
+              final path = AppRoutes.playerPeople
+                  .replaceFirst(':userId', playerBio.userId ?? '');
+              context.push(path, extra: {'initialTab': 1});
             },
           ),
         ],

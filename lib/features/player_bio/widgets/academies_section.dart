@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:socaloca/core/router/app_routes.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
@@ -82,14 +86,17 @@ class AcademiesSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: SizedBox(
-            height: 100,
+            height: 120,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: academies.length,
               itemBuilder: (context, index) {
                 final academy = academies[index];
+                log("this is the academy id ${academy.academyId}");
                 return GestureDetector(
                   onTap: () {
+                    context.push(AppRoutes.academyBio
+                        .replaceFirst(':academyId', academy.academyId ?? ''));
                     // TODO: Navigate to academy bio
                   },
                   child: Container(
@@ -107,8 +114,8 @@ class AcademiesSection extends StatelessWidget {
                           child: ClipOval(
                             child: _isValidImageUrl(academy.imageUrl)
                                 ? CachedNetworkImage(
-                                    imageUrl:
-                                        '${ApiConstants.mediaBaseUrl}${academy.imageUrl}',
+                                    imageUrl: ApiConstants.getImageUrl(
+                                        academy.imageUrl),
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => AppLoader(),
                                     errorWidget: (context, url, error) => Icon(

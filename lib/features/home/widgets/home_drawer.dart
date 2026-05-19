@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/core/constants/api_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/app_strings.dart';
@@ -48,12 +49,12 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
 
     return SafeArea(
       child: Drawer(
-        width: 300,
+        width: MediaQuery.of(context).size.width * .8,
         child: Column(
           children: [
             // ── Profile section (220 dp, black bg) ─────────────────────────
             Container(
-              height: 250,
+              height: 280,
               width: double.infinity,
               color: AppColors.socaBlack,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -64,10 +65,11 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                   children: [
                     // 100 dp circular avatar
                     CircleAvatar(
-                      radius: 50,
+                      radius: 60,
                       backgroundColor: AppColors.socaGrey,
                       backgroundImage: user.profileImage != null
-                          ? NetworkImage(user.profileImage!)
+                          ? NetworkImage(
+                              ApiConstants.getImageUrl(user.profileImage ?? ''))
                           : null,
                       child: user.profileImage == null
                           ? Text(
@@ -88,8 +90,8 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                       user.name ?? 'SocaLoca User',
                       style: TextStyle(
                         fontFamily: 'Lato',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 24,
                         color: AppColors.socaYellow,
                       ),
                       textAlign: TextAlign.center,
@@ -98,7 +100,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                     ),
                     SizedBox(height: 4),
                     // SocaLoca ID label (white) + value (yellow) + copy icon (27 dp)
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -109,29 +111,41 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                             color: Colors.white,
                           ),
                         ),
-                        Text(
-                          socaId,
-                          style: TextStyle(
-                            fontFamily: 'Lato',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 10,
-                            color: AppColors.socaYellow,
-                          ),
+                        SizedBox(
+                          height: 0,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Clipboard.setData(ClipboardData(text: socaId));
-                            AppSnackBar.showSuccess(
-                                context, 'SocaLoca ID copied');
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 6),
-                            child: Icon(
-                              Icons.copy,
-                              size: 27,
-                              color: Colors.white,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              socaId,
+                              style: TextStyle(
+                                fontFamily: 'Lato',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                                color: AppColors.socaYellow,
+                              ),
                             ),
-                          ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Clipboard.setData(ClipboardData(text: socaId));
+                                AppSnackBar.showSuccess(
+                                    context, 'SocaLoca ID copied');
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 6),
+                                child: Icon(
+                                  Icons.copy,
+                                  size: 27,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -148,23 +162,41 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                   padding: EdgeInsets.zero,
                   children: [
                     _DrawerMenuItem(
-                      icon: Icons.sports_soccer,
+                      icon: Image.asset(
+                        "assets/icons/trials.png",
+                        width: 24,
+                        height: 24,
+                      ),
                       title: AppStrings.trials,
                       onTap: () {
-                        context.pop();
+                        Navigator.of(context).pop();
                         context.push(AppRoutes.trials);
                       },
                     ),
                     _DrawerMenuItem(
-                      icon: Icons.photo_library_outlined,
+                      icon: Image.asset(
+                        "assets/icons/ic_gallery_new.png",
+                        width: 24,
+                        height: 24,
+                      ),
                       title: AppStrings.myGallery,
                       onTap: () {
-                        context.pop();
-                        context.push(AppRoutes.gallery);
+                        Navigator.of(context).pop();
+                        context.push(
+                          AppRoutes.myPosts,
+                          extra: {
+                            'userId': user.id,
+                            'isOwnProfile': true,
+                          },
+                        );
                       },
                     ),
                     _DrawerMenuItem(
-                      icon: Icons.edit_outlined,
+                      icon: Image.asset(
+                        "assets/icons/ic_update_profile.png",
+                        width: 24,
+                        height: 24,
+                      ),
                       title: AppStrings.updateProfile,
                       onTap: () {
                         final playerBio = bioState.playerBio;
@@ -173,23 +205,31 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                               context, 'Loading profile, please try again');
                           return;
                         }
-                        context.pop();
+                        Navigator.of(context).pop();
                         context.push(AppRoutes.editProfile, extra: playerBio);
                       },
                     ),
                     _DrawerMenuItem(
-                      icon: Icons.lock_outline,
+                      icon: Image.asset(
+                        "assets/icons/ic_change_20password.png",
+                        width: 24,
+                        height: 24,
+                      ),
                       title: AppStrings.changePassword,
                       onTap: () {
-                        context.pop();
+                        Navigator.of(context).pop();
                         context.push(AppRoutes.changePassword);
                       },
                     ),
                     _DrawerMenuItem(
-                      icon: Icons.language,
+                      icon: Image.asset(
+                        "assets/icons/ic_change_language.png",
+                        width: 24,
+                        height: 24,
+                      ),
                       title: AppStrings.changeLanguage,
                       onTap: () {
-                        context.pop();
+                        Navigator.of(context).pop();
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
@@ -200,10 +240,14 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                       },
                     ),
                     _DrawerMenuItem(
-                      icon: Icons.headset_mic_outlined,
+                      icon: Image.asset(
+                        "assets/icons/ic_helpdesk.png",
+                        width: 24,
+                        height: 24,
+                      ),
                       title: AppStrings.helpDesk,
                       onTap: () {
-                        context.pop();
+                        Navigator.of(context).pop();
                         launchUrl(
                           Uri.parse(
                               'https://organise.socaloca.football/support.php'),
@@ -212,81 +256,89 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                       },
                     ),
                     _DrawerMenuItem(
-                      icon: Icons.privacy_tip_outlined,
+                      icon: Image.asset(
+                        "assets/icons/ic_settings.png",
+                        width: 24,
+                        height: 24,
+                      ),
                       title: AppStrings.privacySettings,
                       onTap: () {
-                        context.pop();
+                        Navigator.of(context).pop();
                         context.push(AppRoutes.privacySettings);
                       },
                     ),
                     _DrawerMenuItem(
-                      icon: Icons.feedback_outlined,
+                      icon: Image.asset(
+                        "assets/icons/help_us_to_improve.png",
+                        width: 24,
+                        height: 24,
+                      ),
                       title: AppStrings.helpUsToImprove,
                       onTap: () {
-                        context.pop();
-                        AppSnackBar.showSuccess(context, 'Coming soon');
+                        Navigator.of(context).pop();
+                        context.push(AppRoutes.survey);
                       },
                     ),
 
                     // Legal links row — "Data Policy | Terms & Conditions"
-                    Divider(
-                        height: 1, thickness: 0.5, color: AppColors.socaBlack),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              context.pop();
-                              launchUrl(
-                                Uri.parse(
-                                    'https://socaloca.football/privacy-policy/'),
-                                mode: LaunchMode.externalApplication,
-                              );
-                            },
-                            child: Text(
-                              AppStrings.dataPolicy,
-                              style: TextStyle(
-                                fontFamily: 'Lato',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                                color: AppColors.socaBlack,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              '|'.tr,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.socaBlack,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context.pop();
-                              launchUrl(
-                                Uri.parse(
-                                    'https://socaloca.football/terms-of-service/'),
-                                mode: LaunchMode.externalApplication,
-                              );
-                            },
-                            child: Text(
-                              AppStrings.termsAndConditions,
-                              style: TextStyle(
-                                fontFamily: 'Lato',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                                color: AppColors.socaBlack,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Divider(
+                    //     height: 1, thickness: 0.5, color: AppColors.socaBlack),
+                    // Padding(
+                    //   padding:
+                    //       EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                    //   child: Row(
+                    //     children: [
+                    //       GestureDetector(
+                    //         onTap: () {
+                    //           Navigator.of(context).pop();
+                    //           launchUrl(
+                    //             Uri.parse(
+                    //                 'https://socaloca.football/privacy-policy/'),
+                    //             mode: LaunchMode.externalApplication,
+                    //           );
+                    //         },
+                    //         child: Text(
+                    //           AppStrings.dataPolicy,
+                    //           style: TextStyle(
+                    //             fontFamily: 'Lato',
+                    //             fontWeight: FontWeight.w700,
+                    //             fontSize: 14,
+                    //             color: AppColors.socaBlack,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       Padding(
+                    //         padding: EdgeInsets.symmetric(horizontal: 8),
+                    //         child: Text(
+                    //           '|'.tr,
+                    //           style: TextStyle(
+                    //             fontSize: 14,
+                    //             color: AppColors.socaBlack,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       GestureDetector(
+                    //         onTap: () {
+                    //           Navigator.of(context).pop();
+                    //           launchUrl(
+                    //             Uri.parse(
+                    //                 'https://socaloca.football/terms-of-service/'),
+                    //             mode: LaunchMode.externalApplication,
+                    //           );
+                    //         },
+                    //         child: Text(
+                    //           AppStrings.termsAndConditions,
+                    //           style: TextStyle(
+                    //             fontFamily: 'Lato',
+                    //             fontWeight: FontWeight.w700,
+                    //             fontSize: 14,
+                    //             color: AppColors.socaBlack,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -298,7 +350,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
             //   padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
             //   child: ElevatedButton(
             //     onPressed: () async {
-            //       context.pop();
+            //       Navigator.of(context).pop();
             //       await ref.read(authStateProvider.notifier).logout();
             //       if (context.mounted) {
             //         context.go(AppRoutes.roleChoice);
@@ -336,44 +388,42 @@ class _DrawerMenuItem extends StatelessWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  final Image icon;
   final String title;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      // mainAxisSize: MainAxisSize.min,
       children: [
         InkWell(
           onTap: onTap,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 13),
-            child: SafeArea(
-              child: Row(
-                children: [
-                  SizedBox(width: 20),
-                  Icon(icon, size: 22, color: AppColors.socaBlack),
-                  SizedBox(width: 16),
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontFamily: 'Lato',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: AppColors.socaBlack,
-                    ),
+            child: Row(
+              children: [
+                SizedBox(width: 20),
+                icon,
+                SizedBox(width: 16),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                    color: AppColors.socaBlack,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-        Divider(
+        const Divider(
           height: 1,
           thickness: 0.5,
           color: AppColors.socaBlack,
-          indent: 20,
+          indent: 0,
         ),
       ],
     );

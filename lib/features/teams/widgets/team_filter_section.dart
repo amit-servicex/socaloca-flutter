@@ -243,7 +243,11 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
-          icon: Icon(Icons.arrow_drop_down, color: Colors.black54),
+          icon: Image.asset(
+            'assets/images/dropdown.png',
+            width: 14,
+            height: 14,
+          ),
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,

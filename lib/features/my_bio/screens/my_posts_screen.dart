@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/api_constants.dart';
+import '../../../core/network/api_client.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
@@ -13,6 +14,7 @@ import '../../player_bio/data/models/player_bio_model.dart';
 import '../../player_bio/data/repositories/player_bio_repository.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import 'package:socaloca/shared/widgets/app_snackbar.dart';
 
 /// Vertical list of a user's posts — mirrors Android MyGalleryNewFragment.
 /// limit=10, paginates on scroll.
@@ -67,9 +69,9 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
   Future<void> _loadPosts({bool refresh = false}) async {
     if (_loading) return;
     if (refresh) {
-      final _start = 0;
-      final _hasMore = true;
       _posts.clear();
+      _start = 0;
+      _hasMore = true;
     }
 
     setState(() => _loading = true);
@@ -87,13 +89,22 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
         setState(() {
           _posts.addAll(newPosts);
           _start += newPosts.length;
-          final _hasMore = newPosts.length == _limit;
-          final _loading = false;
+          _hasMore = newPosts.length == _limit;
+          _loading = false;
         });
       }
     } catch (_) {
       if (mounted) setState(() => _loading = false);
     }
+  }
+
+  void _handlePostDeleted(String postId) {
+    setState(() => _posts.removeWhere((p) => p.postId == postId));
+  }
+
+  Future<void> _handleEditRequested(PlayerPostModel post) async {
+    await context.push(AppRoutes.createPost, extra: post);
+    if (mounted) _loadPosts(refresh: true);
   }
 
   @override
@@ -124,8 +135,9 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
           'No posts found'.tr,
           style: TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 16,
-            color: AppColors.socaGrey,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: AppColors.socaBlack,
           ),
         ),
       );
@@ -142,53 +154,233 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
           if (index == _posts.length) {
             return AppLoader();
           }
-          return _PostCard(post: _posts[index], playerBio: playerBio);
+          return _PostCard(
+            post: _posts[index],
+            playerBio: playerBio,
+            isOwn: _isOwn,
+            onDeleted: () => _handlePostDeleted(_posts[index].postId ?? ''),
+            onEditRequested: () => _handleEditRequested(_posts[index]),
+          );
         },
       ),
     );
   }
 }
 
-class _PostCard extends StatelessWidget {
+class _PostCard extends StatefulWidget {
   final PlayerPostModel post;
   final PlayerBioModel? playerBio;
+  final bool isOwn;
+  final VoidCallback onDeleted;
+  final VoidCallback onEditRequested;
 
-  _PostCard({required this.post, this.playerBio});
+  const _PostCard({
+    required this.post,
+    required this.isOwn,
+    required this.onDeleted,
+    required this.onEditRequested,
+    this.playerBio,
+  });
 
+  @override
+  State<_PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<_PostCard> {
   String? _mediaUrl() {
-    if (post.sources?.isNotEmpty != true) return null;
-    final source = post.sources!.first;
+    if (widget.post.sources?.isNotEmpty != true) return null;
+    final source = widget.post.sources!.first;
     final raw = source.imageUrl ?? source.thumbnail;
     if (raw == null || raw.isEmpty || raw.startsWith('file:///')) return null;
     return ApiConstants.getImageUrl(raw);
   }
 
   bool _isVideo() {
-    if (post.sources?.isNotEmpty != true) return false;
-    return post.sources!.first.videoUrl != null;
+    if (widget.post.sources?.isNotEmpty != true) return false;
+    return widget.post.sources!.first.videoUrl != null;
   }
 
-  String _formatDate(int? addedOn) {
-    if (addedOn == null) return '';
-    final dt = DateTime.fromMillisecondsSinceEpoch(addedOn).toLocal();
-    final months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    final hour = dt.hour == 0 || dt.hour == 12 ? 12 : dt.hour % 12;
-    final minute = dt.minute.toString().padLeft(2, '0');
-    final period = dt.hour >= 12 ? 'PM' : 'AM';
-    return '${months[dt.month - 1]} ${dt.day}, $hour:$minute$period';
+  // ── Options bottom sheet ────────────────────────────────────────────────────
+
+  void _showPostOptions() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Edit option
+              ListTile(
+                leading: const Icon(Icons.edit_outlined,
+                    color: AppColors.socaBlack, size: 22),
+                title: const Text(
+                  'Edit Post',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 15,
+                    color: AppColors.socaBlack,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  widget.onEditRequested();
+                },
+              ),
+              const Divider(
+                  height: 1, thickness: 0.5, color: Color(0xFFE0E0E0)),
+              // Delete option
+              ListTile(
+                leading: const Icon(Icons.delete_outline,
+                    color: Colors.red, size: 22),
+                title: const Text(
+                  'Delete Post',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 15,
+                    color: Colors.red,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  _showDeleteConfirm();
+                },
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // ── Delete confirmation ─────────────────────────────────────────────────────
+
+  void _showDeleteConfirm() {
+    bool isDeleting = false;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) {
+            Future<void> handleDelete() async {
+              setSheetState(() => isDeleting = true);
+              try {
+                final userId = StorageService.userId ?? '';
+                await ApiClient.instance.post(
+                  ApiConstants.deletePost,
+                  body: {
+                    'userId': userId,
+                    'postId': widget.post.postId ?? '',
+                  },
+                );
+                if (ctx.mounted) Navigator.of(ctx).pop();
+                if (mounted) {
+                  AppSnackBar.showSuccess(context, 'Post deleted');
+                  widget.onDeleted();
+                }
+              } catch (_) {
+                setSheetState(() => isDeleting = false);
+                if (mounted) {
+                  AppSnackBar.showError(
+                      context, 'Could not delete post. Please try again.');
+                }
+              }
+            }
+
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Are you sure you want to delete this post?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: AppColors.socaBlack,
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: isDeleting
+                                ? null
+                                : () => Navigator.of(ctx).pop(),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: AppColors.socaBlack, width: 1.5),
+                              foregroundColor: AppColors.socaBlack,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25)),
+                            ),
+                            child: const Text(
+                              'CANCEL',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: isDeleting ? null : handleDelete,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25)),
+                            ),
+                            child: isDeleting
+                                ? const SizedBox(
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Text(
+                                    'DELETE',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -203,15 +395,15 @@ class _PostCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header (Avatar + Name + Role)
-          if (playerBio != null)
+          if (widget.playerBio != null)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
                   ClipOval(
                     child: CachedNetworkImage(
-                      imageUrl:
-                          ApiConstants.getImageUrl(playerBio!.imageUrl ?? ''),
+                      imageUrl: ApiConstants.getImageUrl(
+                          widget.playerBio!.imageUrl ?? ''),
                       width: 40,
                       height: 40,
                       fit: BoxFit.cover,
@@ -228,7 +420,7 @@ class _PostCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${playerBio!.firstName ?? ''} ${playerBio!.lastName ?? ''}'
+                          '${widget.playerBio!.firstName ?? ''} ${widget.playerBio!.lastName ?? ''}'
                               .trim(),
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -237,9 +429,9 @@ class _PostCard extends StatelessWidget {
                             color: AppColors.socaBlack,
                           ),
                         ),
-                        if ((playerBio!.playPosition ?? '').isNotEmpty)
+                        if ((widget.playerBio!.playPosition ?? '').isNotEmpty)
                           Text(
-                            '${playerBio!.playPosition} | ${playerBio!.playPositionType ?? ''}'
+                            '${widget.playerBio!.playPosition} | ${widget.playerBio!.playPositionType ?? ''}'
                                 .trim(),
                             style: TextStyle(
                               fontFamily: 'Poppins',
@@ -256,11 +448,11 @@ class _PostCard extends StatelessWidget {
             ),
 
           // Title / Top Text
-          if (post.title?.isNotEmpty == true)
+          if (widget.post.title?.isNotEmpty == true)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Text(
-                post.title!,
+                widget.post.title!,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -317,20 +509,24 @@ class _PostCard extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.7),
                   ),
 
-                // Top right menu
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
+                // Top right menu — only visible for own posts
+                if (widget.isOwn)
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: GestureDetector(
+                      onTap: _showPostOptions,
+                      child: Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        child: Icon(Icons.more_vert,
+                            color: AppColors.socaBlack, size: 20),
+                      ),
                     ),
-                    child: Icon(Icons.more_vert,
-                        color: AppColors.socaBlack, size: 20),
                   ),
-                ),
               ],
             )
           else
@@ -357,19 +553,23 @@ class _PostCard extends StatelessWidget {
                     size: 72,
                     color: Colors.white.withValues(alpha: 0.7),
                   ),
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
+                if (widget.isOwn)
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: GestureDetector(
+                      onTap: _showPostOptions,
+                      child: Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        child: Icon(Icons.more_vert,
+                            color: AppColors.socaBlack, size: 20),
+                      ),
                     ),
-                    child: Icon(Icons.more_vert,
-                        color: AppColors.socaBlack, size: 20),
                   ),
-                ),
               ],
             ),
 
@@ -382,7 +582,7 @@ class _PostCard extends StatelessWidget {
                     size: 20, color: AppColors.socaBlack),
                 SizedBox(width: 8),
                 Text(
-                  '${post.likeCount ?? 0} cheer',
+                  '${widget.post.likeCount ?? 0} cheer',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,

@@ -24,7 +24,7 @@ class PlayerBioHeader extends StatelessWidget {
     final imageUrl = playerBio.imageUrl;
     final preferredJersey = playerBio.preferredJersey;
     final isVerified = playerBio.isVerifyBadge ?? false;
-    final isOnline = playerBio.isOnline ?? false;
+    final flagIso = _flagIsoCode(playerBio);
 
     return Container(
       padding: EdgeInsets.only(top: 20, bottom: 10),
@@ -145,8 +145,8 @@ class PlayerBioHeader extends StatelessWidget {
 
           SizedBox(height: 15),
 
-          // Country Flag Image (placeholder using icon if no image)
-          if (playerBio.country != null && playerBio.country!.isNotEmpty)
+          // Android uses nationalityIso first, then falls back to country name.
+          if (flagIso != null)
             Container(
               width: 45,
               height: 30,
@@ -154,11 +154,14 @@ class PlayerBioHeader extends StatelessWidget {
                 border: Border.all(color: Colors.grey.shade400, width: 1),
                 borderRadius: BorderRadius.circular(2),
               ),
+              clipBehavior: Clip.antiAlias,
               child: Image.network(
-                'https://flagcdn.com/w40/in.png',
+                'https://flagcdn.com/w40/${flagIso.toLowerCase()}.png',
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    Icon(Icons.flag, color: Colors.green),
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.flag,
+                  color: Colors.green,
+                ),
               ),
             ),
           SizedBox(
@@ -182,4 +185,79 @@ class PlayerBioHeader extends StatelessWidget {
       ),
     );
   }
+
+  String? _flagIsoCode(PlayerBioModel bio) {
+    final directIso =
+        _normalizeIso(bio.nationalityIso) ?? _normalizeIso(bio.countryIso);
+    if (directIso != null) return directIso;
+
+    final country = bio.country?.trim().toLowerCase();
+    if (country == null || country.isEmpty) return null;
+    return _countryNameToIso[country];
+  }
+
+  String? _normalizeIso(String? value) {
+    final iso = value?.trim();
+    if (iso == null || iso.isEmpty) return null;
+    return iso.length == 2 ? iso.toUpperCase() : null;
+  }
 }
+
+const Map<String, String> _countryNameToIso = {
+  'afghanistan': 'AF',
+  'albania': 'AL',
+  'algeria': 'DZ',
+  'argentina': 'AR',
+  'australia': 'AU',
+  'austria': 'AT',
+  'bangladesh': 'BD',
+  'belgium': 'BE',
+  'brazil': 'BR',
+  'canada': 'CA',
+  'chile': 'CL',
+  'china': 'CN',
+  'colombia': 'CO',
+  'denmark': 'DK',
+  'egypt': 'EG',
+  'england': 'GB',
+  'finland': 'FI',
+  'france': 'FR',
+  'germany': 'DE',
+  'greece': 'GR',
+  'india': 'IN',
+  'indonesia': 'ID',
+  'ireland': 'IE',
+  'republic of ireland': 'IE',
+  'italy': 'IT',
+  'japan': 'JP',
+  'kenya': 'KE',
+  'korea republic': 'KR',
+  'south korea': 'KR',
+  'malaysia': 'MY',
+  'mexico': 'MX',
+  'netherlands': 'NL',
+  'new zealand': 'NZ',
+  'nigeria': 'NG',
+  'norway': 'NO',
+  'pakistan': 'PK',
+  'peru': 'PE',
+  'philippines': 'PH',
+  'poland': 'PL',
+  'portugal': 'PT',
+  'russia': 'RU',
+  'saudi arabia': 'SA',
+  'singapore': 'SG',
+  'south africa': 'ZA',
+  'spain': 'ES',
+  'sweden': 'SE',
+  'switzerland': 'CH',
+  'thailand': 'TH',
+  'türkiye': 'TR',
+  'turkey': 'TR',
+  'ukraine': 'UA',
+  'united arab emirates': 'AE',
+  'usa': 'US',
+  'united states': 'US',
+  'united states of america': 'US',
+  'vietnam': 'VN',
+};

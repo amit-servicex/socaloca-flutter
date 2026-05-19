@@ -3,13 +3,13 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../data/tournament_models.dart';
 import '../data/tournament_repository.dart';
 import '../widgets/tournament_card.dart';
 import '../widgets/tournament_filters.dart';
-import 'tournament_featured_screen.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Status integer constants — matches Android Params.java exactly
@@ -122,6 +122,8 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                   ownCountry: currentUser.country ?? '',
                   start: _start,
                   limit: _limit,
+                  isReferee: currentUser.isReferee == true ||
+                      currentUser.userType?.toLowerCase() == 'referee',
                 );
       }
 
@@ -191,7 +193,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                             ),
                             SizedBox(height: 16),
                             Text(
-                              'No tournaments found'.tr,
+                              AppStrings.noTournamentsFound,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
@@ -233,18 +235,9 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                               return TournamentCard(
                                 tournament: t,
                                 onTap: () {
-                                  final id = t.effectiveId;
-                                  if (id.isEmpty) return;
-
-                                  final tmntType = t.tmntType?.toUpperCase() ??
-                                      t.rule?.toUpperCase() ??
-                                      '';
-
-                                  if (tmntType == 'CUP') {
-                                    context.push('/cups/$id');
-                                  } else {
-                                    context.push('/tournaments/$id');
-                                  }
+                                  final route = _detailsRouteFor(t);
+                                  if (route == null) return;
+                                  context.push(route);
                                 },
                               );
                             },
@@ -259,5 +252,20 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
         ),
       ],
     );
+  }
+
+  String? _detailsRouteFor(TournamentModel tournament) {
+    final id = tournament.effectiveId;
+    if (id.isEmpty) return null;
+
+    final tmntType = tournament.tmntType?.trim().toUpperCase();
+    final rule = tournament.rule?.trim().toUpperCase();
+    final isCup = tmntType == 'CUP' ||
+        rule == 'CUP' ||
+        rule == 'GROUP' ||
+        rule == 'KNOCKOUT';
+
+    final route = isCup ? AppRoutes.cupDetail : AppRoutes.tournamentDetail;
+    return route.replaceFirst(isCup ? ':cupId' : ':tmntId', id);
   }
 }

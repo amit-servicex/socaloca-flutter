@@ -317,6 +317,80 @@ class ClubRepository {
     }
   }
 
+  /// clubTrialList — trials for a specific club (used from club bio screen).
+  Future<List<Map<String, dynamic>>> clubTrialList({
+    required String clubId,
+    int start = 0,
+    int limit = 10,
+  }) async {
+    try {
+      final userId = StorageService.userId ?? '';
+      final response = await ApiClient.instance.post(
+        ApiConstants.clubTrialList,
+        body: {
+          'clubId': clubId,
+          'userId': userId,
+          'start': start,
+          'limit': limit,
+        },
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final raw = data['trials'] as List? ?? [];
+      return raw.cast<Map<String, dynamic>>();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// clubRegister — submit new club organisation registration.
+  Future<Map<String, dynamic>> clubRegister({
+    required String clubName,
+    required String email,
+    required String country,
+    required String confed,
+    required String league,
+    required String contactCode,
+    required String contactNumber,
+    required String contactName,
+    required String contactIso,
+  }) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.clubRegister,
+        body: {
+          'clubName': clubName,
+          'email': email,
+          'country': country,
+          'confed': confed,
+          'league': league,
+          'deviceType': 'flutter',
+          'contactCode': contactCode,
+          'contactNumber': contactNumber,
+          'contactName': contactName,
+          'contactIso': contactIso,
+        },
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      return data;
+    } catch (e) {
+      return {'status': 0, 'error': e.toString()};
+    }
+  }
+
+  /// getClubRegion — fetch confederation name and leagues for a country.
+  Future<Map<String, dynamic>> getClubRegion({required String country}) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.clubRegionByCountry,
+        body: {'country': country},
+      );
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      return data;
+    } catch (_) {
+      return {};
+    }
+  }
+
   /// allClubTrials — paginated platform-wide trials with filters.
   Future<List<Map<String, dynamic>>> allClubTrials({
     String? userId,

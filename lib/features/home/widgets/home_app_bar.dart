@@ -50,7 +50,10 @@ String? _titleForPath(String path) {
     if (path == key || path.startsWith('$key/')) return _routeTitles[key];
   }
   // Dynamic segments (e.g. /players/:userId → 'Players')
+  if (path.contains('/people')) return 'People';
+  if (path.contains('/likes')) return 'Likes';
   if (path.startsWith('/players/')) return 'Player';
+  if (path.startsWith('/members/')) return 'Profile';
   if (path.startsWith('/teams/')) return 'Team';
   if (path.startsWith('/clubs/')) return 'Club';
   if (path.startsWith('/tournaments/')) return 'Tournament';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 
 class SearchInput extends StatefulWidget {
@@ -30,8 +31,8 @@ class _SearchInputState extends State<SearchInput> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(8),
+        color: const Color(0xFFF1F1F1),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         children: [
@@ -40,21 +41,26 @@ class _SearchInputState extends State<SearchInput> {
               controller: _controller,
               decoration: InputDecoration(
                 hintText: 'Player/Coach/Manager/Referee'.tr,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
                   fontSize: 14,
-                  color: Colors.grey,
+                  color: Colors.black54,
                 ),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10,
                   vertical: 12,
                 ),
               ),
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
                 fontSize: 14,
               ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')),
+              ],
               textInputAction: TextInputAction.search,
               onSubmitted: (_) => _handleSearch(),
               onChanged: (value) {
@@ -66,7 +72,11 @@ class _SearchInputState extends State<SearchInput> {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black54),
+            icon: Image.asset(
+              'assets/icons/ic_search.png',
+              width: 26,
+              height: 26,
+            ),
             onPressed: _handleSearch,
           ),
         ],

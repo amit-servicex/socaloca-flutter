@@ -159,8 +159,13 @@ class PlayerBioState {
 class PlayerBioNotifier extends StateNotifier<PlayerBioState> {
   final PlayerBioRepository _repository;
   final String playerId;
+  final bool isCoachAdminProfile;
 
-  PlayerBioNotifier(this._repository, this.playerId) : super(PlayerBioState());
+  PlayerBioNotifier(
+    this._repository,
+    this.playerId, {
+    this.isCoachAdminProfile = false,
+  }) : super(PlayerBioState());
 
   /// Load player bio
   Future<void> load() async {
@@ -176,10 +181,15 @@ class PlayerBioNotifier extends StateNotifier<PlayerBioState> {
         return;
       }
 
-      final playerBio = await _repository.getPlayerBio(
-        userId: userId,
-        playerId: playerId,
-      );
+      final playerBio = isCoachAdminProfile
+          ? await _repository.getAdminBio(
+              userId: userId,
+              adminId: playerId,
+            )
+          : await _repository.getPlayerBio(
+              userId: userId,
+              playerId: playerId,
+            );
 
       if (playerBio != null) {
         state = state.copyWith(
@@ -189,22 +199,30 @@ class PlayerBioNotifier extends StateNotifier<PlayerBioState> {
           isLiked: playerBio.likedByMe ?? false,
         );
 
-        // Load stats for current year
-        await loadStats(state.selectedYear);
+        if (!isCoachAdminProfile) {
+          // Load stats for current year
+          await loadStats(state.selectedYear);
 
-        // Load mini activity (matches & training)
-        await loadMiniActivity();
+          // Load mini activity (matches & training)
+          await loadMiniActivity();
+        }
 
-        // Load teams, skills, and posts
+        // Load teams and posts
         await loadTeams();
-        await loadSkills();
         await loadPosts();
 
-        // Load endorsements, academies, tournaments, and tagged videos
-        await loadEndorsements();
+        if (!isCoachAdminProfile) {
+          await loadSkills();
+          await loadEndorsements();
+        }
+
+        // Load academies and tournaments
         await loadAcademies();
         await loadTournaments();
-        await loadTaggedVideos();
+
+        if (!isCoachAdminProfile) {
+          await loadTaggedVideos();
+        }
       } else {
         state = state.copyWith(
           isLoading: false,
@@ -454,11 +472,17 @@ class PlayerBioNotifier extends StateNotifier<PlayerBioState> {
     state = state.copyWith(isLoadingTournaments: true);
 
     try {
-      final tournaments = await _repository.getPlayerTmnts(
-        playerId: playerId,
-        start: 0,
-        limit: 20,
-      );
+      final tournaments = isCoachAdminProfile
+          ? await _repository.getCoachAdminTmnts(
+              userId: playerId,
+              start: 0,
+              limit: 20,
+            )
+          : await _repository.getPlayerTmnts(
+              playerId: playerId,
+              start: 0,
+              limit: 20,
+            );
 
       state = state.copyWith(
         tournaments: tournaments,
@@ -601,5 +625,18 @@ final playerBioProvider =
   (ref, playerId) {
     final repository = ref.watch(playerBioRepositoryProvider);
     return PlayerBioNotifier(repository, playerId);
+  },
+);
+
+/// Provider for coach/admin/manager bio.
+final coachAdminBioProvider =
+    StateNotifierProvider.family<PlayerBioNotifier, PlayerBioState, String>(
+  (ref, memberId) {
+    final repository = ref.watch(playerBioRepositoryProvider);
+    return PlayerBioNotifier(
+      repository,
+      memberId,
+      isCoachAdminProfile: true,
+    );
   },
 );
