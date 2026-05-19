@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:dio/dio.dart';
@@ -12,6 +13,7 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../player_bio/data/models/player_post_model.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ── Post category constants (from Android Params.java) ────────────────────────
@@ -20,11 +22,12 @@ final _kFootballMoments = 'moment';
 final _kPostTypeImage = 'image';
 final _kPostTypeVideo = 'video';
 
-/// Create Post screen — mirrors Android CreatePostFragment.
-/// Video mode: space bar → write+tag → post type → choose category → notify → media
-/// Image mode: write+tag → post type → media
+/// Create / Edit Post screen — mirrors Android CreatePostFragment / EditPostFragment.
+/// Pass [editPost] to pre-fill the form for editing an existing post.
 class CreatePostScreen extends ConsumerStatefulWidget {
-  CreatePostScreen({super.key});
+  final PlayerPostModel? editPost;
+
+  CreatePostScreen({super.key, this.editPost});
 
   @override
   ConsumerState<CreatePostScreen> createState() => _CreatePostScreenState();
@@ -34,18 +37,21 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   final _titleController = TextEditingController();
   final _imagePicker = ImagePicker();
 
-  // Default: Videos first (mirror Android)
+  // Post type / category
   String _postType = _kPostTypeVideo;
   String _postCat = _kSkillVideo;
-  bool _notifyFollowers = true; // Default checked (mirror Android)
+  bool _notifyFollowers = true;
 
+  // Newly picked local files
   final List<XFile> _selectedImages = [];
   XFile? _selectedVideo;
+
+  // Existing network sources from editPost (shown in grid, removable)
+  List<PostMediaSource> _existingSources = [];
 
   final List<Map<String, dynamic>> _taggedUsers = [];
 
   bool _isUploading = false;
-  double _uploadProgress = 0;
   String _uploadStatus = '';
 
   // Space info (from getVdoSpace API)
@@ -54,11 +60,30 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   double _maxMB = 1024;
   bool _spaceLoaded = false;
 
-  static int _maxImages = 10;
+  static const int _maxImages = 10;
+
+  bool get _isEditMode => widget.editPost != null;
+
+  // Helpers for edit mode
+  List<PostMediaSource> get _existingImageSources =>
+      _existingSources.where((s) => s.imageUrl != null).toList();
+
+  PostMediaSource? get _existingVideoSource =>
+      _existingSources.where((s) => s.videoUrl != null).firstOrNull;
+
+  int get _totalImageCount =>
+      _existingImageSources.length + _selectedImages.length;
 
   @override
   void initState() {
     super.initState();
+    if (_isEditMode) {
+      final post = widget.editPost!;
+      _titleController.text = post.title ?? '';
+      _postType = post.postType ?? _kPostTypeImage;
+      _postCat = post.postCat ?? _kSkillVideo;
+      _existingSources = List.from(post.sources ?? []);
+    }
     _loadVdoSpace();
   }
 
@@ -83,10 +108,10 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         final max = (raw['max'] as num?)?.toDouble() ?? 0;
         final available = (raw['available'] as num?)?.toDouble() ?? 0;
         setState(() {
-          final _usedMB = used / (1024 * 1024);
-          final _maxMB = max / (1024 * 1024);
-          final _availableMB = available / (1024 * 1024);
-          final _spaceLoaded = true;
+          _usedMB = used / (1024 * 1024);
+          _maxMB = max / (1024 * 1024);
+          _availableMB = available / (1024 * 1024);
+          _spaceLoaded = true;
         });
       }
     } catch (_) {}
@@ -102,7 +127,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         maxWidth: 1920,
         maxHeight: 1920,
       );
-      if (file != null && _selectedImages.length < _maxImages) {
+      if (file != null && _totalImageCount < _maxImages) {
         setState(() => _selectedImages.add(file));
       }
     } else {
@@ -113,7 +138,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       );
       if (files.isNotEmpty) {
         setState(() {
-          final remaining = _maxImages - _selectedImages.length;
+          final remaining = _maxImages - _totalImageCount;
           _selectedImages.addAll(files.take(remaining));
         });
       }
@@ -123,10 +148,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   Future<void> _pickVideo() async {
     final file = await _imagePicker.pickVideo(
       source: ImageSource.gallery,
-      maxDuration: Duration(minutes: 10),
+      maxDuration: const Duration(minutes: 10),
     );
     if (file != null) {
-      // Check file size against available space
       final size = File(file.path).lengthSync();
       final fileMB = size / (1024 * 1024);
       if (_spaceLoaded && fileMB > _availableMB) {
@@ -141,8 +165,14 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     }
   }
 
-  void _removeImage(int index) =>
+  void _removeLocalImage(int index) =>
       setState(() => _selectedImages.removeAt(index));
+
+  void _removeExistingImageSource(PostMediaSource src) =>
+      setState(() => _existingSources.remove(src));
+
+  void _removeExistingVideo() =>
+      setState(() => _existingSources.removeWhere((s) => s.videoUrl != null));
 
   // ── Tag players ───────────────────────────────────────────────────────────
 
@@ -184,23 +214,27 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       );
       return;
     }
-    if (_postType == _kPostTypeImage && _selectedImages.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select at least one photo'.tr)),
-      );
-      return;
-    }
-    if (_postType == _kPostTypeVideo && _selectedVideo == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a video'.tr)),
-      );
-      return;
+
+    if (_postType == _kPostTypeImage) {
+      if (_totalImageCount == 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please select at least one photo'.tr)),
+        );
+        return;
+      }
+    } else {
+      final hasExistingVideo = _existingVideoSource != null;
+      if (!hasExistingVideo && _selectedVideo == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please select a video'.tr)),
+        );
+        return;
+      }
     }
 
     setState(() {
-      final _isUploading = true;
-      final _uploadProgress = 0;
-      final _uploadStatus = 'Uploading...';
+      _isUploading = true;
+      _uploadStatus = 'Uploading...';
     });
 
     try {
@@ -209,57 +243,98 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       double totalSize = 0;
 
       if (_postType == _kPostTypeImage) {
+        // Keep existing network image sources (not re-uploaded)
+        for (final src in _existingImageSources) {
+          sources.add({
+            'seq': sources.length + 1,
+            'imageUrl': src.imageUrl,
+            'size': 0,
+          });
+        }
+
+        // Upload new local images
         for (int i = 0; i < _selectedImages.length; i++) {
           final img = _selectedImages[i];
           setState(() {
-            final _uploadStatus =
+            _uploadStatus =
                 'Uploading photo ${i + 1} of ${_selectedImages.length}...';
-            final _uploadProgress = i / _selectedImages.length;
           });
-
           final size = File(img.path).lengthSync().toDouble();
           final formData = FormData.fromMap({
-            'image': await MultipartFile.fromFile(img.path, filename: img.name),
+            'metadata': '',
+            'image': await MultipartFile.fromFile(
+              img.path,
+              filename: img.name,
+              contentType: DioMediaType('application', 'octet-stream'),
+            ),
           });
           final resp = await ApiClient.instance
               .uploadFile(ApiConstants.uploadImage, formData: formData);
           final imageUrl = resp['response']?['image'] as String? ?? '';
-          if (imageUrl.isEmpty)
+          if (imageUrl.isEmpty) {
             throw Exception('Failed to upload photo ${i + 1}');
-          sources.add({'seq': i + 1, 'imageUrl': imageUrl, 'size': size});
+          }
+          sources.add({
+            'seq': sources.length + 1,
+            'imageUrl': imageUrl,
+            'size': size,
+          });
           totalSize += size;
         }
       } else {
-        setState(() => _uploadStatus = 'Uploading video...');
-        final size = File(_selectedVideo!.path).lengthSync().toDouble();
-        final formData = FormData.fromMap({
-          'video': await MultipartFile.fromFile(_selectedVideo!.path,
-              filename: _selectedVideo!.name),
-        });
-        final resp = await ApiClient.instance
-            .uploadFile(ApiConstants.uploadVdo, formData: formData);
-        final videoUrl = resp['response']?['videoUrl'] as String? ?? '';
-        final thumbnail = resp['response']?['thumbnail'] as String? ?? '';
-        if (videoUrl.isEmpty) throw Exception('Failed to upload video');
-        sources.add({
-          'seq': 1,
-          'videoUrl': videoUrl,
-          'thumbnail': thumbnail,
-          'thumbSet': thumbnail.isNotEmpty,
-          'videoId': resp['response']?['videoId'] ?? '',
-          'size': size,
-        });
-        totalSize = size;
+        // Video
+        if (_selectedVideo != null) {
+          // Upload new local video (replaces any existing)
+          setState(() => _uploadStatus = 'Uploading video...');
+          final size = File(_selectedVideo!.path).lengthSync().toDouble();
+          final formData = FormData.fromMap({
+            'metadata': '',
+            'video': await MultipartFile.fromFile(
+              _selectedVideo!.path,
+              filename: _selectedVideo!.name,
+              contentType: DioMediaType('application', 'octet-stream'),
+            ),
+          });
+          final resp = await ApiClient.instance
+              .uploadFile(ApiConstants.uploadVdo, formData: formData);
+          final videoUrl = resp['response']?['videoUrl'] as String? ?? '';
+          final thumbnail = resp['response']?['thumbnail'] as String? ?? '';
+          if (videoUrl.isEmpty) throw Exception('Failed to upload video');
+          sources.add({
+            'seq': 1,
+            'videoUrl': videoUrl,
+            'thumbnail': thumbnail,
+            'thumbSet': thumbnail.isNotEmpty,
+            'videoId': resp['response']?['videoId'] ?? '',
+            'size': size,
+          });
+          totalSize = size;
+        } else {
+          // Keep existing video source unchanged
+          final src = _existingVideoSource!;
+          sources.add({
+            'seq': 1,
+            'videoUrl': src.videoUrl,
+            'thumbnail': src.thumbnail ?? '',
+            'thumbSet': src.thumbnail?.isNotEmpty == true,
+            'videoId': '',
+            'size': 0,
+          });
+        }
       }
 
       final tagged = _taggedUsers
           .asMap()
           .entries
-          .map((e) =>
-              {'tagId': e.value['userId'], 'tagType': 'user', 'seq': e.key + 1})
+          .map((e) => {
+                'tagId': e.value['userId'],
+                'tagType': 'user',
+                'seq': e.key + 1,
+              })
           .toList();
 
-      setState(() => _uploadStatus = 'Publishing post...');
+      setState(() => _uploadStatus =
+          _isEditMode ? 'Updating post...' : 'Publishing post...');
 
       final body = <String, dynamic>{
         'userId': userId,
@@ -276,19 +351,28 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         }
       }
 
-      final result = await ApiClient.instance
-          .post(ApiConstants.createUserPost, body: body);
-      if (!mounted) return;
-
-      final status = (result['response']?['status'] as num?)?.toInt() ?? 0;
-      if (status == 1) {
+      if (_isEditMode) {
+        body['postId'] = widget.editPost!.postId ?? '';
+        await ApiClient.instance.post(ApiConstants.editUserPost, body: body);
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Post published successfully!'.tr)),
+          SnackBar(content: Text('Post updated successfully!'.tr)),
         );
         context.pop();
       } else {
-        throw Exception(
-            result['response']?['message'] ?? 'Failed to create post');
+        final result = await ApiClient.instance
+            .post(ApiConstants.createUserPost, body: body);
+        if (!mounted) return;
+        final status = (result['response']?['status'] as num?)?.toInt() ?? 0;
+        if (status == 1) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Post published successfully!'.tr)),
+          );
+          context.pop();
+        } else {
+          throw Exception(
+              result['response']?['message'] ?? 'Failed to create post');
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -298,9 +382,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     } finally {
       if (mounted) {
         setState(() {
-          final _isUploading = false;
-          final _uploadProgress = 0;
-          final _uploadStatus = '';
+          _isUploading = false;
+          _uploadStatus = '';
         });
       }
     }
@@ -319,7 +402,25 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   }
 
   Widget _buildUploadProgress() {
-    return AppLoader();
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AppLoader(),
+          if (_uploadStatus.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(
+              _uploadStatus,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                color: AppColors.socaBlack,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 
   Widget _buildForm() {
@@ -327,11 +428,11 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     final showNotify = isVideo && _postCat == _kSkillVideo;
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── 1. Space bar (video mode only) ────────────────────────────────
+          // ── 1. Space bar (video mode only) ─────────────────────────────────
           if (isVideo) ...[
             _SpaceBar(
               availableMB: _availableMB,
@@ -339,16 +440,16 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               maxMB: _maxMB,
               loaded: _spaceLoaded,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
 
-          // ── 2. Write something + TAG PEOPLE (same row) ────────────────────
+          // ── 2. Write something + TAG PEOPLE ────────────────────────────────
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -357,35 +458,36 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     controller: _titleController,
                     maxLength: 200,
                     maxLines: 1,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack),
                     decoration: InputDecoration(
                       hintText: 'Write something'.tr,
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           color: AppColors.socaGrey),
                       border: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
                       counterText: '',
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 GestureDetector(
                   onTap: _openTagPlayers,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     decoration: BoxDecoration(
                       color: AppColors.socaBlack,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       'TAG PEOPLE'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -400,7 +502,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
 
           // Tagged chips
           if (_taggedUsers.isNotEmpty) ...[
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 6,
@@ -417,7 +519,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     child: imageUrl.isEmpty
                         ? Text(
                             name.isNotEmpty ? name[0].toUpperCase() : '?',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 10,
                                 color: AppColors.socaBlack),
@@ -426,82 +528,86 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   ),
                   label: Text(
                     name.isNotEmpty ? name : u['userId'].toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         color: AppColors.socaBlack),
                   ),
-                  deleteIcon:
-                      Icon(Icons.close, size: 14, color: AppColors.socaBlack),
+                  deleteIcon: const Icon(Icons.close,
+                      size: 14, color: AppColors.socaBlack),
                   onDeleted: () => _removeTag(u['userId'].toString()),
                   backgroundColor: AppColors.socaGrey,
-                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                 );
               }).toList(),
             ),
           ],
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-          // ── 3. Post Type — Videos first, Photos second ─────────────────────
+          // ── 3. Post Type ────────────────────────────────────────────────────
           Container(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
               children: [
                 Text(
                   'Post Type'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppColors.socaBlack,
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 _RadioOption(
                   value: _kPostTypeVideo,
                   groupValue: _postType,
                   label: 'Videos',
-                  onChanged: (v) => setState(() {
-                    final _postType = v!;
-                    _selectedImages.clear();
-                  }),
+                  onChanged: _isEditMode
+                      ? null
+                      : (v) => setState(() {
+                            _postType = v!;
+                            _selectedImages.clear();
+                          }),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 _RadioOption(
                   value: _kPostTypeImage,
                   groupValue: _postType,
                   label: 'Photos',
-                  onChanged: (v) => setState(() {
-                    final _postType = v!;
-                    final _selectedVideo = null;
-                  }),
+                  onChanged: _isEditMode
+                      ? null
+                      : (v) => setState(() {
+                            _postType = v!;
+                            _selectedVideo = null;
+                          }),
                 ),
               ],
             ),
           ),
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-          // ── 4. Choose section (video only) ────────────────────────────────
+          // ── 4. Choose category (video only) ────────────────────────────────
           if (isVideo) ...[
             Container(
               color: Colors.white,
-              padding: EdgeInsets.fromLTRB(14, 12, 14, 16),
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Choose'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _CategoryOption(
                     value: _kSkillVideo,
                     groupValue: _postCat,
@@ -510,7 +616,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                         '(Share videos of you displaying your football skills in matches or in training to be endorsed or rated by SocaLoca users, including coaches and scouts.)',
                     onChanged: (v) => setState(() => _postCat = v!),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   _CategoryOption(
                     value: _kFootballMoments,
                     groupValue: _postCat,
@@ -522,14 +628,14 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
 
-          // ── 5. Notify checkbox (video + skill video only) ──────────────────
+          // ── 5. Notify checkbox (video + skill video only) ───────────────────
           if (showNotify) ...[
             Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
               child: GestureDetector(
                 onTap: () =>
                     setState(() => _notifyFollowers = !_notifyFollowers),
@@ -545,7 +651,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                       child: Text(
                         'Notify all coaches/managers/scounts to endorse video'
                             .tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           color: AppColors.socaBlack,
@@ -556,24 +662,25 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
 
-          // ── 6. Media section ───────────────────────────────────────────────
+          // ── 6. Media section ────────────────────────────────────────────────
           if (isVideo) _buildVideoSection() else _buildImageSection(),
 
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
 
-          // ── 7. Invite players ──────────────────────────────────────────────
+          // ── 7. Invite players ───────────────────────────────────────────────
           Row(
             children: [
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: _invitePlayers,
-                  icon: Icon(Icons.share, size: 16, color: AppColors.socaBlack),
+                  icon: const Icon(Icons.share,
+                      size: 16, color: AppColors.socaBlack),
                   label: Text(
                     'INVITE PLAYERS'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -581,17 +688,17 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.socaBlack),
-                    padding: EdgeInsets.symmetric(vertical: 12),
+                    side: const BorderSide(color: AppColors.socaBlack),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
               ),
             ],
           ),
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-          // ── 8. CREATE POST button ──────────────────────────────────────────
+          // ── 8. Action button ────────────────────────────────────────────────
           GestureDetector(
             onTap: _submit,
             child: Container(
@@ -603,8 +710,8 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               ),
               child: Center(
                 child: Text(
-                  'CREATE POST'.tr,
-                  style: TextStyle(
+                  _isEditMode ? 'UPDATE POST'.tr : 'CREATE POST'.tr,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
@@ -615,79 +722,126 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             ),
           ),
 
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
         ],
       ),
     );
   }
 
-  // ── Image section ──────────────────────────────────────────────────────────
+  // ── Image section ─────────────────────────────────────────────────────────
 
   Widget _buildImageSection() {
+    final existingImages = _existingImageSources;
+    final total = existingImages.length + _selectedImages.length;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (_selectedImages.isNotEmpty) ...[
+        if (total > 0) ...[
           GridView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
             ),
-            itemCount: _selectedImages.length,
-            itemBuilder: (_, i) => Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: Image.file(File(_selectedImages[i].path),
-                      fit: BoxFit.cover),
-                ),
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: GestureDetector(
-                    onTap: () => _removeImage(i),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.black54, shape: BoxShape.circle),
-                      padding: EdgeInsets.all(4),
-                      child: Icon(Icons.close, color: Colors.white, size: 16),
+            itemCount: total,
+            itemBuilder: (_, i) {
+              if (i < existingImages.length) {
+                // Existing network image
+                final src = existingImages[i];
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: CachedNetworkImage(
+                        imageUrl: ApiConstants.getImageUrl(src.imageUrl!),
+                        fit: BoxFit.cover,
+                        placeholder: (_, __) => Container(
+                          color: AppColors.socaGrey.withValues(alpha: 0.2),
+                          child: const Center(
+                              child: CircularProgressIndicator(strokeWidth: 2)),
+                        ),
+                        errorWidget: (_, __, ___) => Container(
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            ),
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap: () => _removeExistingImageSource(src),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.black54, shape: BoxShape.circle),
+                          padding: const EdgeInsets.all(4),
+                          child: const Icon(Icons.close,
+                              color: Colors.white, size: 16),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                // Newly picked local image
+                final localIndex = i - existingImages.length;
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: Image.file(File(_selectedImages[localIndex].path),
+                          fit: BoxFit.cover),
+                    ),
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap: () => _removeLocalImage(localIndex),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.black54, shape: BoxShape.circle),
+                          padding: const EdgeInsets.all(4),
+                          child: const Icon(Icons.close,
+                              color: Colors.white, size: 16),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            },
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
         ],
-        if (_selectedImages.length < _maxImages) ...[
+        if (total < _maxImages) ...[
           Text(
-            'Add Photos (${_selectedImages.length}/$_maxImages)',
-            style: TextStyle(
+            'Add Photos ($total/$_maxImages)',
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Row(
             children: [
               _MediaBtn(
                   icon: Icons.camera_alt_outlined,
                   label: 'Camera',
                   onTap: () => _pickImages(ImageSource.camera)),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               _MediaBtn(
                   icon: Icons.photo_library_outlined,
                   label: 'Gallery',
                   onTap: () => _pickImages(ImageSource.gallery)),
             ],
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             '(max $_maxImages photos allowed)',
             style: TextStyle(
@@ -700,13 +854,16 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     );
   }
 
-  // ── Video section ──────────────────────────────────────────────────────────
+  // ── Video section ─────────────────────────────────────────────────────────
 
   Widget _buildVideoSection() {
+    final existingVideo = _existingVideoSource;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (_selectedVideo != null) ...[
+          // Newly picked local video
           Container(
             height: 180,
             decoration: BoxDecoration(
@@ -716,7 +873,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Icon(Icons.play_circle_fill,
+                const Icon(Icons.play_circle_fill,
                     color: AppColors.socaYellow, size: 60),
                 Positioned(
                   top: 8,
@@ -724,10 +881,11 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   child: GestureDetector(
                     onTap: () => setState(() => _selectedVideo = null),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.black54, shape: BoxShape.circle),
-                      padding: EdgeInsets.all(4),
-                      child: Icon(Icons.close, color: Colors.white, size: 18),
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(Icons.close,
+                          color: Colors.white, size: 18),
                     ),
                   ),
                 ),
@@ -737,7 +895,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   right: 8,
                   child: Text(
                     _selectedVideo!.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         color: Colors.white70),
@@ -748,15 +906,61 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               ],
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
+        ] else if (existingVideo != null) ...[
+          // Existing network video (shown with thumbnail)
+          Container(
+            height: 180,
+            decoration: BoxDecoration(
+              color: AppColors.socaBlack,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                if (existingVideo.thumbnail?.isNotEmpty == true)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          ApiConstants.getImageUrl(existingVideo.thumbnail!),
+                      fit: BoxFit.cover,
+                      placeholder: (_, __) => const SizedBox.shrink(),
+                      errorWidget: (_, __, ___) => const SizedBox.shrink(),
+                    ),
+                  ),
+                const Center(
+                  child: Icon(Icons.play_circle_fill,
+                      color: AppColors.socaYellow, size: 60),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: _removeExistingVideo,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.black54, shape: BoxShape.circle),
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(Icons.close,
+                          color: Colors.white, size: 18),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
         ],
         _MediaBtn(
           icon: Icons.videocam_outlined,
-          label: _selectedVideo == null ? 'Upload Videos' : 'Change Video',
+          label: (_selectedVideo != null || existingVideo != null)
+              ? 'Change Video'
+              : 'Upload Videos',
           onTap: _pickVideo,
           fullWidth: true,
         ),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(
           '(max 10 videos allowed)'.tr,
           style: TextStyle(
@@ -775,7 +979,7 @@ class _SpaceBar extends StatelessWidget {
   final double maxMB;
   final bool loaded;
 
-  _SpaceBar({
+  const _SpaceBar({
     required this.availableMB,
     required this.usedMB,
     required this.maxMB,
@@ -788,7 +992,7 @@ class _SpaceBar extends StatelessWidget {
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(14, 12, 14, 14),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -796,14 +1000,14 @@ class _SpaceBar extends StatelessWidget {
             children: [
               Text(
                 'Available Space : '.tr,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     color: AppColors.socaBlack),
               ),
               Text(
                 loaded ? '${availableMB.toStringAsFixed(2)} MB' : '—',
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -812,19 +1016,19 @@ class _SpaceBar extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 2),
+          const SizedBox(height: 2),
           Row(
             children: [
               Text(
                 'Used Space : '.tr,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     color: AppColors.socaBlack),
               ),
               Text(
                 loaded ? '${usedMB.toStringAsFixed(2)} MB' : '—',
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -833,7 +1037,7 @@ class _SpaceBar extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
@@ -843,17 +1047,17 @@ class _SpaceBar extends StatelessWidget {
               minHeight: 8,
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('0MB'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       color: AppColors.socaBlack)),
               Text('1024MB'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       color: AppColors.socaBlack)),
@@ -865,7 +1069,7 @@ class _SpaceBar extends StatelessWidget {
   }
 }
 
-// ── Category option (radio + title + description) ─────────────────────────────
+// ── Category option ───────────────────────────────────────────────────────────
 
 class _CategoryOption extends StatelessWidget {
   final String value;
@@ -874,7 +1078,7 @@ class _CategoryOption extends StatelessWidget {
   final String description;
   final ValueChanged<String?> onChanged;
 
-  _CategoryOption({
+  const _CategoryOption({
     required this.value,
     required this.groupValue,
     required this.title,
@@ -896,22 +1100,22 @@ class _CategoryOption extends StatelessWidget {
             activeColor: AppColors.socaBlack,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: AppColors.socaBlack,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   description,
                   style: TextStyle(
@@ -930,15 +1134,15 @@ class _CategoryOption extends StatelessWidget {
   }
 }
 
-// ── Radio option (inline, for Post Type row) ──────────────────────────────────
+// ── Radio option ──────────────────────────────────────────────────────────────
 
 class _RadioOption extends StatelessWidget {
   final String value;
   final String groupValue;
   final String label;
-  final ValueChanged<String?> onChanged;
+  final ValueChanged<String?>? onChanged;
 
-  _RadioOption({
+  const _RadioOption({
     required this.value,
     required this.groupValue,
     required this.label,
@@ -947,26 +1151,29 @@ class _RadioOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: () => onChanged(value),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Radio<String>(
-              value: value,
-              groupValue: groupValue,
-              onChanged: onChanged,
-              activeColor: AppColors.socaBlack,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 13,
-                color: AppColors.socaBlack,
+        onTap: onChanged != null ? () => onChanged!(value) : null,
+        child: Opacity(
+          opacity: onChanged == null ? 0.5 : 1.0,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Radio<String>(
+                value: value,
+                groupValue: groupValue,
+                onChanged: onChanged,
+                activeColor: AppColors.socaBlack,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-            ),
-          ],
+              Text(
+                label,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13,
+                  color: AppColors.socaBlack,
+                ),
+              ),
+            ],
+          ),
         ),
       );
 }
@@ -979,7 +1186,7 @@ class _MediaBtn extends StatelessWidget {
   final VoidCallback onTap;
   final bool fullWidth;
 
-  _MediaBtn({
+  const _MediaBtn({
     required this.icon,
     required this.label,
     required this.onTap,
@@ -991,7 +1198,7 @@ class _MediaBtn extends StatelessWidget {
     final btn = GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -1001,9 +1208,9 @@ class _MediaBtn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: AppColors.socaBlack, size: 20),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(label,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -1019,14 +1226,14 @@ class _MediaBtn extends StatelessWidget {
   }
 }
 
-// ── Tag Players bottom sheet ───────────────────────────────────────────────────
+// ── Tag Players bottom sheet ──────────────────────────────────────────────────
 
 class _TagPlayersSheet extends StatefulWidget {
   final String userId;
   final List<Map<String, dynamic>> selected;
   final ValueChanged<List<Map<String, dynamic>>> onDone;
 
-  _TagPlayersSheet({
+  const _TagPlayersSheet({
     required this.userId,
     required this.selected,
     required this.onDone,
@@ -1045,7 +1252,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
   @override
   void initState() {
     super.initState();
-    final _selected = List.from(widget.selected);
+    _selected = List.from(widget.selected);
   }
 
   @override
@@ -1098,13 +1305,13 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
       maxChildSize: 0.95,
       minChildSize: 0.4,
       builder: (ctx, scrollController) => Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
         child: Column(
           children: [
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
               width: 40,
               height: 4,
@@ -1114,13 +1321,13 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
                       'Tag Players'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
@@ -1135,7 +1342,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                     },
                     child: Text(
                       'Done'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
@@ -1147,7 +1354,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
                 controller: _searchController,
                 onChanged: _search,
@@ -1157,7 +1364,8 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaGrey),
-                  prefixIcon: Icon(Icons.search, color: AppColors.socaGrey),
+                  prefixIcon:
+                      const Icon(Icons.search, color: AppColors.socaGrey),
                   filled: true,
                   fillColor: Colors.grey.shade100,
                   border: OutlineInputBorder(
@@ -1165,17 +1373,18 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             if (_isSearching)
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(16),
-                child: AppLoader(),
+                child: CircularProgressIndicator(
+                    color: AppColors.socaBlack, strokeWidth: 2),
               )
             else
               Expanded(
@@ -1185,7 +1394,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                           _searchController.text.length < 2
                               ? 'Type at least 2 characters to search'
                               : 'No players found',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,
                             color: AppColors.socaGrey,
@@ -1215,7 +1424,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                                       name.isNotEmpty
                                           ? name[0].toUpperCase()
                                           : '?',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 14,
                                         color: AppColors.socaBlack,
@@ -1225,7 +1434,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                             ),
                             title: Text(
                               name.isNotEmpty ? name : id,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -1234,7 +1443,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                             subtitle: user['playPosition'] != null
                                 ? Text(
                                     user['playPosition'].toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 11,
                                       color: AppColors.socaGrey,
@@ -1242,7 +1451,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                                   )
                                 : null,
                             trailing: sel
-                                ? Icon(Icons.check_circle,
+                                ? const Icon(Icons.check_circle,
                                     color: AppColors.socaBlack)
                                 : Icon(Icons.radio_button_unchecked,
                                     color: Colors.grey.shade400),

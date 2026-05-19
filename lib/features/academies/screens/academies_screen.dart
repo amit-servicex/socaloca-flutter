@@ -249,7 +249,11 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                     child: DropdownButton<String>(
                       value: _selectedCountry,
                       isExpanded: true,
-                      icon: Icon(Icons.arrow_drop_down, size: 20),
+                      icon: Image.asset(
+                        "assets/images/dropdown.png",
+                        width: 14,
+                        height: 14,
+                      ),
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
@@ -281,8 +285,12 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                     child: DropdownButton<String>(
                       value: _selectedCategory,
                       isExpanded: true,
-                      icon: Icon(Icons.arrow_drop_down, size: 20),
-                      style: TextStyle(
+                      icon: Image.asset(
+                        "assets/images/dropdown.png",
+                        width: 14,
+                        height: 14,
+                      ),
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -305,7 +313,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                 GestureDetector(
                   onTap: _onGoPressed,
                   child: Container(
-                    height: 42,
+                    height: 50,
                     decoration: BoxDecoration(
                       color: AppColors.socaBlack,
                       borderRadius: BorderRadius.circular(5),

@@ -27,9 +27,10 @@ class TrialsLandingScreen extends StatelessWidget {
           Container(
             color: Colors.white,
             child: TabBar(
-              indicatorColor: AppColors.socaYellow,
+              indicatorColor: AppColors.socaBlack,
               labelColor: AppColors.socaBlack,
               unselectedLabelColor: Colors.black54,
+              indicatorWeight: 4,
               labelStyle: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
@@ -294,65 +295,186 @@ class _TrialFilters extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DropdownButtonFormField<String>(
-            value: country.isEmpty ? '' : country,
-            isExpanded: true,
-            items: countries
-                .map(
-                  (item) => DropdownMenuItem(
-                    value: item,
-                    child: Text(
-                      item.isEmpty ? 'Select Country'.tr : item,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontFamily: 'Poppins'),
-                    ),
-                  ),
-                )
-                .toList(),
-            onChanged: (value) => onCountryChanged(value ?? ''),
-            decoration: _inputDecoration('Country'.tr),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: country.isEmpty ? '' : country,
+                isExpanded: true,
+                icon: Image.asset(
+                  'assets/images/dropdown.png',
+                  width: 14,
+                  height: 14,
+                ),
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+                items: countries
+                    .map(
+                      (item) => DropdownMenuItem(
+                        value: item,
+                        child: Text(
+                          item.isEmpty ? 'Select Country'.tr : item,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontFamily: 'Poppins'),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) => onCountryChanged(value ?? ''),
+              ),
+            ),
           ),
+
+          // DropdownButtonFormField<String>(
+          //   value: country.isEmpty ? '' : country,
+          //   isExpanded: true,
+          //   items: countries
+          //       .map(
+          //         (item) => DropdownMenuItem(
+          //           value: item,
+          //           child: Text(
+          //             item.isEmpty ? 'Select Country'.tr : item,
+          //             overflow: TextOverflow.ellipsis,
+          //             style: const TextStyle(fontFamily: 'Poppins'),
+          //           ),
+          //         ),
+          //       )
+          //       .toList(),
+          //   onChanged: (value) => onCountryChanged(value ?? ''),
+          //   decoration: _inputDecoration('Country'.tr),
+          // ),
           const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
-                child: DropdownButtonFormField<String>(
-                  value: fromAge.isEmpty ? '' : fromAge,
-                  isExpanded: true,
-                  items: ages
-                      .map(
-                        (age) => DropdownMenuItem(
-                          value: age,
-                          child: Text(
-                            age.isEmpty ? 'From Age'.tr : age,
-                            style: const TextStyle(fontFamily: 'Poppins'),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: onFromAgeChanged,
-                  decoration: _inputDecoration('From Age'.tr),
+                  flex: 2,
+                  child: Text(
+                    "Age Range".tr,
+                    style: TextStyle(
+                        color: AppColors.playedGray,
+                        fontFamily: 'Poppins',
+                        fontSize: 12),
+                  )),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: fromAge.isEmpty ? '' : fromAge,
+                      isExpanded: true,
+                      icon: Image.asset(
+                        'assets/images/dropdown.png',
+                        width: 14,
+                        height: 14,
+                      ),
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: Colors.black87,
+                      ),
+                      items: ages
+                          .map(
+                            (age) => DropdownMenuItem(
+                              value: age,
+                              child: Text(
+                                age.isEmpty ? 'From'.tr : age,
+                                style: const TextStyle(fontFamily: 'Poppins'),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: onFromAgeChanged,
+                      // decoration: _inputDecoration('From Age'.tr),
+                    ),
+                  ),
                 ),
+
+                //  DropdownButtonFormField<String>(
+                //   value: fromAge.isEmpty ? '' : fromAge,
+                //   isExpanded: true,
+                //   items: ages
+                //       .map(
+                //         (age) => DropdownMenuItem(
+                //           value: age,
+                //           child: Text(
+                //             age.isEmpty ? 'From Age'.tr : age,
+                //             style: const TextStyle(fontFamily: 'Poppins'),
+                //           ),
+                //         ),
+                //       )
+                //       .toList(),
+                //   onChanged: onFromAgeChanged,
+                //   decoration: _inputDecoration('From Age'.tr),
+                // ),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: DropdownButtonFormField<String>(
-                  value: toAge.isEmpty ? '' : toAge,
-                  isExpanded: true,
-                  items: ages
-                      .map(
-                        (age) => DropdownMenuItem(
-                          value: age,
-                          child: Text(
-                            age.isEmpty ? 'To Age'.tr : age,
-                            style: const TextStyle(fontFamily: 'Poppins'),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: onToAgeChanged,
-                  decoration: _inputDecoration('To Age'.tr),
+                flex: 3,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: toAge.isEmpty ? '' : toAge,
+                      isExpanded: true,
+                      icon: Image.asset(
+                        'assets/images/dropdown.png',
+                        width: 14,
+                        height: 14,
+                      ),
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: Colors.black87,
+                      ),
+                      items: ages
+                          .map(
+                            (age) => DropdownMenuItem(
+                              value: age,
+                              child: Text(
+                                age.isEmpty ? 'To '.tr : age,
+                                style: const TextStyle(fontFamily: 'Poppins'),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: onToAgeChanged,
+                      // decoration: _inputDecoration('From Age'.tr),
+                    ),
+                  ),
                 ),
+                // DropdownButtonFormField<String>(
+                //   value: toAge.isEmpty ? '' : toAge,
+                //   isExpanded: true,
+                //   items: ages
+                //       .map(
+                //         (age) => DropdownMenuItem(
+                //           value: age,
+                //           child: Text(
+                //             age.isEmpty ? 'To Age'.tr : age,
+                //             style: const TextStyle(fontFamily: 'Poppins'),
+                //           ),
+                //         ),
+                //       )
+                //       .toList(),
+                //   onChanged: onToAgeChanged,
+                //   decoration: _inputDecoration('To Age'.tr),
+                // ),
               ),
             ],
           ),
@@ -367,17 +489,20 @@ class _TrialFilters extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: _ActionButton(label: 'SEARCH'.tr, onPressed: onSearch),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _ActionButton(label: 'RESET'.tr, onPressed: onReset),
-              ),
-            ],
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _ActionButton(label: 'SEARCH'.tr, onPressed: onSearch),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: _ActionButton(label: 'RESET'.tr, onPressed: onReset),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -415,8 +540,10 @@ class _ActionButton extends StatelessWidget {
       height: 42,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.socaBlack,
-          foregroundColor: AppColors.socaYellow,
+          backgroundColor:
+              label == 'RESET' ? AppColors.socaGrey : AppColors.socaBlack,
+          foregroundColor:
+              label == 'RESET' ? AppColors.socaBlack : AppColors.socaYellow,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
         ),
         onPressed: onPressed,
@@ -479,28 +606,22 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                   trial.displayName,
                   style: const TextStyle(
                     fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w800,
-                    fontSize: 21,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
                     color: Colors.black,
                   ),
                 ),
               ),
               const SizedBox(width: 10),
-              CircleAvatar(
-                radius: 27,
-                backgroundColor: Colors.white,
-                child: imageUrl.isNotEmpty
-                    ? ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: imageUrl,
-                          width: 54,
-                          height: 54,
-                          fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) => _fallbackLogo(),
-                        ),
-                      )
-                    : _fallbackLogo(),
-              ),
+              imageUrl.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      errorWidget: (_, __, ___) => _fallbackLogo(),
+                    )
+                  : _fallbackLogo(),
             ],
           ),
           if (isLive) ...[
@@ -509,7 +630,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
               'LIVE NOW'.tr,
               style: const TextStyle(
                 fontFamily: 'Poppins',
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 fontSize: 13,
                 color: Colors.red,
               ),
@@ -520,8 +641,8 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
             trial.trialName ?? '',
             style: const TextStyle(
               fontFamily: 'Poppins',
-              fontWeight: FontWeight.w800,
-              fontSize: 24,
+              fontWeight: FontWeight.w400,
+              fontSize: 28,
               color: Colors.black,
             ),
           ),
@@ -575,12 +696,13 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
     required bool canRegister,
   }) {
     final label = expired
-        ? 'EXPIRED'.tr
+        ? 'REGISTRATION CLOSED'.tr
         : registered
             ? 'REGISTERED'.tr
             : 'REGISTER'.tr;
     return SizedBox(
       height: 36,
+      width: 250,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.socaBlack,
@@ -807,34 +929,59 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (value.isEmpty) return const SizedBox.shrink();
+
     final text = Text(
       value,
       style: valueStyle ??
           const TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 14,
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
             color: Colors.black,
+            height: 1.25,
           ),
     );
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 108,
+            width: 92,
             child: Text(
-              '$label:',
+              label,
               style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
-                fontSize: 14,
+                fontSize: 13,
                 color: Colors.black,
+                height: 1.25,
               ),
             ),
           ),
+          const SizedBox(
+            width: 12,
+            child: Text(
+              ':',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+                color: Colors.black,
+                height: 1.25,
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
           Expanded(
-            child: onTap == null ? text : InkWell(onTap: onTap, child: text),
+            child: onTap == null
+                ? text
+                : InkWell(
+                    onTap: onTap,
+                    child: text,
+                  ),
           ),
         ],
       ),

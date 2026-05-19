@@ -8,6 +8,7 @@ import '../models/match_training_status_model.dart';
 import '../models/player_team_model.dart';
 import '../models/player_skill_model.dart';
 import '../models/player_post_model.dart';
+import '../models/player_social_models.dart';
 import '../models/endorsement_model.dart';
 import '../models/academy_model.dart';
 import '../models/tournament_model.dart';
@@ -33,6 +34,32 @@ class PlayerBioRepository {
           response['response']['playerDetails'] != null) {
         return PlayerBioModel.fromJson(
           response['response']['playerDetails'] as Map<String, dynamic>,
+        );
+      }
+      return null;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Get coach/admin/manager bio details.
+  Future<PlayerBioModel?> getAdminBio({
+    required String userId,
+    required String adminId,
+  }) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getAdminBio,
+        body: {
+          'userId': userId,
+          'adminId': adminId,
+        },
+      );
+
+      if (response['response']['status'] == 1 &&
+          response['response']['adminDetails'] != null) {
+        return PlayerBioModel.fromJson(
+          response['response']['adminDetails'] as Map<String, dynamic>,
         );
       }
       return null;
@@ -322,6 +349,83 @@ class PlayerBioRepository {
     }
   }
 
+  Future<List<PlayerSocialUserModel>> getFollowers({
+    required String userId,
+    required String myUserId,
+    int start = 0,
+    int limit = 20,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.getFollowers,
+      body: {
+        'userId': userId,
+        'myUserId': myUserId,
+        'start': start,
+        'limit': limit,
+      },
+    );
+    final data = response['response'] as Map<String, dynamic>? ?? response;
+    if (data['status'] == 1 && data['follows'] != null) {
+      final raw = data['follows'] as List;
+      return raw
+          .map((item) =>
+              PlayerSocialUserModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
+  Future<List<PlayerSocialUserModel>> getFollowings({
+    required String userId,
+    required String myUserId,
+    int start = 0,
+    int limit = 20,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.getFollowings,
+      body: {
+        'userId': userId,
+        'myUserId': myUserId,
+        'start': start,
+        'limit': limit,
+      },
+    );
+    final data = response['response'] as Map<String, dynamic>? ?? response;
+    if (data['status'] == 1 && data['follows'] != null) {
+      final raw = data['follows'] as List;
+      return raw
+          .map((item) =>
+              PlayerSocialUserModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
+  Future<List<PlayerLikeModel>> getLikes({
+    required String userId,
+    required String myUserId,
+    int start = 0,
+    int limit = 20,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.getLikes,
+      body: {
+        'userId': userId,
+        'myUserId': myUserId,
+        'start': start,
+        'limit': limit,
+      },
+    );
+    final data = response['response'] as Map<String, dynamic>? ?? response;
+    if (data['status'] == 1 && data['likes'] != null) {
+      final raw = data['likes'] as List;
+      return raw
+          .map((item) => PlayerLikeModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
   /// Get endorsements
   Future<List<EndorsementModel>> getEndorses({
     required String userId,
@@ -391,6 +495,36 @@ class PlayerBioRepository {
         ApiConstants.getPlayerTmnts,
         body: {
           'playerId': playerId,
+          'start': start,
+          'limit': limit,
+        },
+      );
+
+      if (response['response']['status'] == 1 &&
+          response['response']['tmnts'] != null) {
+        final tmnts = response['response']['tmnts'] as List;
+        return tmnts
+            .map((tmnt) =>
+                TournamentModel.fromJson(tmnt as Map<String, dynamic>))
+            .toList();
+      }
+      return [];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Get coach/admin tournaments.
+  Future<List<TournamentModel>> getCoachAdminTmnts({
+    required String userId,
+    int start = 0,
+    int limit = 20,
+  }) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getCoachAdminTmnts,
+        body: {
+          'userId': userId,
           'start': start,
           'limit': limit,
         },

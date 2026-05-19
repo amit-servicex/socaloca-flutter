@@ -656,12 +656,12 @@ class TeamBioScreen extends ConsumerWidget {
         if (match.matchId != null && match.matchId!.isNotEmpty) {
           // TODO: Navigate to match details screen
           // context.push('/matches/${match.matchId}');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Match details: ${match.matchId}'),
-              duration: Duration(seconds: 2),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text('Match details: ${match.matchId}'),
+          //     duration: Duration(seconds: 2),
+          //   ),
+          // );
         }
       },
       child: Container(

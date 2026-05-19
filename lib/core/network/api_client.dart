@@ -139,7 +139,9 @@ class ApiClient {
     }
   }
 
-  /// Multipart file upload (images, videos)
+  /// Multipart file upload (images, videos).
+  /// Matches Android: no Authorization header, no explicit Content-Type override
+  /// (Dio sets multipart/form-data; boundary=... automatically for FormData).
   Future<Map<String, dynamic>> uploadFile(
     String endpoint, {
     required FormData formData,
@@ -148,7 +150,11 @@ class ApiClient {
       final response = await _dio.post<Map<String, dynamic>>(
         endpoint,
         data: formData,
-        options: Options(contentType: 'multipart/form-data'),
+        options: Options(
+          headers: {'Authorization': null},
+          receiveTimeout: const Duration(minutes: 2),
+          sendTimeout: const Duration(minutes: 5),
+        ),
       );
       return response.data ?? {};
     } on DioException catch (e) {

@@ -35,6 +35,7 @@ class TournamentRepository {
     required String ownCountry,
     int start = 0,
     int limit = 10,
+    bool isReferee = false,
   }) async {
     try {
       // Send exactly what Android sends — all fields always present
@@ -54,7 +55,7 @@ class TournamentRepository {
       };
 
       final data = await ApiClient.instance.post(
-        ApiConstants.getVisTmnts,
+        isReferee ? ApiConstants.getRefTmnts : ApiConstants.getVisTmnts,
         body: body,
       );
 

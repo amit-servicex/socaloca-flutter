@@ -13,6 +13,7 @@ class FasState {
   final bool isLoadingMore;
   final bool hasMore;
   final String? error;
+  final String confed;
 
   const FasState({
     this.fas = const [],
@@ -20,6 +21,7 @@ class FasState {
     this.isLoadingMore = false,
     this.hasMore = true,
     this.error,
+    this.confed = '',
   });
 
   FasState copyWith({
@@ -28,6 +30,7 @@ class FasState {
     bool? isLoadingMore,
     bool? hasMore,
     String? error,
+    String? confed,
   }) =>
       FasState(
         fas: fas ?? this.fas,
@@ -35,6 +38,7 @@ class FasState {
         isLoadingMore: isLoadingMore ?? this.isLoadingMore,
         hasMore: hasMore ?? this.hasMore,
         error: error,
+        confed: confed ?? this.confed,
       );
 }
 
@@ -47,8 +51,9 @@ class FasNotifier extends StateNotifier<FasState> {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final items =
-          await _ref.read(partnersRepositoryProvider).getFAs(start: 0);
+      final items = await _ref
+          .read(partnersRepositoryProvider)
+          .getFAs(start: 0, confed: state.confed);
       state = state.copyWith(
         fas: items,
         isLoading: false,
@@ -65,7 +70,7 @@ class FasNotifier extends StateNotifier<FasState> {
     try {
       final items = await _ref
           .read(partnersRepositoryProvider)
-          .getFAs(start: state.fas.length);
+          .getFAs(start: state.fas.length, confed: state.confed);
       state = state.copyWith(
         fas: [...state.fas, ...items],
         isLoadingMore: false,
@@ -74,6 +79,12 @@ class FasNotifier extends StateNotifier<FasState> {
     } catch (e) {
       state = state.copyWith(isLoadingMore: false);
     }
+  }
+
+  void setConfed(String confed) {
+    if (state.confed == confed) return;
+    state = state.copyWith(confed: confed, fas: [], hasMore: true);
+    load();
   }
 
   Future<void> refresh() async {

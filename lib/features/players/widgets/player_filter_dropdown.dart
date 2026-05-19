@@ -23,7 +23,7 @@ class PlayerFilterDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: 42,
+      height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         color: AppColors.socaGrey,
@@ -42,10 +42,10 @@ class PlayerFilterDropdown extends StatelessWidget {
             ),
           ),
           isExpanded: true,
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: AppColors.socaBlack,
-            size: 20,
+          icon: Image.asset(
+            "assets/images/dropdown.png",
+            width: 14,
+            height: 12,
           ),
           dropdownColor: Colors.white,
           style: const TextStyle(

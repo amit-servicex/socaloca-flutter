@@ -43,12 +43,12 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     final state = ref.watch(notificationsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Notifications'.tr),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 1,
-      ),
+      // appBar: AppBar(
+      //   title: Text('Notifications'.tr),
+      //   backgroundColor: Colors.white,
+      //   foregroundColor: Colors.black,
+      //   elevation: 1,
+      // ),
       body: _buildBody(state),
     );
   }

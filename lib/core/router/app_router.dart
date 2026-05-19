@@ -3,7 +3,9 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/features/notifications/screens/notifications_screen.dart';
 import 'package:socaloca/features/players/screens/players_screen.dart';
+import 'package:socaloca/features/search/screens/search_screen.dart';
 import 'package:socaloca/features/settings/screens/legacy_contact_screen.dart';
 import '../../features/live_match/screens/live_match_details_screen.dart';
 import '../../features/live_match/screens/player_live_match_list_screen.dart';
@@ -41,8 +43,12 @@ import '../../features/pickup_match/screens/pickup_match_requests_screen.dart';
 import '../../features/club/screens/clubs_partners_landing_screen.dart';
 import '../../features/club/screens/club_bio_screen.dart';
 import '../../features/club/screens/fa_bio_screen.dart';
+import '../../features/club/screens/sponsor_bio_screen.dart';
+import '../../features/club/screens/charity_bio_screen.dart';
 import '../../features/player_bio/screens/player_bio_screen.dart';
 import '../../features/player_bio/screens/player_joined_teams_screen.dart';
+import '../../features/player_bio/screens/player_likes_screen.dart';
+import '../../features/player_bio/screens/player_people_screen.dart';
 import '../../features/player_bio/screens/player_pending_teams_screen.dart';
 import '../../features/player_bio/screens/player_received_teams_screen.dart';
 import '../../features/my_bio/screens/my_bio_screen.dart';
@@ -54,6 +60,7 @@ import '../../features/my_bio/screens/create_post_screen.dart';
 import '../../features/my_bio/screens/my_posts_screen.dart';
 import '../../features/gallery/screens/gallery_screen.dart';
 import '../../features/player_bio/data/models/player_bio_model.dart';
+import '../../features/player_bio/data/models/player_post_model.dart';
 import '../../features/skill_detail/screens/skill_detail_screen.dart';
 import '../../features/skill_detail/screens/skill_detail_view_all_screen.dart';
 import '../../features/home/screens/main_shell_screen.dart';
@@ -74,8 +81,11 @@ import '../../features/club/screens/club_players_screen.dart';
 import '../../features/club/screens/club_player_bio_screen.dart';
 import '../../features/club/screens/club_gallery_screen.dart';
 import '../../features/club/screens/club_trials_screen.dart';
+import '../../features/club/screens/club_trials_bio_screen.dart';
+import '../../features/auth/screens/register_club_screen.dart';
 import '../../features/settings/screens/change_password_screen.dart';
 import '../../features/settings/screens/privacy_settings_screen.dart';
+import '../../features/survey/screens/survey_screen.dart';
 import '../../shared/providers/auth_provider.dart';
 import '../services/navigation_service.dart';
 import 'app_routes.dart';
@@ -263,6 +273,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'createProfile',
             builder: (ctx, state) => CreateProfileScreen(),
           ),
+          GoRoute(
+            path: 'club-register',
+            name: 'registerClub',
+            builder: (ctx, state) => RegisterClubScreen(),
+          ),
         ],
       ),
 
@@ -310,31 +325,40 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.clubsPartners,
             name: 'clubsPartners',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Players - Coming Soon'.tr)),
-            ),
-            // ClubsPartnersLandingScreen(),
+            builder: (ctx, state) =>
+
+                // Scaffold(
+                //   body: Center(child: Text('Players - Coming Soon'.tr)),
+                // ),
+                ClubsPartnersLandingScreen(),
           ),
           GoRoute(
             path: AppRoutes.players,
             name: 'players',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Players - Coming Soon'.tr)),
-            ),
-            // PlayersScreen(),
+            builder: (ctx, state) =>
+
+                //  Scaffold(
+                //   body: Center(child: Text('Players - Coming Soon'.tr)),
+                // ),
+                PlayersScreen(),
           ),
           GoRoute(
             path: AppRoutes.trials,
             name: 'trials',
-            builder: (ctx, state) => const TrialsLandingScreen(),
+            builder: (ctx, state) => Scaffold(
+              body: Center(child: Text('trials - Coming Soon'.tr)),
+            ),
+
+            // const TrialsLandingScreen(),
           ),
           GoRoute(
             path: AppRoutes.academies,
             name: 'academies',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('academies - Coming Soon'.tr)),
-            ),
-            // AcademiesScreen(),
+            builder: (ctx, state) =>
+                // Scaffold(
+                //   body: Center(child: Text('academies - Coming Soon'.tr)),
+                // ),
+                AcademiesScreen(),
           ),
 
           // ─── Academy Bio (detail screen outside shell) ────────────────────
@@ -434,7 +458,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.createPost,
             name: 'createPost',
-            builder: (ctx, state) => CreatePostScreen(),
+            builder: (ctx, state) {
+              final editPost = state.extra is PlayerPostModel
+                  ? state.extra as PlayerPostModel
+                  : null;
+              return CreatePostScreen(editPost: editPost);
+            },
           ),
           GoRoute(
             path: AppRoutes.editProfile,
@@ -480,6 +509,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             },
           ),
 
+          // ─── Club Trials Bio (per-club trial list) ────────────────────────
+          GoRoute(
+            path: AppRoutes.clubTrialsBio,
+            name: 'clubTrialsBio',
+            builder: (ctx, state) {
+              final clubId = state.pathParameters['clubId']!;
+              return ClubTrialsBioScreen(clubId: clubId);
+            },
+          ),
+
           // ─── Player Bio (detail screen outside shell) ────────────────────
           GoRoute(
             path: AppRoutes.playerBio,
@@ -487,6 +526,37 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (ctx, state) {
               final userId = state.pathParameters['userId']!;
               return PlayerBioScreen(playerId: userId);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.coachAdminBio,
+            name: 'coachAdminBio',
+            builder: (ctx, state) {
+              final userId = state.pathParameters['userId']!;
+              return PlayerBioScreen(
+                playerId: userId,
+                isCoachAdminProfile: true,
+              );
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.playerPeople,
+            name: 'playerPeople',
+            builder: (ctx, state) {
+              final userId = state.pathParameters['userId']!;
+              final extra = state.extra as Map<String, dynamic>?;
+              return PlayerPeopleScreen(
+                userId: userId,
+                initialTab: extra?['initialTab'] as int? ?? 0,
+              );
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.playerLikes,
+            name: 'playerLikes',
+            builder: (ctx, state) {
+              final userId = state.pathParameters['userId']!;
+              return PlayerLikesScreen(userId: userId);
             },
           ),
 
@@ -605,16 +675,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.sponsorBio,
             name: 'sponsorBio',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Sponsor Bio — Coming Soon'.tr)),
-            ),
+            builder: (ctx, state) {
+              final sponId = state.pathParameters['sponId']!;
+              return SponsorBioScreen(sponsorId: sponId);
+            },
           ),
           GoRoute(
             path: AppRoutes.charityBio,
             name: 'charityBio',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Charity Bio — Coming Soon'.tr)),
-            ),
+            builder: (ctx, state) {
+              final charityId = state.pathParameters['charityId']!;
+              return CharityBioScreen(charityId: charityId);
+            },
           ),
 
           // ─── One-Off Matches (outside shell) ─────────────────────────────
@@ -678,6 +750,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.privacySettings,
             name: 'privacySettings',
             builder: (ctx, state) => PrivacySettingsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.survey,
+            name: 'survey',
+            builder: (ctx, state) => const SurveyScreen(),
           ),
           GoRoute(
             path: AppRoutes.lagecy_contact,

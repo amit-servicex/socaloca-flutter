@@ -51,13 +51,10 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
         label: 'PLAYERS',
         route: AppRoutes.players),
     _NavTab(
-        image: 'assets/icons/ic_academies_new.png',
+        image: 'assets/icons/ic_academies_new_2.png',
         label: 'ACADEMIES',
         route: AppRoutes.academies),
-    _NavTab(
-        image: 'assets/icons/ic_hamburger_menu.png',
-        label: 'MENU',
-        route: "MENU"),
+    _NavTab(image: 'assets/icons/ham_menu.png', label: 'MENU', route: "MENU"),
   ];
 
   void _onTap(int index) {
@@ -138,8 +135,8 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
                       children: [
                         // Icon with yellow circular background when active
                         Container(
-                          width: 30,
-                          height: 30,
+                          width: 32,
+                          height: 32,
                           decoration: BoxDecoration(
                             color: isActive
                                 ? AppColors.socaYellow

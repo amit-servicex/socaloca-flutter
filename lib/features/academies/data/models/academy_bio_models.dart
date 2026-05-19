@@ -154,29 +154,57 @@ class AcademyNewsModel {
   }
 }
 
+class AcademyVideoTagModel {
+  final String? skillShort;
+  final String? skillName;
+
+  const AcademyVideoTagModel({this.skillShort, this.skillName});
+
+  factory AcademyVideoTagModel.fromJson(Map<String, dynamic> json) {
+    return AcademyVideoTagModel(
+      skillShort: json['skillShort'] as String?,
+      skillName: json['skillName'] as String?,
+    );
+  }
+}
+
 class AcademyPostModel {
   final String? postId;
+  final String? academyId;
+  final String? videoType;
+  final String? title;
+  final String? videoId;
   final String? description;
   final String? imageUrl;
+  final String? thumbnail;
   final String? videoUrl;
   final String? postType;
   final int likeCount;
   final int commentCount;
   final bool myLike;
   final int addedOn;
+  final int size;
   final List<Map<String, dynamic>> files;
+  final List<AcademyVideoTagModel> tags;
 
   const AcademyPostModel({
     this.postId,
+    this.academyId,
+    this.videoType,
+    this.title,
+    this.videoId,
     this.description,
     this.imageUrl,
+    this.thumbnail,
     this.videoUrl,
     this.postType,
     this.likeCount = 0,
     this.commentCount = 0,
     this.myLike = false,
     this.addedOn = 0,
+    this.size = 0,
     this.files = const [],
+    this.tags = const [],
   });
 
   factory AcademyPostModel.fromJson(Map<String, dynamic> json) {
@@ -185,24 +213,41 @@ class AcademyPostModel {
       final sources = json['sources'] as List;
       files = sources.map((s) => Map<String, dynamic>.from(s as Map)).toList();
     }
+    List<AcademyVideoTagModel> tags = [];
+    if (json['tags'] != null) {
+      final tagsList = json['tags'] as List;
+      tags = tagsList
+          .map((t) => AcademyVideoTagModel.fromJson(t as Map<String, dynamic>))
+          .toList();
+    }
     return AcademyPostModel(
       postId: json['postId'] as String? ??
           json['acaPostId'] as String? ??
           json['acaVdoPostId'] as String? ??
+          json['videoId'] as String? ??
           json['_id'] as String?,
+      academyId: json['academyId'] as String?,
+      videoType: json['videoType'] as String?,
+      title: json['title'] as String?,
+      videoId: json['videoId'] as String?,
       description: json['description'] as String?,
       imageUrl: json['imageUrl'] as String?,
+      thumbnail: json['thumbnail'] as String?,
       videoUrl: json['videoUrl'] as String?,
       postType: json['postType'] as String?,
       likeCount: (json['likeCount'] as num?)?.toInt() ?? 0,
       commentCount: (json['commentCount'] as num?)?.toInt() ?? 0,
       myLike: json['myLike'] == true,
       addedOn: (json['addedOn'] as num?)?.toInt() ?? 0,
+      size: (json['size'] as num?)?.toInt() ?? 0,
       files: files,
+      tags: tags,
     );
   }
 
+  // Returns the best available preview image URL (thumbnail takes priority for videos)
   String get effectiveImageUrl {
+    if (thumbnail != null && thumbnail!.isNotEmpty) return thumbnail!;
     if (imageUrl != null && imageUrl!.isNotEmpty) return imageUrl!;
     if (files.isNotEmpty) {
       final first = files.first;

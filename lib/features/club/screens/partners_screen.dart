@@ -306,6 +306,50 @@ class _FAsTabState extends ConsumerState<_FAsTab>
     }
   }
 
+  static const _confedItems = [
+    ('', 'All'),
+    ('AFC', 'AFC'),
+    ('CAF', 'CAF'),
+    ('CONCACAF', 'CONCACAF'),
+    ('Conmebol', 'Conmebol'),
+    ('OFC', 'OFC'),
+    ('UEFA', 'UEFA'),
+  ];
+
+  Widget _buildConfedDropdown(String selected) {
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: AppColors.socaGrey,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: selected,
+          isExpanded: true,
+          isDense: true,
+          icon: Image.asset(
+            "assets/images/dropdown.png",
+            width: 14,
+            height: 14,
+          ),
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 13,
+            color: AppColors.socaBlack,
+          ),
+          items: _confedItems
+              .map((e) => DropdownMenuItem(value: e.$1, child: Text(e.$2)))
+              .toList(),
+          onChanged: (v) {
+            if (v != null) ref.read(fasProvider.notifier).setConfed(v);
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -320,19 +364,41 @@ class _FAsTabState extends ConsumerState<_FAsTab>
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(16),
-              child: Text(
-                "These are the Football Associations that have partnered with SOCALOCA to provide content and services to our users.\n\n"
-                "If you are a Football Association, you can request to become a SOCALOCA partner and gain access to an individualized hub featuring your logo, branding, and a wide range of features. These include the ability to organize tournaments and leagues using SOCALOCA's tournament module, upload game highlights, training sessions, or interviews directly within the app, engage fans with the latest news and announcements, showcase sponsors, and access a data-driven overview of your Football Association's stakeholders through SOCALOCA Analytics, plus much more.",
-                style: TextStyle(
-                    color: AppColors.socaBlack,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "These are the Football Associations that have partnered with SOCALOCA to provide content and services to our users.\n\n"
+                    "If you are a Football Association, you can request to become a SOCALOCA partner and gain access to an individualized hub featuring your logo, branding, and a wide range of features. These include the ability to organize tournaments and leagues using SOCALOCA's tournament module, upload game highlights, training sessions, or interviews directly within the app, engage fans with the latest news and announcements, showcase sponsors, and access a data-driven overview of your Football Association's stakeholders through SOCALOCA Analytics, plus much more.",
+                    style: TextStyle(
+                        color: AppColors.socaBlack,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Text(
+                        "Confderations",
+                        style: TextStyle(
+                            color: AppColors.socaBlack,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            fontSize: 18),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(child: _buildConfedDropdown(state.confed)),
+                    ],
+                  )
+                ],
               ),
             ),
           ),
           if (state.isLoading && state.fas.isEmpty)
-            SliverFillRemaining(child: AppLoader())
+            const SliverFillRemaining(child: AppLoader())
           else if (state.fas.isEmpty)
             SliverFillRemaining(
                 child: Center(

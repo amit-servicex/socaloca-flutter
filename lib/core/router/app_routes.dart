@@ -63,6 +63,9 @@ class AppRoutes {
   static const String teamBio = '/teams/:teamId';
   static const String teamPlayers = '/teams/:teamId/players';
   static const String playerBio = '/players/:userId';
+  static const String coachAdminBio = '/members/:userId';
+  static const String playerPeople = '/players/:userId/people';
+  static const String playerLikes = '/players/:userId/likes';
   static const String playerJoinedTeams = '/players/:userId/joined-teams';
   static const String playerPendingTeams = '/players/:userId/pending-teams';
   static const String playerReceivedTeams = '/player-invitations';
@@ -95,6 +98,13 @@ class AppRoutes {
   static const String changePassword = '/settings/change-password';
   static const String privacySettings = '/settings/privacy';
   static const String lagecy_contact = '/settings/lagecy_contact';
+  static const String survey = '/settings/survey';
+
+  // ─── Club registration (public, no auth required) ─────────────────────────
+  static const String registerClub = '/auth/club-register';
+
+  // ─── Club bio sub-screens ──────────────────────────────────────────────────
+  static const String clubTrialsBio = '/clubs/:clubId/trials';
 
   // ─── Club admin shell ──────────────────────────────────────────────────────
   static const String clubHome = '/club';

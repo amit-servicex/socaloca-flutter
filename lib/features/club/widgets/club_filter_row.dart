@@ -37,16 +37,16 @@ class ClubFilterRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "These are the Professional Football Clubs that have partnered with SOCALOCA to provide content and services to our users.\n\n"
-            "If you are a Professional Football Club, you can request to become a SOCALOCA partner and gain access to a wide range of features, including an individualized hub with your logo and branding, in-app uploads of game highlights, training sessions, and interviews, the ability to advertise upcoming trials through your club’s dedicated hub, showcase your club teams and top players, engage fans with news, announcements, and recent results, display sponsors, and much more.",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppColors.socaBlack,
-            ),
-          ),
+          // Text(
+          //   "These are the Professional Football Clubs that have partnered with SOCALOCA to provide content and services to our users.\n\n"
+          //   "If you are a Professional Football Club, you can request to become a SOCALOCA partner and gain access to a wide range of features, including an individualized hub with your logo and branding, in-app uploads of game highlights, training sessions, and interviews, the ability to advertise upcoming trials through your club’s dedicated hub, showcase your club teams and top players, engage fans with news, announcements, and recent results, display sponsors, and much more.",
+          //   style: TextStyle(
+          //     fontFamily: 'Poppins',
+          //     fontSize: 12,
+          //     fontWeight: FontWeight.w500,
+          //     color: AppColors.socaBlack,
+          //   ),
+          // ),
           const SizedBox(height: 10),
           Row(
             children: [
@@ -92,7 +92,11 @@ class ClubFilterRow extends StatelessWidget {
           value: value,
           isExpanded: true,
           isDense: true,
-          icon: const Icon(Icons.arrow_drop_down, size: 16),
+          icon: Image.asset(
+            "assets/images/dropdown.png",
+            width: 14,
+            height: 14,
+          ),
           style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 12,

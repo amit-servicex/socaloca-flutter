@@ -35,45 +35,73 @@ class _ClubsPartnersLandingScreenState extends State<ClubsPartnersLandingScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          'Clubs & Partners'.tr,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: AppColors.socaBlack,
-          indicatorWeight: 3,
-          labelColor: AppColors.socaBlack,
-          unselectedLabelColor: AppColors.textSecondary,
-          labelStyle: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-          ),
-          tabs: [
-            Tab(text: 'Clubs'),
-            Tab(text: 'Partners'),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   title: Text(
+      //     'Clubs & Partners'.tr,
+      //     style: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontSize: 18,
+      //       fontWeight: FontWeight.w700,
+      //       color: AppColors.socaBlack,
+      //     ),
+      //   ),
+      //   bottom: TabBar(
+      //     controller: _tabController,
+      //     indicatorColor: AppColors.socaBlack,
+      //     indicatorWeight: 3,
+      //     labelColor: AppColors.socaBlack,
+      //     unselectedLabelColor: AppColors.textSecondary,
+      //     labelStyle: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontSize: 14,
+      //       fontWeight: FontWeight.w700,
+      //     ),
+      //     unselectedLabelStyle: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontSize: 14,
+      //       fontWeight: FontWeight.w400,
+      //     ),
+      //     tabs: [
+      //       Tab(text: 'Clubs'),
+      //       Tab(text: 'Partners'),
+      //     ],
+      //   ),
+      // ),
+
+      body: Column(
         children: [
-          ClubsScreen(),
-          PartnersScreen(),
+          TabBar(
+            controller: _tabController,
+            indicatorColor: AppColors.socaBlack,
+            indicatorWeight: 3,
+            labelColor: AppColors.socaBlack,
+            unselectedLabelColor: AppColors.textSecondary,
+            labelStyle: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+            tabs: [
+              Tab(text: 'Clubs'),
+              Tab(text: 'Partners'),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                ClubsScreen(),
+                PartnersScreen(),
+              ],
+            ),
+          ),
         ],
       ),
     );

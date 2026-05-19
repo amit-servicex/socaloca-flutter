@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socaloca/core/router/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -58,7 +60,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * .6,
+                            width: MediaQuery.of(context).size.width * .5,
                             child: Row(
                               children: [
                                 Flexible(
@@ -78,23 +80,42 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                           ),
                           Row(
                             children: [
-                              VerticalDivider(
-                                color: AppColors.socaBlack,
-                                thickness: 1,
-                                width: 20,
+                              const SizedBox(
+                                height: 30,
+                                child: VerticalDivider(
+                                  color: AppColors.socaBlack,
+                                  thickness: 1,
+                                  width: 20,
+                                ),
+                              ),
+                              Image.asset(
+                                "assets/icons/ic_platinum_badge.png",
+                                width: 28,
+                                height: 28,
                               ),
                               IconButton(
                                 icon: Image.asset(
                                   "assets/images/ic_gallery.png",
-                                  width: 24,
-                                  height: 24,
+                                  width: 28,
+                                  height: 28,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  context.push(
+                                    AppRoutes.myPosts,
+                                    extra: {
+                                      'userId': bio.faDetails.faId,
+                                      'isOwnProfile': false,
+                                    },
+                                  );
+                                },
                               ),
                               if (bio.faDetails.website != null)
                                 IconButton(
-                                  icon: Icon(Icons.language,
-                                      size: 25, color: AppColors.socaBlack),
+                                  icon: Image.asset(
+                                    "assets/icons/ic_website.png",
+                                    width: 28,
+                                    height: 28,
+                                  ),
                                   onPressed: () =>
                                       _launchUrl(bio.faDetails.website ?? ''),
                                 ),
@@ -359,7 +380,14 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
   Widget _buildNewsRow(ClubNewsModel news) {
     final imageUrl = news.fullImageUrl;
-    return Padding(
+    final tapUrl = (news.link != null && news.link!.trim().isNotEmpty)
+        ? news.link!
+        : (news.isVideo && news.videoUrl != null && news.videoUrl!.isNotEmpty)
+            ? news.videoUrl!
+            : null;
+    return GestureDetector(
+      onTap: tapUrl != null ? () => _launchUrl(tapUrl) : null,
+      child: Padding(
       padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,6 +448,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
             ),
           ),
         ],
+      ),
       ),
     );
   }

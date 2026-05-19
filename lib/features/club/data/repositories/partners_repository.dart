@@ -5,6 +5,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/storage/storage_service.dart';
 import '../models/fa_bio_model.dart';
 import '../models/partner_models.dart';
+import '../models/sponsor_charity_bio_models.dart';
 
 final partnersRepositoryProvider = Provider((_) => PartnersRepository());
 
@@ -117,6 +118,56 @@ class PartnersRepository {
       final status = responseData['status'];
       if ((status == 1 || status == '1') && responseData['details'] != null) {
         return FaBioModel.fromApiJson(
+          responseData['details'] as Map<String, dynamic>,
+        );
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // ─── Sponsor Bio ─────────────────────────────────────────────────────────
+
+  Future<SponsorBioModel?> getSponsorBio({required String sponsorId}) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getSponBio,
+        body: {
+          'userId': StorageService.userId ?? '',
+          'sponsorId': sponsorId,
+        },
+      );
+      final responseData = response['response'] as Map<String, dynamic>?;
+      if (responseData == null) return null;
+      final status = responseData['status'];
+      if ((status == 1 || status == '1') && responseData['details'] != null) {
+        return SponsorBioModel.fromApiJson(
+          responseData['details'] as Map<String, dynamic>,
+        );
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // ─── Charity Bio ──────────────────────────────────────────────────────────
+
+  Future<CharityBioModel?> getCharityBio({required String charityId}) async {
+    try {
+      final response = await ApiClient.instance.post(
+        ApiConstants.getCharityBio,
+        body: {
+          'userId': StorageService.userId ?? '',
+          'charityId': charityId,
+        },
+      );
+      final responseData = response['response'] as Map<String, dynamic>?;
+      if (responseData == null) return null;
+      final status = responseData['status'];
+      if ((status == 1 || status == '1') && responseData['details'] != null) {
+        return CharityBioModel.fromApiJson(
           responseData['details'] as Map<String, dynamic>,
         );
       }

@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/api_constants.dart';
-import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/club_bio_model.dart';
 import '../data/models/club_model.dart';
@@ -369,7 +369,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             )
           else if (trial.isRegisterBtn)
             ElevatedButton(
-              onPressed: () => _handleTrialRegister("0" ?? ''),
+              onPressed: () => context.push('/clubs/${widget.clubId}/trials'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
                 shape: RoundedRectangleBorder(
@@ -411,7 +411,14 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
 
   Widget _buildNewsCard(ClubNewsModel news) {
     final imageUrl = news.fullImageUrl;
-    return Card(
+    final tapUrl = (news.link != null && news.link!.trim().isNotEmpty)
+        ? news.link!
+        : (news.isVideo && news.videoUrl != null && news.videoUrl!.isNotEmpty)
+            ? news.videoUrl!
+            : null;
+    return GestureDetector(
+      onTap: tapUrl != null ? () => _launchUrl(tapUrl) : null,
+      child: Card(
       margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       elevation: 2,
@@ -470,6 +477,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -955,37 +963,6 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to update follow status: $e')),
-        );
-      }
-    }
-  }
-
-  void _handleTrialRegister(String trialId) async {
-    final email = StorageService.userEmail ?? '';
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Email not found'.tr)),
-      );
-      return;
-    }
-    try {
-      final success = await ref.read(
-        trialRegisterProvider(
-            (clubId: widget.clubId, email: email, trialId: trialId)).future,
-      );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(success
-                ? 'Successfully registered for trial'
-                : 'Failed to register for trial'),
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
         );
       }
     }

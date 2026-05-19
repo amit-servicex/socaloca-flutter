@@ -27,10 +27,12 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Player Bio Screen with Stats and Endorse tabs
 class PlayerBioScreen extends ConsumerStatefulWidget {
   final String playerId;
+  final bool isCoachAdminProfile;
 
   PlayerBioScreen({
     super.key,
     required this.playerId,
+    this.isCoachAdminProfile = false,
   });
 
   @override
@@ -38,17 +40,22 @@ class PlayerBioScreen extends ConsumerStatefulWidget {
 }
 
 class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
+  StateNotifierProvider<PlayerBioNotifier, PlayerBioState> get _bioProvider =>
+      widget.isCoachAdminProfile
+          ? coachAdminBioProvider(widget.playerId)
+          : playerBioProvider(widget.playerId);
+
   @override
   void initState() {
     super.initState();
     // Load player bio data
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(playerBioProvider(widget.playerId).notifier).load();
+      ref.read(_bioProvider.notifier).load();
     });
   }
 
   void _handleShare() {
-    final state = ref.read(playerBioProvider(widget.playerId));
+    final state = ref.read(_bioProvider);
     final playerBio = state.playerBio;
 
     if (playerBio != null) {
@@ -208,7 +215,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(playerBioProvider(widget.playerId));
+    final state = ref.watch(_bioProvider);
     final currentUserId = StorageService.userId;
     final isOwnProfile = currentUserId == widget.playerId;
 
@@ -238,9 +245,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                       ),
                       SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: () => ref
-                            .read(playerBioProvider(widget.playerId).notifier)
-                            .load(),
+                        onPressed: () => ref.read(_bioProvider.notifier).load(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.socaBlack,
                           foregroundColor: AppColors.socaYellow,
@@ -412,8 +417,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 if (!isOwnProfile)
                                   GestureDetector(
                                     onTap: () => ref
-                                        .read(playerBioProvider(widget.playerId)
-                                            .notifier)
+                                        .read(_bioProvider.notifier)
                                         .toggleFollow(),
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
@@ -492,9 +496,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   GestureDetector(
                                     onTap: () {
                                       ref
-                                          .read(
-                                              playerBioProvider(widget.playerId)
-                                                  .notifier)
+                                          .read(_bioProvider.notifier)
                                           .toggleLike();
                                     },
                                     child: Container(

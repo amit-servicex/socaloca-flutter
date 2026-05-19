@@ -185,7 +185,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                             onTap: state.isLoading ? null : _onGoPressed,
                             child: Container(
                               width: double.infinity,
-                              height: 42,
+                              height: 50,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: AppColors.socaBlack,

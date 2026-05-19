@@ -90,8 +90,8 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
 
   Future<void> _load() async {
     setState(() {
-      final _isLoading = true;
-      final _error = null;
+      _isLoading = true;
+      _error = null;
     });
     try {
       final response = await ApiClient.instance.post(
@@ -101,12 +101,12 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
 
       if (response['response']?['status'] == 1) {
         final raw = response['response'];
-        final _overall = (raw['overall'] as num?)?.toDouble() ?? 0;
+        _overall = (raw['overall'] as num?)?.toDouble() ?? 0;
         final avrgs = raw['avrgs'] as Map<String, dynamic>? ?? {};
-        final _technicalAvg = (avrgs['technical'] as num?)?.toDouble() ?? 0;
-        final _physicalAvg = (avrgs['physical'] as num?)?.toDouble() ?? 0;
-        final _mentalAvg = (avrgs['mental'] as num?)?.toDouble() ?? 0;
-        final _goalkeeperAvg = (avrgs['goalkeeper'] as num?)?.toDouble() ?? 0;
+        _technicalAvg = (avrgs['technical'] as num?)?.toDouble() ?? 0;
+        _physicalAvg = (avrgs['physical'] as num?)?.toDouble() ?? 0;
+        _mentalAvg = (avrgs['mental'] as num?)?.toDouble() ?? 0;
+        _goalkeeperAvg = (avrgs['goalkeeper'] as num?)?.toDouble() ?? 0;
 
         final skills = (raw['skills'] as List?)
                 ?.map(
@@ -114,19 +114,19 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
                 .toList() ??
             [];
 
-        final _technicalSkills =
+        _technicalSkills =
             skills.where((s) => _technical.contains(s.skillName)).toList();
-        final _physicalSkills =
+        _physicalSkills =
             skills.where((s) => _physical.contains(s.skillName)).toList();
-        final _mentalSkills =
+        _mentalSkills =
             skills.where((s) => _mental.contains(s.skillName)).toList();
-        final _goalkeeperSkills =
+        _goalkeeperSkills =
             skills.where((s) => _goalkeeper.contains(s.skillName)).toList();
       } else {
-        final _error = 'Failed to load ratings';
+        _error = 'Failed to load ratings';
       }
     } catch (e) {
-      final _error = e.toString();
+      _error = e.toString();
     }
     if (mounted) setState(() => _isLoading = false);
   }
@@ -583,7 +583,7 @@ class _SkillCellState extends State<_SkillCell> {
   @override
   void initState() {
     super.initState();
-    final _sliderValue = widget.skill.myRating > 0
+    _sliderValue = widget.skill.myRating > 0
         ? widget.skill.myRating.toDouble().clamp(1.0, 5.0)
         : 1.0;
   }

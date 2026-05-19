@@ -164,7 +164,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
     final details = bio.academyDetails;
     return CustomScrollView(
       slivers: [
-        _buildAppBar(details?.name ?? 'Academy'),
+        // _buildAppBar(details?.name ?? 'Academy'),
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,14 +292,26 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Academy name at top
+          Text(
+            details?.name ?? '',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
+              color: AppColors.socaBlack,
+            ),
+          ),
+          SizedBox(height: 12),
+          // Image | Info rows | CAT badge
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Academy image
               Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.socaBlack, width: 2),
                   shape: BoxShape.circle,
                   color: AppColors.socaGrey.withValues(alpha: 0.3),
                 ),
@@ -318,88 +330,94 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                           fit: BoxFit.cover),
                 ),
               ),
-              SizedBox(width: 16),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      details?.name ?? '',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                        color: AppColors.socaBlack,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    // Follow button
-                    GestureDetector(
-                      onTap: () => _handleFollow(bio),
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                        decoration: BoxDecoration(
-                          color:
-                              _isFollowing ? AppColors.socaBlack : Colors.white,
-                          border: Border.all(color: AppColors.socaBlack),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          _isFollowing ? 'Following' : 'Follow',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                            color: _isFollowing
-                                ? AppColors.socaYellow
-                                : AppColors.socaBlack,
-                          ),
-                        ),
-                      ),
-                    ),
+                    if (details?.country != null &&
+                        details!.country!.isNotEmpty)
+                      _infoLabelValue('Country', details.country!),
+                    if (details?.director != null &&
+                        details!.director!.isNotEmpty)
+                      _infoLabelValue('Director', details.director!),
+                    if (details?.formedYear != null &&
+                        details!.formedYear!.isNotEmpty)
+                      _infoLabelValue('Founded Year', details.formedYear!),
                   ],
                 ),
               ),
+              if (details?.category != null &&
+                  details!.category!.isNotEmpty) ...[
+                SizedBox(width: 8),
+                _buildCatBadge(details.category!),
+              ],
             ],
           ),
           SizedBox(height: 12),
-          if (details?.country != null && details!.country!.isNotEmpty)
-            _infoRow(Icons.location_on, details.country!),
-          if (details?.category != null && details!.category!.isNotEmpty)
-            _infoRow(Icons.category, 'Category ${details.category}'),
-          if (details?.formedYear != null && details!.formedYear!.isNotEmpty)
-            _infoRow(Icons.calendar_today, 'Founded ${details.formedYear}'),
-
-          // Join buttons (non-fan roles only)
-          if (_canJoin) ...[
-            SizedBox(height: 12),
-            _buildJoinButtons(),
-          ],
+          // Follow + Join buttons row
+          Row(
+            children: [
+              _buildFollowButton(bio),
+              if (_canJoin) ...[
+                SizedBox(width: 8),
+                _buildInlineJoinButton(),
+              ],
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildJoinButtons() {
+  Widget _buildFollowButton(AcademyBioData bio) {
+    return GestureDetector(
+      onTap: () => _handleFollow(bio),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: !_isFollowing ? AppColors.socaBlack : Colors.white,
+          border: Border.all(color: AppColors.socaBlack),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Text(
+          _isFollowing ? 'FOLLOWING' : 'FOLLOW',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            color: !_isFollowing ? AppColors.socaYellow : AppColors.socaBlack,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInlineJoinButton() {
     if (_isJoining) {
-      return AppLoader();
+      return SizedBox(
+        width: 20,
+        height: 20,
+        child: CircularProgressIndicator(
+            strokeWidth: 2, color: AppColors.socaBlack),
+      );
     }
     if (_joinedStatus == 'ACCEPTED') {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.green.withValues(alpha: 0.1),
+          color: AppColors.socaBlack,
           borderRadius: BorderRadius.circular(5),
           border: Border.all(color: Colors.green),
         ),
         child: Text(
-          'Academy Joined'.tr,
+          'ACADEMY JOINED',
           style: TextStyle(
             fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 13,
-            color: Colors.green,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            color: AppColors.socaYellow,
           ),
         ),
       );
@@ -408,38 +426,37 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       return GestureDetector(
         onTap: () => _handleJoin(false),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.orange,
+            color: AppColors.socaBlack,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Text(
-            'Cancel Request'.tr,
+            'CANCEL REQUEST',
             style: TextStyle(
               fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
-              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+              color: AppColors.socaYellow,
             ),
           ),
         ),
       );
     }
-    // CANCEL or null → show Send Request
     return GestureDetector(
       onTap: () => _handleJoin(true),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.socaBlack,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Text(
-          'Send Request'.tr,
+          'SEND REQUEST',
           style: TextStyle(
             fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 13,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
             color: AppColors.socaYellow,
           ),
         ),
@@ -447,21 +464,37 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
     );
   }
 
-  Widget _infoRow(IconData icon, String text) {
-    return Padding(
-      padding: EdgeInsets.only(top: 4),
-      child: Row(
+  Widget _buildCatBadge(String category) {
+    return Container(
+      width: 80,
+      height: 85,
+      padding: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      decoration: BoxDecoration(
+        color: AppColors.socaBlack,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(icon, size: 14, color: AppColors.socaBlack),
-          SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: AppColors.socaBlack,
-              ),
+          Text(
+            'CAT',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: AppColors.socaYellow,
+            ),
+          ),
+          Text(
+            category,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 28,
+              color: AppColors.socaYellow,
             ),
           ),
         ],
@@ -469,21 +502,55 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
     );
   }
 
+  Widget _infoLabelValue(String label, String value) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 3),
+      child: RichText(
+        text: TextSpan(
+          style: TextStyle(
+              fontFamily: 'Poppins', fontSize: 12, color: AppColors.socaBlack),
+          children: [
+            TextSpan(
+                text: '$label - ',
+                style: TextStyle(fontWeight: FontWeight.w600)),
+            TextSpan(text: value),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildAboutSection(String about) {
     return Container(
-      color: Colors.white,
+      color: AppColors.socaPageBg,
       margin: EdgeInsets.only(top: 8),
       padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle('About'),
-          SizedBox(height: 8),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+            decoration: BoxDecoration(
+              color: AppColors.socaBlack,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'ABOUT',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+                color: AppColors.socaYellow,
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
           Text(
             about,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
+              fontWeight: FontWeight.w600,
               color: AppColors.socaBlack,
             ),
           ),
@@ -502,55 +569,98 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildBioDetails(AcademyDetailModel d) {
     return Container(
-      color: Colors.white,
+      color: AppColors.socaPageBg,
       margin: EdgeInsets.only(top: 8),
       padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle('Details'),
-          SizedBox(height: 8),
-          if (d.director?.isNotEmpty == true)
-            _detailRow('Director', d.director!),
-          if (d.manager?.isNotEmpty == true) _detailRow('Manager', d.manager!),
-          if (d.mobile?.isNotEmpty == true) _detailRow('Contact', d.mobile!),
-          if (d.email?.isNotEmpty == true) _detailRow('Email', d.email!),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+            decoration: BoxDecoration(
+              color: AppColors.socaBlack,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'BIO',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+                color: AppColors.socaYellow,
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (d.director?.isNotEmpty == true)
+                        _bioCell('Academy Director', d.director!),
+                      if (d.director?.isNotEmpty == true &&
+                          d.manager?.isNotEmpty == true)
+                        SizedBox(height: 12),
+                      if (d.manager?.isNotEmpty == true)
+                        _bioCell('Academy Manager', d.manager!),
+                    ],
+                  ),
+                ),
+                if ((d.mobile?.isNotEmpty == true) ||
+                    (d.email?.isNotEmpty == true)) ...[
+                  VerticalDivider(
+                      color: AppColors.socaBlack, thickness: 1, width: 24),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (d.mobile?.isNotEmpty == true)
+                          _bioCell('Academy Contact Number', d.mobile!),
+                        if (d.mobile?.isNotEmpty == true &&
+                            d.email?.isNotEmpty == true)
+                          SizedBox(height: 12),
+                        if (d.email?.isNotEmpty == true)
+                          _bioCell('Academy Contact Email', d.email!),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _detailRow(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 80,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: AppColors.socaBlack,
-              ),
-            ),
+  Widget _bioCell(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 11,
+            fontWeight: FontWeight.w400,
+            color: AppColors.socaBlack,
           ),
-          SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              value,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: AppColors.socaBlack,
-              ),
-            ),
+        ),
+        SizedBox(height: 2),
+        Text(
+          value,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
+            color: AppColors.socaBlack,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -626,71 +736,84 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildTeamsSection(List<AcademyTeamModel> teams) {
     return Container(
-      color: Colors.white,
+      color: AppColors.socaPageBg,
       margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: _sectionTitle('Teams'),
-          ),
-          SizedBox(height: 8),
-          SizedBox(
-            height: 90,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              itemCount: teams.length,
-              separatorBuilder: (_, __) => SizedBox(width: 12),
-              itemBuilder: (_, i) {
-                final t = teams[i];
-                final imgUrl = _imageUrl(t.imageUrl);
-                return GestureDetector(
-                  onTap: t.teamId?.isNotEmpty == true
-                      ? () => context.push('${AppRoutes.teams}/${t.teamId}')
-                      : null,
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.socaGrey.withValues(alpha: 0.2),
-                        ),
-                        child: ClipOval(
-                          child: imgUrl.isNotEmpty
-                              ? CachedNetworkImage(
-                                  imageUrl: imgUrl,
-                                  fit: BoxFit.cover,
-                                  errorWidget: (_, __, ___) => Icon(Icons.group,
-                                      color: AppColors.socaBlack),
-                                )
-                              : Icon(Icons.group, color: AppColors.socaBlack),
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      SizedBox(
-                        width: 68,
-                        child: Text(
-                          t.name ?? '',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 10,
-                            color: AppColors.socaBlack,
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+            decoration: BoxDecoration(
+              color: AppColors.socaBlack,
+              borderRadius: BorderRadius.circular(20),
             ),
+            child: Text(
+              'TEAMS',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+                color: AppColors.socaYellow,
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.85,
+            ),
+            itemCount: teams.length,
+            itemBuilder: (_, i) {
+              final t = teams[i];
+              final imgUrl = _imageUrl(t.imageUrl);
+              return GestureDetector(
+                onTap: t.teamId?.isNotEmpty == true
+                    ? () => context.push('${AppRoutes.teams}/${t.teamId}')
+                    : null,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 72,
+                      height: 72,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.socaGrey.withValues(alpha: 0.3),
+                      ),
+                      child: ClipOval(
+                        child: imgUrl.isNotEmpty
+                            ? CachedNetworkImage(
+                                imageUrl: imgUrl,
+                                fit: BoxFit.cover,
+                                errorWidget: (_, __, ___) => Icon(Icons.group,
+                                    color: AppColors.socaBlack),
+                              )
+                            : Icon(Icons.group, color: AppColors.socaBlack),
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      t.name ?? '',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.socaBlack,
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -719,7 +842,11 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
               separatorBuilder: (_, __) => SizedBox(width: 10),
               itemBuilder: (_, i) {
                 final v = videos[i];
-                final imgUrl = _imageUrl(v.imageUrl ?? v.effectiveImageUrl);
+                // thumbnail is a full URL; imageUrl may be a relative path
+                final imgUrl = v.thumbnail?.isNotEmpty == true
+                    ? v.thumbnail!
+                    : _imageUrl(v.imageUrl ?? v.effectiveImageUrl);
+
                 return Container(
                   width: 120,
                   decoration: BoxDecoration(
@@ -804,6 +931,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             itemBuilder: (_, i) {
               final post = displayPosts[i];
               final imgUrl = _imageUrl(post.imageUrl ?? post.effectiveImageUrl);
+
               return Container(
                 decoration: BoxDecoration(
                   color: AppColors.socaGrey.withValues(alpha: 0.2),
@@ -828,14 +956,29 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildNewsSection(List<AcademyNewsModel> newsList) {
     return Container(
-      color: Colors.white,
+      color: AppColors.socaPageBg,
       margin: EdgeInsets.only(top: 8),
       padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle('News'),
-          SizedBox(height: 8),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+            decoration: BoxDecoration(
+              color: AppColors.socaBlack,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'ACADEMY NEWS',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+                color: AppColors.socaYellow,
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
           ...newsList.map((n) => _buildNewsItem(n)),
         ],
       ),
@@ -844,34 +987,46 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildNewsItem(AcademyNewsModel news) {
     final imgUrl = _imageUrl(news.imageUrl);
-    return Padding(
-      padding: EdgeInsets.only(bottom: 12),
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      color: Colors.white,
+      padding: EdgeInsets.all(12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (imgUrl.isNotEmpty)
+          if (imgUrl.isNotEmpty) ...[
             ClipRRect(
               borderRadius: BorderRadius.circular(6),
               child: CachedNetworkImage(
                 imageUrl: imgUrl,
-                width: 60,
-                height: 60,
+                width: 90,
+                height: 90,
                 fit: BoxFit.cover,
                 errorWidget: (_, __, ___) =>
-                    Container(width: 60, height: 60, color: AppColors.socaGrey),
+                    Container(width: 90, height: 90, color: AppColors.socaGrey),
               ),
             ),
-          if (imgUrl.isNotEmpty) SizedBox(width: 10),
+            SizedBox(width: 12),
+          ],
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (news.newsDate?.isNotEmpty == true)
+                  Text(
+                    news.newsDate!,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
                 if (news.title?.isNotEmpty == true)
                   Text(
                     news.title!,
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       fontSize: 13,
                       color: AppColors.socaBlack,
                     ),
@@ -886,17 +1041,8 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                       fontSize: 11,
                       color: AppColors.socaBlack,
                     ),
-                    maxLines: 2,
+                    maxLines: 50,
                     overflow: TextOverflow.ellipsis,
-                  ),
-                if (news.newsDate?.isNotEmpty == true)
-                  Text(
-                    news.newsDate!,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 10,
-                      color: Colors.grey,
-                    ),
                   ),
               ],
             ),
@@ -955,13 +1101,20 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
   }
 
   Widget _sectionTitle(String title) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontFamily: 'Poppins',
-        fontWeight: FontWeight.w700,
-        fontSize: 15,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+      decoration: BoxDecoration(
         color: AppColors.socaBlack,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w700,
+          fontSize: 12,
+          color: AppColors.socaYellow,
+        ),
       ),
     );
   }
