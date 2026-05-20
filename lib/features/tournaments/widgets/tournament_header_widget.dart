@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/app_loader.dart';
 import '../data/tournament_models.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
 
-/// Tournament header — logo, name, info, follow button
-/// Mirrors Android TournamentsFragment header section
 class TournamentHeaderWidget extends StatelessWidget {
   const TournamentHeaderWidget({
     super.key,
@@ -29,155 +27,118 @@ class TournamentHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageUrl = ApiConstants.getImageUrl(tournament.logo);
-    final status = tournament.status ?? '';
+    final ageLabel = (tournament.ageCat?.isNotEmpty == true)
+        ? tournament.ageCat
+        : tournament.ageGroup;
 
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(16),
+      color: AppColors.socaPageBg,
+      padding: const EdgeInsets.fromLTRB(20, 25, 20, 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Tournament logo (circular, clickable)
-          GestureDetector(
-            onTap: onLogoTap,
-            child: Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.socaGrey,
-                border: Border.all(color: AppColors.socaGrey, width: 2),
-              ),
-              child: ClipOval(
-                child: imageUrl.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: imageUrl,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => const AppLoader(),
-                        errorWidget: (context, url, error) => const Icon(
-                          Icons.emoji_events,
-                          color: AppColors.socaBlack,
-                          size: 36,
-                        ),
-                      )
-                    : const Icon(
-                        Icons.emoji_events,
-                        color: AppColors.socaBlack,
-                        size: 36,
-                      ),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 12),
-
-          // Info section
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Name
-                Text(
-                  tournament.name ?? '',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
+          Column(
+            children: [
+              GestureDetector(
+                onTap: onLogoTap,
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  padding: const EdgeInsets.all(3),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
                     color: AppColors.socaBlack,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                const SizedBox(height: 4),
-
-                // Age group + game type row
-                Row(
-                  children: [
-                    if (tournament.ageGroup != null &&
-                        tournament.ageGroup!.isNotEmpty) ...[
-                      _InfoChip(label: tournament.ageGroup!),
-                      const SizedBox(width: 6),
-                    ],
-                    if (tournament.gameType != null &&
-                        tournament.gameType!.isNotEmpty)
-                      _InfoChip(label: tournament.gameType!),
-                  ],
-                ),
-
-                const SizedBox(height: 4),
-
-                // Location
-                if (tournament.location != null &&
-                    tournament.location!.isNotEmpty)
-                  Row(
-                    children: [
-                      const Icon(Icons.location_on,
-                          size: 13, color: AppColors.socaBlack),
-                      const SizedBox(width: 3),
-                      Expanded(
-                        child: Text(
-                          tournament.location!,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 12,
-                            color: AppColors.socaBlack.withOpacity(0.7),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                  child: ClipOval(
+                    child: imageUrl.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const AppLoader(),
+                            errorWidget: (context, url, error) =>
+                                const _LogoFallback(),
+                          )
+                        : const _LogoFallback(),
                   ),
-
-                const SizedBox(height: 4),
-
-                // Date info
-                _buildDateInfo(status),
-
-                const SizedBox(height: 8),
-
-                // Follow button + count (hidden for referee role)
-                if (showFollow)
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: onFollowTap,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: isFollowing
-                                ? AppColors.socaBlack
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(color: AppColors.socaBlack),
-                          ),
-                          child: Text(
-                            isFollowing ? 'Following' : 'Follow',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                              color: isFollowing
-                                  ? AppColors.socaYellow
-                                  : AppColors.socaBlack,
-                            ),
-                          ),
-                        ),
+                ),
+              ),
+              if (showFollow) ...[
+                const SizedBox(height: 5),
+                GestureDetector(
+                  onTap: onFollowTap,
+                  child: Container(
+                    width: 85,
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    decoration: BoxDecoration(
+                      color: AppColors.socaBlack,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      isFollowing ? 'FOLLOWING' : 'FOLLOW',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                        color: AppColors.socaYellow,
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        _followCountText(),
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          color: AppColors.socaBlack.withValues(alpha: 0.7),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  _followCountText(),
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    color: AppColors.socaBlack,
+                  ),
+                ),
               ],
+            ],
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _HeaderTagRow(
+                    ageGroup: ageLabel,
+                    gameType: tournament.gameType ?? '',
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    tournament.name ?? '',
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: AppColors.socaBlack,
+                      height: 1.2,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (tournament.location != null &&
+                      tournament.location!.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      tournament.location!,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: AppColors.socaBlack,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  const SizedBox(height: 2),
+                  _buildDateInfo(),
+                ],
+              ),
             ),
           ),
         ],
@@ -185,53 +146,35 @@ class TournamentHeaderWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDateInfo(String status) {
+  Widget _buildDateInfo() {
     final startDate = tournament.startDate ?? '';
     if (startDate.isEmpty) return const SizedBox.shrink();
 
-    String dateText;
-    switch (status.toLowerCase()) {
-      case 'init':
-      case 'fixture':
-        dateText = 'Starts $startDate';
-        break;
-      case 'live':
-      case 'end':
-        dateText = 'Started on $startDate';
-        break;
-      default:
-        dateText = startDate;
-    }
+    final status = tournament.status?.toLowerCase() ?? '';
+    final dateText = (status == 'init' || status == 'fixture')
+        ? 'Starts $startDate'
+        : 'Started on $startDate';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            const Icon(Icons.calendar_today,
-                size: 13, color: AppColors.socaBlack),
-            const SizedBox(width: 3),
-            Text(
-              dateText,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: AppColors.socaBlack.withOpacity(0.7),
-              ),
-            ),
-          ],
+        Text(
+          dateText,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 12,
+            color: AppColors.socaBlack,
+          ),
         ),
-        // Final submission date for upcoming tournaments
-        if ((status.toLowerCase() == 'init' ||
-                status.toLowerCase() == 'fixture') &&
+        if ((status == 'init' || status == 'fixture') &&
             tournament.fsdGmtMs > 0) ...[
           const SizedBox(height: 2),
           Text(
-            'Final Submission: ${_formatFsdDate(tournament.fsdGmtMs)}',
-            style: TextStyle(
+            'Final Submission ${_formatFsdDate(tournament.fsdGmtMs)}',
+            style: const TextStyle(
               fontFamily: 'Poppins',
-              fontSize: 11,
-              color: Colors.red.withOpacity(0.8),
+              fontSize: 12,
+              color: AppColors.socaBlack,
             ),
           ),
         ],
@@ -245,32 +188,68 @@ class TournamentHeaderWidget extends StatelessWidget {
   }
 
   String _formatFsdDate(int ms) {
-    if (ms == 0) return '';
     final dt = DateTime.fromMillisecondsSinceEpoch(ms);
     return '${dt.day}/${dt.month}/${dt.year}';
   }
 }
 
-class _InfoChip extends StatelessWidget {
-  const _InfoChip({required this.label});
-  final String label;
+class _LogoFallback extends StatelessWidget {
+  const _LogoFallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.emoji_events,
+      color: AppColors.socaYellow,
+      size: 36,
+    );
+  }
+}
+
+class _HeaderTagRow extends StatelessWidget {
+  const _HeaderTagRow({this.ageGroup, required this.gameType});
+
+  final String? ageGroup;
+  final String gameType;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
       decoration: BoxDecoration(
-        color: AppColors.socaYellow.withOpacity(0.25),
-        borderRadius: BorderRadius.circular(4),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
       ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: AppColors.socaBlack,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (ageGroup != null && ageGroup!.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.socaBlack,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                ageGroup!,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 12,
+                  color: AppColors.socaYellow,
+                ),
+              ),
+            ),
+          if (ageGroup != null && ageGroup!.isNotEmpty)
+            const SizedBox(width: 5),
+          if (gameType.isNotEmpty)
+            Text(
+              gameType,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                color: AppColors.socaBlack,
+              ),
+            ),
+        ],
       ),
     );
   }

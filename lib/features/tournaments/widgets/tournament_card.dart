@@ -30,25 +30,26 @@ class TournamentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final imageUrl = ApiConstants.getImageUrl(tournament.logo);
     final startLabel = _formatStartDate(tournament.startDate);
+    final ageLabel = (tournament.ageCat?.isNotEmpty == true)
+        ? tournament.ageCat
+        : tournament.ageGroup;
 
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        margin: const EdgeInsets.only(top: 5, bottom: 15),
+        color: AppColors.socaGrey,
+        elevation: 4,
+        shadowColor: Colors.black.withValues(alpha: 0.2),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        clipBehavior: Clip.antiAlias,
         child: Container(
-          // margin: const EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
             color: AppColors.socaGrey,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,19 +65,19 @@ class TournamentCard extends StatelessWidget {
                     children: [
                       // Age-group pill + sport label
                       _TagRow(
-                        ageGroup: tournament.ageGroup,
-                        gameType: _sportLabel(tournament.gameType),
+                        ageGroup: ageLabel,
+                        gameType: tournament.gameType ?? '',
                       ),
 
-                      const SizedBox(height: 7),
+                      const SizedBox(height: 4),
 
                       // Tournament name (bold)
                       Text(
                         tournament.name ?? '',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w800,
-                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
                           color: AppColors.socaBlack,
                           height: 1.25,
                         ),
@@ -93,9 +94,9 @@ class TournamentCard extends StatelessWidget {
                           tournament.location!,
                           style: TextStyle(
                             fontFamily: 'Poppins',
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: FontWeight.w400,
-                            color: AppColors.socaBlack.withOpacity(0.55),
+                            color: AppColors.socaBlack,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -111,7 +112,7 @@ class TournamentCard extends StatelessWidget {
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: AppColors.socaBlack.withOpacity(0.55),
+                            color: AppColors.socaBlack,
                           ),
                         ),
 
@@ -152,26 +153,13 @@ class TournamentCard extends StatelessWidget {
   }
 
   /// Maps raw gameType value to a display label.
-  String _sportLabel(String? gameType) {
-    if (gameType == null || gameType.isEmpty) return 'Football';
-    switch (gameType.toLowerCase()) {
-      case 'futsal':
-        return 'Futsal';
-      case 'beach':
-        return 'Beach Soccer';
-      case 'football':
-      case 'soccer':
-        return 'Football';
-      default:
-        return gameType[0].toUpperCase() + gameType.substring(1);
-    }
-  }
-
-  /// Parses ISO date string → "Started on MMM D, YYYY".
+  /// Parses date string → Android-style "Starts/Started on MMM D, YYYY".
   String _formatStartDate(String? raw) {
     if (raw == null || raw.isEmpty) return '';
+    final prefix =
+        (tournament.status?.toLowerCase() == 'init') ? 'Starts' : 'Started on';
     try {
-      final dt = DateTime.parse(raw);
+      final dt = _parseDate(raw);
       const months = [
         '',
         'Jan',
@@ -187,10 +175,25 @@ class TournamentCard extends StatelessWidget {
         'Nov',
         'Dec',
       ];
-      return 'Started on ${months[dt.month]} ${dt.day}, ${dt.year}';
+      return '$prefix ${months[dt.month]} ${dt.day}, ${dt.year}';
     } catch (_) {
-      return 'Started on $raw';
+      return '$prefix $raw';
     }
+  }
+
+  DateTime _parseDate(String raw) {
+    final iso = DateTime.tryParse(raw);
+    if (iso != null) return iso;
+    final parts = raw.split('-');
+    if (parts.length == 3) {
+      final day = int.tryParse(parts[0]);
+      final month = int.tryParse(parts[1]);
+      final year = int.tryParse(parts[2]);
+      if (day != null && month != null && year != null) {
+        return DateTime(year, month, day);
+      }
+    }
+    throw FormatException('Unsupported date: $raw');
   }
 }
 
@@ -205,34 +208,34 @@ class _TagRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 110,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           // Age group — dark pill (matches design: "21-30")
           if (ageGroup != null && ageGroup!.isNotEmpty)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
                 ageGroup!,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w400,
                   color: AppColors.socaYellow,
                 ),
               ),
             ),
 
           if (ageGroup != null && ageGroup!.isNotEmpty)
-            const SizedBox(width: 8),
+            const SizedBox(width: 5),
 
           // Sport label — plain text, no pill
           Text(
@@ -240,8 +243,8 @@ class _TagRow extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppColors.socaBlack.withOpacity(0.65),
+              fontWeight: FontWeight.w400,
+              color: AppColors.socaBlack,
             ),
           ),
         ],
@@ -311,21 +314,21 @@ class _ActionButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 9),
+        constraints: const BoxConstraints(minWidth: 85),
         decoration: BoxDecoration(
           color: filled ? AppColors.socaBlack : Colors.white,
-          border: filled
-              ? null
-              : Border.all(color: AppColors.socaBlack, width: 1.5),
-          borderRadius: BorderRadius.circular(6),
+          border:
+              filled ? null : Border.all(color: AppColors.socaBlack, width: 1),
+          borderRadius: BorderRadius.circular(5),
         ),
         child: Text(
           label,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 13,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: filled ? Colors.white : AppColors.socaBlack,
-            letterSpacing: 0.4,
+            color: filled ? AppColors.socaYellow : AppColors.socaBlack,
           ),
         ),
       ),

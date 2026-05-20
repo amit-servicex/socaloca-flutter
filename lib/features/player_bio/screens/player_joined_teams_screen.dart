@@ -96,7 +96,8 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
                   trailing:
                       Icon(Icons.chevron_right, color: AppColors.socaBlack),
                   onTap: teamId.isNotEmpty
-                      ? () => context.push('${AppRoutes.teams}/$teamId')
+                      ? () => context.push(
+                          AppRoutes.teamBio.replaceFirst(':teamId', teamId))
                       : null,
                 ),
               );

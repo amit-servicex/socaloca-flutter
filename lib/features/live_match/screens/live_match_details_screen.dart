@@ -19,10 +19,12 @@ class LiveMatchDetailsScreen extends ConsumerStatefulWidget {
     super.key,
     required this.matchId,
     required this.tournamentId,
+    this.preferMatchData = false,
   });
 
   final String matchId;
   final String tournamentId;
+  final bool preferMatchData;
 
   @override
   ConsumerState<LiveMatchDetailsScreen> createState() =>
@@ -56,47 +58,48 @@ class _LiveMatchDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final args = (widget.matchId, widget.tournamentId);
+    final args = (widget.matchId, widget.tournamentId, widget.preferMatchData);
     final detailState = ref.watch(liveMatchDetailProvider(args));
     final user = ref.watch(currentUserProvider);
     final isReferee = user?.isReferee == true;
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: Colors.white,
-        title: Text(
-          'Live Match'.tr,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-            color: Colors.white,
-          ),
-        ),
-        actions: [
-          if (isReferee)
-            TextButton(
-              onPressed: () => context.push(
-                '/referee/match/${widget.matchId}/live-update',
-                extra: {
-                  'matchId': widget.matchId,
-                  'tournamentId': widget.tournamentId
-                },
-              ),
-              child: Text(
-                'MANAGE'.tr,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                  color: AppColors.socaYellow,
-                ),
-              ),
-            ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.socaBlack,
+      //   foregroundColor: Colors.white,
+      //   title: Text(
+      //     'Live Match'.tr,
+      //     style: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontWeight: FontWeight.w700,
+      //       fontSize: 16,
+      //       color: Colors.white,
+      //     ),
+      //   ),
+      //   actions: [
+      //     if (isReferee)
+      //       TextButton(
+      //         onPressed: () => context.push(
+      //           '/referee/match/${widget.matchId}/live-update',
+      //           extra: {
+      //             'matchId': widget.matchId,
+      //             'tournamentId': widget.tournamentId
+      //           },
+      //         ),
+      //         child: Text(
+      //           'MANAGE'.tr,
+      //           style: TextStyle(
+      //             fontFamily: 'Poppins',
+      //             fontWeight: FontWeight.w700,
+      //             fontSize: 12,
+      //             color: AppColors.socaYellow,
+      //           ),
+      //         ),
+      //       ),
+      //   ],
+      // ),
+
       body: detailState.isLoading && detailState.detail == null
           ? AppLoader()
           : detailState.error != null && detailState.detail == null
@@ -151,6 +154,30 @@ class _DetailBody extends StatelessWidget {
     return Column(
       children: [
         // Score header card
+        SizedBox(
+          height: 200,
+          child: Stack(
+            children: [
+              // Banner Image (placeholder for now)
+              Container(
+                  height: 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.grey[300]!,
+                        Colors.grey[400]!,
+                      ],
+                    ),
+                  ),
+                  child: Image.asset(
+                      "assets/images/tournament_defalut_banner.jpg",
+                      fit: BoxFit.cover)),
+            ],
+          ),
+        ),
         _ScoreHeader(detail: detail),
 
         // Tab bar
@@ -187,8 +214,10 @@ class _ScoreHeader extends StatelessWidget {
     // Format match date/time
     String dateTimeStr = '';
     if (detail.matchDateTimeGmt != null) {
-      final dt =
-          DateTime.fromMillisecondsSinceEpoch(detail.matchDateTimeGmt! * 1000);
+      final raw = detail.matchDateTimeGmt!;
+      final dt = DateTime.fromMillisecondsSinceEpoch(
+        raw > 100000000000 ? raw : raw * 1000,
+      );
       final local = dt.toLocal();
       dateTimeStr =
           '${local.day.toString().padLeft(2, '0')}/${local.month.toString().padLeft(2, '0')}/${local.year} '
@@ -196,7 +225,7 @@ class _ScoreHeader extends StatelessWidget {
     }
 
     return Container(
-      color: AppColors.socaBlack,
+      color: AppColors.socaGrey,
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       child: Column(
         children: [
@@ -207,7 +236,7 @@ class _ScoreHeader extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 11,
-                color: Colors.white54,
+                color: AppColors.socaBlack,
               ),
             ),
 
@@ -220,7 +249,7 @@ class _ScoreHeader extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    _TeamLogo(imageUrl: homeTeam?.imageUrl, size: 52),
+                    _TeamLogo(imageUrl: homeTeam?.imageUrl, size: 100),
                     SizedBox(height: 6),
                     Text(
                       homeTeam?.teamName ?? '',
@@ -231,7 +260,7 @@ class _ScoreHeader extends StatelessWidget {
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
-                        color: Colors.white,
+                        color: AppColors.socaBlack,
                       ),
                     ),
                     if (homeTeam?.teamShortName?.isNotEmpty == true)
@@ -240,7 +269,7 @@ class _ScoreHeader extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Lato',
                           fontSize: 10,
-                          color: Colors.white60,
+                          color: AppColors.socaBlack,
                         ),
                       ),
                   ],
@@ -264,7 +293,7 @@ class _ScoreHeader extends StatelessWidget {
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w800,
                               fontSize: 24,
-                              color: Colors.white,
+                              color: AppColors.socaBlack,
                             ),
                           ),
                         ),
@@ -292,7 +321,7 @@ class _ScoreHeader extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    _TeamLogo(imageUrl: awayTeam?.imageUrl, size: 52),
+                    _TeamLogo(imageUrl: awayTeam?.imageUrl, size: 100),
                     SizedBox(height: 6),
                     Text(
                       awayTeam?.teamName ?? '',
@@ -303,7 +332,7 @@ class _ScoreHeader extends StatelessWidget {
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
-                        color: Colors.white,
+                        color: AppColors.socaBlack,
                       ),
                     ),
                     if (awayTeam?.teamShortName?.isNotEmpty == true)
@@ -312,7 +341,7 @@ class _ScoreHeader extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Lato',
                           fontSize: 10,
-                          color: Colors.white60,
+                          color: AppColors.socaBlack,
                         ),
                       ),
                   ],
@@ -338,7 +367,7 @@ class _ScoreDigit extends StatelessWidget {
         fontFamily: 'Poppins',
         fontWeight: FontWeight.w900,
         fontSize: 36,
-        color: Colors.white,
+        color: AppColors.socaBlack,
       ),
     );
   }
@@ -363,7 +392,7 @@ class _MatchStateBadge extends StatelessWidget {
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w700,
           fontSize: 10,
-          color: Colors.white,
+          color: AppColors.socaBlack,
         ),
       ),
     );
@@ -371,7 +400,7 @@ class _MatchStateBadge extends StatelessWidget {
 }
 
 class _TeamLogo extends StatelessWidget {
-  _TeamLogo({this.imageUrl, this.size = 52});
+  _TeamLogo({this.imageUrl, this.size = 100});
   final String? imageUrl;
   final double size;
 
@@ -386,7 +415,7 @@ class _TeamLogo extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white12,
-        border: Border.all(color: Colors.white24, width: 1),
+        border: Border.all(color: AppColors.socaBlack, width: 2),
       ),
       child: url.isNotEmpty
           ? ClipOval(

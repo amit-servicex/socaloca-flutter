@@ -103,23 +103,24 @@ class _TournamentFeaturedScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: Text(
-          'Tournament'.tr,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Tournament'.tr,
+      //     style: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontWeight: FontWeight.w700,
+      //       fontSize: 18,
+      //       color: AppColors.socaBlack,
+      //     ),
+      //   ),
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
+      //     onPressed: () => context.pop(),
+      //   ),
+      // ),
+
       body: _loading
           ? AppLoader()
           : _tournament == null
@@ -161,7 +162,7 @@ class _TournamentFeaturedScreenState
                             ),
                           ),
                           child: Text(
-                            'View Tournament Details'.tr,
+                            'View Tournament Details '.tr,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -179,22 +180,21 @@ class _TournamentFeaturedScreenState
                       child: TabBar(
                         controller: _tabController,
                         labelColor: AppColors.socaBlack,
-                        unselectedLabelColor:
-                            AppColors.socaBlack.withValues(alpha: 0.5),
-                        indicatorColor: AppColors.socaYellow,
+                        unselectedLabelColor: AppColors.socaBlack,
+                        indicatorColor: AppColors.socaBlack,
                         indicatorWeight: 3,
                         labelStyle: TextStyle(
                           fontFamily: 'Poppins',
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
-                          fontSize: 14,
                         ),
                         unselectedLabelStyle: TextStyle(
                           fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                         tabs: [
-                          Tab(text: 'Matches'),
+                          Tab(text: 'Matches fd'),
                           Tab(text: 'Points Table'),
                           Tab(text: 'Stats'),
                         ],

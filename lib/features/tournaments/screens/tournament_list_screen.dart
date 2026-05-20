@@ -151,12 +151,52 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
     _loadTournaments(refresh: true);
   }
 
+  Future<void> _toggleFollow(int index) async {
+    final currentUser = ref.read(currentUserProvider);
+    if (currentUser == null) return;
+
+    final tournament = _tournaments[index];
+    final tournamentId = tournament.effectiveId;
+    if (tournamentId.isEmpty) return;
+
+    final result =
+        await ref.read(tournamentRepositoryProvider).followTournament(
+              userId: currentUser.id,
+              tournamentId: tournamentId,
+              myName: currentUser.name ?? '',
+              myImageUrl: currentUser.profileImage,
+              country: currentUser.country,
+              gender: currentUser.gender,
+              isPlayer: currentUser.isPlayer,
+              isCoach: currentUser.isCoach,
+              isAdmin: currentUser.isAdmin,
+              isFan: currentUser.isFan,
+            );
+
+    if (!mounted || result['success'] != true) return;
+    final isFollowing = result['isFollow'] as bool? ?? tournament.isFollowing;
+    final nextFollowCount = isFollowing
+        ? tournament.followCount + 1
+        : tournament.followCount > 0
+            ? tournament.followCount - 1
+            : 0;
+    setState(() {
+      _tournaments[index] = tournament.copyWith(
+        isFollowing: isFollowing,
+        followCount: nextFollowCount,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     // For 'my' tab there are no filters at all
     final showFilters = widget.status != 'my';
+    final currentUser = ref.watch(currentUserProvider);
+    final showFollow = currentUser?.isReferee != true &&
+        currentUser?.userType?.toLowerCase() != 'referee';
 
     return Column(
       children: [
@@ -234,6 +274,8 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                               final t = _tournaments[index];
                               return TournamentCard(
                                 tournament: t,
+                                showFollow: showFollow,
+                                onFollow: () => _toggleFollow(index),
                                 onTap: () {
                                   final route = _detailsRouteFor(t);
                                   if (route == null) return;

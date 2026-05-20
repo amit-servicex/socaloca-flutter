@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
 import '../widgets/stats_tab_content.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 
 class PlayerStatsScreen extends ConsumerStatefulWidget {
   final String playerId;
@@ -128,40 +129,15 @@ class _YearDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final strItems = years.map((y) => y.toString()).toList();
+    return SizedBox(
       width: 160,
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade400),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<int>(
-          value: selectedYear,
-          hint: Text(
-            'select year *'.tr,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 13,
-              color: Colors.grey,
-            ),
-          ),
-          isExpanded: true,
-          icon: Icon(Icons.arrow_drop_down, color: AppColors.socaBlack),
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 13,
-            color: AppColors.socaBlack,
-          ),
-          items: years
-              .map((y) => DropdownMenuItem(
-                    value: y,
-                    child: Text(y.toString()),
-                  ))
-              .toList(),
-          onChanged: onChanged,
-        ),
+      child: SearchableDropdownButton(
+        hint: 'select year *'.tr,
+        value: selectedYear?.toString(),
+        items: strItems,
+        onChanged: (v) => onChanged(v != null ? int.tryParse(v) : null),
+        fontSize: 13,
       ),
     );
   }

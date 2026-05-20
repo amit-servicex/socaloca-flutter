@@ -336,7 +336,8 @@ Widget _teamListTile(
       trailing:
           trailing ?? Icon(Icons.chevron_right, color: AppColors.socaBlack),
       onTap: teamId.isNotEmpty
-          ? () => context.push('${AppRoutes.teams}/$teamId')
+          ? () =>
+              context.push(AppRoutes.teamBio.replaceFirst(':teamId', teamId))
           : null,
     ),
   );
@@ -733,7 +734,8 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
                   Expanded(
                     child: GestureDetector(
                       onTap: teamId.isNotEmpty
-                          ? () => context.push('${AppRoutes.teams}/$teamId')
+                          ? () => context.push(
+                              AppRoutes.teamBio.replaceFirst(':teamId', teamId))
                           : null,
                       child: Text(
                         teamName,

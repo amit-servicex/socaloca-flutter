@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -21,163 +23,153 @@ class MatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("this is the details of the match ${match.toJson()}");
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(bottom: 8),
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              blurRadius: 4,
+              blurRadius: 6,
               offset: Offset(0, 2),
             ),
           ],
         ),
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Column(
-            children: [
-              // Teams row
-              Row(
-                children: [
-                  // Home team
-                  Expanded(
-                    child: Column(
-                      children: [
-                        _TeamLogo(logoPath: match.homeTeamLogo),
-                        SizedBox(height: 6),
-                        Text(
-                          match.homeTeamName ?? 'TBD',
+        child: Column(
+          children: [
+            // Venue at top
+            if (match.venue != null && match.venue!.isNotEmpty) ...[
+              Text(
+                match.venue!.toUpperCase(),
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 13,
+                  color: AppColors.socaBlack.withOpacity(0.9),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+            ],
+
+            // Teams and Score
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Home team
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: [
+                      _TeamLogo(logoPath: match.homeTeamLogo),
+                      SizedBox(height: 8),
+                      Text(
+                        match.homeTeamName ?? 'TBD',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: AppColors.socaBlack,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Center Score and Status
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    children: [
+                      // Score Box or VS Box
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.socaBlack,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          _isPlayed
+                              ? '${match.homeScore} : ${match.awayScore}'
+                              : 'VS',
                           style: TextStyle(
                             fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                            color: AppColors.socaBlack,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24,
+                            color: AppColors.socaYellow,
                           ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
-                  ),
-
-                  // Score / VS
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: _isPlayed
-                        ? Column(
-                            children: [
-                              Text(
-                                '${match.homeScore} - ${match.awayScore}',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 20,
-                                  color: AppColors.socaBlack,
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  'FT'.tr,
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.socaBlack,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Text(
-                            'VS'.tr,
+                      ),
+                      SizedBox(height: 6),
+                      // Full time / Upcoming status
+                      Text(
+                        _isPlayed ? 'Full time'.tr : 'Upcoming'.tr,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: AppColors.socaBlack.withOpacity(0.6),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      // Date Pill
+                      if (match.matchDate != null &&
+                          match.matchDate!.isNotEmpty)
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            match.matchDate!,
                             style: TextStyle(
                               fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w800,
-                              fontSize: 18,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
                               color: AppColors.socaBlack,
                             ),
                           ),
-                  ),
-
-                  // Away team
-                  Expanded(
-                    child: Column(
-                      children: [
-                        _TeamLogo(logoPath: match.awayTeamLogo),
-                        SizedBox(height: 6),
-                        Text(
-                          match.awayTeamName ?? 'TBD',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                            color: AppColors.socaBlack,
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
 
-              // Date + venue
-              if (match.matchDate != null || match.venue != null) ...[
-                SizedBox(height: 8),
-                Divider(height: 1),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (match.matchDate != null) ...[
-                      Icon(Icons.calendar_today,
-                          size: 12, color: AppColors.socaBlack),
-                      SizedBox(width: 4),
+                // Away team
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: [
+                      _TeamLogo(logoPath: match.awayTeamLogo),
+                      SizedBox(height: 8),
                       Text(
-                        match.matchDate!,
+                        match.awayTeamName ?? 'TBD',
                         style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 11,
-                          color: AppColors.socaBlack.withOpacity(0.7),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: AppColors.socaBlack,
                         ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    if (match.matchDate != null && match.venue != null)
-                      SizedBox(width: 12),
-                    if (match.venue != null) ...[
-                      Icon(Icons.stadium, size: 12, color: AppColors.socaBlack),
-                      SizedBox(width: 4),
-                      Flexible(
-                        child: Text(
-                          match.venue!,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 11,
-                            color: AppColors.socaBlack.withOpacity(0.7),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
               ],
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

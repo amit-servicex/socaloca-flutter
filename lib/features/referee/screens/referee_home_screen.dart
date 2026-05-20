@@ -23,27 +23,27 @@ class _RefereeHomeScreenState extends ConsumerState<RefereeHomeScreen> {
 
   static const _tabs = [
     _RefereeNavTab(
-      icon: Icons.emoji_events,
+      icon: "assets/icons/ic_leaguescups_new.png",
       label: 'TOURNAMENT',
       route: AppRoutes.refereeTournament,
     ),
     _RefereeNavTab(
-      icon: Icons.inbox,
+      icon: 'assets/icons/ic_referee_my_requests.png',
       label: 'REQUESTS',
       route: AppRoutes.refereeRequests,
     ),
     _RefereeNavTab(
-      icon: Icons.sports_soccer,
+      icon: 'assets/icons/ic_referee_my_matches.png',
       label: 'MY MATCHES',
       route: AppRoutes.refereeMatches,
     ),
     _RefereeNavTab(
-      icon: Icons.live_tv,
+      icon: 'assets/images/live_matchs.png',
       label: 'LIVE',
       route: AppRoutes.refereeLive,
     ),
     _RefereeNavTab(
-      icon: Icons.person,
+      icon: 'assets/icons/ic_my_bio.png',
       label: 'MY BIO',
       route: AppRoutes.refereeBio,
     ),
@@ -108,20 +108,18 @@ class _RefereeBottomNav extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: isActive
-                              ? AppColors.socaYellow
-                              : Colors.transparent,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          tab.icon,
-                          size: 18,
-                          color: AppColors.socaBlack,
-                        ),
-                      ),
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            color: isActive
+                                ? AppColors.socaYellow
+                                : Colors.transparent,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image.asset(
+                            tab.icon,
+                            fit: BoxFit.contain,
+                          )),
                       const SizedBox(height: 2),
                       Text(
                         tab.label,
@@ -154,7 +152,7 @@ class _RefereeNavTab {
     required this.route,
   });
 
-  final IconData icon;
+  final String icon;
   final String label;
   final String route;
 }

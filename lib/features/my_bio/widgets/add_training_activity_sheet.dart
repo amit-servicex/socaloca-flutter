@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
@@ -333,40 +334,11 @@ class _DropdownField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            value: value,
-            hint: Text(
-              hint,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 13,
-                color: Colors.grey.shade400,
-              ),
-            ),
-            isExpanded: true,
-            icon: Icon(Icons.keyboard_arrow_down),
-            items: items
-                .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 13,
-                          color: AppColors.socaBlack,
-                        ),
-                      ),
-                    ))
-                .toList(),
-            onChanged: onChanged,
-          ),
-        ),
+  Widget build(BuildContext context) => SearchableDropdownButton(
+        hint: hint,
+        value: value,
+        items: items,
+        onChanged: onChanged,
+        fontSize: 13,
       );
 }

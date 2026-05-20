@@ -110,8 +110,17 @@ class LiveMatchRepository {
   Future<LiveMatchDetail?> getLiveMatchDetail({
     required String matchId,
     required String tournamentId,
+    bool preferMatchData = false,
   }) async {
-    final response = await ApiClient.instance.post(
+    if (preferMatchData) {
+      final detail = await _getMatchDataDetail(
+        matchId: matchId,
+        tournamentId: tournamentId,
+      );
+      if (detail != null) return detail;
+    }
+
+    final refResponse = await ApiClient.instance.post(
       ApiConstants.getRefLiveMtchData,
       body: {
         'userId': _userId,
@@ -119,9 +128,31 @@ class LiveMatchRepository {
         'tournamentId': tournamentId,
       },
     );
-    final inner = _inner(response);
-    if (inner['status'] != 1) return null;
-    return LiveMatchDetail.fromJson(matchId, tournamentId, inner);
+    final refInner = _inner(refResponse);
+    if (refInner['status'] == 1 && refInner['matchDetails'] != null) {
+      return LiveMatchDetail.fromJson(matchId, tournamentId, refInner);
+    }
+
+    return _getMatchDataDetail(matchId: matchId, tournamentId: tournamentId);
+  }
+
+  Future<LiveMatchDetail?> _getMatchDataDetail({
+    required String matchId,
+    required String tournamentId,
+  }) async {
+    final matchResponse = await ApiClient.instance.post(
+      ApiConstants.getMatchData,
+      body: {
+        'userId': _userId,
+        'matchId': matchId,
+        'tournamentId': tournamentId,
+      },
+    );
+    final matchInner = _inner(matchResponse);
+    if (matchInner['status'] != 1 || matchInner['matchDetails'] == null) {
+      return null;
+    }
+    return LiveMatchDetail.fromJson(matchId, tournamentId, matchInner);
   }
 
   // ─── Helpers ──────────────────────────────────────────────────────────────

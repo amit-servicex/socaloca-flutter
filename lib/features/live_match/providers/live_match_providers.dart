@@ -200,6 +200,7 @@ class LiveMatchDetailNotifier extends StateNotifier<LiveMatchDetailState> {
     this._repo,
     this._matchId,
     this._tournamentId,
+    this._preferMatchData,
   ) : super(const LiveMatchDetailState()) {
     _fetch();
     _startPolling();
@@ -208,6 +209,7 @@ class LiveMatchDetailNotifier extends StateNotifier<LiveMatchDetailState> {
   final LiveMatchRepository _repo;
   final String _matchId;
   final String _tournamentId;
+  final bool _preferMatchData;
   Timer? _pollTimer;
   bool _isFetching = false;
 
@@ -230,6 +232,7 @@ class LiveMatchDetailNotifier extends StateNotifier<LiveMatchDetailState> {
       final detail = await _repo.getLiveMatchDetail(
         matchId: _matchId,
         tournamentId: _tournamentId,
+        preferMatchData: _preferMatchData,
       );
       if (detail != null) {
         state = LiveMatchDetailState(detail: detail);
@@ -253,11 +256,12 @@ class LiveMatchDetailNotifier extends StateNotifier<LiveMatchDetailState> {
 }
 
 // Family provider — one instance per matchId+tournamentId pair
-final liveMatchDetailProvider = StateNotifierProvider.autoDispose
-    .family<LiveMatchDetailNotifier, LiveMatchDetailState, (String, String)>(
+final liveMatchDetailProvider = StateNotifierProvider.autoDispose.family<
+    LiveMatchDetailNotifier, LiveMatchDetailState, (String, String, bool)>(
   (ref, args) => LiveMatchDetailNotifier(
     ref.read(liveMatchRepositoryProvider),
     args.$1,
     args.$2,
+    args.$3,
   ),
 );

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
@@ -433,42 +434,21 @@ class _Dropdown<T> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<T>(
-            value: value,
-            hint: Text(
-              hint,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 13,
-                color: Colors.grey.shade400,
-              ),
-            ),
-            isExpanded: true,
-            icon: Icon(Icons.keyboard_arrow_down),
-            items: items
-                .map((item) => DropdownMenuItem<T>(
-                      value: item,
-                      child: Text(
-                        itemLabel(item),
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 13,
-                          color: AppColors.socaBlack,
-                        ),
-                      ),
-                    ))
-                .toList(),
-            onChanged: onChanged,
-          ),
-        ),
-      );
+  Widget build(BuildContext context) {
+    final labels = items.map(itemLabel).toList();
+    final strValue = value != null ? itemLabel(value as T) : null;
+    return SearchableDropdownButton(
+      hint: hint,
+      value: strValue,
+      items: labels,
+      onChanged: (v) {
+        if (v == null) return;
+        final idx = labels.indexOf(v);
+        if (idx >= 0) onChanged(items[idx]);
+      },
+      fontSize: 13,
+    );
+  }
 }
 
 class _NumberField extends StatelessWidget {

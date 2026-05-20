@@ -33,6 +33,18 @@ final cupReadyDetailProvider =
   },
 );
 
+/// Cup details for the active tournament flow.
+/// Android loads getCupReadyDetail before rendering stages/stats so round data
+/// is available before getCupGroupMatches/getCupKnockMatches/stat APIs fire.
+final cupReadyOrDetailsProvider =
+    FutureProvider.family<TournamentCupModel?, String>(
+  (ref, tournamentId) async {
+    final ready = await ref.watch(cupReadyDetailProvider(tournamentId).future);
+    if (ready != null) return ready;
+    return ref.watch(cupDetailsProvider(tournamentId).future);
+  },
+);
+
 /// Cup group matches provider
 final cupGroupMatchesProvider =
     FutureProvider.family<CupGroupModel?, CupGroupMatchesParams>(
@@ -61,6 +73,7 @@ final cupGroupPointTableProvider =
     return await repository.getCupLeagueTable(
       userId: user.id,
       tournamentId: params.tournamentId,
+      roundId: params.roundId,
       groupId: params.groupId,
     );
   },
@@ -96,6 +109,8 @@ final cupGroupStatsProvider =
       statType: params.statType,
       roundId: params.roundId,
       groupId: params.groupId,
+      start: params.start,
+      limit: params.limit,
     );
   },
 );
@@ -113,6 +128,8 @@ final cupMatchStatsProvider =
       tournamentId: params.tournamentId,
       statType: params.statType,
       roundId: params.roundId,
+      start: params.start,
+      limit: params.limit,
     );
   },
 );
@@ -354,10 +371,12 @@ class CupGroupMatchesParams {
 
 class CupGroupTableParams {
   final String tournamentId;
+  final String roundId;
   final String groupId;
 
   const CupGroupTableParams({
     required this.tournamentId,
+    required this.roundId,
     required this.groupId,
   });
 
@@ -367,10 +386,12 @@ class CupGroupTableParams {
       other is CupGroupTableParams &&
           runtimeType == other.runtimeType &&
           tournamentId == other.tournamentId &&
+          roundId == other.roundId &&
           groupId == other.groupId;
 
   @override
-  int get hashCode => tournamentId.hashCode ^ groupId.hashCode;
+  int get hashCode =>
+      tournamentId.hashCode ^ roundId.hashCode ^ groupId.hashCode;
 }
 
 class CupKnockoutParams {
@@ -399,12 +420,16 @@ class CupGroupStatsParams {
   final String statType; // 'goals', 'assists', 'cards', 'mom'
   final String? roundId;
   final String? groupId;
+  final int start;
+  final int limit;
 
   const CupGroupStatsParams({
     required this.tournamentId,
     required this.statType,
     this.roundId,
     this.groupId,
+    this.start = 0,
+    this.limit = 10,
   });
 
   @override
@@ -415,25 +440,33 @@ class CupGroupStatsParams {
           tournamentId == other.tournamentId &&
           statType == other.statType &&
           roundId == other.roundId &&
-          groupId == other.groupId;
+          groupId == other.groupId &&
+          start == other.start &&
+          limit == other.limit;
 
   @override
   int get hashCode =>
       tournamentId.hashCode ^
       statType.hashCode ^
       (roundId?.hashCode ?? 0) ^
-      (groupId?.hashCode ?? 0);
+      (groupId?.hashCode ?? 0) ^
+      start.hashCode ^
+      limit.hashCode;
 }
 
 class CupMatchStatsParams {
   final String tournamentId;
   final String statType; // 'goals', 'assists', 'cards', 'mom'
   final String? roundId;
+  final int start;
+  final int limit;
 
   const CupMatchStatsParams({
     required this.tournamentId,
     required this.statType,
     this.roundId,
+    this.start = 0,
+    this.limit = 10,
   });
 
   @override
@@ -443,9 +476,15 @@ class CupMatchStatsParams {
           runtimeType == other.runtimeType &&
           tournamentId == other.tournamentId &&
           statType == other.statType &&
-          roundId == other.roundId;
+          roundId == other.roundId &&
+          start == other.start &&
+          limit == other.limit;
 
   @override
   int get hashCode =>
-      tournamentId.hashCode ^ statType.hashCode ^ (roundId?.hashCode ?? 0);
+      tournamentId.hashCode ^
+      statType.hashCode ^
+      (roundId?.hashCode ?? 0) ^
+      start.hashCode ^
+      limit.hashCode;
 }

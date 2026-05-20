@@ -63,7 +63,7 @@ class _LiveTournamentsSectionState
     if (state.isLoading && state.items.isEmpty) return SizedBox.shrink();
     if (state.items.isEmpty) return SizedBox.shrink();
 
-    log("this is the data of the ongoing tournaments ${state.items}");
+    // log("this is the data of the ongoing tournaments ${state.items}");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

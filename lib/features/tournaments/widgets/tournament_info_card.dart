@@ -1,200 +1,165 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
-import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/tournament_models.dart';
 
-/// Tournament Info Card Widget
-/// Displays comprehensive tournament information in a card layout
-/// Matches Android TournamentDetailsFragment info card
 class TournamentInfoCard extends StatelessWidget {
-  final TournamentModel tournament;
-
-  TournamentInfoCard({
+  const TournamentInfoCard({
     super.key,
     required this.tournament,
   });
 
+  final TournamentModel tournament;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.socaBlack,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  color: AppColors.socaYellow,
-                  size: 20,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'Tournament Information'.tr,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.socaYellow,
+    final leftFields = <_InfoField>[
+      _InfoField('Age Category'.tr, tournament.ageCat),
+      _InfoField('Gender'.tr, tournament.gender),
+      _InfoField('Game Type'.tr, tournament.gameType),
+      _InfoField('Tournament Type'.tr, _getTournamentType()),
+      _InfoField('Country'.tr, tournament.country),
+    ].where((field) => field.value != null && field.value!.isNotEmpty).toList();
+
+    String? tournamentDateDisplay = tournament.startDate;
+    if (tournamentDateDisplay != null &&
+        tournamentDateDisplay.isNotEmpty &&
+        !tournamentDateDisplay.toLowerCase().startsWith('started')) {
+      tournamentDateDisplay = 'Started on $tournamentDateDisplay';
+    }
+
+    final rightFields = <_InfoField>[
+      _InfoField('Location'.tr, tournament.location),
+      _InfoField('Tournament Date'.tr, tournamentDateDisplay),
+      _InfoField('Venue'.tr, tournament.venue),
+      _InfoField('Total Number of Teams'.tr,
+          tournament.teamCount > 0 ? '${tournament.teamCount}' : null),
+      _InfoField(
+          'Number of player per team'.tr,
+          tournament.teamPlayerLimit > 0
+              ? '${tournament.teamPlayerLimit}'
+              : (tournament.teamPlayerLimit == 0 ? 'No limit'.tr : null)),
+    ].where((field) => field.value != null && field.value!.isNotEmpty).toList();
+
+    return Card(
+      margin: const EdgeInsets.only(top: 25, bottom: 5),
+      // color: AppColors.socaGrey,
+      // elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var i = 0; i < leftFields.length; i++)
+                          Padding(
+                            padding: EdgeInsets.only(
+                                bottom: i == leftFields.length - 1 ? 0 : 18),
+                            child: _buildInfoField(leftFields[i]),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  const VerticalDivider(
+                    color: Colors.black26,
+                    width: 32,
+                    thickness: 1,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var i = 0; i < rightFields.length; i++)
+                          Padding(
+                            padding: EdgeInsets.only(
+                                bottom: i == rightFields.length - 1 ? 0 : 18),
+                            child: _buildInfoField(rightFields[i]),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-
-          // Info Grid
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _buildInfoRow('Age Category', tournament.ageCat ?? 'N/A'),
-                _buildDivider(),
-                _buildInfoRow('Gender', tournament.gender ?? 'N/A'),
-                _buildDivider(),
-                _buildInfoRow('Game Type', tournament.gameType ?? 'N/A'),
-                _buildDivider(),
-                _buildInfoRow('Tournament Type', _getTournamentType()),
-                _buildDivider(),
-                _buildInfoRow('Country', tournament.country ?? 'N/A'),
-                _buildDivider(),
-                _buildInfoRow('Location / Place', tournament.location ?? 'N/A'),
-                _buildDivider(),
-                _buildInfoRow('Tournament Date', tournament.startDate ?? 'N/A'),
-                _buildDivider(),
-                _buildInfoRow('Venue', tournament.venue ?? 'N/A'),
-                _buildDivider(),
-                _buildInfoRow('Total Teams', '${tournament.teamCount}'),
-                _buildDivider(),
-                _buildInfoRow(
-                    'Players Per Team', '${tournament.teamPlayerLimit}'),
-              ],
-            ),
-          ),
-
-          // Optional sections
-          if (tournament.notes != null && tournament.notes!.isNotEmpty)
-            _buildOptionalSection('Notes', tournament.notes!),
-
-          if (tournament.description != null &&
-              tournament.description!.isNotEmpty)
-            _buildOptionalSection('Description', tournament.description!,
+            _optionalSection('Notes'.tr, tournament.notes),
+            _optionalSection('Description'.tr, tournament.description,
                 isHtml: true),
-
-          if (tournament.prize != null && tournament.prize!.isNotEmpty)
-            _buildOptionalSection('Prizes', tournament.prize!),
-
-          if (tournament.regFee != null && tournament.regFee!.isNotEmpty)
-            _buildOptionalSection('Registration Fees', tournament.regFee!),
-
-          if (tournament.orgDetails != null &&
-              tournament.orgDetails!.isNotEmpty)
-            _buildOptionalSection('Organizer Details', tournament.orgDetails!),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey[700],
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            flex: 3,
-            child: Text(
-              value,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.right,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDivider() {
-    return Divider(
-      height: 1,
-      color: Colors.grey[200],
-    );
-  }
-
-  Widget _buildOptionalSection(String title, String content,
-      {bool isHtml = false}) {
-    return Container(
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        border: Border(
-          top: BorderSide(color: Colors.grey[200]!),
+            _optionalSection('Prizes'.tr, tournament.prize),
+            _optionalSection('Registration Fees'.tr, tournament.regFee),
+            _optionalSection('Organizer Details'.tr, tournament.orgDetails),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoField(_InfoField field) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          field.label,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: AppColors.socaBlack,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          field.value!,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: AppColors.socaBlack,
+            height: 1.2,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _optionalSection(String title, String? content,
+      {bool isHtml = false}) {
+    if (content == null || content.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontSize: 12,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 1),
           isHtml
               ? _buildHtmlText(content)
               : Text(
                   content,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 13,
-                    color: Colors.grey[700],
-                    height: 1.5,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.socaBlack,
+                    height: 1.35,
                   ),
                 ),
         ],
@@ -203,73 +168,60 @@ class TournamentInfoCard extends StatelessWidget {
   }
 
   Widget _buildHtmlText(String htmlContent) {
-    // Simple HTML link detection and rendering
-    // Matches Android's Linkify behavior
-    final urlPattern = RegExp(
-      r'https?://[^\s]+',
-      caseSensitive: false,
-    );
-
+    final urlPattern = RegExp(r'https?://[^\s]+', caseSensitive: false);
     final matches = urlPattern.allMatches(htmlContent);
 
     if (matches.isEmpty) {
       return Text(
         htmlContent,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
-          fontSize: 13,
-          color: Colors.grey[700],
-          height: 1.5,
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: AppColors.socaBlack,
+          height: 1.35,
         ),
       );
     }
 
     final spans = <TextSpan>[];
-    int lastMatchEnd = 0;
+    var lastMatchEnd = 0;
 
     for (final match in matches) {
-      // Add text before the link
       if (match.start > lastMatchEnd) {
-        spans.add(TextSpan(
-          text: htmlContent.substring(lastMatchEnd, match.start),
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 13,
-            color: Colors.grey[700],
-          ),
-        ));
+        spans.add(
+            TextSpan(text: htmlContent.substring(lastMatchEnd, match.start)));
       }
 
-      // Add the link
       final url = match.group(0)!;
-      spans.add(TextSpan(
-        text: url,
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 13,
-          color: Colors.blue,
-          decoration: TextDecoration.underline,
+      spans.add(
+        TextSpan(
+          text: url,
+          style: const TextStyle(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
+          recognizer: TapGestureRecognizer()..onTap = () => _launchUrl(url),
         ),
-        recognizer: TapGestureRecognizer()..onTap = () => _launchUrl(url),
-      ));
-
+      );
       lastMatchEnd = match.end;
     }
 
-    // Add remaining text
     if (lastMatchEnd < htmlContent.length) {
-      spans.add(TextSpan(
-        text: htmlContent.substring(lastMatchEnd),
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 13,
-          color: Colors.grey[700],
-        ),
-      ));
+      spans.add(TextSpan(text: htmlContent.substring(lastMatchEnd)));
     }
 
     return RichText(
-      text: TextSpan(children: spans),
+      text: TextSpan(
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: AppColors.socaBlack,
+          height: 1.35,
+        ),
+        children: spans,
+      ),
     );
   }
 
@@ -280,8 +232,19 @@ class TournamentInfoCard extends StatelessWidget {
     }
   }
 
-  String _getTournamentType() {
-    final type = tournament.tmntType ?? tournament.rule ?? 'N/A';
+  String? _getTournamentType() {
+    final type = tournament.tmntType ?? tournament.rule;
+    if (type == null || type.isEmpty) return null;
+    if (type.length > 1) {
+      return type[0].toUpperCase() + type.substring(1).toLowerCase();
+    }
     return type.toUpperCase();
   }
+}
+
+class _InfoField {
+  const _InfoField(this.label, this.value);
+
+  final String label;
+  final String? value;
 }

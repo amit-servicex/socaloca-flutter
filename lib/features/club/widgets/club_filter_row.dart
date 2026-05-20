@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 
-import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 
 /// Filter row widget for clubs screen — matches Android fragment_common_clubs.xml
 /// No GO button (hidden in Android too); filters auto-apply on selection change.
@@ -80,50 +80,14 @@ class ClubFilterRow extends StatelessWidget {
     required List<(String, String)> items,
     required ValueChanged<String> onChanged,
   }) {
-    return Container(
+    return SearchableDropdownButton(
+      hint: value,
+      value: value,
+      values: items.map((e) => e.$1).toList(),
+      items: items.map((e) => e.$2).toList(),
+      onChanged: (v) { if (v != null) onChanged(v); },
       height: 42,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: AppColors.socaGrey,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          isExpanded: true,
-          isDense: true,
-          icon: Image.asset(
-            "assets/images/dropdown.png",
-            width: 14,
-            height: 14,
-          ),
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: AppColors.socaBlack,
-          ),
-          dropdownColor: Colors.white,
-          items: items.map((item) {
-            return DropdownMenuItem<String>(
-              value: item.$1,
-              child: Text(
-                item.$2,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 12,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: (newValue) {
-            if (newValue != null) onChanged(newValue);
-          },
-        ),
-      ),
+      fontSize: 12,
     );
   }
 }

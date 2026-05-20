@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../providers/teams_provider.dart';
 
 class TeamFilterSection extends ConsumerStatefulWidget {
@@ -233,35 +234,13 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
     required List<String> items,
     required ValueChanged<String?> onChanged,
   }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          isExpanded: true,
-          icon: Image.asset(
-            'assets/images/dropdown.png',
-            width: 14,
-            height: 14,
-          ),
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            color: Colors.black87,
-          ),
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
-      ),
+    return SearchableDropdownButton(
+      hint: value,
+      value: value,
+      items: items,
+      onChanged: onChanged,
+      backgroundColor: Colors.grey[200],
+      fontSize: 14,
     );
   }
 }

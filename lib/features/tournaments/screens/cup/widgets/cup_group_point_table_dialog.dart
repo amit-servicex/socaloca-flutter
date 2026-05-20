@@ -13,11 +13,13 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Matches Android TournamentCupGroupPointTableFragment
 class CupGroupPointTableDialog extends ConsumerWidget {
   final String tournamentId;
+  final String roundId;
   final String groupId;
 
   CupGroupPointTableDialog({
     super.key,
     required this.tournamentId,
+    required this.roundId,
     required this.groupId,
   });
 
@@ -25,6 +27,7 @@ class CupGroupPointTableDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final params = CupGroupTableParams(
       tournamentId: tournamentId,
+      roundId: roundId,
       groupId: groupId,
     );
 

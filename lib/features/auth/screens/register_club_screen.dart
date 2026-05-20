@@ -6,6 +6,7 @@ import 'package:socaloca/core/router/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../../club/data/confed_data.dart';
 import '../../club/data/repositories/club_repository.dart';
 
@@ -526,58 +527,27 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
     required ValueChanged<String> onChanged,
     String? error,
   }) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color:
-                        error != null ? Colors.red : const Color(0xFFDDDDDD)),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: value,
-                  hint: Text(hint,
-                      style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 13,
-                          color: Colors.grey)),
-                  isExpanded: true,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SearchableDropdownField(
+            hint: hint,
+            value: value,
+            items: items,
+            onChanged: onChanged,
+            error: error,
+          ),
+          if (error != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4, left: 14, bottom: 4),
+              child: Text(error,
                   style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      color: Colors.black87),
-                  items: items
-                      .map((item) => DropdownMenuItem(
-                          value: item,
-                          child: Text(item,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontFamily: 'Poppins'))))
-                      .toList(),
-                  onChanged: (v) {
-                    if (v != null) onChanged(v);
-                  },
-                ),
-              ),
-            ),
-            if (error != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4, left: 14, bottom: 4),
-                child: Text(error,
-                    style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        color: Colors.red)),
-              )
-            else
-              const SizedBox(height: 16),
-          ],
-        ),
+                      fontFamily: 'Poppins', fontSize: 12, color: Colors.red)),
+            )
+          else
+            const SizedBox(height: 16),
+        ],
       );
 
   Widget _readOnlyField({required String value, String? error}) => Padding(

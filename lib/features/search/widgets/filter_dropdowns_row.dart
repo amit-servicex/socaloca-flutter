@@ -4,6 +4,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import '../data/models/search_filter_model.dart';
 import '../providers/search_provider.dart';
 import '../utils/countries_list.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 
 class FilterDropdownsRow extends ConsumerWidget {
   const FilterDropdownsRow({super.key});
@@ -50,21 +51,18 @@ class _CountryDropdownState extends ConsumerState<_CountryDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return _FilterDropdown(
+    return SearchableDropdownButton(
       hint: 'By Country'.tr,
       value: _selectedCountry,
       items: ['All', ...CountriesList.countries],
       onChanged: (value) {
-        setState(() {
-          _selectedCountry = value;
-        });
+        setState(() => _selectedCountry = value);
         if (value != null) {
-          ref.read(searchProvider.notifier).addFilter(
-                SearchFilterType.country,
-                value,
-              );
+          ref.read(searchProvider.notifier).addFilter(SearchFilterType.country, value);
         }
       },
+      height: 42,
+      fontSize: 12,
     );
   }
 }
@@ -79,7 +77,7 @@ class _TypeDropdownState extends ConsumerState<_TypeDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return _FilterDropdown(
+    return SearchableDropdownButton(
       hint: 'By Type'.tr,
       value: _selectedType,
       items: const [
@@ -89,16 +87,13 @@ class _TypeDropdownState extends ConsumerState<_TypeDropdown> {
         UserTypeFilter.referee,
       ],
       onChanged: (value) {
-        setState(() {
-          _selectedType = value;
-        });
+        setState(() => _selectedType = value);
         if (value != null) {
-          ref.read(searchProvider.notifier).addFilter(
-                SearchFilterType.type,
-                value,
-              );
+          ref.read(searchProvider.notifier).addFilter(SearchFilterType.type, value);
         }
       },
+      height: 42,
+      fontSize: 12,
     );
   }
 }
@@ -117,7 +112,7 @@ class _ChoiceDropdownState extends ConsumerState<_ChoiceDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return _FilterDropdown(
+    return SearchableDropdownButton(
       hint: 'By Choice'.tr,
       value: _selectedChoice,
       items: const [
@@ -126,83 +121,14 @@ class _ChoiceDropdownState extends ConsumerState<_ChoiceDropdown> {
         SortingFilter.mostGoals,
       ],
       enabled: widget.enabled,
-      onChanged: widget.enabled
-          ? (value) {
-              setState(() {
-                _selectedChoice = value;
-              });
-              if (value != null) {
-                ref.read(searchProvider.notifier).addFilter(
-                      SearchFilterType.choice,
-                      value,
-                    );
-              }
-            }
-          : null,
-    );
-  }
-}
-
-class _FilterDropdown extends StatelessWidget {
-  final String hint;
-  final String? value;
-  final List<String> items;
-  final Function(String?)? onChanged;
-  final bool enabled;
-
-  const _FilterDropdown({
-    required this.hint,
-    required this.value,
-    required this.items,
-    this.onChanged,
-    this.enabled = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
+      onChanged: (value) {
+        setState(() => _selectedChoice = value);
+        if (value != null) {
+          ref.read(searchProvider.notifier).addFilter(SearchFilterType.choice, value);
+        }
+      },
       height: 42,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF1F1F1),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          hint: Text(
-            hint,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-              color: Colors.black54,
-            ),
-          ),
-          value: value,
-          isExpanded: true,
-          icon: Image.asset(
-            "assets/images/dropdown.png",
-            width: 14,
-            height: 14,
-          ),
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-            color: Colors.black,
-          ),
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                item.tr,
-                overflow: TextOverflow.ellipsis,
-              ),
-            );
-          }).toList(),
-          onChanged: enabled ? onChanged : null,
-        ),
-      ),
+      fontSize: 12,
     );
   }
 }

@@ -14,6 +14,7 @@ import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/socaloca_text_field.dart';
 import '../providers/auth_provider.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 
 /// CreateProfileFragment equivalent - Complete profile creation form
 /// Shows after successful signup for verified users without profile
@@ -1815,34 +1816,12 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     required List<String> items,
     required ValueChanged<String?> onChanged,
   }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-        color: AppColors.socaGrey,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          isExpanded: true,
-          items: items.map((item) {
-            return DropdownMenuItem(
-              value: item,
-              child: Text(
-                item,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: onChanged,
-          icon: Icon(Icons.arrow_drop_down, color: AppColors.socaBlack),
-        ),
-      ),
+    return SearchableDropdownButton(
+      hint: value,
+      value: value,
+      items: items,
+      onChanged: onChanged,
+      fontSize: 14,
     );
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 
-/// Custom dropdown widget for player filters
+/// Searchable dropdown widget for player filters.
+/// Replaces the previous native DropdownButton.
 class PlayerFilterDropdown extends StatelessWidget {
   final String hint;
   final String? value;
@@ -21,48 +22,14 @@ class PlayerFilterDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SearchableDropdownButton(
+      hint: hint,
+      value: value,
+      items: items,
+      onChanged: onChanged,
       width: width,
       height: 50,
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-        color: AppColors.socaGrey,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          hint: Text(
-            hint,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: AppColors.socaBlack,
-            ),
-          ),
-          isExpanded: true,
-          icon: Image.asset(
-            "assets/images/dropdown.png",
-            width: 14,
-            height: 12,
-          ),
-          dropdownColor: Colors.white,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: AppColors.socaBlack,
-          ),
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
-      ),
+      fontSize: 12,
     );
   }
 }

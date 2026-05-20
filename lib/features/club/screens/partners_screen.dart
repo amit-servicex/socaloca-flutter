@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../providers/partners_provider.dart';
 import '../widgets/club_filter_row.dart';
 import '../widgets/partner_card.dart';
@@ -317,36 +318,16 @@ class _FAsTabState extends ConsumerState<_FAsTab>
   ];
 
   Widget _buildConfedDropdown(String selected) {
-    return Container(
+    return SearchableDropdownButton(
+      hint: 'Confederation'.tr,
+      value: selected,
+      items: _confedItems.map((e) => e.$2).toList(),
+      values: _confedItems.map((e) => e.$1).toList(),
+      onChanged: (v) {
+        if (v != null) ref.read(fasProvider.notifier).setConfed(v);
+      },
       height: 50,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: AppColors.socaGrey,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selected,
-          isExpanded: true,
-          isDense: true,
-          icon: Image.asset(
-            "assets/images/dropdown.png",
-            width: 14,
-            height: 14,
-          ),
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 13,
-            color: AppColors.socaBlack,
-          ),
-          items: _confedItems
-              .map((e) => DropdownMenuItem(value: e.$1, child: Text(e.$2)))
-              .toList(),
-          onChanged: (v) {
-            if (v != null) ref.read(fasProvider.notifier).setConfed(v);
-          },
-        ),
-      ),
+      fontSize: 13,
     );
   }
 

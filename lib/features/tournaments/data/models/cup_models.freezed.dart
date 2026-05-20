@@ -2639,30 +2639,34 @@ mixin _$CupMatchModel {
   String? get roundId => throw _privateConstructorUsedError;
   String? get homeTeamId => throw _privateConstructorUsedError;
   String? get homeTeamName => throw _privateConstructorUsedError;
+  String? get homeTeamShortName => throw _privateConstructorUsedError;
   String? get homeTeamLogo => throw _privateConstructorUsedError;
   String? get awayTeamId => throw _privateConstructorUsedError;
   String? get awayTeamName => throw _privateConstructorUsedError;
+  String? get awayTeamShortName => throw _privateConstructorUsedError;
   String? get awayTeamLogo => throw _privateConstructorUsedError;
   int? get homeScore => throw _privateConstructorUsedError;
   int? get awayScore => throw _privateConstructorUsedError;
-  int? get homeExtraTimeScore =>
-      throw _privateConstructorUsedError; // Extra time score
+  int? get homeExtraTimeScore => throw _privateConstructorUsedError;
   int? get awayExtraTimeScore => throw _privateConstructorUsedError;
-  int? get homePenaltyScore =>
-      throw _privateConstructorUsedError; // Penalty shootout score
+  int? get homePenaltyScore => throw _privateConstructorUsedError;
   int? get awayPenaltyScore => throw _privateConstructorUsedError;
-  String? get winnerId =>
-      throw _privateConstructorUsedError; // Team ID of winner
+  String? get winnerId => throw _privateConstructorUsedError;
   String? get winnerName => throw _privateConstructorUsedError;
-  String? get status =>
-      throw _privateConstructorUsedError; // 'upcoming', 'live', 'end'
+  String? get status => throw _privateConstructorUsedError;
+  String? get scoreStatus => throw _privateConstructorUsedError;
+  String? get acceptStatus => throw _privateConstructorUsedError;
+  String? get gameSemiType => throw _privateConstructorUsedError;
   String? get matchDate => throw _privateConstructorUsedError;
+  String? get matchTime => throw _privateConstructorUsedError;
+  String? get matchName => throw _privateConstructorUsedError;
   int get matchDateMs => throw _privateConstructorUsedError;
   String? get venue => throw _privateConstructorUsedError;
+  String? get city => throw _privateConstructorUsedError;
+  String? get fieldName => throw _privateConstructorUsedError;
   String? get gameType => throw _privateConstructorUsedError;
   String? get ageGroup => throw _privateConstructorUsedError;
-  String? get level =>
-      throw _privateConstructorUsedError; // Bracket level (e.g., "1" for final, "2" for semi)
+  String? get level => throw _privateConstructorUsedError;
   String? get seq => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2684,9 +2688,11 @@ abstract class $CupMatchModelCopyWith<$Res> {
       String? roundId,
       String? homeTeamId,
       String? homeTeamName,
+      String? homeTeamShortName,
       String? homeTeamLogo,
       String? awayTeamId,
       String? awayTeamName,
+      String? awayTeamShortName,
       String? awayTeamLogo,
       int? homeScore,
       int? awayScore,
@@ -2697,9 +2703,16 @@ abstract class $CupMatchModelCopyWith<$Res> {
       String? winnerId,
       String? winnerName,
       String? status,
+      String? scoreStatus,
+      String? acceptStatus,
+      String? gameSemiType,
       String? matchDate,
+      String? matchTime,
+      String? matchName,
       int matchDateMs,
       String? venue,
+      String? city,
+      String? fieldName,
       String? gameType,
       String? ageGroup,
       String? level,
@@ -2725,9 +2738,11 @@ class _$CupMatchModelCopyWithImpl<$Res, $Val extends CupMatchModel>
     Object? roundId = freezed,
     Object? homeTeamId = freezed,
     Object? homeTeamName = freezed,
+    Object? homeTeamShortName = freezed,
     Object? homeTeamLogo = freezed,
     Object? awayTeamId = freezed,
     Object? awayTeamName = freezed,
+    Object? awayTeamShortName = freezed,
     Object? awayTeamLogo = freezed,
     Object? homeScore = freezed,
     Object? awayScore = freezed,
@@ -2738,9 +2753,16 @@ class _$CupMatchModelCopyWithImpl<$Res, $Val extends CupMatchModel>
     Object? winnerId = freezed,
     Object? winnerName = freezed,
     Object? status = freezed,
+    Object? scoreStatus = freezed,
+    Object? acceptStatus = freezed,
+    Object? gameSemiType = freezed,
     Object? matchDate = freezed,
+    Object? matchTime = freezed,
+    Object? matchName = freezed,
     Object? matchDateMs = null,
     Object? venue = freezed,
+    Object? city = freezed,
+    Object? fieldName = freezed,
     Object? gameType = freezed,
     Object? ageGroup = freezed,
     Object? level = freezed,
@@ -2771,6 +2793,10 @@ class _$CupMatchModelCopyWithImpl<$Res, $Val extends CupMatchModel>
           ? _value.homeTeamName
           : homeTeamName // ignore: cast_nullable_to_non_nullable
               as String?,
+      homeTeamShortName: freezed == homeTeamShortName
+          ? _value.homeTeamShortName
+          : homeTeamShortName // ignore: cast_nullable_to_non_nullable
+              as String?,
       homeTeamLogo: freezed == homeTeamLogo
           ? _value.homeTeamLogo
           : homeTeamLogo // ignore: cast_nullable_to_non_nullable
@@ -2782,6 +2808,10 @@ class _$CupMatchModelCopyWithImpl<$Res, $Val extends CupMatchModel>
       awayTeamName: freezed == awayTeamName
           ? _value.awayTeamName
           : awayTeamName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      awayTeamShortName: freezed == awayTeamShortName
+          ? _value.awayTeamShortName
+          : awayTeamShortName // ignore: cast_nullable_to_non_nullable
               as String?,
       awayTeamLogo: freezed == awayTeamLogo
           ? _value.awayTeamLogo
@@ -2823,9 +2853,29 @@ class _$CupMatchModelCopyWithImpl<$Res, $Val extends CupMatchModel>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as String?,
+      scoreStatus: freezed == scoreStatus
+          ? _value.scoreStatus
+          : scoreStatus // ignore: cast_nullable_to_non_nullable
+              as String?,
+      acceptStatus: freezed == acceptStatus
+          ? _value.acceptStatus
+          : acceptStatus // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gameSemiType: freezed == gameSemiType
+          ? _value.gameSemiType
+          : gameSemiType // ignore: cast_nullable_to_non_nullable
+              as String?,
       matchDate: freezed == matchDate
           ? _value.matchDate
           : matchDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      matchTime: freezed == matchTime
+          ? _value.matchTime
+          : matchTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      matchName: freezed == matchName
+          ? _value.matchName
+          : matchName // ignore: cast_nullable_to_non_nullable
               as String?,
       matchDateMs: null == matchDateMs
           ? _value.matchDateMs
@@ -2834,6 +2884,14 @@ class _$CupMatchModelCopyWithImpl<$Res, $Val extends CupMatchModel>
       venue: freezed == venue
           ? _value.venue
           : venue // ignore: cast_nullable_to_non_nullable
+              as String?,
+      city: freezed == city
+          ? _value.city
+          : city // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fieldName: freezed == fieldName
+          ? _value.fieldName
+          : fieldName // ignore: cast_nullable_to_non_nullable
               as String?,
       gameType: freezed == gameType
           ? _value.gameType
@@ -2870,9 +2928,11 @@ abstract class _$$CupMatchModelImplCopyWith<$Res>
       String? roundId,
       String? homeTeamId,
       String? homeTeamName,
+      String? homeTeamShortName,
       String? homeTeamLogo,
       String? awayTeamId,
       String? awayTeamName,
+      String? awayTeamShortName,
       String? awayTeamLogo,
       int? homeScore,
       int? awayScore,
@@ -2883,9 +2943,16 @@ abstract class _$$CupMatchModelImplCopyWith<$Res>
       String? winnerId,
       String? winnerName,
       String? status,
+      String? scoreStatus,
+      String? acceptStatus,
+      String? gameSemiType,
       String? matchDate,
+      String? matchTime,
+      String? matchName,
       int matchDateMs,
       String? venue,
+      String? city,
+      String? fieldName,
       String? gameType,
       String? ageGroup,
       String? level,
@@ -2909,9 +2976,11 @@ class __$$CupMatchModelImplCopyWithImpl<$Res>
     Object? roundId = freezed,
     Object? homeTeamId = freezed,
     Object? homeTeamName = freezed,
+    Object? homeTeamShortName = freezed,
     Object? homeTeamLogo = freezed,
     Object? awayTeamId = freezed,
     Object? awayTeamName = freezed,
+    Object? awayTeamShortName = freezed,
     Object? awayTeamLogo = freezed,
     Object? homeScore = freezed,
     Object? awayScore = freezed,
@@ -2922,9 +2991,16 @@ class __$$CupMatchModelImplCopyWithImpl<$Res>
     Object? winnerId = freezed,
     Object? winnerName = freezed,
     Object? status = freezed,
+    Object? scoreStatus = freezed,
+    Object? acceptStatus = freezed,
+    Object? gameSemiType = freezed,
     Object? matchDate = freezed,
+    Object? matchTime = freezed,
+    Object? matchName = freezed,
     Object? matchDateMs = null,
     Object? venue = freezed,
+    Object? city = freezed,
+    Object? fieldName = freezed,
     Object? gameType = freezed,
     Object? ageGroup = freezed,
     Object? level = freezed,
@@ -2955,6 +3031,10 @@ class __$$CupMatchModelImplCopyWithImpl<$Res>
           ? _value.homeTeamName
           : homeTeamName // ignore: cast_nullable_to_non_nullable
               as String?,
+      homeTeamShortName: freezed == homeTeamShortName
+          ? _value.homeTeamShortName
+          : homeTeamShortName // ignore: cast_nullable_to_non_nullable
+              as String?,
       homeTeamLogo: freezed == homeTeamLogo
           ? _value.homeTeamLogo
           : homeTeamLogo // ignore: cast_nullable_to_non_nullable
@@ -2966,6 +3046,10 @@ class __$$CupMatchModelImplCopyWithImpl<$Res>
       awayTeamName: freezed == awayTeamName
           ? _value.awayTeamName
           : awayTeamName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      awayTeamShortName: freezed == awayTeamShortName
+          ? _value.awayTeamShortName
+          : awayTeamShortName // ignore: cast_nullable_to_non_nullable
               as String?,
       awayTeamLogo: freezed == awayTeamLogo
           ? _value.awayTeamLogo
@@ -3007,9 +3091,29 @@ class __$$CupMatchModelImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as String?,
+      scoreStatus: freezed == scoreStatus
+          ? _value.scoreStatus
+          : scoreStatus // ignore: cast_nullable_to_non_nullable
+              as String?,
+      acceptStatus: freezed == acceptStatus
+          ? _value.acceptStatus
+          : acceptStatus // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gameSemiType: freezed == gameSemiType
+          ? _value.gameSemiType
+          : gameSemiType // ignore: cast_nullable_to_non_nullable
+              as String?,
       matchDate: freezed == matchDate
           ? _value.matchDate
           : matchDate // ignore: cast_nullable_to_non_nullable
+              as String?,
+      matchTime: freezed == matchTime
+          ? _value.matchTime
+          : matchTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      matchName: freezed == matchName
+          ? _value.matchName
+          : matchName // ignore: cast_nullable_to_non_nullable
               as String?,
       matchDateMs: null == matchDateMs
           ? _value.matchDateMs
@@ -3018,6 +3122,14 @@ class __$$CupMatchModelImplCopyWithImpl<$Res>
       venue: freezed == venue
           ? _value.venue
           : venue // ignore: cast_nullable_to_non_nullable
+              as String?,
+      city: freezed == city
+          ? _value.city
+          : city // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fieldName: freezed == fieldName
+          ? _value.fieldName
+          : fieldName // ignore: cast_nullable_to_non_nullable
               as String?,
       gameType: freezed == gameType
           ? _value.gameType
@@ -3049,9 +3161,11 @@ class _$CupMatchModelImpl implements _CupMatchModel {
       this.roundId,
       this.homeTeamId,
       this.homeTeamName,
+      this.homeTeamShortName,
       this.homeTeamLogo,
       this.awayTeamId,
       this.awayTeamName,
+      this.awayTeamShortName,
       this.awayTeamLogo,
       this.homeScore,
       this.awayScore,
@@ -3062,9 +3176,16 @@ class _$CupMatchModelImpl implements _CupMatchModel {
       this.winnerId,
       this.winnerName,
       this.status,
+      this.scoreStatus,
+      this.acceptStatus,
+      this.gameSemiType,
       this.matchDate,
+      this.matchTime,
+      this.matchName,
       this.matchDateMs = 0,
       this.venue,
+      this.city,
+      this.fieldName,
       this.gameType,
       this.ageGroup,
       this.level,
@@ -3088,11 +3209,15 @@ class _$CupMatchModelImpl implements _CupMatchModel {
   @override
   final String? homeTeamName;
   @override
+  final String? homeTeamShortName;
+  @override
   final String? homeTeamLogo;
   @override
   final String? awayTeamId;
   @override
   final String? awayTeamName;
+  @override
+  final String? awayTeamShortName;
   @override
   final String? awayTeamLogo;
   @override
@@ -3101,42 +3226,51 @@ class _$CupMatchModelImpl implements _CupMatchModel {
   final int? awayScore;
   @override
   final int? homeExtraTimeScore;
-// Extra time score
   @override
   final int? awayExtraTimeScore;
   @override
   final int? homePenaltyScore;
-// Penalty shootout score
   @override
   final int? awayPenaltyScore;
   @override
   final String? winnerId;
-// Team ID of winner
   @override
   final String? winnerName;
   @override
   final String? status;
-// 'upcoming', 'live', 'end'
+  @override
+  final String? scoreStatus;
+  @override
+  final String? acceptStatus;
+  @override
+  final String? gameSemiType;
   @override
   final String? matchDate;
+  @override
+  final String? matchTime;
+  @override
+  final String? matchName;
   @override
   @JsonKey()
   final int matchDateMs;
   @override
   final String? venue;
   @override
+  final String? city;
+  @override
+  final String? fieldName;
+  @override
   final String? gameType;
   @override
   final String? ageGroup;
   @override
   final String? level;
-// Bracket level (e.g., "1" for final, "2" for semi)
   @override
   final String? seq;
 
   @override
   String toString() {
-    return 'CupMatchModel(id: $id, matchId: $matchId, tournamentId: $tournamentId, roundId: $roundId, homeTeamId: $homeTeamId, homeTeamName: $homeTeamName, homeTeamLogo: $homeTeamLogo, awayTeamId: $awayTeamId, awayTeamName: $awayTeamName, awayTeamLogo: $awayTeamLogo, homeScore: $homeScore, awayScore: $awayScore, homeExtraTimeScore: $homeExtraTimeScore, awayExtraTimeScore: $awayExtraTimeScore, homePenaltyScore: $homePenaltyScore, awayPenaltyScore: $awayPenaltyScore, winnerId: $winnerId, winnerName: $winnerName, status: $status, matchDate: $matchDate, matchDateMs: $matchDateMs, venue: $venue, gameType: $gameType, ageGroup: $ageGroup, level: $level, seq: $seq)';
+    return 'CupMatchModel(id: $id, matchId: $matchId, tournamentId: $tournamentId, roundId: $roundId, homeTeamId: $homeTeamId, homeTeamName: $homeTeamName, homeTeamShortName: $homeTeamShortName, homeTeamLogo: $homeTeamLogo, awayTeamId: $awayTeamId, awayTeamName: $awayTeamName, awayTeamShortName: $awayTeamShortName, awayTeamLogo: $awayTeamLogo, homeScore: $homeScore, awayScore: $awayScore, homeExtraTimeScore: $homeExtraTimeScore, awayExtraTimeScore: $awayExtraTimeScore, homePenaltyScore: $homePenaltyScore, awayPenaltyScore: $awayPenaltyScore, winnerId: $winnerId, winnerName: $winnerName, status: $status, scoreStatus: $scoreStatus, acceptStatus: $acceptStatus, gameSemiType: $gameSemiType, matchDate: $matchDate, matchTime: $matchTime, matchName: $matchName, matchDateMs: $matchDateMs, venue: $venue, city: $city, fieldName: $fieldName, gameType: $gameType, ageGroup: $ageGroup, level: $level, seq: $seq)';
   }
 
   @override
@@ -3153,12 +3287,16 @@ class _$CupMatchModelImpl implements _CupMatchModel {
                 other.homeTeamId == homeTeamId) &&
             (identical(other.homeTeamName, homeTeamName) ||
                 other.homeTeamName == homeTeamName) &&
+            (identical(other.homeTeamShortName, homeTeamShortName) ||
+                other.homeTeamShortName == homeTeamShortName) &&
             (identical(other.homeTeamLogo, homeTeamLogo) ||
                 other.homeTeamLogo == homeTeamLogo) &&
             (identical(other.awayTeamId, awayTeamId) ||
                 other.awayTeamId == awayTeamId) &&
             (identical(other.awayTeamName, awayTeamName) ||
                 other.awayTeamName == awayTeamName) &&
+            (identical(other.awayTeamShortName, awayTeamShortName) ||
+                other.awayTeamShortName == awayTeamShortName) &&
             (identical(other.awayTeamLogo, awayTeamLogo) ||
                 other.awayTeamLogo == awayTeamLogo) &&
             (identical(other.homeScore, homeScore) ||
@@ -3178,11 +3316,24 @@ class _$CupMatchModelImpl implements _CupMatchModel {
             (identical(other.winnerName, winnerName) ||
                 other.winnerName == winnerName) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.scoreStatus, scoreStatus) ||
+                other.scoreStatus == scoreStatus) &&
+            (identical(other.acceptStatus, acceptStatus) ||
+                other.acceptStatus == acceptStatus) &&
+            (identical(other.gameSemiType, gameSemiType) ||
+                other.gameSemiType == gameSemiType) &&
             (identical(other.matchDate, matchDate) ||
                 other.matchDate == matchDate) &&
+            (identical(other.matchTime, matchTime) ||
+                other.matchTime == matchTime) &&
+            (identical(other.matchName, matchName) ||
+                other.matchName == matchName) &&
             (identical(other.matchDateMs, matchDateMs) ||
                 other.matchDateMs == matchDateMs) &&
             (identical(other.venue, venue) || other.venue == venue) &&
+            (identical(other.city, city) || other.city == city) &&
+            (identical(other.fieldName, fieldName) ||
+                other.fieldName == fieldName) &&
             (identical(other.gameType, gameType) ||
                 other.gameType == gameType) &&
             (identical(other.ageGroup, ageGroup) ||
@@ -3201,9 +3352,11 @@ class _$CupMatchModelImpl implements _CupMatchModel {
         roundId,
         homeTeamId,
         homeTeamName,
+        homeTeamShortName,
         homeTeamLogo,
         awayTeamId,
         awayTeamName,
+        awayTeamShortName,
         awayTeamLogo,
         homeScore,
         awayScore,
@@ -3214,9 +3367,16 @@ class _$CupMatchModelImpl implements _CupMatchModel {
         winnerId,
         winnerName,
         status,
+        scoreStatus,
+        acceptStatus,
+        gameSemiType,
         matchDate,
+        matchTime,
+        matchName,
         matchDateMs,
         venue,
+        city,
+        fieldName,
         gameType,
         ageGroup,
         level,
@@ -3245,9 +3405,11 @@ abstract class _CupMatchModel implements CupMatchModel {
       final String? roundId,
       final String? homeTeamId,
       final String? homeTeamName,
+      final String? homeTeamShortName,
       final String? homeTeamLogo,
       final String? awayTeamId,
       final String? awayTeamName,
+      final String? awayTeamShortName,
       final String? awayTeamLogo,
       final int? homeScore,
       final int? awayScore,
@@ -3258,9 +3420,16 @@ abstract class _CupMatchModel implements CupMatchModel {
       final String? winnerId,
       final String? winnerName,
       final String? status,
+      final String? scoreStatus,
+      final String? acceptStatus,
+      final String? gameSemiType,
       final String? matchDate,
+      final String? matchTime,
+      final String? matchName,
       final int matchDateMs,
       final String? venue,
+      final String? city,
+      final String? fieldName,
       final String? gameType,
       final String? ageGroup,
       final String? level,
@@ -3284,11 +3453,15 @@ abstract class _CupMatchModel implements CupMatchModel {
   @override
   String? get homeTeamName;
   @override
+  String? get homeTeamShortName;
+  @override
   String? get homeTeamLogo;
   @override
   String? get awayTeamId;
   @override
   String? get awayTeamName;
+  @override
+  String? get awayTeamShortName;
   @override
   String? get awayTeamLogo;
   @override
@@ -3297,31 +3470,45 @@ abstract class _CupMatchModel implements CupMatchModel {
   int? get awayScore;
   @override
   int? get homeExtraTimeScore;
-  @override // Extra time score
+  @override
   int? get awayExtraTimeScore;
   @override
   int? get homePenaltyScore;
-  @override // Penalty shootout score
+  @override
   int? get awayPenaltyScore;
   @override
   String? get winnerId;
-  @override // Team ID of winner
+  @override
   String? get winnerName;
   @override
   String? get status;
-  @override // 'upcoming', 'live', 'end'
+  @override
+  String? get scoreStatus;
+  @override
+  String? get acceptStatus;
+  @override
+  String? get gameSemiType;
+  @override
   String? get matchDate;
+  @override
+  String? get matchTime;
+  @override
+  String? get matchName;
   @override
   int get matchDateMs;
   @override
   String? get venue;
+  @override
+  String? get city;
+  @override
+  String? get fieldName;
   @override
   String? get gameType;
   @override
   String? get ageGroup;
   @override
   String? get level;
-  @override // Bracket level (e.g., "1" for final, "2" for semi)
+  @override
   String? get seq;
   @override
   @JsonKey(ignore: true)

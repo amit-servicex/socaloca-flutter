@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socaloca/shared/models/team_model.dart';
 
 import '../../../shared/providers/auth_provider.dart';
 import '../data/tournament_models.dart';

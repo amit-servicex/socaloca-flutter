@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socaloca/shared/models/team_model.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
@@ -157,9 +158,13 @@ class TournamentRepository {
       List<TeamModel>? teams;
       if (response['teams'] != null && response['teams'] is List) {
         final teamsData = response['teams'] as List;
-        teams = teamsData
-            .map((json) => TeamModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        teams = teamsData.map((json) {
+          final t = Map<String, dynamic>.from(json as Map<String, dynamic>);
+          t['id'] = t['teamId'] ?? t['_id'] ?? t['id'] ?? '';
+          t['name'] = t['teamName'] ?? t['name'] ?? '';
+          t['logo'] = t['imageUrl'] ?? t['logo'];
+          return TeamModel.fromJson(t);
+        }).toList();
       }
 
       // Parse sponsors
@@ -282,8 +287,7 @@ class TournamentRepository {
       if (matchesData == null) return [];
 
       return matchesData
-          .map((json) =>
-              TournamentMatchModel.fromJson(json as Map<String, dynamic>))
+          .map((json) => _parseMatch(json as Map<String, dynamic>))
           .toList();
     } on ApiException catch (e) {
       log('Error getting tournament matches: ${e.message}');
@@ -292,6 +296,59 @@ class TournamentRepository {
       log('Error getting tournament matches: $e');
       return [];
     }
+  }
+
+  TournamentMatchModel _parseMatch(Map<String, dynamic> m) {
+    final teams = m['teams'] as List? ?? [];
+    final score = m['score'] as Map<String, dynamic>?;
+
+    String? homeTeamId, homeTeamName, homeTeamLogo;
+    String? awayTeamId, awayTeamName, awayTeamLogo;
+
+    final myTeamId = m['myTeamId'] as String?;
+    final opponentTeamId = m['opponentTeamId'] as String?;
+
+    homeTeamId = myTeamId;
+    homeTeamName = m['myTeamName'] as String?;
+    awayTeamId = opponentTeamId;
+    awayTeamName = m['opponentTeamName'] as String?;
+
+    for (final t in teams) {
+      final team = t as Map<String, dynamic>;
+      final tid = (team['teamId'] ?? team['_id']) as String?;
+      if (tid == myTeamId) {
+        homeTeamLogo = team['imageUrl'] as String?;
+      } else if (tid == opponentTeamId) {
+        awayTeamLogo = team['imageUrl'] as String?;
+      }
+    }
+
+    int? homeScore, awayScore;
+    if (score != null) {
+      homeScore = (score['myGoals'] as num?)?.toInt();
+      awayScore = (score['opponentGoals'] as num?)?.toInt();
+    }
+
+    return TournamentMatchModel(
+      id: m['_id'] as String?,
+      matchId: m['matchId'] as String?,
+      homeTeamId: homeTeamId,
+      homeTeamName: homeTeamName,
+      homeTeamLogo: homeTeamLogo,
+      awayTeamId: awayTeamId,
+      awayTeamName: awayTeamName,
+      awayTeamLogo: awayTeamLogo,
+      homeScore: homeScore,
+      awayScore: awayScore,
+      status: m['scoreStatus'] as String? ?? m['status'] as String?,
+      matchDate: m['matchDate'] as String?,
+      matchDateMs: (m['matchDateTimeGmt'] as num?)?.toInt() ?? 0,
+      venue: m['stadiumName'] as String? ??
+          m['fieldName'] as String? ??
+          m['city'] as String?,
+      gameType: m['gameType'] as String?,
+      ageGroup: m['ageGroup'] as String?,
+    );
   }
 
   /// Get points table

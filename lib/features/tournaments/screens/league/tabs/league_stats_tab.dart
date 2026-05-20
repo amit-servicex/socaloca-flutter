@@ -52,23 +52,23 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
           color: Colors.white,
           child: TabBar(
             controller: _tabController,
-            labelColor: AppColors.socaBlack,
-            unselectedLabelColor: AppColors.socaBlack.withOpacity(0.5),
-            indicatorColor: AppColors.socaYellow,
-            indicatorWeight: 2,
             isScrollable: true,
+            labelColor: AppColors.socaBlack,
+            unselectedLabelColor: AppColors.socaBlack,
+            indicatorColor: AppColors.socaBlack,
+            indicatorWeight: 3,
             labelStyle: TextStyle(
               fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
               fontSize: 13,
+              fontWeight: FontWeight.w700,
             ),
             unselectedLabelStyle: TextStyle(
               fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
               fontSize: 13,
+              fontWeight: FontWeight.w500,
             ),
             tabs: [
-              Tab(text: 'TABLE'),
+              // Tab(text: 'TABLE'),
               Tab(text: 'GOALS'),
               Tab(text: 'ASSISTS'),
               Tab(text: 'CARDS'),
@@ -80,7 +80,7 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
           child: TabBarView(
             controller: _tabController,
             children: [
-              _PointsTableView(tournamentId: widget.tournamentId),
+              // _PointsTableView(tournamentId: widget.tournamentId),
               _StatsList(tournamentId: widget.tournamentId, statType: 'goals'),
               _StatsList(
                   tournamentId: widget.tournamentId, statType: 'assists'),

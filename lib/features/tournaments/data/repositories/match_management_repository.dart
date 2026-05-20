@@ -447,7 +447,7 @@ class MatchManagementRepository {
       };
 
       final data = await ApiClient.instance.post(
-        ApiConstants.getMatchDetails,
+        ApiConstants.getMatchData,
         body: body,
       );
 
@@ -457,7 +457,8 @@ class MatchManagementRepository {
       final status = (response['status'] as num?)?.toInt() ?? 0;
       if (status != 1) return null;
 
-      final matchData = response['match'] as Map<String, dynamic>?;
+      final matchData = (response['matchDetails'] as Map<String, dynamic>?) ??
+          (response['match'] as Map<String, dynamic>?);
       if (matchData == null) return null;
 
       return MatchDetailsModel.fromJson(matchData);

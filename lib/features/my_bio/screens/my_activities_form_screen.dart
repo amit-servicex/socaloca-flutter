@@ -8,6 +8,7 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
@@ -892,34 +893,21 @@ class _DropdownField<T> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 14),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          border: Border.all(color: AppColors.socaBlack),
-          borderRadius: BorderRadius.zero,
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<T>(
-            value: value,
-            isExpanded: true,
-            icon: Image.asset("assets/images/dropdown.png",
-                height: 16, width: 16),
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 13,
-              color: AppColors.socaBlack,
-            ),
-            items: items
-                .map((e) => DropdownMenuItem<T>(
-                      value: e,
-                      child: Text(e.toString()),
-                    ))
-                .toList(),
-            onChanged: onChanged,
-          ),
-        ),
-      );
+  Widget build(BuildContext context) {
+    final strItems = items.map((e) => e.toString()).toList();
+    final strValue = value.toString();
+    return SearchableDropdownButton(
+      hint: strValue,
+      value: strValue,
+      items: strItems,
+      onChanged: (v) {
+        if (v == null) return;
+        final idx = strItems.indexOf(v);
+        if (idx >= 0) onChanged(items[idx]);
+      },
+      fontSize: 13,
+    );
+  }
 }
 
 class _DateField extends StatelessWidget {

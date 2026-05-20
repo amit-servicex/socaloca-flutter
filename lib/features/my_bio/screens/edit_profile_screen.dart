@@ -9,6 +9,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../shared/widgets/socaloca_text_field.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../player_bio/data/models/player_bio_model.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
@@ -1465,29 +1466,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     required List<String> items,
     required ValueChanged<String?> onChanged,
   }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-          color: AppColors.socaGrey, borderRadius: BorderRadius.circular(5)),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: items.contains(value) ? value : items.first,
-          isExpanded: true,
-          items: items
-              .map((item) => DropdownMenuItem(
-                    value: item,
-                    child: Text(item,
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: AppColors.socaBlack)),
-                  ))
-              .toList(),
-          onChanged: onChanged,
-          icon: Icon(Icons.arrow_drop_down, color: AppColors.socaBlack),
-        ),
-      ),
+    final safeValue = items.contains(value) ? value : items.first;
+    return SearchableDropdownButton(
+      hint: safeValue,
+      value: safeValue,
+      items: items,
+      onChanged: onChanged,
+      fontSize: 14,
     );
   }
 }

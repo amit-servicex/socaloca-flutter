@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/shared/models/team_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/router/app_routes.dart';
@@ -51,10 +54,36 @@ class CupInfoTab extends ConsumerWidget {
                       ))
                   .toList(),
               height: 200,
-            ),
+            )
+          else ...[
+            SizedBox(
+              height: 200,
+              child: Stack(
+                children: [
+                  // Banner Image (placeholder for now)
+                  Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.grey[300]!,
+                            Colors.grey[400]!,
+                          ],
+                        ),
+                      ),
+                      child: Image.asset(
+                          "assets/images/tournament_defalut_banner.jpg",
+                          fit: BoxFit.cover)),
+                ],
+              ),
+            )
+          ],
 
           // Header with Follow Button
-          _buildHeader(),
+          _buildHeader(user),
 
           // Cup-specific info (rounds count)
           if (cup.rounds > 0)
@@ -129,15 +158,17 @@ class CupInfoTab extends ConsumerWidget {
             TeamsHorizontalList(
               teams: cup.teams!
                   .map((t) => TeamModel(
-                        id: t.id,
-                        teamId: t.teamId,
-                        teamName: t.teamName,
-                        imageUrl: t.logo,
+                        id: t.teamId ?? '',
+                        adminId: t.teamId,
+                        name: t.teamName ?? '',
+                        logo: t.logo,
                         country: t.country,
                       ))
                   .toList(),
               onTeamTap: (teamId) {
-                context.push('${AppRoutes.teams}/$teamId');
+                // log("this is the teams id list  ${cup.teams?.map((i) => i.toJson())}");
+
+                context.push('/teams/${teamId}');
               },
             ),
 
@@ -178,7 +209,7 @@ class CupInfoTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(dynamic user) {
     return TournamentHeaderWidget(
       tournament: TournamentModel(
         id: cup.id,
@@ -197,6 +228,8 @@ class CupInfoTab extends ConsumerWidget {
       isFollowing: cup.isFollowing,
       followCount: cup.followCount,
       onFollowTap: onFollowTap,
+      showFollow:
+          user?.isReferee != true && user?.userType?.toLowerCase() != 'referee',
     );
   }
 

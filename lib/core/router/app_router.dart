@@ -742,6 +742,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               return LiveMatchDetailsScreen(
                 matchId: matchId,
                 tournamentId: tournamentId,
+                preferMatchData: extra['preferMatchData'] == true,
               );
             },
           ),

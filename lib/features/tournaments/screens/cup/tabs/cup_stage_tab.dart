@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../data/models/cup_models.dart';
 import '../widgets/cup_group_stage_view.dart';
+import '../../../../../shared/widgets/searchable_dropdown.dart';
 import '../widgets/cup_knockout_bracket_view.dart';
 
 /// Cup Stage Tab
@@ -91,42 +92,26 @@ class _CupStageTabState extends ConsumerState<CupStageTab>
                 ),
                 SizedBox(width: 12),
                 Expanded(
-                  child: DropdownButtonFormField<String>(
+                  child: SearchableDropdownButton(
+                    hint: 'Select Round'.tr,
                     value: _selectedRoundId,
-                    decoration: InputDecoration(
-                      labelText: 'Select Round'.tr,
-                      labelStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                    ),
-                    items: widget.cup.roundsList!.map((round) {
-                      return DropdownMenuItem<String>(
-                        value: round.roundId,
-                        child: Text(
-                          round.roundName ?? 'Round ${round.seq}',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
+                    items: widget.cup.roundsList!
+                        .map((r) => r.roundName ?? 'Round ${r.seq}')
+                        .toList(),
+                    values: widget.cup.roundsList!
+                        .map((r) => r.roundId ?? '')
+                        .toList(),
+                    onChanged: (v) {
+                      if (v != null) {
                         setState(() {
-                          _selectedRoundId = value;
-                          final selectedRound = widget.cup.roundsList!
-                              .firstWhere((r) => r.roundId == value);
-                          _currentMode = selectedRound.mode ?? 'GROUP';
+                          _selectedRoundId = v;
+                          final r = widget.cup.roundsList!
+                              .firstWhere((r) => r.roundId == v);
+                          _currentMode = r.mode ?? 'GROUP';
                         });
                       }
                     },
+                    fontSize: 14,
                   ),
                 ),
               ],

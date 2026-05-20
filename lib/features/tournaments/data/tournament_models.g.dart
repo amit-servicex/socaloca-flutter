@@ -116,24 +116,6 @@ Map<String, dynamic> _$$BannerModelImplToJson(_$BannerModelImpl instance) =>
       'link': instance.link,
     };
 
-_$TeamModelImpl _$$TeamModelImplFromJson(Map<String, dynamic> json) =>
-    _$TeamModelImpl(
-      id: json['_id'] as String?,
-      teamId: json['teamId'] as String?,
-      teamName: json['teamName'] as String?,
-      imageUrl: json['imageUrl'] as String?,
-      country: json['country'] as String?,
-    );
-
-Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
-    <String, dynamic>{
-      '_id': instance.id,
-      'teamId': instance.teamId,
-      'teamName': instance.teamName,
-      'imageUrl': instance.imageUrl,
-      'country': instance.country,
-    };
-
 _$SponsorModelImpl _$$SponsorModelImplFromJson(Map<String, dynamic> json) =>
     _$SponsorModelImpl(
       id: json['_id'] as String?,

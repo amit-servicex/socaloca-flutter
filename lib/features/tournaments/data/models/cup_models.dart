@@ -160,26 +160,35 @@ class CupMatchModel with _$CupMatchModel {
     String? roundId,
     String? homeTeamId,
     String? homeTeamName,
+    String? homeTeamShortName,
     String? homeTeamLogo,
     String? awayTeamId,
     String? awayTeamName,
+    String? awayTeamShortName,
     String? awayTeamLogo,
     int? homeScore,
     int? awayScore,
-    int? homeExtraTimeScore, // Extra time score
+    int? homeExtraTimeScore,
     int? awayExtraTimeScore,
-    int? homePenaltyScore, // Penalty shootout score
+    int? homePenaltyScore,
     int? awayPenaltyScore,
-    String? winnerId, // Team ID of winner
+    String? winnerId,
     String? winnerName,
-    String? status, // 'upcoming', 'live', 'end'
+    String? status,
+    String? scoreStatus,
+    String? acceptStatus,
+    String? gameSemiType,
     String? matchDate,
+    String? matchTime,
+    String? matchName,
     @Default(0) int matchDateMs,
     String? venue,
+    String? city,
+    String? fieldName,
     String? gameType,
     String? ageGroup,
-    String? level, // Bracket level (e.g., "1" for final, "2" for semi)
-    String? seq, // Sequence in level
+    String? level,
+    String? seq,
   }) = _CupMatchModel;
 
   factory CupMatchModel.fromJson(Map<String, dynamic> json) =>

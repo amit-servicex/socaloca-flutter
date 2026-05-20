@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/academies_provider.dart';
 import '../widgets/academy_card.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 
 /// Academies screen - main tab for browsing academies
 class AcademiesScreen extends ConsumerStatefulWidget {
@@ -238,73 +239,27 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                 SizedBox(height: 15),
 
                 // Country Dropdown
-                Container(
+                SearchableDropdownButton(
+                  hint: 'Country'.tr,
+                  value: _selectedCountry,
+                  items: _countries,
+                  onChanged: _onCountryChanged,
                   height: 42,
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: AppColors.socaGrey.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _selectedCountry,
-                      isExpanded: true,
-                      icon: Image.asset(
-                        "assets/images/dropdown.png",
-                        width: 14,
-                        height: 14,
-                      ),
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack,
-                      ),
-                      items: _countries.map((String country) {
-                        return DropdownMenuItem<String>(
-                          value: country,
-                          child: Text(country),
-                        );
-                      }).toList(),
-                      onChanged: _onCountryChanged,
-                    ),
-                  ),
+                  fontSize: 12,
+                  backgroundColor: AppColors.socaGrey.withValues(alpha: 0.3),
                 ),
 
                 SizedBox(height: 10),
 
                 // Category Dropdown
-                Container(
+                SearchableDropdownButton(
+                  hint: 'Category'.tr,
+                  value: _selectedCategory,
+                  items: _categories,
+                  onChanged: _onCategoryChanged,
                   height: 42,
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: AppColors.socaGrey.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _selectedCategory,
-                      isExpanded: true,
-                      icon: Image.asset(
-                        "assets/images/dropdown.png",
-                        width: 14,
-                        height: 14,
-                      ),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack,
-                      ),
-                      items: _categories.map((String category) {
-                        return DropdownMenuItem<String>(
-                          value: category,
-                          child: Text(category),
-                        );
-                      }).toList(),
-                      onChanged: _onCategoryChanged,
-                    ),
-                  ),
+                  fontSize: 12,
+                  backgroundColor: AppColors.socaGrey.withValues(alpha: 0.3),
                 ),
 
                 SizedBox(height: 15),

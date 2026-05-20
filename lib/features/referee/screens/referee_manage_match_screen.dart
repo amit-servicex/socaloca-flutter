@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../data/models/referee_match_model.dart';
 import '../providers/referee_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 
 class RefereeManageMatchScreen extends ConsumerStatefulWidget {
   RefereeManageMatchScreen({
@@ -759,24 +760,12 @@ class _RefereeManageMatchScreenState
     required String teamB,
     required ValueChanged<String?> onChanged,
   }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFFE0E0E0)),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          isExpanded: true,
-          style: TextStyle(
-              fontFamily: 'Poppins', fontSize: 13, color: Colors.black87),
-          items: [teamA, teamB]
-              .map((t) => DropdownMenuItem(value: t, child: Text(t)))
-              .toList(),
-          onChanged: onChanged,
-        ),
-      ),
+    return SearchableDropdownButton(
+      hint: value,
+      value: value,
+      items: [teamA, teamB],
+      onChanged: onChanged,
+      fontSize: 13,
     );
   }
 
