@@ -55,7 +55,12 @@ class CupRepository {
       if (response['teams'] != null && response['teams'] is List) {
         final teamsData = response['teams'] as List;
         teams = teamsData
-            .map((json) => CupTeamModel.fromJson(json as Map<String, dynamic>))
+            .map((json) {
+              final t = Map<String, dynamic>.from(json as Map<String, dynamic>);
+              t['logo'] = t['imageUrl'] ?? t['logo'];
+              t['teamName'] = t['teamName'] ?? t['name'];
+              return CupTeamModel.fromJson(t);
+            })
             .toList();
       }
 
@@ -73,9 +78,15 @@ class CupRepository {
       List<CupRoundModel>? roundsList;
       if (response['rounds'] != null && response['rounds'] is List) {
         final roundsData = response['rounds'] as List;
-        roundsList = roundsData
-            .map((json) => CupRoundModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        roundsList = roundsData.map((json) {
+          final m = Map<String, dynamic>.from(json as Map<String, dynamic>);
+          for (final key in ['seq', 'count', 'level', 'addedOn']) {
+            if (m[key] != null && m[key] is! String) {
+              m[key] = m[key].toString();
+            }
+          }
+          return CupRoundModel.fromJson(m);
+        }).toList();
       }
 
       final cup = TournamentCupModel.fromJson(details);
@@ -117,7 +128,9 @@ class CupRepository {
       final status = (response['status'] as num?)?.toInt() ?? 0;
       if (status != 1) return null;
 
-      final details = response['details'] as Map<String, dynamic>?;
+      // API returns tournament data under 'tmntDetail' (not 'details')
+      final details = (response['tmntDetail'] ?? response['details'])
+          as Map<String, dynamic>?;
       if (details == null) return null;
 
       // Parse similar to getCupDetails
@@ -134,7 +147,12 @@ class CupRepository {
       if (response['teams'] != null && response['teams'] is List) {
         final teamsData = response['teams'] as List;
         teams = teamsData
-            .map((json) => CupTeamModel.fromJson(json as Map<String, dynamic>))
+            .map((json) {
+              final t = Map<String, dynamic>.from(json as Map<String, dynamic>);
+              t['logo'] = t['imageUrl'] ?? t['logo'];
+              t['teamName'] = t['teamName'] ?? t['name'];
+              return CupTeamModel.fromJson(t);
+            })
             .toList();
       }
 
@@ -150,9 +168,15 @@ class CupRepository {
       List<CupRoundModel>? roundsList;
       if (response['rounds'] != null && response['rounds'] is List) {
         final roundsData = response['rounds'] as List;
-        roundsList = roundsData
-            .map((json) => CupRoundModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        roundsList = roundsData.map((json) {
+          final m = Map<String, dynamic>.from(json as Map<String, dynamic>);
+          for (final key in ['seq', 'count', 'level', 'addedOn']) {
+            if (m[key] != null && m[key] is! String) {
+              m[key] = m[key].toString();
+            }
+          }
+          return CupRoundModel.fromJson(m);
+        }).toList();
       }
 
       final cup = TournamentCupModel.fromJson(details);
@@ -216,12 +240,14 @@ class CupRepository {
   Future<List<CupGroupPointTableEntry>> getCupLeagueTable({
     required String userId,
     required String tournamentId,
+    required String roundId,
     required String groupId,
   }) async {
     try {
       final body = <String, dynamic>{
         'userId': userId,
         'tournamentId': tournamentId,
+        'roundId': roundId,
         'groupId': groupId,
       };
 
@@ -280,9 +306,74 @@ class CupRepository {
       final matchesData = response['matches'] as List?;
       if (matchesData == null) return [];
 
-      return matchesData
-          .map((json) => CupMatchModel.fromJson(json as Map<String, dynamic>))
-          .toList();
+      return matchesData.map((json) {
+        final m = json as Map<String, dynamic>;
+        final score = m['score'] as Map<String, dynamic>?;
+        final teams = (m['teams'] as List?)
+                ?.map((t) => t as Map<String, dynamic>)
+                .toList() ??
+            [];
+        final myTeamId = (m['myTeamId'] ?? m['homeTeamId']) as String?;
+        final opponentTeamId =
+            (m['opponentTeamId'] ?? m['awayTeamId']) as String?;
+        String? myTeamLogo, opponentTeamLogo;
+        for (final t in teams) {
+          if (t['teamId'] == myTeamId) myTeamLogo = t['imageUrl'] as String?;
+          if (t['teamId'] == opponentTeamId) {
+            opponentTeamLogo = t['imageUrl'] as String?;
+          }
+        }
+        return CupMatchModel(
+          id: m['_id'] as String?,
+          matchId: m['matchId'] as String?,
+          tournamentId: m['tournamentId'] as String?,
+          roundId: m['roundId'] as String?,
+          homeTeamId: myTeamId,
+          homeTeamName: (m['myTeamName'] ?? m['homeTeamName']) as String?,
+          homeTeamShortName: (m['myTeamShortName'] ?? m['homeTeamShortName']) as String?,
+          homeTeamLogo: myTeamLogo,
+          awayTeamId: opponentTeamId,
+          awayTeamName: (m['opponentTeamName'] ?? m['awayTeamName']) as String?,
+          awayTeamShortName: (m['opponentTeamShortName'] ?? m['awayTeamShortName']) as String?,
+          awayTeamLogo: opponentTeamLogo,
+          homeScore: score != null
+              ? (score['myGoals'] as num?)?.toInt()
+              : (m['homeScore'] as num?)?.toInt(),
+          awayScore: score != null
+              ? (score['opponentGoals'] as num?)?.toInt()
+              : (m['awayScore'] as num?)?.toInt(),
+          homeExtraTimeScore: score != null
+              ? (score['myExtraTime'] as num?)?.toInt()
+              : (m['homeExtraTimeScore'] as num?)?.toInt(),
+          awayExtraTimeScore: score != null
+              ? (score['opponentExtraTime'] as num?)?.toInt()
+              : (m['awayExtraTimeScore'] as num?)?.toInt(),
+          homePenaltyScore: score != null
+              ? (score['myPenalty'] as num?)?.toInt()
+              : (m['homePenaltyScore'] as num?)?.toInt(),
+          awayPenaltyScore: score != null
+              ? (score['opponentPenalty'] as num?)?.toInt()
+              : (m['awayPenaltyScore'] as num?)?.toInt(),
+          winnerId: m['winnerId'] as String?,
+          winnerName: m['winnerName'] as String?,
+          status: m['status'] as String?,
+          scoreStatus: m['scoreStatus'] as String?,
+          acceptStatus: m['acceptStatus'] as String?,
+          gameSemiType: m['gameSemiType'] as String?,
+          matchDate: m['matchDate'] as String?,
+          matchTime: m['matchTime'] as String?,
+          matchName: m['matchName'] as String?,
+          matchDateMs: (m['matchDateTimeGmt'] as num?)?.toInt() ??
+              (m['matchDateMs'] as num?)?.toInt() ?? 0,
+          venue: m['stadiumName'] as String?,
+          city: m['city'] as String?,
+          fieldName: m['fieldName'] as String?,
+          gameType: m['gameType'] as String?,
+          ageGroup: m['ageGroup'] as String?,
+          level: m['level']?.toString(),
+          seq: m['seq']?.toString(),
+        );
+      }).toList();
     } on ApiException catch (e) {
       log('Error getting cup knockout matches: ${e.message}');
       return [];
@@ -300,11 +391,15 @@ class CupRepository {
     required String statType, // 'goals', 'assists', 'cards', 'mom'
     String? roundId,
     String? groupId,
+    int start = 0,
+    int limit = 10,
   }) async {
     try {
       final body = <String, dynamic>{
         'userId': userId,
         'tournamentId': tournamentId,
+        'start': start,
+        'limit': limit,
       };
 
       if (roundId != null) body['roundId'] = roundId;
@@ -336,7 +431,9 @@ class CupRepository {
       final status = (response['status'] as num?)?.toInt() ?? 0;
       if (status != 1) return [];
 
-      final statsData = response['stats'] as List?;
+      final statsData = (response['players'] as List?) ??
+          (response['stats'] as List?) ??
+          (response['data'] as List?);
       if (statsData == null) return [];
 
       return statsData
@@ -359,11 +456,15 @@ class CupRepository {
     required String tournamentId,
     required String statType, // 'goals', 'assists', 'cards', 'mom'
     String? roundId,
+    int start = 0,
+    int limit = 10,
   }) async {
     try {
       final body = <String, dynamic>{
         'userId': userId,
         'tournamentId': tournamentId,
+        'start': start,
+        'limit': limit,
       };
 
       if (roundId != null) body['roundId'] = roundId;
@@ -394,7 +495,9 @@ class CupRepository {
       final status = (response['status'] as num?)?.toInt() ?? 0;
       if (status != 1) return [];
 
-      final statsData = response['stats'] as List?;
+      final statsData = (response['players'] as List?) ??
+          (response['stats'] as List?) ??
+          (response['data'] as List?);
       if (statsData == null) return [];
 
       return statsData

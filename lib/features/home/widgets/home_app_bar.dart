@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -87,6 +89,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
     final title = isHome ? null : _titleForPath(location);
     final showBack = !isRoot;
     final user = ref.read(currentUserProvider);
+    log("this is the user role ${user?.isReferee}");
     return SafeArea(
       child: Container(
         height: 56,
@@ -184,7 +187,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     ),
                 ],
               ),
-              if (user?.isFan ?? false)
+              if ((user?.isFan ?? false) || (user?.isReferee ?? false))
                 IconButton(
                   icon: Image.asset(
                     "assets/icons/ic_hamburger_menu.png",

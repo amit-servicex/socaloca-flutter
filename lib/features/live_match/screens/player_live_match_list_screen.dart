@@ -8,6 +8,7 @@ import '../../../core/constants/api_constants.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_loader.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../models/live_match_models.dart';
 import '../providers/live_match_providers.dart';
 
@@ -101,29 +102,14 @@ class _PlayerLiveMatchListScreenState
                 // Tournament dropdown
                 Expanded(
                   child: tournamentAsync.when(
-                    data: (items) => _FilterDropdown<String?>(
-                      hint: 'All Tournaments',
-                      value: selectedTmnt,
-                      items: [
-                        DropdownMenuItem(
-                          value: null,
-                          child: Text('All Tournaments'.tr,
-                              style: TextStyle(
-                                  fontFamily: 'Poppins', fontSize: 12)),
-                        ),
-                        ...items.map(
-                          (t) => DropdownMenuItem(
-                            value: t['tournamentId'],
-                            child: Text(
-                              t['tournamentName'] ?? '',
-                              style: TextStyle(
-                                  fontFamily: 'Poppins', fontSize: 12),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ],
-                      onChanged: _onTournamentChanged,
+                    data: (items) => SearchableDropdownButton(
+                      hint: 'All Tournaments'.tr,
+                      value: selectedTmnt ?? '',
+                      items: ['All Tournaments'.tr, ...items.map((t) => (t['tournamentName'] as String?) ?? '')],
+                      values: ['', ...items.map((t) => (t['tournamentId'] as String?) ?? '')],
+                      onChanged: (v) => _onTournamentChanged(v == null || v.isEmpty ? null : v),
+                      height: 36,
+                      fontSize: 12,
                     ),
                     loading: () => SizedBox(
                       height: 36,
@@ -141,27 +127,12 @@ class _PlayerLiveMatchListScreenState
                 // Country dropdown
                 Expanded(
                   child: countryAsync.when(
-                    data: (countries) => _FilterDropdown<String?>(
-                      hint: 'All Countries',
-                      value: selectedCountry,
-                      items: [
-                        DropdownMenuItem(
-                          value: null,
-                          child: Text('All Countries'.tr,
-                              style: TextStyle(
-                                  fontFamily: 'Poppins', fontSize: 12)),
-                        ),
-                        ...countries.map(
-                          (c) => DropdownMenuItem(
-                            value: c,
-                            child: Text(c,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins', fontSize: 12),
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                        ),
-                      ],
-                      onChanged: _onCountryChanged,
+                    data: (countries) => SearchableDropdownButton(
+                      hint: 'All Countries'.tr,
+                      value: selectedCountry ?? '',
+                      items: ['All Countries'.tr, ...countries],
+                      values: ['', ...countries],
+                      onChanged: (v) => _onCountryChanged(v == null || v.isEmpty ? null : v),
                     ),
                     loading: () => SizedBox.shrink(),
                     error: (_, __) => SizedBox.shrink(),
@@ -222,45 +193,6 @@ class _PlayerLiveMatchListScreenState
                           ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ─── Filter dropdown ──────────────────────────────────────────────────────────
-
-class _FilterDropdown<T> extends StatelessWidget {
-  _FilterDropdown({
-    required this.hint,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-  });
-
-  final String hint;
-  final T value;
-  final List<DropdownMenuItem<T>> items;
-  final ValueChanged<T?> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 36,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: AppColors.socaGrey,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<T>(
-          value: value,
-          hint:
-              Text(hint, style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-          isExpanded: true,
-          icon: Icon(Icons.expand_more, size: 18),
-          items: items,
-          onChanged: onChanged,
-        ),
       ),
     );
   }

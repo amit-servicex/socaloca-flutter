@@ -158,7 +158,7 @@ class _PlayerPendingTeamsScreenState
                             ),
                             onTap: teamId.isNotEmpty
                                 ? () =>
-                                    context.push('${AppRoutes.teams}/$teamId')
+                                    context.push(AppRoutes.teamBio.replaceFirst(':teamId', teamId))
                                 : null,
                           ),
                         );

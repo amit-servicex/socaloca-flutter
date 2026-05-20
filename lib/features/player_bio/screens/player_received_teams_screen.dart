@@ -221,8 +221,8 @@ class _PlayerReceivedTeamsScreenState
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: teamId.isNotEmpty
-                                        ? () => context
-                                            .push('${AppRoutes.teams}/$teamId')
+                                        ? () => context.push(AppRoutes.teamBio
+                                            .replaceFirst(':teamId', teamId))
                                         : null,
                                     child: Text(
                                       teamName,

@@ -1,30 +1,25 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:socaloca/features/tournaments/screens/cup/tabs/cup_stage_tab.dart';
-import 'package:socaloca/features/tournaments/screens/cup/tabs/cup_stats_tab.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
-import '../../../../core/router/app_routes.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/cup_models.dart';
 import '../../providers/cup_providers.dart';
-import '../../widgets/tournament_banner_slider.dart';
-import '../../widgets/tournament_header_widget.dart';
-import '../../widgets/tournament_info_card.dart';
-import '../../widgets/teams_horizontal_list.dart';
-import '../../widgets/sponsors_horizontal_list.dart';
-import '../../../tournaments/data/tournament_models.dart';
-import 'tabs/cup_info_tab.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
+import 'cup_info_details_screen.dart';
+import 'widgets/cup_knockout_bracket_view.dart';
+import 'widgets/cup_stats_bottom_sheet.dart';
 
 /// Cup Tournament Details Screen
-/// Comprehensive cup tournament details with banner, info, teams, sponsors, and tabs
-/// Matches Android TournamentCupDetailsFragment
+/// Shows banner, "VIEW TOURNAMENT DETAILS" bar, and dynamic round tabs.
+/// Each round tab loads getCupKnockMatches for that roundId.
 class CupTournamentDetailsScreen extends ConsumerStatefulWidget {
   final String tournamentId;
 
-  CupTournamentDetailsScreen({
+  const CupTournamentDetailsScreen({
     super.key,
     required this.tournamentId,
   });
@@ -36,44 +31,46 @@ class CupTournamentDetailsScreen extends ConsumerStatefulWidget {
 
 class _CupTournamentDetailsScreenState
     extends ConsumerState<CupTournamentDetailsScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+    with TickerProviderStateMixin {
+  TabController? _tabController;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+  void _ensureTabController(int count) {
+    if (count < 1) count = 1;
+    if (_tabController != null && _tabController!.length == count) return;
+    _tabController?.dispose();
+    _tabController = TabController(length: count, vsync: this);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final cupAsync = ref.watch(cupDetailsProvider(widget.tournamentId));
+    final cupAsync = ref.watch(cupReadyOrDetailsProvider(widget.tournamentId));
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: Text(
-          'Cup Tournament'.tr,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Cup Tournament'.tr,
+      //     style: const TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontWeight: FontWeight.w700,
+      //       fontSize: 18,
+      //       color: AppColors.socaBlack,
+      //     ),
+      //   ),
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+      //     onPressed: () => context.pop(),
+      //   ),
+      // ),
+
       body: cupAsync.when(
         data: (cup) {
           if (cup == null) {
@@ -81,18 +78,21 @@ class _CupTournamentDetailsScreenState
           }
           return _buildContent(cup);
         },
-        loading: () => AppLoader(),
+        loading: () => const AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 64, color: Colors.red),
-              SizedBox(height: 16),
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
               Text('Error loading cup: $error'),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   ref.invalidate(cupDetailsProvider(widget.tournamentId));
+                  ref.invalidate(cupReadyDetailProvider(widget.tournamentId));
+                  ref.invalidate(
+                      cupReadyOrDetailsProvider(widget.tournamentId));
                 },
                 child: Text('Retry'.tr),
               ),
@@ -104,242 +104,220 @@ class _CupTournamentDetailsScreenState
   }
 
   Widget _buildContent(TournamentCupModel cup) {
+    final rounds = cup.roundsList ?? [];
+    _ensureTabController(rounds.isEmpty ? 1 : rounds.length);
+
     return Column(
+      // mainAxisAlignment: MainAxisAlignment.end
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        // Tabs Section at top
-        Container(
-          color: Colors.white,
-          child: TabBar(
-            controller: _tabController,
-            labelColor: AppColors.socaBlack,
-            unselectedLabelColor: AppColors.socaBlack.withOpacity(0.5),
-            indicatorColor: AppColors.socaYellow,
-            indicatorWeight: 3,
-            labelStyle: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
+        // Banner
+        if (cup.banners != null && cup.banners!.isNotEmpty) ...[
+          _buildBanner(cup.banners!.first),
+        ] else ...[
+          SizedBox(
+            height: 200,
+            child: Stack(
+              children: [
+                // Banner Image (placeholder for now)
+                Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.grey[300]!,
+                          Colors.grey[400]!,
+                        ],
+                      ),
+                    ),
+                    child: Image.asset(
+                        "assets/images/tournament_defalut_banner.jpg",
+                        fit: BoxFit.cover)),
+              ],
             ),
-            unselectedLabelStyle: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-            ),
-            tabs: [
-              Tab(text: 'INFO'),
-              Tab(text: 'STAGE'),
-              Tab(text: 'STATS'),
-            ],
-          ),
-        ),
+          )
+        ],
+        // "VIEW TOURNAMENT DETAILS" bar
+        _buildDetailsBar(cup),
 
-        // Tab Views
+        // TabBar
+        if (rounds.isNotEmpty)
+          Container(
+            color: Colors.white,
+            child: TabBar(
+              controller: _tabController!,
+              isScrollable: rounds.length > 3,
+              labelColor: AppColors.socaBlack,
+              unselectedLabelColor: AppColors.socaBlack.withValues(alpha: 0.45),
+              indicatorColor: AppColors.socaBlack,
+              indicatorWeight: 3,
+              labelStyle: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+                fontSize: 13,
+              ),
+              tabs: rounds.map((r) {
+                final label = r.roundName?.isNotEmpty == true
+                    ? r.roundName!
+                    : 'Round ${r.seq ?? ''}';
+                return Tab(text: label.toUpperCase());
+              }).toList(),
+            ),
+          ),
+        // STATS button
+        if (rounds.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0, top: 4),
+            child: SizedBox(
+              width: 90,
+              child: ElevatedButton(
+                child: Text(
+                  'STATS'.tr,
+                  style: const TextStyle(
+                    color: AppColors.socaYellow,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                  ),
+                ),
+                onPressed: () => _showStatsSheet(cup),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.socaBlack,
+                  side:
+                      const BorderSide(color: AppColors.socaBlack, width: 1.5),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+        // Tab content
         Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              // Info Tab - Shows banner, header, info card, teams, sponsors
-              CupInfoTab(
-                cup: cup,
-                onFollowTap: () => _handleFollowTap(cup),
-                onRequestToJoin: () => _handleRequestToJoin(cup),
-              ),
-
-              // Stage Tab - Shows group stage or knockout bracket
-              CupStageTab(
-                tournamentId: widget.tournamentId,
-                cup: cup,
-              ),
-
-              // Stats Tab - Shows stats for group/knockout modes
-              CupStatsTab(
-                tournamentId: widget.tournamentId,
-                cup: cup,
-              ),
-            ],
-          ),
+          child: rounds.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.emoji_events_outlined,
+                          size: 64, color: Colors.grey[400]),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No rounds available'.tr,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : TabBarView(
+                  controller: _tabController!,
+                  children: rounds.map((round) {
+                    return CupKnockoutBracketView(
+                      tournamentId: widget.tournamentId,
+                      roundId: round.roundId ?? '',
+                      cup: cup,
+                    );
+                  }).toList(),
+                ),
         ),
       ],
     );
   }
 
-  Future<void> _handleFollowTap(TournamentCupModel cup) async {
-    final notifier = ref.read(cupFollowProvider(widget.tournamentId).notifier);
-    await notifier.toggleFollow(
-      tournamentId: widget.tournamentId,
-      currentFollowState: cup.isFollowing,
-    );
+  Widget _buildBanner(CupBannerModel banner) {
+    final imageUrl = ApiConstants.getImageUrl(banner.imageUrl);
+    if (imageUrl.isEmpty) return const SizedBox.shrink();
 
-    // Refresh cup details
-    ref.invalidate(cupDetailsProvider(widget.tournamentId));
-  }
-
-  Future<void> _handleRequestToJoin(TournamentCupModel cup) async {
-    // Show team selection dialog
-    final teamsAsync = ref.read(myTeamsForCupProvider(widget.tournamentId));
-
-    teamsAsync.when(
-      data: (teams) {
-        if (teams.isEmpty) {
-          _showNoTeamsDialog();
-        } else {
-          _showTeamSelectionDialog(teams, cup);
-        }
-      },
-      loading: () {
-        // Show loading
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AppLoader(),
-        );
-      },
-      error: (error, stack) {
-        _showErrorDialog('Failed to load teams: $error');
-      },
-    );
-  }
-
-  void _showNoTeamsDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'No Eligible Teams'.tr,
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+    return SizedBox(
+      width: double.infinity,
+      height: 180,
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: Colors.grey[200],
+          child: const Center(child: CircularProgressIndicator()),
         ),
-        content: Text(
-          'You don\'t have any teams eligible for this cup.'.tr,
-          style: TextStyle(fontFamily: 'Poppins'),
+        errorWidget: (context, url, error) => Container(
+          color: Colors.grey[200],
+          child: Icon(Icons.image_not_supported,
+              size: 48, color: Colors.grey[400]),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
-          ),
-        ],
       ),
     );
   }
 
-  void _showTeamSelectionDialog(
-      List<CupTeamModel> teams, TournamentCupModel cup) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Select Team'.tr,
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
-        ),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: teams.length,
-            itemBuilder: (context, index) {
-              final team = teams[index];
-              return ListTile(
-                title: Text(
-                  team.teamName ?? 'Unknown',
-                  style: TextStyle(fontFamily: 'Poppins'),
+  Widget _buildDetailsBar(TournamentCupModel cup) {
+    return GestureDetector(
+      onTap: () => _openInfoDetails(),
+      child: Container(
+        color: AppColors.socaBlack,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            const Expanded(
+              child: Text(
+                'VIEW TOURNAMENT DETAILS',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  color: AppColors.socaYellow,
+                  letterSpacing: 0.5,
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _submitJoinRequest(team, cup);
-                },
-              );
-            },
-          ),
+              ),
+            ),
+            IconButton(
+              icon: Image.asset(
+                "assets/icons/ic_info.png",
+                width: 24,
+                height: 24,
+              ),
+              onPressed: _openInfoDetails,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'.tr),
-          ),
-        ],
       ),
     );
   }
 
-  Future<void> _submitJoinRequest(
-      CupTeamModel team, TournamentCupModel cup) async {
-    // Show loading
-    showDialog(
+  void _showStatsSheet(TournamentCupModel cup) {
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => AppLoader(),
-    );
-
-    final notifier =
-        ref.read(cupJoinRequestProvider(widget.tournamentId).notifier);
-    await notifier.requestToJoin(
-      tournamentId: widget.tournamentId,
-      teamId: team.effectiveId,
-      parentId: cup.parentId,
-      teamName: team.teamName,
-      tmntName: cup.name,
-    );
-
-    // Close loading dialog
-    if (mounted) Navigator.pop(context);
-
-    // Show result
-    final state = ref.read(cupJoinRequestProvider(widget.tournamentId));
-    state.when(
-      data: (success) {
-        if (success) {
-          _showSuccessDialog('Join request submitted successfully!');
-        } else {
-          _showErrorDialog('Failed to submit join request');
-        }
-      },
-      loading: () {},
-      error: (error, stack) {
-        _showErrorDialog('Error: $error');
-      },
-    );
-  }
-
-  void _showSuccessDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Success'.tr,
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
-        ),
-        content: Text(
-          message,
-          style: TextStyle(fontFamily: 'Poppins'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
-          ),
-        ],
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => CupStatsBottomSheet(
+        tournamentId: widget.tournamentId,
+        cup: cup,
       ),
     );
   }
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Error'.tr,
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+  void _openInfoDetails() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CupInfoDetailsScreen(
+          tournamentId: widget.tournamentId,
         ),
-        content: Text(
-          message,
-          style: TextStyle(fontFamily: 'Poppins'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
-          ),
-        ],
       ),
     );
   }

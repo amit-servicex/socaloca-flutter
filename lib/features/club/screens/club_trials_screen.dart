@@ -5,6 +5,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:socaloca/core/storage/storage_service.dart';
 import 'package:socaloca/features/search/utils/countries_list.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/api_constants.dart';
@@ -295,41 +296,13 @@ class _TrialFilters extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: country.isEmpty ? '' : country,
-                isExpanded: true,
-                icon: Image.asset(
-                  'assets/images/dropdown.png',
-                  width: 14,
-                  height: 14,
-                ),
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
-                items: countries
-                    .map(
-                      (item) => DropdownMenuItem(
-                        value: item,
-                        child: Text(
-                          item.isEmpty ? 'Select Country'.tr : item,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontFamily: 'Poppins'),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) => onCountryChanged(value ?? ''),
-              ),
-            ),
+          SearchableDropdownButton(
+            hint: 'Select Country'.tr,
+            value: country.isEmpty ? null : country,
+            items: countries.where((c) => c.isNotEmpty).toList(),
+            onChanged: (v) => onCountryChanged(v ?? ''),
+            fontSize: 14,
+            backgroundColor: Colors.grey[200],
           ),
 
           // DropdownButtonFormField<String>(
@@ -364,117 +337,26 @@ class _TrialFilters extends StatelessWidget {
                   )),
               Expanded(
                 flex: 3,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: fromAge.isEmpty ? '' : fromAge,
-                      isExpanded: true,
-                      icon: Image.asset(
-                        'assets/images/dropdown.png',
-                        width: 14,
-                        height: 14,
-                      ),
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
-                      items: ages
-                          .map(
-                            (age) => DropdownMenuItem(
-                              value: age,
-                              child: Text(
-                                age.isEmpty ? 'From'.tr : age,
-                                style: const TextStyle(fontFamily: 'Poppins'),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: onFromAgeChanged,
-                      // decoration: _inputDecoration('From Age'.tr),
-                    ),
-                  ),
+                child: SearchableDropdownButton(
+                  hint: 'From'.tr,
+                  value: fromAge.isEmpty ? null : fromAge,
+                  items: ages.where((a) => a.isNotEmpty).toList(),
+                  onChanged: onFromAgeChanged,
+                  fontSize: 14,
+                  backgroundColor: Colors.grey[200],
                 ),
-
-                //  DropdownButtonFormField<String>(
-                //   value: fromAge.isEmpty ? '' : fromAge,
-                //   isExpanded: true,
-                //   items: ages
-                //       .map(
-                //         (age) => DropdownMenuItem(
-                //           value: age,
-                //           child: Text(
-                //             age.isEmpty ? 'From Age'.tr : age,
-                //             style: const TextStyle(fontFamily: 'Poppins'),
-                //           ),
-                //         ),
-                //       )
-                //       .toList(),
-                //   onChanged: onFromAgeChanged,
-                //   decoration: _inputDecoration('From Age'.tr),
-                // ),
               ),
               const SizedBox(width: 10),
               Expanded(
                 flex: 3,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: toAge.isEmpty ? '' : toAge,
-                      isExpanded: true,
-                      icon: Image.asset(
-                        'assets/images/dropdown.png',
-                        width: 14,
-                        height: 14,
-                      ),
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
-                      items: ages
-                          .map(
-                            (age) => DropdownMenuItem(
-                              value: age,
-                              child: Text(
-                                age.isEmpty ? 'To '.tr : age,
-                                style: const TextStyle(fontFamily: 'Poppins'),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: onToAgeChanged,
-                      // decoration: _inputDecoration('From Age'.tr),
-                    ),
-                  ),
+                child: SearchableDropdownButton(
+                  hint: 'To'.tr,
+                  value: toAge.isEmpty ? null : toAge,
+                  items: ages.where((a) => a.isNotEmpty).toList(),
+                  onChanged: onToAgeChanged,
+                  fontSize: 14,
+                  backgroundColor: Colors.grey[200],
                 ),
-                // DropdownButtonFormField<String>(
-                //   value: toAge.isEmpty ? '' : toAge,
-                //   isExpanded: true,
-                //   items: ages
-                //       .map(
-                //         (age) => DropdownMenuItem(
-                //           value: age,
-                //           child: Text(
-                //             age.isEmpty ? 'To Age'.tr : age,
-                //             style: const TextStyle(fontFamily: 'Poppins'),
-                //           ),
-                //         ),
-                //       )
-                //       .toList(),
-                //   onChanged: onToAgeChanged,
-                //   decoration: _inputDecoration('To Age'.tr),
-                // ),
               ),
             ],
           ),

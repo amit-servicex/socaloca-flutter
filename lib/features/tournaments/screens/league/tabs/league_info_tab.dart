@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/shared/models/team_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/router/app_routes.dart';
@@ -40,11 +43,37 @@ class LeagueInfoTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Banner Slider
-          if (tournament.banners != null && tournament.banners!.isNotEmpty)
+          if (tournament.banners != null && tournament.banners!.isNotEmpty) ...[
             TournamentBannerSlider(
               banners: tournament.banners!,
               height: 200,
             ),
+          ] else ...[
+            SizedBox(
+              height: 200,
+              child: Stack(
+                children: [
+                  // Banner Image (placeholder for now)
+                  Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.grey[300]!,
+                            Colors.grey[400]!,
+                          ],
+                        ),
+                      ),
+                      child: Image.asset(
+                          "assets/images/tournament_defalut_banner.jpg",
+                          fit: BoxFit.cover)),
+                ],
+              ),
+            )
+          ],
 
           // Header with Follow Button
           TournamentHeaderWidget(
@@ -52,6 +81,8 @@ class LeagueInfoTab extends ConsumerWidget {
             isFollowing: tournament.isFollowing,
             followCount: tournament.followCount,
             onFollowTap: onFollowTap,
+            showFollow: user?.isReferee != true &&
+                user?.userType?.toLowerCase() != 'referee',
           ),
 
           // Tournament Info Card
@@ -64,7 +95,7 @@ class LeagueInfoTab extends ConsumerWidget {
             TeamsHorizontalList(
               teams: tournament.teams!,
               onTeamTap: (teamId) {
-                context.push('${AppRoutes.teams}/$teamId');
+                context.push('/teams/${teamId}');
               },
             ),
 
@@ -222,7 +253,7 @@ class _LeagueInvitationRow extends ConsumerWidget {
         children: [
           Expanded(
             child: Text(
-              team.teamName ?? 'Unknown Team',
+              team.name ?? 'Unknown Team',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
@@ -284,10 +315,10 @@ class _LeagueInvitationRow extends ConsumerWidget {
     final notifier = ref.read(inviteResponseProvider(tournamentId).notifier);
     await notifier.respond(
       tournamentId: tournamentId,
-      teamId: team.effectiveId,
+      teamId: team.id,
       accept: accept,
       parentId: tournament.parentId,
-      teamName: team.teamName,
+      teamName: team.name,
       tmntName: tournament.name,
     );
 

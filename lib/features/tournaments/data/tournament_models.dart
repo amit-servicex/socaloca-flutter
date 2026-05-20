@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:socaloca/shared/models/team_model.dart';
 
 part 'tournament_models.freezed.dart';
 part 'tournament_models.g.dart';
@@ -70,24 +71,24 @@ class BannerModel with _$BannerModel {
       _$BannerModelFromJson(json);
 }
 
-/// Team model (used in tournament teams list)
-@freezed
-class TeamModel with _$TeamModel {
-  const factory TeamModel({
-    @JsonKey(name: '_id') String? id,
-    @JsonKey(name: 'teamId') String? teamId,
-    String? teamName,
-    String? imageUrl,
-    String? country,
-  }) = _TeamModel;
+// /// Team model (used in tournament teams list)
+// @freezed
+// class TeamModel with _$TeamModel {
+//   const factory TeamModel({
+//     @JsonKey(name: '_id') String? id,
+//     @JsonKey(name: 'teamId') String? teamId,
+//     String? teamName,
+//     String? imageUrl,
+//     String? country,
+//   }) = _TeamModel;
 
-  factory TeamModel.fromJson(Map<String, dynamic> json) =>
-      _$TeamModelFromJson(json);
-}
+//   factory TeamModel.fromJson(Map<String, dynamic> json) =>
+//       _$TeamModelFromJson(json);
+// }
 
-extension TeamModelX on TeamModel {
-  String get effectiveId => teamId ?? id ?? '';
-}
+// extension TeamModelX on TeamModel {
+//   String get effectiveId => teamId ?? id ?? '';
+// }
 
 /// Sponsor model
 @freezed

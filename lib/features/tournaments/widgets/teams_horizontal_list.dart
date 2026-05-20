@@ -3,10 +3,10 @@ import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:socaloca/shared/models/team_model.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
-import '../data/tournament_models.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Teams Horizontal List Widget
@@ -42,12 +42,6 @@ class TeamsHorizontalList extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(
-                      Icons.groups,
-                      color: AppColors.socaBlack,
-                      size: 20,
-                    ),
-                    SizedBox(width: 8),
                     Text(
                       'Teams Playing (${teams.length})',
                       style: TextStyle(
@@ -80,7 +74,7 @@ class TeamsHorizontalList extends StatelessWidget {
 
           // Horizontal List
           SizedBox(
-            height: 120,
+            height: 150,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.symmetric(horizontal: 12),
@@ -97,24 +91,24 @@ class TeamsHorizontalList extends StatelessWidget {
   }
 
   Widget _buildTeamCard(TeamModel team) {
-    log("this is the temas logo ${team.imageUrl}");
+    // log("this is the teams id ${team.logo} ${team.id}");
+
     return GestureDetector(
-      onTap: onTeamTap != null ? () => onTeamTap!(team.effectiveId) : null,
+      onTap: onTeamTap != null ? () => onTeamTap!(team.id) : null,
       child: Container(
         width: 100,
         margin: EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey[300]!),
+          // border: Border.all(color: Colors.grey[300]!),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Team Logo
             ClipOval(
-              child:
-                  _buildTeamLogo(ApiConstants.getImageUrl(team.imageUrl), 50),
+              child: _buildTeamLogo(ApiConstants.getImageUrl(team.logo), 80),
             ),
 
             SizedBox(height: 8),
@@ -123,8 +117,8 @@ class TeamsHorizontalList extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 4),
               child: Text(
-                team.teamName ?? 'Unknown',
-                style: TextStyle(
+                team.name ?? 'Unknown',
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -142,6 +136,7 @@ class TeamsHorizontalList extends StatelessWidget {
   }
 
   Widget _buildTeamLogo(String? logoUrl, double size) {
+    log("this is the image url ${logoUrl}");
     if (logoUrl == null || logoUrl.isEmpty) {
       return Container(
         width: size,

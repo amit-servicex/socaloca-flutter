@@ -22,30 +22,92 @@ class TournamentVisibilityToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.socaPageBg,
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-      child: Row(
-        children: [
-          Expanded(
-            child: _ToggleBtn(
-              label: 'NATIONAL',
-              active: visibility == 'local',
-              onTap: () => onChanged('local'),
+      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(16, 15, 16, 5),
+      child: Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 100,
+              child: _ToggleBtn(
+                label: 'NATIONAL',
+                active: visibility == 'local',
+                onTap: () => onChanged('local'),
+              ),
             ),
-          ),
-          SizedBox(width: 12),
-          Expanded(
-            child: _ToggleBtn(
-              label: 'GLOBAL',
-              active: visibility == 'global',
-              onTap: () => onChanged('global'),
+            SizedBox(width: 20),
+            SizedBox(
+              width: 100,
+              child: _ToggleBtn(
+                label: 'GLOBAL',
+                active: visibility == 'global',
+                onTap: () => onChanged('global'),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
+const _tournamentIntro =
+    'See the listing of tournaments in your area and apply to join a competition if its right for your team. You can also view the progression of competitions in real time, see fixtures, points tables, stats and even match highlights.';
+
+const _countryOptions = [
+  'Afghanistan',
+  'Albania',
+  'Algeria',
+  'Argentina',
+  'Australia',
+  'Austria',
+  'Bangladesh',
+  'Belgium',
+  'Brazil',
+  'Canada',
+  'Chile',
+  'China',
+  'Colombia',
+  'Denmark',
+  'Egypt',
+  'England',
+  'Finland',
+  'France',
+  'Germany',
+  'Greece',
+  'India',
+  'Indonesia',
+  'Republic of Ireland',
+  'Italy',
+  'Japan',
+  'Kenya',
+  'Korea Republic',
+  'Malaysia',
+  'Mexico',
+  'Netherlands',
+  'New Zealand',
+  'Nigeria',
+  'Norway',
+  'Pakistan',
+  'Peru',
+  'Philippines',
+  'Poland',
+  'Portugal',
+  'Russia',
+  'Saudi Arabia',
+  'Singapore',
+  'South Africa',
+  'Spain',
+  'Sweden',
+  'Switzerland',
+  'Thailand',
+  'Türkiye',
+  'Ukraine',
+  'United Arab Emirates',
+  'USA',
+  'Vietnam',
+];
 
 /// Tournament filters — filter dropdowns (country, location, game, gender, age).
 /// The NATIONAL/GLOBAL toggle is rendered separately via [TournamentVisibilityToggle].
@@ -68,6 +130,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
   late TournamentFilters _filters;
   final TextEditingController _locationController = TextEditingController();
   String? _selectedCountry;
+  bool _showSearchError = false;
 
   static final _gameTypes = ['Football', 'Futsal'];
   static final _ageGroups = [
@@ -97,27 +160,28 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
     super.dispose();
   }
 
-  void _setVisibility(String v) {
-    setState(() => _filters = _filters.copyWith(visibility: v));
-  }
-
   void _applyFilters() {
     final location = _locationController.text.trim();
+    final hasAnyFilter = location.isNotEmpty ||
+        (_filters.gameType?.isNotEmpty == true) ||
+        (_filters.ageGroup?.isNotEmpty == true) ||
+        (_filters.gender?.isNotEmpty == true) ||
+        (_selectedCountry?.isNotEmpty == true);
+
+    if (!hasAnyFilter) {
+      setState(() => _showSearchError = true);
+      return;
+    }
+
     final updated = _filters.copyWith(
       location: location.isEmpty ? null : location,
       country: _selectedCountry,
     );
-    setState(() => _filters = updated);
-    widget.onFiltersChanged(updated);
-  }
-
-  void _clearFilters() {
-    _locationController.clear();
-    final cleared = _filters.clearFilters();
     setState(() {
-      _filters = cleared;
-      _selectedCountry = StorageService.currentUser?['country'] as String?;
+      _filters = updated;
+      _showSearchError = false;
     });
+    widget.onFiltersChanged(updated);
   }
 
   Future<void> _pickOption({
@@ -138,40 +202,56 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
         current: current,
       ),
     );
-    onSelected(result);
+    if (result != null) {
+      onSelected(result);
+    }
+  }
+
+  Future<void> _pickCountry() async {
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => _PickerSheet(
+        title: 'Select Country'.tr,
+        options: _countryOptions,
+        current: _selectedCountry,
+      ),
+    );
+    if (result != null) {
+      setState(() {
+        _selectedCountry = result;
+        _showSearchError = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.socaPageBg,
-      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(20, 10, 20, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text(
+            _tournamentIntro.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              color: AppColors.socaBlack,
+            ),
+          ),
+          SizedBox(height: 15),
           // Country Dropdown
           _DropdownField(
-            hint: _selectedCountry ?? 'India',
-            onTap: () {
-              // TODO: Implement country picker
-              // For now, just show a simple dialog
-              showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  title: Text('Select Country'.tr),
-                  content: Text('Country picker coming soon'.tr),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(ctx),
-                      child: Text('OK'.tr),
-                    ),
-                  ],
-                ),
-              );
-            },
+            hint: _selectedCountry ?? 'Country'.tr,
+            onTap: _pickCountry,
           ),
 
-          SizedBox(height: 12),
+          SizedBox(height: 10),
 
           // Location TextField
           _TextField(
@@ -179,7 +259,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             hint: 'Location',
           ),
 
-          SizedBox(height: 12),
+          SizedBox(height: 10),
 
           // Game and Gender Row
           Row(
@@ -214,7 +294,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             ],
           ),
 
-          SizedBox(height: 12),
+          SizedBox(height: 10),
 
           // Age Group Dropdown
           _DropdownField(
@@ -229,7 +309,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             ),
           ),
 
-          SizedBox(height: 16),
+          SizedBox(height: 15),
 
           // GO Button
           GestureDetector(
@@ -238,7 +318,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
               height: 50,
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Center(
                 child: Text(
@@ -246,13 +326,26 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
-                    fontSize: 16,
+                    fontSize: 14,
                     color: AppColors.socaYellow,
                   ),
                 ),
               ),
             ),
           ),
+          if (_showSearchError) ...[
+            SizedBox(height: 5),
+            Text(
+              'Please select at least one filter'.tr,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+                color: AppColors.socaBlack,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -277,7 +370,7 @@ class _ToggleBtn extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: active ? AppColors.socaBlack : Colors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(5),
           border: Border.all(
             color: active ? AppColors.socaBlack : AppColors.socaGrey,
             width: 1,
@@ -289,7 +382,7 @@ class _ToggleBtn extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
-              fontSize: 14,
+              fontSize: 12,
               color: active ? AppColors.socaYellow : AppColors.socaBlack,
             ),
           ),
@@ -313,9 +406,10 @@ class _DropdownField extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        constraints: BoxConstraints(minHeight: 42),
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(5),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,7 +418,7 @@ class _DropdownField extends StatelessWidget {
               hint,
               style: TextStyle(
                 fontFamily: 'Poppins',
-                fontSize: 14,
+                fontSize: 12,
                 color: AppColors.socaBlack,
               ),
             ),
@@ -348,22 +442,23 @@ class _TextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
+      constraints: BoxConstraints(minHeight: 42),
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: TextField(
         controller: controller,
         style: TextStyle(
           fontFamily: 'Poppins',
-          fontSize: 14,
+          fontSize: 12,
           color: AppColors.socaBlack,
         ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 14,
+            fontSize: 12,
             color: Colors.grey.shade600,
           ),
           border: InputBorder.none,
@@ -415,19 +510,6 @@ class _PickerSheet extends StatelessWidget {
                   color: AppColors.socaBlack,
                 ),
               ),
-              // Clear option
-              if (current != null)
-                GestureDetector(
-                  onTap: () => Navigator.pop(context, null),
-                  child: Text(
-                    'Clear'.tr,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 13,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
             ],
           ),
         ),

@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../data/repositories/pickup_match_repository.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 
 /// Host Pickup Match Screen - Form to create a new pickup match
 /// Mirrors Android PickUpHostMatchFragment
@@ -298,45 +299,13 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
               ),
             ),
             SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  value: _selectedAgeGroup,
-                  hint: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      'Select'.tr,
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: AppColors.socaBlack),
-                    ),
-                  ),
-                  icon: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Image.asset("assets/images/dropdown.png",
-                        width: 12, height: 12),
-                  ),
-                  items: _ageGroups.map((age) {
-                    return DropdownMenuItem(
-                      value: age,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(age,
-                            style:
-                                TextStyle(fontFamily: 'Poppins', fontSize: 14)),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) =>
-                      setState(() => _selectedAgeGroup = value),
-                ),
-              ),
+            SearchableDropdownButton(
+              hint: 'Select'.tr,
+              value: _selectedAgeGroup,
+              items: _ageGroups,
+              onChanged: (value) => setState(() => _selectedAgeGroup = value),
+              fontSize: 14,
+              backgroundColor: Colors.grey.shade200,
             ),
 
             SizedBox(height: 16),

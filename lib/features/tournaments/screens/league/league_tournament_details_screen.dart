@@ -1,25 +1,26 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:socaloca/shared/providers/auth_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/tournament_models.dart';
 import '../../providers/tournament_providers.dart';
-import 'tabs/league_info_tab.dart';
+import 'league_info_details_screen.dart';
 import 'tabs/league_matches_tab.dart';
+import 'tabs/league_points_table_tab.dart';
 import 'tabs/league_stats_tab.dart';
-import 'tabs/league_match_management_tab.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// League Tournament Details Screen
-/// Tabs: INFO, MATCHES, STATS (+ optional MANAGE for admins/coaches/referees)
-/// Matches Android TournamentDetailsFragment
+/// Shows banner, "VIEW TOURNAMENT DETAILS" bar, and Matches/Points Table/Stats tabs.
+/// Matches Android TournamentDetailsFragment.
 class LeagueTournamentDetailsScreen extends ConsumerStatefulWidget {
   final String tournamentId;
 
-  LeagueTournamentDetailsScreen({
+  const LeagueTournamentDetailsScreen({
     super.key,
     required this.tournamentId,
   });
@@ -33,21 +34,13 @@ class _LeagueTournamentDetailsScreenState
     extends ConsumerState<LeagueTournamentDetailsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _tabCount = 3;
+
+  static const _tabs = ['MATCHES', 'POINTS TABLE', 'STATS'];
 
   @override
   void initState() {
     super.initState();
-    // Determine tab count based on user role
-    final user = ref.read(currentUserProvider);
-    if (user != null && _canManageMatches(user)) {
-      _tabCount = 4; // Add MANAGE tab
-    }
-    _tabController = TabController(length: _tabCount, vsync: this);
-  }
-
-  bool _canManageMatches(user) {
-    return user.isAdmin || user.isCoach || user.isReferee;
+    _tabController = TabController(length: _tabs.length, vsync: this);
   }
 
   @override
@@ -63,23 +56,24 @@ class _LeagueTournamentDetailsScreenState
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: Text(
-          'Tournament Details'.tr,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Tournament'.tr,
+      //     style: const TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontWeight: FontWeight.w700,
+      //       fontSize: 18,
+      //       color: AppColors.socaBlack,
+      //     ),
+      //   ),
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
+      //     onPressed: () => context.pop(),
+      //   ),
+      // ),
+
       body: tournamentAsync.when(
         data: (tournament) {
           if (tournament == null) {
@@ -87,20 +81,18 @@ class _LeagueTournamentDetailsScreenState
           }
           return _buildContent(tournament);
         },
-        loading: () => AppLoader(),
+        loading: () => const AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 64, color: Colors.red),
-              SizedBox(height: 16),
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
               Text('Error loading tournament: $error'),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  ref.invalidate(
-                      tournamentDetailsProvider(widget.tournamentId));
-                },
+                onPressed: () => ref
+                    .invalidate(tournamentDetailsProvider(widget.tournamentId)),
                 child: Text('Retry'.tr),
               ),
             ],
@@ -113,49 +105,69 @@ class _LeagueTournamentDetailsScreenState
   Widget _buildContent(TournamentModel tournament) {
     return Column(
       children: [
-        // Tab bar
+        // Banner
+        if (tournament.banners != null && tournament.banners!.isNotEmpty) ...[
+          _buildBanner(tournament.banners!.first),
+        ] else ...[
+          SizedBox(
+            height: 200,
+            child: Stack(
+              children: [
+                // Banner Image (placeholder for now)
+                Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.grey[300]!,
+                          Colors.grey[400]!,
+                        ],
+                      ),
+                    ),
+                    child: Image.asset(
+                        "assets/images/tournament_defalut_banner.jpg",
+                        fit: BoxFit.cover)),
+              ],
+            ),
+          )
+        ],
+        // "VIEW TOURNAMENT DETAILS" bar
+        _buildDetailsBar(),
+
+        // Tabs
         Container(
           color: Colors.white,
           child: TabBar(
             controller: _tabController,
             labelColor: AppColors.socaBlack,
-            unselectedLabelColor: AppColors.socaBlack.withValues(alpha: 0.5),
-            indicatorColor: AppColors.socaYellow,
+            unselectedLabelColor: AppColors.socaBlack,
+            indicatorColor: AppColors.socaBlack,
             indicatorWeight: 3,
-            isScrollable: _tabCount > 3,
             labelStyle: TextStyle(
               fontFamily: 'Poppins',
+              fontSize: 13,
               fontWeight: FontWeight.w700,
-              fontSize: 14,
             ),
             unselectedLabelStyle: TextStyle(
               fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
             ),
-            tabs: [
-              Tab(text: 'INFO'),
-              Tab(text: 'MATCHES'),
-              Tab(text: 'STATS'),
-              if (_tabCount == 4) Tab(text: 'MANAGE'),
-            ],
+            tabs: _tabs.map((t) => Tab(text: t)).toList(),
           ),
         ),
 
-        // Tab views
+        // Tab content
         Expanded(
           child: TabBarView(
             controller: _tabController,
             children: [
-              LeagueInfoTab(
-                tournament: tournament,
-                onFollowTap: () => _handleFollowTap(tournament),
-                onRequestToJoin: () => _handleRequestToJoin(tournament),
-              ),
               LeagueMatchesTab(tournamentId: widget.tournamentId),
+              LeaguePointsTableTab(tournamentId: widget.tournamentId),
               LeagueStatsTab(tournamentId: widget.tournamentId),
-              if (_tabCount == 4)
-                LeagueMatchManagementTab(tournamentId: widget.tournamentId),
             ],
           ),
         ),
@@ -163,185 +175,70 @@ class _LeagueTournamentDetailsScreenState
     );
   }
 
-  Future<void> _handleFollowTap(TournamentModel tournament) async {
-    final notifier =
-        ref.read(tournamentFollowProvider(widget.tournamentId).notifier);
-    await notifier.toggleFollow(
-      tournamentId: widget.tournamentId,
-      currentFollowState: tournament.isFollowing,
-    );
+  Widget _buildBanner(BannerModel banner) {
+    final imageUrl = ApiConstants.getImageUrl(banner.imageUrl);
+    if (imageUrl.isEmpty) return const SizedBox.shrink();
 
-    // Refresh tournament details
-    ref.invalidate(tournamentDetailsProvider(widget.tournamentId));
-  }
-
-  Future<void> _handleRequestToJoin(TournamentModel tournament) async {
-    // Show team selection dialog
-    final teamsAsync =
-        ref.read(myTeamsForTournamentProvider(widget.tournamentId));
-
-    teamsAsync.when(
-      data: (teams) {
-        if (teams.isEmpty) {
-          _showNoTeamsDialog();
-        } else {
-          _showTeamSelectionDialog(teams, tournament);
-        }
-      },
-      loading: () {
-        // Show loading
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AppLoader(),
-        );
-      },
-      error: (error, stack) {
-        _showErrorDialog('Failed to load teams: $error');
-      },
-    );
-  }
-
-  void _showNoTeamsDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'No Eligible Teams'.tr,
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+    return SizedBox(
+      width: double.infinity,
+      height: 180,
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: Colors.grey[200],
+          child: const Center(child: CircularProgressIndicator()),
         ),
-        content: Text(
-          'You don\'t have any teams eligible for this tournament.'.tr,
-          style: TextStyle(fontFamily: 'Poppins'),
+        errorWidget: (context, url, error) => Container(
+          color: Colors.grey[200],
+          child: Icon(Icons.image_not_supported,
+              size: 48, color: Colors.grey[400]),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
-          ),
-        ],
       ),
     );
   }
 
-  void _showTeamSelectionDialog(
-      List<TeamModel> teams, TournamentModel tournament) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Select Team'.tr,
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
-        ),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: teams.length,
-            itemBuilder: (context, index) {
-              final team = teams[index];
-              return ListTile(
-                title: Text(
-                  team.teamName ?? 'Unknown',
-                  style: TextStyle(fontFamily: 'Poppins'),
+  Widget _buildDetailsBar() {
+    return GestureDetector(
+      onTap: _openInfoDetails,
+      child: Container(
+        color: AppColors.socaBlack,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            const Expanded(
+              child: Text(
+                'VIEW TOURNAMENT DETAILS ',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  color: AppColors.socaYellow,
+                  letterSpacing: 0.5,
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _submitJoinRequest(team, tournament);
-                },
-              );
-            },
-          ),
+              ),
+            ),
+            IconButton(
+              icon: Image.asset(
+                "assets/icons/ic_info.png",
+                width: 24,
+                height: 24,
+              ),
+              onPressed: _openInfoDetails,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'.tr),
-          ),
-        ],
       ),
     );
   }
 
-  Future<void> _submitJoinRequest(
-      TeamModel team, TournamentModel tournament) async {
-    // Show loading
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AppLoader(),
-    );
-
-    final notifier =
-        ref.read(joinRequestProvider(widget.tournamentId).notifier);
-    await notifier.requestToJoin(
-      tournamentId: widget.tournamentId,
-      teamId: team.effectiveId,
-      parentId: tournament.parentId,
-      teamName: team.teamName,
-      tmntName: tournament.name,
-    );
-
-    // Close loading dialog
-    if (mounted) Navigator.pop(context);
-
-    // Show result
-    final state = ref.read(joinRequestProvider(widget.tournamentId));
-    state.when(
-      data: (success) {
-        if (success) {
-          _showSuccessDialog('Join request submitted successfully!');
-        } else {
-          _showErrorDialog('Failed to submit join request');
-        }
-      },
-      loading: () {},
-      error: (error, stack) {
-        _showErrorDialog('Error: $error');
-      },
-    );
-  }
-
-  void _showSuccessDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Success'.tr,
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
-        ),
-        content: Text(
-          message,
-          style: TextStyle(fontFamily: 'Poppins'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Error'.tr,
-          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
-        ),
-        content: Text(
-          message,
-          style: TextStyle(fontFamily: 'Poppins'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
-          ),
-        ],
+  void _openInfoDetails() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) =>
+            LeagueInfoDetailsScreen(tournamentId: widget.tournamentId),
       ),
     );
   }

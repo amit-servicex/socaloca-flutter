@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../data/models/referee_match_model.dart';
 
 /// Tournament filter dropdown — reused across Requests, Matches, Live tabs.
@@ -19,36 +20,15 @@ class RefereeTournamentDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: AppColors.socaGrey,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String?>(
-          isExpanded: true,
-          value: selectedId,
-          hint: Text('All Tournaments'.tr,
-              style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
-          items: [
-            DropdownMenuItem<String?>(
-              value: null,
-              child: Text('All Tournaments'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
-            ),
-            ...items.map((t) => DropdownMenuItem<String?>(
-                  value: t.tournamentId,
-                  child: Text(
-                    t.tournamentName ?? '',
-                    style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-          ],
-          onChanged: onChanged,
-        ),
-      ),
+    final labels = ['All Tournaments'.tr, ...items.map((t) => t.tournamentName ?? '')];
+    final values = ['', ...items.map((t) => t.tournamentId ?? '')];
+    return SearchableDropdownButton(
+      hint: 'All Tournaments'.tr,
+      value: selectedId ?? '',
+      items: labels,
+      values: values,
+      onChanged: (v) => onChanged(v == null || v.isEmpty ? null : v),
+      fontSize: 14,
     );
   }
 }

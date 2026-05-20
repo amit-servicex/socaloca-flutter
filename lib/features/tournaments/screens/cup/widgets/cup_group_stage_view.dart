@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../data/models/cup_models.dart';
 import '../../../providers/cup_providers.dart';
@@ -9,6 +11,7 @@ import '../../../widgets/match_card.dart';
 import '../../../data/tournament_models.dart';
 import 'cup_group_point_table_dialog.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import '../../../../../shared/widgets/searchable_dropdown.dart';
 
 /// Cup Group Stage View
 /// Shows matches for selected group with point table access
@@ -102,39 +105,15 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                 ),
                 SizedBox(width: 12),
                 Expanded(
-                  child: DropdownButtonFormField<String>(
+                  child: SearchableDropdownButton(
+                    hint: 'Select Group'.tr,
                     value: _selectedGroupId,
-                    decoration: InputDecoration(
-                      labelText: 'Select Group'.tr,
-                      labelStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                    ),
-                    items: _groups.map((group) {
-                      return DropdownMenuItem<String>(
-                        value: group.groupId,
-                        child: Text(
-                          group.groupName ?? 'Group',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          _selectedGroupId = value;
-                        });
-                      }
+                    items: _groups.map((g) => g.groupName ?? 'Group').toList(),
+                    values: _groups.map((g) => g.groupId ?? '').toList(),
+                    onChanged: (v) {
+                      if (v != null) setState(() => _selectedGroupId = v);
                     },
+                    fontSize: 14,
                   ),
                 ),
               ],
@@ -251,7 +230,16 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                   ageGroup: match.ageGroup,
                 ),
                 onTap: () {
-                  // TODO: Navigate to match details
+                  final matchId = match.effectiveId;
+                  if (matchId.isEmpty) return;
+                  context.push(
+                    AppRoutes.liveMatchDetails
+                        .replaceFirst(':matchId', matchId),
+                    extra: {
+                      'tournamentId': widget.tournamentId,
+                      'preferMatchData': true,
+                    },
+                  );
                 },
               );
             },
@@ -284,6 +272,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
       context: context,
       builder: (context) => CupGroupPointTableDialog(
         tournamentId: widget.tournamentId,
+        roundId: widget.roundId,
         groupId: groupId,
       ),
     );

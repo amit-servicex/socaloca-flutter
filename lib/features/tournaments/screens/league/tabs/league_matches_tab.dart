@@ -25,95 +25,21 @@ class LeagueMatchesTab extends ConsumerStatefulWidget {
 }
 
 class _LeagueMatchesTabState extends ConsumerState<LeagueMatchesTab>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  late TabController _tabController;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    return Column(
-      children: [
-        Container(
-          color: Colors.white,
-          child: TabBar(
-            controller: _tabController,
-            labelColor: AppColors.socaBlack,
-            unselectedLabelColor: AppColors.socaBlack.withOpacity(0.5),
-            indicatorColor: AppColors.socaYellow,
-            indicatorWeight: 2,
-            labelStyle: const TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
-            ),
-            unselectedLabelStyle: const TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-              fontSize: 13,
-            ),
-            tabs: const [
-              Tab(text: 'UPCOMING'),
-              Tab(text: 'PLAYED'),
-            ],
-          ),
-        ),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              _MatchesList(
-                tournamentId: widget.tournamentId,
-                isUpcoming: true,
-              ),
-              _MatchesList(
-                tournamentId: widget.tournamentId,
-                isUpcoming: false,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _MatchesList extends ConsumerStatefulWidget {
-  final String tournamentId;
-  final bool isUpcoming;
-
-  const _MatchesList({
-    required this.tournamentId,
-    required this.isUpcoming,
-  });
-
-  @override
-  ConsumerState<_MatchesList> createState() => _MatchesListState();
-}
-
-class _MatchesListState extends ConsumerState<_MatchesList>
     with AutomaticKeepAliveClientMixin {
   final ScrollController _scrollController = ScrollController();
-  List<TournamentMatchModel> _matches = [];
-  bool _isLoadingMore = false;
-  bool _hasMore = true;
-  int _start = 0;
+
+  final List<TournamentMatchModel> _upcomingMatches = [];
+  bool _isLoadingUpcoming = false;
+  bool _hasMoreUpcoming = true;
+  int _startUpcoming = 0;
+
+  final List<TournamentMatchModel> _playedMatches = [];
+  bool _isLoadingPlayed = false;
+  bool _hasMorePlayed = true;
+  int _startPlayed = 0;
+
   final int _limit = 10;
+  bool _isInit = true;
 
   @override
   bool get wantKeepAlive => true;
@@ -122,7 +48,7 @@ class _MatchesListState extends ConsumerState<_MatchesList>
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _loadMatches();
+    _loadInitial();
   }
 
   @override
@@ -131,60 +57,155 @@ class _MatchesListState extends ConsumerState<_MatchesList>
     super.dispose();
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent * 0.8 &&
-        !_isLoadingMore &&
-        _hasMore) {
-      _loadMore();
+  Future<void> _loadInitial() async {
+    setState(() {
+      _isLoadingUpcoming = true;
+    });
+
+    await _fetchUpcoming();
+    if (!_hasMoreUpcoming) {
+      await _fetchPlayed();
     }
-  }
-
-  Future<void> _loadMatches({bool refresh = false}) async {
-    if (refresh) {
-      setState(() {
-        _start = 0;
-        _matches = [];
-        _hasMore = true;
-      });
-    }
-
-    final params = TournamentMatchesParams(
-      tournamentId: widget.tournamentId,
-      isUpcoming: widget.isUpcoming,
-      start: _start,
-      limit: _limit,
-    );
-
-    final matchesAsync =
-        await ref.read(tournamentMatchesProvider(params).future);
 
     if (mounted) {
       setState(() {
-        if (refresh) {
-          _matches = matchesAsync;
-        } else {
-          _matches.addAll(matchesAsync);
-        }
-        _hasMore = matchesAsync.length >= _limit;
-        _isLoadingMore = false;
+        _isInit = false;
       });
     }
   }
 
-  Future<void> _loadMore() async {
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
+      if (_hasMoreUpcoming && !_isLoadingUpcoming) {
+        _fetchUpcoming();
+      } else if (!_hasMoreUpcoming && _hasMorePlayed && !_isLoadingPlayed) {
+        _fetchPlayed();
+      }
+    }
+  }
+
+  Future<void> _fetchUpcoming() async {
+    setState(() => _isLoadingUpcoming = true);
+    final params = TournamentMatchesParams(
+      tournamentId: widget.tournamentId,
+      isUpcoming: true,
+      start: _startUpcoming,
+      limit: _limit,
+    );
+    final matches = await ref.read(tournamentMatchesProvider(params).future);
+    if (mounted) {
+      setState(() {
+        _upcomingMatches.addAll(matches);
+        _hasMoreUpcoming = matches.length >= _limit;
+        _startUpcoming += _limit;
+        _isLoadingUpcoming = false;
+      });
+
+      if (!_hasMoreUpcoming &&
+          _playedMatches.isEmpty &&
+          _hasMorePlayed &&
+          !_isLoadingPlayed) {
+        _fetchPlayed();
+      }
+    }
+  }
+
+  Future<void> _fetchPlayed() async {
+    setState(() => _isLoadingPlayed = true);
+    final params = TournamentMatchesParams(
+      tournamentId: widget.tournamentId,
+      isUpcoming: false,
+      start: _startPlayed,
+      limit: _limit,
+    );
+    final matches = await ref.read(tournamentMatchesProvider(params).future);
+    if (mounted) {
+      setState(() {
+        _playedMatches.addAll(matches);
+        _hasMorePlayed = matches.length >= _limit;
+        _startPlayed += _limit;
+        _isLoadingPlayed = false;
+      });
+    }
+  }
+
+  Future<void> _onRefresh() async {
     setState(() {
-      _isLoadingMore = true;
-      _start += _limit;
+      _upcomingMatches.clear();
+      _playedMatches.clear();
+      _startUpcoming = 0;
+      _startPlayed = 0;
+      _hasMoreUpcoming = true;
+      _hasMorePlayed = true;
     });
-    await _loadMatches();
+    await _loadInitial();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    if (_matches.isEmpty && !_isLoadingMore) {
+    if (_isInit) {
+      return const AppLoader();
+    }
+
+    final items = <Widget>[];
+
+    if (_upcomingMatches.isNotEmpty) {
+      items.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+          child: Text(
+            'Upcoming Matches',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
+              color: AppColors.socaBlack,
+            ),
+          ),
+        ),
+      );
+      items.addAll(_upcomingMatches.map((m) => _buildMatch(m)));
+    }
+
+    if (_isLoadingUpcoming) {
+      items.add(const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: AppLoader(),
+      ));
+    }
+
+    if (!_hasMoreUpcoming && _playedMatches.isNotEmpty) {
+      items.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+          child: Text(
+            'Played Matches',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
+              color: AppColors.socaBlack,
+            ),
+          ),
+        ),
+      );
+      items.addAll(_playedMatches.map((m) => _buildMatch(m)));
+    }
+
+    if (!_hasMoreUpcoming && _isLoadingPlayed) {
+      items.add(const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: AppLoader(),
+      ));
+    }
+
+    if (_upcomingMatches.isEmpty &&
+        _playedMatches.isEmpty &&
+        !_isLoadingUpcoming &&
+        !_isLoadingPlayed) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -196,7 +217,7 @@ class _MatchesListState extends ConsumerState<_MatchesList>
             ),
             const SizedBox(height: 16),
             Text(
-              widget.isUpcoming ? 'No upcoming matches' : 'No played matches',
+              'No matches found',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -209,28 +230,32 @@ class _MatchesListState extends ConsumerState<_MatchesList>
     }
 
     return RefreshIndicator(
-      onRefresh: () => _loadMatches(refresh: true),
+      onRefresh: _onRefresh,
       child: ListView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.all(12),
-        itemCount: _matches.length + (_isLoadingMore ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index >= _matches.length) {
-            return const AppLoader();
-          }
+        padding: const EdgeInsets.only(bottom: 24),
+        itemCount: items.length,
+        itemBuilder: (context, index) => items[index],
+      ),
+    );
+  }
 
-          final match = _matches[index];
-          return MatchCard(
-            match: match,
-            onTap: () {
-              final matchId = match.effectiveId;
-              if (matchId.isNotEmpty) {
-                context.push(
-                  AppRoutes.matchDetail.replaceFirst(':matchId', matchId),
-                );
-              }
-            },
-          );
+  Widget _buildMatch(TournamentMatchModel match) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: MatchCard(
+        match: match,
+        onTap: () {
+          final matchId = match.effectiveId;
+          if (matchId.isNotEmpty) {
+            context.push(
+              AppRoutes.liveMatchDetails.replaceFirst(':matchId', matchId),
+              extra: {
+                'tournamentId': widget.tournamentId,
+                'preferMatchData': true,
+              },
+            );
+          }
         },
       ),
     );

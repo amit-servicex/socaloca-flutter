@@ -54,6 +54,8 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final groupRoundId = _roundIdForMode('GROUP');
+    final knockoutRoundId = _roundIdForMode('KNOCKOUT');
 
     return Column(
       children: [
@@ -89,10 +91,10 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
             controller: _modeTabController,
             children: [
               // Group Stage Stats
-              _buildGroupStageStats(),
+              _buildGroupStageStats(groupRoundId),
 
               // Knockout Stats
-              _buildKnockoutStats(),
+              _buildKnockoutStats(knockoutRoundId),
             ],
           ),
         ),
@@ -100,7 +102,25 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
     );
   }
 
-  Widget _buildGroupStageStats() {
+  String? _roundIdForMode(String mode) {
+    final rounds = widget.cup.roundsList ?? const <CupRoundModel>[];
+    for (final round in rounds) {
+      if ((round.mode ?? '').toUpperCase() == mode &&
+          (round.roundId?.isNotEmpty == true)) {
+        return round.roundId;
+      }
+    }
+    for (final round in rounds) {
+      if (round.roundId?.isNotEmpty == true) return round.roundId;
+    }
+    return null;
+  }
+
+  Widget _buildGroupStageStats(String? roundId) {
+    if (roundId == null || roundId.isEmpty) {
+      return _NoRoundState(message: 'No group round available'.tr);
+    }
+
     return Column(
       children: [
         Container(
@@ -136,21 +156,25 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
             children: [
               _CupStatsList(
                 tournamentId: widget.tournamentId,
+                roundId: roundId,
                 statType: 'goals',
                 isGroupMode: true,
               ),
               _CupStatsList(
                 tournamentId: widget.tournamentId,
+                roundId: roundId,
                 statType: 'assists',
                 isGroupMode: true,
               ),
               _CupStatsList(
                 tournamentId: widget.tournamentId,
+                roundId: roundId,
                 statType: 'cards',
                 isGroupMode: true,
               ),
               _CupStatsList(
                 tournamentId: widget.tournamentId,
+                roundId: roundId,
                 statType: 'mom',
                 isGroupMode: true,
               ),
@@ -161,7 +185,11 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
     );
   }
 
-  Widget _buildKnockoutStats() {
+  Widget _buildKnockoutStats(String? roundId) {
+    if (roundId == null || roundId.isEmpty) {
+      return _NoRoundState(message: 'No knockout round available'.tr);
+    }
+
     return Column(
       children: [
         Container(
@@ -197,21 +225,25 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
             children: [
               _CupStatsList(
                 tournamentId: widget.tournamentId,
+                roundId: roundId,
                 statType: 'goals',
                 isGroupMode: false,
               ),
               _CupStatsList(
                 tournamentId: widget.tournamentId,
+                roundId: roundId,
                 statType: 'assists',
                 isGroupMode: false,
               ),
               _CupStatsList(
                 tournamentId: widget.tournamentId,
+                roundId: roundId,
                 statType: 'cards',
                 isGroupMode: false,
               ),
               _CupStatsList(
                 tournamentId: widget.tournamentId,
+                roundId: roundId,
                 statType: 'mom',
                 isGroupMode: false,
               ),
@@ -225,11 +257,13 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
 
 class _CupStatsList extends ConsumerWidget {
   final String tournamentId;
+  final String roundId;
   final String statType;
   final bool isGroupMode;
 
   _CupStatsList({
     required this.tournamentId,
+    required this.roundId,
     required this.statType,
     required this.isGroupMode,
   });
@@ -239,11 +273,17 @@ class _CupStatsList extends ConsumerWidget {
     final statsAsync = isGroupMode
         ? ref.watch(cupGroupStatsProvider(CupGroupStatsParams(
             tournamentId: tournamentId,
+            roundId: roundId,
             statType: statType,
+            start: 0,
+            limit: 10,
           )))
         : ref.watch(cupMatchStatsProvider(CupMatchStatsParams(
             tournamentId: tournamentId,
+            roundId: roundId,
             statType: statType,
+            start: 0,
+            limit: 10,
           )));
 
     return statsAsync.when(
@@ -277,12 +317,18 @@ class _CupStatsList extends ConsumerWidget {
             if (isGroupMode) {
               ref.invalidate(cupGroupStatsProvider(CupGroupStatsParams(
                 tournamentId: tournamentId,
+                roundId: roundId,
                 statType: statType,
+                start: 0,
+                limit: 10,
               )));
             } else {
               ref.invalidate(cupMatchStatsProvider(CupMatchStatsParams(
                 tournamentId: tournamentId,
+                roundId: roundId,
                 statType: statType,
+                start: 0,
+                limit: 10,
               )));
             }
           },
@@ -310,12 +356,18 @@ class _CupStatsList extends ConsumerWidget {
                 if (isGroupMode) {
                   ref.invalidate(cupGroupStatsProvider(CupGroupStatsParams(
                     tournamentId: tournamentId,
+                    roundId: roundId,
                     statType: statType,
+                    start: 0,
+                    limit: 10,
                   )));
                 } else {
                   ref.invalidate(cupMatchStatsProvider(CupMatchStatsParams(
                     tournamentId: tournamentId,
+                    roundId: roundId,
                     statType: statType,
+                    start: 0,
+                    limit: 10,
                   )));
                 }
               },
@@ -559,5 +611,25 @@ class _CupStatsList extends ConsumerWidget {
       default:
         return 'stats';
     }
+  }
+}
+
+class _NoRoundState extends StatelessWidget {
+  const _NoRoundState({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        message,
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 16,
+          color: Colors.grey[600],
+        ),
+      ),
+    );
   }
 }

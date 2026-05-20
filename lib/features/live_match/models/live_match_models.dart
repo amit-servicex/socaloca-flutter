@@ -384,8 +384,12 @@ class LiveMatchDetail {
     Map<String, dynamic> json,
   ) {
     final matchDetails = json['matchDetails'] as Map<String, dynamic>? ?? {};
-    final liveRecord = json['liveRecord'] as Map<String, dynamic>? ?? {};
-    final score = json['score'] as Map<String, dynamic>? ?? {};
+    final liveRecord = (json['liveRecord'] as Map<String, dynamic>?) ??
+        (matchDetails['liveRecord'] as Map<String, dynamic>?) ??
+        {};
+    final score = (json['score'] as Map<String, dynamic>?) ??
+        (matchDetails['score'] as Map<String, dynamic>?) ??
+        {};
 
     // Extract teams from matchDetails.teams array
     final teams = (matchDetails['teams'] as List?)
@@ -396,7 +400,7 @@ class LiveMatchDetail {
     // The first team is "my team", second is opponent
     // These are indexed by myTeamId / opponentTeamId from matchShort
     final matchShort =
-        matchDetails['matchShort'] as Map<String, dynamic>? ?? {};
+        matchDetails['matchShort'] as Map<String, dynamic>? ?? matchDetails;
     final myTeamId = matchShort['myTeamId']?.toString();
     final opponentTeamId = matchShort['opponentTeamId']?.toString();
 
@@ -440,7 +444,9 @@ class LiveMatchDetail {
     return LiveMatchDetail(
       matchId: matchId,
       tournamentId: tournamentId,
-      rawState: liveRecord['state']?.toString(),
+      rawState: liveRecord['state']?.toString() ??
+          matchDetails['state']?.toString() ??
+          _stateFromScoreStatus(matchDetails['scoreStatus']?.toString()),
       startTimeGmt: _parseInt(liveRecord['startTimeGmt']),
       firstHalfStartTime: _parseInt(liveRecord['firstHalfStartTime']),
       firstHalfEndTime: _parseInt(liveRecord['firstHalfEndTime']),
@@ -452,10 +458,17 @@ class LiveMatchDetail {
       extraTimeShEndTime: _parseInt(liveRecord['extraTimeShEndTime']),
       penaltyStartTime: _parseInt(liveRecord['penaltyStartTime']),
       finishTime: _parseInt(liveRecord['finishTime']),
-      myGoals: _parseInt(liveRecord['myGoals']) ?? 0,
-      opponentGoals: _parseInt(liveRecord['opponentGoals']) ?? 0,
-      myExtraTime: _parseInt(liveRecord['myExtraTime']) ?? 0,
-      opponentExtraTime: _parseInt(liveRecord['opponentExtraTime']) ?? 0,
+      myGoals:
+          _parseInt(liveRecord['myGoals']) ?? _parseInt(score['myGoals']) ?? 0,
+      opponentGoals: _parseInt(liveRecord['opponentGoals']) ??
+          _parseInt(score['opponentGoals']) ??
+          0,
+      myExtraTime: _parseInt(liveRecord['myExtraTime']) ??
+          _parseInt(score['myExtraTime']) ??
+          0,
+      opponentExtraTime: _parseInt(liveRecord['opponentExtraTime']) ??
+          _parseInt(score['opponentExtraTime']) ??
+          0,
       myPenalty: _parseInt(score['myPenalty']) ?? 0,
       opponentPenalty: _parseInt(score['opponentPenalty']) ?? 0,
       goals: parseGoals(liveRecord['goals']),
@@ -484,4 +497,15 @@ bool _parseBool(dynamic val) {
   if (val is bool) return val;
   if (val is int) return val != 0;
   return val.toString().toLowerCase() == 'true';
+}
+
+String? _stateFromScoreStatus(String? status) {
+  switch (status?.toLowerCase()) {
+    case 'accepted':
+      return 'FINISH';
+    case 'pending':
+      return 'SECOND_HALF_END';
+    default:
+      return null;
+  }
 }
