@@ -72,28 +72,81 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
   Future<void> _showBlockDialog(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     final nav = Navigator.of(context);
+    final playerBio = ref.read(_bioProvider).playerBio;
+    final playerName = playerBio != null
+        ? '${playerBio.firstName ?? ''} ${playerBio.lastName ?? ''}'.trim()
+        : 'User';
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Block User'.tr,
-            style:
-                TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: Text('Are you sure you want to block this user?'.tr,
-            style: TextStyle(fontFamily: 'Poppins')),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancel'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins', color: AppColors.socaBlack)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Text(
+          "Block $playerName's Profile",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
+            fontSize: 15,
+            color: AppColors.socaBlack,
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: Text('Block'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
+        ),
+        content: Text(
+          'You will no longer receive any post or view any comment from the user you are blocking. '
+          'People you block can no longer tag you, start a conversation with you, add you in his/her network or see '
+          'things you post in the SocaLoca feed. If you follow each other, blocking will automatically unfollow that user.',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 13,
+            color: AppColors.socaBlack,
+            height: 1.5,
+          ),
+        ),
+        actionsPadding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(ctx, false),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: AppColors.socaBlack, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: Text(
+                    'No'.tr,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx, true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.socaBlack,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: Text(
+                    'Yes'.tr,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -132,60 +185,132 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
       'Misguiding Content',
     ];
     final messenger = ScaffoldMessenger.of(context);
-    String? selectedCause = causes.first;
-    final confirmed = await showDialog<String>(
+    final confirmed = await showModalBottomSheet<String>(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          title: Text('Report User'.tr,
-              style: TextStyle(
-                  fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Select a reason:'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-              SizedBox(height: 8),
-              RadioGroup<String>(
-                groupValue: selectedCause,
-                onChanged: (v) => setDialogState(() => selectedCause = v),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: causes
-                      .map(
-                        (cause) => RadioListTile<String>(
-                          value: cause,
-                          title: Text(cause,
-                              style: TextStyle(
-                                  fontFamily: 'Poppins', fontSize: 13)),
-                          contentPadding: EdgeInsets.zero,
-                          dense: true,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text('Cancel'.tr,
-                  style: TextStyle(
-                      fontFamily: 'Poppins', color: AppColors.socaBlack)),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(ctx, selectedCause),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.socaBlack,
-                  foregroundColor: AppColors.socaYellow),
-              child: Text('Report'.tr,
-                  style: TextStyle(
-                      fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-            ),
-          ],
-        ),
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
+      builder: (ctx) {
+        String selectedCause = causes.first;
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) => Padding(
+            padding: EdgeInsets.fromLTRB(20, 16, 20, 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'Report A User',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(ctx),
+                      child: Icon(Icons.close,
+                          size: 22, color: AppColors.socaBlack),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                // Bold heading
+                Text(
+                  'Please select a problem',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                    color: AppColors.socaBlack,
+                  ),
+                ),
+                SizedBox(height: 8),
+                // Description
+                Text(
+                  'If you feel the user post to be inappropriate and can cause harm please report it to SocaLoca. Choose a reason from below.',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 13,
+                    color: AppColors.socaBlack,
+                    height: 1.5,
+                  ),
+                ),
+                SizedBox(height: 16),
+                // Reason chips
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: causes.map((cause) {
+                    final isSelected = selectedCause == cause;
+                    return GestureDetector(
+                      onTap: () => setSheetState(() => selectedCause = cause),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          color:
+                              isSelected ? AppColors.socaBlack : Colors.white,
+                          border: Border.all(
+                              color: AppColors.socaBlack, width: 1.2),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          cause,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color:
+                                isSelected ? Colors.white : AppColors.socaBlack,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 24),
+                // Submit button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(ctx, selectedCause),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: AppColors.socaBlack,
+                      side: BorderSide(color: AppColors.socaBlack, width: 1.2),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      'SUBMIT',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
     if (confirmed == null || !mounted) return;
     final userId = StorageService.userId;
