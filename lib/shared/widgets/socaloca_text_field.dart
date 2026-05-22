@@ -149,13 +149,24 @@ class _SocaLocaPasswordFieldState extends State<SocaLocaPasswordField> {
             });
           },
           child: Padding(
-            padding: const EdgeInsets.all(2),
-            child: Icon(
-              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-              color: AppColors.socaBlack,
-              size: 26,
-            ),
-          ),
+              padding: const EdgeInsets.all(2),
+              child: _isPasswordVisible
+                  ? Image.asset(
+                      "assets/icons/ic_password_eye.png",
+                      width: 24,
+                      height: 24,
+                    )
+                  : Image.asset(
+                      "assets/icons/ic_visibility_off.png",
+                      width: 24,
+                      height: 24,
+                    )
+              // Icon(
+              //   _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              //   color: AppColors.socaBlack,
+              //   size: 26,
+              // ),
+              ),
         ),
       ),
     );
