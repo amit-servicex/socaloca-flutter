@@ -17,6 +17,8 @@ class FeedPost {
   final DateTime createdAt;
   final Map<String, dynamic>? metadata; // Additional data based on type
 
+  bool get isSocaFeed => type == 'socaFeed';
+
   const FeedPost({
     required this.id,
     required this.type,
@@ -39,7 +41,11 @@ class FeedPost {
     final userDetails = json['userDetails'] as Map<String, dynamic>?;
     final firstName = userDetails?['firstName'] as String? ?? '';
     final lastName = userDetails?['lastName'] as String? ?? '';
-    final userName = '$firstName $lastName'.trim();
+    var userName = '$firstName $lastName'.trim();
+    final isSocaFeed = json['feedType'] == 'socaFeed';
+    if (isSocaFeed && userName.isEmpty) {
+      userName = 'SocaLoca';
+    }
     final userImagePath = userDetails?['imageUrl'] as String?;
     final userImage = ApiConstants.getImageUrl(userImagePath);
     final userId =
@@ -79,6 +85,13 @@ class FeedPost {
         ? DateTime.fromMillisecondsSinceEpoch(addedOn.toInt())
         : DateTime.now();
 
+    final title = json['title'] as String?;
+    final description = json['description'] as String?;
+    final content = [
+      if (title != null && title.isNotEmpty) title,
+      if (description != null && description.isNotEmpty) description,
+    ].join('\n');
+
     return FeedPost(
       id: json['postId'] as String? ?? json['_id'] as String? ?? '',
       type: json['feedType'] as String? ??
@@ -87,7 +100,7 @@ class FeedPost {
       userId: userId,
       userName: userName.isEmpty ? 'Unknown' : userName,
       userImage: userImage.isEmpty ? null : userImage,
-      content: json['title'] as String? ?? json['description'] as String?,
+      content: content.isNotEmpty ? content : null,
       images: images,
       videoUrl: videoUrl,
       thumbnail: thumbnail,

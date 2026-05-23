@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:socaloca/core/router/app_routes.dart';
 import 'package:socaloca/core/storage/storage_service.dart';
 import 'package:socaloca/features/home/data/models/feed_new_team_model.dart';
 
@@ -110,7 +112,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
               ),
               GestureDetector(
                 onTap: () {
-                  // TODO: Navigate to view all recently joined teams
+                  context.push(AppRoutes.teams, extra: {'status': 'all'});
                 },
                 child: Text(
                   AppStrings.viewAll,
@@ -368,10 +370,11 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                     ),
 
                     // ── Divider ────────────────────────────────────────
-                    Container(
-                        height: 0.5,
-                        color: AppColors.socaGrey.withOpacity(0.2)),
-
+                    Divider(
+                      color: AppColors.socaBlack,
+                      height: 1,
+                      thickness: .8,
+                    ),
                     // ── Share button ───────────────────────────────────
                     InkWell(
                       onTap: () => _onShareTeam(team),
@@ -381,8 +384,11 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.share,
-                                size: 18, color: AppColors.socaBlack),
+                            Image.asset(
+                              "assets/icons/ic_share_feed.png",
+                              width: 28,
+                              height: 28,
+                            ),
                             SizedBox(width: 8),
                             Text(
                               'SHARE'.tr,
@@ -396,6 +402,11 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                           ],
                         ),
                       ),
+                    ),
+                    Divider(
+                      color: AppColors.socaBlack,
+                      height: 1,
+                      thickness: .8,
                     ),
                   ],
                 ),

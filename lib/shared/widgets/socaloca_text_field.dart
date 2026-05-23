@@ -65,6 +65,7 @@ class SocaLocaTextField extends StatelessWidget {
               obscureText: obscureText,
               onChanged: onChanged,
               keyboardType: keyboardType,
+              obscuringCharacter: '*',
               textInputAction: textInputAction,
               maxLength: maxLength,
               inputFormatters: inputFormatters,

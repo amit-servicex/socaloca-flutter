@@ -14,6 +14,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../social_feed/providers/feed_providers.dart';
 import '../../social_feed/screens/social_feed_screen.dart';
+import '../../social_feed/widgets/feed_post_card.dart';
 import '../data/models/match_update_model.dart';
 import '../providers/home_feed_providers.dart';
 import '../providers/home_providers.dart';
@@ -37,7 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
   final PageController _matchUpdatesPageController =
-      PageController(viewportFraction: 0.92);
+      PageController(viewportFraction: 1);
   bool _showFeedbackBanner = false;
   Timer? _matchUpdatesTimer;
 
@@ -210,7 +211,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
 
         SizedBox(
-          height: 340,
+          height: 236,
           child: PageView.builder(
             controller: _matchUpdatesPageController,
             itemCount: matches.length,
@@ -262,49 +263,53 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               final isLast = index == matches.length - 1;
 
               return Container(
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
-                      blurRadius: 12,
-                      offset: Offset(0, 6),
-                    ),
-                  ],
-                ),
+                color: Colors.white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // ── Tournament logo + name row ──────────────────
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(14, 14, 14, 10),
+                    Container(
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          bottom: BorderSide(
+                            color: AppColors.socaBlack.withOpacity(0.45),
+                            width: 0.8,
+                          ),
+                        ),
+                      ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           if (item.tournamentLogo.isNotEmpty)
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
+                            ClipOval(
                               child: Image.network(
                                 ApiConstants.getImageUrl(item.tournamentLogo),
-                                width: 32,
-                                height: 32,
+                                width: 18,
+                                height: 18,
                                 fit: BoxFit.cover,
                                 errorBuilder: (_, __, ___) => Icon(
                                   Icons.emoji_events,
-                                  size: 28,
-                                  color: AppColors.socaGrey,
+                                  size: 18,
+                                  color: AppColors.socaYellow,
                                 ),
                               ),
                             )
                           else
-                            Icon(Icons.emoji_events,
-                                size: 28, color: AppColors.socaGrey),
-                          SizedBox(width: 10),
-                          Expanded(
+                            Icon(
+                              Icons.emoji_events,
+                              size: 18,
+                              color: AppColors.socaYellow,
+                            ),
+                          SizedBox(width: 8),
+                          Flexible(
                             child: Text(
                               tournamentName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
@@ -317,190 +322,172 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
 
-                    // ── Divider ────────────────────────────────────
-                    Container(
-                        height: 0.5,
-                        color: AppColors.socaGrey.withOpacity(0.2)),
-
-                    // ── Venue ──────────────────────────────────────
-                    if (venue.isNotEmpty)
-                      Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: Text(
-                          venue,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.socaBlack,
-                          ),
-                        ),
-                      ),
-
-                    // ── Teams + Score row ──────────────────────────
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Left chevron
-                          GestureDetector(
-                            onTap: isFirst
-                                ? null
-                                : () =>
-                                    _matchUpdatesPageController.previousPage(
-                                      duration: Duration(milliseconds: 350),
-                                      curve: Curves.easeInOut,
-                                    ),
-                            child: Icon(
-                              Icons.chevron_left,
-                              size: 28,
-                              color: isFirst
-                                  ? AppColors.socaGrey.withOpacity(0.3)
-                                  : AppColors.socaGrey,
-                            ),
-                          ),
-
-                          // Home team
-                          Expanded(
-                            child: Column(
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 14, 0, 12),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                _buildMatchUpdateTeamLogo(homeLogo),
-                                SizedBox(height: 8),
-                                Text(
-                                  homeName,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    color: AppColors.socaBlack,
+                                SizedBox(
+                                  height: 38,
+                                  child: Center(
+                                    child: Text(
+                                      venue,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 13,
+                                        height: 1.15,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.socaBlack,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 22),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: _buildMatchUpdateTeam(
+                                          logoUrl: homeLogo,
+                                          name: homeName,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 96,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              scoreText,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 34,
+                                                height: 1,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(height: 9),
+                                            if (dateText.isNotEmpty) ...[
+                                              Text(
+                                                dateText,
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 12,
+                                                  height: 1,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: AppColors.socaBlack,
+                                                ),
+                                              ),
+                                              SizedBox(height: 2),
+                                              Text(
+                                                timeText,
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 12,
+                                                  height: 1,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: AppColors.socaBlack,
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _buildMatchUpdateTeam(
+                                          logoUrl: awayLogo,
+                                          name: awayName,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 6),
+                                SizedBox(
+                                  width: 112,
+                                  height: 30,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      final tournamentId =
+                                          item.tmntInfo?.tournamentId ?? '';
+                                      if (tournamentId.isNotEmpty) {
+                                        context
+                                            .push('/tournaments/$tournamentId');
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.socaBlack,
+                                      foregroundColor: AppColors.socaYellow,
+                                      padding: EdgeInsets.zero,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    child: Text(
+                                      AppStrings.viewDetails.toUpperCase(),
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w800,
+                                        color: AppColors.socaYellow,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-
-                          // Score + date/time
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              children: [
-                                Text(
-                                  scoreText,
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.socaBlack,
-                                  ),
+                            Positioned(
+                              left: -2,
+                              top: 76,
+                              child: GestureDetector(
+                                onTap: isFirst
+                                    ? null
+                                    : () => _matchUpdatesPageController
+                                            .previousPage(
+                                          duration: Duration(milliseconds: 350),
+                                          curve: Curves.easeInOut,
+                                        ),
+                                child: Icon(
+                                  Icons.chevron_left,
+                                  size: 44,
+                                  color: isFirst
+                                      ? AppColors.socaBlack.withOpacity(0.45)
+                                      : AppColors.socaBlack.withOpacity(0.62),
                                 ),
-                                if (dateText.isNotEmpty) ...[
-                                  SizedBox(height: 4),
-                                  Text(
-                                    dateText,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12,
-                                      color:
-                                          AppColors.socaBlack.withOpacity(0.6),
-                                    ),
-                                  ),
-                                  Text(
-                                    timeText,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12,
-                                      color:
-                                          AppColors.socaBlack.withOpacity(0.6),
-                                    ),
-                                  ),
-                                ],
-                              ],
+                              ),
                             ),
-                          ),
-
-                          // Away team
-                          Expanded(
-                            child: Column(
-                              children: [
-                                _buildMatchUpdateTeamLogo(awayLogo),
-                                SizedBox(height: 8),
-                                Text(
-                                  awayName,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    color: AppColors.socaBlack,
-                                  ),
+                            Positioned(
+                              right: -2,
+                              top: 76,
+                              child: GestureDetector(
+                                onTap: isLast
+                                    ? null
+                                    : () =>
+                                        _matchUpdatesPageController.nextPage(
+                                          duration: Duration(milliseconds: 350),
+                                          curve: Curves.easeInOut,
+                                        ),
+                                child: Icon(
+                                  Icons.chevron_right,
+                                  size: 44,
+                                  color: isLast
+                                      ? AppColors.socaBlack.withOpacity(0.45)
+                                      : AppColors.socaBlack.withOpacity(0.62),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-
-                          // Right chevron
-                          GestureDetector(
-                            onTap: isLast
-                                ? null
-                                : () => _matchUpdatesPageController.nextPage(
-                                      duration: Duration(milliseconds: 350),
-                                      curve: Curves.easeInOut,
-                                    ),
-                            child: Icon(
-                              Icons.chevron_right,
-                              size: 28,
-                              color: isLast
-                                  ? AppColors.socaGrey.withOpacity(0.3)
-                                  : AppColors.socaGrey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // ── Divider ────────────────────────────────────
-                    Container(
-                        height: 0.5,
-                        color: AppColors.socaGrey.withOpacity(0.2)),
-
-                    // ── View Details button ────────────────────────
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: navigate to match details
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.socaBlack,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            AppStrings.viewDetails,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
+                          ],
                         ),
                       ),
                     ),
@@ -517,8 +504,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildMatchUpdateTeamLogo(String logoUrl) {
     if (logoUrl.isEmpty) {
       return Container(
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         decoration: BoxDecoration(
           color: AppColors.border,
           shape: BoxShape.circle,
@@ -527,8 +514,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
     }
     return Container(
-      width: 40,
-      height: 40,
+      width: 50,
+      height: 50,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: AppColors.border),
@@ -543,6 +530,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMatchUpdateTeam({
+    required String logoUrl,
+    required String name,
+  }) {
+    return Column(
+      children: [
+        _buildMatchUpdateTeamLogo(logoUrl),
+        SizedBox(height: 8),
+        Text(
+          name.toUpperCase(),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 11,
+            height: 1.15,
+            fontWeight: FontWeight.w400,
+            color: AppColors.socaBlack,
+          ),
+        ),
+      ],
     );
   }
 
@@ -582,6 +594,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     final matchUpdates = ref.watch(matchUpdatesProvider);
+    final feedState = ref.watch(feedProvider);
     log("this is the profile image ${user?.profileImage}");
     return Scaffold(
       key: _scaffoldKey,
@@ -874,9 +887,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                   ),
+
                   SliverToBoxAdapter(child: MostEndorsedSection()),
                   SliverToBoxAdapter(child: MostFollowedTeamsSection()),
-                  SliverToBoxAdapter(child: NewTeamsSection()),
                   SliverToBoxAdapter(child: LiveTournamentsSection()),
                   if (user != null && !user.isFan)
                     SliverToBoxAdapter(
@@ -886,6 +899,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         error: (_, __) => SizedBox.shrink(),
                       ),
                     ),
+                  SliverToBoxAdapter(
+                    child: feedState.maybeWhen(
+                      data: (feed) => feed.socaFeed != null
+                          ? FeedPostCard(post: feed.socaFeed!)
+                          : SizedBox.shrink(),
+                      orElse: () => SizedBox.shrink(),
+                    ),
+                  ),
+                  SliverToBoxAdapter(child: NewTeamsSection()),
+
+                  //     SliverToBoxAdapter(
+                  //   child: feedState.maybeWhen(
+                  //     data: (feed) => feed.socaFeed != null
+                  //         ? FeedPostCard(post: feed.socaFeed!)
+                  //         : SizedBox.shrink(),
+                  //     orElse: () => SizedBox.shrink(),
+                  //   ),
+                  // ),
                   SliverToBoxAdapter(child: RecommendedUsersSection()),
                   SliverToBoxAdapter(child: SocialFeedScreen()),
                 ],

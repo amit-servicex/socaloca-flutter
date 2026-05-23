@@ -11,7 +11,22 @@ final feedRepositoryProvider = Provider<FeedRepository>((ref) {
 
 // ─── Feed Provider ────────────────────────────────────────────────────────────
 
-class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
+class FeedState {
+  final FeedPost? socaFeed;
+  final List<FeedPost> posts;
+
+  const FeedState({
+    this.socaFeed,
+    required this.posts,
+  });
+
+  List<FeedPost> get displayPosts => [
+        if (socaFeed != null) socaFeed!,
+        ...posts,
+      ];
+}
+
+class FeedNotifier extends StateNotifier<AsyncValue<FeedState>> {
   FeedNotifier(this.ref) : super(const AsyncValue.loading()) {
     // Don't auto-load in constructor, wait for profile to load first
     _initializeFeed();
@@ -59,7 +74,7 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
 
     try {
       final repository = ref.read(feedRepositoryProvider);
-      final posts = await repository.getFeed(
+      final result = await repository.getFeed(
         userId: user.id,
         isFan: user.isFan,
         isPlayer: user.isPlayer,
@@ -68,12 +83,18 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
         lastId: _lastId,
       );
 
-      print('🟢 loadFeed: Loaded ${posts.length} posts');
-      state = AsyncValue.data(posts);
-      _hasMore = posts.length >= 10; // Assuming 10 posts per page
-      if (posts.isNotEmpty) {
-        _lastId = posts.last.id; // Store last post ID for pagination
-      }
+      print('🟢 loadFeed: Loaded ${result.posts.length} posts');
+      state = AsyncValue.data(
+        FeedState(
+          socaFeed: result.socaFeed,
+          posts: result.posts,
+        ),
+      );
+      _hasMore = result.posts.length >= 10; // Assuming 10 posts per page
+      _lastId = result.lastId ??
+          (result.posts.isNotEmpty
+              ? result.posts.last.id
+              : null); // Store normal feed cursor for pagination
     } catch (error, stackTrace) {
       print('🔴 loadFeed error: $error');
       state = AsyncValue.error(error, stackTrace);
@@ -88,7 +109,7 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
     if (!_hasMore || _isLoadingMore) return;
 
     final currentState = state;
-    if (currentState is! AsyncData<List<FeedPost>>) return;
+    if (currentState is! AsyncData<FeedState>) return;
 
     _isLoadingMore = true;
 
@@ -97,7 +118,7 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
 
     try {
       final repository = ref.read(feedRepositoryProvider);
-      final newPosts = await repository.getFeed(
+      final result = await repository.getFeed(
         userId: user.id,
         isFan: user.isFan,
         isPlayer: user.isPlayer,
@@ -106,11 +127,16 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
         lastId: _lastId,
       );
 
-      if (newPosts.isEmpty) {
+      if (result.posts.isEmpty) {
         _hasMore = false;
       } else {
-        state = AsyncValue.data([...currentState.value, ...newPosts]);
-        _lastId = newPosts.last.id; // Update last ID
+        state = AsyncValue.data(
+          FeedState(
+            socaFeed: currentState.value.socaFeed,
+            posts: [...currentState.value.posts, ...result.posts],
+          ),
+        );
+        _lastId = result.lastId ?? result.posts.last.id; // Update last ID
       }
     } catch (error) {
       // Keep current state on error
@@ -122,6 +148,6 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<FeedPost>>> {
 }
 
 final feedProvider =
-    StateNotifierProvider<FeedNotifier, AsyncValue<List<FeedPost>>>((ref) {
+    StateNotifierProvider<FeedNotifier, AsyncValue<FeedState>>((ref) {
   return FeedNotifier(ref);
 });

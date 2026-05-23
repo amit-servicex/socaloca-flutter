@@ -23,32 +23,32 @@ class LanguageSelectionBottomSheet extends ConsumerStatefulWidget {
 
 class _LanguageSelectionBottomSheetState
     extends ConsumerState<LanguageSelectionBottomSheet> {
-  int? _selectedIndex;
+  int? _selectedIndex = 0;
   bool _showError = false;
 
   // Matches Utils.getLanguages() from Android
   final List<Map<String, String>> _languages = [
     {'name': 'English', 'code': 'en', 'display': 'English'},
-    {'name': 'Spanish', 'code': 'es', 'display': 'español'},
-    {'name': 'Portugese', 'code': 'pt', 'display': 'português'},
-    {'name': 'French', 'code': 'fr', 'display': 'français'},
+    {'name': 'Spanish', 'code': 'es', 'display': 'Spanish'},
+    {'name': 'Portugese', 'code': 'pt', 'display': 'Portuguese'},
+    {'name': 'French', 'code': 'fr', 'display': 'French'},
   ];
 
   Future<void> _handleSave() async {
-    // if (_selectedIndex == null) {
-    //   setState(() => _showError = true);
-    //   return;
-    // }
+    if (_selectedIndex == null) {
+      setState(() => _showError = true);
+      return;
+    }
 
-    // final selected = _languages[_selectedIndex!];
-    // final code = selected['code']!;
-    // final name = selected['name']!;
+    final selected = _languages[_selectedIndex!];
+    final code = selected['code']!;
+    final name = selected['name']!;
 
-    // // Update locale in app + persist to SharedPreferences
-    // await ref.read(localeProvider.notifier).setLocale(code, name);
+    // Update locale in app + persist to SharedPreferences
+    await ref.read(localeProvider.notifier).setLocale(code, name);
 
-    // if (!mounted) return;
-    // widget.onLanguageSelected(code, name);
+    if (!mounted) return;
+    widget.onLanguageSelected(code, name);
     Navigator.pop(context);
   }
 
@@ -65,9 +65,10 @@ class _LanguageSelectionBottomSheetState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header
+            Container(height: 1, color: AppColors.socaBlack),
+
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              padding: const EdgeInsets.only(left: 24, right: 8),
               child: Row(
                 children: [
                   const Spacer(),
@@ -81,34 +82,31 @@ class _LanguageSelectionBottomSheetState
                     ),
                   ),
                   const Spacer(),
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      padding: const EdgeInsets.all(5),
-                      child: const Icon(
-                        Icons.close,
-                        color: AppColors.socaBlack,
-                        size: 24,
-                      ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Color(0xFF777777),
+                      size: 28,
                     ),
                   ),
                 ],
               ),
             ),
 
-            // Divider
-            Container(height: 0.5, color: AppColors.socaBlack),
+            Container(
+                height: 0.8, color: AppColors.socaBlack.withOpacity(0.35)),
 
             // Description
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
               child: Text(
                 AppStrings.selectLanguageDesc,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 14,
+                  fontSize: 13,
+                  height: 1.15,
+                  fontWeight: FontWeight.w400,
                   color: AppColors.socaBlack,
                 ),
               ),
@@ -116,13 +114,13 @@ class _LanguageSelectionBottomSheetState
 
             // Language Grid (2 columns)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 44),
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 3,
+                  childAspectRatio: 3.45,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
@@ -132,6 +130,7 @@ class _LanguageSelectionBottomSheetState
                   final isSelected = _selectedIndex == index;
 
                   return InkWell(
+                    borderRadius: BorderRadius.circular(18),
                     onTap: () {
                       setState(() {
                         _selectedIndex = index;
@@ -140,41 +139,26 @@ class _LanguageSelectionBottomSheetState
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColors.socaYellow
-                            : AppColors.socaGrey,
-                        borderRadius: BorderRadius.circular(5),
+                        color: isSelected ? AppColors.socaBlack : Colors.white,
+                        borderRadius: BorderRadius.circular(18),
                         border: Border.all(
-                          color: isSelected
-                              ? AppColors.socaBlack
-                              : Colors.transparent,
-                          width: 2,
+                          color: AppColors.socaBlack,
+                          width: 1,
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (isSelected)
-                            const Padding(
-                              padding: EdgeInsets.only(right: 8),
-                              child: Icon(
-                                Icons.check_circle,
-                                color: AppColors.socaBlack,
-                                size: 20,
-                              ),
-                            ),
-                          Text(
-                            language['display']!,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: isSelected
-                                  ? FontWeight.w700
-                                  : FontWeight.w400,
-                              fontSize: 14,
-                              color: AppColors.socaBlack,
-                            ),
+                      child: Center(
+                        child: Text(
+                          language['display']!,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight:
+                                isSelected ? FontWeight.w800 : FontWeight.w700,
+                            fontSize: 12,
+                            color: isSelected
+                                ? AppColors.socaYellow
+                                : AppColors.socaBlack,
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   );
@@ -182,7 +166,7 @@ class _LanguageSelectionBottomSheetState
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
             // Error message
             if (_showError)
@@ -200,22 +184,24 @@ class _LanguageSelectionBottomSheetState
 
             // Save button
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
               child: InkWell(
+                borderRadius: BorderRadius.circular(28),
                 onTap: _handleSave,
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  height: 50,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(28),
                   ),
                   child: Text(
-                    AppStrings.save,
+                    AppStrings.save.toUpperCase(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w800,
                       fontSize: 14,
                       color: AppColors.socaYellow,
                     ),
@@ -224,7 +210,15 @@ class _LanguageSelectionBottomSheetState
               ),
             ),
 
-            const SizedBox(height: 10),
+            Container(
+              width: 114,
+              height: 3,
+              margin: const EdgeInsets.only(bottom: 2),
+              decoration: BoxDecoration(
+                color: const Color(0xFF777777),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
           ],
         ),
       ),

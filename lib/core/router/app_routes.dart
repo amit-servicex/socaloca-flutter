@@ -25,6 +25,7 @@ class AppRoutes {
   static const String home = '/home';
   static const String teams = '/teams';
   static const String tournaments = '/tournaments';
+  static const String tournamentslistScreen = '/tournamentslistScreen';
   static const String clubsPartners = '/clubs-partners';
   static const String players = '/players';
   static const String trials = '/trials';
