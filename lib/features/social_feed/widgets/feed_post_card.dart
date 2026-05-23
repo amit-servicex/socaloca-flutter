@@ -176,6 +176,358 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     );
   }
 
+  static const _kReasons = [
+    'Misleading or Scam',
+    'Sexually Inappropriate',
+    'Offensive',
+    'Violence',
+    'Prohibited Content',
+    'Spam',
+    'False News',
+    'Political candidate or Issue',
+    'Other',
+  ];
+
+  void _showMoreOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            _MoreOptionTile(
+              icon: Icons.flag_outlined,
+              label: 'Report Post',
+              onTap: () {
+                Navigator.pop(ctx);
+                _showReasonPicker(
+                  context,
+                  title: 'Report Post',
+                  onConfirm: (cause) => _doReportPost(context, cause),
+                );
+              },
+            ),
+            _MoreOptionTile(
+              icon: Icons.block,
+              label: 'Block Post',
+              onTap: () {
+                Navigator.pop(ctx);
+                _showReasonPicker(
+                  context,
+                  title: 'Block Post',
+                  onConfirm: (cause) => _doBlockPost(context, cause),
+                );
+              },
+            ),
+            _MoreOptionTile(
+              icon: Icons.person_off_outlined,
+              label: 'Block User',
+              onTap: () {
+                Navigator.pop(ctx);
+                _showBlockUserConfirm(context);
+              },
+            ),
+            _MoreOptionTile(
+              icon: Icons.report_outlined,
+              label: 'Report User',
+              onTap: () {
+                Navigator.pop(ctx);
+                _showReasonPicker(
+                  context,
+                  title: 'Report User',
+                  onConfirm: (cause) => _doReportUser(context, cause),
+                );
+              },
+            ),
+            SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showReasonPicker(
+    BuildContext context, {
+    required String title,
+    required void Function(String cause) onConfirm,
+  }) {
+    String selected = _kReasons.first;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => Padding(
+          padding: EdgeInsets.fromLTRB(20, 16, 20, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(ctx),
+                    child:
+                        Icon(Icons.close, size: 22, color: AppColors.socaBlack),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Please select a reason',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  color: AppColors.socaBlack,
+                ),
+              ),
+              SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _kReasons.map((reason) {
+                  final isSelected = selected == reason;
+                  return GestureDetector(
+                    onTap: () => setSheetState(() => selected = reason),
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.socaBlack : Colors.white,
+                        border:
+                            Border.all(color: AppColors.socaBlack, width: 1.2),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        reason,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color:
+                              isSelected ? Colors.white : AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    onConfirm(selected);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.socaBlack,
+                    side: BorderSide(color: AppColors.socaBlack, width: 1.2),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    padding: EdgeInsets.symmetric(vertical: 14),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'SUBMIT',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showBlockUserConfirm(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Text(
+          "Block ${widget.post.userName}'s Profile",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
+            fontSize: 15,
+            color: AppColors.socaBlack,
+          ),
+        ),
+        content: Text(
+          'You will no longer receive any post or view any comment from the user '
+          'you are blocking. People you block can no longer tag you, start a '
+          'conversation with you, add you in his/her network or see things you '
+          'post in the SocaLoca feed. If you follow each other, blocking will '
+          'automatically unfollow that user.',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 13,
+            color: AppColors.socaBlack,
+            height: 1.5,
+          ),
+        ),
+        actionsPadding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: AppColors.socaBlack, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: Text('No',
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: AppColors.socaBlack)),
+                ),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    _doBlockUser(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.socaBlack,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: Text('Yes',
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14)),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSnack(BuildContext context, String msg, {bool error = false}) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg, style: TextStyle(fontFamily: 'Poppins')),
+      backgroundColor: error ? Colors.red : Colors.green,
+    ));
+  }
+
+  Future<void> _doReportPost(BuildContext context, String cause) async {
+    final userId = StorageService.userId ?? '';
+    if (userId.isEmpty) return;
+    try {
+      final ok = await FeedRepository().reportPost(
+        userId: userId,
+        postId: widget.post.id,
+        createdBy: widget.post.userId,
+        cause: cause,
+      );
+      _showSnack(context,
+          ok ? 'Report submitted. Thank you.' : 'Failed to report post.',
+          error: !ok);
+    } catch (_) {
+      _showSnack(context, 'Failed to report post.', error: true);
+    }
+  }
+
+  Future<void> _doBlockPost(BuildContext context, String cause) async {
+    final userId = StorageService.userId ?? '';
+    if (userId.isEmpty) return;
+    try {
+      final ok = await FeedRepository().blockPost(
+        userId: userId,
+        postId: widget.post.id,
+        postType: widget.post.type,
+        cause: cause,
+      );
+      _showSnack(context, ok ? 'Post blocked.' : 'Failed to block post.',
+          error: !ok);
+    } catch (_) {
+      _showSnack(context, 'Failed to block post.', error: true);
+    }
+  }
+
+  Future<void> _doBlockUser(BuildContext context) async {
+    final userId = StorageService.userId ?? '';
+    if (userId.isEmpty) return;
+    try {
+      final ok = await FeedRepository().blockUser(
+        userId: userId,
+        toUserId: widget.post.userId,
+      );
+      _showSnack(context, ok ? 'User blocked.' : 'Failed to block user.',
+          error: !ok);
+    } catch (_) {
+      _showSnack(context, 'Failed to block user.', error: true);
+    }
+  }
+
+  Future<void> _doReportUser(BuildContext context, String cause) async {
+    final userId = StorageService.userId ?? '';
+    if (userId.isEmpty) return;
+    try {
+      final ok = await FeedRepository().reportUser(
+        userId: userId,
+        toUserId: widget.post.userId,
+        cause: cause,
+      );
+      _showSnack(context,
+          ok ? 'Report submitted. Thank you.' : 'Failed to report user.',
+          error: !ok);
+    } catch (_) {
+      _showSnack(context, 'Failed to report user.', error: true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -251,7 +603,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                 ),
                 IconButton(
                   icon: Icon(Icons.more_vert, color: AppColors.socaBlack),
-                  onPressed: () {},
+                  onPressed: () => _showMoreOptions(context),
                 ),
               ],
             ),
@@ -384,12 +736,17 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
               children: [
                 GestureDetector(
                   onTap: _onDoubleTap,
-                  child: Icon(
-                    _isLiked ? Icons.pan_tool_alt : Icons.pan_tool_alt_outlined,
-                    size: 20,
-                    color:
-                        _isLiked ? AppColors.socaYellow : AppColors.socaBlack,
+                  child: Image.asset(
+                    "assets/icons/ic_not_cheers.png",
+                    width: 24,
+                    height: 24,
                   ),
+                  // Icon(
+                  //   _isLiked ? Icons.pan_tool_alt : Icons.pan_tool_alt_outlined,
+                  //   size: 20,
+                  //   color:
+                  //       _isLiked ? AppColors.socaYellow : AppColors.socaBlack,
+                  // ),
                 ),
                 SizedBox(width: 8),
                 Text(
@@ -423,15 +780,20 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            _isFollowing
-                                ? Icons.person_remove_outlined
-                                : Icons.person_add_outlined,
-                            size: 22,
-                            color: _isFollowing
-                                ? AppColors.socaYellow
-                                : AppColors.socaBlack,
+                          Image.asset(
+                            "assets/icons/ic_follow_feed.png",
+                            width: 28,
+                            height: 28,
                           ),
+                          // Icon(
+                          //   _isFollowing
+                          //       ? Icons.person_remove_outlined
+                          //       : Icons.person_add_outlined,
+                          //   size: 22,
+                          //   color: _isFollowing
+                          //       ? AppColors.socaYellow
+                          //       : AppColors.socaBlack,
+                          // ),
                           SizedBox(width: 8),
                           Text(
                             _isFollowing ? 'Following' : 'Follow',
@@ -439,7 +801,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: _isFollowing
-                                  ? AppColors.socaYellow
+                                  ? AppColors.socaBlack
                                   : AppColors.socaBlack,
                             ),
                           ),
@@ -458,8 +820,11 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.ios_share_rounded,
-                            size: 22, color: AppColors.socaBlack),
+                        Image.asset(
+                          "assets/icons/ic_share_feed.png",
+                          width: 28,
+                          height: 28,
+                        ),
                         SizedBox(width: 8),
                         Text(
                           'SHARE'.tr,
@@ -501,6 +866,38 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     final minute = date.minute.toString().padLeft(2, '0');
     final period = date.hour >= 12 ? 'PM' : 'AM';
     return '${months[date.month - 1]} ${date.day}, $hour:$minute$period';
+  }
+}
+
+// ── More Option Tile ──────────────────────────────────────────────────────────
+
+class _MoreOptionTile extends StatelessWidget {
+  const _MoreOptionTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon, color: AppColors.socaBlack, size: 22),
+      title: Text(
+        label,
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: AppColors.socaBlack,
+        ),
+      ),
+      onTap: onTap,
+      dense: true,
+    );
   }
 }
 

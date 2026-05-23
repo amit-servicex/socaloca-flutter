@@ -232,6 +232,11 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     color: AppColors.socaBlack,
                   ),
                   decoration: InputDecoration(
+                    errorBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
                     hintText: label,
                     hintStyle: TextStyle(
                         fontFamily: 'Poppins',
@@ -250,15 +255,18 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 GestureDetector(
                   onTap: onToggleObscure,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Icon(
-                      obscure
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      size: 20,
-                      color: Colors.grey,
-                    ),
-                  ),
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: !obscure
+                          ? Image.asset(
+                              "assets/icons/ic_password_eye.png",
+                              width: 28,
+                              height: 28,
+                            )
+                          : Image.asset(
+                              "assets/icons/ic_visibility_off.png",
+                              width: 28,
+                              height: 28,
+                            )),
                 ),
             ],
           ),
@@ -282,6 +290,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   // ── Build ────────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -296,16 +305,16 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // ── Logo ──────────────────────────────────────────────────
-                SizedBox(height: 40),
+                SizedBox(height: height * .2),
                 Center(
                   child: SvgPicture.asset(
                     'assets/icons/socaloca_logo.svg',
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.contain,
+                    width: 170,
+                    // height: 100,
+                    // fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: height * .07),
 
                 // ── OTP field ────────────────────────────────────────────
                 _buildField(

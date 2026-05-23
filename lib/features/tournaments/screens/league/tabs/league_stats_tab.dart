@@ -33,7 +33,7 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -49,30 +49,30 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
     return Column(
       children: [
         Container(
-          color: Colors.white,
+          color: Color(0xFFF3F3F3),
           child: TabBar(
             controller: _tabController,
-            isScrollable: true,
+            isScrollable: false,
             labelColor: AppColors.socaBlack,
             unselectedLabelColor: AppColors.socaBlack,
             indicatorColor: AppColors.socaBlack,
-            indicatorWeight: 3,
+            indicatorWeight: 2,
             labelStyle: TextStyle(
               fontFamily: 'Poppins',
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
             unselectedLabelStyle: TextStyle(
               fontFamily: 'Poppins',
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
             tabs: [
               // Tab(text: 'TABLE'),
-              Tab(text: 'GOALS'),
-              Tab(text: 'ASSISTS'),
-              Tab(text: 'CARDS'),
-              Tab(text: 'MAN OF MATCH'),
+              Tab(text: 'Goals'),
+              Tab(text: 'Assists'),
+              Tab(text: 'Cards'),
+              Tab(text: 'POM'),
             ],
           ),
         ),
@@ -143,10 +143,39 @@ class _StatsList extends ConsumerWidget {
             ref.invalidate(tournamentStatsProvider(params));
           },
           child: ListView.builder(
-            padding: EdgeInsets.all(12),
-            itemCount: stats.length,
+            padding: EdgeInsets.zero,
+            itemCount: stats.length +
+                (statType == 'goals' || statType == 'cards' ? 1 : 0),
             itemBuilder: (context, index) {
-              final stat = stats[index];
+              if (statType == 'goals' && index == 0) {
+                return _buildGoalsHeader();
+              }
+              if (statType == 'cards' && index == 0) {
+                return _buildCardsHeader();
+              }
+
+              final statIndex = (statType == 'goals' || statType == 'cards')
+                  ? index - 1
+                  : index;
+              final stat = stats[statIndex];
+
+              if (statType == 'goals') {
+                return _buildFlatStatRow(
+                  stat,
+                  valueWidgets: [_buildPlainCount('${stat.count}')],
+                );
+              }
+              if (statType == 'cards') {
+                return _buildFlatStatRow(
+                  stat,
+                  valueWidgets: [
+                    _buildPlainCount('${stat.redCards}'),
+                    SizedBox(width: 16),
+                    _buildPlainCount('${stat.yellowCards}'),
+                  ],
+                );
+              }
+
               return _buildStatCard(stat, index + 1);
             },
           ),
@@ -168,6 +197,157 @@ class _StatsList extends ConsumerWidget {
               child: Text('Retry'.tr),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGoalsHeader() {
+    return Container(
+      height: 44,
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildHeaderText('PLAYERS'),
+          ),
+          SizedBox(
+            width: 52,
+            child: _buildHeaderText('GOALS', textAlign: TextAlign.right),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCardsHeader() {
+    return Container(
+      height: 44,
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(child: _buildHeaderText('PLAYERS')),
+          _buildCardHeaderIcon(Colors.red),
+          SizedBox(width: 16),
+          _buildCardHeaderIcon(AppColors.socaYellow),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeaderText(String text, {TextAlign textAlign = TextAlign.left}) {
+    return Text(
+      text,
+      textAlign: textAlign,
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: AppColors.socaBlack,
+      ),
+    );
+  }
+
+  Widget _buildCardHeaderIcon(Color color) {
+    return Container(
+      width: 28,
+      height: 32,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.18),
+            blurRadius: 2,
+            offset: Offset(0, 1),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFlatStatRow(
+    dynamic stat, {
+    required List<Widget> valueWidgets,
+  }) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(16, 11, 16, 0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.socaGrey,
+                  border: Border.all(color: AppColors.socaBlack, width: 1.2),
+                ),
+                child: ClipOval(
+                  child: _buildPlayerPhoto(stat.playerImage, 48),
+                ),
+              ),
+              SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      (stat.playerName ?? 'Unknown').toString().toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                    SizedBox(height: 3),
+                    Text(
+                      stat.teamName ?? 'Unknown Team',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.socaBlack.withOpacity(0.76),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 12),
+              ...valueWidgets,
+            ],
+          ),
+          SizedBox(height: 10),
+          Divider(
+            height: 1,
+            thickness: 0.8,
+            color: AppColors.socaBlack.withOpacity(0.35),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlainCount(String value) {
+    return SizedBox(
+      width: 28,
+      child: Text(
+        value,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: AppColors.socaBlack,
         ),
       ),
     );

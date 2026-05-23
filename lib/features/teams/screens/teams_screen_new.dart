@@ -1,3 +1,4 @@
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,8 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// - Fans: single "All" view (no tabs).
 /// - Players / Coaches / Managers: 4 tabs — ALL, JOINED, PENDING, RECEIVED.
 class TeamsScreenNew extends ConsumerStatefulWidget {
-  TeamsScreenNew({super.key});
+  String? status;
+  TeamsScreenNew({super.key, this.status});
 
   @override
   ConsumerState<TeamsScreenNew> createState() => _TeamsScreenNewState();
@@ -80,7 +82,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
       backgroundColor: AppColors.socaPageBg,
       body: Column(
         children: [
-          if (!user!.isFan ?? false) ...[
+          if ((!user!.isFan ?? false) && (widget.status == null)) ...[
             Container(
               color: Colors.white,
               child: TabBar(

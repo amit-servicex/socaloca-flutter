@@ -284,15 +284,15 @@ class AuthRepository {
         ApiConstants.forgetPassw,
         body: body,
       );
-      final status = (data['status'] as num?)?.toInt() ?? 0;
+      final status = (data['response']['status'] as num?)?.toInt() ?? 0;
       if (status != 1) {
         return AuthFailure(
             (data['message'] as String?) ?? 'Failed to send OTP');
       }
 
-      final userFound = data['userFound'] as bool? ?? false;
-      final contactExist = data['contactExist'] as bool? ?? false;
-      final userId = data['userId'] as String? ?? '';
+      final userFound = data['response']['userFound'] as bool? ?? false;
+      final contactExist = data['response']['contactExist'] as bool? ?? false;
+      final userId = data['response']['userId'] as String? ?? '';
 
       if (!userFound) {
         // Return failure with type-specific error message
@@ -346,12 +346,12 @@ class AuthRepository {
         ApiConstants.forgetAllPass,
         body: body,
       );
-      final status = (data['status'] as num?)?.toInt() ?? 0;
+      final status = (data['response']['status'] as num?)?.toInt() ?? 0;
       if (status != 1) {
         return AuthFailure(
-            (data['message'] as String?) ?? 'Failed to resend OTP');
+            (data['response']['message'] as String?) ?? 'Failed to resend OTP');
       }
-      final userId = data['userId'] as String? ?? '';
+      final userId = data['response']['userId'] as String? ?? '';
       return AuthSuccess(userId);
     } on ApiException catch (e) {
       return AuthFailure(e.message);
@@ -377,10 +377,10 @@ class AuthRepository {
           ApiConstants.resetPass,
           body: {'token': userId, 'password': password},
         );
-        final status = (data['status'] as num?)?.toInt() ?? 0;
+        final status = (data['response']['status'] as num?)?.toInt() ?? 0;
         if (status != 1) {
-          return AuthFailure(
-              (data['message'] as String?) ?? 'Password reset failed');
+          return AuthFailure((data['response']['message'] as String?) ??
+              'Password reset failed');
         }
         return const AuthSuccess(true);
       }
@@ -393,12 +393,12 @@ class AuthRepository {
           'passKey': password,
         },
       );
-      final status = (data['status'] as num?)?.toInt() ?? 0;
+      final status = (data['response']['status'] as num?)?.toInt() ?? 0;
       if (status != 1) {
-        return AuthFailure(
-            (data['message'] as String?) ?? 'Password reset failed');
+        return AuthFailure((data['response']['message'] as String?) ??
+            'Password reset failed');
       }
-      final success = data['success'] as bool? ?? false;
+      final success = data['response']['success'] as bool? ?? false;
       if (!success) {
         return const AuthFailure('Incorrect OTP');
       }

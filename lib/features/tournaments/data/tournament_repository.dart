@@ -394,11 +394,15 @@ class TournamentRepository {
     required String userId,
     required String tournamentId,
     required String statType, // 'goals', 'assists', 'cards', 'mom'
+    int start = 0,
+    int limit = 10,
   }) async {
     try {
       final body = <String, dynamic>{
         'userId': userId,
         'tournamentId': tournamentId,
+        'start': start,
+        'limit': limit,
       };
 
       String endpoint;
@@ -427,12 +431,48 @@ class TournamentRepository {
       final status = (response['status'] as num?)?.toInt() ?? 0;
       if (status != 1) return [];
 
-      final statsData = response['stats'] as List?;
+      final statsData = response['players'] as List?;
       if (statsData == null) return [];
 
-      return statsData
-          .map((json) => PlayerStatEntry.fromJson(json as Map<String, dynamic>))
-          .toList();
+      return statsData.map((raw) {
+        final map = raw as Map<String, dynamic>;
+        final team = map['team'] as Map<String, dynamic>?;
+
+        final firstName = (map['firstName'] as String? ?? '').trim();
+        final lastName = (map['lastName'] as String? ?? '').trim();
+        final playerName =
+            [firstName, lastName].where((s) => s.isNotEmpty).join(' ');
+
+        int count;
+        switch (statType) {
+          case 'goals':
+            count = (map['goalCount'] as num?)?.toInt() ?? 0;
+            break;
+          case 'assists':
+            count = (map['assistCount'] as num?)?.toInt() ?? 0;
+            break;
+          case 'mom':
+            count = (map['momCount'] as num?)?.toInt() ?? 0;
+            break;
+          default:
+            count = 0;
+        }
+
+        return PlayerStatEntry.fromJson({
+          'userId': map['playerId'],
+          'playerName': playerName,
+          'playerImage': map['imageUrl'],
+          'teamId': team?['teamId'],
+          'teamName': team?['teamName'],
+          'count': count,
+          'yellowCards': (map['yellowCards'] as num?)?.toInt() ??
+              (map['yCard'] as num?)?.toInt() ??
+              0,
+          'redCards': (map['redCards'] as num?)?.toInt() ??
+              (map['rCard'] as num?)?.toInt() ??
+              0,
+        });
+      }).toList();
     } on ApiException catch (e) {
       log('Error getting tournament stats: ${e.message}');
       return [];

@@ -7,6 +7,7 @@ import 'package:socaloca/features/notifications/screens/notifications_screen.dar
 import 'package:socaloca/features/players/screens/players_screen.dart';
 import 'package:socaloca/features/search/screens/search_screen.dart';
 import 'package:socaloca/features/settings/screens/legacy_contact_screen.dart';
+import 'package:socaloca/features/tournaments/screens/tournament_list_screen.dart';
 import '../../features/live_match/screens/live_match_details_screen.dart';
 import '../../features/live_match/screens/player_live_match_list_screen.dart';
 import '../../features/academies/screens/academies_screen.dart';
@@ -309,10 +310,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 HomeScreen(),
           ),
           GoRoute(
-            path: AppRoutes.teams,
-            name: 'teams',
-            builder: (ctx, state) => TeamsScreenNew(),
-          ),
+              path: AppRoutes.teams,
+              name: 'teams',
+              builder: (ctx, state) {
+                final extra = state.extra as Map<String, dynamic>?;
+                String status = extra?['status'] ?? null;
+                return TeamsScreenNew(
+                  status: status,
+                );
+              }),
           GoRoute(
             path: AppRoutes.tournaments,
             name: 'tournaments',
@@ -322,6 +328,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 // ),
                 TournamentsLandingScreen(),
           ),
+          GoRoute(
+              path: AppRoutes.tournamentslistScreen,
+              name: 'tournamentslistScreen',
+              builder: (ctx, state) {
+                final extra = state.extra as Map<String, dynamic>?;
+                String status = extra?['status'];
+                // Scaffold(
+                //   body: Center(child: Text('tournaments - Coming Soon'.tr)),
+                // ),
+                return TournamentListScreen(
+                  status: status,
+                );
+              }),
+
+          // ongoing
           GoRoute(
             path: AppRoutes.clubsPartners,
             name: 'clubsPartners',
@@ -592,10 +613,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.search,
             name: 'search',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Search - Coming Soon'.tr)),
-            ),
-            // SearchScreen(),
+            builder: (ctx, state) =>
+
+                // Scaffold(
+                //   body: Center(child: Text('Search - Coming Soon'.tr)),
+                // ),
+                SearchScreen(),
           ),
 
           // ─── Team Bio (detail screen outside shell) ──────────────────────

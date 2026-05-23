@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:socaloca/core/router/app_routes.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/storage/storage_service.dart';
@@ -123,13 +125,18 @@ class _RecommendedUsersSectionState
                   color: AppColors.socaYellow,
                 ),
               ),
-              Text(
-                'View All'.tr,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+              InkWell(
+                onTap: () {
+                  context.push(AppRoutes.search);
+                },
+                child: Text(
+                  'View All'.tr,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
@@ -377,14 +384,17 @@ class _RecommendedUsersSectionState
             width: double.infinity,
             decoration: BoxDecoration(
               border:
-                  Border(top: BorderSide(color: AppColors.socaGrey, width: 1)),
+                  Border(top: BorderSide(color: AppColors.socaBlack, width: 1)),
             ),
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.ios_share_rounded,
-                    size: 22, color: AppColors.socaBlack),
+                Image.asset(
+                  "assets/icons/ic_share_feed.png",
+                  width: 28,
+                  height: 28,
+                ),
                 SizedBox(width: 8),
                 Text(
                   'SHARE'.tr,

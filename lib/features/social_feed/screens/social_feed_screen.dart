@@ -33,31 +33,36 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
     final feedState = ref.watch(feedProvider);
 
     return feedState.when(
-      data: (posts) => Column(
-        children: [
-          FeedHeaderWidget(),
-          if (posts.isEmpty)
-            Padding(
-              padding: EdgeInsets.all(32),
-              child: Text(
-                'No posts yet'.tr,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  color: AppColors.socaBlack,
+      data: (feed) {
+        final posts = feed.posts;
+
+        return Column(
+          children: [
+            FeedHeaderWidget(),
+            if (posts.isEmpty)
+              Padding(
+                padding: EdgeInsets.all(32),
+                child: Text(
+                  'No posts yet'.tr,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: AppColors.socaBlack,
+                  ),
                 ),
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 8),
+                itemCount: posts.length,
+                itemBuilder: (context, index) =>
+                    FeedPostCard(post: posts[index]),
               ),
-            )
-          else
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(vertical: 8),
-              itemCount: posts.length,
-              itemBuilder: (context, index) => FeedPostCard(post: posts[index]),
-            ),
-        ],
-      ),
+          ],
+        );
+      },
       loading: () => Padding(
         padding: EdgeInsets.all(32),
         child: AppLoader(),
