@@ -11,9 +11,8 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// MainShellScreen wraps all post-login screens with a bottom navigation bar.
-/// Mirrors CommonHomeActivity with 6 tabs matching Android exactly.
-///
-/// Bottom nav: Home, Teams, Leagues/Cups, Clubs/Partners, Trials, Academies
+/// Mirrors CommonHomeActivity with tabs matching Android exactly.
+/// Referee role shows its own 5-tab nav; all other roles share the regular nav.
 class MainShellScreen extends ConsumerStatefulWidget {
   const MainShellScreen({super.key, required this.child});
 
@@ -27,47 +26,83 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // 6 tabs matching Android CommonHomeActivity
-
+  // Regular user tabs (non-referee roles)
   static const _tabs = [
     _NavTab(
-        image: 'assets/icons/ic_home_new.png',
-        label: 'HOME',
-        route: AppRoutes.home),
+      image: 'assets/icons/ic_home_new.png',
+      label: 'HOME',
+      route: AppRoutes.home,
+    ),
     _NavTab(
-        image: 'assets/icons/ic_teams_new.png',
-        label: 'TEAMS',
-        route: AppRoutes.teams),
+      image: 'assets/icons/ic_teams_new.png',
+      label: 'TEAMS',
+      route: AppRoutes.teams,
+    ),
     _NavTab(
-        image: 'assets/icons/ic_leaguescups_new.png',
-        label: 'TOURNAMENTS',
-        route: AppRoutes.tournaments),
+      image: 'assets/icons/ic_leaguescups_new.png',
+      label: 'TOURNAMENTS',
+      route: AppRoutes.tournaments,
+    ),
     _NavTab(
-        image: 'assets/icons/ic_clubs_partners_new.png',
-        label: 'CLUBS',
-        route: AppRoutes.clubsPartners),
+      image: 'assets/icons/ic_clubs_partners_new.png',
+      label: 'CLUBS',
+      route: AppRoutes.clubsPartners,
+    ),
     _NavTab(
-        image: 'assets/icons/ic_players_black.png',
-        label: 'PLAYERS',
-        route: AppRoutes.players),
+      image: 'assets/icons/ic_players_black.png',
+      label: 'PLAYERS',
+      route: AppRoutes.players,
+    ),
     _NavTab(
-        image: 'assets/icons/ic_academies_new_2.png',
-        label: 'ACADEMIES',
-        route: AppRoutes.academies),
-    _NavTab(image: 'assets/icons/ham_menu.png', label: 'MENU', route: "MENU"),
+      image: 'assets/icons/ic_academies_new_2.png',
+      label: 'ACADEMIES',
+      route: AppRoutes.academies,
+    ),
+    _NavTab(
+      image: 'assets/icons/ham_menu.png',
+      label: 'MENU',
+      route: 'MENU',
+    ),
   ];
 
-  void _onTap(int index) {
-    setState(() => _currentIndex = index);
+  // Referee-role tabs
+  static const _refereeTabs = [
+    _NavTab(
+      image: 'assets/icons/ic_leaguescups_new.png',
+      label: 'TOURNAMENT',
+      route: AppRoutes.refereeTournament,
+    ),
+    _NavTab(
+      image: 'assets/icons/ic_referee_my_requests.png',
+      label: 'REQUESTS',
+      route: AppRoutes.refereeRequests,
+    ),
+    _NavTab(
+      image: 'assets/icons/ic_referee_my_matches.png',
+      label: 'MY MATCHES',
+      route: AppRoutes.refereeMatches,
+    ),
+    _NavTab(
+      image: 'assets/images/live_matchs.png',
+      label: 'LIVE',
+      route: AppRoutes.refereeLive,
+    ),
+    _NavTab(
+      image: 'assets/icons/ic_my_bio.png',
+      label: 'MY BIO',
+      route: AppRoutes.refereeBio,
+    ),
+  ];
 
-    if (_tabs[index].route == 'MENU') {
+  void _onTap(int index, List<_NavTab> tabs) {
+    setState(() => _currentIndex = index);
+    final route = tabs[index].route;
+    if (route == 'MENU') {
       _scaffoldKey.currentState?.openEndDrawer();
+    } else if (route == AppRoutes.home) {
+      context.go(route);
     } else {
-      if (_tabs[index].route == 'HOME') {
-        context.go(_tabs[index].route);
-      } else {
-        context.push(_tabs[index].route);
-      }
+      context.push(route);
     }
   }
 
@@ -92,10 +127,21 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
     }
   }
 
+  bool _shouldHideTab(_NavTab tab, {required bool isFan}) {
+    // Players tab: only visible for fans
+    if (!isFan && tab.route == AppRoutes.players) return true;
+    // Menu tab: hidden for fans
+    if (isFan && tab.route == 'MENU') return true;
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.watch(localeProvider);
     final user = ref.read(currentUserProvider);
+    final isReferee = user?.isReferee ?? false;
+    final isFan = user?.isFan ?? false;
+    final tabs = isReferee ? _refereeTabs : _tabs;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -107,7 +153,7 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, -2),
             ),
@@ -118,22 +164,21 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
             height: 56,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(_tabs.length, (index) {
-                final tab = _tabs[index];
+              children: List.generate(tabs.length, (index) {
+                final tab = tabs[index];
                 final isActive = _currentIndex == index;
-                if (!(user?.isFan ?? false) && tab.route == AppRoutes.players) {
-                  return SizedBox();
+
+                // Role-based visibility only applies to the regular tab set
+                if (!isReferee && _shouldHideTab(tab, isFan: isFan)) {
+                  return const SizedBox();
                 }
-                if ((user?.isFan ?? false) && tab.route == "MENU") {
-                  return SizedBox();
-                }
+
                 return Expanded(
                   child: InkWell(
-                    onTap: () => _onTap(index),
+                    onTap: () => _onTap(index, tabs),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Icon with yellow circular background when active
                         Container(
                           width: 32,
                           height: 32,
@@ -150,7 +195,6 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        // Label - uppercase, 8sp
                         Text(
                           _labelForTab(tab),
                           style: const TextStyle(

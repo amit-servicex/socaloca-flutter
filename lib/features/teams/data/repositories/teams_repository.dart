@@ -68,7 +68,14 @@ class TeamsRepository {
       final teams = <TeamModel>[];
       for (var i = 0; i < teamsData.length; i++) {
         try {
-          final teamJson = teamsData[i] as Map<String, dynamic>;
+          final teamJson = Map<String, dynamic>.from(
+            teamsData[i] as Map<String, dynamic>,
+          );
+          // Ensure required non-nullable fields have fallback values
+          teamJson['teamId'] =
+              teamJson['teamId'] ?? teamJson['_id'] ?? '';
+          teamJson['teamName'] =
+              teamJson['teamName'] ?? teamJson['name'] ?? '';
           final team = TeamModel.fromJson(teamJson);
           teams.add(team);
         } catch (e, stackTrace) {

@@ -152,14 +152,15 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
               // const Spacer(),
 
               // Search
-              IconButton(
-                icon: Image.asset(
-                  "assets/icons/ic_search.png",
-                  width: 24,
-                  height: 24,
+              if (!(user?.isReferee ?? false))
+                IconButton(
+                  icon: Image.asset(
+                    "assets/icons/ic_search.png",
+                    width: 24,
+                    height: 24,
+                  ),
+                  onPressed: () => context.push(AppRoutes.search),
                 ),
-                onPressed: () => context.push(AppRoutes.search),
-              ),
 
               // Notification with badge
               Stack(

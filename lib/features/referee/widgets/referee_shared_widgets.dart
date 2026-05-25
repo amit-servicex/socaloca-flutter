@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../shared/widgets/searchable_dropdown.dart';
 import '../data/models/referee_match_model.dart';
 
 /// Tournament filter dropdown — reused across Requests, Matches, Live tabs.
 class RefereeTournamentDropdown extends StatelessWidget {
-  RefereeTournamentDropdown({
+  const RefereeTournamentDropdown({
     super.key,
     required this.items,
     required this.selectedId,
@@ -20,22 +19,71 @@ class RefereeTournamentDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labels = ['All Tournaments'.tr, ...items.map((t) => t.tournamentName ?? '')];
-    final values = ['', ...items.map((t) => t.tournamentId ?? '')];
-    return SearchableDropdownButton(
-      hint: 'All Tournaments'.tr,
-      value: selectedId ?? '',
-      items: labels,
-      values: values,
-      onChanged: (v) => onChanged(v == null || v.isEmpty ? null : v),
-      fontSize: 14,
+    final dropdownItems = <TournamentDropdownItem>[];
+    final values = <String>{};
+    for (final item in items) {
+      final id = item.tournamentId;
+      if (id == null || id.isEmpty || !values.add(id)) continue;
+      dropdownItems.add(item);
+    }
+
+    final selectedValue =
+        selectedId != null && values.contains(selectedId) ? selectedId : '';
+
+    return Container(
+      height: 55,
+      width: MediaQuery.of(context).size.width * .7,
+      padding: const EdgeInsets.symmetric(horizontal: 13),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: AppColors.socaBlack, width: 1),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: selectedValue,
+          isExpanded: true,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: AppColors.textHint,
+            size: 32,
+          ),
+          dropdownColor: Colors.white,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: AppColors.socaBlack,
+          ),
+          items: [
+            DropdownMenuItem<String>(
+              value: '',
+              child: Text(
+                AppStrings.selectTournamentRequired,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            ...dropdownItems.map(
+              (item) => DropdownMenuItem<String>(
+                value: item.tournamentId,
+                child: Text(
+                  item.tournamentName ?? '',
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+          onChanged: (value) => onChanged(
+            value == null || value.isEmpty ? null : value,
+          ),
+        ),
+      ),
     );
   }
 }
 
 /// Generic empty-state widget used across referee list screens.
 class RefereeEmptyState extends StatelessWidget {
-  RefereeEmptyState({
+  const RefereeEmptyState({
     super.key,
     required this.message,
     required this.icon,
@@ -50,12 +98,15 @@ class RefereeEmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 60, color: AppColors.socaGrey),
-          SizedBox(height: 16),
+          Icon(icon, size: 60, color: AppColors.socaBlack),
+          const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(
-                fontFamily: 'Poppins', fontSize: 14, color: Colors.grey),
+            style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: AppColors.socaBlack),
           ),
         ],
       ),
@@ -65,11 +116,11 @@ class RefereeEmptyState extends StatelessWidget {
 
 /// Loading dropdown placeholder shown while tournament list is fetching.
 class RefereeDropdownLoading extends StatelessWidget {
-  RefereeDropdownLoading({super.key});
+  const RefereeDropdownLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       height: 48,
       child: Center(
         child: LinearProgressIndicator(
@@ -83,7 +134,7 @@ class RefereeDropdownLoading extends StatelessWidget {
 
 /// Info chip (icon + text) used inside match cards.
 class RefereeInfoChip extends StatelessWidget {
-  RefereeInfoChip({super.key, required this.icon, required this.text});
+  const RefereeInfoChip({super.key, required this.icon, required this.text});
 
   final IconData icon;
   final String text;
@@ -94,9 +145,9 @@ class RefereeInfoChip extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 12, color: Colors.grey),
-        SizedBox(width: 3),
+        const SizedBox(width: 3),
         Text(text,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Lato', fontSize: 12, color: Colors.grey)),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socaloca/core/theme/app_colors.dart';
 import '../providers/notifications_provider.dart';
 import '../widgets/notification_card.dart';
 import '../widgets/notification_shimmer.dart';
@@ -97,23 +98,23 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           Icon(
             Icons.notifications_none,
             size: 80,
-            color: Colors.grey[400],
+            color: AppColors.socaBlack,
           ),
           SizedBox(height: 16),
           Text(
             'No notifications yet'.tr,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
-              color: Colors.grey[600],
+              color: AppColors.socaBlack,
               fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: 8),
           Text(
             'When you get notifications, they\'ll show up here'.tr,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
-              color: Colors.grey[500],
+              color: AppColors.socaBlack,
             ),
             textAlign: TextAlign.center,
           ),

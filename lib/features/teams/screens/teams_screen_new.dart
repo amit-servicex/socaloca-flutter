@@ -82,7 +82,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
       backgroundColor: AppColors.socaPageBg,
       body: Column(
         children: [
-          if ((!user!.isFan ?? false) && (widget.status == null)) ...[
+          if (!(user?.isFan ?? false) && widget.status == null) ...[
             Container(
               color: Colors.white,
               child: TabBar(

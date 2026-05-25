@@ -178,6 +178,7 @@ class AppStrings {
   static String get todaysMatches => _t('todaysMatches');
   static String get hostMatch => _t('hostMatch');
   static String get manageRequests => _t('manageRequests');
+  static String get selectTournamentRequired => _t('selectTournamentRequired');
   static String get ongoing => _t('ongoing');
   static String get upcoming => _t('upcoming');
   static String get closed => _t('closed');
@@ -465,6 +466,7 @@ class AppStrings {
       'todaysMatches': "Today's Matches",
       'hostMatch': 'Host Match',
       'manageRequests': 'Manage Requests',
+      'selectTournamentRequired': 'select tournament *',
       'ongoing': 'Ongoing',
       'upcoming': 'Upcoming',
       'closed': 'Closed',
@@ -726,6 +728,7 @@ class AppStrings {
       'todaysMatches': 'Partidos de hoy',
       'hostMatch': 'Organizar partido',
       'manageRequests': 'Gestionar solicitudes',
+      'selectTournamentRequired': 'seleccionar torneo *',
       'ongoing': 'En curso',
       'upcoming': 'Próximos',
       'closed': 'Cerrados',
@@ -989,6 +992,7 @@ class AppStrings {
       'todaysMatches': 'Partidas de Hoje',
       'hostMatch': 'Organizar Partida',
       'manageRequests': 'Gerenciar Solicitações',
+      'selectTournamentRequired': 'selecionar torneio *',
       'ongoing': 'Em andamento',
       'upcoming': 'Próximos',
       'closed': 'Encerrados',
@@ -1252,6 +1256,7 @@ class AppStrings {
       'todaysMatches': "Matchs d'aujourd'hui",
       'hostMatch': 'Organiser un match',
       'manageRequests': 'Gérer les demandes',
+      'selectTournamentRequired': 'sélectionner un tournoi *',
       'ongoing': 'En cours',
       'upcoming': 'À venir',
       'closed': 'Terminés',

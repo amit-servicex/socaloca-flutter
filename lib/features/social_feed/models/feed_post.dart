@@ -1,9 +1,8 @@
-import '../../../core/constants/api_constants.dart';
+import 'package:socaloca/core/constants/api_constants.dart';
 
-/// Feed post model matching Android feed structure
 class FeedPost {
   final String id;
-  final String type; // userPost, clubPost, matchScoreEvent, etc.
+  final String type;
   final String userId;
   final String userName;
   final String? userImage;
@@ -15,7 +14,18 @@ class FeedPost {
   final int commentCount;
   final bool isLiked;
   final DateTime createdAt;
-  final Map<String, dynamic>? metadata; // Additional data based on type
+  final Map<String, dynamic>? metadata;
+
+  // Added missing fields
+// Added missing fields as nullable
+  final String? postType;
+  final int? size;
+  final dynamic postCat;
+  final bool? postNotify;
+  final List<dynamic>? tagged;
+  final int? reportCount;
+  final bool? isDelete;
+  final List<dynamic>? comments;
 
   bool get isSocaFeed => type == 'socaFeed';
 
@@ -34,24 +44,35 @@ class FeedPost {
     required this.isLiked,
     required this.createdAt,
     this.metadata,
+
+    // Added missing fields
+    this.postType,
+    this.size,
+    this.postCat,
+    this.postNotify,
+    this.tagged,
+    this.reportCount,
+    this.isDelete,
+    this.comments,
   });
 
   factory FeedPost.fromJson(Map<String, dynamic> json) {
-    // Extract user details
     final userDetails = json['userDetails'] as Map<String, dynamic>?;
     final firstName = userDetails?['firstName'] as String? ?? '';
     final lastName = userDetails?['lastName'] as String? ?? '';
     var userName = '$firstName $lastName'.trim();
+
     final isSocaFeed = json['feedType'] == 'socaFeed';
     if (isSocaFeed && userName.isEmpty) {
       userName = 'SocaLoca';
     }
+
     final userImagePath = userDetails?['imageUrl'] as String?;
     final userImage = ApiConstants.getImageUrl(userImagePath);
+
     final userId =
         json['addedBy'] as String? ?? userDetails?['userId'] as String? ?? '';
 
-    // Extract sources (images/videos)
     final sources = json['sources'] as List<dynamic>? ?? [];
     final images = <String>[];
     String? videoUrl;
@@ -63,12 +84,13 @@ class FeedPost {
           final imagePath = source['imageUrl'] as String;
           images.add(ApiConstants.getImageUrl(imagePath));
         }
+
         if (source['videoUrl'] != null) {
           videoUrl = source['videoUrl'] as String;
-          // Video URLs are already full URLs (CloudFront)
           if (!videoUrl.startsWith('http')) {
             videoUrl = ApiConstants.getImageUrl(videoUrl);
           }
+
           final thumbnailPath = source['thumbnail'] as String?;
           if (thumbnailPath != null) {
             thumbnail = thumbnailPath.startsWith('http')
@@ -79,7 +101,6 @@ class FeedPost {
       }
     }
 
-    // Parse timestamp
     final addedOn = json['addedOn'] as num?;
     final createdAt = addedOn != null
         ? DateTime.fromMillisecondsSinceEpoch(addedOn.toInt())
@@ -109,6 +130,16 @@ class FeedPost {
       isLiked: json['myLike'] as bool? ?? false,
       createdAt: createdAt,
       metadata: json,
+
+      // Added missing fields
+      postType: json['postType'] as String?,
+      size: (json['size'] as num?)?.toInt(),
+      postCat: json['postCat'],
+      postNotify: json['postNotify'] as bool?,
+      tagged: json['tagged'] as List<dynamic>?,
+      reportCount: (json['reportCount'] as num?)?.toInt(),
+      isDelete: json['isDelete'] as bool?,
+      comments: json['comments'] as List<dynamic>?,
     );
   }
 
@@ -116,6 +147,7 @@ class FeedPost {
     return {
       'postId': id,
       'feedType': type,
+      'postType': postType,
       'addedBy': userId,
       'userDetails': {
         'firstName': userName.split(' ').first,
@@ -131,40 +163,16 @@ class FeedPost {
       'commentCount': commentCount,
       'myLike': isLiked,
       'addedOn': createdAt.millisecondsSinceEpoch,
-    };
-  }
 
-  FeedPost copyWith({
-    String? id,
-    String? type,
-    String? userId,
-    String? userName,
-    String? userImage,
-    String? content,
-    List<String>? images,
-    String? videoUrl,
-    String? thumbnail,
-    int? likeCount,
-    int? commentCount,
-    bool? isLiked,
-    DateTime? createdAt,
-    Map<String, dynamic>? metadata,
-  }) {
-    return FeedPost(
-      id: id ?? this.id,
-      type: type ?? this.type,
-      userId: userId ?? this.userId,
-      userName: userName ?? this.userName,
-      userImage: userImage ?? this.userImage,
-      content: content ?? this.content,
-      images: images ?? this.images,
-      videoUrl: videoUrl ?? this.videoUrl,
-      thumbnail: thumbnail ?? this.thumbnail,
-      likeCount: likeCount ?? this.likeCount,
-      commentCount: commentCount ?? this.commentCount,
-      isLiked: isLiked ?? this.isLiked,
-      createdAt: createdAt ?? this.createdAt,
-      metadata: metadata ?? this.metadata,
-    );
+      // Added missing fields
+      'postType': postType,
+      'size': size,
+      'postCat': postCat,
+      'postNotify': postNotify,
+      'tagged': tagged,
+      'reportCount': reportCount,
+      'isDelete': isDelete,
+      'comments': comments,
+    };
   }
 }

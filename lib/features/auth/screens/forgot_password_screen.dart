@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/services/location_service.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
 
@@ -44,7 +45,19 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _inputCtrl = TextEditingController();
   String? _inputError;
   bool _isLoading = false;
-  String _selectedCountryCode = '+44';
+  String _selectedCountryCode = '+91';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _detectCountry());
+  }
+
+  Future<void> _detectCountry() async {
+    final country = await LocationService.detectCountry(context);
+    if (!mounted || country == null) return;
+    setState(() => _selectedCountryCode = country.phoneCode);
+  }
 
   @override
   void dispose() {
@@ -231,34 +244,57 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   Future<void> _pickCountry() async {
     final countries = [
       {'name': 'Afghanistan', 'code': '+93'},
+      {'name': 'Albania', 'code': '+355'},
       {'name': 'Algeria', 'code': '+213'},
       {'name': 'Argentina', 'code': '+54'},
       {'name': 'Australia', 'code': '+61'},
+      {'name': 'Austria', 'code': '+43'},
       {'name': 'Bangladesh', 'code': '+880'},
+      {'name': 'Belgium', 'code': '+32'},
       {'name': 'Brazil', 'code': '+55'},
       {'name': 'Canada', 'code': '+1'},
+      {'name': 'Chile', 'code': '+56'},
       {'name': 'China', 'code': '+86'},
+      {'name': 'Colombia', 'code': '+57'},
+      {'name': 'Denmark', 'code': '+45'},
       {'name': 'Egypt', 'code': '+20'},
       {'name': 'England', 'code': '+44'},
+      {'name': 'Finland', 'code': '+358'},
       {'name': 'France', 'code': '+33'},
       {'name': 'Germany', 'code': '+49'},
       {'name': 'Ghana', 'code': '+233'},
+      {'name': 'Greece', 'code': '+30'},
       {'name': 'India', 'code': '+91'},
       {'name': 'Indonesia', 'code': '+62'},
+      {'name': 'Republic of Ireland', 'code': '+353'},
       {'name': 'Italy', 'code': '+39'},
       {'name': 'Japan', 'code': '+81'},
       {'name': 'Kenya', 'code': '+254'},
+      {'name': 'Korea Republic', 'code': '+82'},
       {'name': 'Malaysia', 'code': '+60'},
       {'name': 'Mexico', 'code': '+52'},
       {'name': 'Netherlands', 'code': '+31'},
+      {'name': 'New Zealand', 'code': '+64'},
       {'name': 'Nigeria', 'code': '+234'},
+      {'name': 'Norway', 'code': '+47'},
       {'name': 'Pakistan', 'code': '+92'},
+      {'name': 'Peru', 'code': '+51'},
+      {'name': 'Philippines', 'code': '+63'},
+      {'name': 'Poland', 'code': '+48'},
       {'name': 'Portugal', 'code': '+351'},
+      {'name': 'Russia', 'code': '+7'},
       {'name': 'Saudi Arabia', 'code': '+966'},
+      {'name': 'Singapore', 'code': '+65'},
       {'name': 'South Africa', 'code': '+27'},
       {'name': 'Spain', 'code': '+34'},
+      {'name': 'Sweden', 'code': '+46'},
+      {'name': 'Switzerland', 'code': '+41'},
+      {'name': 'Thailand', 'code': '+66'},
       {'name': 'Türkiye', 'code': '+90'},
+      {'name': 'Ukraine', 'code': '+380'},
+      {'name': 'United Arab Emirates', 'code': '+971'},
       {'name': 'USA', 'code': '+1'},
+      {'name': 'Vietnam', 'code': '+84'},
     ];
     await showDialog(
       context: context,
@@ -325,6 +361,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           style: TextStyle(
               fontFamily: 'Poppins', fontSize: 14, color: AppColors.socaBlack),
           decoration: InputDecoration(
+            errorBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            focusedErrorBorder: InputBorder.none,
             hintText: hint,
             hintStyle: TextStyle(
                 fontFamily: 'Poppins', fontSize: 14, color: Colors.grey),
@@ -455,7 +496,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                           ),
                         ),
                         Container(
-                            width: 0.5, height: 24, color: Colors.black45),
+                            width: 0.5, height: 24, color: AppColors.socaBlack),
                       ],
                       // Text input
                       Expanded(
@@ -473,6 +514,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                             color: AppColors.socaBlack,
                           ),
                           decoration: InputDecoration(
+                            errorBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            focusedErrorBorder: InputBorder.none,
                             hintText: _hintText,
                             hintStyle: TextStyle(
                                 fontFamily: 'Poppins',

@@ -67,6 +67,7 @@ class AppRoutes {
   static const String coachAdminBio = '/members/:userId';
   static const String playerPeople = '/players/:userId/people';
   static const String playerLikes = '/players/:userId/likes';
+  static const String playerStats = '/players/:userId/stats';
   static const String playerJoinedTeams = '/players/:userId/joined-teams';
   static const String playerPendingTeams = '/players/:userId/pending-teams';
   static const String playerReceivedTeams = '/player-invitations';
