@@ -272,11 +272,11 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
                 ),
                 if (state.tournaments.isNotEmpty) SizedBox(height: 20),
                 PlayerSkillsSection(
-                  skills: state.skills,
-                  overallRating: state.overallRating,
-                  isLoadingSkills: state.isLoadingSkills,
-                  isOwnProfile: true,
-                ),
+                    skills: state.skills,
+                    overallRating: state.overallRating,
+                    isLoadingSkills: state.isLoadingSkills,
+                    isOwnProfile: true,
+                    userid: _userId),
                 SizedBox(height: 20),
                 PlayerPostsSection(
                   posts: state.posts,

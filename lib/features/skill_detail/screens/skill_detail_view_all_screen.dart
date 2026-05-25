@@ -122,24 +122,25 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.socaBlack,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new,
-              color: Color.fromARGB(255, 65, 141, 255), size: 20),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          widget.roleLabel,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.socaYellow,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.socaBlack,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: Icon(Icons.arrow_back_ios_new,
+      //         color: Color.fromARGB(255, 65, 141, 255), size: 20),
+      //     onPressed: () => Navigator.of(context).pop(),
+      //   ),
+      //   title: Text(
+      //     widget.roleLabel,
+      //     style: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontSize: 16,
+      //       fontWeight: FontWeight.w600,
+      //       color: AppColors.socaYellow,
+      //     ),
+      //   ),
+      // ),
+
       body: SafeArea(child: _buildBody()),
     );
   }
@@ -184,7 +185,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
       return Center(
         child: Text(
           _emptyText,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w600,

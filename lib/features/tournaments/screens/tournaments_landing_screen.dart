@@ -62,7 +62,7 @@ class _TournamentsLandingScreenState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Main tabs: TOURNAMENTS / ONE-OFF / PICK-UP
-                  if (!usesTournamentOnlyLanding)
+                  if (!_usesTournamentTopTabBarOnlyLanding(user))
                     TabBar(
                       controller: _mainTabController,
                       labelColor: Colors.black,
@@ -141,6 +141,16 @@ class _TournamentsLandingScreenState
 
   bool _usesTournamentOnlyLanding(UserModel? user) {
     final userType = user?.userType?.toLowerCase();
+    return
+
+        // (user?.isReferee ?? false) ||
+        (user?.isFan ?? false) ||
+            // userType == 'referee' ||
+            userType == 'fan';
+  }
+
+  bool _usesTournamentTopTabBarOnlyLanding(UserModel? user) {
+    final userType = user?.userType?.toLowerCase();
     return (user?.isReferee ?? false) ||
         (user?.isFan ?? false) ||
         userType == 'referee' ||
@@ -191,32 +201,28 @@ class _TournamentTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.socaPageBg,
-      width: double.infinity,
-      child: TabBar(
-        controller: controller,
-        labelColor: Colors.black,
-        unselectedLabelColor: Colors.black.withValues(alpha: 0.6),
-        labelStyle: const TextStyle(
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-        ),
-        indicatorColor: Colors.black,
-        indicatorWeight: 2,
-        isScrollable: true,
-        tabAlignment: TabAlignment.start,
-        dividerColor: Colors.transparent,
-        tabs: [
-          for (final tab in tabs) Tab(text: tab.label),
-        ],
+    return TabBar(
+      controller: controller,
+      labelColor: Colors.black,
+      unselectedLabelColor: Colors.black.withValues(alpha: 0.6),
+      labelStyle: const TextStyle(
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w600,
+        fontSize: 14,
       ),
+      unselectedLabelStyle: const TextStyle(
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+      ),
+      indicatorColor: Colors.black,
+      indicatorWeight: 3,
+      isScrollable: true,
+      tabAlignment: TabAlignment.start,
+      dividerColor: Colors.transparent,
+      tabs: [
+        for (final tab in tabs) Tab(text: tab.label),
+      ],
     );
   }
 }

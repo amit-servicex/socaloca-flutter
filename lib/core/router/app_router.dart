@@ -52,6 +52,7 @@ import '../../features/player_bio/screens/player_likes_screen.dart';
 import '../../features/player_bio/screens/player_people_screen.dart';
 import '../../features/player_bio/screens/player_pending_teams_screen.dart';
 import '../../features/player_bio/screens/player_received_teams_screen.dart';
+import '../../features/player_bio/screens/player_stats_screen.dart';
 import '../../features/my_bio/screens/my_bio_screen.dart';
 import '../../features/my_bio/screens/my_skill_ratings_screen.dart';
 import '../../features/my_bio/screens/my_endorsement_list_screen.dart';
@@ -66,7 +67,6 @@ import '../../features/skill_detail/screens/skill_detail_screen.dart';
 import '../../features/skill_detail/screens/skill_detail_view_all_screen.dart';
 import '../../features/home/screens/main_shell_screen.dart';
 import '../../features/home/screens/home_screen.dart';
-import '../../features/referee/screens/referee_home_screen.dart';
 import '../../features/tournaments/screens/tournament_featured_screen.dart';
 import '../../features/referee/screens/referee_tournament_screen.dart';
 import '../../features/referee/screens/referee_my_requests_screen.dart';
@@ -314,7 +314,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               name: 'teams',
               builder: (ctx, state) {
                 final extra = state.extra as Map<String, dynamic>?;
-                String status = extra?['status'] ?? null;
+                final String? status = extra?['status'] as String?;
                 return TeamsScreenNew(
                   status: status,
                 );
@@ -333,7 +333,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               name: 'tournamentslistScreen',
               builder: (ctx, state) {
                 final extra = state.extra as Map<String, dynamic>?;
-                String status = extra?['status'];
+                final String status = extra?['status'] as String? ?? '';
                 // Scaffold(
                 //   body: Center(child: Text('tournaments - Coming Soon'.tr)),
                 // ),
@@ -400,10 +400,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.notifications,
             name: 'notifications',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Notifications - Coming Soon'.tr)),
-            ),
-            // NotificationsScreen(),
+            builder: (ctx, state) =>
+
+                //  Scaffold(
+                //   body: Center(child: Text('Notifications - Coming Soon'.tr)),
+                // ),
+                NotificationsScreen(),
           ),
           GoRoute(
             path: AppRoutes.profile,
@@ -578,6 +580,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (ctx, state) {
               final userId = state.pathParameters['userId']!;
               return PlayerLikesScreen(userId: userId);
+            },
+          ),
+          GoRoute(
+            path: AppRoutes.playerStats,
+            name: 'playerStats',
+            builder: (ctx, state) {
+              final userId = state.pathParameters['userId']!;
+              return PlayerStatsScreen(playerId: userId);
             },
           ),
 
@@ -787,43 +797,38 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               return LegacyContactScreen();
             },
           ),
-        ],
-      ),
 
-      // ─── Referee tournament detail (full-screen, no shell nav) ───────────
-      GoRoute(
-        path: AppRoutes.refereeTournamentView,
-        name: 'refereeTournamentView',
-        builder: (ctx, state) => TournamentFeaturedScreen(
-          tournamentId: state.pathParameters['tmntId']!,
-          isReferee: true,
-        ),
-      ),
+          // ─── Referee tournament detail (full-screen, no shell nav) ────────
+          GoRoute(
+            path: AppRoutes.refereeTournamentView,
+            name: 'refereeTournamentView',
+            builder: (ctx, state) => TournamentFeaturedScreen(
+              tournamentId: state.pathParameters['tmntId']!,
+              isReferee: true,
+            ),
+          ),
 
-      // ─── Referee shell (separate from common shell) ───────────────────────
-      ShellRoute(
-        builder: (ctx, state, child) => RefereeHomeScreen(child: child),
-        routes: [
+          // ─── Referee routes (inside main shell; bottom nav hides for role) ─
           GoRoute(
             path: AppRoutes.refereeTournament,
             name: 'refereeTournament',
             builder: (_, __) => RefereeTournamentScreen(),
           ),
           GoRoute(
-            path: AppRoutes.refereeRequests,
-            name: 'refereeRequests',
-            builder: (_, __) => Scaffold(
-              body: Center(child: Text('refereeRequests - Coming Soon'.tr)),
-            ),
-            // RefereeMyRequestsScreen(),
-          ),
+              path: AppRoutes.refereeRequests,
+              name: 'refereeRequests',
+              builder: (_, __) => RefereeMyRequestsScreen()
+              // Scaffold(
+              //   body: Center(child: Text('refereeRequests - Coming Soon'.tr)),
+              // ),
+              ),
           GoRoute(
             path: AppRoutes.refereeMatches,
             name: 'refereeMatches',
-            builder: (_, __) => Scaffold(
-              body: Center(child: Text('refereeMatches - Coming Soon'.tr)),
-            ),
-            //  RefereeMyMatchesScreen(),
+            builder: (_, __) => RefereeMyMatchesScreen(),
+            // Scaffold(
+            //   body: Center(child: Text('refereeMatches - Coming Soon'.tr)),
+            // ),
           ),
           GoRoute(
             path: AppRoutes.refereeLive,

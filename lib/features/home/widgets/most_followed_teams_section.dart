@@ -27,7 +27,7 @@ class MostFollowedTeamsSection extends ConsumerWidget {
     if (state.items.isEmpty) return const SizedBox.shrink();
 
     final itemCount = state.items.length + (state.isLoadingMore ? 1 : 0);
-    log("this is the most followed teams section, item count: ${state.items.first.toJson()}");
+    // log("this is the most followed teams section, item count: ${state.items.first.toJson()}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

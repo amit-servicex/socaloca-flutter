@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
+import 'package:socaloca/core/router/app_routes.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_skill_model.dart';
@@ -10,14 +12,14 @@ class PlayerSkillsSection extends StatelessWidget {
   final double? overallRating;
   final bool isLoadingSkills;
   final bool isOwnProfile;
-
-  PlayerSkillsSection({
-    super.key,
-    required this.skills,
-    required this.overallRating,
-    required this.isLoadingSkills,
-    required this.isOwnProfile,
-  });
+  final String userid;
+  const PlayerSkillsSection(
+      {super.key,
+      required this.skills,
+      required this.overallRating,
+      required this.isLoadingSkills,
+      required this.isOwnProfile,
+      required this.userid});
 
   String _fmt(double? v) => (v == null || v == 0) ? '-' : v.toStringAsFixed(1);
   String _fmtInt(int? v) => (v == null || v == 0) ? '-' : '$v';
@@ -25,60 +27,59 @@ class PlayerSkillsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingSkills) {
-      return AppLoader();
+      return const AppLoader();
     }
 
-    if (skills.isEmpty) return SizedBox.shrink();
+    if (skills.isEmpty) return const SizedBox.shrink();
 
     return Column(
       children: [
-        SizedBox(
-          height: 25,
-        ),
         Stack(
-          clipBehavior: Clip.none,
           children: [
             // Header row
 
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.socaGrey.withValues(alpha: 0.4),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                children: [
-                  // Column headers
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12, 12, 12, 4),
-                    child: Row(
-                      children: [
-                        Expanded(child: SizedBox()),
-                        SizedBox(
-                          width: 110,
-                          child: Text(
-                            'Average Rating | Endorsed By'.tr,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 10,
-                              color: Colors.grey[600],
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.socaGrey.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  children: [
+                    // Column headers
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+                      child: Row(
+                        children: [
+                          const Expanded(child: SizedBox()),
+                          SizedBox(
+                            width: 110,
+                            child: Text(
+                              'Average Rating | Endorsed By'.tr,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 10,
+                                color: Colors.grey[600],
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
 
-                  // Skill rows
-                  ...skills.map((skill) => _buildRow(skill)),
+                    // Skill rows
+                    ...skills.map((skill) => _buildRow(skill)),
 
-                  SizedBox(height: 4),
-                ],
+                    const SizedBox(height: 4),
+                  ],
+                ),
               ),
             ),
 
             Positioned(
-              top: -30,
+              top: 0,
               left: 10,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * .85,
@@ -86,15 +87,15 @@ class PlayerSkillsSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.socaBlack,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         'RATINGS'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -102,13 +103,23 @@ class PlayerSkillsSection extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      'view all'.tr,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack,
+                    InkWell(
+                      onTap: () {
+                        context.push(
+                          AppRoutes.playerStats.replaceFirst(
+                            ':userId',
+                            userid,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'view all '.tr,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack,
+                        ),
                       ),
                     ),
                   ],
@@ -123,7 +134,7 @@ class PlayerSkillsSection extends StatelessWidget {
 
   Widget _buildRow(PlayerSkillModel skill) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
@@ -136,7 +147,7 @@ class PlayerSkillsSection extends StatelessWidget {
           Expanded(
             child: Text(
               skill.skillName ?? '',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,

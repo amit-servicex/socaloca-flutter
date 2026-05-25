@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/player_bio_provider.dart';
 import 'endorse_player_screen.dart';
-import 'player_stats_screen.dart';
 import '../../my_bio/screens/my_skill_ratings_screen.dart';
 import '../widgets/player_bio_header.dart';
 import '../widgets/player_bio_stats_counters.dart';
@@ -418,12 +419,10 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 // STATS
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => PlayerStatsScreen(
-                                          playerId: widget.playerId,
-                                        ),
+                                    context.push(
+                                      AppRoutes.playerStats.replaceFirst(
+                                        ':userId',
+                                        widget.playerId,
                                       ),
                                     );
                                   },
@@ -753,6 +752,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                   overallRating: state.overallRating,
                                   isLoadingSkills: state.isLoadingSkills,
                                   isOwnProfile: isOwnProfile,
+                                  userid: widget.playerId,
                                 ),
 
                                 SizedBox(height: 20),

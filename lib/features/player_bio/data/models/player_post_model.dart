@@ -16,10 +16,15 @@ class PostMediaSource with _$PostMediaSource {
     @JsonKey(name: 'thumbnail') String? thumbnail,
     @JsonKey(name: 'type') String? type,
     @JsonKey(name: 'seq') int? seq,
+    @JsonKey(name: 'size') int? size,
   }) = _PostMediaSource;
 
   factory PostMediaSource.fromJson(Map<String, dynamic> json) =>
-      _$PostMediaSourceFromJson({...json, 'seq': _toInt(json['seq'])});
+      _$PostMediaSourceFromJson({
+        ...json,
+        'seq': _toInt(json['seq']),
+        'size': _toInt(json['size']),
+      });
 }
 
 /// Convenience getter — returns the displayable URL for a media source.
@@ -36,13 +41,20 @@ class PlayerPostModel with _$PlayerPostModel {
     @JsonKey(name: 'title') String? title,
     @JsonKey(name: 'text') String? text,
     @JsonKey(name: 'postType') String? postType,
-    @JsonKey(name: 'postCat') String? postCat,
+    @JsonKey(name: 'postCat') dynamic postCat,
+    @JsonKey(name: 'addedBy') String? addedBy,
     @JsonKey(name: 'addedOn') int? addedOn,
     @JsonKey(name: 'likeCount') int? likeCount,
     @JsonKey(name: 'commentCount') int? commentCount,
     @JsonKey(name: 'shareCount') int? shareCount,
+    @JsonKey(name: 'reportCount') int? reportCount,
     @JsonKey(name: 'myLike') bool? myLike,
     @JsonKey(name: 'sources') List<PostMediaSource>? sources,
+    @JsonKey(name: 'size') int? size,
+    @JsonKey(name: 'postNotify') bool? postNotify,
+    @JsonKey(name: 'tagged') List<dynamic>? tagged,
+    @JsonKey(name: 'isDelete') bool? isDelete,
+    @JsonKey(name: 'comments') List<dynamic>? comments,
   }) = _PlayerPostModel;
 
   factory PlayerPostModel.fromJson(Map<String, dynamic> json) =>
@@ -52,5 +64,7 @@ class PlayerPostModel with _$PlayerPostModel {
         'likeCount': _toInt(json['likeCount']),
         'commentCount': _toInt(json['commentCount']),
         'shareCount': _toInt(json['shareCount']),
+        'reportCount': _toInt(json['reportCount']),
+        'size': _toInt(json['size']),
       });
 }

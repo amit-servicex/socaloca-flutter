@@ -42,7 +42,34 @@ class _RefereeLiveMatchesScreenState
     final selectedTmnt = ref.watch(refereeSelectedTmntLiveProvider);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          padding: const EdgeInsets.only(left: 8, right: 50, top: 8, bottom: 8),
+          margin: const EdgeInsets.only(left: 16, top: 16),
+          decoration: const BoxDecoration(
+            color: AppColors.socaBlack,
+          ),
+          child: const Text(
+            "Live Matches",
+            style: TextStyle(
+                color: AppColors.socaYellow,
+                fontFamily: 'Poppins',
+                fontSize: 20,
+                fontWeight: FontWeight.w600),
+          ),
+        ),
+        const Padding(
+          padding: const EdgeInsets.only(left: 16, top: 16),
+          child: const Text(
+            "Find all the matches assigned to you by the Tournament Organiser here. Tap on \"START MATCH\" to publish \"Live Scores\".",
+            style: const TextStyle(
+              color: AppColors.socaBlack,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
         Padding(
           padding: EdgeInsets.fromLTRB(12, 12, 12, 4),
           child: dropdownAsync.when(

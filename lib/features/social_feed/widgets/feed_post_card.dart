@@ -1,8 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart' show SharePlus, ShareParams;
+import 'package:socaloca/core/router/app_routes.dart';
+import 'package:socaloca/features/home/widgets/full_screen_post_show.dart';
+import 'package:socaloca/features/social_feed/widgets/tag_chip_card.dart';
 
+import '../../../core/constants/api_constants.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/feed_repository.dart';
@@ -11,7 +17,7 @@ import '../models/feed_post.dart';
 /// Feed post card widget matching Android feed item design.
 /// Implements double-tap to cheer (like) with animated heart overlay.
 class FeedPostCard extends ConsumerStatefulWidget {
-  FeedPostCard({super.key, required this.post});
+  const FeedPostCard({super.key, required this.post});
 
   final FeedPost post;
 
@@ -42,7 +48,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
 
     _heartController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
     );
 
     // Scale: 0 → 1.2 (elastic overshoot) in first 400ms, then 1.2 → 0
@@ -95,7 +101,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     if (userId.isEmpty) return;
 
     try {
-      final success = await FeedRepository().likePost(
+      final success = await const FeedRepository().likePost(
         userId: userId,
         postId: widget.post.id,
         postType: widget.post.type,
@@ -136,7 +142,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
       final myName = '$firstName $lastName'.trim();
       final myImageUrl = user['imageUrl'] as String? ?? '';
 
-      final result = await FeedRepository().followUser(
+      final result = await const FeedRepository().followUser(
         userId: userId,
         toUserId: widget.post.userId,
         myName: myName,
@@ -192,7 +198,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) => SafeArea(
@@ -202,7 +208,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
             Container(
               width: 40,
               height: 4,
-              margin: EdgeInsets.symmetric(vertical: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(2),
@@ -252,7 +258,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                 );
               },
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
           ],
         ),
       ),
@@ -269,12 +275,12 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setSheetState) => Padding(
-          padding: EdgeInsets.fromLTRB(20, 16, 20, 32),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,7 +291,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                     child: Center(
                       child: Text(
                         title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
@@ -296,13 +302,13 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   ),
                   GestureDetector(
                     onTap: () => Navigator.pop(ctx),
-                    child:
-                        Icon(Icons.close, size: 22, color: AppColors.socaBlack),
+                    child: const Icon(Icons.close,
+                        size: 22, color: AppColors.socaBlack),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Please select a reason',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -311,7 +317,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -320,8 +326,8 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   return GestureDetector(
                     onTap: () => setSheetState(() => selected = reason),
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
                         color: isSelected ? AppColors.socaBlack : Colors.white,
                         border:
@@ -342,7 +348,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   );
                 }).toList(),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -353,13 +359,14 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: AppColors.socaBlack,
-                    side: BorderSide(color: AppColors.socaBlack, width: 1.2),
+                    side: const BorderSide(
+                        color: AppColors.socaBlack, width: 1.2),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
-                    padding: EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                   ),
-                  child: Text(
+                  child: const Text(
                     'SUBMIT',
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -383,14 +390,14 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         title: Text(
           "Block ${widget.post.userName}'s Profile",
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 15,
             color: AppColors.socaBlack,
           ),
         ),
-        content: Text(
+        content: const Text(
           'You will no longer receive any post or view any comment from the user '
           'you are blocking. People you block can no longer tag you, start a '
           'conversation with you, add you in his/her network or see things you '
@@ -403,7 +410,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
             height: 1.5,
           ),
         ),
-        actionsPadding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: [
           Row(
             children: [
@@ -411,12 +418,13 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(ctx),
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.socaBlack, width: 1.5),
+                    side: const BorderSide(
+                        color: AppColors.socaBlack, width: 1.5),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6)),
-                    padding: EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: Text('No',
+                  child: const Text('No',
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -424,7 +432,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           color: AppColors.socaBlack)),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
@@ -437,9 +445,9 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6)),
-                    padding: EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: Text('Yes',
+                  child: const Text('Yes',
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
@@ -456,7 +464,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
   void _showSnack(BuildContext context, String msg, {bool error = false}) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: TextStyle(fontFamily: 'Poppins')),
+      content: Text(msg, style: const TextStyle(fontFamily: 'Poppins')),
       backgroundColor: error ? Colors.red : Colors.green,
     ));
   }
@@ -465,7 +473,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     final userId = StorageService.userId ?? '';
     if (userId.isEmpty) return;
     try {
-      final ok = await FeedRepository().reportPost(
+      final ok = await const FeedRepository().reportPost(
         userId: userId,
         postId: widget.post.id,
         createdBy: widget.post.userId,
@@ -483,7 +491,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     final userId = StorageService.userId ?? '';
     if (userId.isEmpty) return;
     try {
-      final ok = await FeedRepository().blockPost(
+      final ok = await const FeedRepository().blockPost(
         userId: userId,
         postId: widget.post.id,
         postType: widget.post.type,
@@ -500,7 +508,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     final userId = StorageService.userId ?? '';
     if (userId.isEmpty) return;
     try {
-      final ok = await FeedRepository().blockUser(
+      final ok = await const FeedRepository().blockUser(
         userId: userId,
         toUserId: widget.post.userId,
       );
@@ -515,7 +523,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     final userId = StorageService.userId ?? '';
     if (userId.isEmpty) return;
     try {
-      final ok = await FeedRepository().reportUser(
+      final ok = await const FeedRepository().reportUser(
         userId: userId,
         toUserId: widget.post.userId,
         cause: cause,
@@ -532,13 +540,13 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // User Header
           Padding(
-            padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -553,14 +561,14 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           widget.post.userName.isNotEmpty
                               ? widget.post.userName[0].toUpperCase()
                               : 'U',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: AppColors.socaBlack,
                           ),
                         )
                       : null,
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -570,7 +578,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           Flexible(
                             child: Text(
                               widget.post.userName,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16,
@@ -584,15 +592,15 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                             width: 1,
                             height: 14,
                             color: AppColors.socaBlack,
-                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
                           ),
-                          Text('🌍'.tr, style: TextStyle(fontSize: 18)),
+                          Text('🌍'.tr, style: const TextStyle(fontSize: 18)),
                         ],
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
                         _formatDate(widget.post.createdAt),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack,
@@ -602,7 +610,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.more_vert, color: AppColors.socaBlack),
+                  icon: const Icon(Icons.more_vert, color: AppColors.socaBlack),
                   onPressed: () => _showMoreOptions(context),
                 ),
               ],
@@ -612,10 +620,10 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
           // Content text
           if (widget.post.content != null && widget.post.content!.isNotEmpty)
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Text(
                 widget.post.content!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -624,21 +632,48 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
               ),
             ),
 
-          SizedBox(height: 8),
+          // Tagged entities
+          if (widget.post.tagged != null && widget.post.tagged!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                children: widget.post.tagged!.map((tag) {
+                  final t = tag as Map<String, dynamic>;
+                  final name = t['name'] as String? ?? '';
+                  final tagId = t['tagId'] as String? ?? '';
+                  final imageUrl =
+                      ApiConstants.getImageUrl(t['imageUrl'] as String?);
+                  return TagChip(name: name, imageUrl: imageUrl, id: tagId);
+                }).toList(),
+              ),
+            ),
+
+          const SizedBox(height: 8),
 
           // Media (image or video) — GestureDetector wraps both
           if (widget.post.images.isNotEmpty || widget.post.videoUrl != null)
             GestureDetector(
               onDoubleTap: _onDoubleTap,
               onTap: widget.post.images.isNotEmpty
-                  ? () => Navigator.of(context, rootNavigator: true).push(
+                  ? () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => _FullScreenImageScreen(
+                          builder: (_) => FullScreenImageScreen(
                             imageUrl: widget.post.images.first,
                           ),
                         ),
                       )
-                  : null,
+                  : widget.post.videoUrl != null
+                      ? () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => FullScreenVideoScreen(
+                                videoUrl: widget.post.videoUrl!,
+                                thumbnail: widget.post.thumbnail,
+                              ),
+                            ),
+                          )
+                      : null,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -653,7 +688,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                         width: double.infinity,
                         height: 400,
                         color: AppColors.socaBlack,
-                        child: Icon(Icons.image,
+                        child: const Icon(Icons.image,
                             size: 48, color: AppColors.socaGrey),
                       ),
                     )
@@ -676,7 +711,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                         width: double.infinity,
                         color: AppColors.socaBlack,
                       ),
-                    Icon(Icons.play_circle_outline,
+                    const Icon(Icons.play_circle_outline,
                         size: 64, color: Colors.white),
                   ],
 
@@ -684,15 +719,15 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   Positioned(
                     bottom: 180,
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: Text(
                         'Double Tap to Cheer'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'Poppins',
                           fontSize: 15,
@@ -707,7 +742,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                     animation: _heartController,
                     builder: (_, __) {
                       if (_heartController.isDismissed) {
-                        return SizedBox.shrink();
+                        return const SizedBox.shrink();
                       }
                       return Opacity(
                         opacity: _heartOpacity.value,
@@ -731,7 +766,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
 
           // Cheers Count Row
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
                 GestureDetector(
@@ -748,10 +783,10 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   //       _isLiked ? AppColors.socaYellow : AppColors.socaBlack,
                   // ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
                   '$_likeCount ${_likeCount == 1 ? 'cheer' : 'cheers'}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 15,
                     color: AppColors.socaBlack,
@@ -776,7 +811,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   child: InkWell(
                     onTap: _followLoading ? null : _onFollow,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -794,7 +829,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           //       ? AppColors.socaYellow
                           //       : AppColors.socaBlack,
                           // ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text(
                             _isFollowing ? 'Following' : 'Follow',
                             style: TextStyle(
@@ -816,7 +851,7 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                 child: InkWell(
                   onTap: _onShare,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -825,10 +860,10 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           width: 28,
                           height: 28,
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           'SHARE'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             color: AppColors.socaBlack,
@@ -888,7 +923,7 @@ class _MoreOptionTile extends StatelessWidget {
       leading: Icon(icon, color: AppColors.socaBlack, size: 22),
       title: Text(
         label,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -901,73 +936,6 @@ class _MoreOptionTile extends StatelessWidget {
   }
 }
 
+// ── Tag Chip ──────────────────────────────────────────────────────────────────
+
 // ── Full Screen Image ──────────────────────────────────────────────────────────
-
-class _FullScreenImageScreen extends StatelessWidget {
-  final String imageUrl;
-
-  _FullScreenImageScreen({required this.imageUrl});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.socaBlack,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Center(
-              child: Image.network(
-                imageUrl,
-                width: double.infinity,
-                fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) =>
-                    Icon(Icons.error, color: Colors.white, size: 64),
-              ),
-            ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.15,
-              left: 20,
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.transparent,
-                child: Image.asset(
-                  'assets/images/logo_transparent.png',
-                  color: AppColors.socaBlack,
-                  errorBuilder: (_, __, ___) => Icon(
-                    Icons.sports_soccer,
-                    color: AppColors.socaBlack,
-                    size: 32,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 16,
-              left: 16,
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.arrow_back_ios_new,
-                        color: Colors.white, size: 22),
-                    SizedBox(width: 6),
-                    Text(
-                      'Back'.tr,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

@@ -41,10 +41,34 @@ class _RefereeMyRequestsScreenState
     final selectedTmnt = ref.watch(refereeSelectedTmntRequestsProvider);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          padding: const EdgeInsets.only(left: 8, right: 50, top: 8, bottom: 8),
+          margin: const EdgeInsets.only(left: 16, top: 16),
+          decoration: const BoxDecoration(
+            color: AppColors.socaBlack,
+          ),
+          child: const Text(
+            "My Requests",
+            style: TextStyle(
+                color: AppColors.socaYellow,
+                fontFamily: 'Poppins',
+                fontSize: 20,
+                fontWeight: FontWeight.w600),
+          ),
+        ),
+        const Padding(
+          padding: const EdgeInsets.only(left: 16, top: 16),
+          child: const Text(
+              style: TextStyle(
+                  color: AppColors.socaBlack, fontWeight: FontWeight.w700),
+              "${"Find all the matches here assigned to you by the Tournament Organisers. You can accept or decline as per your preference. All accepted matches will be under “My Matches” "}"),
+        ),
         // Tournament filter dropdown
         Padding(
-          padding: EdgeInsets.fromLTRB(12, 12, 12, 4),
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
           child: dropdownAsync.when(
             data: (items) => RefereeTournamentDropdown(
               items: items,

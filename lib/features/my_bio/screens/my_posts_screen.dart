@@ -3,12 +3,14 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/features/social_feed/widgets/tag_chip_card.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../home/widgets/full_screen_post_show.dart';
 import '../../player_bio/data/models/player_post_model.dart';
 import '../../player_bio/data/models/player_bio_model.dart';
 import '../../player_bio/data/repositories/player_bio_repository.dart';
@@ -22,7 +24,7 @@ class MyPostsScreen extends ConsumerStatefulWidget {
   final String userId;
   final bool isOwnProfile;
 
-  MyPostsScreen({
+  const MyPostsScreen({
     super.key,
     required this.userId,
     this.isOwnProfile = false,
@@ -117,7 +119,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
           ? FloatingActionButton(
               backgroundColor: AppColors.socaBlack,
               onPressed: () => context.push(AppRoutes.createPost),
-              child: Icon(Icons.add, color: AppColors.socaYellow),
+              child: const Icon(Icons.add, color: AppColors.socaYellow),
             )
           : null,
       body: _buildBody(playerBio),
@@ -126,14 +128,14 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
 
   Widget _buildBody(PlayerBioModel? playerBio) {
     if (_loading && _posts.isEmpty) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     if (!_loading && _posts.isEmpty) {
       return Center(
         child: Text(
           'No posts found'.tr,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
             fontSize: 14,
@@ -149,10 +151,10 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
       child: ListView.separated(
         controller: _scrollController,
         itemCount: _posts.length + (_loading ? 1 : 0),
-        separatorBuilder: (_, __) => SizedBox(height: 8),
+        separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemBuilder: (context, index) {
           if (index == _posts.length) {
-            return AppLoader();
+            return const AppLoader();
           }
           return _PostCard(
             post: _posts[index],
@@ -198,6 +200,39 @@ class _PostCardState extends State<_PostCard> {
   bool _isVideo() {
     if (widget.post.sources?.isNotEmpty != true) return false;
     return widget.post.sources!.first.videoUrl != null;
+  }
+
+  String? _videoUrl() {
+    if (widget.post.sources?.isNotEmpty != true) return null;
+    final source = widget.post.sources!.first;
+    final raw = source.videoUrl;
+    if (raw == null || raw.isEmpty) return null;
+    return raw.startsWith('http') ? raw : ApiConstants.getImageUrl(raw);
+  }
+
+  String? _thumbnailUrl() {
+    if (widget.post.sources?.isNotEmpty != true) return null;
+    final raw = widget.post.sources!.first.thumbnail;
+    if (raw == null || raw.isEmpty) return null;
+    return raw.startsWith('http') ? raw : ApiConstants.getImageUrl(raw);
+  }
+
+  void _openFullScreen(BuildContext context) {
+    final videoUrl = _videoUrl();
+    if (videoUrl != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => FullScreenVideoScreen(
+          videoUrl: videoUrl,
+          thumbnail: _thumbnailUrl(),
+        ),
+      ));
+    } else {
+      final url = _mediaUrl();
+      if (url == null) return;
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => FullScreenImageScreen(imageUrl: url),
+      ));
+    }
   }
 
   // ── Options bottom sheet ────────────────────────────────────────────────────
@@ -390,14 +425,14 @@ class _PostCardState extends State<_PostCard> {
 
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header (Avatar + Name + Role)
           if (widget.playerBio != null)
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
                   ClipOval(
@@ -407,14 +442,14 @@ class _PostCardState extends State<_PostCard> {
                       width: 40,
                       height: 40,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => CircleAvatar(
+                      errorWidget: (_, __, ___) => const CircleAvatar(
                         radius: 20,
                         backgroundColor: AppColors.socaGrey,
                         child: Icon(Icons.person, color: Colors.white),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -422,7 +457,7 @@ class _PostCardState extends State<_PostCard> {
                         Text(
                           '${widget.playerBio!.firstName ?? ''} ${widget.playerBio!.lastName ?? ''}'
                               .trim(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -433,7 +468,7 @@ class _PostCardState extends State<_PostCard> {
                           Text(
                             '${widget.playerBio!.playPosition} | ${widget.playerBio!.playPositionType ?? ''}'
                                 .trim(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 12,
                               color: AppColors.socaBlack,
@@ -446,14 +481,29 @@ class _PostCardState extends State<_PostCard> {
                 ],
               ),
             ),
-
+          if (widget.post.tagged != null && widget.post.tagged!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                children: widget.post.tagged!.map((tag) {
+                  final t = tag as Map<String, dynamic>;
+                  final name = t['name'] as String? ?? '';
+                  final tagId = t['tagId'] as String? ?? '';
+                  final imageUrl =
+                      ApiConstants.getImageUrl(t['imageUrl'] as String?);
+                  return TagChip(name: name, imageUrl: imageUrl, id: tagId);
+                }).toList(),
+              ),
+            ),
           // Title / Top Text
           if (widget.post.title?.isNotEmpty == true)
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Text(
                 widget.post.title!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -464,126 +514,132 @@ class _PostCardState extends State<_PostCard> {
 
           // Media
           if (mediaUrl != null)
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                CachedNetworkImage(
-                  imageUrl: mediaUrl,
-                  width: double.infinity,
-                  height: 350,
-                  fit: BoxFit.cover,
-                  placeholder: (_, __) => Container(
+            GestureDetector(
+              onTap: () => _openFullScreen(context),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: mediaUrl,
+                    width: double.infinity,
                     height: 350,
-                    color: AppColors.socaGrey.withValues(alpha: 0.15),
-                    child: AppLoader(),
+                    fit: BoxFit.cover,
+                    placeholder: (_, __) => Container(
+                      height: 350,
+                      color: AppColors.socaGrey.withValues(alpha: 0.15),
+                      child: const AppLoader(),
+                    ),
+                    errorWidget: (_, __, ___) => Container(
+                      height: 350,
+                      color: AppColors.socaBlack,
+                    ),
                   ),
-                  errorWidget: (_, __, ___) => Container(
+
+                  // Double Tap to Cheer Text
+                  Text(
+                    'Double Tap to Cheer'.tr,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black54,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Play Icon overlay
+                  if (isVideo)
+                    Icon(
+                      Icons.play_circle_outline,
+                      size: 72,
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
+
+                  // Top right menu — only visible for own posts
+                  if (widget.isOwn)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: GestureDetector(
+                        onTap: _showPostOptions,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: const Icon(Icons.more_vert,
+                              color: AppColors.socaBlack, size: 20),
+                        ),
+                      ),
+                    ),
+                ],
+              ), // Stack
+            ) // GestureDetector (mediaUrl != null)
+          else
+            GestureDetector(
+              onTap: () => _openFullScreen(context),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
                     height: 350,
+                    width: double.infinity,
                     color: AppColors.socaBlack,
                   ),
-                ),
-
-                // Double Tap to Cheer Text
-                Text(
-                  'Double Tap to Cheer'.tr,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black54,
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Play Icon overlay
-                if (isVideo)
-                  Icon(
-                    Icons.play_circle_outline,
-                    size: 72,
-                    color: Colors.white.withValues(alpha: 0.7),
-                  ),
-
-                // Top right menu — only visible for own posts
-                if (widget.isOwn)
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: GestureDetector(
-                      onTap: _showPostOptions,
-                      child: Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                        child: Icon(Icons.more_vert,
-                            color: AppColors.socaBlack, size: 20),
-                      ),
+                  Text(
+                    'Double Tap to Cheer'.tr,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
                     ),
                   ),
-              ],
-            )
-          else
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: 350,
-                  width: double.infinity,
-                  color: AppColors.socaBlack,
-                ),
-                Text(
-                  'Double Tap to Cheer'.tr,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-                if (isVideo)
-                  Icon(
-                    Icons.play_circle_outline,
-                    size: 72,
-                    color: Colors.white.withValues(alpha: 0.7),
-                  ),
-                if (widget.isOwn)
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: GestureDetector(
-                      onTap: _showPostOptions,
-                      child: Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
+                  if (isVideo)
+                    Icon(
+                      Icons.play_circle_outline,
+                      size: 72,
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
+                  if (widget.isOwn)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: GestureDetector(
+                        onTap: _showPostOptions,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: const Icon(Icons.more_vert,
+                              color: AppColors.socaBlack, size: 20),
                         ),
-                        child: Icon(Icons.more_vert,
-                            color: AppColors.socaBlack, size: 20),
                       ),
                     ),
-                  ),
-              ],
-            ),
+                ],
+              ), // Stack
+            ), // GestureDetector (mediaUrl == null)
 
           // Cheer Section
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
-                Icon(Icons.pan_tool_alt_outlined,
+                const Icon(Icons.pan_tool_alt_outlined,
                     size: 20, color: AppColors.socaBlack),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
                   '${widget.post.likeCount ?? 0} cheer',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack,
@@ -593,19 +649,20 @@ class _PostCardState extends State<_PostCard> {
             ),
           ),
 
-          Divider(height: 1, thickness: 1, color: Color(0xFFE0E0E0)),
+          const Divider(height: 1, thickness: 1, color: Color(0xFFE0E0E0)),
 
           // Share Section
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Icon(Icons.ios_share, size: 20, color: AppColors.socaBlack),
-                SizedBox(width: 8),
+                const Icon(Icons.ios_share,
+                    size: 20, color: AppColors.socaBlack),
+                const SizedBox(width: 8),
                 Text(
                   'SHARE'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack,
