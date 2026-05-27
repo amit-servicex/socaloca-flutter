@@ -248,14 +248,23 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                 InkWell(
                   onTap: _isLoading ? null : _handleProceed,
                   child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 18),
-                    decoration: BoxDecoration(
-                      color: AppColors.socaBlack,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: AppLoader(),
-                  ),
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(vertical: 18),
+                      decoration: BoxDecoration(
+                        color: AppColors.socaBlack,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "PROCEED",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: AppColors.socaYellow,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )
+                      // AppLoader   (),
+                      ),
                 ),
 
                 SizedBox(height: 50),

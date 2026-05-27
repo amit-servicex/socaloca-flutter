@@ -37,10 +37,10 @@ class SocaLocaTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50, // 40dp + padding
+      height: 60, // 40dp + padding
       decoration: BoxDecoration(
         color: AppColors.socaGrey, // new_grey (#eaeae8)
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(3),
         border: Border.all(
           color: AppColors.socaBlack, // black border
           width: 1, // 0.8dp ≈ 1px
@@ -73,7 +73,7 @@ class SocaLocaTextField extends StatelessWidget {
               style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400, // Regular
-                fontSize: 16,
+                fontSize: 18,
                 color: AppColors.socaBlack,
                 height: 1.0,
               ),
@@ -83,7 +83,7 @@ class SocaLocaTextField extends StatelessWidget {
                 hintStyle: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
-                  fontSize: 16,
+                  fontSize: 18,
                   color: AppColors.socaBlack,
                   height: 1.0,
                 ),
@@ -154,13 +154,13 @@ class _SocaLocaPasswordFieldState extends State<SocaLocaPasswordField> {
               child: _isPasswordVisible
                   ? Image.asset(
                       "assets/icons/ic_password_eye.png",
-                      width: 24,
-                      height: 24,
+                      width: 30,
+                      height: 30,
                     )
                   : Image.asset(
                       "assets/icons/ic_visibility_off.png",
-                      width: 24,
-                      height: 24,
+                      width: 30,
+                      height: 30,
                     )
               // Icon(
               //   _isPasswordVisible ? Icons.visibility : Icons.visibility_off,

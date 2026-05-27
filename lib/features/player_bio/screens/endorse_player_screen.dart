@@ -110,18 +110,18 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: AppColors.socaYellow,
-        elevation: 0,
-        titleSpacing: 0,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.socaBlack,
+      //   foregroundColor: AppColors.socaYellow,
+      //   elevation: 0,
+      //   titleSpacing: 0,
+      // ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── Black header banner ───────────────────────────────────────────
           Container(
-            width: double.infinity,
+            margin: EdgeInsets.only(left: 16, top: 10),
             color: AppColors.socaBlack,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Text(
@@ -153,42 +153,32 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  SizedBox(height: 16),
-
-                  // Text input with plain border
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: _hasError
-                            ? AppColors.socaYellow
-                            : Colors.grey.shade400,
-                      ),
+                  TextField(
+                    controller: _commentController,
+                    maxLines: 8,
+                    maxLength: _maxChars,
+                    buildCounter: (_,
+                            {required currentLength,
+                            required isFocused,
+                            maxLength}) =>
+                        null,
+                    onChanged: (_) {
+                      if (_hasError) setState(() => _hasError = false);
+                      setState(() {});
+                    },
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 13,
+                      color: AppColors.socaBlack,
                     ),
-                    child: TextField(
-                      controller: _commentController,
-                      maxLines: 8,
-                      maxLength: _maxChars,
-                      buildCounter: (_,
-                              {required currentLength,
-                              required isFocused,
-                              maxLength}) =>
-                          null,
-                      onChanged: (_) {
-                        if (_hasError) setState(() => _hasError = false);
-                        setState(() {});
-                      },
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 13,
-                        color: AppColors.socaBlack,
-                      ),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(12),
-                      ),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(12),
                     ),
                   ),
+
+                  // Text input with plain border
+                  SizedBox(height: 16),
 
                   // max characters label
                   Align(

@@ -18,6 +18,7 @@ class AppRoutes {
   static const String pinSetup = '/auth/pin-setup';
   static const String parentalSettings = '/auth/parental-settings';
   static const String socialAge = '/auth/social-age';
+  static const String socialThankYou = '/auth/social-thank-you';
   static const String createProfile = '/auth/create-profile';
 
   static const String locationPicker = '/location-picker';

@@ -122,25 +122,29 @@ class AuthRepository {
   Future<AuthResult<SocialLoginResponse>> socialLogin({
     required String socialId,
     required String email,
-    required String name,
-    required String profilePic,
-    required String loginType, // 'google' | 'facebook'
+    required String firstName,
+    required String lastName,
+    required String
+        media, // 'google' | 'facebook'  ← matches Android field name
     String? fcmToken,
   }) async {
     try {
       final data = await ApiClient.instance.post(
         ApiConstants.socialLogin,
         body: {
+          'firstName': firstName,
+          'lastName': lastName,
+          'media': media,
           'socialId': socialId,
           'email': email,
-          'name': name,
-          'profilePic': profilePic,
-          'loginType': loginType,
+          'deviceType': 'android',
           'deviceId': DeviceInfo.deviceId,
+          'deviceModel': 'Unknown',
           if (fcmToken != null) 'fcmToken': fcmToken,
         },
       );
       final response = SocialLoginResponse.fromJson(data);
+      log('Social login response: status=${response.status} isNewUser=${response.isNewUser} token=${response.token != null}');
       if (response.status != 1) {
         return AuthFailure(response.message ?? 'Social login failed');
       }

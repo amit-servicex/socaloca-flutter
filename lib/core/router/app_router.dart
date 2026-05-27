@@ -270,6 +270,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (ctx, state) => SocialAgeSelectionScreen(),
           ),
           GoRoute(
+            path: 'social-thank-you',
+            name: 'socialThankYou',
+            builder: (ctx, state) => SocialThankYouScreen(),
+          ),
+          GoRoute(
             path: 'create-profile',
             name: 'createProfile',
             builder: (ctx, state) => CreateProfileScreen(),
