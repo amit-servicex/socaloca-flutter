@@ -1044,7 +1044,17 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   color: AppColors.socaBlack,
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: AppLoader(),
+                child: _isLoading
+                    ? AppLoader(size: 40, centered: false)
+                    : Text(
+                        'SUBMIT'.tr,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          color: AppColors.socaYellow,
+                        ),
+                      ),
               ),
             ),
 

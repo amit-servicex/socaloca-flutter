@@ -375,7 +375,7 @@ class AppStrings {
           'SocaLoca is available in multiple languages. Please select one to continue.',
       'pleaseSelectLanguage': 'Please select a language',
       'signIn': 'SIGN IN',
-      'signUp': 'SIGN UP',
+      'signUp': 'Sign Up',
       'signOut': 'Sign Out',
       'login': 'Login',
       'forgotPassword': 'Forgot Password?',

@@ -28,6 +28,7 @@ class LoginLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: _pageBg,
       body: SafeArea(
@@ -40,18 +41,18 @@ class LoginLandingScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     // Logo  — 150×150dp, centred, marginTop 50dp
-                    SizedBox(height: 50),
+                    SizedBox(height: height * .17),
                     Center(
                       child: SvgPicture.asset(
                         'assets/icons/socaloca_logo.svg',
-                        width: 200,
+                        width: 180,
                         // height: 150,
                         // fit: BoxFit.contain,
                       ),
                     ),
 
                     // Buttons block — marginTop 50dp
-                    SizedBox(height: 50),
+                    SizedBox(height: height * .12),
 
                     // ── LOGIN button — outlined stroke, no fill ───────────
                     Padding(
@@ -59,7 +60,7 @@ class LoginLandingScreen extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () => context.push(AppRoutes.login),
                         child: Container(
-                          height: 80,
+                          height: 90,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: Colors.transparent,
@@ -71,7 +72,7 @@ class LoginLandingScreen extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
-                              fontSize: 26,
+                              fontSize: 32,
                               color: _black,
                             ),
                           ),
@@ -112,7 +113,7 @@ class LoginLandingScreen extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () => context.push(AppRoutes.ageSelection),
                         child: Container(
-                          height: 80,
+                          height: 90,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: _black,
@@ -123,7 +124,7 @@ class LoginLandingScreen extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
-                              fontSize: 26,
+                              fontSize: 32,
                               color: _yellow,
                             ),
                           ),

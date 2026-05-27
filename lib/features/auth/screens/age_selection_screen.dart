@@ -15,6 +15,8 @@ class AgeSelectionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: AppColors.socaPageBg, // new_white
       body: SafeArea(
@@ -22,17 +24,17 @@ class AgeSelectionScreen extends ConsumerWidget {
           child: Column(
             children: [
               // Logo Box - marginTop 50dp
-              SizedBox(height: 50),
+              SizedBox(height: height * .2),
               Center(
                 child: SvgPicture.asset(
                   'assets/icons/socaloca_logo.svg',
-                  width: 200,
+                  width: 180,
                   // height: 150,
                   // fit: BoxFit.contain,
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
+                height: height * 0.07,
               ),
               // Top Box - marginLeft/Right 40dp
               Padding(
@@ -49,7 +51,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                       },
                       child: Container(
                         width: double.infinity,
-                        height: 100,
+                        height: 115,
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
@@ -100,7 +102,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    SizedBox(height: 30),
+                    SizedBox(height: 40),
 
                     // Youth Button - 13-15 years old
                     InkWell(
@@ -112,7 +114,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                       },
                       child: Container(
                         width: double.infinity,
-                        height: 100,
+                        height: 115,
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
@@ -163,7 +165,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    SizedBox(height: 30),
+                    SizedBox(height: 40),
 
                     // Child Button - 7-12 years old (parent/guardian)
                     InkWell(
@@ -175,7 +177,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                       },
                       child: Container(
                         width: double.infinity,
-                        height: 100,
+                        height: 115,
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,

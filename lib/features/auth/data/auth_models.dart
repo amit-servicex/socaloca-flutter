@@ -125,14 +125,29 @@ class SocialLoginResponse {
   final bool isNewUser;
 
   factory SocialLoginResponse.fromJson(Map<String, dynamic> json) {
-    final response = json['response'] as Map<String, dynamic>?;
-    final userData = response?['userDetails'] as Map<String, dynamic>?;
+    // Android socialLogin returns flat: { "status":1, "userDetails":{...} }
+    // (unlike modSignIn which wraps in "response":{...})
+    // We try the flat format first; fall back to wrapped if needed.
+    final flat = json['status'] != null ? json : null;
+    final wrapped = json['response'] as Map<String, dynamic>?;
+    final root = flat ?? wrapped ?? <String, dynamic>{};
+
+    final userData = root['userDetails'] as Map<String, dynamic>?;
+    final user = userData != null ? LoginResponse._mapUserDetails(userData) : null;
+
+    // token may live at root level or inside userDetails
+    final token = (root['token'] as String?)
+        ?? (userData?['token'] as String?);
+
+    // Android checks !user.isProfile() — user.profile==false means new user
+    final isNewUser = !(user?.profile ?? true);
+
     return SocialLoginResponse(
-      status: (response?['status'] as num?)?.toInt() ?? 0,
-      message: response?['message'] as String?,
-      token: response?['token'] as String?,
-      user: userData != null ? LoginResponse._mapUserDetails(userData) : null,
-      isNewUser: (response?['isNewUser'] as bool?) ?? false,
+      status: (root['status'] as num?)?.toInt() ?? 0,
+      message: root['message'] as String?,
+      token: token,
+      user: user,
+      isNewUser: isNewUser,
     );
   }
 }
