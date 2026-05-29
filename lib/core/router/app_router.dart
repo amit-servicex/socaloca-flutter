@@ -880,10 +880,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (ctx, state, child) => ClubHomeScreen(child: child),
         routes: [
           GoRoute(
-            path: AppRoutes.clubBioAdmin,
-            name: 'clubBioAdmin',
-            builder: (_, __) => ClubBioAdminScreen(),
-          ),
+              path: AppRoutes.clubBioAdmin,
+              name: 'clubBioAdmin',
+              builder: (_, __) => Scaffold(
+                    body:
+                        Center(child: Text('ClubBioAdminScreen — coming soon')),
+                  )
+              //  ClubBioAdminScreen(),
+              ),
           GoRoute(
             path: AppRoutes.clubPlayers,
             name: 'clubPlayers',
