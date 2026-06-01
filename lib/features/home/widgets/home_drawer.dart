@@ -14,6 +14,7 @@ import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_snackbar.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import 'language_selection_bottom_sheet.dart';
+import 'dart:developer';
 
 /// Right-side drawer matching Android common_menu.xml.
 /// Width: 300 dp, profile section: 220 dp black background.
@@ -46,7 +47,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
     final socaId =
         user.sclId?.isNotEmpty == true ? user.sclId! : 'SCL${user.id}';
     final bioState = ref.watch(playerBioProvider(user.id));
-
+    // log("this is the user profile ${user.profileImage}");
     return SafeArea(
       child: Drawer(
         width: MediaQuery.of(context).size.width * .8,
@@ -67,22 +68,23 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                     CircleAvatar(
                       radius: 60,
                       backgroundColor: AppColors.socaGrey,
-                      backgroundImage: user.profileImage != null
-                          ? NetworkImage(
-                              ApiConstants.getImageUrl(user.profileImage ?? ''))
-                          : null,
-                      child: user.profileImage == null
-                          ? Text(
-                              user.name?.isNotEmpty == true
-                                  ? user.name![0].toUpperCase()
-                                  : 'S',
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.socaBlack,
-                              ),
-                            )
-                          : null,
+                      backgroundImage: (user.profileImage?.isEmpty ?? true)
+                          ? Image.asset("assets/images/avatar1.png").image
+                          : NetworkImage(ApiConstants.getImageUrl(
+                              user.profileImage ?? '')),
+                      // : null,
+                      // child: (user.profileImage?.isEmpty ?? true)
+                      //     ? Text(
+                      //         user.name?.isNotEmpty == true
+                      //             ? user.name![0].toUpperCase()
+                      //             : 'S',
+                      //         style: TextStyle(
+                      //           fontSize: 36,
+                      //           fontWeight: FontWeight.bold,
+                      //           color: AppColors.socaBlack,
+                      //         ),
+                      //       )
+                      //     : null,
                     ),
                     SizedBox(height: 10),
                     // Full name — yellow
@@ -161,36 +163,38 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
-                    _DrawerMenuItem(
-                      icon: Image.asset(
-                        "assets/icons/trials.png",
-                        width: 24,
-                        height: 24,
+                    if (user.isReferee == false && user.isFan == false) ...[
+                      _DrawerMenuItem(
+                        icon: Image.asset(
+                          "assets/icons/trials.png",
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: AppStrings.trials,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          context.push(AppRoutes.trials);
+                        },
                       ),
-                      title: AppStrings.trials,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.push(AppRoutes.trials);
-                      },
-                    ),
-                    _DrawerMenuItem(
-                      icon: Image.asset(
-                        "assets/icons/ic_gallery_new.png",
-                        width: 24,
-                        height: 24,
+                      _DrawerMenuItem(
+                        icon: Image.asset(
+                          "assets/icons/ic_gallery_new.png",
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: AppStrings.myGallery,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          context.push(
+                            AppRoutes.myPosts,
+                            extra: {
+                              'userId': user.id,
+                              'isOwnProfile': true,
+                            },
+                          );
+                        },
                       ),
-                      title: AppStrings.myGallery,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.push(
-                          AppRoutes.myPosts,
-                          extra: {
-                            'userId': user.id,
-                            'isOwnProfile': true,
-                          },
-                        );
-                      },
-                    ),
+                    ],
                     _DrawerMenuItem(
                       icon: Image.asset(
                         "assets/icons/ic_update_profile.png",
@@ -267,19 +271,21 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                         context.push(AppRoutes.privacySettings);
                       },
                     ),
-                    _DrawerMenuItem(
-                      icon: Image.asset(
-                        "assets/icons/help_us_to_improve.png",
-                        width: 24,
-                        height: 24,
-                      ),
-                      title: AppStrings.helpUsToImprove,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        context.push(AppRoutes.survey);
-                      },
-                    ),
 
+                    if (user.isReferee == false && user.isFan == false) ...[
+                      _DrawerMenuItem(
+                        icon: Image.asset(
+                          "assets/icons/help_us_to_improve.png",
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: AppStrings.helpUsToImprove,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          context.push(AppRoutes.survey);
+                        },
+                      ),
+                    ],
                     // Legal links row — "Data Policy | Terms & Conditions"
                     // Divider(
                     //     height: 1, thickness: 0.5, color: AppColors.socaBlack),

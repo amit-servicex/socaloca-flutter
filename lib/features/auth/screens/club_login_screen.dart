@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/app_loader.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
 
@@ -39,15 +41,8 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
   }
 
   void _onUKeyChanged(String value) {
-    String label;
-    if (_isSocaLocaId(value)) {
-      label = 'SocaLoca ID *';
-    } else if (value.isNotEmpty) {
-      label = 'Email *';
-    } else {
-      label = 'Email or SocaLoca ID';
-    }
-    if (label != _inputLabel) setState(() => _inputLabel = label);
+    // Keep logic if needed, but UI no longer uses _inputLabel dynamically
+    // as it statically says "Email */SocaLoca ID *" in the hint/label.
   }
 
   bool _isSocaLocaId(String v) => RegExp(r'^[Ss][Cc][Ll]\d+$').hasMatch(v);
@@ -103,253 +98,231 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 16),
-                // Title
-                Text(
-                  'Club Login'.tr,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'Sign in to your professional club account'.tr,
-                  style: TextStyle(
-                    fontFamily: 'Lato',
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-                SizedBox(height: 32),
-
-                // Email / SocaLoca ID field
-                Text(
-                  _inputLabel,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-                SizedBox(height: 6),
-                TextFormField(
-                  controller: _uKeyCtrl,
-                  onChanged: _onUKeyChanged,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                  decoration: _inputDecoration('Enter email or SocaLoca ID'),
-                  validator: (v) {
-                    final val = v?.trim() ?? '';
-                    if (val.isEmpty) return 'Please enter email or SocaLoca ID';
-                    if (!_isEmail(val) && !_isSocaLocaId(val)) {
-                      return 'Please enter a valid email or SocaLoca ID';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-
-                // Password field
-                Text(
-                  'Password *'.tr,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-                SizedBox(height: 6),
-                TextFormField(
-                  controller: _passCtrl,
-                  obscureText: _obscurePass,
-                  textInputAction: TextInputAction.go,
-                  onFieldSubmitted: (_) => _submit(),
-                  style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                  decoration: _inputDecoration('Enter password').copyWith(
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePass ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.grey,
-                        size: 20,
+      backgroundColor: Color(0xFFF5F5F5), // match light grey background
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: height * .17),
+                    // Logo
+                    Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/socaloca_logo.svg',
+                        width: 200,
+                        // height: 150,
+                        // fit: BoxFit.contain,
                       ),
-                      onPressed: () =>
-                          setState(() => _obscurePass = !_obscurePass),
                     ),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return 'Please enter password';
-                    return null;
-                  },
-                ),
+                    SizedBox(height: height * .1),
 
-                // Forgot password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () =>
-                        context.push(AppRoutes.forgotPassword, extra: true),
-                    child: Text(
-                      'Forgot Password?'.tr,
+                    // Email / SocaLoca ID field
+                    TextFormField(
+                      controller: _uKeyCtrl,
+                      onChanged: _onUKeyChanged,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 16),
+                      decoration: _inputDecoration('Email */SocaLoca ID *'),
+                      validator: (v) {
+                        final val = v?.trim() ?? '';
+                        if (val.isEmpty)
+                          return 'Please enter email or SocaLoca ID';
+                        if (!_isEmail(val) && !_isSocaLocaId(val)) {
+                          return 'Please enter a valid email or SocaLoca ID';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 20),
+
+                    // Password field
+                    TextFormField(
+                      controller: _passCtrl,
+                      obscuringCharacter: '*',
+                      obscureText: _obscurePass,
+                      textInputAction: TextInputAction.go,
+                      onFieldSubmitted: (_) => _submit(),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 16),
+                      decoration: _inputDecoration('Password *').copyWith(
+                        suffixIcon: IconButton(
+                          icon: !_obscurePass
+                              ? Image.asset(
+                                  "assets/icons/ic_password_eye.png",
+                                  width: 34,
+                                  height: 34,
+                                )
+                              : Image.asset(
+                                  "assets/icons/ic_visibility_off.png",
+                                  width: 34,
+                                  height: 34,
+                                ),
+
+                          //  Icon(
+                          //   _obscurePass
+                          //       ? Icons.visibility_off_outlined
+                          //       : Icons.visibility_outlined,
+                          //   color: AppColors.socaBlack,
+                          //   size: 22,
+                          // ),
+                          onPressed: () =>
+                              setState(() => _obscurePass = !_obscurePass),
+                        ),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty)
+                          return 'Please enter password';
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 12),
+
+                    Text(
+                      '* mandatory fields',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 13,
+                        fontSize: 12,
                         color: AppColors.socaBlack,
                       ),
                     ),
-                  ),
-                ),
 
-                // Error message
-                if (_errorMessage != null) ...[
-                  SizedBox(height: 8),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: AppColors.error.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                          color: AppColors.error.withValues(alpha: 0.3)),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.error_outline,
-                            size: 16, color: AppColors.error),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            _errorMessage!,
-                            style: TextStyle(
-                                fontFamily: 'Lato',
-                                fontSize: 13,
-                                color: AppColors.error),
+                    // Error message
+                    if (_errorMessage != null) ...[
+                      SizedBox(height: 16),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: AppColors.error.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                              color: AppColors.error.withValues(alpha: 0.3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.error_outline,
+                                size: 16, color: AppColors.error),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                _errorMessage!,
+                                style: TextStyle(
+                                    fontFamily: 'Lato',
+                                    fontSize: 13,
+                                    color: AppColors.error),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+
+                    SizedBox(height: 24),
+
+                    // Login button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 60,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _submit,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.socaBlack,
+                          disabledBackgroundColor:
+                              AppColors.socaBlack.withValues(alpha: 0.5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ],
+                        child:
 
-                SizedBox(height: 24),
+                            // _isLoading
+                            //     ? SizedBox(
+                            //         width: 22,
+                            //         height: 22,
+                            //         child: CircularProgressIndicator(
+                            //           color: AppColors.socaYellow,
+                            //           strokeWidth: 2.5,
+                            //         ),
+                            //       )
+                            //     :
 
-                // Login button
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.socaBlack,
-                      disabledBackgroundColor:
-                          AppColors.socaBlack.withValues(alpha: 0.5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                    child: _isLoading
-                        ? SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              color: AppColors.socaYellow,
-                              strokeWidth: 2.5,
-                            ),
-                          )
-                        : Text(
-                            'LOGIN'.tr,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w800,
-                              fontSize: 15,
-                              color: AppColors.socaYellow,
-                            ),
+                            Text(
+                          'LOGIN'.tr,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 15,
+                            color: AppColors.socaYellow,
                           ),
-                  ),
-                ),
-
-                SizedBox(height: 20),
-
-                // Register as Club link
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have a club account?".tr,
-                      style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 13,
-                        color: Colors.grey,
+                        ),
                       ),
                     ),
-                    TextButton(
-                      onPressed: () => context.push(AppRoutes.registerClub),
-                      child: Text(
-                        'Register as Club'.tr,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                          color: AppColors.socaBlack,
+
+                    SizedBox(height: 24),
+
+                    // Register as Club link
+                    Center(
+                      child: TextButton(
+                        onPressed: () => context.push(AppRoutes.registerClub),
+                        child: Text(
+                          'Register as a Club',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: AppColors.socaBlack,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+          if (_isLoading)
+            Container(
+              color: Colors.black54,
+              child: AppLoader(size: 500),
+            ),
+        ],
       ),
     );
   }
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration _inputDecoration(String label) {
     return InputDecoration(
-      hintText: hint,
-      hintStyle:
-          TextStyle(fontFamily: 'Lato', fontSize: 13, color: Colors.grey),
-      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: BorderSide(color: Color(0xFFDDDDDD)),
+      fillColor: Colors.transparent,
+      labelText: label,
+      labelStyle: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+        color: AppColors.socaBlack,
       ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: BorderSide(color: Color(0xFFDDDDDD)),
+      floatingLabelBehavior: FloatingLabelBehavior.never,
+      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+      border: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey.shade400),
       ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey.shade400),
+      ),
+      focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.socaBlack, width: 1.5),
       ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
+      errorBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.error),
       ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
+      focusedErrorBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.error, width: 1.5),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:socaloca/shared/providers/auth_provider.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
@@ -344,6 +345,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
     final state = ref.watch(_bioProvider);
     final currentUserId = StorageService.userId;
     final isOwnProfile = currentUserId == widget.playerId;
+    final user = ref.watch(currentUserProvider);
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
@@ -488,7 +490,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
                                 SizedBox(width: 8),
                                 // RATE
-                                if (!isOwnProfile)
+                                if (!isOwnProfile && user?.isFan == false)
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.push(

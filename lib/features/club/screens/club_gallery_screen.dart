@@ -54,16 +54,16 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
     final parsed = raw.map((e) => ClubPostModel.fromJson(e)).toList();
     setState(() {
       _posts.addAll(parsed);
-      final _hasMore = parsed.length >= _limit;
-      final _loading = false;
+      _hasMore = parsed.length >= _limit;
+      _loading = false;
     });
   }
 
   Future<void> _refresh() async {
     setState(() {
       _posts.clear();
-      final _start = 0;
-      final _hasMore = true;
+      _start = 0;
+      _hasMore = true;
     });
     await _load();
   }
@@ -75,7 +75,12 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
     }
     if (_posts.isEmpty) {
       return Center(
-          child: Text('No Posts'.tr, style: TextStyle(fontFamily: 'Poppins')));
+          child: Text('No Posts'.tr,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.socaBlack)));
     }
 
     return RefreshIndicator(

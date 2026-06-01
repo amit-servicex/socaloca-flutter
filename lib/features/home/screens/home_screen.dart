@@ -625,7 +625,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   if (user != null && !user.isFan)
                     ref.read(matchUpdatesProvider.future),
                   ref.read(feedLiveTmntsProvider.notifier).refresh(),
-                  ref.read(feedNewTeamsProvider.notifier).refresh(),
+                  if (user != null && !user.isFan)
+                    ref.read(feedNewTeamsProvider.notifier).refresh(),
                   ref.read(feedRecUsersProvider.notifier).refresh(),
                   ref.read(mostEndorsedProvider.notifier).refresh(),
                   ref.read(feedTeamsProvider.notifier).refresh(),
@@ -642,7 +643,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     snap: true,
                     pinned: true,
                     surfaceTintColor: AppColors.socaBlack,
-                    expandedHeight: 150,
+                    expandedHeight: user?.isFan == true ? 110 : 160,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Padding(
                         padding: EdgeInsets.fromLTRB(16, 45, 16, 0),
@@ -667,27 +668,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             fontWeight: FontWeight.w700)),
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    _buildStatColumn(
-                                        (user?.postCount ?? 0).toString(),
-                                        AppStrings.posts.toUpperCase()),
-                                    SizedBox(width: 8),
-                                    _buildStatColumn(
-                                        (user?.likeCount ?? 0).toString(),
-                                        AppStrings.cheers),
-                                    SizedBox(width: 8),
-                                    _buildStatColumn(
-                                        (user?.followersCount ?? 0).toString(),
-                                        AppStrings.followers.toUpperCase()),
-                                    SizedBox(width: 8),
-                                    _buildStatColumn(
-                                        (user?.followingCount ?? 0).toString(),
-                                        AppStrings.following.toUpperCase()),
-                                  ],
-                                ),
+                                if (user?.isFan == false)
+                                  Row(
+                                    children: [
+                                      _buildStatColumn(
+                                          (user?.postCount ?? 0).toString(),
+                                          AppStrings.posts.toUpperCase()),
+                                      SizedBox(width: 8),
+                                      _buildStatColumn(
+                                          (user?.likeCount ?? 0).toString(),
+                                          AppStrings.cheers),
+                                      SizedBox(width: 8),
+                                      _buildStatColumn(
+                                          (user?.followersCount ?? 0)
+                                              .toString(),
+                                          AppStrings.followers.toUpperCase()),
+                                      SizedBox(width: 8),
+                                      _buildStatColumn(
+                                          (user?.followingCount ?? 0)
+                                              .toString(),
+                                          AppStrings.following.toUpperCase()),
+                                    ],
+                                  ),
                                 CircleAvatar(
-                                  radius: 24,
+                                  radius: 30,
                                   backgroundColor:
                                       AppColors.socaGrey.withOpacity(0.2),
                                   backgroundImage: user?.profileImage != null &&
@@ -701,93 +705,96 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           user!.profileImage!.isEmpty ||
                                           user.profileImage!
                                               .startsWith('file:///')
-                                      ? Icon(Icons.person,
-                                          color: AppColors.socaBlack)
+                                      ? Image.asset("assets/images/avatar1.png")
                                       : null,
                                 ),
                               ],
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border(
-                                  top: BorderSide(color: Colors.grey.shade300),
-                                  bottom:
-                                      BorderSide(color: Colors.grey.shade300),
+                            if (user?.isFan == false) ...[
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border(
+                                    top:
+                                        BorderSide(color: Colors.grey.shade300),
+                                    bottom:
+                                        BorderSide(color: Colors.grey.shade300),
+                                  ),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () =>
+                                          context.push(AppRoutes.myBio),
+                                      child: _buildActionItem(
+                                          Image.asset(
+                                              "assets/icons/ic_my_bio.png",
+                                              width: 20,
+                                              height: 20),
+                                          AppStrings.myBio),
+                                    ),
+                                    Container(
+                                        width: 1,
+                                        height: 20,
+                                        color: Colors.grey.shade300),
+                                    InkWell(
+                                      onTap: () => context.push(
+                                        AppRoutes.myPosts,
+                                        extra: {
+                                          'userId': userId,
+                                          'isOwnProfile': true,
+                                        },
+                                      ),
+                                      child: _buildActionItem(
+                                          Image.asset(
+                                            "assets/icons/ic_my_post_feed.png",
+                                            width: 20,
+                                            height: 20,
+                                          ),
+                                          AppStrings.myPosts),
+                                    ),
+                                    Container(
+                                        width: 1,
+                                        height: 20,
+                                        color: Colors.grey.shade300),
+                                    InkWell(
+                                      onTap: () => context.push(
+                                        AppRoutes.mySkillRatings,
+                                        extra: {'userId': userId},
+                                      ),
+                                      child: _buildActionItem(
+                                          Image.asset(
+                                              "assets/icons/ic_endorsements_bottom_black.png",
+                                              width: 20,
+                                              height: 20),
+                                          AppStrings.myRatings),
+                                    ),
+                                    Container(
+                                        width: 1,
+                                        height: 20,
+                                        color: Colors.grey.shade300),
+                                    InkWell(
+                                      onTap: () => context.push(
+                                        AppRoutes.gallery,
+                                        extra: {
+                                          'userId': userId,
+                                          'isOwnProfile': true,
+                                        },
+                                      ),
+                                      child: _buildActionItem(
+                                          Image.asset(
+                                              "assets/icons/ic_gallery.png",
+                                              width: 20,
+                                              height: 20),
+                                          AppStrings.gallery),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => context.push(AppRoutes.myBio),
-                                    child: _buildActionItem(
-                                        Image.asset(
-                                            "assets/icons/ic_my_bio.png",
-                                            width: 20,
-                                            height: 20),
-                                        AppStrings.myBio),
-                                  ),
-                                  Container(
-                                      width: 1,
-                                      height: 20,
-                                      color: Colors.grey.shade300),
-                                  InkWell(
-                                    onTap: () => context.push(
-                                      AppRoutes.myPosts,
-                                      extra: {
-                                        'userId': userId,
-                                        'isOwnProfile': true,
-                                      },
-                                    ),
-                                    child: _buildActionItem(
-                                        Image.asset(
-                                          "assets/icons/ic_my_post_feed.png",
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                        AppStrings.myPosts),
-                                  ),
-                                  Container(
-                                      width: 1,
-                                      height: 20,
-                                      color: Colors.grey.shade300),
-                                  InkWell(
-                                    onTap: () => context.push(
-                                      AppRoutes.mySkillRatings,
-                                      extra: {'userId': userId},
-                                    ),
-                                    child: _buildActionItem(
-                                        Image.asset(
-                                            "assets/icons/ic_endorsements_bottom_black.png",
-                                            width: 20,
-                                            height: 20),
-                                        AppStrings.myRatings),
-                                  ),
-                                  Container(
-                                      width: 1,
-                                      height: 20,
-                                      color: Colors.grey.shade300),
-                                  InkWell(
-                                    onTap: () => context.push(
-                                      AppRoutes.gallery,
-                                      extra: {
-                                        'userId': userId,
-                                        'isOwnProfile': true,
-                                      },
-                                    ),
-                                    child: _buildActionItem(
-                                        Image.asset(
-                                            "assets/icons/ic_gallery.png",
-                                            width: 20,
-                                            height: 20),
-                                        AppStrings.gallery),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            ]
                           ],
                         ),
                       ),
@@ -828,68 +835,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     //   ),
                     // ),
                   ),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      color: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      margin: EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: AppColors.socaBlack, width: 2),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Icon(
-                              Icons.add,
-                              size: 16,
-                              color: AppColors.socaBlack,
-                              weight: 2,
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              AppStrings.sharePostPrompt,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              context.push(AppRoutes.createPost);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 10),
+
+                  if (user?.isFan == false)
+                    SliverToBoxAdapter(
+                      child: Container(
+                        color: Colors.white,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        margin: EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(2),
                               decoration: BoxDecoration(
-                                color: AppColors.socaBlack,
+                                border: Border.all(
+                                    color: AppColors.socaBlack, width: 2),
                                 borderRadius: BorderRadius.circular(4),
                               ),
+                              child: Icon(
+                                Icons.add,
+                                size: 16,
+                                color: AppColors.socaBlack,
+                                weight: 2,
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Expanded(
                               child: Text(
-                                AppStrings.createPostUpper,
+                                AppStrings.sharePostPrompt,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.socaYellow,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                            InkWell(
+                              onTap: () {
+                                context.push(AppRoutes.createPost);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: AppColors.socaBlack,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  AppStrings.createPostUpper,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.socaYellow,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
                   SliverToBoxAdapter(child: MostEndorsedSection()),
-                  SliverToBoxAdapter(child: MostFollowedTeamsSection()),
+
+                  if (user?.isFan == false)
+                    SliverToBoxAdapter(child: MostFollowedTeamsSection()),
                   SliverToBoxAdapter(child: LiveTournamentsSection()),
                   if (user != null && !user.isFan)
                     SliverToBoxAdapter(

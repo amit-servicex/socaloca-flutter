@@ -291,8 +291,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
         final user = data.user;
         final token = data.token;
         if (user == null) {
-          AppSnackBar.showError(
-              context, 'Unexpected response. Please try again.');
+          _showNotRegisteredDialog(context, 'Mobile is not registered');
           return;
         }
 
@@ -319,6 +318,10 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
 
         // Navigate based on user role (matches Android logic)
         if (mounted) {
+          if (user.profile == false) {
+            context.push(AppRoutes.createProfile);
+            return;
+          }
           _navigateBasedOnRole(
               user?.isReferee == true ? 'referee' : user?.userType);
         }
@@ -454,7 +457,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
         } else {
           final user = data.user;
           if (user == null) {
-            AppSnackBar.showError(
+            _showNotRegisteredDialog(
                 context, 'Unexpected response. Please try again.');
             return;
           }
@@ -474,6 +477,97 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
   }
 
   // ─── UI helpers ──────────────────────────────────────────────────────────
+
+  void _showNotRegisteredDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(dialogContext),
+                  child: const Icon(Icons.close, color: Colors.black, size: 22),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(dialogContext);
+                        context.push(AppRoutes.ageSelection);
+                      },
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: Colors.black, width: 1.5),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'SIGN UP',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(dialogContext),
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'TRY AGAIN',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: AppColors.socaYellow,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   static Color _black = AppColors.socaBlack;
   static Color _yellow = AppColors.socaYellow;

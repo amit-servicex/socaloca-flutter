@@ -45,9 +45,9 @@ class _FullScreenVideoScreenState extends State<FullScreenVideoScreen> {
         allowFullScreen: true,
         allowMuting: true,
         showControls: true,
-        placeholder: widget.thumbnail != null
-            ? Image.network(widget.thumbnail!, fit: BoxFit.contain)
-            : null,
+        // placeholder: widget.thumbnail != null
+        //     ? Image.network(widget.thumbnail!, fit: BoxFit.contain)
+        //     : null,
         materialProgressColors: ChewieProgressColors(
           playedColor: AppColors.socaYellow,
           handleColor: AppColors.socaYellow,

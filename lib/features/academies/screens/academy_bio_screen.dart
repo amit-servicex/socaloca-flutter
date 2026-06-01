@@ -906,31 +906,39 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                     ? v.thumbnail!
                     : _imageUrl(v.imageUrl ?? v.effectiveImageUrl);
 
-                return Container(
-                  width: 120,
-                  decoration: BoxDecoration(
-                    color: AppColors.socaGrey.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      if (imgUrl.isNotEmpty)
-                        CachedNetworkImage(
-                          imageUrl: imgUrl,
-                          fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) =>
-                              Icon(Icons.videocam, color: AppColors.socaBlack),
-                        )
-                      else
-                        Icon(Icons.videocam, color: AppColors.socaBlack),
-                      Container(color: Colors.black26),
-                      Center(
-                        child: Icon(Icons.play_circle_outline,
-                            color: Colors.white, size: 36),
-                      ),
-                    ],
+                return InkWell(
+                  onTap: () {
+                    context.push(AppRoutes.fullScreenVideo, extra: {
+                      'videoUrl': v.videoUrl ?? '',
+                      'thumbnail': imgUrl,
+                    });
+                  },
+                  child: Container(
+                    width: 120,
+                    decoration: BoxDecoration(
+                      color: AppColors.socaGrey.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        if (imgUrl.isNotEmpty)
+                          CachedNetworkImage(
+                            imageUrl: imgUrl,
+                            fit: BoxFit.cover,
+                            errorWidget: (_, __, ___) => Icon(Icons.videocam,
+                                color: AppColors.socaBlack),
+                          )
+                        else
+                          Icon(Icons.videocam, color: AppColors.socaBlack),
+                        Container(color: Colors.black26),
+                        Center(
+                          child: Icon(Icons.play_circle_outline,
+                              color: Colors.white, size: 36),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
