@@ -3,14 +3,14 @@
     <string name="app_id" translatable="false">com.football.socaloca</string>
 
 
-<!--    <string name="base_url" translatable="false">http://52.89.63.249:9757/</string>-->
-<!--    <string name="php_base_url" translatable="false">http://52.89.63.249/supersoca/rest/</string>-->
-<!--    <string name="img_base_url" translatable="false">https://d1aa86jbydwee9.cloudfront.net/dev/</string>-->
+   <string name="base_url" translatable="false">http://52.89.63.249:9757/</string>
+   <string name="php_base_url" translatable="false">http://52.89.63.249/supersoca/rest/</string>
+   <string name="img_base_url" translatable="false">https://d1aa86jbydwee9.cloudfront.net/dev/</string>
 
 
-        <string name="base_url" translatable="false">https://organise.socaloca.football:9757/</string>
+        <!-- <string name="base_url" translatable="false">https://organise.socaloca.football:9757/</string>
         <string name="php_base_url" translatable="false">https://console.socaloca.football/supersoca/rest/</string>
-        <string name="img_base_url" translatable="false">https://soca-loca.s3-us-west-2.amazonaws.com/dev/</string>
+        <string name="img_base_url" translatable="false">https://soca-loca.s3-us-west-2.amazonaws.com/dev/</string> -->
 
     <string name="upload_large_file_url" translatable="false">https://largeupload.socaloca.football/uploadFile</string>
     <!--    <string name="share_base_url" translatable="false">https://feed.socaloca.football/</string>-->

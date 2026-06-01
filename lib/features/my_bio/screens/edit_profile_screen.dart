@@ -948,7 +948,18 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       color: AppColors.socaBlack,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: AppLoader(),
+                    child: Center(
+                      child: Text(
+                        'UPDATE'.tr,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          color: AppColors.socaYellow,
+                        ),
+                      ),
+                    ),
+                    //  AppLoader(),
                   ),
                 ),
 

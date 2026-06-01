@@ -112,7 +112,7 @@ class _BioBody extends ConsumerWidget {
           children: [
             // ── Top Bar ──────────────────────────────────────────────
             Container(
-              color: Colors.white,
+              // color: AppColors.socaGrey,
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
@@ -128,17 +128,18 @@ class _BioBody extends ConsumerWidget {
                   SizedBox(width: 12),
                   Container(width: 1.5, height: 24, color: AppColors.socaBlack),
                   SizedBox(width: 12),
-                  Icon(Icons.workspace_premium_outlined,
-                      color: AppColors.socaBlack),
+                  Image.asset("assets/icons/ic_platinum_badge.png",
+                      width: 28, height: 28),
                   Spacer(),
                   IconButton(
-                    icon: Icon(Icons.photo_library_outlined,
-                        color: AppColors.socaBlack),
+                    icon: Image.asset("assets/icons/ic_gallery_new.png",
+                        width: 28, height: 28),
                     onPressed: () => context.push(AppRoutes.clubGallery),
                   ),
                   if (club.website != null && club.website!.isNotEmpty)
                     IconButton(
-                      icon: Icon(Icons.language, color: AppColors.socaBlack),
+                      icon: Image.asset("assets/icons/ic_website.png",
+                          width: 28, height: 28),
                       onPressed: () => launchUrl(Uri.parse(club.website!)),
                     ),
                 ],

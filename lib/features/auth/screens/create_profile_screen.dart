@@ -722,6 +722,10 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       if (!mounted) return;
 
       if (result) {
+        if (_isReferee) {
+          context.go(AppRoutes.tournaments);
+          return;
+        }
         context.go(AppRoutes.home);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

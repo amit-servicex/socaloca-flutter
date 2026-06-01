@@ -558,7 +558,17 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             color: AppColors.socaBlack,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: AppLoader(),
+                          child: Center(
+                            child: Text(
+                              'SIGN UP'.tr,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w800,
+                                fontSize: 15,
+                                color: AppColors.socaYellow,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
 
@@ -676,6 +686,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               ),
             ),
           ),
+          if (_isLoading)
+            Container(
+              color: Colors.black54,
+              child: AppLoader(size: 500),
+            ),
         ],
       ),
     );

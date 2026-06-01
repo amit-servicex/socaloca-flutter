@@ -78,17 +78,16 @@ class _TournamentsLandingScreenState
                         fontSize: 14,
                       ),
                       indicatorColor: Colors.black,
-                      indicatorWeight: 2,
-                      isScrollable: true,
-                      tabAlignment: TabAlignment.start,
+                      indicatorWeight: 3,
+                      isScrollable: false,
                       dividerColor: Colors.transparent,
                       tabs: [
                         Tab(text: AppStrings.tournaments.toUpperCase()),
                         Tab(text: AppStrings.oneOff.toUpperCase()),
-                        Tab(text: AppStrings.pickup.toUpperCase()),
+                        if (!_usesTournamentTopTabBarOnlyLanding(user))
+                          Tab(text: AppStrings.pickup.toUpperCase()),
                       ],
                     ),
-
                   // Tournament sub-tabs (only visible when TOURNAMENTS is selected)
                   if (usesTournamentOnlyLanding)
                     _TournamentTabBar(
@@ -141,20 +140,20 @@ class _TournamentsLandingScreenState
 
   bool _usesTournamentOnlyLanding(UserModel? user) {
     final userType = user?.userType?.toLowerCase();
-    return
-
-        // (user?.isReferee ?? false) ||
+    return (user?.isReferee ?? false) ||
         (user?.isFan ?? false) ||
-            // userType == 'referee' ||
-            userType == 'fan';
+        userType == 'referee' ||
+        userType == 'fan';
   }
 
   bool _usesTournamentTopTabBarOnlyLanding(UserModel? user) {
     final userType = user?.userType?.toLowerCase();
     return (user?.isReferee ?? false) ||
-        (user?.isFan ?? false) ||
-        userType == 'referee' ||
-        userType == 'fan';
+            // (user?.isFan ?? false) ||
+            userType == 'referee'
+        // ||
+        // userType == 'fan'
+        ;
   }
 
   List<_TournamentTabSpec> _tournamentTabsFor(UserModel? user) {
@@ -217,8 +216,7 @@ class _TournamentTabBar extends StatelessWidget {
       ),
       indicatorColor: Colors.black,
       indicatorWeight: 3,
-      isScrollable: true,
-      tabAlignment: TabAlignment.start,
+      isScrollable: false,
       dividerColor: Colors.transparent,
       tabs: [
         for (final tab in tabs) Tab(text: tab.label),

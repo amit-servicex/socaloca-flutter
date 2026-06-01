@@ -12,6 +12,7 @@ import '../../features/live_match/screens/live_match_details_screen.dart';
 import '../../features/live_match/screens/player_live_match_list_screen.dart';
 import '../../features/academies/screens/academies_screen.dart';
 import '../../features/academies/screens/academy_bio_screen.dart';
+import '../../features/home/widgets/full_screen_post_show.dart';
 import '../storage/storage_service.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/login_landing_screen.dart';
@@ -635,6 +636,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 // ),
                 SearchScreen(),
           ),
+          GoRoute(
+            path: AppRoutes.fullScreenVideo,
+            name: 'fullScreenVideo',
+            builder: (ctx, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              final videoUrl = extra?['videoUrl'] as String? ?? '';
+              final thumbnail = extra?['thumbnail'] as String?;
+              return FullScreenVideoScreen(
+                videoUrl: videoUrl,
+                thumbnail: thumbnail,
+              );
+            },
+          ),
 
           // ─── Team Bio (detail screen outside shell) ──────────────────────
           GoRoute(
@@ -880,14 +894,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (ctx, state, child) => ClubHomeScreen(child: child),
         routes: [
           GoRoute(
-              path: AppRoutes.clubBioAdmin,
-              name: 'clubBioAdmin',
-              builder: (_, __) => Scaffold(
-                    body:
-                        Center(child: Text('ClubBioAdminScreen — coming soon')),
-                  )
-              //  ClubBioAdminScreen(),
-              ),
+            path: AppRoutes.clubBioAdmin,
+            name: 'clubBioAdmin',
+            builder: (_, __) =>
+
+                // Scaffold(
+                //       body:
+                //           Center(child: Text('ClubBioAdminScreen — coming soon')),
+                //     )
+                ClubBioAdminScreen(),
+          ),
           GoRoute(
             path: AppRoutes.clubPlayers,
             name: 'clubPlayers',

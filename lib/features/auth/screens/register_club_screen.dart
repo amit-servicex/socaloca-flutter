@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:socaloca/core/router/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/services/location_service.dart';
 import '../../../shared/widgets/searchable_dropdown.dart';
 import '../../club/data/confed_data.dart';
 import '../../club/data/repositories/club_repository.dart';
@@ -44,6 +46,21 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
   String? _leagueError;
   String? _contactNameError;
   String? _contactNumberError;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _detectCountry());
+  }
+
+  Future<void> _detectCountry() async {
+    final country = await LocationService.detectCountry(context);
+    if (!mounted || country == null) return;
+    setState(() {
+      _contactCode = country.phoneCode;
+      _contactIso = country.iso;
+    });
+  }
 
   @override
   void dispose() {
@@ -265,197 +282,187 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
   @override
   Widget build(BuildContext context) {
     final countries = ConfedData.countries;
+    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'Register as Club',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Image.asset(
-                'assets/images/logo.png',
-                width: 110,
-                height: 110,
-                fit: BoxFit.contain,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Center(
-              child: Text(
-                '* indicates required fields',
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Colors.grey[600]),
-              ),
-            ),
-            const SizedBox(height: 24),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 0.5,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back, color: Colors.black),
+      //     onPressed: () => context.pop(),
+      //   ),
+      //   title: const Text(
+      //     'Register as Club',
+      //     style: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontWeight: FontWeight.w700,
+      //       fontSize: 18,
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      // ),
 
-            // Club Name
-            _fieldLabel('Club Name *'),
-            _textField(
-              controller: _clubNameCtrl,
-              hint: 'Enter club name',
-              error: _clubNameError,
-              textCapitalization: TextCapitalization.words,
-              onChanged: (_) => _clearErrors(),
-            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: height * .18),
 
-            // Email
-            _fieldLabel('Email *'),
-            _textField(
-              controller: _emailCtrl,
-              hint: 'Enter club email',
-              error: _emailError,
-              keyboardType: TextInputType.emailAddress,
-              onChanged: (_) => _clearErrors(),
-            ),
-
-            // Country
-            _fieldLabel('Country *'),
-            _dropdownField(
-              value: _country.isEmpty ? null : _country,
-              hint: 'Select Country *',
-              items: countries,
-              error: _countryError,
-              onChanged: _onCountryChanged,
-            ),
-
-            // Confederation (read-only)
-            _fieldLabel('Confederation'),
-            _readOnlyField(
-              value: _confedName.isEmpty
-                  ? 'Auto-populated from country'
-                  : _confedName,
-              error: _confedError,
-            ),
-
-            // League
-            _fieldLabel('League *'),
-            _leagues.isEmpty
-                ? _readOnlyField(
-                    value: 'Select country first',
-                    error: _leagueError,
-                  )
-                : _dropdownField(
-                    value: _leagueName.isEmpty ? null : _leagueName,
-                    hint: 'Select League *',
-                    items: _leagues,
-                    error: _leagueError,
-                    onChanged: (v) {
-                      setState(() => _leagueName = v);
-                      _clearErrors();
-                    },
+              Center(
+                child: Center(
+                  child: SvgPicture.asset(
+                    'assets/icons/socaloca_logo.svg',
+                    width: 180,
+                    // height: 150,
+                    // fit: BoxFit.contain,
                   ),
+                ),
+              ),
 
-            // Contact Name
-            _fieldLabel('Contact Name *'),
-            _textField(
-              controller: _contactNameCtrl,
-              hint: 'Enter contact name',
-              error: _contactNameError,
-              textCapitalization: TextCapitalization.words,
-              onChanged: (_) => _clearErrors(),
-            ),
+              SizedBox(height: height * .11),
 
-            // Contact Number with phone code
-            _fieldLabel('Contact Number *'),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
+              // Club Name
+              // _fieldLabel('Club Name *'),
+              _textField(
+                controller: _clubNameCtrl,
+                hint: 'Enter club name',
+                error: _clubNameError,
+                textCapitalization: TextCapitalization.words,
+                onChanged: (_) => _clearErrors(),
+              ),
+
+              // Email
+              // _fieldLabel('Email *'),
+              _textField(
+                controller: _emailCtrl,
+                hint: 'Enter club email',
+                error: _emailError,
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (_) => _clearErrors(),
+              ),
+
+              // Country
+              // _fieldLabel('Country *'),
+              _dropdownField(
+                value: _country.isEmpty ? null : _country,
+                hint: 'Select Country *',
+                items: countries,
+                error: _countryError,
+                onChanged: _onCountryChanged,
+              ),
+
+              // Confederation (read-only)
+              // _fieldLabel('Confederation'),
+              _readOnlyField(
+                value: _confedName.isEmpty
+                    ? 'Auto-populated from country'
+                    : _confedName,
+                error: _confedError,
+              ),
+
+              // League
+              // _fieldLabel('League *'),
+              _leagues.isEmpty
+                  ? _readOnlyField(
+                      value: 'Select country first',
+                      error: _leagueError,
+                    )
+                  : _dropdownField(
+                      value: _leagueName.isEmpty ? null : _leagueName,
+                      hint: 'Select League *',
+                      items: _leagues,
+                      error: _leagueError,
+                      onChanged: (v) {
+                        setState(() => _leagueName = v);
+                        _clearErrors();
+                      },
+                    ),
+
+              // Contact Name
+              // _fieldLabel('Contact Name *'),
+              _textField(
+                controller: _contactNameCtrl,
+                hint: 'Enter contact name',
+                error: _contactNameError,
+                textCapitalization: TextCapitalization.words,
+                onChanged: (_) => _clearErrors(),
+              ),
+
+              // Contact Number with phone code
+              // _fieldLabel('Contact Number *'),
+              _textField(
+                prefix: GestureDetector(
                   onTap: _pickContactCode,
                   child: Container(
-                    height: 52,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    margin: const EdgeInsets.only(bottom: 16, right: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFFDDDDDD)),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+                    // margin: const EdgeInsets.only(right: 8),
                     child: Row(
+                      spacing: 8,
                       children: [
-                        Text(
-                          _contactCode,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
+                        Text(_contactCode,
+                            style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                color: Colors.black87)),
+                        Image.asset(
+                          'assets/images/dropdown.png',
+                          width: 12,
+                          height: 12,
                         ),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.arrow_drop_down, size: 18),
                       ],
                     ),
                   ),
                 ),
-                Expanded(
-                  child: _textField(
-                    controller: _contactNumberCtrl,
-                    hint: 'Enter contact number',
-                    error: _contactNumberError,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 10,
-                    onChanged: (_) => _clearErrors(),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 8),
-
-            // Submit button
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.socaBlack,
-                  foregroundColor: AppColors.socaYellow,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6)),
-                  elevation: 0,
-                ),
-                onPressed: _isLoading ? null : _submit,
-                child: _isLoading
-                    ? const SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Text(
-                        'SUBMIT',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
-                        ),
-                      ),
+                controller: _contactNumberCtrl,
+                hint: 'Enter contact number',
+                error: _contactNumberError,
+                keyboardType: TextInputType.phone,
+                maxLength: 10,
+                onChanged: (_) => _clearErrors(),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 8),
+
+              // Submit button
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                width: double.infinity,
+                height: 75,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.socaBlack,
+                    foregroundColor: AppColors.socaYellow,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    elevation: 0,
+                  ),
+                  onPressed: _isLoading ? null : _submit,
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'SUBMIT',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 24,
+                          ),
+                        ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -482,8 +489,10 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
     TextCapitalization textCapitalization = TextCapitalization.none,
     int? maxLength,
     ValueChanged<String>? onChanged,
+    Widget? prefix,
   }) =>
-      Padding(
+      Container(
+        margin: const EdgeInsets.only(left: 24, right: 24),
         padding: const EdgeInsets.only(bottom: 16),
         child: TextField(
           controller: controller,
@@ -493,30 +502,46 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
           onChanged: onChanged,
           style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
           decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(
-                fontFamily: 'Poppins', fontSize: 13, color: Colors.grey),
-            errorText: error,
-            counterText: '',
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(color: Colors.black, width: 1.5),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(color: Colors.red),
-            ),
-          ),
+              prefixIcon: prefix != null
+                  ? Container(
+                      width: 70,
+                      padding: const EdgeInsets.only(right: 8),
+                      child: prefix,
+                    )
+                  : null,
+              fillColor: AppColors.socaGrey,
+              // prefix: prefix,
+              hintText: hint,
+              hintStyle: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13,
+                  color: AppColors.socaBlack),
+              errorText: error,
+              counterText: '',
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              border: InputBorder.none,
+              // OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(6),
+              //   borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
+              // ),
+              enabledBorder: InputBorder.none,
+              // OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(6),
+              //   borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
+              // ),
+              focusedBorder: InputBorder.none,
+
+              //  OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(6),
+              //   borderSide: const BorderSide(color: Colors.black, width: 1.5),
+              // ),
+              errorBorder: InputBorder.none
+              //  OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(6),
+              //   borderSide: const BorderSide(color: Colors.red),
+              // ),
+              ),
         ),
       );
 
@@ -527,27 +552,35 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
     required ValueChanged<String> onChanged,
     String? error,
   }) =>
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SearchableDropdownField(
-            hint: hint,
-            value: value,
-            items: items,
-            onChanged: onChanged,
-            error: error,
-          ),
-          if (error != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 4, left: 14, bottom: 4),
-              child: Text(error,
-                  style: const TextStyle(
-                      fontFamily: 'Poppins', fontSize: 12, color: Colors.red)),
-            )
-          else
-            const SizedBox(height: 16),
-        ],
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              color: AppColors.socaGrey,
+              child: SearchableDropdownField(
+                hint: hint,
+                value: value,
+                items: items,
+                onChanged: onChanged,
+                error: error,
+              ),
+            ),
+            if (error != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 14, bottom: 4),
+                child: Text(error,
+                    style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 12,
+                        color: Colors.red)),
+              )
+            else
+              const SizedBox(height: 16),
+          ],
+        ),
       );
 
   Widget _readOnlyField({required String value, String? error}) => Padding(
@@ -558,8 +591,9 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              margin: const EdgeInsets.symmetric(horizontal: 24),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: AppColors.socaGrey,
                 border: Border.all(
                     color:
                         error != null ? Colors.red : const Color(0xFFDDDDDD)),

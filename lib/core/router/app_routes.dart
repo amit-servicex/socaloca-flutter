@@ -62,6 +62,7 @@ class AppRoutes {
   static const String recentMatches = '/one-off-matches/recent';
 
   static const String search = '/search';
+  static const String fullScreenVideo = '/video/full-screen';
   static const String teamBio = '/teams/:teamId';
   static const String teamPlayers = '/teams/:teamId/players';
   static const String playerBio = '/players/:userId';

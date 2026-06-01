@@ -27,7 +27,7 @@ class ClubHomeScreen extends ConsumerWidget {
         backgroundColor: AppColors.socaGrey,
         elevation: 0,
         leadingWidth: 160,
-
+        centerTitle: false,
         leading: Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(
@@ -52,7 +52,12 @@ class ClubHomeScreen extends ConsumerWidget {
         //     : null,
         actions: [
           IconButton(
-            icon: Icon(Icons.logout, color: AppColors.playedGray),
+            icon: Image.asset(
+              "assets/icons/ic_sign_out.png",
+              width: 28,
+              height: 28,
+              color: const Color.fromARGB(255, 128, 128, 128),
+            ),
             tooltip: 'Logout',
             onPressed: () async {
               await StorageService.setClubLogin(false);

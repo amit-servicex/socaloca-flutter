@@ -76,11 +76,14 @@ class _SearchableSheetState extends State<_SearchableSheet> {
   @override
   Widget build(BuildContext context) {
     final maxH = MediaQuery.of(context).size.height * 0.75;
+    final width = MediaQuery.of(context).size.width * 0.85;
+
     return Container(
       height: maxH,
+      width: width,
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        // borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
         children: [
@@ -91,7 +94,7 @@ class _SearchableSheetState extends State<_SearchableSheet> {
             height: 4,
             decoration: BoxDecoration(
               color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(2),
+              // borderRadius: BorderRadius.circular(2),
             ),
           ),
           // title
@@ -102,7 +105,7 @@ class _SearchableSheetState extends State<_SearchableSheet> {
               style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
-                fontSize: 16,
+                fontSize: 18,
                 color: Colors.black,
               ),
             ),
@@ -115,24 +118,29 @@ class _SearchableSheetState extends State<_SearchableSheet> {
               autofocus: true,
               style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
               decoration: InputDecoration(
+                fillColor: Colors.transparent,
                 hintText: 'Search...'.tr,
                 hintStyle: const TextStyle(
                     fontFamily: 'Poppins', fontSize: 13, color: Colors.grey),
-                prefixIcon: const Icon(Icons.search, size: 20),
+                prefixIcon: const Icon(Icons.search, size: 30),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.socaBlack),
-                ),
+                border: InputBorder.none,
+                // OutlineInputBorder(
+                //   borderRadius: BorderRadius.circular(8),
+                //   borderSide: BorderSide(color: Colors.grey.shade300),
+                // ),
+                enabledBorder: InputBorder.none,
+
+                //   OutlineInputBorder(
+                //   borderRadius: BorderRadius.circular(8),
+                //   borderSide: BorderSide(color: Colors.grey.shade300),
+                // ),
+                focusedBorder: InputBorder.none,
+                // OutlineInputBorder(
+                //   borderRadius: BorderRadius.circular(8),
+                //   borderSide: const BorderSide(color: AppColors.socaBlack),
+                // ),
               ),
             ),
           ),
@@ -160,9 +168,17 @@ class _SearchableSheetState extends State<_SearchableSheet> {
                       return InkWell(
                         onTap: () => Navigator.of(context).pop(val),
                         child: Container(
-                          color: isSelected
-                              ? AppColors.socaYellow.withValues(alpha: 0.15)
-                              : null,
+                          // color: isSelected
+                          //     ? AppColors.socaYellow.withValues(alpha: 0.15)
+                          //     : null,
+                          decoration: BoxDecoration(
+                            border: const Border(
+                              bottom: const BorderSide(
+                                color: AppColors.socaGrey,
+                                width: .8,
+                              ),
+                            ),
+                          ),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 14),
                           child: Row(

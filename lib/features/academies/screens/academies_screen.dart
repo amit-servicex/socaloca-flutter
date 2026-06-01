@@ -215,7 +215,6 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
       //   foregroundColor: AppColors.socaYellow,
       //   elevation: 0,
       // ),
-
       body: Column(
         children: [
           // Description and Filters Section

@@ -106,20 +106,24 @@ class LiveMatchRepository {
   }
 
   // ─── Live match details (all roles) ──────────────────────────────────────
+  // getMatchData is always tried first because it returns the full payload:
+  // teams, players (allUsers), jerseys (allJerseys), score, goals, cards, subs.
+  // getRefLiveMtchData is used as fallback — it has liveRecord data but often
+  // omits allUsers/allJerseys, so players would not show if used as primary.
 
   Future<LiveMatchDetail?> getLiveMatchDetail({
     required String matchId,
     required String tournamentId,
     bool preferMatchData = false,
   }) async {
-    if (preferMatchData) {
-      final detail = await _getMatchDataDetail(
-        matchId: matchId,
-        tournamentId: tournamentId,
-      );
-      if (detail != null) return detail;
-    }
+    // Always fetch from getMatchData first for the full player/team payload.
+    final matchDetail = await _getMatchDataDetail(
+      matchId: matchId,
+      tournamentId: tournamentId,
+    );
+    if (matchDetail != null) return matchDetail;
 
+    // Fallback to referee live-match endpoint if getMatchData failed.
     final refResponse = await ApiClient.instance.post(
       ApiConstants.getRefLiveMtchData,
       body: {
@@ -133,7 +137,7 @@ class LiveMatchRepository {
       return LiveMatchDetail.fromJson(matchId, tournamentId, refInner);
     }
 
-    return _getMatchDataDetail(matchId: matchId, tournamentId: tournamentId);
+    return null;
   }
 
   Future<LiveMatchDetail?> _getMatchDataDetail({
