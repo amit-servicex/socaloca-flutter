@@ -6,14 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/features/home/widgets/most_followed_teams_section.dart';
 import 'package:socaloca/shared/providers/auth_provider.dart';
+import 'package:socaloca/shared/widgets/app_loader.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../social_feed/models/feed_post.dart';
 import '../../social_feed/providers/feed_providers.dart';
-import '../../social_feed/screens/social_feed_screen.dart';
 import '../../social_feed/widgets/feed_post_card.dart';
 import '../data/models/match_update_model.dart';
 import '../providers/home_feed_providers.dart';
@@ -558,6 +559,58 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  /// Mirrors Android's customizedAdd() in FanHomeFeedFragment / CommonHomeFeedFragment.
+  ///
+  /// Loops over the original post list and, at every position divisible by 5,
+  /// inserts a section widget at that exact index in a growing working list —
+  /// exactly as ArrayList.add(pos, item) does in the Java source.
+  ///
+  /// Section rotation (Android initial currentType = TYPE_INSERT_TEAM = 1):
+  ///   injection #0 → pos 0  → NewTeamsSection        (type 1)
+  ///   injection #1 → pos 5  → RecommendedUsersSection (type 2)
+  ///   injection #2 → pos 10 → LiveTournamentsSection  (type 0, after reset)
+  ///   injection #3 → pos 15 → NewTeamsSection         (cycles)
+  List<Widget> _buildInjectedFeedList(List<FeedPost> posts) {
+    final List<Widget> workingList =
+        posts.map<Widget>((p) => FeedPostCard(post: p)).toList();
+
+    const int typeInsertTournaments = 0;
+    const int typeInsertTeam = 1;
+    const int typeInsertUser = 2;
+
+    int currentType = typeInsertTeam; // matches Android's initial value
+    final int originalLen = posts.length;
+
+    for (int pos = 0; pos < originalLen; pos++) {
+      if (pos % 5 == 0) {
+        // Reset check happens before the switch — matches Android logic
+        if (currentType >= 3) currentType = typeInsertTournaments;
+
+        final Widget section;
+        switch (currentType) {
+          case typeInsertTournaments:
+            section = LiveTournamentsSection();
+            break;
+          case typeInsertTeam:
+            section = NewTeamsSection();
+            break;
+          case typeInsertUser:
+            section = RecommendedUsersSection();
+            break;
+          default:
+            section = const SizedBox.shrink();
+        }
+
+        // Insert at literal index `pos` in the growing list, exactly as
+        // tempFeeds.add(pos, item) in Android.
+        workingList.insert(pos, section);
+        currentType++;
+      }
+    }
+
+    return workingList;
+  }
+
   @override
   Widget build(BuildContext context) {
     final userId = StorageService.userId ?? '';
@@ -918,18 +971,88 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       orElse: () => SizedBox.shrink(),
                     ),
                   ),
-                  SliverToBoxAdapter(child: NewTeamsSection()),
-
-                  //     SliverToBoxAdapter(
-                  //   child: feedState.maybeWhen(
-                  //     data: (feed) => feed.socaFeed != null
-                  //         ? FeedPostCard(post: feed.socaFeed!)
-                  //         : SizedBox.shrink(),
-                  //     orElse: () => SizedBox.shrink(),
-                  //   ),
-                  // ),
-                  SliverToBoxAdapter(child: RecommendedUsersSection()),
-                  SliverToBoxAdapter(child: SocialFeedScreen()),
+                  // ── Interleaved feed: posts with section cards every 5 items ──
+                  // Matches Android customizedAdd() in FanHomeFeedFragment /
+                  // CommonHomeFeedFragment. Section order per batch:
+                  //   pos=0  → NewTeamsSection
+                  //   pos=5  → RecommendedUsersSection
+                  //   pos=10 → LiveTournamentsSection
+                  //   pos=15 → NewTeamsSection (cycles)
+                  ...feedState.maybeWhen(
+                    data: (feed) {
+                      final items = _buildInjectedFeedList(feed.posts);
+                      if (feed.posts.isEmpty) {
+                        return [
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.all(32),
+                              child: Center(
+                                child: Text(
+                                  'No posts yet'.tr,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ];
+                      }
+                      return [
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (ctx, i) => items[i],
+                            childCount: items.length,
+                          ),
+                        ),
+                      ];
+                    },
+                    loading: () => [
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(32),
+                          child: Center(child: AppLoader()),
+                        ),
+                      ),
+                    ],
+                    error: (error, _) => [
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.all(32),
+                          child: Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.error_outline,
+                                    size: 48, color: AppColors.error),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Error loading feed'.tr,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () => ref
+                                      .read(feedProvider.notifier)
+                                      .refresh(),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.socaBlack,
+                                    foregroundColor: AppColors.socaYellow,
+                                  ),
+                                  child: Text('Retry'.tr),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    orElse: () => const [],
+                  ),
                 ],
               ),
             ),
