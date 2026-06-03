@@ -24,32 +24,28 @@ mixin _$RefereeMatchModel {
   String? get matchId => throw _privateConstructorUsedError;
   @JsonKey(name: 'tournamentId')
   String? get tournamentId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'tournamentName')
+  @JsonKey(name: 'tournament')
   String? get tournamentName => throw _privateConstructorUsedError;
   @JsonKey(name: 'roundName')
   String? get roundName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'teamA')
-  String? get teamA => throw _privateConstructorUsedError;
-  @JsonKey(name: 'teamAId')
-  String? get teamAId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'teamALogo')
-  String? get teamALogo => throw _privateConstructorUsedError;
-  @JsonKey(name: 'teamAScore')
-  String? get teamAScore => throw _privateConstructorUsedError;
-  @JsonKey(name: 'teamB')
-  String? get teamB => throw _privateConstructorUsedError;
-  @JsonKey(name: 'teamBId')
-  String? get teamBId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'teamBLogo')
-  String? get teamBLogo => throw _privateConstructorUsedError;
-  @JsonKey(name: 'teamBScore')
-  String? get teamBScore => throw _privateConstructorUsedError;
-  @JsonKey(name: 'matchDate')
-  String? get matchDate => throw _privateConstructorUsedError;
-  @JsonKey(name: 'matchTime')
-  String? get matchTime => throw _privateConstructorUsedError;
-  @JsonKey(name: 'venue')
-  String? get venue => throw _privateConstructorUsedError;
+  @JsonKey(name: 'city')
+  String? get city => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fieldName')
+  String? get fieldName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'mainAccept')
+  int? get mainAccept => throw _privateConstructorUsedError;
+  @JsonKey(name: 'matchDateTimeGmt')
+  int? get matchDateTimeGmt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'myTeamId')
+  String? get myTeamId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'opponentTeamId')
+  String? get opponentTeamId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'stadiumName')
+  String? get stadiumName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'score')
+  RefereeScoreModel? get score => throw _privateConstructorUsedError;
+  @JsonKey(name: 'teams')
+  List<RefereeTeamModel>? get teams => throw _privateConstructorUsedError;
   @JsonKey(name: 'ageGroup')
   String? get ageGroup =>
       throw _privateConstructorUsedError; // "upcoming" | "live" | "completed"
@@ -71,6 +67,8 @@ mixin _$RefereeMatchModel {
   String? get matchCommis => throw _privateConstructorUsedError;
   @JsonKey(name: 'currentMinute')
   String? get currentMinute => throw _privateConstructorUsedError;
+  @JsonKey(name: 'state')
+  String? get state => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -87,19 +85,17 @@ abstract class $RefereeMatchModelCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'matchId') String? matchId,
       @JsonKey(name: 'tournamentId') String? tournamentId,
-      @JsonKey(name: 'tournamentName') String? tournamentName,
+      @JsonKey(name: 'tournament') String? tournamentName,
       @JsonKey(name: 'roundName') String? roundName,
-      @JsonKey(name: 'teamA') String? teamA,
-      @JsonKey(name: 'teamAId') String? teamAId,
-      @JsonKey(name: 'teamALogo') String? teamALogo,
-      @JsonKey(name: 'teamAScore') String? teamAScore,
-      @JsonKey(name: 'teamB') String? teamB,
-      @JsonKey(name: 'teamBId') String? teamBId,
-      @JsonKey(name: 'teamBLogo') String? teamBLogo,
-      @JsonKey(name: 'teamBScore') String? teamBScore,
-      @JsonKey(name: 'matchDate') String? matchDate,
-      @JsonKey(name: 'matchTime') String? matchTime,
-      @JsonKey(name: 'venue') String? venue,
+      @JsonKey(name: 'city') String? city,
+      @JsonKey(name: 'fieldName') String? fieldName,
+      @JsonKey(name: 'mainAccept') int? mainAccept,
+      @JsonKey(name: 'matchDateTimeGmt') int? matchDateTimeGmt,
+      @JsonKey(name: 'myTeamId') String? myTeamId,
+      @JsonKey(name: 'opponentTeamId') String? opponentTeamId,
+      @JsonKey(name: 'stadiumName') String? stadiumName,
+      @JsonKey(name: 'score') RefereeScoreModel? score,
+      @JsonKey(name: 'teams') List<RefereeTeamModel>? teams,
       @JsonKey(name: 'ageGroup') String? ageGroup,
       @JsonKey(name: 'matchStatus') String? matchStatus,
       @JsonKey(name: 'scoreStatus') String? scoreStatus,
@@ -108,7 +104,10 @@ abstract class $RefereeMatchModelCopyWith<$Res> {
       @JsonKey(name: 'asstRef2') String? asstRef2,
       @JsonKey(name: 'mainRef') String? mainRef,
       @JsonKey(name: 'matchCommis') String? matchCommis,
-      @JsonKey(name: 'currentMinute') String? currentMinute});
+      @JsonKey(name: 'currentMinute') String? currentMinute,
+      @JsonKey(name: 'state') String? state});
+
+  $RefereeScoreModelCopyWith<$Res>? get score;
 }
 
 /// @nodoc
@@ -128,17 +127,15 @@ class _$RefereeMatchModelCopyWithImpl<$Res, $Val extends RefereeMatchModel>
     Object? tournamentId = freezed,
     Object? tournamentName = freezed,
     Object? roundName = freezed,
-    Object? teamA = freezed,
-    Object? teamAId = freezed,
-    Object? teamALogo = freezed,
-    Object? teamAScore = freezed,
-    Object? teamB = freezed,
-    Object? teamBId = freezed,
-    Object? teamBLogo = freezed,
-    Object? teamBScore = freezed,
-    Object? matchDate = freezed,
-    Object? matchTime = freezed,
-    Object? venue = freezed,
+    Object? city = freezed,
+    Object? fieldName = freezed,
+    Object? mainAccept = freezed,
+    Object? matchDateTimeGmt = freezed,
+    Object? myTeamId = freezed,
+    Object? opponentTeamId = freezed,
+    Object? stadiumName = freezed,
+    Object? score = freezed,
+    Object? teams = freezed,
     Object? ageGroup = freezed,
     Object? matchStatus = freezed,
     Object? scoreStatus = freezed,
@@ -148,6 +145,7 @@ class _$RefereeMatchModelCopyWithImpl<$Res, $Val extends RefereeMatchModel>
     Object? mainRef = freezed,
     Object? matchCommis = freezed,
     Object? currentMinute = freezed,
+    Object? state = freezed,
   }) {
     return _then(_value.copyWith(
       matchId: freezed == matchId
@@ -166,50 +164,42 @@ class _$RefereeMatchModelCopyWithImpl<$Res, $Val extends RefereeMatchModel>
           ? _value.roundName
           : roundName // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamA: freezed == teamA
-          ? _value.teamA
-          : teamA // ignore: cast_nullable_to_non_nullable
+      city: freezed == city
+          ? _value.city
+          : city // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamAId: freezed == teamAId
-          ? _value.teamAId
-          : teamAId // ignore: cast_nullable_to_non_nullable
+      fieldName: freezed == fieldName
+          ? _value.fieldName
+          : fieldName // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamALogo: freezed == teamALogo
-          ? _value.teamALogo
-          : teamALogo // ignore: cast_nullable_to_non_nullable
+      mainAccept: freezed == mainAccept
+          ? _value.mainAccept
+          : mainAccept // ignore: cast_nullable_to_non_nullable
+              as int?,
+      matchDateTimeGmt: freezed == matchDateTimeGmt
+          ? _value.matchDateTimeGmt
+          : matchDateTimeGmt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      myTeamId: freezed == myTeamId
+          ? _value.myTeamId
+          : myTeamId // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamAScore: freezed == teamAScore
-          ? _value.teamAScore
-          : teamAScore // ignore: cast_nullable_to_non_nullable
+      opponentTeamId: freezed == opponentTeamId
+          ? _value.opponentTeamId
+          : opponentTeamId // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamB: freezed == teamB
-          ? _value.teamB
-          : teamB // ignore: cast_nullable_to_non_nullable
+      stadiumName: freezed == stadiumName
+          ? _value.stadiumName
+          : stadiumName // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamBId: freezed == teamBId
-          ? _value.teamBId
-          : teamBId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      teamBLogo: freezed == teamBLogo
-          ? _value.teamBLogo
-          : teamBLogo // ignore: cast_nullable_to_non_nullable
-              as String?,
-      teamBScore: freezed == teamBScore
-          ? _value.teamBScore
-          : teamBScore // ignore: cast_nullable_to_non_nullable
-              as String?,
-      matchDate: freezed == matchDate
-          ? _value.matchDate
-          : matchDate // ignore: cast_nullable_to_non_nullable
-              as String?,
-      matchTime: freezed == matchTime
-          ? _value.matchTime
-          : matchTime // ignore: cast_nullable_to_non_nullable
-              as String?,
-      venue: freezed == venue
-          ? _value.venue
-          : venue // ignore: cast_nullable_to_non_nullable
-              as String?,
+      score: freezed == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as RefereeScoreModel?,
+      teams: freezed == teams
+          ? _value.teams
+          : teams // ignore: cast_nullable_to_non_nullable
+              as List<RefereeTeamModel>?,
       ageGroup: freezed == ageGroup
           ? _value.ageGroup
           : ageGroup // ignore: cast_nullable_to_non_nullable
@@ -246,7 +236,23 @@ class _$RefereeMatchModelCopyWithImpl<$Res, $Val extends RefereeMatchModel>
           ? _value.currentMinute
           : currentMinute // ignore: cast_nullable_to_non_nullable
               as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $RefereeScoreModelCopyWith<$Res>? get score {
+    if (_value.score == null) {
+      return null;
+    }
+
+    return $RefereeScoreModelCopyWith<$Res>(_value.score!, (value) {
+      return _then(_value.copyWith(score: value) as $Val);
+    });
   }
 }
 
@@ -261,19 +267,17 @@ abstract class _$$RefereeMatchModelImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: 'matchId') String? matchId,
       @JsonKey(name: 'tournamentId') String? tournamentId,
-      @JsonKey(name: 'tournamentName') String? tournamentName,
+      @JsonKey(name: 'tournament') String? tournamentName,
       @JsonKey(name: 'roundName') String? roundName,
-      @JsonKey(name: 'teamA') String? teamA,
-      @JsonKey(name: 'teamAId') String? teamAId,
-      @JsonKey(name: 'teamALogo') String? teamALogo,
-      @JsonKey(name: 'teamAScore') String? teamAScore,
-      @JsonKey(name: 'teamB') String? teamB,
-      @JsonKey(name: 'teamBId') String? teamBId,
-      @JsonKey(name: 'teamBLogo') String? teamBLogo,
-      @JsonKey(name: 'teamBScore') String? teamBScore,
-      @JsonKey(name: 'matchDate') String? matchDate,
-      @JsonKey(name: 'matchTime') String? matchTime,
-      @JsonKey(name: 'venue') String? venue,
+      @JsonKey(name: 'city') String? city,
+      @JsonKey(name: 'fieldName') String? fieldName,
+      @JsonKey(name: 'mainAccept') int? mainAccept,
+      @JsonKey(name: 'matchDateTimeGmt') int? matchDateTimeGmt,
+      @JsonKey(name: 'myTeamId') String? myTeamId,
+      @JsonKey(name: 'opponentTeamId') String? opponentTeamId,
+      @JsonKey(name: 'stadiumName') String? stadiumName,
+      @JsonKey(name: 'score') RefereeScoreModel? score,
+      @JsonKey(name: 'teams') List<RefereeTeamModel>? teams,
       @JsonKey(name: 'ageGroup') String? ageGroup,
       @JsonKey(name: 'matchStatus') String? matchStatus,
       @JsonKey(name: 'scoreStatus') String? scoreStatus,
@@ -282,7 +286,11 @@ abstract class _$$RefereeMatchModelImplCopyWith<$Res>
       @JsonKey(name: 'asstRef2') String? asstRef2,
       @JsonKey(name: 'mainRef') String? mainRef,
       @JsonKey(name: 'matchCommis') String? matchCommis,
-      @JsonKey(name: 'currentMinute') String? currentMinute});
+      @JsonKey(name: 'currentMinute') String? currentMinute,
+      @JsonKey(name: 'state') String? state});
+
+  @override
+  $RefereeScoreModelCopyWith<$Res>? get score;
 }
 
 /// @nodoc
@@ -300,17 +308,15 @@ class __$$RefereeMatchModelImplCopyWithImpl<$Res>
     Object? tournamentId = freezed,
     Object? tournamentName = freezed,
     Object? roundName = freezed,
-    Object? teamA = freezed,
-    Object? teamAId = freezed,
-    Object? teamALogo = freezed,
-    Object? teamAScore = freezed,
-    Object? teamB = freezed,
-    Object? teamBId = freezed,
-    Object? teamBLogo = freezed,
-    Object? teamBScore = freezed,
-    Object? matchDate = freezed,
-    Object? matchTime = freezed,
-    Object? venue = freezed,
+    Object? city = freezed,
+    Object? fieldName = freezed,
+    Object? mainAccept = freezed,
+    Object? matchDateTimeGmt = freezed,
+    Object? myTeamId = freezed,
+    Object? opponentTeamId = freezed,
+    Object? stadiumName = freezed,
+    Object? score = freezed,
+    Object? teams = freezed,
     Object? ageGroup = freezed,
     Object? matchStatus = freezed,
     Object? scoreStatus = freezed,
@@ -320,6 +326,7 @@ class __$$RefereeMatchModelImplCopyWithImpl<$Res>
     Object? mainRef = freezed,
     Object? matchCommis = freezed,
     Object? currentMinute = freezed,
+    Object? state = freezed,
   }) {
     return _then(_$RefereeMatchModelImpl(
       matchId: freezed == matchId
@@ -338,50 +345,42 @@ class __$$RefereeMatchModelImplCopyWithImpl<$Res>
           ? _value.roundName
           : roundName // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamA: freezed == teamA
-          ? _value.teamA
-          : teamA // ignore: cast_nullable_to_non_nullable
+      city: freezed == city
+          ? _value.city
+          : city // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamAId: freezed == teamAId
-          ? _value.teamAId
-          : teamAId // ignore: cast_nullable_to_non_nullable
+      fieldName: freezed == fieldName
+          ? _value.fieldName
+          : fieldName // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamALogo: freezed == teamALogo
-          ? _value.teamALogo
-          : teamALogo // ignore: cast_nullable_to_non_nullable
+      mainAccept: freezed == mainAccept
+          ? _value.mainAccept
+          : mainAccept // ignore: cast_nullable_to_non_nullable
+              as int?,
+      matchDateTimeGmt: freezed == matchDateTimeGmt
+          ? _value.matchDateTimeGmt
+          : matchDateTimeGmt // ignore: cast_nullable_to_non_nullable
+              as int?,
+      myTeamId: freezed == myTeamId
+          ? _value.myTeamId
+          : myTeamId // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamAScore: freezed == teamAScore
-          ? _value.teamAScore
-          : teamAScore // ignore: cast_nullable_to_non_nullable
+      opponentTeamId: freezed == opponentTeamId
+          ? _value.opponentTeamId
+          : opponentTeamId // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamB: freezed == teamB
-          ? _value.teamB
-          : teamB // ignore: cast_nullable_to_non_nullable
+      stadiumName: freezed == stadiumName
+          ? _value.stadiumName
+          : stadiumName // ignore: cast_nullable_to_non_nullable
               as String?,
-      teamBId: freezed == teamBId
-          ? _value.teamBId
-          : teamBId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      teamBLogo: freezed == teamBLogo
-          ? _value.teamBLogo
-          : teamBLogo // ignore: cast_nullable_to_non_nullable
-              as String?,
-      teamBScore: freezed == teamBScore
-          ? _value.teamBScore
-          : teamBScore // ignore: cast_nullable_to_non_nullable
-              as String?,
-      matchDate: freezed == matchDate
-          ? _value.matchDate
-          : matchDate // ignore: cast_nullable_to_non_nullable
-              as String?,
-      matchTime: freezed == matchTime
-          ? _value.matchTime
-          : matchTime // ignore: cast_nullable_to_non_nullable
-              as String?,
-      venue: freezed == venue
-          ? _value.venue
-          : venue // ignore: cast_nullable_to_non_nullable
-              as String?,
+      score: freezed == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as RefereeScoreModel?,
+      teams: freezed == teams
+          ? _value._teams
+          : teams // ignore: cast_nullable_to_non_nullable
+              as List<RefereeTeamModel>?,
       ageGroup: freezed == ageGroup
           ? _value.ageGroup
           : ageGroup // ignore: cast_nullable_to_non_nullable
@@ -418,29 +417,31 @@ class __$$RefereeMatchModelImplCopyWithImpl<$Res>
           ? _value.currentMinute
           : currentMinute // ignore: cast_nullable_to_non_nullable
               as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$RefereeMatchModelImpl implements _RefereeMatchModel {
+class _$RefereeMatchModelImpl extends _RefereeMatchModel {
   const _$RefereeMatchModelImpl(
       {@JsonKey(name: 'matchId') this.matchId,
       @JsonKey(name: 'tournamentId') this.tournamentId,
-      @JsonKey(name: 'tournamentName') this.tournamentName,
+      @JsonKey(name: 'tournament') this.tournamentName,
       @JsonKey(name: 'roundName') this.roundName,
-      @JsonKey(name: 'teamA') this.teamA,
-      @JsonKey(name: 'teamAId') this.teamAId,
-      @JsonKey(name: 'teamALogo') this.teamALogo,
-      @JsonKey(name: 'teamAScore') this.teamAScore,
-      @JsonKey(name: 'teamB') this.teamB,
-      @JsonKey(name: 'teamBId') this.teamBId,
-      @JsonKey(name: 'teamBLogo') this.teamBLogo,
-      @JsonKey(name: 'teamBScore') this.teamBScore,
-      @JsonKey(name: 'matchDate') this.matchDate,
-      @JsonKey(name: 'matchTime') this.matchTime,
-      @JsonKey(name: 'venue') this.venue,
+      @JsonKey(name: 'city') this.city,
+      @JsonKey(name: 'fieldName') this.fieldName,
+      @JsonKey(name: 'mainAccept') this.mainAccept,
+      @JsonKey(name: 'matchDateTimeGmt') this.matchDateTimeGmt,
+      @JsonKey(name: 'myTeamId') this.myTeamId,
+      @JsonKey(name: 'opponentTeamId') this.opponentTeamId,
+      @JsonKey(name: 'stadiumName') this.stadiumName,
+      @JsonKey(name: 'score') this.score,
+      @JsonKey(name: 'teams') final List<RefereeTeamModel>? teams,
       @JsonKey(name: 'ageGroup') this.ageGroup,
       @JsonKey(name: 'matchStatus') this.matchStatus,
       @JsonKey(name: 'scoreStatus') this.scoreStatus,
@@ -449,7 +450,10 @@ class _$RefereeMatchModelImpl implements _RefereeMatchModel {
       @JsonKey(name: 'asstRef2') this.asstRef2,
       @JsonKey(name: 'mainRef') this.mainRef,
       @JsonKey(name: 'matchCommis') this.matchCommis,
-      @JsonKey(name: 'currentMinute') this.currentMinute});
+      @JsonKey(name: 'currentMinute') this.currentMinute,
+      @JsonKey(name: 'state') this.state})
+      : _teams = teams,
+        super._();
 
   factory _$RefereeMatchModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$RefereeMatchModelImplFromJson(json);
@@ -461,44 +465,46 @@ class _$RefereeMatchModelImpl implements _RefereeMatchModel {
   @JsonKey(name: 'tournamentId')
   final String? tournamentId;
   @override
-  @JsonKey(name: 'tournamentName')
+  @JsonKey(name: 'tournament')
   final String? tournamentName;
   @override
   @JsonKey(name: 'roundName')
   final String? roundName;
   @override
-  @JsonKey(name: 'teamA')
-  final String? teamA;
+  @JsonKey(name: 'city')
+  final String? city;
   @override
-  @JsonKey(name: 'teamAId')
-  final String? teamAId;
+  @JsonKey(name: 'fieldName')
+  final String? fieldName;
   @override
-  @JsonKey(name: 'teamALogo')
-  final String? teamALogo;
+  @JsonKey(name: 'mainAccept')
+  final int? mainAccept;
   @override
-  @JsonKey(name: 'teamAScore')
-  final String? teamAScore;
+  @JsonKey(name: 'matchDateTimeGmt')
+  final int? matchDateTimeGmt;
   @override
-  @JsonKey(name: 'teamB')
-  final String? teamB;
+  @JsonKey(name: 'myTeamId')
+  final String? myTeamId;
   @override
-  @JsonKey(name: 'teamBId')
-  final String? teamBId;
+  @JsonKey(name: 'opponentTeamId')
+  final String? opponentTeamId;
   @override
-  @JsonKey(name: 'teamBLogo')
-  final String? teamBLogo;
+  @JsonKey(name: 'stadiumName')
+  final String? stadiumName;
   @override
-  @JsonKey(name: 'teamBScore')
-  final String? teamBScore;
+  @JsonKey(name: 'score')
+  final RefereeScoreModel? score;
+  final List<RefereeTeamModel>? _teams;
   @override
-  @JsonKey(name: 'matchDate')
-  final String? matchDate;
-  @override
-  @JsonKey(name: 'matchTime')
-  final String? matchTime;
-  @override
-  @JsonKey(name: 'venue')
-  final String? venue;
+  @JsonKey(name: 'teams')
+  List<RefereeTeamModel>? get teams {
+    final value = _teams;
+    if (value == null) return null;
+    if (_teams is EqualUnmodifiableListView) return _teams;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   @JsonKey(name: 'ageGroup')
   final String? ageGroup;
@@ -529,10 +535,13 @@ class _$RefereeMatchModelImpl implements _RefereeMatchModel {
   @override
   @JsonKey(name: 'currentMinute')
   final String? currentMinute;
+  @override
+  @JsonKey(name: 'state')
+  final String? state;
 
   @override
   String toString() {
-    return 'RefereeMatchModel(matchId: $matchId, tournamentId: $tournamentId, tournamentName: $tournamentName, roundName: $roundName, teamA: $teamA, teamAId: $teamAId, teamALogo: $teamALogo, teamAScore: $teamAScore, teamB: $teamB, teamBId: $teamBId, teamBLogo: $teamBLogo, teamBScore: $teamBScore, matchDate: $matchDate, matchTime: $matchTime, venue: $venue, ageGroup: $ageGroup, matchStatus: $matchStatus, scoreStatus: $scoreStatus, acceptStatus: $acceptStatus, asstRef1: $asstRef1, asstRef2: $asstRef2, mainRef: $mainRef, matchCommis: $matchCommis, currentMinute: $currentMinute)';
+    return 'RefereeMatchModel(matchId: $matchId, tournamentId: $tournamentId, tournamentName: $tournamentName, roundName: $roundName, city: $city, fieldName: $fieldName, mainAccept: $mainAccept, matchDateTimeGmt: $matchDateTimeGmt, myTeamId: $myTeamId, opponentTeamId: $opponentTeamId, stadiumName: $stadiumName, score: $score, teams: $teams, ageGroup: $ageGroup, matchStatus: $matchStatus, scoreStatus: $scoreStatus, acceptStatus: $acceptStatus, asstRef1: $asstRef1, asstRef2: $asstRef2, mainRef: $mainRef, matchCommis: $matchCommis, currentMinute: $currentMinute, state: $state)';
   }
 
   @override
@@ -547,23 +556,21 @@ class _$RefereeMatchModelImpl implements _RefereeMatchModel {
                 other.tournamentName == tournamentName) &&
             (identical(other.roundName, roundName) ||
                 other.roundName == roundName) &&
-            (identical(other.teamA, teamA) || other.teamA == teamA) &&
-            (identical(other.teamAId, teamAId) || other.teamAId == teamAId) &&
-            (identical(other.teamALogo, teamALogo) ||
-                other.teamALogo == teamALogo) &&
-            (identical(other.teamAScore, teamAScore) ||
-                other.teamAScore == teamAScore) &&
-            (identical(other.teamB, teamB) || other.teamB == teamB) &&
-            (identical(other.teamBId, teamBId) || other.teamBId == teamBId) &&
-            (identical(other.teamBLogo, teamBLogo) ||
-                other.teamBLogo == teamBLogo) &&
-            (identical(other.teamBScore, teamBScore) ||
-                other.teamBScore == teamBScore) &&
-            (identical(other.matchDate, matchDate) ||
-                other.matchDate == matchDate) &&
-            (identical(other.matchTime, matchTime) ||
-                other.matchTime == matchTime) &&
-            (identical(other.venue, venue) || other.venue == venue) &&
+            (identical(other.city, city) || other.city == city) &&
+            (identical(other.fieldName, fieldName) ||
+                other.fieldName == fieldName) &&
+            (identical(other.mainAccept, mainAccept) ||
+                other.mainAccept == mainAccept) &&
+            (identical(other.matchDateTimeGmt, matchDateTimeGmt) ||
+                other.matchDateTimeGmt == matchDateTimeGmt) &&
+            (identical(other.myTeamId, myTeamId) ||
+                other.myTeamId == myTeamId) &&
+            (identical(other.opponentTeamId, opponentTeamId) ||
+                other.opponentTeamId == opponentTeamId) &&
+            (identical(other.stadiumName, stadiumName) ||
+                other.stadiumName == stadiumName) &&
+            (identical(other.score, score) || other.score == score) &&
+            const DeepCollectionEquality().equals(other._teams, _teams) &&
             (identical(other.ageGroup, ageGroup) ||
                 other.ageGroup == ageGroup) &&
             (identical(other.matchStatus, matchStatus) ||
@@ -580,7 +587,8 @@ class _$RefereeMatchModelImpl implements _RefereeMatchModel {
             (identical(other.matchCommis, matchCommis) ||
                 other.matchCommis == matchCommis) &&
             (identical(other.currentMinute, currentMinute) ||
-                other.currentMinute == currentMinute));
+                other.currentMinute == currentMinute) &&
+            (identical(other.state, state) || other.state == state));
   }
 
   @JsonKey(ignore: true)
@@ -591,17 +599,15 @@ class _$RefereeMatchModelImpl implements _RefereeMatchModel {
         tournamentId,
         tournamentName,
         roundName,
-        teamA,
-        teamAId,
-        teamALogo,
-        teamAScore,
-        teamB,
-        teamBId,
-        teamBLogo,
-        teamBScore,
-        matchDate,
-        matchTime,
-        venue,
+        city,
+        fieldName,
+        mainAccept,
+        matchDateTimeGmt,
+        myTeamId,
+        opponentTeamId,
+        stadiumName,
+        score,
+        const DeepCollectionEquality().hash(_teams),
         ageGroup,
         matchStatus,
         scoreStatus,
@@ -610,7 +616,8 @@ class _$RefereeMatchModelImpl implements _RefereeMatchModel {
         asstRef2,
         mainRef,
         matchCommis,
-        currentMinute
+        currentMinute,
+        state
       ]);
 
   @JsonKey(ignore: true)
@@ -628,33 +635,32 @@ class _$RefereeMatchModelImpl implements _RefereeMatchModel {
   }
 }
 
-abstract class _RefereeMatchModel implements RefereeMatchModel {
+abstract class _RefereeMatchModel extends RefereeMatchModel {
   const factory _RefereeMatchModel(
-          {@JsonKey(name: 'matchId') final String? matchId,
-          @JsonKey(name: 'tournamentId') final String? tournamentId,
-          @JsonKey(name: 'tournamentName') final String? tournamentName,
-          @JsonKey(name: 'roundName') final String? roundName,
-          @JsonKey(name: 'teamA') final String? teamA,
-          @JsonKey(name: 'teamAId') final String? teamAId,
-          @JsonKey(name: 'teamALogo') final String? teamALogo,
-          @JsonKey(name: 'teamAScore') final String? teamAScore,
-          @JsonKey(name: 'teamB') final String? teamB,
-          @JsonKey(name: 'teamBId') final String? teamBId,
-          @JsonKey(name: 'teamBLogo') final String? teamBLogo,
-          @JsonKey(name: 'teamBScore') final String? teamBScore,
-          @JsonKey(name: 'matchDate') final String? matchDate,
-          @JsonKey(name: 'matchTime') final String? matchTime,
-          @JsonKey(name: 'venue') final String? venue,
-          @JsonKey(name: 'ageGroup') final String? ageGroup,
-          @JsonKey(name: 'matchStatus') final String? matchStatus,
-          @JsonKey(name: 'scoreStatus') final String? scoreStatus,
-          @JsonKey(name: 'acceptStatus') final String? acceptStatus,
-          @JsonKey(name: 'asstRef1') final String? asstRef1,
-          @JsonKey(name: 'asstRef2') final String? asstRef2,
-          @JsonKey(name: 'mainRef') final String? mainRef,
-          @JsonKey(name: 'matchCommis') final String? matchCommis,
-          @JsonKey(name: 'currentMinute') final String? currentMinute}) =
-      _$RefereeMatchModelImpl;
+      {@JsonKey(name: 'matchId') final String? matchId,
+      @JsonKey(name: 'tournamentId') final String? tournamentId,
+      @JsonKey(name: 'tournament') final String? tournamentName,
+      @JsonKey(name: 'roundName') final String? roundName,
+      @JsonKey(name: 'city') final String? city,
+      @JsonKey(name: 'fieldName') final String? fieldName,
+      @JsonKey(name: 'mainAccept') final int? mainAccept,
+      @JsonKey(name: 'matchDateTimeGmt') final int? matchDateTimeGmt,
+      @JsonKey(name: 'myTeamId') final String? myTeamId,
+      @JsonKey(name: 'opponentTeamId') final String? opponentTeamId,
+      @JsonKey(name: 'stadiumName') final String? stadiumName,
+      @JsonKey(name: 'score') final RefereeScoreModel? score,
+      @JsonKey(name: 'teams') final List<RefereeTeamModel>? teams,
+      @JsonKey(name: 'ageGroup') final String? ageGroup,
+      @JsonKey(name: 'matchStatus') final String? matchStatus,
+      @JsonKey(name: 'scoreStatus') final String? scoreStatus,
+      @JsonKey(name: 'acceptStatus') final String? acceptStatus,
+      @JsonKey(name: 'asstRef1') final String? asstRef1,
+      @JsonKey(name: 'asstRef2') final String? asstRef2,
+      @JsonKey(name: 'mainRef') final String? mainRef,
+      @JsonKey(name: 'matchCommis') final String? matchCommis,
+      @JsonKey(name: 'currentMinute') final String? currentMinute,
+      @JsonKey(name: 'state') final String? state}) = _$RefereeMatchModelImpl;
+  const _RefereeMatchModel._() : super._();
 
   factory _RefereeMatchModel.fromJson(Map<String, dynamic> json) =
       _$RefereeMatchModelImpl.fromJson;
@@ -666,44 +672,38 @@ abstract class _RefereeMatchModel implements RefereeMatchModel {
   @JsonKey(name: 'tournamentId')
   String? get tournamentId;
   @override
-  @JsonKey(name: 'tournamentName')
+  @JsonKey(name: 'tournament')
   String? get tournamentName;
   @override
   @JsonKey(name: 'roundName')
   String? get roundName;
   @override
-  @JsonKey(name: 'teamA')
-  String? get teamA;
+  @JsonKey(name: 'city')
+  String? get city;
   @override
-  @JsonKey(name: 'teamAId')
-  String? get teamAId;
+  @JsonKey(name: 'fieldName')
+  String? get fieldName;
   @override
-  @JsonKey(name: 'teamALogo')
-  String? get teamALogo;
+  @JsonKey(name: 'mainAccept')
+  int? get mainAccept;
   @override
-  @JsonKey(name: 'teamAScore')
-  String? get teamAScore;
+  @JsonKey(name: 'matchDateTimeGmt')
+  int? get matchDateTimeGmt;
   @override
-  @JsonKey(name: 'teamB')
-  String? get teamB;
+  @JsonKey(name: 'myTeamId')
+  String? get myTeamId;
   @override
-  @JsonKey(name: 'teamBId')
-  String? get teamBId;
+  @JsonKey(name: 'opponentTeamId')
+  String? get opponentTeamId;
   @override
-  @JsonKey(name: 'teamBLogo')
-  String? get teamBLogo;
+  @JsonKey(name: 'stadiumName')
+  String? get stadiumName;
   @override
-  @JsonKey(name: 'teamBScore')
-  String? get teamBScore;
+  @JsonKey(name: 'score')
+  RefereeScoreModel? get score;
   @override
-  @JsonKey(name: 'matchDate')
-  String? get matchDate;
-  @override
-  @JsonKey(name: 'matchTime')
-  String? get matchTime;
-  @override
-  @JsonKey(name: 'venue')
-  String? get venue;
+  @JsonKey(name: 'teams')
+  List<RefereeTeamModel>? get teams;
   @override
   @JsonKey(name: 'ageGroup')
   String? get ageGroup;
@@ -732,8 +732,368 @@ abstract class _RefereeMatchModel implements RefereeMatchModel {
   @JsonKey(name: 'currentMinute')
   String? get currentMinute;
   @override
+  @JsonKey(name: 'state')
+  String? get state;
+  @override
   @JsonKey(ignore: true)
   _$$RefereeMatchModelImplCopyWith<_$RefereeMatchModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+RefereeScoreModel _$RefereeScoreModelFromJson(Map<String, dynamic> json) {
+  return _RefereeScoreModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$RefereeScoreModel {
+  int? get myGoals => throw _privateConstructorUsedError;
+  int? get opponentGoals => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $RefereeScoreModelCopyWith<RefereeScoreModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RefereeScoreModelCopyWith<$Res> {
+  factory $RefereeScoreModelCopyWith(
+          RefereeScoreModel value, $Res Function(RefereeScoreModel) then) =
+      _$RefereeScoreModelCopyWithImpl<$Res, RefereeScoreModel>;
+  @useResult
+  $Res call({int? myGoals, int? opponentGoals});
+}
+
+/// @nodoc
+class _$RefereeScoreModelCopyWithImpl<$Res, $Val extends RefereeScoreModel>
+    implements $RefereeScoreModelCopyWith<$Res> {
+  _$RefereeScoreModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? myGoals = freezed,
+    Object? opponentGoals = freezed,
+  }) {
+    return _then(_value.copyWith(
+      myGoals: freezed == myGoals
+          ? _value.myGoals
+          : myGoals // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opponentGoals: freezed == opponentGoals
+          ? _value.opponentGoals
+          : opponentGoals // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$RefereeScoreModelImplCopyWith<$Res>
+    implements $RefereeScoreModelCopyWith<$Res> {
+  factory _$$RefereeScoreModelImplCopyWith(_$RefereeScoreModelImpl value,
+          $Res Function(_$RefereeScoreModelImpl) then) =
+      __$$RefereeScoreModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int? myGoals, int? opponentGoals});
+}
+
+/// @nodoc
+class __$$RefereeScoreModelImplCopyWithImpl<$Res>
+    extends _$RefereeScoreModelCopyWithImpl<$Res, _$RefereeScoreModelImpl>
+    implements _$$RefereeScoreModelImplCopyWith<$Res> {
+  __$$RefereeScoreModelImplCopyWithImpl(_$RefereeScoreModelImpl _value,
+      $Res Function(_$RefereeScoreModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? myGoals = freezed,
+    Object? opponentGoals = freezed,
+  }) {
+    return _then(_$RefereeScoreModelImpl(
+      myGoals: freezed == myGoals
+          ? _value.myGoals
+          : myGoals // ignore: cast_nullable_to_non_nullable
+              as int?,
+      opponentGoals: freezed == opponentGoals
+          ? _value.opponentGoals
+          : opponentGoals // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$RefereeScoreModelImpl implements _RefereeScoreModel {
+  const _$RefereeScoreModelImpl({this.myGoals, this.opponentGoals});
+
+  factory _$RefereeScoreModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$RefereeScoreModelImplFromJson(json);
+
+  @override
+  final int? myGoals;
+  @override
+  final int? opponentGoals;
+
+  @override
+  String toString() {
+    return 'RefereeScoreModel(myGoals: $myGoals, opponentGoals: $opponentGoals)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RefereeScoreModelImpl &&
+            (identical(other.myGoals, myGoals) || other.myGoals == myGoals) &&
+            (identical(other.opponentGoals, opponentGoals) ||
+                other.opponentGoals == opponentGoals));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, myGoals, opponentGoals);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RefereeScoreModelImplCopyWith<_$RefereeScoreModelImpl> get copyWith =>
+      __$$RefereeScoreModelImplCopyWithImpl<_$RefereeScoreModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RefereeScoreModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _RefereeScoreModel implements RefereeScoreModel {
+  const factory _RefereeScoreModel(
+      {final int? myGoals, final int? opponentGoals}) = _$RefereeScoreModelImpl;
+
+  factory _RefereeScoreModel.fromJson(Map<String, dynamic> json) =
+      _$RefereeScoreModelImpl.fromJson;
+
+  @override
+  int? get myGoals;
+  @override
+  int? get opponentGoals;
+  @override
+  @JsonKey(ignore: true)
+  _$$RefereeScoreModelImplCopyWith<_$RefereeScoreModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+RefereeTeamModel _$RefereeTeamModelFromJson(Map<String, dynamic> json) {
+  return _RefereeTeamModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$RefereeTeamModel {
+  String? get teamId => throw _privateConstructorUsedError;
+  String? get teamName => throw _privateConstructorUsedError;
+  String? get teamShortName => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $RefereeTeamModelCopyWith<RefereeTeamModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RefereeTeamModelCopyWith<$Res> {
+  factory $RefereeTeamModelCopyWith(
+          RefereeTeamModel value, $Res Function(RefereeTeamModel) then) =
+      _$RefereeTeamModelCopyWithImpl<$Res, RefereeTeamModel>;
+  @useResult
+  $Res call(
+      {String? teamId,
+      String? teamName,
+      String? teamShortName,
+      String? imageUrl});
+}
+
+/// @nodoc
+class _$RefereeTeamModelCopyWithImpl<$Res, $Val extends RefereeTeamModel>
+    implements $RefereeTeamModelCopyWith<$Res> {
+  _$RefereeTeamModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? teamId = freezed,
+    Object? teamName = freezed,
+    Object? teamShortName = freezed,
+    Object? imageUrl = freezed,
+  }) {
+    return _then(_value.copyWith(
+      teamId: freezed == teamId
+          ? _value.teamId
+          : teamId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      teamName: freezed == teamName
+          ? _value.teamName
+          : teamName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      teamShortName: freezed == teamShortName
+          ? _value.teamShortName
+          : teamShortName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$RefereeTeamModelImplCopyWith<$Res>
+    implements $RefereeTeamModelCopyWith<$Res> {
+  factory _$$RefereeTeamModelImplCopyWith(_$RefereeTeamModelImpl value,
+          $Res Function(_$RefereeTeamModelImpl) then) =
+      __$$RefereeTeamModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String? teamId,
+      String? teamName,
+      String? teamShortName,
+      String? imageUrl});
+}
+
+/// @nodoc
+class __$$RefereeTeamModelImplCopyWithImpl<$Res>
+    extends _$RefereeTeamModelCopyWithImpl<$Res, _$RefereeTeamModelImpl>
+    implements _$$RefereeTeamModelImplCopyWith<$Res> {
+  __$$RefereeTeamModelImplCopyWithImpl(_$RefereeTeamModelImpl _value,
+      $Res Function(_$RefereeTeamModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? teamId = freezed,
+    Object? teamName = freezed,
+    Object? teamShortName = freezed,
+    Object? imageUrl = freezed,
+  }) {
+    return _then(_$RefereeTeamModelImpl(
+      teamId: freezed == teamId
+          ? _value.teamId
+          : teamId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      teamName: freezed == teamName
+          ? _value.teamName
+          : teamName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      teamShortName: freezed == teamShortName
+          ? _value.teamShortName
+          : teamShortName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$RefereeTeamModelImpl implements _RefereeTeamModel {
+  const _$RefereeTeamModelImpl(
+      {this.teamId, this.teamName, this.teamShortName, this.imageUrl});
+
+  factory _$RefereeTeamModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$RefereeTeamModelImplFromJson(json);
+
+  @override
+  final String? teamId;
+  @override
+  final String? teamName;
+  @override
+  final String? teamShortName;
+  @override
+  final String? imageUrl;
+
+  @override
+  String toString() {
+    return 'RefereeTeamModel(teamId: $teamId, teamName: $teamName, teamShortName: $teamShortName, imageUrl: $imageUrl)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RefereeTeamModelImpl &&
+            (identical(other.teamId, teamId) || other.teamId == teamId) &&
+            (identical(other.teamName, teamName) ||
+                other.teamName == teamName) &&
+            (identical(other.teamShortName, teamShortName) ||
+                other.teamShortName == teamShortName) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, teamId, teamName, teamShortName, imageUrl);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RefereeTeamModelImplCopyWith<_$RefereeTeamModelImpl> get copyWith =>
+      __$$RefereeTeamModelImplCopyWithImpl<_$RefereeTeamModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RefereeTeamModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _RefereeTeamModel implements RefereeTeamModel {
+  const factory _RefereeTeamModel(
+      {final String? teamId,
+      final String? teamName,
+      final String? teamShortName,
+      final String? imageUrl}) = _$RefereeTeamModelImpl;
+
+  factory _RefereeTeamModel.fromJson(Map<String, dynamic> json) =
+      _$RefereeTeamModelImpl.fromJson;
+
+  @override
+  String? get teamId;
+  @override
+  String? get teamName;
+  @override
+  String? get teamShortName;
+  @override
+  String? get imageUrl;
+  @override
+  @JsonKey(ignore: true)
+  _$$RefereeTeamModelImplCopyWith<_$RefereeTeamModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -746,7 +1106,7 @@ TournamentDropdownItem _$TournamentDropdownItemFromJson(
 mixin _$TournamentDropdownItem {
   @JsonKey(name: 'tournamentId')
   String? get tournamentId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'tournamentName')
+  @JsonKey(name: 'name')
   String? get tournamentName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -763,7 +1123,7 @@ abstract class $TournamentDropdownItemCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'tournamentId') String? tournamentId,
-      @JsonKey(name: 'tournamentName') String? tournamentName});
+      @JsonKey(name: 'name') String? tournamentName});
 }
 
 /// @nodoc
@@ -807,7 +1167,7 @@ abstract class _$$TournamentDropdownItemImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'tournamentId') String? tournamentId,
-      @JsonKey(name: 'tournamentName') String? tournamentName});
+      @JsonKey(name: 'name') String? tournamentName});
 }
 
 /// @nodoc
@@ -844,7 +1204,7 @@ class __$$TournamentDropdownItemImplCopyWithImpl<$Res>
 class _$TournamentDropdownItemImpl implements _TournamentDropdownItem {
   const _$TournamentDropdownItemImpl(
       {@JsonKey(name: 'tournamentId') this.tournamentId,
-      @JsonKey(name: 'tournamentName') this.tournamentName});
+      @JsonKey(name: 'name') this.tournamentName});
 
   factory _$TournamentDropdownItemImpl.fromJson(Map<String, dynamic> json) =>
       _$$TournamentDropdownItemImplFromJson(json);
@@ -853,7 +1213,7 @@ class _$TournamentDropdownItemImpl implements _TournamentDropdownItem {
   @JsonKey(name: 'tournamentId')
   final String? tournamentId;
   @override
-  @JsonKey(name: 'tournamentName')
+  @JsonKey(name: 'name')
   final String? tournamentName;
 
   @override
@@ -894,7 +1254,7 @@ class _$TournamentDropdownItemImpl implements _TournamentDropdownItem {
 abstract class _TournamentDropdownItem implements TournamentDropdownItem {
   const factory _TournamentDropdownItem(
           {@JsonKey(name: 'tournamentId') final String? tournamentId,
-          @JsonKey(name: 'tournamentName') final String? tournamentName}) =
+          @JsonKey(name: 'name') final String? tournamentName}) =
       _$TournamentDropdownItemImpl;
 
   factory _TournamentDropdownItem.fromJson(Map<String, dynamic> json) =
@@ -904,7 +1264,7 @@ abstract class _TournamentDropdownItem implements TournamentDropdownItem {
   @JsonKey(name: 'tournamentId')
   String? get tournamentId;
   @override
-  @JsonKey(name: 'tournamentName')
+  @JsonKey(name: 'name')
   String? get tournamentName;
   @override
   @JsonKey(ignore: true)

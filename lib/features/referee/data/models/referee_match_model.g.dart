@@ -11,19 +11,21 @@ _$RefereeMatchModelImpl _$$RefereeMatchModelImplFromJson(
     _$RefereeMatchModelImpl(
       matchId: json['matchId'] as String?,
       tournamentId: json['tournamentId'] as String?,
-      tournamentName: json['tournamentName'] as String?,
+      tournamentName: json['tournament'] as String?,
       roundName: json['roundName'] as String?,
-      teamA: json['teamA'] as String?,
-      teamAId: json['teamAId'] as String?,
-      teamALogo: json['teamALogo'] as String?,
-      teamAScore: json['teamAScore'] as String?,
-      teamB: json['teamB'] as String?,
-      teamBId: json['teamBId'] as String?,
-      teamBLogo: json['teamBLogo'] as String?,
-      teamBScore: json['teamBScore'] as String?,
-      matchDate: json['matchDate'] as String?,
-      matchTime: json['matchTime'] as String?,
-      venue: json['venue'] as String?,
+      city: json['city'] as String?,
+      fieldName: json['fieldName'] as String?,
+      mainAccept: (json['mainAccept'] as num?)?.toInt(),
+      matchDateTimeGmt: (json['matchDateTimeGmt'] as num?)?.toInt(),
+      myTeamId: json['myTeamId'] as String?,
+      opponentTeamId: json['opponentTeamId'] as String?,
+      stadiumName: json['stadiumName'] as String?,
+      score: json['score'] == null
+          ? null
+          : RefereeScoreModel.fromJson(json['score'] as Map<String, dynamic>),
+      teams: (json['teams'] as List<dynamic>?)
+          ?.map((e) => RefereeTeamModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       ageGroup: json['ageGroup'] as String?,
       matchStatus: json['matchStatus'] as String?,
       scoreStatus: json['scoreStatus'] as String?,
@@ -33,6 +35,7 @@ _$RefereeMatchModelImpl _$$RefereeMatchModelImplFromJson(
       mainRef: json['mainRef'] as String?,
       matchCommis: json['matchCommis'] as String?,
       currentMinute: json['currentMinute'] as String?,
+      state: json['state'] as String?,
     );
 
 Map<String, dynamic> _$$RefereeMatchModelImplToJson(
@@ -40,19 +43,17 @@ Map<String, dynamic> _$$RefereeMatchModelImplToJson(
     <String, dynamic>{
       'matchId': instance.matchId,
       'tournamentId': instance.tournamentId,
-      'tournamentName': instance.tournamentName,
+      'tournament': instance.tournamentName,
       'roundName': instance.roundName,
-      'teamA': instance.teamA,
-      'teamAId': instance.teamAId,
-      'teamALogo': instance.teamALogo,
-      'teamAScore': instance.teamAScore,
-      'teamB': instance.teamB,
-      'teamBId': instance.teamBId,
-      'teamBLogo': instance.teamBLogo,
-      'teamBScore': instance.teamBScore,
-      'matchDate': instance.matchDate,
-      'matchTime': instance.matchTime,
-      'venue': instance.venue,
+      'city': instance.city,
+      'fieldName': instance.fieldName,
+      'mainAccept': instance.mainAccept,
+      'matchDateTimeGmt': instance.matchDateTimeGmt,
+      'myTeamId': instance.myTeamId,
+      'opponentTeamId': instance.opponentTeamId,
+      'stadiumName': instance.stadiumName,
+      'score': instance.score,
+      'teams': instance.teams,
       'ageGroup': instance.ageGroup,
       'matchStatus': instance.matchStatus,
       'scoreStatus': instance.scoreStatus,
@@ -62,18 +63,51 @@ Map<String, dynamic> _$$RefereeMatchModelImplToJson(
       'mainRef': instance.mainRef,
       'matchCommis': instance.matchCommis,
       'currentMinute': instance.currentMinute,
+      'state': instance.state,
+    };
+
+_$RefereeScoreModelImpl _$$RefereeScoreModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$RefereeScoreModelImpl(
+      myGoals: (json['myGoals'] as num?)?.toInt(),
+      opponentGoals: (json['opponentGoals'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$RefereeScoreModelImplToJson(
+        _$RefereeScoreModelImpl instance) =>
+    <String, dynamic>{
+      'myGoals': instance.myGoals,
+      'opponentGoals': instance.opponentGoals,
+    };
+
+_$RefereeTeamModelImpl _$$RefereeTeamModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$RefereeTeamModelImpl(
+      teamId: json['teamId'] as String?,
+      teamName: json['teamName'] as String?,
+      teamShortName: json['teamShortName'] as String?,
+      imageUrl: json['imageUrl'] as String?,
+    );
+
+Map<String, dynamic> _$$RefereeTeamModelImplToJson(
+        _$RefereeTeamModelImpl instance) =>
+    <String, dynamic>{
+      'teamId': instance.teamId,
+      'teamName': instance.teamName,
+      'teamShortName': instance.teamShortName,
+      'imageUrl': instance.imageUrl,
     };
 
 _$TournamentDropdownItemImpl _$$TournamentDropdownItemImplFromJson(
         Map<String, dynamic> json) =>
     _$TournamentDropdownItemImpl(
       tournamentId: json['tournamentId'] as String?,
-      tournamentName: json['tournamentName'] as String?,
+      tournamentName: json['name'] as String?,
     );
 
 Map<String, dynamic> _$$TournamentDropdownItemImplToJson(
         _$TournamentDropdownItemImpl instance) =>
     <String, dynamic>{
       'tournamentId': instance.tournamentId,
-      'tournamentName': instance.tournamentName,
+      'name': instance.tournamentName,
     };

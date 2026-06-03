@@ -447,17 +447,19 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             child: Column(
               children: [
                 // Logo Box - marginTop 50dp
-                SizedBox(height: 50),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.25,
+                ),
                 Center(
                   child: SvgPicture.asset(
                     'assets/icons/socaloca_logo.svg',
-                    width: 200,
+                    width: 160,
                     // height: 150,
                     // fit: BoxFit.contain,
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery.of(context).size.height * 0.07,
                 ),
                 // Top Box - marginLeft/Right 40dp,
                 Padding(
@@ -560,11 +562,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              'SIGN UP'.tr,
+                              'Continue'.tr,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w800,
-                                fontSize: 15,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 24,
                                 color: AppColors.socaYellow,
                               ),
                             ),

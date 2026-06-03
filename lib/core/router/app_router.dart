@@ -74,6 +74,9 @@ import '../../features/referee/screens/referee_my_requests_screen.dart';
 import '../../features/referee/screens/referee_my_matches_screen.dart';
 import '../../features/referee/screens/referee_live_matches_screen.dart';
 import '../../features/referee/screens/referee_my_bio_screen.dart';
+import '../../features/referee/screens/referee_manage_match_screen.dart';
+import '../../features/referee/screens/referee_live_match_update_screen.dart';
+import '../../features/referee/data/models/referee_match_model.dart';
 import '../../features/teams/screens/teams_screen_new.dart';
 import '../../features/teams/screens/team_bio_screen.dart';
 import '../../features/teams/screens/team_players_screen.dart';
@@ -844,7 +847,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.refereeMatches,
             name: 'refereeMatches',
-            builder: (_, __) => RefereeMyMatchesScreen(),
+            builder: (_, __) => const RefereeMyMatchesScreen(),
             // Scaffold(
             //   body: Center(child: Text('refereeMatches - Coming Soon'.tr)),
             // ),
@@ -852,7 +855,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.refereeLive,
             name: 'refereeLive',
-            builder: (_, __) => RefereeLiveMatchesScreen(),
+            builder: (_, __) => const RefereeLiveMatchesScreen(),
           ),
           GoRoute(
             path: AppRoutes.refereeBio,
@@ -871,8 +874,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'refereeManageMatch',
             builder: (ctx, state) {
               final matchId = state.pathParameters['matchId']!;
-              return Scaffold(
-                body: Center(child: Text('Manage Match $matchId — Phase 8')),
+              return RefereeManageMatchScreen(
+                matchId: matchId,
+                match: state.extra is RefereeMatchModel
+                    ? state.extra as RefereeMatchModel
+                    : null,
               );
             },
           ),
@@ -881,8 +887,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'refereeLiveUpdate',
             builder: (ctx, state) {
               final matchId = state.pathParameters['matchId']!;
-              return Scaffold(
-                body: Center(child: Text('Live Update $matchId — Phase 9')),
+              return RefereeLiveMatchUpdateScreen(
+                matchId: matchId,
+                match: state.extra is RefereeMatchModel
+                    ? state.extra as RefereeMatchModel
+                    : null,
               );
             },
           ),

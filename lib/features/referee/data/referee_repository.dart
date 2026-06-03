@@ -88,7 +88,7 @@ class RefereeRepository {
     );
     final resp = response['response'] as Map<String, dynamic>? ?? {};
     if (resp['status'] != 1) return [];
-    final List<dynamic> raw = resp['matches'] as List? ?? [];
+    final List<dynamic> raw = resp['matchSet'] as List? ?? [];
     return raw
         .map((e) => RefereeMatchModel.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -118,6 +118,7 @@ class RefereeRepository {
   Future<List<RefereeMatchModel>> getMatches({
     String? tournamentId,
     int start = 0,
+    int limit = 10,
   }) async {
     final response = await ApiClient.instance.post(
       ApiConstants.getRefMatchList,
@@ -125,12 +126,12 @@ class RefereeRepository {
         'userId': _userId,
         'tournamentId': tournamentId ?? '',
         'start': start,
-        'limit': 10,
+        'limit': limit,
       },
     );
     final resp = response['response'] as Map<String, dynamic>? ?? {};
     if (resp['status'] != 1) return [];
-    final List<dynamic> raw = resp['matches'] as List? ?? [];
+    final List<dynamic> raw = resp['matchSet'] as List? ?? [];
     return raw
         .map((e) => RefereeMatchModel.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -141,6 +142,7 @@ class RefereeRepository {
   Future<List<RefereeMatchModel>> getLiveMatches({
     String? tournamentId,
     int start = 0,
+    int limit = 10,
   }) async {
     final response = await ApiClient.instance.post(
       ApiConstants.getRefLiveList,
@@ -148,12 +150,12 @@ class RefereeRepository {
         'userId': _userId,
         'tournamentId': tournamentId ?? '',
         'start': start,
-        'limit': 10,
+        'limit': limit,
       },
     );
     final resp = response['response'] as Map<String, dynamic>? ?? {};
     if (resp['status'] != 1) return [];
-    final List<dynamic> raw = resp['matches'] as List? ?? [];
+    final List<dynamic> raw = resp['matchSet'] as List? ?? [];
     return raw
         .map((e) => RefereeMatchModel.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -253,6 +255,234 @@ class RefereeRepository {
     return resp['status'] == 1;
   }
 
+  Future<bool> savePlayerOfTheMatch({
+    required String matchId,
+    required String tournamentId,
+    required String matchType,
+    required String mvpTeamId,
+    required String mvpPlayerId,
+    required String mvpPlayerName,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMatchMvp,
+      body: {
+        'tournamentId': tournamentId,
+        'userId': _userId,
+        'matchId': matchId,
+        'matchType': matchType,
+        'mvpTeamId': mvpTeamId,
+        'mvpPlayerId': mvpPlayerId,
+        'mvpPlayerName': mvpPlayerName,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveCleanSheet({
+    required String matchId,
+    required String tournamentId,
+    String? myTeamCleanSheet,
+    String? oppoTeamCleanSheet,
+  }) async {
+    final body = <String, dynamic>{
+      'tournamentId': tournamentId,
+      'userId': _userId,
+      'matchId': matchId,
+    };
+    if (myTeamCleanSheet?.isNotEmpty == true) {
+      body['myTeamCleanSheet'] = myTeamCleanSheet;
+    }
+    if (oppoTeamCleanSheet?.isNotEmpty == true) {
+      body['oppoTeamCleanSheet'] = oppoTeamCleanSheet;
+    }
+    final response = await ApiClient.instance.post(
+      ApiConstants.refMatchCleanSheet,
+      body: body,
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveCoachManager({
+    required String matchId,
+    Map<String, dynamic>? myCoach,
+    Map<String, dynamic>? myManager,
+    Map<String, dynamic>? oppoCoach,
+    Map<String, dynamic>? oppoManager,
+  }) async {
+    final body = <String, dynamic>{'matchId': matchId};
+    if (myCoach != null) body['myCoach'] = myCoach;
+    if (myManager != null) body['myManager'] = myManager;
+    if (oppoCoach != null) body['oppoCoach'] = oppoCoach;
+    if (oppoManager != null) body['oppoManager'] = oppoManager;
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMatchMgmt,
+      body: body,
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveMatchOfficials({
+    required String matchId,
+    required List<Map<String, dynamic>> myOfficials,
+    required List<Map<String, dynamic>> oppoOfficials,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveMatchOfcl,
+      body: {
+        'userId': _userId,
+        'matchId': matchId,
+        'myOfficials': myOfficials,
+        'oppoOfficials': oppoOfficials,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveMatchSquad({
+    required String matchId,
+    required String tournamentId,
+    required List<Map<String, dynamic>> myPlayers,
+    required List<Map<String, dynamic>> opponentPlayers,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMtchSquad,
+      body: {
+        'tournamentId': tournamentId,
+        'userId': _userId,
+        'matchId': matchId,
+        'myPlayers': myPlayers,
+        'opponentPlayers': opponentPlayers,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveSubstitutes({
+    required String matchId,
+    required List<Map<String, dynamic>> players,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMatchSubs,
+      body: {
+        'matchId': matchId,
+        'players': players,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveMatchIncident({
+    required String matchId,
+    required String desc,
+    String commIncident = '',
+  }) async {
+    final body = <String, dynamic>{
+      'userId': _userId,
+      'matchId': matchId,
+      'desc': desc,
+    };
+    if (commIncident.isNotEmpty) {
+      body['commIncident'] = commIncident;
+    }
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMatchIncident,
+      body: body,
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveMatchPhotos({
+    required String matchId,
+    required String parentId,
+    required List<Map<String, dynamic>> photos,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMtchPhotos,
+      body: {
+        'userId': _userId,
+        'matchId': matchId,
+        'parentId': parentId,
+        'photos': photos,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveMatchHighlights({
+    required String matchId,
+    required String parentId,
+    required String matchType,
+    required List<Map<String, dynamic>> videos,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMtchVideos,
+      body: {
+        'userId': _userId,
+        'matchId': matchId,
+        'parentId': parentId,
+        'matchType': matchType,
+        'videos': videos,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveMatchVideos({
+    required String matchId,
+    required String parentId,
+    required String matchType,
+    required List<Map<String, dynamic>> videos,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMtchBigVideo,
+      body: {
+        'userId': _userId,
+        'matchId': matchId,
+        'parentId': parentId,
+        'matchType': matchType,
+        'videos': videos,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> publishMatchVideos({
+    required String matchId,
+    required String parentId,
+    required String matchType,
+    required List<Map<String, dynamic>> videos,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.pubRefMtchBigVideo,
+      body: {
+        'userId': _userId,
+        'matchId': matchId,
+        'parentId': parentId,
+        'matchType': _publishedMatchType(matchType),
+        'videos': videos,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  String _publishedMatchType(String matchType) {
+    if (matchType == 'tournament') return 'leagueMatch';
+    if (matchType == 'cupLeague') return 'cupGroup';
+    if (matchType == 'cupMatch') return 'cupKnock';
+    return '';
+  }
+
   // ─── Live Match Update (Phase 9) ─────────────────────────────────────────
 
   Future<Map<String, dynamic>?> getLiveMatchData({
@@ -292,5 +522,20 @@ class RefereeRepository {
     );
     final resp = response['response'] as Map<String, dynamic>? ?? {};
     return resp['status'] == 1;
+  }
+
+  Future<bool> saveLiveMatchState({
+    required String matchId,
+    required String tournamentId,
+    required String state,
+    Map<String, dynamic> keyVals = const {},
+  }) {
+    return saveLiveMatchData(
+      matchId: matchId,
+      tournamentId: tournamentId,
+      entry: 'state',
+      state: state,
+      keyVals: keyVals,
+    );
   }
 }

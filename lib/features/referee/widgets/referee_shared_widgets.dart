@@ -26,10 +26,8 @@ class RefereeTournamentDropdown extends StatelessWidget {
       if (id == null || id.isEmpty || !values.add(id)) continue;
       dropdownItems.add(item);
     }
-
     final selectedValue =
         selectedId != null && values.contains(selectedId) ? selectedId : '';
-
     return Container(
       height: 55,
       width: MediaQuery.of(context).size.width * .7,
@@ -39,41 +37,59 @@ class RefereeTournamentDropdown extends StatelessWidget {
         border: Border.all(color: AppColors.socaBlack, width: 1),
       ),
       child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selectedValue,
-          isExpanded: true,
-          icon: const Icon(
-            Icons.arrow_drop_down,
-            color: AppColors.textHint,
-            size: 32,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Colors.white,
           ),
-          dropdownColor: Colors.white,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: AppColors.socaBlack,
-          ),
-          items: [
-            DropdownMenuItem<String>(
-              value: '',
-              child: Text(
-                AppStrings.selectTournamentRequired,
-                overflow: TextOverflow.ellipsis,
-              ),
+          child: DropdownButton<String>(
+            value: selectedValue,
+            isExpanded: true,
+            focusColor: Colors.transparent,
+            icon: const Icon(
+              Icons.arrow_drop_down,
+              color: AppColors.socaBlack,
+              size: 32,
             ),
-            ...dropdownItems.map(
-              (item) => DropdownMenuItem<String>(
-                value: item.tournamentId,
+            dropdownColor: Colors.white,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: AppColors.socaBlack,
+            ),
+            items: [
+              DropdownMenuItem<String>(
+                value: '',
                 child: Text(
-                  item.tournamentName ?? '',
+                  AppStrings.selectTournamentRequired,
                   overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.socaBlack,
+                  ),
                 ),
               ),
+              ...dropdownItems.map(
+                (item) => DropdownMenuItem<String>(
+                  value: item.tournamentId,
+                  child: Text(
+                    item.tournamentName ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+            onChanged: (value) => onChanged(
+              value == null || value.isEmpty ? null : value,
             ),
-          ],
-          onChanged: (value) => onChanged(
-            value == null || value.isEmpty ? null : value,
           ),
         ),
       ),

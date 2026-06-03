@@ -169,6 +169,318 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     'Under Armor'
   ];
 
+  // All leagues and their team lists — sourced from CreateProfileFragment.java
+  static const Map<String, List<String>> _leagueTeams = {
+    'Premier League': [
+      'Arsenal',
+      'Aston Villa',
+      'Bournemouth',
+      'Brighton & Hove Albion',
+      'Burnley',
+      'Chelsea',
+      'Crystal Palace',
+      'Everton',
+      'Leicester City',
+      'Liverpool',
+      'Manchester City',
+      'Manchester United',
+      'Newcastle United',
+      'Norwich City',
+      'Sheffield United',
+      'Southampton',
+      'Tottenham Hotspur',
+      'Watford',
+      'West Ham United',
+      'Wolverhampton Wanderers',
+    ],
+    'La Liga': [
+      'Real Madrid',
+      'Barcelona',
+      'Atlético Madrid',
+      'Athletic Bilbao',
+      'Valencia',
+      'Real Sociedad',
+      'Deportivo La Coruña',
+      'Sevilla',
+      'Real Betis',
+    ],
+    'Bundesliga': [
+      'FC Augsburg',
+      'Bayer Leverkusen',
+      'Bayern Munich',
+      'Borussia Dortmund',
+      'Borussia Mönchengladbach',
+      'Eintracht Frankfurt',
+      'Fortuna Düsseldorf',
+      'SC Freiburg',
+      'Hertha BSC',
+      'TSG 1899 Hoffenheim',
+      'FC Köln',
+      'RB Leipzig',
+      'FSV Mainz 05',
+      'SC Paderborn 07',
+      'Schalke 04',
+      'Union Berlin',
+      'Werder Bremen',
+      'VfL Wolfsburg',
+    ],
+    'Serie A': [
+      'Atalanta',
+      'Bologna',
+      'Brescia',
+      'Cagliari',
+      'Fiorentina',
+      'Genoa',
+      'Hellas Verona',
+      'Internazionale',
+      'Juventus',
+      'Lazio',
+      'Lecce',
+      'Milan',
+      'Napoli',
+      'Parma',
+      'Roma',
+      'Sampdoria',
+      'Sassuolo',
+      'SPAL',
+      'Torino',
+      'Udinese',
+    ],
+    'Ligue 1': [
+      'Amiens',
+      'Angers',
+      'Bordeaux',
+      'Brest',
+      'Dijon',
+      'Lille',
+      'Lyon',
+      'Marseille',
+      'Metz',
+      'Monaco',
+      'Montpellier',
+      'Nantes',
+      'Nice',
+      'Nîmes',
+      'Paris Saint-Germain',
+      'Reims',
+      'Rennes',
+      'Saint-Étienne',
+      'Strasbourg',
+      'Toulouse',
+    ],
+    'Brasileirão': [
+      'Palmeiras',
+      'Santos',
+      'Corinthians',
+      'São Paulo',
+      'Flamengo',
+      'Cruzeiro',
+      'Vasco',
+      'Fluminense',
+      'Internacional',
+      'Botafogo',
+      'Grêmio',
+      'Bahia',
+      'Atlético Mineiro',
+      'Guarani',
+      'Atlético Paranaense',
+      'Coritiba',
+      'Sport',
+      'Fortaleza',
+      'São Caetano',
+      'Náutico',
+      'Bangu',
+      'Bragantino',
+      'Vitória',
+      'Portuguesa',
+    ],
+    'Superliga Argentina': [
+      'Aldosivi',
+      'Argentinos Juniors',
+      'Arsenal',
+      'Atlético Tucumán',
+      'Banfield',
+      'Boca Juniors',
+      'Central Córdoba (SdE)',
+      'Colón',
+      'Defensa y Justicia',
+      'Estudiantes (LP)',
+      'Gimnasia y Esgrima (LP)',
+      'Godoy Cruz',
+      'Huracán',
+      'Independiente',
+      'Lanús',
+      "Newell's Old Boys",
+      'Patronato',
+      'River Plate',
+      'Rosario Central',
+      'San Lorenzo',
+      'Talleres (C)',
+      'Unión',
+      'Vélez Sarsfield',
+    ],
+    'Dutch Eredivisie': [
+      'Ajax',
+      'AZ',
+      'ADO Den Haag',
+      'FC Emmen',
+      'Feyenoord',
+      'Fortuna Sittard',
+      'FC Groningen',
+      'SC Heerenveen',
+      'Heracles Almelo',
+      'PSV',
+      'Sparta Rotterdam',
+      'Twente',
+      'FC Utrecht',
+      'Vitesse',
+      'VVV-Venlo',
+      'RKC Waalwijk',
+      'Willem II',
+      'PEC Zwolle',
+    ],
+    'Primeira Liga': [
+      'Belenenses SAD',
+      'Benfica',
+      'Boavista',
+      'Braga',
+      'Desportivo das Aves',
+      'Famalicão',
+      'Gil Vicente',
+      'Marítimo',
+      'Moreirense',
+      'Paços de Ferreira',
+      'Portimonense',
+      'Porto',
+      'Rio Ave',
+      'Santa Clara',
+      'Sporting CP',
+      'Tondela',
+      'Vitória de Guimarães',
+      'Vitória de Setúbal',
+    ],
+    'Major League Soccer': [
+      'Atlanta United FC',
+      'Chicago Fire FC',
+      'FC Cincinnati',
+      'Columbus Crew SC',
+      'D.C. United',
+      'Inter Miami CF',
+      'Montreal Impact',
+      'New England Revolution',
+      'New York City FC',
+      'New York Red Bulls',
+      'Orlando City SC',
+      'Philadelphia Union',
+      'Toronto FC',
+      'Colorado Rapids',
+      'FC Dallas',
+      'Houston Dynamo',
+      'LA Galaxy',
+      'Los Angeles FC',
+      'Minnesota United FC',
+      'Nashville SC',
+      'Portland Timbers',
+      'Real Salt Lake',
+      'San Jose Earthquakes',
+      'Seattle Sounders FC',
+      'Sporting Kansas City',
+      'Vancouver Whitecaps FC',
+    ],
+    'FA Womens Super League': [
+      'Arsenal Women',
+      'Aston Villa Women',
+      'Birmingham City Women',
+      'Brighton & Hove Albion Women',
+      'Chelsea Women',
+      'Everton Women',
+      'Leicester City Women',
+      'Manchester City Women',
+      'Manchester United Women',
+      'Reading Women',
+      'Tottenham Hotspur Women',
+      'West Ham United Women',
+    ],
+    'France D1 Arkema Women': [
+      'Bordeaux Womens',
+      'Dijon Womens',
+      'FC Fleury 91 Womens',
+      'EA Guingamp Womens',
+      'Issy FF Womens',
+      'Lyon Womens',
+      'Montpellier Womens',
+      'Paris FC Womens',
+      'PSG Womens',
+      'Reims Womens',
+      'Soyaux Womens',
+      'Saint Etienne Womens',
+    ],
+    'Spanish Primera Iberdrola Women': [
+      'Athletic Bilbao Womens',
+      'Atletico Madrid Womens',
+      'Barcelona Womens',
+      'Alaves Womens',
+      'Eibar Womens',
+      'Granadilla Tenerife Womens',
+      'Levante Womens',
+      'Madrid CFF Womens',
+      'Rayo Vallecano Womens',
+      'Real Betis Womens',
+      'Real Madrid Womens',
+      'Real Sociedad Womens',
+      'Sevilla Womens',
+      'Sporting Huelva Womens',
+      'Valencia Womens',
+      'Villarreal Womens',
+    ],
+    'Italy Serie A Women': [
+      'Milan Women',
+      'Internazionale Women',
+      'Juventus Women',
+      'Roma Women',
+      'Sampdoria Women',
+      'Sassuolo Women',
+      'Fiorentina Women',
+      'Lazio Women',
+      'Empoli Women',
+      'Napoli Women',
+      'Pomigliano Women',
+      'Hellas Verona Women',
+    ],
+    'Portugal Liga BPI Women': [
+      'Albergaria Women',
+      'Condeixa Women',
+      'Famalicao Women',
+      'Gil Vicente Women',
+      'Braga Women',
+      'Valadares Women',
+      'Varzim Women',
+      'Vilaverdense Women',
+      'Amora Women',
+      'Atletico CP Women',
+      'Estoril Women',
+      'Maritimo Women',
+      'Ouriense Women',
+      'Benfica Women',
+      'Sporting Women',
+      'Torreense Women',
+    ],
+    'Sweden OBOS Damallsvenskan Women': [
+      'Rosengard Women',
+      'Hacken Women',
+      'Eskilstuna Women',
+      'Hammarby Women',
+      'Kristianstads Women',
+      'Linkoping Women',
+      'Vittsjo Women',
+      'Djurgarden Women',
+      'KIF Orebro Women',
+      'AIK Women',
+      'Pitea Women',
+      'Vaxjo Women',
+    ],
+  };
+
   @override
   void initState() {
     super.initState();
@@ -265,7 +577,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       (_isPlayer || _isCoach || _isManager) && !_isReferee;
   bool get _showBrands =>
       (_isPlayer || _isCoach || _isManager || _isFan) && !_isReferee;
-  bool get _showFanLocation => _isFan;
+  bool get _showFanLocation => _isFan || _isReferee;
   bool get _showLeaguesTeams => _isFan;
 
   void _onRoleToggle(String role, bool value) {
@@ -430,9 +742,9 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               ),
               SizedBox(height: 20),
               ListTile(
-                leading: Icon(Icons.camera_alt, color: AppColors.socaBlack),
+                // leading: Icon(Icons.camera_alt, color: AppColors.socaBlack),
                 title: Text(
-                  'Camera'.tr,
+                  'TAKE A PHOTO'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -445,9 +757,9 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo_library, color: AppColors.socaBlack),
+                // leading: Icon(Icons.photo_library, color: AppColors.socaBlack),
                 title: Text(
-                  'Gallery'.tr,
+                  'CHOOSE FROM GALLERY'.tr,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -696,6 +1008,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             gender: _gender,
             aboutMe: _aboutMeController.text.trim(),
             imageUrl: _selectedAvatar ?? '',
+            imageFile: _profileImage,
             playPosition: _showPlayerFields ? _playPosition : '',
             playPositionType: _showPlayerFields ? _playPositionType : '',
             playLevel: _showPlayerFields ? _playLevel : '',
@@ -748,239 +1061,229 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.sizeOf(context).height;
     return Scaffold(
-      backgroundColor: AppColors.socaPageBg,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 50),
-
-            // Logo
-            Center(
-              child: SvgPicture.asset(
-                'assets/icons/socaloca_logo.svg',
-                width: 160,
-                height: 60,
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            // Title
-            Text(
-              'Create Profile'.tr,
-              style: TextStyle(
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.w700,
-                fontSize: 22,
-                color: AppColors.socaBlack,
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            // First Name
-            SocaLocaTextField(
-              controller: _firstNameController,
-              hintText: 'first name *'.tr,
-              onChanged: (_) => setState(() => _firstNameError = null),
-            ),
-            if (_firstNameError != null)
-              SocaLocaFieldError(errorText: _firstNameError!),
-
-            SizedBox(height: 15),
-
-            // Last Name
-            SocaLocaTextField(
-              controller: _lastNameController,
-              hintText: 'last name *'.tr,
-              onChanged: (_) => setState(() => _lastNameError = null),
-            ),
-            if (_lastNameError != null)
-              SocaLocaFieldError(errorText: _lastNameError!),
-
-            SizedBox(height: 15),
-
-            // Profile Name
-            SocaLocaTextField(
-              controller: _profileNameController,
-              hintText: 'profile name *'.tr,
-              onChanged: (value) {
-                setState(() {
-                  _profileNameError = null;
-                  // Show check icon if 5+ characters
-                  _profileNameValid = value.trim().length >= 5;
-                });
-              },
-              suffixWidget: _profileNameController.text.trim().length >= 5
-                  ? Icon(Icons.check_circle, color: Colors.green)
-                  : null,
-            ),
-            Text(
-              'minimum 5 characters'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: AppColors.socaBlack,
-              ),
-            ),
-            if (_profileNameError != null)
-              SocaLocaFieldError(errorText: _profileNameError!),
-
-            SizedBox(height: 15),
-
-            // About Me
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.socaGrey,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: TextField(
-                controller: _aboutMeController,
-                maxLines: 3,
-                maxLength: 300,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: AppColors.socaBlack,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'About Me'.tr,
-                  hintStyle: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack,
-                  ),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(15),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'max 300 characters'.tr,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-            ),
-
-            SizedBox(height: 15),
-
-            // Select Role
-            Text(
-              'Select role *'.tr,
-              style: TextStyle(
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.w700,
-                fontSize: 20,
-                color: AppColors.socaBlack,
-              ),
-            ),
-
-            SizedBox(height: 7),
-
-            // Role chips
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            // padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Container(
+              color: AppColors.socaPageBg,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildRoleChip('Player', _isPlayer),
-                  SizedBox(width: 10),
-                  _buildRoleChip('Coach', _isCoach),
-                  SizedBox(width: 10),
-                  _buildRoleChip('Manager', _isManager),
-                  SizedBox(width: 10),
-                  _buildRoleChip('Fan', _isFan),
-                  SizedBox(width: 10),
-                  _buildRoleChip('Referee', _isReferee),
-                ],
-              ),
-            ),
+                  SizedBox(height: height * .18),
 
-            SizedBox(height: 15),
+                  // Logo
+                  Center(
+                    child: SvgPicture.asset(
+                      'assets/icons/socaloca_logo.svg',
+                      width: 160,
+                      // height: 60,
+                    ),
+                  ),
 
-            // DOB
-            GestureDetector(
-              onTap: _selectDate,
-              child: Container(
-                height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                decoration: BoxDecoration(
-                  color: AppColors.socaGrey,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _birthDate ?? 'date of birth *',
+                  SizedBox(height: height * .06),
+
+                  // Title
+                  Text(
+                    'Create Profile'.tr,
+                    style: TextStyle(
+                      fontFamily: 'Lato',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+
+                  SizedBox(height: height * .05),
+
+                  // First Name
+                  CreateProfileTextField(
+                    controller: _firstNameController,
+                    hintText: 'first name *'.tr,
+                    onChanged: (_) => setState(() => _firstNameError = null),
+                  ),
+                  if (_firstNameError != null)
+                    SocaLocaFieldError(errorText: _firstNameError!),
+
+                  SizedBox(height: 15),
+
+                  // Last Name
+                  CreateProfileTextField(
+                    controller: _lastNameController,
+                    hintText: 'last name *'.tr,
+                    onChanged: (_) => setState(() => _lastNameError = null),
+                  ),
+                  if (_lastNameError != null)
+                    SocaLocaFieldError(errorText: _lastNameError!),
+
+                  SizedBox(height: 15),
+
+                  // Profile Name
+                  CreateProfileTextField(
+                    controller: _profileNameController,
+                    hintText: 'profile name *'.tr,
+                    onChanged: (value) {
+                      setState(() {
+                        _profileNameError = null;
+                        _profileNameValid = value.trim().length >= 5;
+                      });
+                    },
+                    suffixWidget: _profileNameController.text.trim().length >= 5
+                        ? Image.asset("assets/icons/ic_tick_green.png",
+                            color: AppColors.socaBlack, width: 28, height: 28)
+                        : null,
+                  ),
+                  Text(
+                    'minimum 5 characters'.tr,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+                  if (_profileNameError != null)
+                    SocaLocaFieldError(errorText: _profileNameError!),
+
+                  SizedBox(height: 15),
+
+                  // About Me
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.socaGrey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: TextField(
+                      controller: _aboutMeController,
+                      maxLines: 3,
+                      maxLength: 300,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
-                        color: _birthDate == null
-                            ? AppColors.socaBlack
-                            : AppColors.socaBlack,
+                        color: AppColors.socaBlack,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'About Me'.tr,
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          color: AppColors.socaBlack,
+                        ),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.all(15),
                       ),
                     ),
-                    Icon(Icons.calendar_today,
-                        color: AppColors.socaBlack, size: 20),
-                  ],
-                ),
-              ),
-            ),
-            if (_dobError != null) SocaLocaFieldError(errorText: _dobError!),
-
-            SizedBox(height: 15),
-
-            // Country
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.socaGrey,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Text(
-                _selectedCountry,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-            ),
-
-            SizedBox(height: 10),
-
-            // Gender
-            Row(
-              children: [
-                Text(
-                  'Gender'.tr,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack,
                   ),
-                ),
-                SizedBox(width: 7),
-                RadioGroup<String>(
-                  groupValue: _gender,
-                  onChanged: (val) => setState(() => _gender = val!),
-                  child: Row(
-                    children: [
-                      Radio<String>(
-                        value: 'male',
-                        activeColor: AppColors.socaBlack,
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      'max 300 characters'.tr,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: AppColors.socaBlack,
                       ),
+                    ),
+                  ),
+
+                  SizedBox(height: 15),
+
+                  // Select Role
+                  Text(
+                    'Select role *'.tr,
+                    style: TextStyle(
+                      fontFamily: 'Lato',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+
+                  SizedBox(height: 7),
+
+                  // Role chips
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildRoleChip('Player', _isPlayer),
+                        SizedBox(width: 10),
+                        _buildRoleChip('Coach', _isCoach),
+                        SizedBox(width: 10),
+                        _buildRoleChip('Manager', _isManager),
+                        SizedBox(width: 10),
+                        _buildRoleChip('Fan', _isFan),
+                        SizedBox(width: 10),
+                        _buildRoleChip('Referee', _isReferee),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 15),
+
+                  // DOB
+                  GestureDetector(
+                    onTap: _selectDate,
+                    child: Container(
+                      height: 50,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: AppColors.socaGrey,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _birthDate ?? 'Date Of Birth *',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                              color: _birthDate == null
+                                  ? AppColors.socaBlack
+                                  : AppColors.socaBlack,
+                            ),
+                          ),
+                          Image.asset("assets/icons/ic_calendar.png",
+                              width: 28, height: 28)
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_dobError != null)
+                    SocaLocaFieldError(errorText: _dobError!),
+
+                  SizedBox(height: 15),
+
+                  // Country
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.socaGrey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      _selectedCountry,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Gender
+                  Row(
+                    children: [
                       Text(
-                        'Male'.tr,
+                        'Gender'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -988,97 +1291,124 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                         ),
                       ),
                       SizedBox(width: 7),
-                      Radio<String>(
-                        value: 'female',
-                        activeColor: AppColors.socaBlack,
-                      ),
-                      Text(
-                        'Female'.tr,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: AppColors.socaBlack,
+                      RadioGroup<String>(
+                        groupValue: _gender,
+                        onChanged: (val) => setState(() => _gender = val!),
+                        child: Row(
+                          children: [
+                            Radio<String>(
+                              value: 'male',
+                              activeColor: AppColors.socaBlack,
+                            ),
+                            Text(
+                              'Male'.tr,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                color: AppColors.socaBlack,
+                              ),
+                            ),
+                            SizedBox(width: 7),
+                            Radio<String>(
+                              value: 'female',
+                              activeColor: AppColors.socaBlack,
+                            ),
+                            Text(
+                              'Female'.tr,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                color: AppColors.socaBlack,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
 
-            SizedBox(height: 10),
+                  SizedBox(height: 10),
 
-            // Player/Coach/Manager specific fields
-            if (_showPlayerFields || _showCoachManagerFields)
-              _buildPlayerCoachFields(),
+                  // Player/Coach/Manager specific fields
+                  if (_showPlayerFields || _showCoachManagerFields)
+                    _buildPlayerCoachFields(),
 
-            // Fan specific fields
-            if (_showFanLocation) _buildFanLocationField(),
+                  // Fan specific fields
+                  if (_showFanLocation) _buildFanLocationField(),
 
-            // Brands section
-            if (_showBrands) _buildBrandsSection(),
+                  // Brands section
+                  if (_showBrands) _buildBrandsSection(),
 
-            // Leagues and Teams for Fan
-            if (_showLeaguesTeams) _buildLeaguesTeamsSection(),
+                  // Leagues and Teams for Fan
+                  if (_showLeaguesTeams) _buildLeaguesTeamsSection(),
 
-            // Avatar section
-            _buildAvatarSection(),
+                  // Avatar section
+                  if (!_isFan) ...[
+                    _buildAvatarSection(),
+                  ],
+                  SizedBox(height: 30),
 
-            SizedBox(height: 30),
+                  // Mandatory fields note
+                  Text(
+                    '* mandatory fields'.tr,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 13,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
 
-            // Mandatory fields note
-            Text(
-              '* mandatory fields'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 13,
-                color: AppColors.socaBlack,
-              ),
-            ),
+                  SizedBox(height: 12),
 
-            SizedBox(height: 12),
-
-            // Submit Button
-            InkWell(
-              onTap: _isLoading ? null : _handleSubmit,
-              child: Container(
-                width: double.infinity,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: AppColors.socaBlack,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: _isLoading
-                    ? AppLoader(size: 40, centered: false)
-                    : Text(
-                        'SUBMIT'.tr,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          color: AppColors.socaYellow,
+                  // Submit Button
+                  InkWell(
+                    onTap: _isLoading ? null : _handleSubmit,
+                    child: Container(
+                      width: double.infinity,
+                      height: 65,
+                      decoration: BoxDecoration(
+                        color: AppColors.socaBlack,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'SUBMIT'.tr,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24,
+                            color: AppColors.socaYellow,
+                          ),
                         ),
                       ),
+                    ),
+                  ),
+
+                  SizedBox(height: 16),
+
+                  // Privacy / Terms text
+                  Text(
+                    'By clicking Submit, you agree to our Terms & Conditions and Privacy Policy.'
+                        .tr,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+
+                  SizedBox(height: 30),
+                ],
               ),
             ),
-
-            SizedBox(height: 16),
-
-            // Privacy / Terms text
-            Text(
-              'By clicking Submit, you agree to our Terms & Conditions and Privacy Policy.'
-                  .tr,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: AppColors.socaBlack,
-              ),
+          ),
+          if (_isLoading)
+            Container(
+              color: Colors.black.withValues(alpha: 0.4),
+              child: const AppLoader(),
             ),
-
-            SizedBox(height: 30),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -1089,7 +1419,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.socaBlack : Colors.white,
+          color: isSelected ? AppColors.socaBlack : Colors.transparent,
           borderRadius: BorderRadius.circular(5),
           border: Border.all(color: AppColors.socaBlack),
         ),
@@ -1097,8 +1427,8 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           label,
           style: TextStyle(
             fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
             color: isSelected ? AppColors.socaYellow : AppColors.socaBlack,
           ),
         ),
@@ -1107,309 +1437,305 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
   }
 
   Widget _buildPlayerCoachFields() {
-    return Container(
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Nationality (Player only)
-          if (_showPlayerFields) ...[
-            Text(
-              'Nationality *'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: AppColors.socaBlack,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Nationality (Player only)
+        if (_showPlayerFields) ...[
+          Text(
+            'Nationality *'.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: AppColors.socaBlack,
             ),
-            SizedBox(height: 10),
-            GestureDetector(
-              onTap: _showNationalityPicker,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 14),
-                decoration: BoxDecoration(
-                  color: AppColors.socaGrey,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _nationality.isEmpty ? 'Select' : _nationality,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: AppColors.socaBlack,
-                      ),
-                    ),
-                    Icon(Icons.arrow_drop_down, color: AppColors.socaBlack),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-          ],
-
-          // Location (Player/Coach/Manager)
+          ),
+          SizedBox(height: 10),
           GestureDetector(
-            onTap: _openLocationPicker,
+            onTap: _showNationalityPicker,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 14),
               decoration: BoxDecoration(
                 color: AppColors.socaGrey,
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.location_on, color: AppColors.socaBlack),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      _placeName.isEmpty
-                          ? 'Select location from map'
-                          : _placeName,
+                  Text(
+                    _nationality.isEmpty ? 'Select' : _nationality,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+                  // Image.asset("assets/icons/ic_arrow_drop_down.png",
+                  //     width: 28, height: 28),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+        ],
+
+        // Location (Player/Coach/Manager)
+        GestureDetector(
+          onTap: _openLocationPicker,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            decoration: BoxDecoration(
+              color: AppColors.socaGrey,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Row(
+              children: [
+                Image.asset("assets/icons/ic_location.png",
+                    width: 28, height: 28),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    _placeName.isEmpty
+                        ? 'Select location from map'
+                        : _placeName,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        SizedBox(height: 15),
+
+        // Playing Position (Player only)
+        if (_showPlayerFields) ...[
+          Text(
+            'Playing Position'.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: AppColors.socaBlack,
+            ),
+          ),
+          SizedBox(height: 10),
+          _buildDropdown(
+            value: _playPosition,
+            items: _playPositions,
+            onChanged: (val) {
+              setState(() {
+                _playPosition = val!;
+                _playPositionType = _positionTypes[val]!.first;
+              });
+            },
+          ),
+          SizedBox(height: 10),
+          _buildDropdown(
+            value: _playPositionType,
+            items: _positionTypes[_playPosition]!,
+            onChanged: (val) => setState(() => _playPositionType = val!),
+          ),
+          SizedBox(height: 15),
+        ],
+
+        // Jersey Number
+        if (_showJerseyNumber) ...[
+          Text(
+            'Preferred Jersey Number'.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: AppColors.socaBlack,
+            ),
+          ),
+          SizedBox(height: 10),
+          CreateProfileTextField(
+            controller: _jerseyNumberController,
+            hintText: '0 - 99'.tr,
+            keyboardType: TextInputType.number,
+            maxLength: 2,
+          ),
+          SizedBox(height: 15),
+        ],
+
+        // Playing Level (Player only)
+        if (_showPlayerFields) ...[
+          Text(
+            'Playing Level *'.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: AppColors.socaBlack,
+            ),
+          ),
+          SizedBox(height: 10),
+          _buildDropdown(
+            value: _playLevel,
+            items: _playingLevels,
+            onChanged: (val) => setState(() => _playLevel = val!),
+          ),
+          SizedBox(height: 10),
+
+          // Preferred Foot
+          Row(
+            children: [
+              Text(
+                'Preferred Foot'.tr,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.socaBlack,
+                ),
+              ),
+              SizedBox(width: 7),
+              RadioGroup<String>(
+                groupValue: _preferredFoot,
+                onChanged: (val) => setState(() => _preferredFoot = val!),
+                child: Row(
+                  children: [
+                    Radio<String>(
+                      value: 'right',
+                      activeColor: AppColors.socaBlack,
+                    ),
+                    Text(
+                      'Right'.tr,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(width: 7),
+                    Radio<String>(
+                      value: 'left',
+                      activeColor: AppColors.socaBlack,
+                    ),
+                    Text(
+                      'Left'.tr,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
 
           SizedBox(height: 15),
 
-          // Playing Position (Player only)
-          if (_showPlayerFields) ...[
-            Text(
-              'Playing Position'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: AppColors.socaBlack,
-              ),
+          // Height
+          Text(
+            'Height'.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: AppColors.socaBlack,
             ),
-            SizedBox(height: 10),
-            _buildDropdown(
-              value: _playPosition,
-              items: _playPositions,
-              onChanged: (val) {
-                setState(() {
-                  _playPosition = val!;
-                  _playPositionType = _positionTypes[val]!.first;
-                });
-              },
-            ),
-            SizedBox(height: 10),
-            _buildDropdown(
-              value: _playPositionType,
-              items: _positionTypes[_playPosition]!,
-              onChanged: (val) => setState(() => _playPositionType = val!),
-            ),
-            SizedBox(height: 15),
-          ],
+          ),
+          SizedBox(height: 10),
+          CreateProfileTextField(
+            controller: _heightController,
+            hintText: 'value in cm'.tr,
+            keyboardType: TextInputType.number,
+            maxLength: 3,
+          ),
+          SizedBox(height: 15),
+        ],
 
-          // Jersey Number
-          if (_showJerseyNumber) ...[
-            Text(
-              'Preferred Jersey Number'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: AppColors.socaBlack,
-              ),
+        // Jersey Size
+        if (_showJerseySize) ...[
+          Text(
+            'Shirt/Jersey Size'.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: AppColors.socaBlack,
             ),
-            SizedBox(height: 10),
-            SocaLocaTextField(
-              controller: _jerseyNumberController,
-              hintText: '0 - 99'.tr,
-              keyboardType: TextInputType.number,
-              maxLength: 2,
-            ),
-            SizedBox(height: 15),
-          ],
-
-          // Playing Level (Player only)
-          if (_showPlayerFields) ...[
-            Text(
-              'Playing Level *'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: AppColors.socaBlack,
-              ),
-            ),
-            SizedBox(height: 10),
-            _buildDropdown(
-              value: _playLevel,
-              items: _playingLevels,
-              onChanged: (val) => setState(() => _playLevel = val!),
-            ),
-            SizedBox(height: 10),
-
-            // Preferred Foot
-            Row(
-              children: [
-                Text(
-                  'Preferred Foot'.tr,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-                SizedBox(width: 7),
-                RadioGroup<String>(
-                  groupValue: _preferredFoot,
-                  onChanged: (val) => setState(() => _preferredFoot = val!),
-                  child: Row(
-                    children: [
-                      Radio<String>(
-                        value: 'right',
-                        activeColor: AppColors.socaBlack,
-                      ),
-                      Text(
-                        'Right'.tr,
+          ),
+          SizedBox(height: 10),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _jerseySizes.map((size) {
+                final isSelected = _jerseySize == size;
+                return GestureDetector(
+                  onTap: () => setState(() => _jerseySize = size),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    margin: EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color:
+                          isSelected ? AppColors.socaBlack : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: AppColors.socaBlack),
+                    ),
+                    child: Center(
+                      child: Text(
+                        size,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
-                          color: AppColors.socaBlack,
-                        ),
-                      ),
-                      SizedBox(width: 7),
-                      Radio<String>(
-                        value: 'left',
-                        activeColor: AppColors.socaBlack,
-                      ),
-                      Text(
-                        'Left'.tr,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: AppColors.socaBlack,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 15),
-
-            // Height
-            Text(
-              'Height'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: AppColors.socaBlack,
-              ),
-            ),
-            SizedBox(height: 10),
-            SocaLocaTextField(
-              controller: _heightController,
-              hintText: 'value in cm'.tr,
-              keyboardType: TextInputType.number,
-              maxLength: 3,
-            ),
-            SizedBox(height: 15),
-          ],
-
-          // Jersey Size
-          if (_showJerseySize) ...[
-            Text(
-              'Shirt/Jersey Size'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: AppColors.socaBlack,
-              ),
-            ),
-            SizedBox(height: 10),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: _jerseySizes.map((size) {
-                  final isSelected = _jerseySize == size;
-                  return GestureDetector(
-                    onTap: () => setState(() => _jerseySize = size),
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      margin: EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.socaBlack : Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: AppColors.socaBlack),
-                      ),
-                      child: Center(
-                        child: Text(
-                          size,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                            color: isSelected
-                                ? AppColors.socaYellow
-                                : AppColors.socaBlack,
-                          ),
+                          color: isSelected
+                              ? AppColors.socaYellow
+                              : AppColors.socaBlack,
                         ),
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
-            ),
-            SizedBox(height: 15),
-          ],
-
-          // Shoe Size
-          if (_showShoeSize) ...[
-            Text(
-              'Shoe Size'.tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: AppColors.socaBlack,
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: _buildDropdown(
-                    value: _shoeUnit,
-                    items: _shoeUnits,
-                    onChanged: (val) {
-                      setState(() {
-                        _shoeUnit = val!;
-                        _shoeSize = _shoeSizes[val]!.first;
-                      });
-                    },
                   ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: _buildDropdown(
-                    value: _shoeSize,
-                    items: _shoeSizes[_shoeUnit]!,
-                    onChanged: (val) => setState(() => _shoeSize = val!),
-                  ),
-                ),
-              ],
+                );
+              }).toList(),
             ),
-          ],
+          ),
+          SizedBox(height: 15),
         ],
-      ),
+
+        // Shoe Size
+        if (_showShoeSize) ...[
+          Text(
+            'Shoe Size'.tr,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: AppColors.socaBlack,
+            ),
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: _buildDropdown(
+                  value: _shoeUnit,
+                  items: _shoeUnits,
+                  onChanged: (val) {
+                    setState(() {
+                      _shoeUnit = val!;
+                      _shoeSize = _shoeSizes[val]!.first;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: _buildDropdown(
+                  value: _shoeSize,
+                  items: _shoeSizes[_shoeUnit]!,
+                  onChanged: (val) => setState(() => _shoeSize = val!),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
     );
   }
 
@@ -1427,7 +1753,8 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             ),
             child: Row(
               children: [
-                Icon(Icons.location_on, color: AppColors.socaBlack),
+                Image.asset("assets/icons/ic_location.png",
+                    width: 28, height: 28),
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
@@ -1454,64 +1781,57 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 15),
-        Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Brands you like'.tr,
-                style: TextStyle(
-                  fontFamily: 'Lato',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: AppColors.socaBlack,
-                ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Brands you like'.tr,
+              style: TextStyle(
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: AppColors.socaBlack,
               ),
-              SizedBox(height: 10),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: _brands.map((brand) {
-                  final isSelected = _selectedBrands.contains(brand);
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          _selectedBrands.remove(brand);
-                        } else {
-                          _selectedBrands.add(brand);
-                        }
-                      });
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.socaBlack : Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: AppColors.socaBlack),
-                      ),
-                      child: Text(
-                        brand,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: isSelected
-                              ? AppColors.socaYellow
-                              : AppColors.socaBlack,
-                        ),
+            ),
+            SizedBox(height: 10),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: _brands.map((brand) {
+                final isSelected = _selectedBrands.contains(brand);
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (isSelected) {
+                        _selectedBrands.remove(brand);
+                      } else {
+                        _selectedBrands.add(brand);
+                      }
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color:
+                          isSelected ? AppColors.socaBlack : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: AppColors.socaBlack),
+                    ),
+                    child: Text(
+                      brand,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: isSelected
+                            ? AppColors.socaYellow
+                            : AppColors.socaBlack,
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
         ),
       ],
     );
@@ -1521,86 +1841,66 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     return Column(
       children: [
         SizedBox(height: 15),
-        Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Major leagues you follow'.tr,
-                style: TextStyle(
-                  fontFamily: 'Lato',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: AppColors.socaBlack,
-                ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Major leagues you follow'.tr,
+              style: TextStyle(
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: AppColors.socaBlack,
               ),
-              SizedBox(height: 10),
-              _buildDropdown(
-                value: _leagueFollow,
-                items: [
-                  'Premier League',
-                  'La Liga',
-                  'Serie A',
-                  'Bundesliga',
-                  'Ligue 1'
-                ],
-                onChanged: (val) => setState(() => _leagueFollow = val!),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 10),
+            _buildDropdown(
+              value: _leagueFollow,
+              items: _leagueTeams.keys.toList(),
+              onChanged: (val) {
+                if (val == null) return;
+                final teams = _leagueTeams[val]!;
+                setState(() {
+                  _leagueFollow = val;
+                  _teamFollow = teams.first;
+                });
+              },
+            ),
+          ],
         ),
         SizedBox(height: 15),
-        Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Teams you follow'.tr,
-                style: TextStyle(
-                  fontFamily: 'Lato',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: AppColors.socaBlack,
-                ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Teams you follow'.tr,
+              style: TextStyle(
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: AppColors.socaBlack,
               ),
-              SizedBox(height: 10),
-              _buildDropdown(
-                value: _teamFollow,
-                items: [
-                  'Arsenal',
-                  'Chelsea',
-                  'Liverpool',
-                  'Manchester United',
-                  'Manchester City'
-                ],
-                onChanged: (val) => setState(() => _teamFollow = val!),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 10),
+            _buildDropdown(
+              value: _teamFollow,
+              items: _leagueTeams[_leagueFollow] ??
+                  _leagueTeams['Premier League']!,
+              onChanged: (val) => setState(() => _teamFollow = val!),
+            ),
+          ],
         ),
       ],
     );
   }
 
   Widget _buildAvatarSection() {
-    return Column(
-      children: [
-        SizedBox(height: 15),
-        Center(child: _buildProfileImagePreview()),
-        SizedBox(height: 20),
-        if (_isAdult) _buildPhotoUploadSection() else _buildAvatarGridSection(),
-      ],
-    );
+    return Column(children: [
+      SizedBox(height: 15),
+      Center(child: _buildProfileImagePreview()),
+      SizedBox(height: 20),
+      if (_isAdult) _buildPhotoUploadSection() else _buildAvatarGridSection(),
+    ]);
   }
 
   Widget _buildProfileImagePreview() {
@@ -1613,7 +1913,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppColors.socaYellow,
+              color: AppColors.socaBlack,
               width: (_profileImage != null || _selectedAvatar != null) ? 3 : 0,
             ),
           ),
@@ -1668,84 +1968,74 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
 
   // Adult mode: camera + gallery upload only
   Widget _buildPhotoUploadSection() {
-    return Container(
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Upload your profile photo'.tr,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 16,
-              color: AppColors.socaBlack,
+    return Column(
+      children: [
+        Text(
+          'Upload your profile photo'.tr,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 16,
+            color: AppColors.socaBlack,
+          ),
+        ),
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: _pickImageFromCamera,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: AppColors.socaBlack),
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'TAKE A PHOTO'.tr,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: _pickImageFromCamera,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: AppColors.socaBlack),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.camera_alt,
-                          color: AppColors.socaBlack, size: 18),
-                      SizedBox(width: 5),
-                      Text(
-                        'CAMERA'.tr,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: AppColors.socaBlack,
-                        ),
+            SizedBox(width: 10),
+            InkWell(
+              onTap: _pickImageFromGallery,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.socaBlack,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(
+                  children: [
+                    // Icon(Icons.photo_library,
+                    //     color: AppColors.socaYellow, size: 18),
+                    // SizedBox(width: 5),
+                    Text(
+                      'CHOOSE FROM GALLERY'.tr,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        color: AppColors.socaYellow,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(width: 10),
-              InkWell(
-                onTap: _pickImageFromGallery,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: AppColors.socaBlack,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.photo_library,
-                          color: AppColors.socaYellow, size: 18),
-                      SizedBox(width: 5),
-                      Text(
-                        'GALLERY'.tr,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: AppColors.socaYellow,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
