@@ -1,4 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
@@ -471,6 +474,7 @@ class AuthRepository {
     required String gender,
     String aboutMe = '',
     String imageUrl = '',
+    File? imageFile,
     String playPosition = '',
     String playPositionType = '',
     String playLevel = '',
@@ -490,6 +494,30 @@ class AuthRepository {
     double userLng = 0.0,
   }) async {
     try {
+      // Upload new profile photo first if provided (matches Android flow)
+      if (imageFile != null) {
+        final formData = FormData.fromMap({
+          'metadata': '',
+          'image': await MultipartFile.fromFile(
+            imageFile.path,
+            filename: imageFile.path.split('/').last,
+            contentType: DioMediaType('application', 'octet-stream'),
+          ),
+        });
+        final uploadResp = await ApiClient.instance.uploadFile(
+          ApiConstants.uploadImage,
+          formData: formData,
+        );
+        final uploadedUrl =
+            uploadResp['response']?['image'] as String? ?? '';
+        if (uploadedUrl.isNotEmpty) {
+          imageUrl = uploadedUrl;
+          log('✅ Profile image uploaded: $imageUrl');
+        } else {
+          log('⚠️ Image upload returned no URL — keeping existing image');
+        }
+      }
+
       final body = <String, dynamic>{
         'userId': userId,
         'firstName': firstName,
@@ -568,6 +596,7 @@ class AuthRepository {
     required String gender,
     String aboutMe = '',
     String imageUrl = '',
+    File? imageFile,
     String playPosition = '',
     String playPositionType = '',
     String playLevel = '',
@@ -596,6 +625,30 @@ class AuthRepository {
     String? fa,
   }) async {
     try {
+      // Upload profile photo first (matches Android: upload before createUserProfile)
+      if (imageFile != null) {
+        final formData = FormData.fromMap({
+          'metadata': '',
+          'image': await MultipartFile.fromFile(
+            imageFile.path,
+            filename: imageFile.path.split('/').last,
+            contentType: DioMediaType('application', 'octet-stream'),
+          ),
+        });
+        final uploadResp = await ApiClient.instance.uploadFile(
+          ApiConstants.uploadImage,
+          formData: formData,
+        );
+        final uploadedUrl =
+            uploadResp['response']?['image'] as String? ?? '';
+        if (uploadedUrl.isNotEmpty) {
+          imageUrl = uploadedUrl;
+          log('✅ Profile image uploaded: $imageUrl');
+        } else {
+          log('⚠️ Image upload returned no URL — profile will have no image');
+        }
+      }
+
       final body = <String, dynamic>{
         'userId': userId,
         'firstName': firstName,
@@ -679,7 +732,7 @@ class AuthRepository {
       );
 
       final status = (data['response']['status'] as num?)?.toInt() ?? 0;
-      log("this is thhe statis of the create profie ${status}");
+      log("this is thhe statis of the create profie $status");
       if (status == 1) {
         log('✅ Profile created successfully');
         return true;

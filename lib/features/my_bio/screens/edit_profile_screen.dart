@@ -148,6 +148,317 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     'Under Armor'
   ];
 
+  static const Map<String, List<String>> _leagueTeams = {
+    'Premier League': [
+      'Arsenal',
+      'Aston Villa',
+      'Bournemouth',
+      'Brighton & Hove Albion',
+      'Burnley',
+      'Chelsea',
+      'Crystal Palace',
+      'Everton',
+      'Leicester City',
+      'Liverpool',
+      'Manchester City',
+      'Manchester United',
+      'Newcastle United',
+      'Norwich City',
+      'Sheffield United',
+      'Southampton',
+      'Tottenham Hotspur',
+      'Watford',
+      'West Ham United',
+      'Wolverhampton Wanderers',
+    ],
+    'La Liga': [
+      'Real Madrid',
+      'Barcelona',
+      'Atlético Madrid',
+      'Athletic Bilbao',
+      'Valencia',
+      'Real Sociedad',
+      'Deportivo La Coruña',
+      'Sevilla',
+      'Real Betis',
+    ],
+    'Bundesliga': [
+      'FC Augsburg',
+      'Bayer Leverkusen',
+      'Bayern Munich',
+      'Borussia Dortmund',
+      'Borussia Mönchengladbach',
+      'Eintracht Frankfurt',
+      'Fortuna Düsseldorf',
+      'SC Freiburg',
+      'Hertha BSC',
+      'TSG 1899 Hoffenheim',
+      'FC Köln',
+      'RB Leipzig',
+      'FSV Mainz 05',
+      'SC Paderborn 07',
+      'Schalke 04',
+      'Union Berlin',
+      'Werder Bremen',
+      'VfL Wolfsburg',
+    ],
+    'Serie A': [
+      'Atalanta',
+      'Bologna',
+      'Brescia',
+      'Cagliari',
+      'Fiorentina',
+      'Genoa',
+      'Hellas Verona',
+      'Internazionale',
+      'Juventus',
+      'Lazio',
+      'Lecce',
+      'Milan',
+      'Napoli',
+      'Parma',
+      'Roma',
+      'Sampdoria',
+      'Sassuolo',
+      'SPAL',
+      'Torino',
+      'Udinese',
+    ],
+    'Ligue 1': [
+      'Amiens',
+      'Angers',
+      'Bordeaux',
+      'Brest',
+      'Dijon',
+      'Lille',
+      'Lyon',
+      'Marseille',
+      'Metz',
+      'Monaco',
+      'Montpellier',
+      'Nantes',
+      'Nice',
+      'Nîmes',
+      'Paris Saint-Germain',
+      'Reims',
+      'Rennes',
+      'Saint-Étienne',
+      'Strasbourg',
+      'Toulouse',
+    ],
+    'Brasileirão': [
+      'Palmeiras',
+      'Santos',
+      'Corinthians',
+      'São Paulo',
+      'Flamengo',
+      'Cruzeiro',
+      'Vasco',
+      'Fluminense',
+      'Internacional',
+      'Botafogo',
+      'Grêmio',
+      'Bahia',
+      'Atlético Mineiro',
+      'Guarani',
+      'Atlético Paranaense',
+      'Coritiba',
+      'Sport',
+      'Fortaleza',
+      'São Caetano',
+      'Náutico',
+      'Bangu',
+      'Bragantino',
+      'Vitória',
+      'Portuguesa',
+    ],
+    'Superliga Argentina': [
+      'Aldosivi',
+      'Argentinos Juniors',
+      'Arsenal',
+      'Atlético Tucumán',
+      'Banfield',
+      'Boca Juniors',
+      'Central Córdoba (SdE)',
+      'Colón',
+      'Defensa y Justicia',
+      'Estudiantes (LP)',
+      'Gimnasia y Esgrima (LP)',
+      'Godoy Cruz',
+      'Huracán',
+      'Independiente',
+      'Lanús',
+      "Newell's Old Boys",
+      'Patronato',
+      'River Plate',
+      'Rosario Central',
+      'San Lorenzo',
+      'Talleres (C)',
+      'Unión',
+      'Vélez Sarsfield',
+    ],
+    'Dutch Eredivisie': [
+      'Ajax',
+      'AZ',
+      'ADO Den Haag',
+      'FC Emmen',
+      'Feyenoord',
+      'Fortuna Sittard',
+      'FC Groningen',
+      'SC Heerenveen',
+      'Heracles Almelo',
+      'PSV',
+      'Sparta Rotterdam',
+      'Twente',
+      'FC Utrecht',
+      'Vitesse',
+      'VVV-Venlo',
+      'RKC Waalwijk',
+      'Willem II',
+      'PEC Zwolle',
+    ],
+    'Primeira Liga': [
+      'Belenenses SAD',
+      'Benfica',
+      'Boavista',
+      'Braga',
+      'Desportivo das Aves',
+      'Famalicão',
+      'Gil Vicente',
+      'Marítimo',
+      'Moreirense',
+      'Paços de Ferreira',
+      'Portimonense',
+      'Porto',
+      'Rio Ave',
+      'Santa Clara',
+      'Sporting CP',
+      'Tondela',
+      'Vitória de Guimarães',
+      'Vitória de Setúbal',
+    ],
+    'Major League Soccer': [
+      'Atlanta United FC',
+      'Chicago Fire FC',
+      'FC Cincinnati',
+      'Columbus Crew SC',
+      'D.C. United',
+      'Inter Miami CF',
+      'Montreal Impact',
+      'New England Revolution',
+      'New York City FC',
+      'New York Red Bulls',
+      'Orlando City SC',
+      'Philadelphia Union',
+      'Toronto FC',
+      'Colorado Rapids',
+      'FC Dallas',
+      'Houston Dynamo',
+      'LA Galaxy',
+      'Los Angeles FC',
+      'Minnesota United FC',
+      'Nashville SC',
+      'Portland Timbers',
+      'Real Salt Lake',
+      'San Jose Earthquakes',
+      'Seattle Sounders FC',
+      'Sporting Kansas City',
+      'Vancouver Whitecaps FC',
+    ],
+    'FA Womens Super League': [
+      'Arsenal Women',
+      'Aston Villa Women',
+      'Birmingham City Women',
+      'Brighton & Hove Albion Women',
+      'Chelsea Women',
+      'Everton Women',
+      'Leicester City Women',
+      'Manchester City Women',
+      'Manchester United Women',
+      'Reading Women',
+      'Tottenham Hotspur Women',
+      'West Ham United Women',
+    ],
+    'France D1 Arkema Women': [
+      'Bordeaux Womens',
+      'Dijon Womens',
+      'FC Fleury 91 Womens',
+      'EA Guingamp Womens',
+      'Issy FF Womens',
+      'Lyon Womens',
+      'Montpellier Womens',
+      'Paris FC Womens',
+      'PSG Womens',
+      'Reims Womens',
+      'Soyaux Womens',
+      'Saint Etienne Womens',
+    ],
+    'Spanish Primera Iberdrola Women': [
+      'Athletic Bilbao Womens',
+      'Atletico Madrid Womens',
+      'Barcelona Womens',
+      'Alaves Womens',
+      'Eibar Womens',
+      'Granadilla Tenerife Womens',
+      'Levante Womens',
+      'Madrid CFF Womens',
+      'Rayo Vallecano Womens',
+      'Real Betis Womens',
+      'Real Madrid Womens',
+      'Real Sociedad Womens',
+      'Sevilla Womens',
+      'Sporting Huelva Womens',
+      'Valencia Womens',
+      'Villarreal Womens',
+    ],
+    'Italy Serie A Women': [
+      'Milan Women',
+      'Internazionale Women',
+      'Juventus Women',
+      'Roma Women',
+      'Sampdoria Women',
+      'Sassuolo Women',
+      'Fiorentina Women',
+      'Lazio Women',
+      'Empoli Women',
+      'Napoli Women',
+      'Pomigliano Women',
+      'Hellas Verona Women',
+    ],
+    'Portugal Liga BPI Women': [
+      'Albergaria Women',
+      'Condeixa Women',
+      'Famalicao Women',
+      'Gil Vicente Women',
+      'Braga Women',
+      'Valadares Women',
+      'Varzim Women',
+      'Vilaverdense Women',
+      'Amora Women',
+      'Atletico CP Women',
+      'Estoril Women',
+      'Maritimo Women',
+      'Ouriense Women',
+      'Benfica Women',
+      'Sporting Women',
+      'Torreense Women',
+    ],
+    'Sweden OBOS Damallsvenskan Women': [
+      'Rosengard Women',
+      'Hacken Women',
+      'Eskilstuna Women',
+      'Hammarby Women',
+      'Kristianstads Women',
+      'Linkoping Women',
+      'Vittsjo Women',
+      'Djurgarden Women',
+      'KIF Orebro Women',
+      'AIK Women',
+      'Pitea Women',
+      'Vaxjo Women',
+    ],
+  };
+
   @override
   void initState() {
     super.initState();
@@ -597,11 +908,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     setState(() => _isLoading = true);
     try {
       final userId = StorageService.userId ?? widget.playerBio.userId ?? '';
-      final imageUrl = _profileImage != null
-          ? _profileImage!.path
-          : _selectedAvatar != null
-              ? _selectedAvatar!
-              : _existingImageUrl;
 
       final result = await ref.read(authRepositoryProvider).editCommonProfile(
             userId: userId,
@@ -616,7 +922,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             country: _selectedCountry,
             gender: _gender,
             aboutMe: _aboutMeController.text.trim(),
-            imageUrl: imageUrl,
+            imageUrl: _selectedAvatar ?? _existingImageUrl,
+            imageFile: _profileImage,
             playPosition: _showPlayerFields ? _playPosition : '',
             playPositionType: _showPlayerFields ? _playPositionType : '',
             playLevel: _showPlayerFields ? _playLevel : '',
@@ -666,49 +973,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     }
   }
 
-  Widget _buildGreyTextField({
-    required TextEditingController controller,
-    String? hintText,
-    bool enabled = true,
-    int maxLines = 1,
-    int? maxLength,
-    ValueChanged<String>? onChanged,
-    Widget? suffixWidget,
-    bool isBold = false,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xFFF1F1F1), // Light grey
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: TextField(
-        controller: controller,
-        enabled: enabled,
-        maxLines: maxLines,
-        maxLength: maxLength,
-        onChanged: onChanged,
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 14,
-          color: AppColors.socaBlack,
-          fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
-        ),
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            color: Colors.grey,
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          counterText: '',
-          suffixIcon: suffixWidget,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final userMobile = StorageService.currentUser?['mobile']?.toString() ??
@@ -726,15 +990,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 Center(child: _buildProfileImagePreview()),
                 SizedBox(height: 20),
 
-                _buildGreyTextField(
+                CreateProfileTextField(
                   controller: TextEditingController(text: userMobile),
                   enabled: false,
-                  isBold: true,
                 ),
                 SizedBox(height: 15),
 
                 // First Name
-                _buildGreyTextField(
+                CreateProfileTextField(
                   controller: _firstNameController,
                   hintText: 'first name *'.tr,
                   onChanged: (_) => setState(() => _firstNameError = null),
@@ -744,7 +1007,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 SizedBox(height: 15),
 
                 // Last Name
-                _buildGreyTextField(
+                CreateProfileTextField(
                   controller: _lastNameController,
                   hintText: 'last name *'.tr,
                   onChanged: (_) => setState(() => _lastNameError = null),
@@ -754,12 +1017,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 SizedBox(height: 15),
 
                 // Profile Name
-                _buildGreyTextField(
+                CreateProfileTextField(
                   controller: _profileNameController,
                   hintText: 'profile name *'.tr,
                   onChanged: (_) => setState(() => _profileNameError = null),
                   suffixWidget: _profileNameController.text.trim().length >= 5
-                      ? Icon(Icons.check_circle, color: Colors.green)
+                      ? Image.asset("assets/icons/ic_tick_green.png",
+                          color: AppColors.socaBlack, width: 28, height: 28)
                       : null,
                 ),
                 Text(
@@ -774,11 +1038,33 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 SizedBox(height: 15),
 
                 // About Me
-                _buildGreyTextField(
-                  controller: _aboutMeController,
-                  hintText: 'developer'.tr,
-                  maxLines: 4,
-                  maxLength: 300,
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.socaGrey,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: TextField(
+                    controller: _aboutMeController,
+                    maxLines: 4,
+                    maxLength: 300,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: AppColors.socaBlack,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'About Me'.tr,
+                      hintStyle: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: AppColors.socaBlack,
+                      ),
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      contentPadding: const EdgeInsets.all(15),
+                      counterText: '',
+                    ),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -843,8 +1129,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                               fontSize: 14,
                               color: AppColors.socaBlack),
                         ),
-                        Icon(Icons.calendar_today,
-                            color: AppColors.socaBlack, size: 20),
+                        Image.asset("assets/icons/ic_calendar.png",
+                            width: 28, height: 28)
                       ],
                     ),
                   ),
@@ -856,6 +1142,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
                 // Country (display only)
                 Container(
+                  width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
                     color: AppColors.socaGrey,
@@ -994,302 +1281,208 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   Widget _buildPlayerCoachFields() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (_showPlayerFields) ...[
-            Text('Nationality *'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack)),
-            SizedBox(height: 10),
-            GestureDetector(
-              onTap: _showNationalityPicker,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 14),
-                decoration: BoxDecoration(
-                    color: AppColors.socaGrey,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _nationality.isEmpty ? 'Select' : _nationality,
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                          color: AppColors.socaBlack),
-                    ),
-                    Icon(Icons.arrow_drop_down, color: AppColors.socaBlack),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-          ],
-
-          // Location
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (_showPlayerFields) ...[
+          Text('Nationality *'.tr,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.socaBlack)),
+          SizedBox(height: 10),
           GestureDetector(
-            onTap: _openLocationPicker,
+            onTap: _showNationalityPicker,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 14),
               decoration: BoxDecoration(
                   color: AppColors.socaGrey,
                   borderRadius: BorderRadius.circular(5)),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.location_on, color: AppColors.socaBlack),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      _placeName.isEmpty
-                          ? 'Select location from map'
-                          : _placeName,
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: AppColors.socaBlack),
-                    ),
+                  Text(
+                    _nationality.isEmpty ? 'Select' : _nationality,
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: AppColors.socaBlack),
+                  ),
+                  Image.asset(
+                    'assets/images/dropdown.png',
+                    width: 14,
+                    height: 14,
+                    errorBuilder: (_, __, ___) =>
+                        const Icon(Icons.arrow_drop_down, size: 18),
                   ),
                 ],
               ),
             ),
           ),
-
-          SizedBox(height: 15),
-
-          if (_showPlayerFields) ...[
-            Text('Playing Position'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack)),
-            SizedBox(height: 10),
-            _buildDropdown(
-              value: _playPosition,
-              items: _playPositions,
-              onChanged: (val) => setState(() {
-                _playPosition = val!;
-                _playPositionType = _positionTypes[val]!.first;
-              }),
-            ),
-            SizedBox(height: 10),
-            _buildDropdown(
-              value: _playPositionType,
-              items: _positionTypes[_playPosition]!,
-              onChanged: (val) => setState(() => _playPositionType = val!),
-            ),
-            SizedBox(height: 15),
-          ],
-
-          if (_showJerseyNumber) ...[
-            Text('Preferred Jersey Number'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack)),
-            SizedBox(height: 10),
-            SocaLocaTextField(
-              controller: _jerseyNumberController,
-              hintText: '0 - 99'.tr,
-              keyboardType: TextInputType.number,
-              maxLength: 2,
-            ),
-            SizedBox(height: 15),
-          ],
-
-          if (_showPlayerFields) ...[
-            Text('Playing Level *'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack)),
-            SizedBox(height: 10),
-            _buildDropdown(
-              value: _playLevel,
-              items: _playingLevels,
-              onChanged: (val) => setState(() => _playLevel = val!),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Text('Preferred Foot'.tr,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: AppColors.socaBlack)),
-                SizedBox(width: 10),
-                Radio<String>(
-                  value: 'right',
-                  groupValue: _preferredFoot,
-                  activeColor: AppColors.socaBlack,
-                  onChanged: (val) => setState(() => _preferredFoot = val!),
-                ),
-                Text('Right'.tr,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: AppColors.socaBlack)),
-                SizedBox(width: 7),
-                Radio<String>(
-                  value: 'left',
-                  groupValue: _preferredFoot,
-                  activeColor: AppColors.socaBlack,
-                  onChanged: (val) => setState(() => _preferredFoot = val!),
-                ),
-                Text('Left'.tr,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: AppColors.socaBlack)),
-              ],
-            ),
-            SizedBox(height: 15),
-            Text('Height'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack)),
-            SizedBox(height: 10),
-            SocaLocaTextField(
-              controller: _heightController,
-              hintText: 'value in cm'.tr,
-              keyboardType: TextInputType.number,
-              maxLength: 3,
-            ),
-            SizedBox(height: 15),
-          ],
-
-          if (_showJerseySize) ...[
-            Text('Shirt/Jersey Size'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack)),
-            SizedBox(height: 10),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: _jerseySizes.map((size) {
-                  final isSelected = _jerseySize == size;
-                  return GestureDetector(
-                    onTap: () => setState(() => _jerseySize = size),
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      margin: EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.socaBlack : Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: AppColors.socaBlack),
-                      ),
-                      child: Center(
-                        child: Text(
-                          size,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                            color: isSelected
-                                ? AppColors.socaYellow
-                                : AppColors.socaBlack,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-            SizedBox(height: 15),
-          ],
-
-          if (_showShoeSize) ...[
-            Text('Shoe Size'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack)),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: _buildDropdown(
-                    value: _shoeUnit,
-                    items: _shoeUnits,
-                    onChanged: (val) => setState(() {
-                      _shoeUnit = val!;
-                      _shoeSize = _shoeSizes[val]!.first;
-                    }),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: _buildDropdown(
-                    value: _shoeSize,
-                    items: _shoeSizes[_shoeUnit]!,
-                    onChanged: (val) => setState(() => _shoeSize = val!),
-                  ),
-                ),
-              ],
-            ),
-          ],
+          SizedBox(height: 10),
         ],
-      ),
-    );
-  }
 
-  Widget _buildBrandsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+        // Location
+        GestureDetector(
+          onTap: _openLocationPicker,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            decoration: BoxDecoration(
+                color: AppColors.socaGrey,
+                borderRadius: BorderRadius.circular(5)),
+            child: Row(
+              children: [
+                Image.asset("assets/icons/ic_location.png",
+                    width: 28, height: 28),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    _placeName.isEmpty
+                        ? 'Select location from map'
+                        : _placeName,
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: AppColors.socaBlack),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
         SizedBox(height: 15),
-        Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(5)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+
+        if (_showPlayerFields) ...[
+          Text('Playing Position'.tr,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.socaBlack)),
+          SizedBox(height: 10),
+          _buildDropdown(
+            value: _playPosition,
+            items: _playPositions,
+            onChanged: (val) => setState(() {
+              _playPosition = val!;
+              _playPositionType = _positionTypes[val]!.first;
+            }),
+          ),
+          SizedBox(height: 10),
+          _buildDropdown(
+            value: _playPositionType,
+            items: _positionTypes[_playPosition]!,
+            onChanged: (val) => setState(() => _playPositionType = val!),
+          ),
+          SizedBox(height: 15),
+        ],
+
+        if (_showJerseyNumber) ...[
+          Text('Preferred Jersey Number'.tr,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.socaBlack)),
+          SizedBox(height: 10),
+          CreateProfileTextField(
+            controller: _jerseyNumberController,
+            hintText: '0 - 99'.tr,
+            keyboardType: TextInputType.number,
+            maxLength: 2,
+          ),
+          SizedBox(height: 15),
+        ],
+
+        if (_showPlayerFields) ...[
+          Text('Playing Level *'.tr,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.socaBlack)),
+          SizedBox(height: 10),
+          _buildDropdown(
+            value: _playLevel,
+            items: _playingLevels,
+            onChanged: (val) => setState(() => _playLevel = val!),
+          ),
+          SizedBox(height: 10),
+          Row(
             children: [
-              Text(
-                'Brands you like'.tr,
-                style: TextStyle(
-                    fontFamily: 'Lato',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: AppColors.socaBlack),
+              Text('Preferred Foot'.tr,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: AppColors.socaBlack)),
+              SizedBox(width: 10),
+              Radio<String>(
+                value: 'right',
+                groupValue: _preferredFoot,
+                activeColor: AppColors.socaBlack,
+                onChanged: (val) => setState(() => _preferredFoot = val!),
               ),
-              SizedBox(height: 10),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: _brands.map((brand) {
-                  final isSelected = _selectedBrands.contains(brand);
-                  return GestureDetector(
-                    onTap: () => setState(() {
-                      isSelected
-                          ? _selectedBrands.remove(brand)
-                          : _selectedBrands.add(brand);
-                    }),
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.socaBlack : Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: AppColors.socaBlack),
-                      ),
+              Text('Right'.tr,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: AppColors.socaBlack)),
+              SizedBox(width: 7),
+              Radio<String>(
+                value: 'left',
+                groupValue: _preferredFoot,
+                activeColor: AppColors.socaBlack,
+                onChanged: (val) => setState(() => _preferredFoot = val!),
+              ),
+              Text('Left'.tr,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: AppColors.socaBlack)),
+            ],
+          ),
+          SizedBox(height: 15),
+          Text('Height'.tr,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.socaBlack)),
+          SizedBox(height: 10),
+          CreateProfileTextField(
+            controller: _heightController,
+            hintText: 'value in cm'.tr,
+            keyboardType: TextInputType.number,
+            maxLength: 3,
+          ),
+          SizedBox(height: 15),
+        ],
+
+        if (_showJerseySize) ...[
+          Text('Shirt/Jersey Size'.tr,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.socaBlack)),
+          SizedBox(height: 10),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _jerseySizes.map((size) {
+                final isSelected = _jerseySize == size;
+                return GestureDetector(
+                  onTap: () => setState(() => _jerseySize = size),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    margin: EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color:
+                          isSelected ? AppColors.socaBlack : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: AppColors.socaBlack),
+                    ),
+                    child: Center(
                       child: Text(
-                        brand,
+                        size,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -1299,11 +1492,100 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         ),
                       ),
                     ),
-                  );
-                }).toList(),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          SizedBox(height: 15),
+        ],
+
+        if (_showShoeSize) ...[
+          Text('Shoe Size'.tr,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.socaBlack)),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: _buildDropdown(
+                  value: _shoeUnit,
+                  items: _shoeUnits,
+                  onChanged: (val) => setState(() {
+                    _shoeUnit = val!;
+                    _shoeSize = _shoeSizes[val]!.first;
+                  }),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: _buildDropdown(
+                  value: _shoeSize,
+                  items: _shoeSizes[_shoeUnit]!,
+                  onChanged: (val) => setState(() => _shoeSize = val!),
+                ),
               ),
             ],
           ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildBrandsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 15),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Brands you like'.tr,
+              style: TextStyle(
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: AppColors.socaBlack),
+            ),
+            SizedBox(height: 10),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: _brands.map((brand) {
+                final isSelected = _selectedBrands.contains(brand);
+                return GestureDetector(
+                  onTap: () => setState(() {
+                    isSelected
+                        ? _selectedBrands.remove(brand)
+                        : _selectedBrands.add(brand);
+                  }),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color:
+                          isSelected ? AppColors.socaBlack : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: AppColors.socaBlack),
+                    ),
+                    child: Text(
+                      brand,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: isSelected
+                            ? AppColors.socaYellow
+                            : AppColors.socaBlack,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
         ),
       ],
     );
@@ -1313,62 +1595,48 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return Column(
       children: [
         SizedBox(height: 15),
-        Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(5)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Major leagues you follow'.tr,
-                  style: TextStyle(
-                      fontFamily: 'Lato',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: AppColors.socaBlack)),
-              SizedBox(height: 10),
-              _buildDropdown(
-                value: _leagueFollow,
-                items: [
-                  'Premier League',
-                  'La Liga',
-                  'Serie A',
-                  'Bundesliga',
-                  'Ligue 1'
-                ],
-                onChanged: (val) => setState(() => _leagueFollow = val!),
-              ),
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Major leagues you follow'.tr,
+                style: TextStyle(
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: AppColors.socaBlack)),
+            SizedBox(height: 10),
+            _buildDropdown(
+              value: _leagueFollow,
+              items: _leagueTeams.keys.toList(),
+              onChanged: (val) {
+                if (val == null) return;
+                final teams = _leagueTeams[val]!;
+                setState(() {
+                  _leagueFollow = val;
+                  _teamFollow = teams.first;
+                });
+              },
+            ),
+          ],
         ),
         SizedBox(height: 15),
-        Container(
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(5)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Teams you follow'.tr,
-                  style: TextStyle(
-                      fontFamily: 'Lato',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: AppColors.socaBlack)),
-              SizedBox(height: 10),
-              _buildDropdown(
-                value: _teamFollow,
-                items: [
-                  'Arsenal',
-                  'Chelsea',
-                  'Liverpool',
-                  'Manchester United',
-                  'Manchester City'
-                ],
-                onChanged: (val) => setState(() => _teamFollow = val!),
-              ),
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Teams you follow'.tr,
+                style: TextStyle(
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: AppColors.socaBlack)),
+            SizedBox(height: 10),
+            _buildDropdown(
+              value: _teamFollow,
+              items: _leagueTeams[_leagueFollow] ??
+                  _leagueTeams['Premier League']!,
+              onChanged: (val) => setState(() => _teamFollow = val!),
+            ),
+          ],
         ),
       ],
     );

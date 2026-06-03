@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/api_constants.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/router/app_routes.dart';
+import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/app_loader.dart';
 import '../data/models/referee_match_model.dart';
 import '../providers/referee_providers.dart';
 import '../widgets/referee_shared_widgets.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeLiveMatchesScreen extends ConsumerStatefulWidget {
-  RefereeLiveMatchesScreen({super.key});
+  const RefereeLiveMatchesScreen({super.key});
 
   @override
   ConsumerState<RefereeLiveMatchesScreen> createState() =>
@@ -19,20 +22,37 @@ class RefereeLiveMatchesScreen extends ConsumerStatefulWidget {
 
 class _RefereeLiveMatchesScreenState
     extends ConsumerState<RefereeLiveMatchesScreen> {
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(refereeLiveMatchesProvider.notifier).load();
       ref.invalidate(refereeLiveDropdownProvider);
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final position = _scrollController.position;
+    if (position.pixels < position.maxScrollExtent - 220) return;
+    ref.read(refereeLiveMatchesProvider.notifier).loadMore();
+  }
+
   void _onTournamentChanged(String? tournamentId) {
     ref.read(refereeSelectedTmntLiveProvider.notifier).state = tournamentId;
-    ref.read(refereeLiveMatchesProvider.notifier).load(
-          tournamentId: tournamentId,
-        );
+    ref
+        .read(refereeLiveMatchesProvider.notifier)
+        .load(tournamentId: tournamentId);
   }
 
   @override
@@ -41,354 +61,440 @@ class _RefereeLiveMatchesScreenState
     final dropdownAsync = ref.watch(refereeLiveDropdownProvider);
     final selectedTmnt = ref.watch(refereeSelectedTmntLiveProvider);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.only(left: 8, right: 50, top: 8, bottom: 8),
-          margin: const EdgeInsets.only(left: 16, top: 16),
-          decoration: const BoxDecoration(
+    return Container(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 15, top: 25),
+            padding:
+                const EdgeInsets.only(left: 10, right: 50, top: 8, bottom: 8),
             color: AppColors.socaBlack,
-          ),
-          child: const Text(
-            "Live Matches",
-            style: TextStyle(
+            child: Text(
+              AppStrings.liveMatches,
+              style: const TextStyle(
                 color: AppColors.socaYellow,
-                fontFamily: 'Poppins',
+                fontFamily: 'Lato',
                 fontSize: 20,
-                fontWeight: FontWeight.w600),
-          ),
-        ),
-        const Padding(
-          padding: const EdgeInsets.only(left: 16, top: 16),
-          child: const Text(
-            "Find all the matches assigned to you by the Tournament Organiser here. Tap on \"START MATCH\" to publish \"Live Scores\".",
-            style: const TextStyle(
-              color: AppColors.socaBlack,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(12, 12, 12, 4),
-          child: dropdownAsync.when(
-            data: (items) => RefereeTournamentDropdown(
-              items: items,
-              selectedId: selectedTmnt,
-              onChanged: _onTournamentChanged,
-            ),
-            loading: () => RefereeDropdownLoading(),
-            error: (_, __) => SizedBox.shrink(),
-          ),
-        ),
-        Expanded(
-          child: matchesState.when(
-            loading: () => AppLoader(),
-            error: (e, _) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error_outline, size: 48, color: AppColors.error),
-                  SizedBox(height: 12),
-                  Text(e.toString(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-                  SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () =>
-                        ref.read(refereeLiveMatchesProvider.notifier).load(
-                              tournamentId: selectedTmnt,
-                            ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.socaBlack,
-                        foregroundColor: AppColors.socaYellow),
-                    child: Text('Retry'.tr,
-                        style: TextStyle(fontFamily: 'Poppins')),
-                  ),
-                ],
+                fontWeight: FontWeight.w700,
+                height: 1,
               ),
             ),
-            data: (matches) => matches.isEmpty
-                ? RefereeEmptyState(
-                    message: 'No live matches right now',
-                    icon: Icons.live_tv_outlined,
-                  )
-                : ListView.builder(
-                    padding: EdgeInsets.all(12),
-                    itemCount: matches.length,
-                    itemBuilder: (ctx, i) => _LiveMatchCard(
-                      match: matches[i],
-                      onViewDetails: () => context.push(
-                        '/live-match/${matches[i].matchId}',
-                        extra: {'tournamentId': matches[i].tournamentId ?? ''},
-                      ),
-                      onUpdate: () => context.push(
-                        '/referee/match/${matches[i].matchId}/live-update',
-                        extra: matches[i],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: Text(
+              AppStrings.liveMatchTournament,
+              style: const TextStyle(
+                color: AppColors.socaBlack,
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                height: 1.25,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, top: 25, bottom: 4),
+            child: dropdownAsync.when(
+              data: (items) => RefereeTournamentDropdown(
+                items: items,
+                selectedId: selectedTmnt,
+                onChanged: _onTournamentChanged,
+              ),
+              loading: () => const RefereeDropdownLoading(),
+              error: (_, __) => RefereeTournamentDropdown(
+                items: const [],
+                selectedId: selectedTmnt,
+                onChanged: _onTournamentChanged,
+              ),
+            ),
+          ),
+          Expanded(
+            child: matchesState.when(
+              loading: () => const AppLoader(),
+              error: (e, _) => _ErrorState(
+                error: e.toString(),
+                onRetry: () => ref
+                    .read(refereeLiveMatchesProvider.notifier)
+                    .load(tournamentId: selectedTmnt),
+              ),
+              data: (matches) {
+                if (matches.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 50),
+                      child: Text(
+                        AppStrings.noMatchesAreFound,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: AppColors.socaBlack,
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
+                  );
+                }
+
+                return RefreshIndicator(
+                  color: AppColors.socaYellow,
+                  backgroundColor: AppColors.socaBlack,
+                  onRefresh: () => ref
+                      .read(refereeLiveMatchesProvider.notifier)
+                      .load(tournamentId: selectedTmnt),
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.only(bottom: 24),
+                    itemCount: matches.length,
+                    itemBuilder: (context, index) {
+                      final match = matches[index];
+                      final previous = index > 0 ? matches[index - 1] : null;
+                      final showTournament = previous?.tournamentId == null ||
+                          previous?.tournamentId != match.tournamentId;
+
+                      return _LiveMatchRow(
+                        match: match,
+                        showTournament: showTournament,
+                        currentUserId: StorageService.userId ?? '',
+                        onManage: () => context.push(
+                          AppRoutes.refereeLiveUpdate.replaceFirst(
+                            ':matchId',
+                            match.matchId ?? '',
+                          ),
+                          extra: match,
+                        ),
+                      );
+                    },
                   ),
+                );
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
-class _LiveMatchCard extends StatelessWidget {
-  _LiveMatchCard({
+class _LiveMatchRow extends StatelessWidget {
+  const _LiveMatchRow({
     required this.match,
-    required this.onViewDetails,
-    required this.onUpdate,
+    required this.showTournament,
+    required this.currentUserId,
+    required this.onManage,
   });
 
   final RefereeMatchModel match;
-  final VoidCallback onViewDetails;
-  final VoidCallback onUpdate;
+  final bool showTournament;
+  final String currentUserId;
+  final VoidCallback onManage;
 
   @override
   Widget build(BuildContext context) {
-    final minute = match.currentMinute;
-    final hasScore = match.teamAScore != null && match.teamBScore != null;
+    final canManage = match.canManage(currentUserId);
+    final stateLabel = liveMatchStateLabel(match.liveState);
 
-    return GestureDetector(
-      onTap: onViewDetails,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.red.shade400, width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 4,
-              offset: Offset(0, 2),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (showTournament)
+          Container(
+            margin: const EdgeInsets.fromLTRB(2, 10, 2, 0),
+            padding: const EdgeInsets.only(left: 15, top: 8, bottom: 8),
+            color: AppColors.socaBlack,
+            child: Text(
+              match.tournamentName ?? '',
+              style: const TextStyle(
+                color: AppColors.socaYellow,
+                fontFamily: 'Poppins',
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                height: 1,
+              ),
             ),
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header: tournament + round + LIVE badge + minute
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${match.tournamentName ?? ''}${match.roundName != null ? ' — ${match.roundName}' : ''}',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
-                        color: AppColors.socaBlack,
-                      ),
+          )
+        else
+          Container(
+            height: 0.5,
+            margin: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+            color: AppColors.socaBlack,
+          ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _TeamLine(
+                          logoUrl: match.teamALogo,
+                          name: match.teamA ?? '',
+                          blackLogo: true,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 57, top: 2),
+                          child: Text(
+                            'vs',
+                            style: TextStyle(
+                              color: AppColors.socaBlack,
+                              fontFamily: 'Poppins',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              height: 1,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        _TeamLine(
+                          logoUrl: match.teamBLogo,
+                          name: match.teamB ?? '',
+                          blackLogo: false,
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  _LiveBadge(minute: minute),
-                ],
-              ),
-              SizedBox(height: 12),
-
-              // Score row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Text(
-                      match.teamA ?? '',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: AppColors.socaBlack),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      hasScore
-                          ? '${match.teamAScore} - ${match.teamBScore}'
-                          : 'vs',
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w800,
-                          fontSize: 22,
-                          color: Colors.red),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      match.teamB ?? '',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: AppColors.socaBlack),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-
-              // Meta info chips
-              Wrap(
-                spacing: 12,
-                runSpacing: 4,
-                children: [
-                  if (match.matchDate != null)
-                    RefereeInfoChip(
-                        icon: Icons.calendar_today, text: match.matchDate!),
-                  if (match.matchTime != null)
-                    RefereeInfoChip(
-                        icon: Icons.access_time, text: match.matchTime!),
-                  if (match.venue != null)
-                    RefereeInfoChip(
-                        icon: Icons.location_on, text: match.venue!),
-                ],
-              ),
-              SizedBox(height: 12),
-
-              // Referee roles row
-              if (_hasRefereeInfo(match)) ...[
-                _RefereeRolesRow(match: match),
-                SizedBox(height: 10),
-              ],
-
-              // UPDATE MATCH button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: onUpdate,
-                  icon: Icon(Icons.edit, size: 16),
-                  label: Text(
-                    'UPDATE MATCH'.tr,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 12),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
                   ),
                 ),
+                Container(width: 0.5, color: AppColors.socaBlack),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if ((match.stadiumName ?? '').isNotEmpty)
+                          _DetailText(match.stadiumName!),
+                        if ((match.matchDateTimeGmt ?? 0) > 0) ...[
+                          const SizedBox(height: 7),
+                          _DetailText(
+                            '${match.matchDate ?? ''} | ${match.matchTime ?? ''}',
+                          ),
+                        ],
+                        if (stateLabel.isNotEmpty) ...[
+                          const SizedBox(height: 7),
+                          _DetailText(stateLabel),
+                        ],
+                        if (canManage) ...[
+                          const SizedBox(height: 15),
+                          _ActionButton(
+                            label: AppStrings.manage.toUpperCase(),
+                            onTap: onManage,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+String liveMatchStateLabel(String? state) {
+  switch (state) {
+    case 'INIT':
+      return 'Upcoming';
+    case 'FIRST_HALF_START':
+      return 'First Half';
+    case 'FIRST_HALF_END':
+      return 'Half Time';
+    case 'SECOND_HALF_START':
+      return 'Second Half';
+    case 'SECOND_HALF_END':
+      return 'Break Before ET';
+    case 'POSTPONED':
+      return 'Postponed';
+    case 'ABANDONED':
+      return 'Abandoned';
+    case 'EXTRA_TIME_FH_START':
+      return 'ET First Half';
+    case 'EXTRA_TIME_FH_END':
+      return 'ET Half Time';
+    case 'EXTRA_TIME_SH_START':
+      return 'ET Second Half';
+    case 'EXTRA_TIME_SH_END':
+      return 'After Extra Time';
+    case 'PENALTY':
+      return 'Penalty';
+    case 'FINISH':
+      return 'Full Time';
+    default:
+      return '';
+  }
+}
+
+class _TeamLine extends StatelessWidget {
+  const _TeamLine({
+    required this.logoUrl,
+    required this.name,
+    required this.blackLogo,
+  });
+
+  final String? logoUrl;
+  final String name;
+  final bool blackLogo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, top: 5),
+      child: Row(
+        children: [
+          _TeamLogo(logoUrl: logoUrl, name: name, blackLogo: blackLogo),
+          const SizedBox(width: 7),
+          Expanded(
+            child: Text(
+              name,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: AppColors.socaBlack,
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                height: 1,
               ),
-            ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TeamLogo extends StatelessWidget {
+  const _TeamLogo({
+    required this.logoUrl,
+    required this.name,
+    required this.blackLogo,
+  });
+
+  final String? logoUrl;
+  final String name;
+  final bool blackLogo;
+
+  @override
+  Widget build(BuildContext context) {
+    final url = ApiConstants.getImageUrl(logoUrl);
+    final fallback = name.isEmpty
+        ? 'TEAM'
+        : name.substring(0, name.length > 4 ? 4 : name.length).toUpperCase();
+
+    return CircleAvatar(
+      radius: 20,
+      backgroundColor: blackLogo ? AppColors.socaBlack : AppColors.socaYellow,
+      backgroundImage: url.isNotEmpty ? NetworkImage(url) : null,
+      child: url.isEmpty
+          ? Text(
+              fallback,
+              style: TextStyle(
+                color: blackLogo ? AppColors.socaYellow : AppColors.socaBlack,
+                fontFamily: 'Poppins',
+                fontSize: 9,
+                fontWeight: FontWeight.w700,
+              ),
+            )
+          : null,
+    );
+  }
+}
+
+class _DetailText extends StatelessWidget {
+  const _DetailText(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: AppColors.socaBlack,
+        fontFamily: 'Poppins',
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+        height: 1,
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.socaBlack,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.socaYellow,
+            fontFamily: 'Poppins',
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            height: 1,
           ),
         ),
       ),
     );
   }
-
-  bool _hasRefereeInfo(RefereeMatchModel m) =>
-      (m.mainRef?.isNotEmpty == true) ||
-      (m.asstRef1?.isNotEmpty == true) ||
-      (m.asstRef2?.isNotEmpty == true) ||
-      (m.matchCommis?.isNotEmpty == true);
 }
 
-class _LiveBadge extends StatefulWidget {
-  _LiveBadge({this.minute});
-  final String? minute;
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.error, required this.onRetry});
 
-  @override
-  State<_LiveBadge> createState() => _LiveBadgeState();
-}
-
-class _LiveBadgeState extends State<_LiveBadge>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _opacity;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 900),
-    )..repeat(reverse: true);
-    _opacity = Tween<double>(begin: 0.4, end: 1.0).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  final String error;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _opacity,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.circle, size: 7, color: Colors.white),
-            SizedBox(width: 4),
+            const Icon(Icons.error_outline, size: 42, color: AppColors.error),
+            const SizedBox(height: 12),
             Text(
-              widget.minute != null && widget.minute!.isNotEmpty
-                  ? "LIVE ${widget.minute}'"
-                  : 'LIVE',
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 10,
-                  color: Colors.white),
+              error,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: onRetry,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.socaBlack,
+                foregroundColor: AppColors.socaYellow,
+              ),
+              child: Text(
+                AppStrings.retry,
+                style: const TextStyle(fontFamily: 'Poppins'),
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _RefereeRolesRow extends StatelessWidget {
-  _RefereeRolesRow({required this.match});
-  final RefereeMatchModel match;
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 10,
-      runSpacing: 4,
-      children: [
-        if (match.mainRef?.isNotEmpty == true) _roleChip('REF', match.mainRef!),
-        if (match.asstRef1?.isNotEmpty == true)
-          _roleChip('AR1', match.asstRef1!),
-        if (match.asstRef2?.isNotEmpty == true)
-          _roleChip('AR2', match.asstRef2!),
-        if (match.matchCommis?.isNotEmpty == true)
-          _roleChip('MC', match.matchCommis!),
-      ],
-    );
-  }
-
-  Widget _roleChip(String role, String name) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-      decoration: BoxDecoration(
-        color: AppColors.socaGrey,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        '$role: $name',
-        style: TextStyle(
-            fontFamily: 'Lato', fontSize: 11, color: AppColors.socaBlack),
       ),
     );
   }

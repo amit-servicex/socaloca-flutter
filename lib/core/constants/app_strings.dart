@@ -179,6 +179,21 @@ class AppStrings {
   static String get hostMatch => _t('hostMatch');
   static String get manageRequests => _t('manageRequests');
   static String get selectTournamentRequired => _t('selectTournamentRequired');
+  static String get myMatches => _t('myMatches');
+  static String get myMatchesTournament => _t('myMatchesTournament');
+  static String get noMatchesAreFound => _t('noMatchesAreFound');
+  static String get manage => _t('manage');
+  static String get downloadMatchReport => _t('downloadMatchReport');
+  static String get liveMatches => _t('liveMatches');
+  static String get liveMatchTournament => _t('liveMatchTournament');
+  static String get noLiveMatchesAvailable => _t('noLiveMatchesAvailable');
+  static String get startMatch => _t('startMatch');
+  static String get abandonMatch => _t('abandonMatch');
+  static String get saveAndPublish => _t('saveAndPublish');
+  static String get matchStatus => _t('matchStatus');
+  static String get goals => _t('goals');
+  static String get cards => _t('cards');
+  static String get substitution => _t('substitution');
   static String get ongoing => _t('ongoing');
   static String get upcoming => _t('upcoming');
   static String get closed => _t('closed');
@@ -467,6 +482,23 @@ class AppStrings {
       'hostMatch': 'Host Match',
       'manageRequests': 'Manage Requests',
       'selectTournamentRequired': 'select tournament *',
+      'myMatches': 'My Matches',
+      'myMatchesTournament':
+          'Find all the matches assigned to you by the Tournament Organisers. Update scores and records by tapping "Manage". Download Match Report once a match is updated.',
+      'noMatchesAreFound': 'No matches are found!!!',
+      'manage': 'Manage',
+      'downloadMatchReport': 'Download Match Report',
+      'liveMatches': 'Live Matches',
+      'liveMatchTournament':
+          'Find all the matches assigned to you by the Tournament Organiser here. Tap on "START MATCH" to publish "Live Scores".',
+      'noLiveMatchesAvailable': 'No Live Matches Available!!!',
+      'startMatch': 'Start Match',
+      'abandonMatch': 'Abandon Match',
+      'saveAndPublish': 'Save & Publish',
+      'matchStatus': 'Match Status',
+      'goals': 'Goals',
+      'cards': 'Cards',
+      'substitution': 'Substitution',
       'ongoing': 'Ongoing',
       'upcoming': 'Upcoming',
       'closed': 'Closed',
@@ -729,6 +761,23 @@ class AppStrings {
       'hostMatch': 'Organizar partido',
       'manageRequests': 'Gestionar solicitudes',
       'selectTournamentRequired': 'seleccionar torneo *',
+      'myMatches': 'My Matches',
+      'myMatchesTournament':
+          'Find all the matches assigned to you by the Tournament Organisers. Update scores and records by tapping "Manage". Download Match Report once a match is updated.',
+      'noMatchesAreFound': 'No se encontraron partidos!!!',
+      'manage': 'Gestionar',
+      'downloadMatchReport': 'Descargar informe del partido',
+      'liveMatches': 'Live Matches',
+      'liveMatchTournament':
+          'Find all the matches assigned to you by the Tournament Organiser here. Tap on "START MATCH" to publish "Live Scores".',
+      'noLiveMatchesAvailable': 'No hay partidos en vivo disponibles!!!',
+      'startMatch': 'Iniciar partido',
+      'abandonMatch': 'Abandonar partido',
+      'saveAndPublish': 'Guardar y publicar',
+      'matchStatus': 'Estado del partido',
+      'goals': 'Goles',
+      'cards': 'Tarjetas',
+      'substitution': 'Sustitución',
       'ongoing': 'En curso',
       'upcoming': 'Próximos',
       'closed': 'Cerrados',
@@ -993,6 +1042,23 @@ class AppStrings {
       'hostMatch': 'Organizar Partida',
       'manageRequests': 'Gerenciar Solicitações',
       'selectTournamentRequired': 'selecionar torneio *',
+      'myMatches': 'My Matches',
+      'myMatchesTournament':
+          'Find all the matches assigned to you by the Tournament Organisers. Update scores and records by tapping "Manage". Download Match Report once a match is updated.',
+      'noMatchesAreFound': 'Nenhuma partida encontrada!!!',
+      'manage': 'Gerenciar',
+      'downloadMatchReport': 'Baixar relatório da partida',
+      'liveMatches': 'Live Matches',
+      'liveMatchTournament':
+          'Find all the matches assigned to you by the Tournament Organiser here. Tap on "START MATCH" to publish "Live Scores".',
+      'noLiveMatchesAvailable': 'Nenhuma partida ao vivo disponível!!!',
+      'startMatch': 'Iniciar partida',
+      'abandonMatch': 'Abandonar partida',
+      'saveAndPublish': 'Salvar e publicar',
+      'matchStatus': 'Status da partida',
+      'goals': 'Gols',
+      'cards': 'Cartões',
+      'substitution': 'Substituição',
       'ongoing': 'Em andamento',
       'upcoming': 'Próximos',
       'closed': 'Encerrados',
@@ -1257,6 +1323,23 @@ class AppStrings {
       'hostMatch': 'Organiser un match',
       'manageRequests': 'Gérer les demandes',
       'selectTournamentRequired': 'sélectionner un tournoi *',
+      'myMatches': 'My Matches',
+      'myMatchesTournament':
+          'Find all the matches assigned to you by the Tournament Organisers. Update scores and records by tapping "Manage". Download Match Report once a match is updated.',
+      'noMatchesAreFound': 'Aucun match trouvé!!!',
+      'manage': 'Gérer',
+      'downloadMatchReport': 'Télécharger le rapport du match',
+      'liveMatches': 'Live Matches',
+      'liveMatchTournament':
+          'Find all the matches assigned to you by the Tournament Organiser here. Tap on "START MATCH" to publish "Live Scores".',
+      'noLiveMatchesAvailable': 'Aucun match en direct disponible!!!',
+      'startMatch': 'Démarrer le match',
+      'abandonMatch': 'Abandonner le match',
+      'saveAndPublish': 'Enregistrer et publier',
+      'matchStatus': 'Statut du match',
+      'goals': 'Buts',
+      'cards': 'Cartons',
+      'substitution': 'Remplacement',
       'ongoing': 'En cours',
       'upcoming': 'À venir',
       'closed': 'Terminés',

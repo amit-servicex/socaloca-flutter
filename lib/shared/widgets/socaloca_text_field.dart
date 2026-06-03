@@ -234,6 +234,96 @@ class SocaLocaMobileEmailField extends StatelessWidget {
   }
 }
 
+/// Flat text field for the Create Profile screen.
+/// No border, no shadow — grey background with 5dp rounded corners.
+class CreateProfileTextField extends StatelessWidget {
+  const CreateProfileTextField({
+    super.key,
+    required this.controller,
+    this.hintText,
+    this.obscureText = false,
+    this.onChanged,
+    this.keyboardType,
+    this.textInputAction,
+    this.maxLength,
+    this.inputFormatters,
+    this.suffixWidget,
+    this.enabled = true,
+  });
+
+  final TextEditingController controller;
+  final String? hintText;
+  final bool obscureText;
+  final ValueChanged<String>? onChanged;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final int? maxLength;
+  final List<TextInputFormatter>? inputFormatters;
+  final Widget? suffixWidget;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+        color: AppColors.socaGrey, // lighter grey background
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              obscureText: obscureText,
+              onChanged: onChanged,
+              keyboardType: keyboardType,
+              obscuringCharacter: '*',
+              textInputAction: textInputAction,
+              maxLength: maxLength,
+              inputFormatters: inputFormatters,
+              enabled: enabled,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: AppColors.socaBlack,
+                height: 1.0,
+              ),
+              decoration: InputDecoration(
+                fillColor: Colors.transparent,
+                hintText: hintText,
+                hintStyle: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  color: AppColors.socaBlack,
+                  height: 1.0,
+                ),
+                focusedBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 12,
+                ),
+                counterText: '',
+              ),
+            ),
+          ),
+          if (suffixWidget != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: suffixWidget!,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Error text widget matching Android design
 /// Shows below text field with Poppins Bold, 12sp
 class SocaLocaFieldError extends StatelessWidget {

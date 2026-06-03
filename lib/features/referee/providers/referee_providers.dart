@@ -108,15 +108,57 @@ class _MatchesNotifier
   }
 
   final RefereeRepository _repo;
+  static const _limit = 10;
+  String? _tournamentId;
+  int _start = 0;
+  bool isLoadingMore = false;
+  bool hasMore = true;
 
   Future<void> load({String? tournamentId}) async {
+    _tournamentId = tournamentId;
+    _start = 0;
+    hasMore = true;
+    isLoadingMore = false;
     state = const AsyncValue.loading();
     try {
-      final list = await _repo.getMatches(tournamentId: tournamentId);
-      state = AsyncValue.data(list);
+      final list = await _repo.getMatches(
+        tournamentId: tournamentId,
+        start: _start,
+        limit: _limit,
+      );
+      _start += _limit;
+      hasMore = list.length == _limit;
+      state = AsyncValue.data(_sortedMatches(list));
     } catch (e, s) {
       state = AsyncValue.error(e, s);
     }
+  }
+
+  Future<void> loadMore() async {
+    if (isLoadingMore || !hasMore) return;
+    final current = state.valueOrNull ?? [];
+    isLoadingMore = true;
+    try {
+      final list = await _repo.getMatches(
+        tournamentId: _tournamentId,
+        start: _start,
+        limit: _limit,
+      );
+      _start += _limit;
+      hasMore = list.length == _limit;
+      state = AsyncValue.data(_sortedMatches([...current, ...list]));
+    } catch (_) {
+      state = AsyncValue.data(current);
+    } finally {
+      isLoadingMore = false;
+    }
+  }
+
+  List<RefereeMatchModel> _sortedMatches(List<RefereeMatchModel> matches) {
+    final sorted = [...matches];
+    sorted.sort(
+        (a, b) => (b.matchDateTimeGmt ?? 0).compareTo(a.matchDateTimeGmt ?? 0));
+    return sorted;
   }
 }
 
@@ -134,15 +176,57 @@ class _LiveMatchesNotifier
   }
 
   final RefereeRepository _repo;
+  static const _limit = 10;
+  String? _tournamentId;
+  int _start = 0;
+  bool isLoadingMore = false;
+  bool hasMore = true;
 
   Future<void> load({String? tournamentId}) async {
+    _tournamentId = tournamentId;
+    _start = 0;
+    hasMore = true;
+    isLoadingMore = false;
     state = const AsyncValue.loading();
     try {
-      final list = await _repo.getLiveMatches(tournamentId: tournamentId);
-      state = AsyncValue.data(list);
+      final list = await _repo.getLiveMatches(
+        tournamentId: tournamentId,
+        start: _start,
+        limit: _limit,
+      );
+      _start += _limit;
+      hasMore = list.length == _limit;
+      state = AsyncValue.data(_sortedMatches(list));
     } catch (e, s) {
       state = AsyncValue.error(e, s);
     }
+  }
+
+  Future<void> loadMore() async {
+    if (isLoadingMore || !hasMore) return;
+    final current = state.valueOrNull ?? [];
+    isLoadingMore = true;
+    try {
+      final list = await _repo.getLiveMatches(
+        tournamentId: _tournamentId,
+        start: _start,
+        limit: _limit,
+      );
+      _start += _limit;
+      hasMore = list.length == _limit;
+      state = AsyncValue.data(_sortedMatches([...current, ...list]));
+    } catch (_) {
+      state = AsyncValue.data(current);
+    } finally {
+      isLoadingMore = false;
+    }
+  }
+
+  List<RefereeMatchModel> _sortedMatches(List<RefereeMatchModel> matches) {
+    final sorted = [...matches];
+    sorted.sort(
+        (a, b) => (b.matchDateTimeGmt ?? 0).compareTo(a.matchDateTimeGmt ?? 0));
+    return sorted;
   }
 }
 

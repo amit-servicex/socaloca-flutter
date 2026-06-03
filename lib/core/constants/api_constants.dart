@@ -6,11 +6,12 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'https://organise.socaloca.football:9757/';
-  // static const String baseUrl = 'http://52.89.63.249:9757/';
+  // static const String baseUrl = 'https://organise.socaloca.football:9757/';
+  static const String baseUrl = 'http://52.89.63.249:9757/';
 
   static const String imageBaseUrl =
       'https://soca-loca.s3-us-west-2.amazonaws.com/dev/';
+  static const String phpBaseUrl = 'http://52.89.63.249/supersoca/rest/';
 
   static const String mapsApiKey = 'AIzaSyA94sWctn9Zp4j32EJTCafz3KGoxThx6jI';
 
@@ -426,6 +427,8 @@ class ApiConstants {
   // ─── Media ────────────────────────────────────────────────────────────────
   static const String uploadImage = 'uploadImage';
   static const String uploadVdo = 'uploadVdo';
+  static const String uploadLargeFileUrl =
+      'https://largeupload.socaloca.football/uploadFile';
   static const String uploadBulk = 'uploadBulk';
   static const String getVdoSpace = 'getVdoSpace';
 

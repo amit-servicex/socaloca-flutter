@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/api_constants.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -90,7 +93,10 @@ class _RefereeMyRequestsScreenState
                   SizedBox(height: 12),
                   Text(e.toString(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 13,
+                          color: AppColors.socaBlack)),
                   SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () =>
@@ -214,136 +220,205 @@ class _RequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // log("ghtis isvsjfv ${match.teamALogo}");
     return Container(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Color(0xFFE0E0E0)),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Tournament + round
-            Text(
-              '${match.tournamentName ?? ''}${match.roundName != null ? ' — ${match.roundName}' : ''}',
-              style: TextStyle(
+      clipBehavior: Clip.hardEdge,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Header
+          Container(
+            color: AppColors.socaBlack,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              match.tournamentName?.toUpperCase() ?? '',
+              style: const TextStyle(
                 fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-                color: AppColors.socaBlack,
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: AppColors.socaYellow,
               ),
             ),
-            SizedBox(height: 10),
-            // Teams
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          // Body
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
               children: [
-                Expanded(
-                  child: Text(
-                    match.teamA ?? '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: AppColors.socaBlack),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Team A
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 36,
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: match.teamALogo != null &&
+                                    match.teamALogo!.isNotEmpty
+                                ? NetworkImage(
+                                    ApiConstants.getImageUrl(match.teamALogo!))
+                                : null,
+                            child: match.teamALogo == null ||
+                                    match.teamALogo!.isEmpty
+                                ? const Icon(Icons.sports_soccer,
+                                    size: 36, color: Colors.grey)
+                                : null,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            match.teamA ?? '',
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // VS & Date/Time
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        children: [
+                          const Text(
+                            'VS',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 22,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${match.matchDate ?? ''} | ${match.matchTime?.replaceAll(' ', '\n') ?? ''}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Team B
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 36,
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: match.teamBLogo != null &&
+                                    match.teamBLogo!.isNotEmpty
+                                ? NetworkImage(match.teamBLogo!)
+                                : null,
+                            child: match.teamBLogo == null ||
+                                    match.teamBLogo!.isEmpty
+                                ? const Icon(Icons.sports_soccer,
+                                    size: 36, color: Colors.grey)
+                                : null,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            match.teamB ?? '',
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text('vs'.tr,
-                      style: TextStyle(
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: Colors.grey)),
-                ),
-                Expanded(
-                  child: Text(
-                    match.teamB ?? '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: AppColors.socaBlack),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            // Date · Time · Venue
-            Wrap(
-              spacing: 12,
-              runSpacing: 4,
-              children: [
-                if (match.matchDate != null)
-                  RefereeInfoChip(
-                      icon: Icons.calendar_today, text: match.matchDate!),
-                if (match.matchTime != null)
-                  RefereeInfoChip(
-                      icon: Icons.access_time, text: match.matchTime!),
-                if (match.venue != null)
-                  RefereeInfoChip(icon: Icons.location_on, text: match.venue!),
-                if (match.ageGroup != null)
-                  RefereeInfoChip(icon: Icons.group, text: match.ageGroup!),
-              ],
-            ),
-            SizedBox(height: 14),
-            // Accept / Decline buttons
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: onAccept,
-                    icon: Icon(Icons.check, size: 16),
-                    label: Text('ACCEPT'.tr,
-                        style: TextStyle(
+                const SizedBox(height: 24),
+                // Buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: onDecline,
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.socaBlack,
+                          side: const BorderSide(
+                              color: AppColors.socaBlack, width: 1.5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        child: Text(
+                          'DECLINE'.tr,
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
-                            fontSize: 12)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.socaBlack,
-                      foregroundColor: AppColors.socaYellow,
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
+                            fontSize: 13,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: onDecline,
-                    icon: Icon(Icons.close, size: 16),
-                    label: Text('DECLINE'.tr,
-                        style: TextStyle(
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: onAccept,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.socaBlack,
+                          foregroundColor: AppColors.socaYellow,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        child: Text(
+                          'ACCEPT'.tr,
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
-                            fontSize: 12)),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.socaBlack,
-                      side: BorderSide(color: AppColors.socaBlack),
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
