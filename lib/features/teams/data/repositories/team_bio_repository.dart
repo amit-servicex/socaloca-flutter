@@ -38,6 +38,14 @@ class TeamBioActionInfo {
   final int? joinedOn;
 }
 
+/// Thrown when the server rejects a delete request with a known reason code.
+class TeamDeleteException implements Exception {
+  final String message;
+  const TeamDeleteException(this.message);
+  @override
+  String toString() => message;
+}
+
 /// Repository for team bio related API calls
 class TeamBioRepository {
   /// Get team bio details
@@ -202,6 +210,50 @@ class TeamBioRepository {
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value);
     return null;
+  }
+
+  /// Delete a team. Throws a [TeamDeleteException] with a user-facing message on
+  /// business-logic failures, or a generic Exception on network/unexpected errors.
+  Future<void> deleteTeam({required String teamId}) async {
+    final userId = StorageService.userId;
+    if (userId == null || userId.isEmpty) {
+      throw Exception('User not logged in');
+    }
+
+    final response = await ApiClient.instance.post(
+      ApiConstants.deleteTeam,
+      body: {'teamId': teamId, 'userId': userId},
+    );
+
+    final data = response['response'] is Map
+        ? Map<String, dynamic>.from(response['response'] as Map)
+        : response;
+
+    if (data['status'] == 1) {
+      final success = _readBool(data['success']);
+      if (success) return;
+
+      final reason = data['reason']?.toString() ?? '';
+      throw TeamDeleteException(_reasonMessage(reason));
+    }
+    throw Exception('Failed to delete team');
+  }
+
+  String _reasonMessage(String reason) {
+    switch (reason) {
+      case 'noTeam':
+        return 'This team does not exist.';
+      case 'noRight':
+        return "You don't have permissions to delete.";
+      case 'hasPlayer':
+        return 'This team has players assigned and cannot be deleted. Please remove all players before you delete.';
+      case 'hasMatch':
+        return 'This team has participated in Matches, and cannot be deleted.';
+      case 'hasTournament':
+        return 'This team is participating in a Tournament, and cannot be deleted.';
+      default:
+        return 'Failed to delete team. Please try again.';
+    }
   }
 
   /// Get team recent matches

@@ -27,12 +27,16 @@ class AcademiesRepository {
         },
       );
 
-      if (response['response']['status'] == 1 &&
-          response['response']['academys'] != null) {
-        final academys = response['response']['academys'] as List;
-        final academyList = academys
+      final respData = response['response'] is Map
+          ? Map<String, dynamic>.from(response['response'] as Map)
+          : response;
+      if (respData['status'] == 1 && respData['academys'] != null) {
+        final rawAcademys = respData['academys'];
+        if (rawAcademys is! List) return [];
+        final academyList = rawAcademys
+            .whereType<Map>()
             .map((academy) =>
-                AcademyModel.fromJson(academy as Map<String, dynamic>))
+                AcademyModel.fromJson(Map<String, dynamic>.from(academy)))
             .toList();
 
         // Sort alphabetically by name
@@ -60,70 +64,80 @@ class AcademiesRepository {
         body: {'userId': userId, 'academyId': academyId},
       );
 
-      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final data = response['response'] is Map
+          ? Map<String, dynamic>.from(response['response'] as Map)
+          : response;
       if (data['status'] != 1 || data['details'] == null) return null;
 
-      final details = data['details'] as Map<String, dynamic>;
+      final rawDetails = data['details'];
+      if (rawDetails is! Map) return null;
+      final details = Map<String, dynamic>.from(rawDetails);
 
       String? joinedStatus;
-      if (details['joinDetails'] != null) {
-        final jd = details['joinDetails'] as Map<String, dynamic>;
+      if (details['joinDetails'] is Map) {
+        final jd = Map<String, dynamic>.from(details['joinDetails'] as Map);
         joinedStatus = jd['joined'] as String?;
       }
 
       AcademyDetailModel? academyDetails;
-      if (details['academyDetails'] != null) {
+      if (details['academyDetails'] is Map) {
         academyDetails = AcademyDetailModel.fromJson(
-            details['academyDetails'] as Map<String, dynamic>);
+            Map<String, dynamic>.from(details['academyDetails'] as Map));
       }
 
       final banners = <AcademyBannerModel>[];
       if (details['banners'] is List) {
         for (final b in details['banners'] as List) {
-          final bm = AcademyBannerModel.fromJson(b as Map<String, dynamic>);
+          if (b is! Map) continue;
+          final bm = AcademyBannerModel.fromJson(Map<String, dynamic>.from(b));
           if (bm.imageUrl.isNotEmpty) banners.add(bm);
         }
       }
 
       AcademyTrialStatusModel? trialDetails;
-      if (details['trialDetails'] != null) {
+      if (details['trialDetails'] is Map) {
         trialDetails = AcademyTrialStatusModel.fromJson(
-            details['trialDetails'] as Map<String, dynamic>);
+            Map<String, dynamic>.from(details['trialDetails'] as Map));
       }
 
       final newsList = <AcademyNewsModel>[];
       if (details['newsList'] is List) {
         for (final n in details['newsList'] as List) {
-          newsList.add(AcademyNewsModel.fromJson(n as Map<String, dynamic>));
+          if (n is! Map) continue;
+          newsList.add(AcademyNewsModel.fromJson(Map<String, dynamic>.from(n)));
         }
       }
 
       final postList = <AcademyPostModel>[];
       if (details['postList'] is List) {
         for (final p in details['postList'] as List) {
-          postList.add(AcademyPostModel.fromJson(p as Map<String, dynamic>));
+          if (p is! Map) continue;
+          postList.add(AcademyPostModel.fromJson(Map<String, dynamic>.from(p)));
         }
       }
 
       final sponsorList = <AcademySponsorModel>[];
       if (details['sponsorList'] is List) {
         for (final s in details['sponsorList'] as List) {
+          if (s is! Map) continue;
           sponsorList
-              .add(AcademySponsorModel.fromJson(s as Map<String, dynamic>));
+              .add(AcademySponsorModel.fromJson(Map<String, dynamic>.from(s)));
         }
       }
 
       final teams = <AcademyTeamModel>[];
       if (details['teams'] is List) {
         for (final t in details['teams'] as List) {
-          teams.add(AcademyTeamModel.fromJson(t as Map<String, dynamic>));
+          if (t is! Map) continue;
+          teams.add(AcademyTeamModel.fromJson(Map<String, dynamic>.from(t)));
         }
       }
 
       final skillVdos = <AcademyPostModel>[];
       if (details['skillVdos'] is List) {
         for (final v in details['skillVdos'] as List) {
-          skillVdos.add(AcademyPostModel.fromJson(v as Map<String, dynamic>));
+          if (v is! Map) continue;
+          skillVdos.add(AcademyPostModel.fromJson(Map<String, dynamic>.from(v)));
         }
         skillVdos.sort((a, b) => b.addedOn.compareTo(a.addedOn));
       }
@@ -131,7 +145,8 @@ class AcademiesRepository {
       final matchVdos = <AcademyPostModel>[];
       if (details['matchVdos'] is List) {
         for (final v in details['matchVdos'] as List) {
-          matchVdos.add(AcademyPostModel.fromJson(v as Map<String, dynamic>));
+          if (v is! Map) continue;
+          matchVdos.add(AcademyPostModel.fromJson(Map<String, dynamic>.from(v)));
         }
         matchVdos.sort((a, b) => b.addedOn.compareTo(a.addedOn));
       }
@@ -183,7 +198,9 @@ class AcademiesRepository {
           'isFan': isFan,
         },
       );
-      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final data = response['response'] is Map
+          ? Map<String, dynamic>.from(response['response'] as Map)
+          : response;
       return data['status'] == 1;
     } catch (e) {
       return false;
@@ -204,7 +221,9 @@ class AcademiesRepository {
           'request': request,
         },
       );
-      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final data = response['response'] is Map
+          ? Map<String, dynamic>.from(response['response'] as Map)
+          : response;
       if (data['status'] == 1 && data['success'] == true) {
         return {'joined': data['joined']};
       }
@@ -230,11 +249,13 @@ class AcademiesRepository {
           'limit': limit,
         },
       );
-      final data = response['response'] as Map<String, dynamic>? ?? response;
-      if (data['status'] != 1 || data['posts'] == null) return [];
-      final posts = data['posts'] as List;
-      return posts
-          .map((p) => AcademyPostModel.fromJson(p as Map<String, dynamic>))
+      final data = response['response'] is Map
+          ? Map<String, dynamic>.from(response['response'] as Map)
+          : response;
+      if (data['status'] != 1 || data['posts'] is! List) return [];
+      return (data['posts'] as List)
+          .whereType<Map>()
+          .map((p) => AcademyPostModel.fromJson(Map<String, dynamic>.from(p)))
           .toList();
     } catch (e) {
       return [];
@@ -263,7 +284,9 @@ class AcademiesRepository {
           'academyEmail': academyEmail,
         },
       );
-      final data = response['response'] as Map<String, dynamic>? ?? response;
+      final data = response['response'] is Map
+          ? Map<String, dynamic>.from(response['response'] as Map)
+          : response;
       return data['status'] == 1;
     } catch (e) {
       return false;

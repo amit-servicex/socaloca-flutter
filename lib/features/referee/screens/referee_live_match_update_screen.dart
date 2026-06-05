@@ -280,24 +280,7 @@ class _RefereeLiveMatchUpdateScreenState
     final title = liveMatchStateLabel(_state);
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
-          onPressed: () => context.pop(),
-        ),
-        title: Text(
-          AppStrings.liveMatches,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: AppColors.socaBlack,
-          ),
-        ),
-      ),
+      backgroundColor: Colors.grey.shade50,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -339,16 +322,24 @@ class _RefereeLiveMatchUpdateScreenState
       padding: const EdgeInsets.fromLTRB(40, 40, 40, 10),
       child: Column(
         children: [
-          _WideButton(
-            label: _startButtonLabel,
-            filled: true,
-            onTap: () => _saveState(_startNextState()),
+          Center(
+            child: SizedBox(
+              width: 220,
+              child: _WideButton(
+                label: _startButtonLabel,
+                filled: true,
+                onTap: () => _saveState(_startNextState()),
+              ),
+            ),
           ),
           const SizedBox(height: 20),
-          _WideButton(
-            label: AppStrings.abandonMatch.toUpperCase(),
-            filled: false,
-            onTap: () => _saveState('ABANDONED'),
+          SizedBox(
+            width: double.infinity,
+            child: _WideButton(
+              label: AppStrings.abandonMatch.toUpperCase(),
+              filled: false,
+              onTap: () => _saveState('ABANDONED'),
+            ),
           ),
         ],
       ),
@@ -475,21 +466,157 @@ class _MatchSummary extends StatelessWidget {
     return Column(
       children: [
         Container(
+          color: Colors.white,
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  flex: 8,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16, top: 20, bottom: 20, right: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                          ),
+                          child: const Text(
+                            'Live Match Updates',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                              color: AppColors.socaYellow,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'CAUTION',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                            color: Colors.red,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildBulletPoint(
+                            'Never close the app while the match is live'),
+                        const SizedBox(height: 8),
+                        _buildBulletPoint(
+                            'Tap "SAVE & PUBLISH" only when you are sure'),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  color: Colors.grey.shade400,
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'SCORE',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '$scoreA : $scoreB',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 32,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'TIME',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/icons/ic_clock_old.png",
+                              width: 28,
+                              height: 28,
+                            ),
+                            const SizedBox(width: 4),
+                            const Text(
+                              '00:00',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                color: AppColors.socaBlack,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          stateTitle,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Container(
           height: 54,
-          color: const Color(0xFF767070),
+          color: AppColors.playedGray,
           child: Row(
             children: [
               Expanded(
-                flex: 7,
+                flex: 6,
                 child: Center(
-                  child: Text(
-                    match?.tournamentName ?? 'Tournament Name',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: AppColors.socaBlack,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      match?.tournamentName ?? 'Tournament Name',
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        color: AppColors.socaBlack,
+                      ),
                     ),
                   ),
                 ),
@@ -498,14 +625,18 @@ class _MatchSummary extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: Center(
-                  child: Text(
-                    match?.matchDate ?? '',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: AppColors.socaBlack,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Text(
+                      (match?.matchDate ?? '') + (match?.matchTime ?? ''),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        color: AppColors.socaBlack,
+                      ),
                     ),
                   ),
                 ),
@@ -513,23 +644,28 @@ class _MatchSummary extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 18),
-        Text(
-          stateTitle,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-          ),
+      ],
+    );
+  }
+
+  Widget _buildBulletPoint(String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 2),
+          child: Icon(Icons.adjust, size: 14, color: AppColors.socaBlack),
         ),
-        const SizedBox(height: 8),
-        Text(
-          '$scoreA : $scoreB',
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w800,
-            fontSize: 30,
-            color: AppColors.socaBlack,
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+              color: AppColors.socaBlack,
+            ),
           ),
         ),
       ],

@@ -118,7 +118,7 @@ class _RefereeMyRequestsScreenState
                     icon: Icons.inbox_outlined,
                   )
                 : ListView.builder(
-                    padding: EdgeInsets.all(12),
+                    // padding: EdgeInsets.all(12),
                     itemCount: matches.length,
                     itemBuilder: (ctx, i) => _RequestCard(
                       match: matches[i],
@@ -222,10 +222,10 @@ class _RequestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // log("ghtis isvsjfv ${match.teamALogo}");
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      // margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        // borderRadius: BorderRadius.circular(8),
         border: Border.all(color: const Color(0xFFE0E0E0)),
         boxShadow: [
           BoxShadow(
@@ -366,7 +366,8 @@ class _RequestCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Expanded(
+                    SizedBox(
+                      width: 100,
                       child: OutlinedButton(
                         onPressed: onDecline,
                         style: OutlinedButton.styleFrom(
@@ -374,7 +375,7 @@ class _RequestCard extends StatelessWidget {
                           side: const BorderSide(
                               color: AppColors.socaBlack, width: 1.5),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
+                              horizontal: 12, vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6),
                           ),
@@ -391,14 +392,15 @@ class _RequestCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
+                    SizedBox(
+                      width: 100,
                       child: ElevatedButton(
                         onPressed: onAccept,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.socaBlack,
                           foregroundColor: AppColors.socaYellow,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
+                              horizontal: 12, vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6),
                           ),

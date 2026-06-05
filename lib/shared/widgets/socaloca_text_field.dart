@@ -245,10 +245,14 @@ class CreateProfileTextField extends StatelessWidget {
     this.onChanged,
     this.keyboardType,
     this.textInputAction,
+    this.onSubmitted,
     this.maxLength,
     this.inputFormatters,
+    this.prefixWidget,
     this.suffixWidget,
     this.enabled = true,
+    this.autofocus = false,
+    this.textAlign = TextAlign.start,
   });
 
   final TextEditingController controller;
@@ -257,10 +261,14 @@ class CreateProfileTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final ValueChanged<String>? onSubmitted;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
+  final Widget? prefixWidget;
   final Widget? suffixWidget;
   final bool enabled;
+  final bool autofocus;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -272,6 +280,7 @@ class CreateProfileTextField extends StatelessWidget {
       ),
       child: Row(
         children: [
+          if (prefixWidget != null) prefixWidget!,
           Expanded(
             child: TextField(
               controller: controller,
@@ -280,9 +289,12 @@ class CreateProfileTextField extends StatelessWidget {
               keyboardType: keyboardType,
               obscuringCharacter: '*',
               textInputAction: textInputAction,
+              onSubmitted: onSubmitted,
               maxLength: maxLength,
               inputFormatters: inputFormatters,
               enabled: enabled,
+              autofocus: autofocus,
+              textAlign: textAlign,
               style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,

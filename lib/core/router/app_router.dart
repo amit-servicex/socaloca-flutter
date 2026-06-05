@@ -80,6 +80,9 @@ import '../../features/referee/data/models/referee_match_model.dart';
 import '../../features/teams/screens/teams_screen_new.dart';
 import '../../features/teams/screens/team_bio_screen.dart';
 import '../../features/teams/screens/team_players_screen.dart';
+import '../../features/teams/screens/edit_team_screen.dart';
+import '../../features/teams/screens/manage_team_screen.dart';
+import '../../features/teams/screens/add_player_screen.dart';
 import '../../features/club/screens/club_home_screen.dart';
 import '../../features/club/screens/club_bio_admin_screen.dart';
 import '../../features/club/screens/club_players_screen.dart';
@@ -670,6 +673,48 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (ctx, state) {
               final teamId = state.pathParameters['teamId']!;
               return TeamPlayersScreen(teamId: teamId);
+            },
+          ),
+
+          // ─── Edit Team ────────────────────────────────────────────────────
+          GoRoute(
+            path: AppRoutes.editTeam,
+            name: 'editTeam',
+            builder: (ctx, state) {
+              final teamId = state.pathParameters['teamId']!;
+              final details = state.extra as dynamic;
+              return EditTeamScreen(
+                teamId: teamId,
+                teamDetails: details,
+              );
+            },
+          ),
+
+          // ─── Manage Team ──────────────────────────────────────────────────
+          GoRoute(
+            path: AppRoutes.manageTeam,
+            name: 'manageTeam',
+            builder: (ctx, state) {
+              final teamId = state.pathParameters['teamId']!;
+              final details = state.extra as dynamic;
+              return ManageTeamScreen(
+                teamId: teamId,
+                teamDetails: details,
+              );
+            },
+          ),
+
+          // ─── Add Team Player ─────────────────────────────────────────────
+          GoRoute(
+            path: AppRoutes.addTeamPlayer,
+            name: 'addTeamPlayer',
+            builder: (ctx, state) {
+              final teamId = state.pathParameters['teamId']!;
+              final details = state.extra as dynamic;
+              return AddPlayerScreen(
+                teamId: teamId,
+                teamDetails: details,
+              );
             },
           ),
 

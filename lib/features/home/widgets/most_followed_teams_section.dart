@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,11 +13,48 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Most Followed Teams Section
 /// Matches Android CommonHomeFeedFragment teams section
-class MostFollowedTeamsSection extends ConsumerWidget {
+class MostFollowedTeamsSection extends ConsumerStatefulWidget {
   const MostFollowedTeamsSection({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MostFollowedTeamsSection> createState() =>
+      _MostFollowedTeamsSectionState();
+}
+
+class _MostFollowedTeamsSectionState
+    extends ConsumerState<MostFollowedTeamsSection> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+
+    final position = _scrollController.position;
+    if (position.pixels >= position.maxScrollExtent - 80) {
+      _maybeLoadMore();
+    }
+  }
+
+  void _maybeLoadMore() {
+    final state = ref.read(feedTeamsProvider);
+    if (!state.hasMore || state.isLoading || state.isLoadingMore) return;
+    ref.read(feedTeamsProvider.notifier).loadMore();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.watch(localeProvider);
     final state = ref.watch(feedTeamsProvider);
 
@@ -45,16 +80,16 @@ class MostFollowedTeamsSection extends ConsumerWidget {
         SizedBox(
           height: 65,
           child: ListView.builder(
+            controller: _scrollController,
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             itemCount: itemCount,
             itemBuilder: (context, index) {
-              // Trigger load more when near end
-              if (index == state.items.length - 1 &&
-                  state.hasMore &&
-                  !state.isLoadingMore) {
+              if (state.hasMore &&
+                  !state.isLoadingMore &&
+                  index >= state.items.length - 2) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  ref.read(feedTeamsProvider.notifier).loadMore();
+                  _maybeLoadMore();
                 });
               }
 

@@ -1,4 +1,7 @@
+import 'dart:developer';
 import 'dart:ui';
+
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
@@ -151,11 +154,11 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
   Widget _buildError(String msg) {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.socaBlack,
-        foregroundColor: AppColors.socaYellow,
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.socaBlack,
+      //   foregroundColor: AppColors.socaYellow,
+      //   elevation: 0,
+      // ),
       body: Center(
         child: Text(msg, style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
       ),
@@ -723,8 +726,13 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          SizedBox(
-            height: 80,
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: AppColors.socaPageBg,
+            ),
+            height: 150,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -797,17 +805,12 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
         children: [
           Container(
             color: AppColors.socaPageBg,
-            padding: EdgeInsets.all(16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.85,
-              ),
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+            height: 150,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
               itemCount: teams.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 16),
               itemBuilder: (_, i) {
                 final t = teams[i];
                 final imgUrl = _imageUrl(t.imageUrl);
@@ -815,41 +818,46 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                   onTap: t.teamId?.isNotEmpty == true
                       ? () => context.push('${AppRoutes.teams}/${t.teamId}')
                       : null,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.socaGrey.withValues(alpha: 0.3),
+                  child: SizedBox(
+                    width: 72,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.socaGrey.withValues(alpha: 0.3),
+                          ),
+                          child: ClipOval(
+                            child: imgUrl.isNotEmpty
+                                ? CachedNetworkImage(
+                                    imageUrl: imgUrl,
+                                    fit: BoxFit.cover,
+                                    errorWidget: (_, __, ___) => const Icon(
+                                        Icons.group,
+                                        color: AppColors.socaBlack),
+                                  )
+                                : const Icon(Icons.group,
+                                    color: AppColors.socaBlack),
+                          ),
                         ),
-                        child: ClipOval(
-                          child: imgUrl.isNotEmpty
-                              ? CachedNetworkImage(
-                                  imageUrl: imgUrl,
-                                  fit: BoxFit.cover,
-                                  errorWidget: (_, __, ___) => Icon(Icons.group,
-                                      color: AppColors.socaBlack),
-                                )
-                              : Icon(Icons.group, color: AppColors.socaBlack),
+                        const SizedBox(height: 6),
+                        Text(
+                          t.name ?? '',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.socaBlack,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        t.name ?? '',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.socaBlack,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
@@ -964,6 +972,44 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: AppColors.socaPageBg,
+            ),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 6,
+                mainAxisSpacing: 6,
+              ),
+              itemCount: displayPosts.length,
+              itemBuilder: (_, i) {
+                final post = displayPosts[i];
+                final imgUrl =
+                    _imageUrl(post.imageUrl ?? post.effectiveImageUrl);
+                log("this is the post image url : $imgUrl");
+                return Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.socaGrey.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: imgUrl.isNotEmpty
+                      ? CachedNetworkImage(
+                          imageUrl: imgUrl,
+                          fit: BoxFit.cover,
+                          errorWidget: (_, __, ___) =>
+                              Icon(Icons.image, color: AppColors.socaBlack),
+                        )
+                      : Icon(Icons.image, color: AppColors.socaBlack),
+                );
+              },
+            ),
+          ),
           Positioned(
             top: -20,
             left: 10,
@@ -993,42 +1039,6 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                     ),
                   ),
               ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-            color: AppColors.socaPageBg,
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 6,
-                mainAxisSpacing: 6,
-              ),
-              itemCount: displayPosts.length,
-              itemBuilder: (_, i) {
-                final post = displayPosts[i];
-                final imgUrl =
-                    _imageUrl(post.imageUrl ?? post.effectiveImageUrl);
-
-                return Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.socaGrey.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: imgUrl.isNotEmpty
-                      ? CachedNetworkImage(
-                          imageUrl: imgUrl,
-                          fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) =>
-                              Icon(Icons.image, color: AppColors.socaBlack),
-                        )
-                      : Icon(Icons.image, color: AppColors.socaBlack),
-                );
-              },
             ),
           ),
         ],
@@ -1082,67 +1092,78 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildNewsItem(AcademyNewsModel news) {
     final imgUrl = _imageUrl(news.imageUrl);
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      // color: Colors.white,
-      padding: EdgeInsets.all(12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (imgUrl.isNotEmpty) ...[
-            ClipRRect(
-              // borderRadius: BorderRadius.circular(6),
-              child: CachedNetworkImage(
-                imageUrl: imgUrl,
-                width: 110,
-                height: 110,
-                fit: BoxFit.cover,
-                errorWidget: (_, __, ___) =>
-                    Container(width: 90, height: 90, color: AppColors.socaGrey),
+    final hasLink = news.link != null && news.link!.isNotEmpty;
+    return InkWell(
+      onTap: hasLink
+          ? () async {
+              final uri = Uri.tryParse(news.link!);
+              if (uri != null && await canLaunchUrl(uri)) {
+                await launchUrl(uri, mode: LaunchMode.externalApplication);
+              }
+            }
+          : null,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        // color: Colors.white,
+        padding: EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (imgUrl.isNotEmpty) ...[
+              ClipRRect(
+                // borderRadius: BorderRadius.circular(6),
+                child: CachedNetworkImage(
+                  imageUrl: imgUrl,
+                  width: 110,
+                  height: 110,
+                  fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => Container(
+                      width: 90, height: 90, color: AppColors.socaGrey),
+                ),
+              ),
+              SizedBox(width: 12),
+            ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (news.newsDate?.isNotEmpty == true)
+                    Text(
+                      news.newsDate!,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 11,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  if (news.title?.isNotEmpty == true)
+                    Text(
+                      news.title!,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: AppColors.socaBlack,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  if (news.description?.isNotEmpty == true)
+                    Text(
+                      news.description!,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 11,
+                        color: AppColors.socaBlack,
+                      ),
+                      maxLines: 50,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
               ),
             ),
-            SizedBox(width: 12),
           ],
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (news.newsDate?.isNotEmpty == true)
-                  Text(
-                    news.newsDate!,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                if (news.title?.isNotEmpty == true)
-                  Text(
-                    news.title!,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: AppColors.socaBlack,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                if (news.description?.isNotEmpty == true)
-                  Text(
-                    news.description!,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      color: AppColors.socaBlack,
-                    ),
-                    maxLines: 50,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

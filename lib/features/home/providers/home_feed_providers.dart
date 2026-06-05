@@ -123,16 +123,17 @@ class NewTeamsNotifier extends StateNotifier<HomeFeedState<FeedNewTeamModel>> {
   int _start = 0;
   bool _isLoadingMore = false;
 
-  Future<void> load({bool isRefresh = false}) async {
-    if (!isRefresh) {
-      _start = 0;
-      state = HomeFeedState(isLoading: true, hasMore: true);
-    }
+  Future<void> load() async {
+    _start = 0;
+    _isLoadingMore = false;
+    state = HomeFeedState(isLoading: true, hasMore: true);
+
     final user = ref.read(currentUserProvider);
     if (user == null) {
-      if (!isRefresh) state = HomeFeedState(isLoading: false, hasMore: false);
+      state = HomeFeedState(isLoading: false, hasMore: false);
       return;
     }
+
     final items = await ref.read(homeFeedRepositoryProvider).getFeedNewTeams(
           userId: user.id,
           start: 0,
@@ -156,21 +157,25 @@ class NewTeamsNotifier extends StateNotifier<HomeFeedState<FeedNewTeamModel>> {
       state = state.copyWith(isLoadingMore: false);
       return;
     }
-    final more = await ref.read(homeFeedRepositoryProvider).getFeedNewTeams(
-          userId: user.id,
-          start: _start,
-          limit: _limit,
-        );
-    _start += more.length;
-    state = state.copyWith(
-      items: [...state.items, ...more],
-      isLoadingMore: false,
-      hasMore: more.length >= _limit,
-    );
-    _isLoadingMore = false;
+    try {
+      final more = await ref.read(homeFeedRepositoryProvider).getFeedNewTeams(
+            userId: user.id,
+            start: _start,
+            limit: _limit,
+          );
+      _start += more.length;
+      state = state.copyWith(
+        items: [...state.items, ...more],
+        isLoadingMore: false,
+        hasMore: more.length >= _limit,
+      );
+    } finally {
+      _isLoadingMore = false;
+      state = state.copyWith(isLoadingMore: false);
+    }
   }
 
-  Future<void> refresh() => load(isRefresh: true);
+  Future<void> refresh() => load();
 }
 
 final feedNewTeamsProvider =
@@ -338,16 +343,17 @@ class FeedTeamsNotifier extends StateNotifier<HomeFeedState<FeedTeamModel>> {
   int _start = 0;
   bool _isLoadingMore = false;
 
-  Future<void> load({bool isRefresh = false}) async {
-    if (!isRefresh) {
-      _start = 0;
-      state = HomeFeedState(isLoading: true, hasMore: true);
-    }
+  Future<void> load() async {
+    _start = 0;
+    _isLoadingMore = false;
+    state = HomeFeedState(isLoading: true, hasMore: true);
+
     final user = ref.read(currentUserProvider);
     if (user == null) {
-      if (!isRefresh) state = HomeFeedState(isLoading: false, hasMore: false);
+      state = HomeFeedState(isLoading: false, hasMore: false);
       return;
     }
+
     final teamsData =
         await ref.read(homeFeedRepositoryProvider).getFeedTeamList(
               userId: user.id,
@@ -368,30 +374,36 @@ class FeedTeamsNotifier extends StateNotifier<HomeFeedState<FeedTeamModel>> {
     if (!state.hasMore || _isLoadingMore || state.isLoading) return;
     _isLoadingMore = true;
     state = state.copyWith(isLoadingMore: true);
+
     final user = ref.read(currentUserProvider);
     if (user == null) {
       _isLoadingMore = false;
       state = state.copyWith(isLoadingMore: false);
       return;
     }
-    final teamsData =
-        await ref.read(homeFeedRepositoryProvider).getFeedTeamList(
-              userId: user.id,
-              start: _start,
-              limit: _limit,
-            );
 
-    final more = teamsData.map((t) => FeedTeamModel.fromJson(t)).toList();
-    _start += more.length;
-    state = state.copyWith(
-      items: [...state.items, ...more],
-      isLoadingMore: false,
-      hasMore: more.length >= _limit,
-    );
-    _isLoadingMore = false;
+    try {
+      final teamsData =
+          await ref.read(homeFeedRepositoryProvider).getFeedTeamList(
+                userId: user.id,
+                start: _start,
+                limit: _limit,
+              );
+
+      final more = teamsData.map((t) => FeedTeamModel.fromJson(t)).toList();
+      _start += more.length;
+      state = state.copyWith(
+        items: [...state.items, ...more],
+        isLoadingMore: false,
+        hasMore: more.length >= _limit,
+      );
+    } finally {
+      _isLoadingMore = false;
+      state = state.copyWith(isLoadingMore: false);
+    }
   }
 
-  Future<void> refresh() => load(isRefresh: true);
+  Future<void> refresh() => load();
 }
 
 final feedTeamsProvider =

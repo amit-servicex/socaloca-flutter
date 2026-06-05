@@ -41,6 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _matchUpdatesPageController =
       PageController(viewportFraction: 1);
   bool _showFeedbackBanner = false;
+  bool _priorityHomeFeedsLoaded = false;
   Timer? _matchUpdatesTimer;
 
   @override
@@ -57,23 +58,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   /// Initialize home screen following Android's API call sequence
   Future<void> _initializeHomeScreen() async {
-    // 1. Get blocked users (first call in Android)
+    // 1. Load priority home feed sections first.
+    await Future.wait([
+      ref.read(feedNewTeamsProvider.notifier).refresh(),
+      ref.read(mostEndorsedProvider.notifier).refresh(),
+    ]);
+    if (!mounted) return;
+
+    // 2. Get blocked users.
     ref.read(blockedUsersProvider);
 
-    // 2. Get user profile details (must load before feed)
+    // 3. Get user profile details (must load before feed)
     await ref.read(userProfileDetailsProvider.future);
 
-    // 3. Get match updates (for Player/Coach/Manager/Admin only)
+    // 4. Get match updates (for Player/Coach/Manager/Admin only)
     final user = ref.read(currentUserProvider);
     if (user != null && !user.isFan) {
       ref.read(matchUpdatesProvider);
     }
 
-    // 4. Check language selection
+    // 5. Check language selection
     _checkAndShowLanguageSelection();
 
-    // 5. Check feedback visibility
+    // 6. Check feedback visibility
     _checkFeedbackVisibility();
+
+    if (!mounted) return;
+    setState(() => _priorityHomeFeedsLoaded = true);
 
     // Feed providers will auto-load via their constructors
   }
@@ -616,11 +627,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final userId = StorageService.userId ?? '';
     ref.watch(localeProvider);
     final cachedUser = ref.watch(currentUserProvider);
-    final profileState = ref.watch(userProfileDetailsProvider);
 
     // Use the freshly fetched user details if available, otherwise fallback to the cached login user
     var user = cachedUser;
-    final profileData = profileState.valueOrNull;
+    final profileData = _priorityHomeFeedsLoaded
+        ? ref.watch(userProfileDetailsProvider).valueOrNull
+        : null;
     if (profileData != null) {
       if (profileData.runtimeType.toString() == 'UserModel') {
         user = profileData as dynamic;
@@ -646,8 +658,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     }
 
-    final matchUpdates = ref.watch(matchUpdatesProvider);
-    final feedState = ref.watch(feedProvider);
+    final matchUpdates = _priorityHomeFeedsLoaded
+        ? ref.watch(matchUpdatesProvider)
+        : const AsyncValue<List<MatchUpdateModel>>.loading();
+    final feedState = _priorityHomeFeedsLoaded
+        ? ref.watch(feedProvider)
+        : const AsyncValue<FeedState>.loading();
     log("this is the profile image ${user?.profileImage}");
     return Scaffold(
       key: _scaffoldKey,
@@ -674,14 +690,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: RefreshIndicator(
               onRefresh: () async {
                 await Future.wait([
+                  ref.read(feedNewTeamsProvider.notifier).refresh(),
+                  ref.read(mostEndorsedProvider.notifier).refresh(),
+                ]);
+                await Future.wait([
                   ref.read(userProfileDetailsProvider.future),
                   if (user != null && !user.isFan)
                     ref.read(matchUpdatesProvider.future),
                   ref.read(feedLiveTmntsProvider.notifier).refresh(),
-                  if (user != null && !user.isFan)
-                    ref.read(feedNewTeamsProvider.notifier).refresh(),
                   ref.read(feedRecUsersProvider.notifier).refresh(),
-                  ref.read(mostEndorsedProvider.notifier).refresh(),
                   ref.read(feedTeamsProvider.notifier).refresh(),
                   ref.read(feedProvider.notifier).refresh(),
                 ]);
@@ -950,12 +967,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
 
-                  SliverToBoxAdapter(child: MostEndorsedSection()),
+                  if (_priorityHomeFeedsLoaded)
+                    SliverToBoxAdapter(child: MostEndorsedSection())
+                  else
+                    const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.all(32),
+                        child: Center(child: AppLoader()),
+                      ),
+                    ),
 
-                  if (user?.isFan == false)
+                  if (_priorityHomeFeedsLoaded && user?.isFan == false)
                     SliverToBoxAdapter(child: MostFollowedTeamsSection()),
-                  SliverToBoxAdapter(child: LiveTournamentsSection()),
-                  if (user != null && !user.isFan)
+                  if (_priorityHomeFeedsLoaded)
+                    SliverToBoxAdapter(child: LiveTournamentsSection()),
+                  if (_priorityHomeFeedsLoaded && user != null && !user.isFan)
                     SliverToBoxAdapter(
                       child: matchUpdates.when(
                         data: (matches) => _buildMatchUpdatesSection(matches),
@@ -1036,9 +1062,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                                 const SizedBox(height: 16),
                                 ElevatedButton(
-                                  onPressed: () => ref
-                                      .read(feedProvider.notifier)
-                                      .refresh(),
+                                  onPressed: () =>
+                                      ref.read(feedProvider.notifier).refresh(),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.socaBlack,
                                     foregroundColor: AppColors.socaYellow,

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/models/team_bio_model.dart';
 import '../data/repositories/team_bio_repository.dart';
+export '../data/repositories/team_bio_repository.dart' show TeamDeleteException;
 
 final teamBioRepositoryProvider = Provider<TeamBioRepository>((ref) {
   return TeamBioRepository();
@@ -18,6 +19,7 @@ class TeamBioState {
   final bool isLoading;
   final bool isFollowLoading;
   final bool isRequestLoading;
+  final bool isDeleteLoading;
   final String? error;
   final bool isFollowing;
   final int followCount;
@@ -34,6 +36,7 @@ class TeamBioState {
     this.isLoading = false,
     this.isFollowLoading = false,
     this.isRequestLoading = false,
+    this.isDeleteLoading = false,
     this.error,
     this.isFollowing = false,
     this.followCount = 0,
@@ -51,6 +54,7 @@ class TeamBioState {
     bool? isLoading,
     bool? isFollowLoading,
     bool? isRequestLoading,
+    bool? isDeleteLoading,
     String? error,
     bool? isFollowing,
     int? followCount,
@@ -67,6 +71,7 @@ class TeamBioState {
       isLoading: isLoading ?? this.isLoading,
       isFollowLoading: isFollowLoading ?? this.isFollowLoading,
       isRequestLoading: isRequestLoading ?? this.isRequestLoading,
+      isDeleteLoading: isDeleteLoading ?? this.isDeleteLoading,
       error: error,
       isFollowing: isFollowing ?? this.isFollowing,
       followCount: followCount ?? this.followCount,
@@ -139,6 +144,20 @@ class TeamBioNotifier extends StateNotifier<TeamBioState> {
       );
     } catch (e) {
       state = state.copyWith(isFollowLoading: false);
+      rethrow;
+    }
+  }
+
+  /// Deletes the team. Throws [TeamDeleteException] on known failure reasons,
+  /// or a generic [Exception] on network errors.
+  Future<void> deleteTeam() async {
+    if (state.isDeleteLoading) return;
+    state = state.copyWith(isDeleteLoading: true, error: null);
+    try {
+      await _repository.deleteTeam(teamId: _teamId);
+      state = state.copyWith(isDeleteLoading: false);
+    } catch (e) {
+      state = state.copyWith(isDeleteLoading: false);
       rethrow;
     }
   }

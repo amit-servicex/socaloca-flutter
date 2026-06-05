@@ -12,25 +12,208 @@ import '../data/models/team_bio_model.dart';
 import '../providers/team_bio_provider.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
-class TeamBioScreen extends ConsumerWidget {
+class TeamBioScreen extends ConsumerStatefulWidget {
   final String teamId;
 
-  TeamBioScreen({
+  const TeamBioScreen({
     super.key,
     required this.teamId,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TeamBioScreen> createState() => _TeamBioScreenState();
+}
+
+class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
+  String get teamId => widget.teamId;
+
+  // ── Visibility helpers ────────────────────────────────────────────────────
+
+  /// Android rule: editManageBox visible when isAdmin == true.
+  bool _canEditManage(TeamBioState state) => state.isAdmin;
+
+  /// Android rule: delete visible when isAdmin == true AND
+  /// currentUserId == team.createdBy (only creator can delete).
+  bool _canDelete(TeamBioState state) {
+    // return true;
+    final uid = StorageService.userId;
+    return state.isAdmin &&
+        uid != null &&
+        uid.isNotEmpty &&
+        state.createdBy != null &&
+        uid == state.createdBy;
+  }
+
+  // ── Delete flow ───────────────────────────────────────────────────────────
+
+  Future<void> _onDeleteTap(TeamBioState state) async {
+    final confirmed = await _showDeleteConfirmation();
+    if (!confirmed || !mounted) return;
+
+    try {
+      await ref.read(teamBioProvider(teamId).notifier).deleteTeam();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Team Deleted Successfully.',
+            style: TextStyle(fontFamily: 'Poppins'),
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.of(context).pop();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
+            style: const TextStyle(fontFamily: 'Poppins'),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  /// Mirrors Android's `team_delete_popup.xml` confirmation dialog.
+  Future<bool> _showDeleteConfirmation() async {
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        content: const Text(
+          'Are you sure to\ndelete this team?',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: AppColors.socaBlack,
+          ),
+        ),
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
+        actions: [
+          Row(spacing: 20, children: [
+            Expanded(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.socaBlack,
+                  side: const BorderSide(color: AppColors.socaBlack),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                ),
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text(
+                  'YES',
+                  style: TextStyle(
+                      fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+            // NO — black filled / yellow text (Android negative button style)
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.socaBlack,
+                  foregroundColor: AppColors.socaYellow,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                ),
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text(
+                  'NO',
+                  style: TextStyle(
+                      fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+          ])
+          // YES — white/outlined (Android positive button style)
+        ],
+      ),
+    );
+    return result ?? false;
+  }
+
+  // ── Edit / Manage placeholders ────────────────────────────────────────────
+
+  void _onEditTap() {
+    final details = ref.read(teamBioProvider(teamId)).teamBio?.teamDetails;
+    if (details == null) return;
+    context
+        .pushNamed(
+      'editTeam',
+      pathParameters: {'teamId': teamId},
+      extra: details,
+    )
+        .then((_) {
+      // Refresh bio after returning — user may have saved changes.
+      ref.read(teamBioProvider(teamId).notifier).refresh();
+    });
+  }
+
+  void _onManageTap() {
+    final details = ref.read(teamBioProvider(teamId)).teamBio?.teamDetails;
+    if (details == null) return;
+    context.pushNamed(
+      'manageTeam',
+      pathParameters: {'teamId': teamId},
+      extra: details,
+    );
+  }
+
+  // ── Build ─────────────────────────────────────────────────────────────────
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(teamBioProvider(teamId));
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      body: _buildBody(context, ref, state),
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.socaBlack,
+      //   foregroundColor: AppColors.socaYellow,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back),
+      //     onPressed: () => Navigator.of(context).maybePop(),
+      //   ),
+      //   actions: [
+      //     if (_canDelete(state))
+      //       state.isDeleteLoading
+      //           ? const Padding(
+      //               padding: EdgeInsets.all(14),
+      //               child: SizedBox(
+      //                 width: 20,
+      //                 height: 20,
+      //                 child: CircularProgressIndicator(
+      //                   strokeWidth: 2,
+      //                   color: AppColors.socaYellow,
+      //                 ),
+      //               ),
+      //             )
+      //           : IconButton(
+      //               icon: const Icon(Icons.delete_outline),
+      //               tooltip: 'Delete team',
+      //               onPressed: () => _onDeleteTap(state),
+      //             ),
+      //   ],
+      // ),
+
+      body: _buildBody(context, state),
     );
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, TeamBioState state) {
+  Widget _buildBody(BuildContext context, TeamBioState state) {
     if (state.isLoading) {
       return AppLoader();
     }
@@ -162,7 +345,9 @@ class TeamBioScreen extends ConsumerWidget {
                                       .read(teamBioProvider(teamId).notifier)
                                       .toggleFollow();
                                 } catch (e) {
-                                  _showActionError(context, e);
+                                  if (mounted) {
+                                    _showActionError(this.context, e);
+                                  }
                                 }
                               },
                       ),
@@ -288,28 +473,113 @@ class TeamBioScreen extends ConsumerWidget {
                         onPressed: (!canRequest || state.isRequestLoading)
                             ? null
                             : () async {
+                                final messenger = ScaffoldMessenger.of(context);
                                 try {
                                   await ref
                                       .read(teamBioProvider(teamId).notifier)
                                       .requestToJoin();
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                  if (mounted) {
+                                    messenger.showSnackBar(
                                       SnackBar(
                                         content: Text(
                                           'Request sent'.tr,
-                                          style:
-                                              TextStyle(fontFamily: 'Poppins'),
+                                          style: const TextStyle(
+                                              fontFamily: 'Poppins'),
                                         ),
                                         backgroundColor: Colors.green,
                                       ),
                                     );
                                   }
                                 } catch (e) {
-                                  _showActionError(context, e);
+                                  if (mounted) {
+                                    _showActionError(this.context, e);
+                                  }
                                 }
                               },
                       ),
                     ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (_canEditManage(state)) ...[
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              OutlinedButton(
+                                onPressed: _onEditTap,
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: AppColors.socaBlack,
+                                  side: const BorderSide(
+                                      color: AppColors.socaBlack),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4)),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 6),
+                                  minimumSize: const Size(70, 30),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                child: const Text(
+                                  'EDIT',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              ElevatedButton(
+                                onPressed: _onManageTap,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.socaBlack,
+                                  foregroundColor: AppColors.socaYellow,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4)),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 6),
+                                  minimumSize: const Size(80, 30),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                child: const Text(
+                                  'MANAGE',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                        if (_canDelete(state))
+                          state.isDeleteLoading
+                              ? const Padding(
+                                  padding: EdgeInsets.all(14),
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.socaYellow,
+                                    ),
+                                  ),
+                                )
+                              : IconButton(
+                                  icon: Image.asset("assets/icons/ic_trash.png",
+                                      width: 24,
+                                      height: 24,
+                                      color: AppColors.socaBlack),
+                                  tooltip: 'Delete team',
+                                  onPressed: () => _onDeleteTap(state),
+                                ),
+                      ],
+                    )
+                    // Edit / Manage — visible to team admins (Android: editManageBox)
                   ],
                 ),
               ),
@@ -671,7 +941,7 @@ class TeamBioScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.12),
+              color: Colors.black.withValues(alpha: 0.12),
               blurRadius: 10,
               offset: Offset(0, 3),
             ),
@@ -892,19 +1162,14 @@ class TeamBioScreen extends ConsumerWidget {
   Widget _buildPlayerAvatar(String? imageUrl, double size) {
     if (imageUrl == null || imageUrl.isEmpty) {
       return Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          shape: BoxShape.circle,
-          border: Border.all(color: AppColors.socaBlack),
-        ),
-        child: Icon(
-          Icons.person,
-          size: size * 0.5,
-          color: Colors.grey,
-        ),
-      );
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.socaBlack),
+          ),
+          child: Image.asset("assets/images/avatar1.png"));
     }
 
     final fullImageUrl = ApiConstants.getImageUrl(imageUrl);

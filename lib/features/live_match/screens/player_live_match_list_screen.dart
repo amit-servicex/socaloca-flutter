@@ -105,9 +105,18 @@ class _PlayerLiveMatchListScreenState
                     data: (items) => SearchableDropdownButton(
                       hint: 'All Tournaments'.tr,
                       value: selectedTmnt ?? '',
-                      items: ['All Tournaments'.tr, ...items.map((t) => (t['tournamentName'] as String?) ?? '')],
-                      values: ['', ...items.map((t) => (t['tournamentId'] as String?) ?? '')],
-                      onChanged: (v) => _onTournamentChanged(v == null || v.isEmpty ? null : v),
+                      items: [
+                        'All Tournaments'.tr,
+                        ...items
+                            .map((t) => (t['tournamentName'] as String?) ?? '')
+                      ],
+                      values: [
+                        '',
+                        ...items
+                            .map((t) => (t['tournamentId'] as String?) ?? '')
+                      ],
+                      onChanged: (v) => _onTournamentChanged(
+                          v == null || v.isEmpty ? null : v),
                       height: 36,
                       fontSize: 12,
                     ),
@@ -132,7 +141,8 @@ class _PlayerLiveMatchListScreenState
                       value: selectedCountry ?? '',
                       items: ['All Countries'.tr, ...countries],
                       values: ['', ...countries],
-                      onChanged: (v) => _onCountryChanged(v == null || v.isEmpty ? null : v),
+                      onChanged: (v) =>
+                          _onCountryChanged(v == null || v.isEmpty ? null : v),
                     ),
                     loading: () => SizedBox.shrink(),
                     error: (_, __) => SizedBox.shrink(),

@@ -203,14 +203,14 @@ class _LiveMatchRow extends StatelessWidget {
         if (showTournament)
           Container(
             margin: const EdgeInsets.fromLTRB(2, 10, 2, 0),
-            padding: const EdgeInsets.only(left: 15, top: 8, bottom: 8),
+            padding: const EdgeInsets.only(left: 15, top: 12, bottom: 12),
             color: AppColors.socaBlack,
             child: Text(
               match.tournamentName ?? '',
               style: const TextStyle(
                 color: AppColors.socaYellow,
                 fontFamily: 'Poppins',
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.w700,
                 height: 1,
               ),

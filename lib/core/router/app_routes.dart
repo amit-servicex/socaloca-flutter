@@ -65,6 +65,9 @@ class AppRoutes {
   static const String fullScreenVideo = '/video/full-screen';
   static const String teamBio = '/teams/:teamId';
   static const String teamPlayers = '/teams/:teamId/players';
+  static const String editTeam = '/teams/:teamId/edit';
+  static const String manageTeam = '/teams/:teamId/manage';
+  static const String addTeamPlayer = '/teams/:teamId/add-player';
   static const String playerBio = '/players/:userId';
   static const String coachAdminBio = '/members/:userId';
   static const String playerPeople = '/players/:userId/people';

@@ -125,6 +125,7 @@ class AcademyNewsModel {
   final String? description;
   final String? newsDate;
   final String? imageUrl;
+  final String? link;
   final int likeCount;
   final int commentCount;
   final bool myLike;
@@ -135,6 +136,7 @@ class AcademyNewsModel {
     this.description,
     this.newsDate,
     this.imageUrl,
+    this.link,
     this.likeCount = 0,
     this.commentCount = 0,
     this.myLike = false,
@@ -147,6 +149,7 @@ class AcademyNewsModel {
       description: json['description'] as String?,
       newsDate: json['newsDate'] as String?,
       imageUrl: json['imageUrl'] as String?,
+      link: json['link'] as String?,
       likeCount: (json['likeCount'] as num?)?.toInt() ?? 0,
       commentCount: (json['commentCount'] as num?)?.toInt() ?? 0,
       myLike: json['myLike'] == true,
@@ -209,15 +212,18 @@ class AcademyPostModel {
 
   factory AcademyPostModel.fromJson(Map<String, dynamic> json) {
     List<Map<String, dynamic>> files = [];
-    if (json['sources'] != null) {
-      final sources = json['sources'] as List;
-      files = sources.map((s) => Map<String, dynamic>.from(s as Map)).toList();
+    if (json['sources'] is List) {
+      files = (json['sources'] as List)
+          .whereType<Map>()
+          .map((s) => Map<String, dynamic>.from(s))
+          .toList();
     }
     List<AcademyVideoTagModel> tags = [];
-    if (json['tags'] != null) {
-      final tagsList = json['tags'] as List;
-      tags = tagsList
-          .map((t) => AcademyVideoTagModel.fromJson(t as Map<String, dynamic>))
+    if (json['tags'] is List) {
+      tags = (json['tags'] as List)
+          .whereType<Map>()
+          .map((t) =>
+              AcademyVideoTagModel.fromJson(Map<String, dynamic>.from(t)))
           .toList();
     }
     return AcademyPostModel(

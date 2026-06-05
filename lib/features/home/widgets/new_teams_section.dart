@@ -30,6 +30,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
   @override
   void initState() {
     super.initState();
+    _pageController.addListener(_onPageScroll);
     _startAutoSlide();
   }
 
@@ -65,8 +66,34 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
   @override
   void dispose() {
     _autoSlideTimer?.cancel();
+    _pageController.removeListener(_onPageScroll);
     _pageController.dispose();
     super.dispose();
+  }
+
+  void _onPageScroll() {
+    if (!_pageController.hasClients) return;
+
+    final position = _pageController.position;
+    if (position.pixels >= position.maxScrollExtent - 120) {
+      _maybeLoadMore();
+      return;
+    }
+
+    final visiblePage = _pageController.page?.round();
+    if (visiblePage != null) {
+      _maybeLoadMore(visiblePage);
+    }
+  }
+
+  void _maybeLoadMore([int? visibleIndex]) {
+    final state = ref.read(feedNewTeamsProvider);
+    if (!state.hasMore || state.isLoading || state.isLoadingMore) return;
+
+    final index = visibleIndex ?? (_pageController.page?.round() ?? 0);
+    if (index >= state.items.length - 2) {
+      ref.read(feedNewTeamsProvider.notifier).loadMore();
+    }
   }
 
   void _onShareTeam(FeedNewTeamModel team) {
@@ -88,7 +115,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
     if (state.isLoading) return SizedBox.shrink();
     if (state.items.isEmpty) return SizedBox.shrink();
 
-    final itemCount = state.items.length + (state.isLoadingMore ? 1 : 0);
+    final itemCount = state.items.length + (state.hasMore ? 1 : 0);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,17 +161,20 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
             controller: _pageController,
             onPageChanged: (index) {
               setState(() => _currentPage = index);
-
-              if (index == state.items.length - 1 &&
-                  state.hasMore &&
-                  !state.isLoadingMore) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  ref.read(feedNewTeamsProvider.notifier).loadMore();
-                });
-              }
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _maybeLoadMore(index);
+              });
             },
             itemCount: itemCount,
             itemBuilder: (context, index) {
+              if (state.hasMore &&
+                  !state.isLoadingMore &&
+                  index >= state.items.length - 2) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _maybeLoadMore(index);
+                });
+              }
+
               if (index == state.items.length) {
                 return AppLoader();
               }
@@ -158,7 +188,8 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                   : null;
 
               final isFirst = _currentPage == 0;
-              final isLast = _currentPage == state.items.length - 1;
+              final isLast =
+                  !state.hasMore && _currentPage >= state.items.length - 1;
 
               return Container(
                 color: Colors.white,

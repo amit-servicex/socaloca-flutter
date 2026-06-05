@@ -91,9 +91,12 @@ class _RefereeManageMatchScreenState
   List<_MatchVideoFile> _matchVideos = [];
   String? _detailTeamAName;
   String? _detailTeamBName;
+  String? _detailTeamAShortName;
+  String? _detailTeamBShortName;
   String? _detailMatchDate;
   String? _detailMatchTime;
   String? _detailVenue;
+  String? _detailFieldName;
 
   String _mvpTeam = 'my';
   String? _selectedMvpPlayerId;
@@ -292,16 +295,26 @@ class _RefereeManageMatchScreenState
         : _penaltyBCtrl.text;
 
     _detailTeamAName = _nonEmpty(
-      matchDetails['myTeamShortName'],
       matchDetails['myTeamName'],
       _teamNameFromSource(source, _myTeamId),
-      widget.match?.teamA,
+      widget.match?.myTeam?.teamName,
+      matchDetails['myTeamShortName'],
+    );
+    _detailTeamAShortName = _nonEmpty(
+      matchDetails['myTeamShortName'],
+      matchShort['myTeamShortName'],
+      widget.match?.myTeam?.teamShortName,
     );
     _detailTeamBName = _nonEmpty(
-      matchDetails['opponentTeamShortName'],
       matchDetails['opponentTeamName'],
       _teamNameFromSource(source, _opponentTeamId),
-      widget.match?.teamB,
+      widget.match?.opponentTeam?.teamName,
+      matchDetails['opponentTeamShortName'],
+    );
+    _detailTeamBShortName = _nonEmpty(
+      matchDetails['opponentTeamShortName'],
+      matchShort['opponentTeamShortName'],
+      widget.match?.opponentTeam?.teamShortName,
     );
     _detailMatchDate = _nonEmpty(matchDetails['matchDate'],
         matchShort['matchDate'], widget.match?.matchDate);
@@ -312,6 +325,11 @@ class _RefereeManageMatchScreenState
       matchShort['stadiumName'],
       matchDetails['locationName'],
       widget.match?.venue,
+    );
+    _detailFieldName = _nonEmpty(
+      matchDetails['fieldName'],
+      matchShort['fieldName'],
+      widget.match?.fieldName,
     );
 
     _goals
@@ -390,7 +408,7 @@ class _RefereeManageMatchScreenState
     for (final item in teams.whereType<Map>()) {
       final team = item.cast<String, dynamic>();
       if (_stringValue(team['teamId']) == teamId) {
-        return _nonEmpty(team['teamShortName'], team['teamName']);
+        return _nonEmpty(team['teamName'], team['teamShortName']);
       }
     }
     return null;
@@ -552,11 +570,32 @@ class _RefereeManageMatchScreenState
         '';
   }
 
-  String get _displayTeamA =>
-      _detailTeamAName ?? widget.match?.teamA ?? 'Team A';
+  String _formatWithShort(String? full, String? short) {
+    final f = full ?? '';
+    final s = short ?? '';
+    if (f.isEmpty) return s.isEmpty ? '' : s;
+    if (s.isEmpty || s == f) return f;
+    return '$f ($s)';
+  }
 
-  String get _displayTeamB =>
-      _detailTeamBName ?? widget.match?.teamB ?? 'Team B';
+  String get _displayTeamA {
+    final full = _detailTeamAName ??
+        widget.match?.myTeam?.teamName ??
+        widget.match?.teamA ??
+        'Team A';
+    final short = _detailTeamAShortName ?? widget.match?.myTeam?.teamShortName;
+    return _formatWithShort(full, short);
+  }
+
+  String get _displayTeamB {
+    final full = _detailTeamBName ??
+        widget.match?.opponentTeam?.teamName ??
+        widget.match?.teamB ??
+        'Team B';
+    final short =
+        _detailTeamBShortName ?? widget.match?.opponentTeam?.teamShortName;
+    return _formatWithShort(full, short);
+  }
 
   Future<void> _saveScore() async {
     final a = int.tryParse(_scoreACtrl.text) ?? 0;
@@ -593,23 +632,6 @@ class _RefereeManageMatchScreenState
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
-          onPressed: () => context.pop(),
-        ),
-        title: Text(
-          'Manage Match'.tr,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: AppColors.socaBlack,
-          ),
-        ),
-      ),
       body: _isLoadingDetails
           ? AppLoader()
           : _detailsError != null
@@ -632,6 +654,7 @@ class _RefereeManageMatchScreenState
             matchDate: _detailMatchDate,
             matchTime: _detailMatchTime,
             venue: _detailVenue,
+            fieldName: _detailFieldName,
           ),
           Padding(
             padding: EdgeInsets.all(16),
@@ -704,10 +727,10 @@ class _RefereeManageMatchScreenState
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
-          ),
+              // color: Colors.white,
+              // borderRadius: BorderRadius.circular(8),
+              // border: Border.all(color: const Color(0xFFE0E0E0)),
+              ),
           clipBehavior: Clip.hardEdge,
           child: Column(
             children: [
@@ -783,8 +806,9 @@ class _RefereeManageMatchScreenState
                         _scoreBCtrl.clear();
                       },
                       child: Container(
+                        height: 50,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 8),
+                            horizontal: 24, vertical: 14),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(6),
@@ -883,7 +907,10 @@ class _RefereeManageMatchScreenState
   }
 
   Widget _scoreBox(TextEditingController controller) {
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: AppColors.socaBlack),
+          borderRadius: BorderRadius.circular(6)),
       width: 50,
       height: 50,
       child: TextField(
@@ -1177,9 +1204,9 @@ class _RefereeManageMatchScreenState
       children: [
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFF8F8F8),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+            // color: const Color(0xFFF8F8F8),
+            // borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.socaBlack),
           ),
           clipBehavior: Clip.hardEdge,
           child: Column(
@@ -1201,8 +1228,14 @@ class _RefereeManageMatchScreenState
                 ),
               ),
               // Team A
+              SizedBox(
+                height: 8,
+              ),
               _buildTeamCardSection(teamA),
               // Team B
+              SizedBox(
+                height: 8,
+              ),
               _buildTeamCardSection(teamB),
               // Bottom button
               Padding(
@@ -3498,32 +3531,40 @@ class _RefereeManageMatchScreenState
     required Widget child,
   }) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Color(0xFFE0E0E0)),
-      ),
+      decoration: const BoxDecoration(
+          // color: Colors.white,
+          // borderRadius: BorderRadius.circular(8),
+          // border: Border.all(color: const Color(0xFFE0E0E0)),
+          ),
+      clipBehavior: Clip.hardEdge,
       child: Column(
         children: [
           InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(8),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Container(
+              width: double.infinity,
+              color: AppColors.socaBlack,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Row(
                 children: [
-                  Text(title,
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                          color: AppColors.socaBlack)),
-                  Spacer(),
+                  const SizedBox(width: 24),
+                  Expanded(
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                   Icon(
                     expanded
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
-                    color: AppColors.socaBlack,
+                    color: Colors.white,
                   ),
                 ],
               ),
@@ -3531,7 +3572,7 @@ class _RefereeManageMatchScreenState
           ),
           if (expanded)
             Padding(
-              padding: EdgeInsets.fromLTRB(14, 0, 14, 14),
+              padding: const EdgeInsets.all(16),
               child: child,
             ),
         ],
@@ -3742,6 +3783,7 @@ class _MatchHeader extends StatelessWidget {
     this.matchDate,
     this.matchTime,
     this.venue,
+    this.fieldName,
   });
 
   final RefereeMatchModel? match;
@@ -3752,6 +3794,7 @@ class _MatchHeader extends StatelessWidget {
   final String? matchDate;
   final String? matchTime;
   final String? venue;
+  final String? fieldName;
 
   @override
   Widget build(BuildContext context) {
@@ -3759,6 +3802,8 @@ class _MatchHeader extends StatelessWidget {
     final rightTeam = teamB ?? match?.teamB ?? '';
     final displayDate = matchDate ?? match?.matchDate;
     final displayTime = matchTime ?? match?.matchTime;
+    final displayVenue = venue ?? match?.stadiumName;
+    final displayFieldName = fieldName ?? match?.fieldName;
     final round = match?.roundName;
 
     return Container(
@@ -3819,7 +3864,7 @@ class _MatchHeader extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w700,
                         fontSize: 12,
                         color: AppColors.socaBlack,
                       ),
@@ -3841,11 +3886,60 @@ class _MatchHeader extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w700,
                         fontSize: 12,
                         color: AppColors.socaBlack,
                       ),
                     ),
+                    if (displayFieldName != null &&
+                        displayFieldName.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      // const Text(
+                      //   'Field Name',
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     fontFamily: 'Poppins',
+                      //     fontWeight: FontWeight.w700,
+                      //     fontSize: 12,
+                      //     color: AppColors.socaBlack,
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 4),
+                      Text(
+                        displayFieldName,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ],
+                    if (displayVenue != null && displayVenue.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      // const Text(
+                      //   'Stadium',
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     fontFamily: 'Poppins',
+                      //     fontWeight: FontWeight.w700,
+                      //     fontSize: 12,
+                      //     color: AppColors.socaBlack,
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 4),
+                      Text(
+                        displayVenue,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -3866,20 +3960,23 @@ class _MatchHeader extends StatelessWidget {
     final fallback = name.isEmpty
         ? 'TEAM'
         : name.substring(0, name.length > 4 ? 4 : name.length).toUpperCase();
-
+    log("this is te team name and url $name $url");
     return Column(
       children: [
         CircleAvatar(
           radius: 36,
           backgroundColor: AppColors.socaBlack,
-          backgroundImage: url.isNotEmpty ? NetworkImage(url) : null,
-          child: url.isEmpty
+          backgroundImage:
+              url.isNotEmpty && url != "${ApiConstants.imageBaseUrl}logo.png"
+                  ? NetworkImage(url)
+                  : null,
+          child: url.isEmpty || url == "${ApiConstants.imageBaseUrl}logo.png"
               ? Text(
                   fallback,
                   style: const TextStyle(
                     color: AppColors.socaYellow,
                     fontFamily: 'Poppins',
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
                 )

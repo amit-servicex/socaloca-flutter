@@ -134,6 +134,7 @@ class ApiConstants {
   static const String getTeamAllPlayers = 'getTeamAllPlayers';
   static const String getTeamAllMembers = 'getTeamAllMembers';
   static const String getAssignTeamPlayers = 'getAssignTeamPlayers';
+  static const String getNewTeamPlayers = 'getNewTeamPlayers';
   static const String assignTeamPlayers = 'assignTeamPlayers';
   static const String assignTeamAdmin = 'assignTeamAdmin';
   static const String removeTeamAdmin = 'removeTeamAdmin';
@@ -144,6 +145,8 @@ class ApiConstants {
   static const String requestTeamJoin = 'requestTeamJoin';
   static const String cancelTeamJoinRequest = 'cancelTeamJoinRequest';
   static const String inviteTeamPlayer = 'inviteTeamPlayer';
+  static const String inviteTeamUser = 'inviteTeamUser';
+  static const String addTeamPlayer = 'addTeamPlayer';
   static const String checkTeamInvite = 'checkTeamInvite';
   static const String playerJoinedTeams = 'playerJoinedTeams';
   static const String playerPendingTeams = 'playerPendingTeams';
