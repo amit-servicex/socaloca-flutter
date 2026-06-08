@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +17,7 @@ import '../data/models/referee_match_model.dart';
 import '../providers/referee_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 import '../../../shared/widgets/searchable_dropdown.dart';
+import '../../../shared/widgets/app_toast.dart';
 
 class RefereeManageMatchScreen extends ConsumerStatefulWidget {
   RefereeManageMatchScreen({
@@ -38,6 +40,8 @@ class _RefereeManageMatchScreenState
   String? _detailsError;
   Map<String, dynamic>? _details;
   bool _isSavingScore = false;
+  bool _isSavingGoals = false;
+  bool _isSavingCards = false;
   bool _isSavingMvp = false;
   bool _isSavingCleanSheet = false;
   bool _isSavingCoachManager = false;
@@ -63,8 +67,8 @@ class _RefereeManageMatchScreenState
   final _opponentSubsCountCtrl = TextEditingController();
   final _matchIncidentCtrl = TextEditingController();
   final _commissionerReportCtrl = TextEditingController();
-  bool _showExtra = false;
-  bool _showPenalty = false;
+  bool _showExtra = true;
+  bool _showPenalty = true;
 
   // Goals/Cards state
   final List<_GoalEntry> _goals = [];
@@ -430,6 +434,9 @@ class _RefereeManageMatchScreenState
       return _GoalEntry(
         team: _teamLabelById(teamId),
         player: player,
+        playerId: _stringValue(goal['playerId']),
+        assistPlayerId: _stringValue(goal['assistPlayerId']),
+        assistPlayerName: _stringValue(goal['assistPlayerName']),
         minute: _stringValue(goal['goalTime']),
       );
     }).toList();
@@ -444,8 +451,13 @@ class _RefereeManageMatchScreenState
       return _CardEntry(
         team: _teamLabelById(teamId),
         player: _nonEmpty(card['playerName'], card['name']) ?? 'Player',
+        playerId: _stringValue(card['playerId']),
         minute: _nonEmpty(card['time'], card['goalTime']) ?? '',
-        type: isRed ? 'red' : 'yellow',
+        type: isRed
+            ? 'red'
+            : card['secondYellowCard'] == true
+                ? 'secondYellow'
+                : 'firstYellow',
       );
     }).toList();
   }
@@ -455,6 +467,26 @@ class _RefereeManageMatchScreenState
       return _displayTeamB;
     }
     return _displayTeamA;
+  }
+
+  String _teamIdForLabel(String teamLabel) {
+    if (teamLabel == _displayTeamB) return _opponentTeamId;
+    return _myTeamId;
+  }
+
+  List<_ManageMember> _membersForTeamLabel(String teamLabel) {
+    if (teamLabel == _displayTeamB) return _opponentPlayers;
+    return _myPlayers;
+  }
+
+  _ManageMember? _memberById(String? id) {
+    if (id == null || id.isEmpty) return null;
+    for (final member in [..._myPlayers, ..._opponentPlayers]) {
+      if (member.id == id || member.playerId == id || member.userId == id) {
+        return member;
+      }
+    }
+    return null;
   }
 
   List<_MatchPhoto> _parsePhotos(dynamic raw) {
@@ -598,29 +630,63 @@ class _RefereeManageMatchScreenState
   }
 
   Future<void> _saveScore() async {
-    final a = int.tryParse(_scoreACtrl.text) ?? 0;
-    final b = int.tryParse(_scoreBCtrl.text) ?? 0;
-    final eA = int.tryParse(_extraACtrl.text) ?? 0;
-    final eB = int.tryParse(_extraBCtrl.text) ?? 0;
-    final pA = int.tryParse(_penaltyACtrl.text) ?? 0;
-    final pB = int.tryParse(_penaltyBCtrl.text) ?? 0;
+    final a = _scoreValue(_scoreACtrl);
+    final b = _scoreValue(_scoreBCtrl);
+    final eA = _scoreValue(_extraACtrl);
+    final eB = _scoreValue(_extraBCtrl);
+    final pA = _scoreValue(_penaltyACtrl);
+    final pB = _scoreValue(_penaltyBCtrl);
+    if (a == null || b == null) {
+      _showSnack('Please enter score properly', success: false);
+      return;
+    }
+    if (_showExtra && (eA == null || eB == null)) {
+      _showSnack('Please enter extra time details', success: false);
+      return;
+    }
+    if (_showPenalty && (pA == null || pB == null)) {
+      _showSnack('Please enter penalty shootout details', success: false);
+      return;
+    }
 
     setState(() => _isSavingScore = true);
     final repo = ref.read(refereeRepositoryProvider);
-    final ok = await repo.saveMatchScore(
+    var ok = await repo.saveMatchScore(
       matchId: widget.matchId,
       tournamentId: widget.match?.tournamentId ?? '',
       teamAScore: a,
       teamBScore: b,
-      penaltyScore: pA + pB,
-      extraTimeScore: eA + eB,
+      penaltyScore: _showPenalty,
+      extraTimeScore: _showExtra,
     );
+    if (ok && _showExtra) {
+      ok = await repo.saveExtraTimeScore(
+        matchId: widget.matchId,
+        teamAScore: eA!,
+        teamBScore: eB!,
+      );
+    }
+    if (ok && _showPenalty) {
+      ok = await repo.savePenaltyScore(
+        matchId: widget.matchId,
+        teamAScore: pA!,
+        teamBScore: pB!,
+      );
+    }
     if (!mounted) return;
     setState(() => _isSavingScore = false);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(ok ? 'Score saved successfully' : 'Failed to save score'),
-      backgroundColor: ok ? AppColors.socaBlack : Colors.red,
-    ));
+    if (ok) {
+      _showSnack('Match score saved', success: true);
+      _loadDetails();
+    }
+  }
+
+  int? _scoreValue(TextEditingController controller) {
+    final text = controller.text.trim();
+    if (text.isEmpty || text.length > 2) return null;
+    final value = int.tryParse(text);
+    if (value == null || value < 0 || value > 99) return null;
+    return value;
   }
 
   @override
@@ -916,6 +982,10 @@ class _RefereeManageMatchScreenState
       child: TextField(
         controller: controller,
         keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(2),
+        ],
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontFamily: 'Poppins',
@@ -1029,6 +1099,31 @@ class _RefereeManageMatchScreenState
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isSavingGoals ? null : _saveGoals,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.socaBlack,
+                          foregroundColor: AppColors.socaYellow,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        child: _isSavingGoals
+                            ? AppLoader(size: 24, centered: false)
+                            : Text(
+                                'SAVE ALL GOALS'.tr,
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13,
+                                ),
+                              ),
                       ),
                     ),
                   ],
@@ -1198,7 +1293,50 @@ class _RefereeManageMatchScreenState
     );
   }
 
+  Future<void> _saveGoals() async {
+    final goals = <Map<String, dynamic>>[];
+    for (var i = 0; i < _goals.length; i++) {
+      final goal = _goals[i];
+      final goalTime = int.tryParse(goal.minute);
+      final playerId = goal.playerId;
+      if (goalTime == null || goalTime <= 0 || playerId.isEmpty) {
+        _showSnack(
+          'Please enter ${_ordinal(i + 1)} goal details for ${goal.team}',
+          success: false,
+        );
+        return;
+      }
+      goals.add({
+        'goalSequence': i + 1,
+        'teamId': _teamIdForLabel(goal.team),
+        'ownGoal': false,
+        'playerId': playerId,
+        'playerName': goal.player,
+        'assistPlayerId': goal.assistPlayerId,
+        'assistPlayerName': goal.assistPlayerName,
+        'isPenalty': false,
+        'goalTime': goalTime,
+        'videoId': '',
+        'videoUrl': '',
+      });
+    }
+
+    setState(() => _isSavingGoals = true);
+    final ok = await ref.read(refereeRepositoryProvider).saveMatchGoals(
+          matchId: widget.matchId,
+          tournamentId: widget.match?.tournamentId ?? '',
+          matchType: _matchType,
+          goals: goals,
+        );
+    if (!mounted) return;
+    setState(() => _isSavingGoals = false);
+    if (ok) _loadDetails();
+  }
+
   Widget _buildCardsTab(String teamA, String teamB) {
+    final teamACards = _cards.where((card) => card.team == teamA).toList();
+    final teamBCards = _cards.where((card) => card.team == teamB).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -1231,38 +1369,66 @@ class _RefereeManageMatchScreenState
               SizedBox(
                 height: 8,
               ),
-              _buildTeamCardSection(teamA),
+              _buildTeamCardSection(teamA, teamACards),
               // Team B
               SizedBox(
                 height: 8,
               ),
-              _buildTeamCardSection(teamB),
+              _buildTeamCardSection(teamB, teamBCards),
               // Bottom button
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Center(
-                  child: InkWell(
-                    onTap: () {
-                      // Save all cards
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.socaBlack,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        'SAVE ALL CARDS'.tr,
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                          color: AppColors.socaYellow,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () => _showAddCardSheet(teamA, teamB),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: Text(
+                          'ADD CARD'.tr,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.socaBlack,
+                          foregroundColor: AppColors.socaYellow,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isSavingCards ? null : _saveCards,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.socaBlack,
+                          foregroundColor: AppColors.socaYellow,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        child: _isSavingCards
+                            ? AppLoader(size: 24, centered: false)
+                            : Text(
+                                'SAVE ALL CARDS'.tr,
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -1272,7 +1438,7 @@ class _RefereeManageMatchScreenState
     );
   }
 
-  Widget _buildTeamCardSection(String teamName) {
+  Widget _buildTeamCardSection(String teamName, List<_CardEntry> cards) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -1320,11 +1486,11 @@ class _RefereeManageMatchScreenState
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text('0',
-                              style: TextStyle(
+                        children: [
+                          Text('${cards.length}',
+                              style: const TextStyle(
                                   fontFamily: 'Poppins', fontSize: 13)),
-                          Icon(Icons.arrow_drop_down, color: Colors.grey),
+                          const Icon(Icons.arrow_drop_down, color: Colors.grey),
                         ],
                       ),
                     ),
@@ -1359,11 +1525,56 @@ class _RefereeManageMatchScreenState
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
+              if (cards.isEmpty)
+                Text(
+                  'No cards recorded'.tr,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                )
+              else
+                ...cards.map((card) => _CardEntryCard(
+                      card: card,
+                      onRemove: () => setState(() => _cards.remove(card)),
+                    )),
             ],
           ),
         ),
       ],
     );
+  }
+
+  Future<void> _saveCards() async {
+    final cards = <Map<String, dynamic>>[];
+    for (final card in _cards) {
+      if (card.playerId.isEmpty) {
+        _showSnack('Please enter card details for ${card.team}',
+            success: false);
+        return;
+      }
+      cards.add({
+        'teamId': _teamIdForLabel(card.team),
+        'playerId': card.playerId,
+        'playerName': card.player,
+        'firstYellowCard': card.type == 'firstYellow',
+        'secondYellowCard': card.type == 'secondYellow',
+        'redCard': card.type == 'red',
+      });
+    }
+
+    setState(() => _isSavingCards = true);
+    final ok = await ref.read(refereeRepositoryProvider).saveMatchCards(
+          matchId: widget.matchId,
+          tournamentId: widget.match?.tournamentId ?? '',
+          matchType: _matchType,
+          cards: cards,
+        );
+    if (!mounted) return;
+    setState(() => _isSavingCards = false);
+    if (ok) _loadDetails();
   }
 
   Widget _buildCardTypeButton(String label, bool isYellow) {
@@ -1669,7 +1880,6 @@ class _RefereeManageMatchScreenState
     );
     if (!mounted) return;
     setState(() => _isSavingMvp = false);
-    _showSnack(ok ? 'MVP saved' : 'Failed to save MVP', success: ok);
     if (ok) _loadDetails();
   }
 
@@ -1862,10 +2072,6 @@ class _RefereeManageMatchScreenState
     );
     if (!mounted) return;
     setState(() => _isSavingCoachManager = false);
-    _showSnack(
-      ok ? 'Coach / manager saved' : 'Failed to save coach / manager',
-      success: ok,
-    );
     if (ok) _loadDetails();
   }
 
@@ -2070,10 +2276,7 @@ class _RefereeManageMatchScreenState
     );
     if (!mounted) return;
     setState(() => _isSavingOfficials = false);
-    _showSnack(
-      ok ? 'Club & Team Officials saved' : 'Failed to save officials',
-      success: ok,
-    );
+    if (ok) _showSnack('Club & Team Officials saved', success: true);
   }
 
   Widget _buildSquadTab(String teamA, String teamB) {
@@ -2277,7 +2480,6 @@ class _RefereeManageMatchScreenState
     );
     if (!mounted) return;
     setState(() => _isSavingSquad = false);
-    _showSnack(ok ? 'Squad saved' : 'Failed to save squad', success: ok);
     if (ok) _loadDetails();
   }
 
@@ -2674,10 +2876,6 @@ class _RefereeManageMatchScreenState
     );
     if (!mounted) return;
     setState(() => _isSavingSubstitutes = false);
-    _showSnack(
-      ok ? 'Substitutes saved' : 'Failed to save substitutes',
-      success: ok,
-    );
     if (ok) _loadDetails();
   }
 
@@ -2747,7 +2945,18 @@ class _RefereeManageMatchScreenState
 
   bool get _showCommissionerReport {
     final currentUserId = StorageService.userId ?? '';
-    final commissionerId = widget.match?.matchCommis ?? '';
+    final matchDetails =
+        (_details?['matchDetails'] as Map?)?.cast<String, dynamic>() ?? {};
+    final matchShort = ((_details?['source'] as Map?)?['matchShort'] as Map?)
+            ?.cast<String, dynamic>() ??
+        (_details?['matchShort'] as Map?)?.cast<String, dynamic>() ??
+        {};
+    final commissionerId = _nonEmpty(
+          matchShort['matchCommis'],
+          matchDetails['matchCommis'],
+          widget.match?.matchCommis,
+        ) ??
+        '';
     return currentUserId.isNotEmpty &&
         commissionerId.isNotEmpty &&
         currentUserId.toLowerCase() == commissionerId.toLowerCase();
@@ -2764,13 +2973,11 @@ class _RefereeManageMatchScreenState
     );
     if (!mounted) return;
     setState(() => _isSavingIncident = false);
-    _showSnack(
-      ok
-          ? 'Match Commissioner Report successfully saved!!!'
-          : 'Failed to save incidents',
-      success: ok,
-    );
-    if (ok) _loadDetails();
+    if (ok) {
+      _showSnack('Match Commissioner Report successfully saved!!!',
+          success: true);
+      _loadDetails();
+    }
   }
 
   Widget _buildMediaTab() {
@@ -3189,7 +3396,6 @@ class _RefereeManageMatchScreenState
         );
     if (!mounted) return;
     setState(() => _isSavingPhotos = false);
-    _showSnack(ok ? 'Photos saved' : 'Failed to save photos', success: ok);
     if (ok) _loadDetails();
   }
 
@@ -3203,10 +3409,6 @@ class _RefereeManageMatchScreenState
         );
     if (!mounted) return;
     setState(() => _isSavingHighlights = false);
-    _showSnack(
-      ok ? 'Highlights saved' : 'Failed to save highlights',
-      success: ok,
-    );
     if (ok) _loadDetails();
   }
 
@@ -3220,7 +3422,6 @@ class _RefereeManageMatchScreenState
         );
     if (!mounted) return;
     setState(() => _isSavingMatchVideos = false);
-    _showSnack(ok ? 'Videos saved' : 'Failed to save videos', success: ok);
     if (ok) _loadDetails();
   }
 
@@ -3234,9 +3435,10 @@ class _RefereeManageMatchScreenState
         );
     if (!mounted) return;
     setState(() => _isPublishingVideos = false);
-    _showSnack(ok ? 'Video published to feed' : 'Failed to publish videos',
-        success: ok);
-    if (ok) _loadDetails();
+    if (ok) {
+      _showSnack('Video published to feed', success: true, long: true);
+      _loadDetails();
+    }
   }
 
   List<Map<String, dynamic>> _videoPayload(List<_MatchVideoFile> videos) {
@@ -3301,17 +3503,14 @@ class _RefereeManageMatchScreenState
     );
     if (!mounted) return;
     setState(() => _isSavingCleanSheet = false);
-    _showSnack(
-      ok ? 'Clean sheet saved' : 'Failed to save clean sheet',
-      success: ok,
-    );
     if (ok) _loadDetails();
   }
 
   void _showAddGoalSheet(String teamA, String teamB) {
-    final playerCtrl = TextEditingController();
     final minuteCtrl = TextEditingController();
     String selectedTeam = teamA;
+    String? selectedPlayerId;
+    String? selectedAssistId;
 
     showModalBottomSheet(
       context: context,
@@ -3344,16 +3543,35 @@ class _RefereeManageMatchScreenState
                 value: selectedTeam,
                 teamA: teamA,
                 teamB: teamB,
-                onChanged: (v) =>
-                    setSheetState(() => selectedTeam = v ?? teamA),
+                onChanged: (v) => setSheetState(() {
+                  selectedTeam = v ?? teamA;
+                  selectedPlayerId = null;
+                  selectedAssistId = null;
+                }),
               ),
               SizedBox(height: 12),
               Text('Player Name'.tr,
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
               SizedBox(height: 6),
-              TextField(
-                  controller: playerCtrl,
-                  decoration: _inputDecoration(hint: 'e.g. John Doe')),
+              _memberDropdown(
+                hint: 'Select Scorer',
+                members: _membersForTeamLabel(selectedTeam),
+                value: selectedPlayerId,
+                onChanged: (value) =>
+                    setSheetState(() => selectedPlayerId = value),
+              ),
+              SizedBox(height: 12),
+              Text('Assist'.tr,
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
+              SizedBox(height: 6),
+              _memberDropdown(
+                hint: 'Select Assist',
+                members: _membersForTeamLabel(selectedTeam),
+                value: selectedAssistId,
+                includeNone: true,
+                onChanged: (value) =>
+                    setSheetState(() => selectedAssistId = value),
+              ),
               SizedBox(height: 12),
               Text('Minute'.tr,
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
@@ -3361,6 +3579,10 @@ class _RefereeManageMatchScreenState
               TextField(
                 controller: minuteCtrl,
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(3),
+                ],
                 decoration: _inputDecoration(hint: "e.g. 45'"),
               ),
               SizedBox(height: 20),
@@ -3368,12 +3590,20 @@ class _RefereeManageMatchScreenState
                 // width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    final player = playerCtrl.text.trim();
-                    if (player.isEmpty) return;
+                    final player = _memberById(selectedPlayerId);
+                    final minute = minuteCtrl.text.trim();
+                    if (player == null || (int.tryParse(minute) ?? 0) <= 0) {
+                      _showSnack('Please enter goal details', success: false);
+                      return;
+                    }
+                    final assist = _memberById(selectedAssistId);
                     setState(() => _goals.add(_GoalEntry(
                           team: selectedTeam,
-                          player: player,
-                          minute: minuteCtrl.text.trim(),
+                          player: player.shortName,
+                          playerId: player.id,
+                          assistPlayerId: assist?.id ?? '',
+                          assistPlayerName: assist?.shortName ?? '',
+                          minute: minute,
                         )));
                     Navigator.pop(ctx);
                   },
@@ -3397,10 +3627,10 @@ class _RefereeManageMatchScreenState
   }
 
   void _showAddCardSheet(String teamA, String teamB) {
-    final playerCtrl = TextEditingController();
     final minuteCtrl = TextEditingController();
     String selectedTeam = teamA;
-    String cardType = 'yellow';
+    String? selectedPlayerId;
+    String cardType = 'firstYellow';
 
     showModalBottomSheet(
       context: context,
@@ -3430,7 +3660,10 @@ class _RefereeManageMatchScreenState
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
               SizedBox(height: 6),
               Row(children: [
-                _cardTypeChip('Yellow', 'yellow', cardType,
+                _cardTypeChip('1st', 'firstYellow', cardType,
+                    (v) => setSheetState(() => cardType = v), Colors.amber),
+                SizedBox(width: 10),
+                _cardTypeChip('2nd', 'secondYellow', cardType,
                     (v) => setSheetState(() => cardType = v), Colors.amber),
                 SizedBox(width: 10),
                 _cardTypeChip('Red', 'red', cardType,
@@ -3444,16 +3677,22 @@ class _RefereeManageMatchScreenState
                 value: selectedTeam,
                 teamA: teamA,
                 teamB: teamB,
-                onChanged: (v) =>
-                    setSheetState(() => selectedTeam = v ?? teamA),
+                onChanged: (v) => setSheetState(() {
+                  selectedTeam = v ?? teamA;
+                  selectedPlayerId = null;
+                }),
               ),
               SizedBox(height: 12),
               Text('Player Name'.tr,
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
               SizedBox(height: 6),
-              TextField(
-                  controller: playerCtrl,
-                  decoration: _inputDecoration(hint: 'e.g. John Doe')),
+              _memberDropdown(
+                hint: 'Select Player',
+                members: _membersForTeamLabel(selectedTeam),
+                value: selectedPlayerId,
+                onChanged: (value) =>
+                    setSheetState(() => selectedPlayerId = value),
+              ),
               SizedBox(height: 12),
               Text('Minute'.tr,
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
@@ -3461,6 +3700,10 @@ class _RefereeManageMatchScreenState
               TextField(
                 controller: minuteCtrl,
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(3),
+                ],
                 decoration: _inputDecoration(hint: "e.g. 55'"),
               ),
               SizedBox(height: 20),
@@ -3468,11 +3711,15 @@ class _RefereeManageMatchScreenState
                 // width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    final player = playerCtrl.text.trim();
-                    if (player.isEmpty) return;
+                    final player = _memberById(selectedPlayerId);
+                    if (player == null) {
+                      _showSnack('Please enter card details', success: false);
+                      return;
+                    }
                     setState(() => _cards.add(_CardEntry(
                           team: selectedTeam,
-                          player: player,
+                          player: player.shortName,
+                          playerId: player.id,
                           minute: minuteCtrl.text.trim(),
                           type: cardType,
                         )));
@@ -3597,6 +3844,10 @@ class _RefereeManageMatchScreenState
           child: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(2),
+            ],
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontFamily: 'Poppins',
@@ -3732,13 +3983,8 @@ class _RefereeManageMatchScreenState
     );
   }
 
-  void _showSnack(String message, {required bool success}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message.tr),
-        backgroundColor: success ? AppColors.socaBlack : Colors.red,
-      ),
-    );
+  void _showSnack(String message, {required bool success, bool long = false}) {
+    AppToast.show(context, message.tr, long: long);
   }
 
   Widget _labelText(String text) => Text(text,
@@ -4217,20 +4463,33 @@ class _MatchVideoFile {
 class _GoalEntry {
   final String team;
   final String player;
+  final String playerId;
+  final String assistPlayerId;
+  final String assistPlayerName;
   final String minute;
-  _GoalEntry({required this.team, required this.player, required this.minute});
+  _GoalEntry({
+    required this.team,
+    required this.player,
+    required this.minute,
+    this.playerId = '',
+    this.assistPlayerId = '',
+    this.assistPlayerName = '',
+  });
 }
 
 class _CardEntry {
   final String team;
   final String player;
+  final String playerId;
   final String minute;
-  final String type; // 'yellow' | 'red'
-  _CardEntry(
-      {required this.team,
-      required this.player,
-      required this.minute,
-      required this.type});
+  final String type; // 'firstYellow' | 'secondYellow' | 'red'
+  _CardEntry({
+    required this.team,
+    required this.player,
+    required this.minute,
+    required this.type,
+    this.playerId = '',
+  });
 }
 
 class _GoalCard extends StatelessWidget {
@@ -4284,7 +4543,12 @@ class _CardEntryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isYellow = card.type == 'yellow';
+    final isYellow = card.type != 'red';
+    final label = card.type == 'secondYellow'
+        ? '2nd'
+        : card.type == 'red'
+            ? 'Red'
+            : '1st';
     return Container(
       margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -4300,6 +4564,16 @@ class _CardEntryCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: isYellow ? Colors.amber : Colors.red,
             borderRadius: BorderRadius.circular(3),
+          ),
+        ),
+        SizedBox(width: 10),
+        Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+            color: isYellow ? AppColors.socaBlack : Colors.red,
           ),
         ),
         SizedBox(width: 10),

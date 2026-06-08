@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/core/constants/api_constants.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_loader.dart';
+import '../../../shared/widgets/app_toast.dart';
 import '../data/models/referee_match_model.dart';
 import '../providers/referee_providers.dart';
 import 'referee_live_matches_screen.dart';
+
+class _LivePlayer {
+  const _LivePlayer({
+    required this.id,
+    required this.name,
+    required this.teamId,
+  });
+
+  final String id;
+  final String name;
+  final String teamId;
+}
 
 class RefereeLiveMatchUpdateScreen extends ConsumerStatefulWidget {
   const RefereeLiveMatchUpdateScreen({
@@ -88,9 +103,15 @@ class _RefereeLiveMatchUpdateScreenState
   String get _teamA => widget.match?.teamA ?? 'Team A';
   String get _teamB => widget.match?.teamB ?? 'Team B';
   String get _tournamentId => widget.match?.tournamentId ?? '';
+  String get _currentUserId => StorageService.userId ?? '';
   bool get _isTerminal =>
       _state == 'FINISH' || _state == 'POSTPONED' || _state == 'ABANDONED';
-  bool get _isEditable => !_isTerminal && _state != 'INIT';
+  bool get _isEditable =>
+      _state == 'FIRST_HALF_START' ||
+      _state == 'SECOND_HALF_START' ||
+      _state == 'EXTRA_TIME_FH_START' ||
+      _state == 'EXTRA_TIME_SH_START' ||
+      _state == 'PENALTY';
   bool get _isPenaltyMode => _state == 'PENALTY';
   bool get _showStartControls =>
       _state == 'INIT' ||
@@ -172,12 +193,18 @@ class _RefereeLiveMatchUpdateScreenState
           (map['playerId'] ?? map['userId'] ?? map['_id'] ?? map['id'])
               ?.toString();
       final mapTeamId = (map['teamId'] ?? map['teamID'])?.toString();
-      final name = (map['shortNameAfterJersey'] ??
+      String? name = (map['shortNameAfterJersey'] ??
               map['playerName'] ??
               map['name'] ??
               map['shortName'] ??
               map['profileName'])
           ?.toString();
+      if (name == null || name.isEmpty) {
+        final first = map['firstName']?.toString() ?? '';
+        final last = map['lastName']?.toString() ?? '';
+        final combined = '$first $last'.trim();
+        if (combined.isNotEmpty) name = combined;
+      }
       if (playerId != null &&
           playerId.isNotEmpty &&
           mapTeamId == teamId &&
@@ -303,20 +330,37 @@ class _RefereeLiveMatchUpdateScreenState
     }
   }
 
+  Map<String, dynamic> _scoreKeyVals() => {
+        'myGoals': _intVal(_liveRecord['myGoals']),
+        'opponentGoals': _intVal(_liveRecord['opponentGoals']),
+        'myPenalty': _intVal(_liveRecord['myPenalty']),
+        'opponentPenalty': _intVal(_liveRecord['opponentPenalty']),
+        'myExtraTime': _intVal(_liveRecord['myExtraTime']),
+        'opponentExtraTime': _intVal(_liveRecord['opponentExtraTime']),
+      };
+
   Future<void> _saveState(String nextState) async {
     if (_tournamentId.isEmpty || widget.matchId.isEmpty) return;
+    if (_isStartState(nextState) &&
+        (_teamAPlayers.isEmpty || _teamBPlayers.isEmpty)) {
+      _showError(_teamAPlayers.isEmpty
+          ? '$_teamA has no team players'
+          : '$_teamB has no team players');
+      return;
+    }
     setState(() => _isSaving = true);
     final ok = await ref.read(refereeRepositoryProvider).saveLiveMatchState(
-          matchId: widget.matchId,
-          tournamentId: _tournamentId,
-          state: nextState,
-          keyVals: _timestampKeyVals(nextState),
-        );
+      matchId: widget.matchId,
+      tournamentId: _tournamentId,
+      state: nextState,
+      keyVals: {..._scoreKeyVals(), ..._timestampKeyVals(nextState)},
+    );
     if (!mounted) return;
     setState(() {
       _isSaving = false;
       if (ok) {
         _state = nextState;
+        _liveRecord = {..._liveRecord, 'state': nextState};
         _applyState(nextState);
         if (nextState == 'POSTPONED' || nextState == 'ABANDONED') {
           _scoreA = 0;
@@ -324,12 +368,348 @@ class _RefereeLiveMatchUpdateScreenState
         }
       }
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(ok ? 'Match updated successfully' : 'Update failed'),
-        backgroundColor: ok ? AppColors.socaBlack : Colors.red,
-      ),
+    if (ok && nextState == 'FINISH') {
+      AppToast.show(context, 'Match ended successfully');
+    }
+  }
+
+  bool _isStartState(String state) =>
+      state == 'FIRST_HALF_START' ||
+      state == 'SECOND_HALF_START' ||
+      state == 'EXTRA_TIME_FH_START' ||
+      state == 'EXTRA_TIME_SH_START' ||
+      state == 'PENALTY';
+
+  Future<void> _saveCurrentEntry() async {
+    if (_isPenaltyMode) {
+      await _savePenalty();
+    } else if (_tab == 'Cards') {
+      await _saveCard();
+    } else if (_tab == 'Substitution') {
+      await _saveSubstitution();
+    } else {
+      await _saveGoal();
+    }
+  }
+
+  Future<void> _saveGoal() async {
+    final leftSelected = _goalAOwn || _goalAScorer != null;
+    final rightSelected = _goalBOwn || _goalBScorer != null;
+    if (leftSelected == rightSelected) {
+      _showError(leftSelected
+          ? 'Select scorer from only ONE team'
+          : 'Please select a scorer');
+      return;
+    }
+    final isLeft = leftSelected;
+    final time = _parseRequiredMinute(
+        isLeft ? _goalATime : _goalBTime, 'Please select scoring time');
+    if (time == null) return;
+    if (!_validateEventMinute(time)) return;
+
+    final isExtra =
+        _state == 'EXTRA_TIME_FH_START' || _state == 'EXTRA_TIME_SH_START';
+    final ownGoal = isLeft ? _goalAOwn : _goalBOwn;
+    final scorer = isLeft ? _goalAScorer : _goalBScorer;
+    final assist = isLeft ? _goalAAssist : _goalBAssist;
+    final missed = isLeft ? _goalAPenaltyMissed : _goalBPenaltyMissed;
+    final isPenalty = isLeft ? _goalAPenalty : _goalBPenalty;
+    final creditedTeamId = ownGoal
+        ? (isLeft ? widget.match?.teamBId : widget.match?.teamAId)
+        : (isLeft ? widget.match?.teamAId : widget.match?.teamBId);
+    if (creditedTeamId == null || creditedTeamId.isEmpty) {
+      _showError(AppStrings.somethingWentWrong);
+      return;
+    }
+
+    final keyVals = _scoreKeyVals();
+    if (!missed) {
+      final key = isExtra
+          ? (creditedTeamId == widget.match?.teamAId
+              ? 'myExtraTime'
+              : 'opponentExtraTime')
+          : (creditedTeamId == widget.match?.teamAId
+              ? 'myGoals'
+              : 'opponentGoals');
+      keyVals[key] = _intVal(keyVals[key]) + 1;
+    }
+    final listVal = {
+      'teamId': creditedTeamId,
+      'goalTime': time,
+      'ownGoal': ownGoal,
+      'isPenalty': isPenalty,
+      'missed': missed,
+      'goalSequence':
+          _nextSequence(isExtra ? 'extraTime' : 'goals', creditedTeamId),
+      'addedBy': _currentUserId,
+      'absoluteTime': DateTime.now().millisecondsSinceEpoch,
+      if (!ownGoal) ...{
+        'playerId': scorer?.id ?? '',
+        'playerName': scorer?.name ?? '',
+        'assistPlayerId': assist?.id ?? '',
+        'assistPlayerName': assist?.name ?? '',
+      },
+    };
+    await _saveEntry(
+      entry: isExtra ? 'extratime' : 'goal',
+      listKey: isExtra ? 'extraTime' : 'goals',
+      keyVals: keyVals,
+      listVal: listVal,
+      afterSuccess: _clearGoalForm,
     );
+  }
+
+  Future<void> _savePenalty() async {
+    final leftSelected = _goalAScorer != null;
+    final rightSelected = _goalBScorer != null;
+    if (leftSelected == rightSelected) {
+      _showError(leftSelected
+          ? 'Select scorer from only ONE team'
+          : 'Please select a scorer');
+      return;
+    }
+    final player = leftSelected ? _goalAScorer! : _goalBScorer!;
+    final missed = leftSelected ? _goalAPenaltyMissed : _goalBPenaltyMissed;
+    final keyVals = {
+      'myPenalty': _intVal(_liveRecord['myPenalty']),
+      'opponentPenalty': _intVal(_liveRecord['opponentPenalty']),
+    };
+    if (!missed) {
+      keyVals[leftSelected ? 'myPenalty' : 'opponentPenalty'] =
+          _intVal(keyVals[leftSelected ? 'myPenalty' : 'opponentPenalty']) + 1;
+    }
+    await _saveEntry(
+      entry: 'penalty',
+      listKey: 'penalty',
+      keyVals: keyVals,
+      listVal: {
+        'teamId': player.teamId,
+        'playerId': player.id,
+        'playerName': player.name,
+        'isPenalty': true,
+        'missed': missed,
+        'goalSequence': _nextSequence('penalty', player.teamId),
+        'addedBy': _currentUserId,
+        'absoluteTime': DateTime.now().millisecondsSinceEpoch,
+      },
+      afterSuccess: _clearGoalForm,
+    );
+  }
+
+  Future<void> _saveCard() async {
+    final leftSelected = _cardAPlayer != null;
+    final rightSelected = _cardBPlayer != null;
+    if (leftSelected == rightSelected) {
+      _showError(leftSelected
+          ? 'Select card holder from only ONE team'
+          : 'Please select a card holder');
+      return;
+    }
+    final type = leftSelected ? _cardAType : _cardBType;
+    if (type.isEmpty) {
+      _showError('Please select card type (1st / 2nd / Red)');
+      return;
+    }
+    final time = _parseRequiredMinute(
+        leftSelected ? _cardATime : _cardBTime, 'Please select card time');
+    if (time == null) return;
+    if (!_validateEventMinute(time)) return;
+    final player = leftSelected ? _cardAPlayer! : _cardBPlayer!;
+    final validation = _validateCard(player, type);
+    if (validation != null) {
+      _showError(validation);
+      return;
+    }
+    await _saveEntry(
+      entry: 'card',
+      listKey: 'cards',
+      keyVals: _scoreKeyVals(),
+      listVal: {
+        'matchId': widget.matchId,
+        'teamId': player.teamId,
+        'playerId': player.id,
+        'playerName': player.name,
+        'cardTime': time,
+        'firstYellowCard': type == 'first',
+        'secondYellowCard': type == 'second',
+        'redCard': type == 'red',
+        'addedBy': _currentUserId,
+        'absoluteTime': DateTime.now().millisecondsSinceEpoch,
+      },
+      afterSuccess: () {
+        _clearCardForm();
+        _loadLiveDetails();
+      },
+    );
+  }
+
+  Future<void> _saveSubstitution() async {
+    final leftSelected = _subAIn != null || _subAOut != null;
+    final rightSelected = _subBIn != null || _subBOut != null;
+    if (leftSelected == rightSelected) {
+      _showError(leftSelected
+          ? 'Select substitution from only ONE team'
+          : 'Please select players for substitution');
+      return;
+    }
+    final playerIn = leftSelected ? _subAIn : _subBIn;
+    final playerOut = leftSelected ? _subAOut : _subBOut;
+    if (playerIn == null) {
+      _showError(leftSelected
+          ? 'Please select player IN for My Team'
+          : 'Please select player IN for Opponent Team');
+      return;
+    }
+    if (playerOut == null) {
+      _showError(leftSelected
+          ? 'Please select player OUT for My Team'
+          : 'Please select player OUT for Opponent Team');
+      return;
+    }
+    if (playerIn.id == playerOut.id) {
+      _showError('Player IN and Player OUT cannot be the same');
+      return;
+    }
+    final time = _parseRequiredMinute(
+        leftSelected ? _subATime : _subBTime, 'Please enter substitution time');
+    if (time == null) return;
+    if (!_validateEventMinute(time)) return;
+    await _saveEntry(
+      entry: 'substitution',
+      listKey: 'subs',
+      keyVals: _scoreKeyVals(),
+      listVal: {
+        'teamId': playerIn.teamId,
+        'time': time,
+        'playerId': playerIn.id,
+        'playerName': playerIn.name,
+        'playerOutId': playerOut.id,
+        'playerOutName': playerOut.name,
+        'absoluteTime': DateTime.now().millisecondsSinceEpoch,
+      },
+      afterSuccess: _clearSubstitutionForm,
+    );
+  }
+
+  Future<void> _saveEntry({
+    required String entry,
+    required String listKey,
+    required Map<String, dynamic> keyVals,
+    required Map<String, dynamic> listVal,
+    required VoidCallback afterSuccess,
+  }) async {
+    if (_tournamentId.isEmpty || widget.matchId.isEmpty) return;
+    setState(() => _isSaving = true);
+    final ok = await ref.read(refereeRepositoryProvider).saveLiveMatchData(
+      matchId: widget.matchId,
+      tournamentId: _tournamentId,
+      entry: entry,
+      state: _state,
+      keyVals: keyVals,
+      listKey: listKey,
+      listVal: [listVal],
+    );
+    if (!mounted) return;
+    setState(() {
+      _isSaving = false;
+      if (ok) {
+        _liveRecord = {..._liveRecord, ...keyVals};
+        _syncScoresFromLiveRecord();
+        afterSuccess();
+      }
+    });
+  }
+
+  int? _parseRequiredMinute(TextEditingController controller, String message) {
+    final value = int.tryParse(controller.text.trim());
+    if (value == null || value <= 0) {
+      _showError(message);
+      return null;
+    }
+    return value;
+  }
+
+  bool _validateEventMinute(int minute) {
+    final current = int.tryParse(widget.match?.currentMinute ?? '') ?? 0;
+    if (current > 0 && minute > current) {
+      _showError('Event time cannot be greater than match time');
+      return false;
+    }
+    return true;
+  }
+
+  int _nextSequence(String listKey, String teamId) {
+    final list = _liveRecord[listKey];
+    if (list is! List) return 1;
+    return list.where((item) {
+          final map = _asMap(item);
+          return map['teamId']?.toString() == teamId;
+        }).length +
+        1;
+  }
+
+  String? _validateCard(_LivePlayer player, String type) {
+    final cards = _liveRecord['cards'];
+    if (cards is! List) return null;
+    var hasFirst = false;
+    var hasSecond = false;
+    var hasRed = false;
+    for (final item in cards) {
+      final card = _asMap(item);
+      final samePlayer = card['playerId']?.toString() == player.id ||
+          card['playerName']?.toString().toLowerCase() ==
+              player.name.toLowerCase();
+      if (!samePlayer) continue;
+      hasFirst = hasFirst || card['firstYellowCard'] == true;
+      hasSecond = hasSecond || card['secondYellowCard'] == true;
+      hasRed = hasRed || card['redCard'] == true;
+    }
+    if (hasRed) return '${player.name} already has a red card';
+    if (hasSecond) return '${player.name} already has 2 yellow cards';
+    if (type == 'second' && !hasFirst) {
+      return 'Cannot give 2nd yellow without 1st yellow';
+    }
+    if (type == 'first' && hasFirst) {
+      return '${player.name} already has 1st yellow card';
+    }
+    return null;
+  }
+
+  void _showError(String message) {
+    AppToast.show(context, message);
+  }
+
+  void _clearGoalForm() {
+    _goalATime.clear();
+    _goalBTime.clear();
+    _goalAOwn = false;
+    _goalBOwn = false;
+    _goalAPenalty = false;
+    _goalBPenalty = false;
+    _goalAPenaltyMissed = false;
+    _goalBPenaltyMissed = false;
+    _goalAScorer = null;
+    _goalBScorer = null;
+    _goalAAssist = null;
+    _goalBAssist = null;
+  }
+
+  void _clearCardForm() {
+    _cardATime.clear();
+    _cardBTime.clear();
+    _cardAType = '';
+    _cardBType = '';
+    _cardAPlayer = null;
+    _cardBPlayer = null;
+  }
+
+  void _clearSubstitutionForm() {
+    _subATime.clear();
+    _subBTime.clear();
+    _subAIn = null;
+    _subBIn = null;
+    _subAOut = null;
+    _subBOut = null;
   }
 
   void _openStatusSheet() {
@@ -402,8 +782,8 @@ class _RefereeLiveMatchUpdateScreenState
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Warning'),
-        content: const Text('Are you sure you want to end this match?'),
+        title: Text(AppStrings.warning),
+        content: Text(AppStrings.confirmEndMatch),
         actions: [
           TextButton(onPressed: context.pop, child: Text(AppStrings.no)),
           TextButton(
@@ -446,7 +826,7 @@ class _RefereeLiveMatchUpdateScreenState
               ),
             ),
           ),
-          if (_isSaving)
+          if (_isSaving || _isLoadingDetails)
             const Positioned.fill(
               child: AbsorbPointer(
                 child: ColoredBox(
@@ -551,7 +931,55 @@ class _RefereeLiveMatchUpdateScreenState
             scoreB: _scoreB,
           ),
           const SizedBox(height: 18),
-          _LiveEntryPanel(tab: penalty ? 'Penalty' : _tab),
+          _LiveEntryPanel(
+            tab: penalty ? 'Penalty' : _tab,
+            leftPlayers: _teamAPlayers,
+            rightPlayers: _teamBPlayers,
+            goalATime: _goalATime,
+            goalBTime: _goalBTime,
+            cardATime: _cardATime,
+            cardBTime: _cardBTime,
+            subATime: _subATime,
+            subBTime: _subBTime,
+            goalAOwn: _goalAOwn,
+            goalBOwn: _goalBOwn,
+            goalAPenalty: _goalAPenalty,
+            goalBPenalty: _goalBPenalty,
+            goalAPenaltyMissed: _goalAPenaltyMissed,
+            goalBPenaltyMissed: _goalBPenaltyMissed,
+            cardAType: _cardAType,
+            cardBType: _cardBType,
+            goalAScorer: _goalAScorer,
+            goalBScorer: _goalBScorer,
+            goalAAssist: _goalAAssist,
+            goalBAssist: _goalBAssist,
+            cardAPlayer: _cardAPlayer,
+            cardBPlayer: _cardBPlayer,
+            subAIn: _subAIn,
+            subBIn: _subBIn,
+            subAOut: _subAOut,
+            subBOut: _subBOut,
+            onGoalAOwn: (value) => setState(() => _goalAOwn = value),
+            onGoalBOwn: (value) => setState(() => _goalBOwn = value),
+            onGoalAPenalty: (value) => setState(() => _goalAPenalty = value),
+            onGoalBPenalty: (value) => setState(() => _goalBPenalty = value),
+            onGoalAPenaltyMissed: (value) =>
+                setState(() => _goalAPenaltyMissed = value),
+            onGoalBPenaltyMissed: (value) =>
+                setState(() => _goalBPenaltyMissed = value),
+            onGoalAScorer: (value) => setState(() => _goalAScorer = value),
+            onGoalBScorer: (value) => setState(() => _goalBScorer = value),
+            onGoalAAssist: (value) => setState(() => _goalAAssist = value),
+            onGoalBAssist: (value) => setState(() => _goalBAssist = value),
+            onCardAType: (value) => setState(() => _cardAType = value),
+            onCardBType: (value) => setState(() => _cardBType = value),
+            onCardAPlayer: (value) => setState(() => _cardAPlayer = value),
+            onCardBPlayer: (value) => setState(() => _cardBPlayer = value),
+            onSubAIn: (value) => setState(() => _subAIn = value),
+            onSubBIn: (value) => setState(() => _subBIn = value),
+            onSubAOut: (value) => setState(() => _subAOut = value),
+            onSubBOut: (value) => setState(() => _subBOut = value),
+          ),
           const SizedBox(height: 26),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -562,7 +990,7 @@ class _RefereeLiveMatchUpdateScreenState
                   child: _InlineButton(
                       label: AppStrings.saveAndPublish.toUpperCase(),
                       filled: true,
-                      onTap: () => _saveState(_state)),
+                      onTap: _saveCurrentEntry),
                 ),
                 const SizedBox(width: 10),
                 const SizedBox(height: 12),
@@ -921,13 +1349,13 @@ class _TeamLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasLogo = logoUrl != null && logoUrl!.trim().isNotEmpty;
     return Container(
-      width: 66,
-      height: 66,
+      width: 80,
+      height: 80,
       decoration: const BoxDecoration(shape: BoxShape.circle),
       clipBehavior: Clip.antiAlias,
       child: hasLogo
           ? Image.network(
-              logoUrl!,
+              ApiConstants.getImageUrl(logoUrl)!,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => const _TeamLogoFallback(),
             )
@@ -949,22 +1377,100 @@ class _TeamLogoFallback extends StatelessWidget {
   }
 }
 
-class _LiveEntryPanel extends StatefulWidget {
-  const _LiveEntryPanel({required this.tab});
+class _LiveEntryPanel extends StatelessWidget {
+  const _LiveEntryPanel({
+    required this.tab,
+    required this.leftPlayers,
+    required this.rightPlayers,
+    required this.goalATime,
+    required this.goalBTime,
+    required this.cardATime,
+    required this.cardBTime,
+    required this.subATime,
+    required this.subBTime,
+    required this.goalAOwn,
+    required this.goalBOwn,
+    required this.goalAPenalty,
+    required this.goalBPenalty,
+    required this.goalAPenaltyMissed,
+    required this.goalBPenaltyMissed,
+    required this.cardAType,
+    required this.cardBType,
+    required this.goalAScorer,
+    required this.goalBScorer,
+    required this.goalAAssist,
+    required this.goalBAssist,
+    required this.cardAPlayer,
+    required this.cardBPlayer,
+    required this.subAIn,
+    required this.subBIn,
+    required this.subAOut,
+    required this.subBOut,
+    required this.onGoalAOwn,
+    required this.onGoalBOwn,
+    required this.onGoalAPenalty,
+    required this.onGoalBPenalty,
+    required this.onGoalAPenaltyMissed,
+    required this.onGoalBPenaltyMissed,
+    required this.onGoalAScorer,
+    required this.onGoalBScorer,
+    required this.onGoalAAssist,
+    required this.onGoalBAssist,
+    required this.onCardAType,
+    required this.onCardBType,
+    required this.onCardAPlayer,
+    required this.onCardBPlayer,
+    required this.onSubAIn,
+    required this.onSubBIn,
+    required this.onSubAOut,
+    required this.onSubBOut,
+  });
 
   final String tab;
-
-  @override
-  State<_LiveEntryPanel> createState() => _LiveEntryPanelState();
-}
-
-class _LiveEntryPanelState extends State<_LiveEntryPanel> {
-  bool _leftOwnGoal = false;
-  bool _leftPenalty = false;
-  bool _rightOwnGoal = false;
-  bool _rightPenalty = false;
-  String _leftCard = '';
-  String _rightCard = '';
+  final List<_LivePlayer> leftPlayers;
+  final List<_LivePlayer> rightPlayers;
+  final TextEditingController goalATime;
+  final TextEditingController goalBTime;
+  final TextEditingController cardATime;
+  final TextEditingController cardBTime;
+  final TextEditingController subATime;
+  final TextEditingController subBTime;
+  final bool goalAOwn;
+  final bool goalBOwn;
+  final bool goalAPenalty;
+  final bool goalBPenalty;
+  final bool goalAPenaltyMissed;
+  final bool goalBPenaltyMissed;
+  final String cardAType;
+  final String cardBType;
+  final _LivePlayer? goalAScorer;
+  final _LivePlayer? goalBScorer;
+  final _LivePlayer? goalAAssist;
+  final _LivePlayer? goalBAssist;
+  final _LivePlayer? cardAPlayer;
+  final _LivePlayer? cardBPlayer;
+  final _LivePlayer? subAIn;
+  final _LivePlayer? subBIn;
+  final _LivePlayer? subAOut;
+  final _LivePlayer? subBOut;
+  final ValueChanged<bool> onGoalAOwn;
+  final ValueChanged<bool> onGoalBOwn;
+  final ValueChanged<bool> onGoalAPenalty;
+  final ValueChanged<bool> onGoalBPenalty;
+  final ValueChanged<bool> onGoalAPenaltyMissed;
+  final ValueChanged<bool> onGoalBPenaltyMissed;
+  final ValueChanged<_LivePlayer?> onGoalAScorer;
+  final ValueChanged<_LivePlayer?> onGoalBScorer;
+  final ValueChanged<_LivePlayer?> onGoalAAssist;
+  final ValueChanged<_LivePlayer?> onGoalBAssist;
+  final ValueChanged<String> onCardAType;
+  final ValueChanged<String> onCardBType;
+  final ValueChanged<_LivePlayer?> onCardAPlayer;
+  final ValueChanged<_LivePlayer?> onCardBPlayer;
+  final ValueChanged<_LivePlayer?> onSubAIn;
+  final ValueChanged<_LivePlayer?> onSubBIn;
+  final ValueChanged<_LivePlayer?> onSubAOut;
+  final ValueChanged<_LivePlayer?> onSubBOut;
 
   @override
   Widget build(BuildContext context) {
@@ -988,26 +1494,41 @@ class _LiveEntryPanelState extends State<_LiveEntryPanel> {
   }
 
   Widget _buildSide({required bool isLeft}) {
-    switch (widget.tab) {
+    final players = isLeft ? leftPlayers : rightPlayers;
+    switch (tab) {
       case 'Cards':
         return _CardsFields(
-          selected: isLeft ? _leftCard : _rightCard,
-          onSelected: (value) => setState(
-            () => isLeft ? _leftCard = value : _rightCard = value,
-          ),
+          selected: isLeft ? cardAType : cardBType,
+          timeController: isLeft ? cardATime : cardBTime,
+          players: players,
+          selectedPlayer: isLeft ? cardAPlayer : cardBPlayer,
+          onTypeSelected: isLeft ? onCardAType : onCardBType,
+          onPlayerSelected: isLeft ? onCardAPlayer : onCardBPlayer,
         );
       case 'Substitution':
-        return const _SubstitutionFields();
+        return _SubstitutionFields(
+          timeController: isLeft ? subATime : subBTime,
+          players: players,
+          playerIn: isLeft ? subAIn : subBIn,
+          playerOut: isLeft ? subAOut : subBOut,
+          onPlayerIn: isLeft ? onSubAIn : onSubBIn,
+          onPlayerOut: isLeft ? onSubAOut : onSubBOut,
+        );
       default:
         return _GoalFields(
-          ownGoal: isLeft ? _leftOwnGoal : _rightOwnGoal,
-          penalty: isLeft ? _leftPenalty : _rightPenalty,
-          onOwnGoal: (value) => setState(
-            () => isLeft ? _leftOwnGoal = value : _rightOwnGoal = value,
-          ),
-          onPenalty: (value) => setState(
-            () => isLeft ? _leftPenalty = value : _rightPenalty = value,
-          ),
+          isPenaltyMode: tab == 'Penalty',
+          players: players,
+          timeController: isLeft ? goalATime : goalBTime,
+          ownGoal: isLeft ? goalAOwn : goalBOwn,
+          penalty: isLeft ? goalAPenalty : goalBPenalty,
+          penaltyMissed: isLeft ? goalAPenaltyMissed : goalBPenaltyMissed,
+          scorer: isLeft ? goalAScorer : goalBScorer,
+          assist: isLeft ? goalAAssist : goalBAssist,
+          onOwnGoal: isLeft ? onGoalAOwn : onGoalBOwn,
+          onPenalty: isLeft ? onGoalAPenalty : onGoalBPenalty,
+          onPenaltyMissed: isLeft ? onGoalAPenaltyMissed : onGoalBPenaltyMissed,
+          onScorer: isLeft ? onGoalAScorer : onGoalBScorer,
+          onAssist: isLeft ? onGoalAAssist : onGoalBAssist,
         );
     }
   }
@@ -1015,39 +1536,81 @@ class _LiveEntryPanelState extends State<_LiveEntryPanel> {
 
 class _GoalFields extends StatelessWidget {
   const _GoalFields({
+    required this.isPenaltyMode,
+    required this.players,
+    required this.timeController,
     required this.ownGoal,
     required this.penalty,
+    required this.penaltyMissed,
+    required this.scorer,
+    required this.assist,
     required this.onOwnGoal,
     required this.onPenalty,
+    required this.onPenaltyMissed,
+    required this.onScorer,
+    required this.onAssist,
   });
 
+  final bool isPenaltyMode;
+  final List<_LivePlayer> players;
+  final TextEditingController timeController;
   final bool ownGoal;
   final bool penalty;
+  final bool penaltyMissed;
+  final _LivePlayer? scorer;
+  final _LivePlayer? assist;
   final ValueChanged<bool> onOwnGoal;
   final ValueChanged<bool> onPenalty;
+  final ValueChanged<bool> onPenaltyMissed;
+  final ValueChanged<_LivePlayer?> onScorer;
+  final ValueChanged<_LivePlayer?> onAssist;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _CheckRow(
-          label: AppStrings.ownGoal,
-          value: ownGoal,
-          onChanged: onOwnGoal,
-        ),
-        const SizedBox(height: 8),
-        _CheckRow(
-          label: AppStrings.penalty,
-          value: penalty,
-          onChanged: onPenalty,
-        ),
-        const SizedBox(height: 12),
-        const _TimeField(),
-        const SizedBox(height: 10),
-        _DropdownBox(label: AppStrings.selectScorer),
-        const SizedBox(height: 10),
-        _DropdownBox(label: AppStrings.selectAssist),
+        if (!isPenaltyMode) ...[
+          _CheckRow(
+            label: AppStrings.ownGoal,
+            value: ownGoal,
+            onChanged: onOwnGoal,
+          ),
+          const SizedBox(height: 8),
+          _CheckRow(
+            label: AppStrings.penalty,
+            value: penalty,
+            onChanged: onPenalty,
+          ),
+          const SizedBox(height: 12),
+          _TimeField(controller: timeController),
+          const SizedBox(height: 10),
+        ],
+        if (penalty || isPenaltyMode) ...[
+          _CheckRow(
+            label: AppStrings.penaltyMissed,
+            value: penaltyMissed,
+            onChanged: onPenaltyMissed,
+          ),
+          const SizedBox(height: 10),
+        ],
+        if (!ownGoal)
+          _DropdownBox(
+            label: penalty || isPenaltyMode
+                ? AppStrings.selectPlayer
+                : AppStrings.selectScorer,
+            players: players,
+            selected: scorer,
+            onChanged: onScorer,
+          ),
+        if (!ownGoal) const SizedBox(height: 10),
+        if (!ownGoal && !penalty && !isPenaltyMode)
+          _DropdownBox(
+            label: AppStrings.selectAssist,
+            players: players,
+            selected: assist,
+            onChanged: onAssist,
+          ),
       ],
     );
   }
@@ -1056,11 +1619,19 @@ class _GoalFields extends StatelessWidget {
 class _CardsFields extends StatelessWidget {
   const _CardsFields({
     required this.selected,
-    required this.onSelected,
+    required this.timeController,
+    required this.players,
+    required this.selectedPlayer,
+    required this.onTypeSelected,
+    required this.onPlayerSelected,
   });
 
   final String selected;
-  final ValueChanged<String> onSelected;
+  final TextEditingController timeController;
+  final List<_LivePlayer> players;
+  final _LivePlayer? selectedPlayer;
+  final ValueChanged<String> onTypeSelected;
+  final ValueChanged<_LivePlayer?> onPlayerSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -1074,7 +1645,7 @@ class _CardsFields extends StatelessWidget {
               selected: selected == 'first',
               color: AppColors.socaYellow,
               textColor: AppColors.socaBlack,
-              onSelected: onSelected,
+              onSelected: onTypeSelected,
             ),
             const SizedBox(width: 2),
             _CardChoice(
@@ -1083,7 +1654,7 @@ class _CardsFields extends StatelessWidget {
               selected: selected == 'second',
               color: AppColors.socaYellow,
               textColor: AppColors.socaBlack,
-              onSelected: onSelected,
+              onSelected: onTypeSelected,
             ),
             const SizedBox(width: 2),
             _CardChoice(
@@ -1092,14 +1663,19 @@ class _CardsFields extends StatelessWidget {
               selected: selected == 'red',
               color: Colors.red,
               textColor: Colors.white,
-              onSelected: onSelected,
+              onSelected: onTypeSelected,
             ),
           ],
         ),
         const SizedBox(height: 10),
-        const _TimeField(),
+        _TimeField(controller: timeController),
         const SizedBox(height: 12),
-        _DropdownBox(label: AppStrings.selectPlayer),
+        _DropdownBox(
+          label: AppStrings.selectPlayer,
+          players: players,
+          selected: selectedPlayer,
+          onChanged: onPlayerSelected,
+        ),
       ],
     );
   }
@@ -1179,22 +1755,46 @@ class _CardChoice extends StatelessWidget {
 }
 
 class _SubstitutionFields extends StatelessWidget {
-  const _SubstitutionFields();
+  const _SubstitutionFields({
+    required this.timeController,
+    required this.players,
+    required this.playerIn,
+    required this.playerOut,
+    required this.onPlayerIn,
+    required this.onPlayerOut,
+  });
+
+  final TextEditingController timeController;
+  final List<_LivePlayer> players;
+  final _LivePlayer? playerIn;
+  final _LivePlayer? playerOut;
+  final ValueChanged<_LivePlayer?> onPlayerIn;
+  final ValueChanged<_LivePlayer?> onPlayerOut;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _TimeField(),
+        _TimeField(controller: timeController),
         const SizedBox(height: 12),
         _DirectionalLabel(label: AppStrings.playerIn, up: false),
         const SizedBox(height: 8),
-        _DropdownBox(label: AppStrings.selectInPlayer),
+        _DropdownBox(
+          label: AppStrings.selectInPlayer,
+          players: players,
+          selected: playerIn,
+          onChanged: onPlayerIn,
+        ),
         const SizedBox(height: 12),
         _DirectionalLabel(label: AppStrings.playerOut, up: true),
         const SizedBox(height: 8),
-        _DropdownBox(label: AppStrings.selectOutPlayer),
+        _DropdownBox(
+          label: AppStrings.selectOutPlayer,
+          players: players,
+          selected: playerOut,
+          onChanged: onPlayerOut,
+        ),
       ],
     );
   }
@@ -1224,11 +1824,18 @@ class _DirectionalLabel extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 6),
-        Icon(
-          up ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-          color: AppColors.socaBlack,
-          size: 24,
-        ),
+        Image.asset(
+          !up
+              ? "assets/icons/ic_match_downarrow.png"
+              : "assets/icons/ic_match_uparrow.png",
+          width: 20,
+          height: 20,
+        )
+        // Icon(
+        //   up ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+        //   color: AppColors.socaBlack,
+        //   size: 24,
+        // ),
       ],
     );
   }
@@ -1281,13 +1888,15 @@ class _CheckRow extends StatelessWidget {
 }
 
 class _TimeField extends StatelessWidget {
-  const _TimeField();
+  const _TimeField({required this.controller});
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(child: _InputBox(hint: 'Time')),
+        Expanded(child: _InputBox(hint: 'Time', controller: controller)),
         const SizedBox(width: 8),
         Text(
           AppStrings.minutesShort,
@@ -1304,15 +1913,17 @@ class _TimeField extends StatelessWidget {
 }
 
 class _InputBox extends StatelessWidget {
-  const _InputBox({required this.hint});
+  const _InputBox({required this.hint, required this.controller});
 
   final String hint;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 40,
       child: TextField(
+        controller: controller,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           hintText: AppStrings.literal(hint),
@@ -1339,37 +1950,66 @@ class _InputBox extends StatelessWidget {
 }
 
 class _DropdownBox extends StatelessWidget {
-  const _DropdownBox({required this.label});
+  const _DropdownBox({
+    required this.label,
+    this.players = const [],
+    this.selected,
+    this.onChanged,
+  });
 
   final String label;
+  final List<_LivePlayer> players;
+  final _LivePlayer? selected;
+  final ValueChanged<_LivePlayer?>? onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: AppColors.socaBlack),
-        borderRadius: BorderRadius.circular(3),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: AppColors.socaBlack,
+    final display = selected?.name ?? label;
+    return PopupMenuButton<_LivePlayer?>(
+      enabled: players.isNotEmpty && onChanged != null,
+      onSelected: onChanged,
+      itemBuilder: (context) => [
+        PopupMenuItem<_LivePlayer?>(
+          value: null,
+          child: Text(label),
+        ),
+        ...players.map(
+          (player) => PopupMenuItem<_LivePlayer?>(
+            value: player,
+            child: Text(player.name),
+          ),
+        ),
+      ],
+      child: Container(
+        height: 48,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: AppColors.socaBlack),
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                display,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 12,
+                  color: AppColors.socaBlack,
+                ),
               ),
             ),
-          ),
-          const Icon(Icons.arrow_drop_down, color: Colors.grey, size: 30),
-        ],
+            Image.asset(
+              "assets/images/dropdown.png",
+              width: 16,
+              height: 16,
+            ),
+          ],
+        ),
       ),
     );
   }

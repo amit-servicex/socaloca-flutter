@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/api_constants.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/socaloca_text_field.dart';
@@ -31,7 +32,7 @@ class ManageTeamScreen extends StatelessWidget {
         backgroundColor: AppColors.socaPageBg,
         body: Column(
           children: [
-            const ColoredBox(
+            ColoredBox(
               color: Colors.white,
               child: TabBar(
                 isScrollable: true,
@@ -39,20 +40,20 @@ class ManageTeamScreen extends StatelessWidget {
                 unselectedLabelColor: AppColors.socaBlack,
                 indicatorColor: AppColors.socaBlack,
                 indicatorWeight: 3,
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                 ),
-                unselectedLabelStyle: TextStyle(
+                unselectedLabelStyle: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
                 tabs: [
-                  Tab(text: 'NEW REQUESTS'),
-                  Tab(text: 'NEW PLAYERS'),
-                  Tab(text: 'JERSEY ASSIGNED'),
+                  Tab(text: AppStrings.newRequests.toUpperCase()),
+                  Tab(text: AppStrings.newPlayers.toUpperCase()),
+                  Tab(text: AppStrings.jerseyAssigned.toUpperCase()),
                 ],
               ),
             ),
@@ -368,9 +369,9 @@ class _NewPlayersTabState extends State<_NewPlayersTab>
       await widget.repo.assignJerseys(payload);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content:
-              Text('Jerseys assigned', style: TextStyle(fontFamily: 'Poppins')),
+              Text(AppStrings.jerseysAssigned, style: const TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.green,
         ),
       );
@@ -645,13 +646,13 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
           autofocus: true,
           maxLength: 5,
           keyboardType: TextInputType.text,
-          hintText: 'Jersey number or "coach"/"manager"',
+          hintText: AppStrings.jerseyNumberHint,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('CANCEL',
-                style: TextStyle(fontFamily: 'Poppins', color: Colors.grey)),
+            child: Text(AppStrings.cancel.toUpperCase(),
+                style: const TextStyle(fontFamily: 'Poppins', color: Colors.grey)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -660,7 +661,7 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
               elevation: 0,
             ),
             onPressed: () => Navigator.of(ctx).pop(ctrl.text.trim()),
-            child: const Text('SAVE', style: TextStyle(fontFamily: 'Poppins')),
+            child: Text(AppStrings.save, style: const TextStyle(fontFamily: 'Poppins')),
           ),
         ],
       ),
@@ -703,8 +704,8 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
               side: const BorderSide(color: AppColors.socaBlack),
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('YES',
-                style: TextStyle(
+            child: Text(AppStrings.yes,
+                style: const TextStyle(
                     fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
           ),
           ElevatedButton(
@@ -714,8 +715,8 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
               elevation: 0,
             ),
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('NO',
-                style: TextStyle(
+            child: Text(AppStrings.no,
+                style: const TextStyle(
                     fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
           ),
         ],
@@ -1078,32 +1079,32 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
                       controller: mobileCtrl,
                       enabled: !otpRequested && !loading,
                       keyboardType: TextInputType.phone,
-                      hintText: 'Mobile number',
+                      hintText: AppStrings.mobileNumber,
                     ),
                     const SizedBox(height: 8),
                     CreateProfileTextField(
                       controller: countryCodeCtrl,
                       enabled: !otpRequested && !loading,
-                      hintText: 'Country code',
+                      hintText: AppStrings.countryCode,
                     ),
                     const SizedBox(height: 8),
                     CreateProfileTextField(
                       controller: countryIsoCtrl,
                       enabled: !otpRequested && !loading,
-                      hintText: 'Country ISO',
+                      hintText: AppStrings.countryIso,
                     ),
                     const SizedBox(height: 8),
                     CreateProfileTextField(
                       controller: countryCtrl,
                       enabled: !otpRequested && !loading,
-                      hintText: 'Country',
+                      hintText: AppStrings.country,
                     ),
                     const SizedBox(height: 8),
                     CreateProfileTextField(
                       controller: passwordCtrl,
                       enabled: !otpRequested && !loading,
                       obscureText: true,
-                      hintText: 'Password',
+                      hintText: AppStrings.passwordHint,
                     ),
                     if (otpRequested) ...[
                       const SizedBox(height: 8),
@@ -1111,7 +1112,7 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
                         controller: otpCtrl,
                         enabled: !loading,
                         keyboardType: TextInputType.number,
-                        hintText: 'OTP',
+                        hintText: AppStrings.otp,
                       ),
                     ],
                     if (error != null) ...[
@@ -1547,7 +1548,7 @@ class _ErrorRetry extends StatelessWidget {
               foregroundColor: AppColors.socaYellow,
               elevation: 0,
             ),
-            child: const Text('Retry', style: TextStyle(fontFamily: 'Poppins')),
+            child: Text(AppStrings.retry, style: const TextStyle(fontFamily: 'Poppins')),
           ),
         ],
       ),

@@ -194,9 +194,9 @@ class _TournamentFeaturedScreenState
                           fontWeight: FontWeight.w500,
                         ),
                         tabs: [
-                          Tab(text: 'Matches fd'),
-                          Tab(text: 'Points Table'),
-                          Tab(text: 'Stats'),
+                          Tab(text: AppStrings.matches),
+                          Tab(text: AppStrings.pointsTable),
+                          Tab(text: AppStrings.stats),
                         ],
                       ),
                     ),

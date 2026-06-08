@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socaloca/core/constants/api_constants.dart';
 
+import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/socaloca_text_field.dart';
 import '../data/models/team_bio_model.dart';
@@ -117,9 +118,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Select Photo',
-                style: TextStyle(
+              Text(
+                AppStrings.selectPhoto,
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
@@ -130,8 +131,8 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
               ListTile(
                 leading:
                     const Icon(Icons.camera_alt, color: AppColors.socaBlack),
-                title: const Text('Camera',
-                    style: TextStyle(fontFamily: 'Poppins', fontSize: 16)),
+                title: Text(AppStrings.camera,
+                    style: const TextStyle(fontFamily: 'Poppins', fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.camera);
@@ -140,8 +141,8 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
               ListTile(
                 leading:
                     const Icon(Icons.photo_library, color: AppColors.socaBlack),
-                title: const Text('Gallery',
-                    style: TextStyle(fontFamily: 'Poppins', fontSize: 16)),
+                title: Text(AppStrings.gallery,
+                    style: const TextStyle(fontFamily: 'Poppins', fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.gallery);
@@ -172,9 +173,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Team info updated',
-              style: TextStyle(fontFamily: 'Poppins')),
+        SnackBar(
+          content: Text(AppStrings.teamInfoUpdated,
+              style: const TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.green,
         ),
       );
@@ -297,9 +298,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
             // Game Type
             Row(
               children: [
-                const Text(
-                  'Game Type',
-                  style: TextStyle(
+                Text(
+                  AppStrings.gameType,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack,
@@ -312,9 +313,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
                   activeColor: AppColors.socaBlack,
                   onChanged: (v) => setState(() => _gameType = v!),
                 ),
-                const Text(
-                  'Football',
-                  style: TextStyle(
+                Text(
+                  AppStrings.football,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack,
@@ -326,9 +327,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
                   activeColor: AppColors.socaBlack,
                   onChanged: (v) => setState(() => _gameType = v!),
                 ),
-                const Text(
-                  'Futsal',
-                  style: TextStyle(
+                Text(
+                  AppStrings.futsal,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack,
@@ -339,9 +340,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
             const SizedBox(height: 16),
 
             // Age Range
-            const Text(
-              'Age Range',
-              style: TextStyle(
+            Text(
+              AppStrings.ageRange,
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 color: AppColors.socaBlack,
@@ -350,16 +351,16 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
             const SizedBox(height: 6),
             _buildDropdown<String>(
               value: _ageGroup,
-              hint: 'Select age range',
+              hint: AppStrings.selectAgeRange,
               items: _ageGroups,
               onChanged: (v) => setState(() => _ageGroup = v),
             ),
             const SizedBox(height: 16),
 
             // Age Category
-            const Text(
-              'Age Category *',
-              style: TextStyle(
+            Text(
+              '${AppStrings.ageCategory} *',
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 color: AppColors.socaBlack,
@@ -368,7 +369,7 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
             const SizedBox(height: 6),
             _buildDropdown<String>(
               value: _ageCat,
-              hint: 'Select age category',
+              hint: AppStrings.selectAgeCategory,
               items: _ageCategories,
               onChanged: (v) => setState(() => _ageCat = v),
             ),
@@ -378,9 +379,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
             if (widget.teamDetails.gender?.isNotEmpty ?? false) ...[
               Row(
                 children: [
-                  const Text(
-                    'Gender',
-                    style: TextStyle(
+                  Text(
+                    AppStrings.gender,
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaBlack,
@@ -404,9 +405,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
             // Team Name
             _buildTextField(
               controller: _nameCtrl,
-              hint: 'Team Name',
+              hint: AppStrings.teamName,
               validator: (v) => (v == null || v.trim().isEmpty)
-                  ? 'Team name is required'
+                  ? AppStrings.teamNameRequired
                   : null,
             ),
             const SizedBox(height: 16),
@@ -414,7 +415,7 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
             // Short Name
             _buildTextField(
               controller: _shortNameCtrl,
-              hint: 'Short Name (max 4 chars)',
+              hint: AppStrings.shortNameHint,
               maxLength: 4,
             ),
             const SizedBox(height: 16),
@@ -432,13 +433,13 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
             // City
             _buildTextField(
               controller: _cityCtrl,
-              hint: 'City / Address',
+              hint: AppStrings.cityAddress,
             ),
             const SizedBox(height: 32),
 
-            const Text(
-              '* mandatory fields',
-              style: TextStyle(
+            Text(
+              AppStrings.mandatoryFields,
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,
@@ -467,9 +468,9 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
                         child: CircularProgressIndicator(
                             strokeWidth: 2, color: AppColors.socaYellow),
                       )
-                    : const Text(
-                        'UPDATE TEAM',
-                        style: TextStyle(
+                    : Text(
+                        AppStrings.updateTeam.toUpperCase(),
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 24,

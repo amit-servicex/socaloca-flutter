@@ -119,7 +119,7 @@ class _SearchableSheetState extends State<_SearchableSheet> {
               style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
               decoration: InputDecoration(
                 fillColor: Colors.transparent,
-                hintText: 'Search...'.tr,
+                hintText: AppStrings.searchEllipsis,
                 hintStyle: const TextStyle(
                     fontFamily: 'Poppins', fontSize: 13, color: Colors.grey),
                 prefixIcon: const Icon(Icons.search, size: 30),
@@ -150,7 +150,7 @@ class _SearchableSheetState extends State<_SearchableSheet> {
             child: _filtered.isEmpty
                 ? Center(
                     child: Text(
-                      'No results found'.tr,
+                      AppStrings.noResultsFound,
                       style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,

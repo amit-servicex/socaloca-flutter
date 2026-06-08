@@ -218,8 +218,8 @@ class RefereeRepository {
     required String tournamentId,
     required int teamAScore,
     required int teamBScore,
-    int penaltyScore = 0,
-    int extraTimeScore = 0,
+    bool penaltyScore = false,
+    bool extraTimeScore = false,
   }) async {
     final response = await ApiClient.instance.post(
       ApiConstants.saveRefMatchScore,
@@ -231,6 +231,91 @@ class RefereeRepository {
         'opponentGoals': teamBScore,
         'penaltyScore': penaltyScore,
         'extraTimeScore': extraTimeScore,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveExtraTimeScore({
+    required String matchId,
+    required int teamAScore,
+    required int teamBScore,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMtchExtScore,
+      body: {
+        'matchId': matchId,
+        'myGoals': teamAScore,
+        'opponentGoals': teamBScore,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> savePenaltyScore({
+    required String matchId,
+    required int teamAScore,
+    required int teamBScore,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMtchPenaltyScore,
+      body: {
+        'matchId': matchId,
+        'myGoals': teamAScore,
+        'opponentGoals': teamBScore,
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveMatchGoals({
+    required String matchId,
+    required String tournamentId,
+    required String matchType,
+    required List<Map<String, dynamic>> goals,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.refSaveMatchGoals,
+      body: {
+        'tournamentId': tournamentId,
+        'userId': _userId,
+        'matchId': matchId,
+        'matchType': matchType,
+        'goals': goals
+            .map((goal) => {
+                  ...goal,
+                  if (!goal.containsKey('addedBy')) 'addedBy': _userId,
+                })
+            .toList(),
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
+
+  Future<bool> saveMatchCards({
+    required String matchId,
+    required String tournamentId,
+    required String matchType,
+    required List<Map<String, dynamic>> cards,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMtchCards,
+      body: {
+        'tournamentId': tournamentId,
+        'userId': _userId,
+        'matchId': matchId,
+        'matchType': matchType,
+        'cards': cards
+            .map((card) => {
+                  ...card,
+                  'matchId': matchId,
+                  if (!card.containsKey('addedBy')) 'addedBy': _userId,
+                })
+            .toList(),
       },
     );
     final resp = response['response'] as Map<String, dynamic>? ?? {};

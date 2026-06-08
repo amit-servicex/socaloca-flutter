@@ -49,6 +49,11 @@ class AppStrings {
   static String get yes => _t('yes');
   static String get no => _t('no');
   static String get search => _t('search');
+  static String get searchEllipsis => _t('searchEllipsis');
+  static String get noResultsFound => _t('noResultsFound');
+  static String get locationPermission => _t('locationPermission');
+  static String get locationPermissionDesc => _t('locationPermissionDesc');
+  static String get learnMore => _t('learnMore');
   static String get back => _t('back');
   static String get save => _t('save');
   static String get delete => _t('delete');
@@ -196,6 +201,7 @@ class AppStrings {
   static String get substitution => _t('substitution');
   static String get ownGoal => _t('ownGoal');
   static String get penalty => _t('penalty');
+  static String get penaltyMissed => _t('penaltyMissed');
   static String get minutesShort => _t('minutesShort');
   static String get selectScorer => _t('selectScorer');
   static String get selectAssist => _t('selectAssist');
@@ -357,6 +363,62 @@ class AppStrings {
   static String get takePhotoUpper => _t('takePhotoUpper');
   static String get chooseGalleryUpper => _t('chooseGalleryUpper');
 
+  // ── Teams ─────────────────────────────────────────────────────────────────
+  static String get warning => _t('warning');
+  static String get confirmEndMatch => _t('confirmEndMatch');
+  static String get jerseysAssigned => _t('jerseysAssigned');
+  static String get inviteSent => _t('inviteSent');
+  static String get enterAtLeast3Chars => _t('enterAtLeast3Chars');
+  static String get noPlayersFound => _t('noPlayersFound');
+  static String get invitationSentAll => _t('invitationSentAll');
+  static String get profileNameNotAvailable => _t('profileNameNotAvailable');
+  static String get selectYear => _t('selectYear');
+  static String get camera => _t('camera');
+  static String get teamInfoUpdated => _t('teamInfoUpdated');
+  // Tab labels
+  static String get pom => _t('pom');
+  static String get score => _t('score');
+  static String get squad => _t('squad');
+  static String get pointsTable => _t('pointsTable');
+  static String get stats => _t('stats');
+  static String get groupStage => _t('groupStage');
+  static String get knockout => _t('knockout');
+  static String get manOfMatch => _t('manOfMatch');
+  static String get searchAndInvite => _t('searchAndInvite');
+  static String get inviteByPhone => _t('inviteByPhone');
+  static String get createPlayer => _t('createPlayer');
+  static String get all => _t('all');
+  static String get joined => _t('joined');
+  static String get pending => _t('pending');
+  static String get received => _t('received');
+  static String get newRequests => _t('newRequests');
+  static String get newPlayers => _t('newPlayers');
+  static String get jerseyAssigned => _t('jerseyAssigned');
+  // Form hints
+  static String get phoneNumber => _t('phoneNumber');
+  static String get jerseyNumberHint => _t('jerseyNumberHint');
+  static String get enterTextHint => _t('enterTextHint');
+  static String get mobileNumber => _t('mobileNumber');
+  static String get countryCode => _t('countryCode');
+  static String get countryIso => _t('countryIso');
+  static String get otp => _t('otp');
+  static String get searchHere => _t('searchHere');
+  static String get passwordHint => _t('passwordHint');
+  // Edit team screen
+  static String get selectPhoto => _t('selectPhoto');
+  static String get gameType => _t('gameType');
+  static String get football => _t('football');
+  static String get futsal => _t('futsal');
+  static String get ageRange => _t('ageRange');
+  static String get ageCategory => _t('ageCategory');
+  static String get updateTeam => _t('updateTeam');
+  static String get teamName => _t('teamName');
+  static String get shortNameHint => _t('shortNameHint');
+  static String get cityAddress => _t('cityAddress');
+  static String get selectAgeRange => _t('selectAgeRange');
+  static String get selectAgeCategory => _t('selectAgeCategory');
+  static String get teamNameRequired => _t('teamNameRequired');
+
   // ─────────────────────────────────────────────────────────────────────────
   // Translation tables — sourced from Android values/strings.xml
   // ─────────────────────────────────────────────────────────────────────────
@@ -369,6 +431,11 @@ class AppStrings {
       'yes': 'YES',
       'no': 'No',
       'search': 'Search',
+      'searchEllipsis': 'Search...',
+      'locationPermission': 'Location Permission',
+      'locationPermissionDesc':
+          "SocaLoca asks for your location access to align you with your country's Football Association. SocaLoca also uses your location to find your tournament location. Your location data is only used to help you navigate through your football journey and is not saved for any other purposes.",
+      'learnMore': 'Learn more',
       'searchHere': 'Search here',
       'playerCoachManagerReferee': 'Player/Coach/Manager/Referee',
       'byCountry': 'By Country',
@@ -514,6 +581,7 @@ class AppStrings {
       'substitution': 'Substitution',
       'ownGoal': 'Own Goal',
       'penalty': 'Penalty',
+      'penaltyMissed': 'Penalty Missed',
       'minutesShort': '(Mins.)',
       'selectScorer': 'Select Scorer',
       'selectAssist': 'Select Assist',
@@ -650,6 +718,56 @@ class AppStrings {
       'teamsYouFollow': 'Teams you follow',
       'takePhotoUpper': 'TAKE A PHOTO',
       'chooseGalleryUpper': 'CHOOSE FROM GALLERY',
+      'warning': 'Warning',
+      'confirmEndMatch': 'Are you sure you want to end this match?',
+      'jerseysAssigned': 'Jerseys assigned',
+      'inviteSent': 'Invite sent',
+      'enterAtLeast3Chars': 'Enter at least 3 characters to search',
+      'noPlayersFound': 'No players found',
+      'invitationSentAll': 'Invitation sent to all numbers',
+      'profileNameNotAvailable': 'Profile name is not available',
+      'selectYear': 'Select year',
+      'camera': 'Camera',
+      'teamInfoUpdated': 'Team info updated',
+      'pom': 'POM',
+      'score': 'Score',
+      'squad': 'Squad',
+      'pointsTable': 'Points Table',
+      'stats': 'Stats',
+      'groupStage': 'Group Stage',
+      'knockout': 'Knockout',
+      'manOfMatch': 'Man of Match',
+      'searchAndInvite': 'Search & Invite',
+      'inviteByPhone': 'Invite by Phone',
+      'createPlayer': 'Create Player',
+      'all': 'All',
+      'joined': 'Joined',
+      'pending': 'Pending',
+      'received': 'Received',
+      'newRequests': 'New Requests',
+      'newPlayers': 'New Players',
+      'jerseyAssigned': 'Jersey Assigned',
+      'phoneNumber': 'Phone Number',
+      'jerseyNumberHint': 'Jersey number or "coach"/"manager"',
+      'enterTextHint': 'Enter text here (max 150 characters)',
+      'mobileNumber': 'Mobile number',
+      'countryCode': 'Country code',
+      'countryIso': 'Country ISO',
+      'otp': 'OTP',
+      'passwordHint': 'Password',
+      'selectPhoto': 'Select Photo',
+      'gameType': 'Game Type',
+      'football': 'Football',
+      'futsal': 'Futsal',
+      'ageRange': 'Age Range',
+      'ageCategory': 'Age Category',
+      'updateTeam': 'Update Team',
+      'teamName': 'Team Name',
+      'shortNameHint': 'Short Name (max 4 chars)',
+      'cityAddress': 'City / Address',
+      'selectAgeRange': 'Select age range',
+      'selectAgeCategory': 'Select age category',
+      'teamNameRequired': 'Team name is required',
     },
 
     // ── Spanish ─────────────────────────────────────────────────────────────
@@ -660,6 +778,11 @@ class AppStrings {
       'yes': 'SÍ',
       'no': 'No',
       'search': 'Buscar',
+      'searchEllipsis': 'Buscar...',
+      'locationPermission': 'Permiso de ubicación',
+      'locationPermissionDesc':
+          'SocaLoca solicita acceso a tu ubicación para conectarte con la Asociación de Fútbol de tu país. SocaLoca también usa tu ubicación para encontrar la ubicación de tu torneo. Tus datos de ubicación solo se usan para ayudarte a navegar por tu recorrido futbolístico y no se guardan para ningún otro propósito.',
+      'learnMore': 'Más información',
       'searchHere': 'Buscar aquí',
       'playerCoachManagerReferee': 'Jugador/Entrenador/Manager/Árbitro',
       'byCountry': 'Por país',
@@ -806,6 +929,7 @@ class AppStrings {
       'substitution': 'Sustitución',
       'ownGoal': 'Gol en propia puerta',
       'penalty': 'Penalti',
+      'penaltyMissed': 'Penalti fallado',
       'minutesShort': '(Min.)',
       'selectScorer': 'Seleccionar goleador',
       'selectAssist': 'Seleccionar asistencia',
@@ -944,6 +1068,56 @@ class AppStrings {
       'teamsYouFollow': 'Equipos que sigues',
       'takePhotoUpper': 'TOMAR UNA FOTO',
       'chooseGalleryUpper': 'ELEGIR DE LA GALERÍA',
+      'warning': 'Advertencia',
+      'confirmEndMatch': '¿Estás seguro de que quieres terminar este partido?',
+      'jerseysAssigned': 'Camisetas asignadas',
+      'inviteSent': 'Invitación enviada',
+      'enterAtLeast3Chars': 'Ingresa al menos 3 caracteres para buscar',
+      'noPlayersFound': 'No se encontraron jugadores',
+      'invitationSentAll': 'Invitación enviada a todos los números',
+      'profileNameNotAvailable': 'El nombre de perfil no está disponible',
+      'selectYear': 'Seleccionar año',
+      'camera': 'Cámara',
+      'teamInfoUpdated': 'Información del equipo actualizada',
+      'pom': 'POM',
+      'score': 'Marcador',
+      'squad': 'Plantilla',
+      'pointsTable': 'Tabla de Puntos',
+      'stats': 'Estadísticas',
+      'groupStage': 'Fase de Grupos',
+      'knockout': 'Eliminatoria',
+      'manOfMatch': 'Jugador del Partido',
+      'searchAndInvite': 'Buscar e Invitar',
+      'inviteByPhone': 'Invitar por Teléfono',
+      'createPlayer': 'Crear Jugador',
+      'all': 'Todos',
+      'joined': 'Unido',
+      'pending': 'Pendiente',
+      'received': 'Recibido',
+      'newRequests': 'Nuevas Solicitudes',
+      'newPlayers': 'Nuevos Jugadores',
+      'jerseyAssigned': 'Camiseta Asignada',
+      'phoneNumber': 'Número de Teléfono',
+      'jerseyNumberHint': 'Número de camiseta o "entrenador"/"manager"',
+      'enterTextHint': 'Ingresa texto aquí (máx. 150 caracteres)',
+      'mobileNumber': 'Número de móvil',
+      'countryCode': 'Código de país',
+      'countryIso': 'ISO del país',
+      'otp': 'OTP',
+      'passwordHint': 'Contraseña',
+      'selectPhoto': 'Seleccionar Foto',
+      'gameType': 'Tipo de Juego',
+      'football': 'Fútbol',
+      'futsal': 'Futsal',
+      'ageRange': 'Rango de Edad',
+      'ageCategory': 'Categoría de Edad',
+      'updateTeam': 'Actualizar Equipo',
+      'teamName': 'Nombre del Equipo',
+      'shortNameHint': 'Nombre Corto (máx. 4 chars)',
+      'cityAddress': 'Ciudad / Dirección',
+      'selectAgeRange': 'Seleccionar rango de edad',
+      'selectAgeCategory': 'Seleccionar categoría de edad',
+      'teamNameRequired': 'El nombre del equipo es obligatorio',
     },
 
     // ── Portuguese ──────────────────────────────────────────────────────────
@@ -954,6 +1128,11 @@ class AppStrings {
       'yes': 'SIM',
       'no': 'Não',
       'search': 'Pesquisar',
+      'searchEllipsis': 'Pesquisar...',
+      'locationPermission': 'Permissão de localização',
+      'locationPermissionDesc':
+          'A SocaLoca solicita acesso à sua localização para conectá-lo à Associação de Futebol do seu país. A SocaLoca também usa sua localização para encontrar o local do seu torneio. Seus dados de localização são usados apenas para ajudar você a navegar pela sua jornada no futebol e não são salvos para nenhum outro propósito.',
+      'learnMore': 'Saiba mais',
       'searchHere': 'Pesquisar aqui',
       'playerCoachManagerReferee': 'Jogador/Treinador/Gestor/Árbitro',
       'byCountry': 'Por país',
@@ -1100,6 +1279,7 @@ class AppStrings {
       'substitution': 'Substituição',
       'ownGoal': 'Gol contra',
       'penalty': 'Pênalti',
+      'penaltyMissed': 'Pênalti perdido',
       'minutesShort': '(Min.)',
       'selectScorer': 'Selecionar artilheiro',
       'selectAssist': 'Selecionar assistência',
@@ -1238,6 +1418,56 @@ class AppStrings {
       'teamsYouFollow': 'Equipes que você segue',
       'takePhotoUpper': 'TIRAR UMA FOTO',
       'chooseGalleryUpper': 'ESCOLHER DA GALERIA',
+      'warning': 'Aviso',
+      'confirmEndMatch': 'Tem certeza de que deseja encerrar esta partida?',
+      'jerseysAssigned': 'Camisas atribuídas',
+      'inviteSent': 'Convite enviado',
+      'enterAtLeast3Chars': 'Digite pelo menos 3 caracteres para pesquisar',
+      'noPlayersFound': 'Nenhum jogador encontrado',
+      'invitationSentAll': 'Convite enviado para todos os números',
+      'profileNameNotAvailable': 'Nome de perfil não está disponível',
+      'selectYear': 'Selecionar ano',
+      'camera': 'Câmera',
+      'teamInfoUpdated': 'Informações da equipe atualizadas',
+      'pom': 'POM',
+      'score': 'Placar',
+      'squad': 'Elenco',
+      'pointsTable': 'Tabela de Pontos',
+      'stats': 'Estatísticas',
+      'groupStage': 'Fase de Grupos',
+      'knockout': 'Eliminatória',
+      'manOfMatch': 'Homem da Partida',
+      'searchAndInvite': 'Buscar e Convidar',
+      'inviteByPhone': 'Convidar por Telefone',
+      'createPlayer': 'Criar Jogador',
+      'all': 'Todos',
+      'joined': 'Ingressado',
+      'pending': 'Pendente',
+      'received': 'Recebido',
+      'newRequests': 'Novas Solicitações',
+      'newPlayers': 'Novos Jogadores',
+      'jerseyAssigned': 'Camisa Atribuída',
+      'phoneNumber': 'Número de Telefone',
+      'jerseyNumberHint': 'Número da camisa ou "treinador"/"gerente"',
+      'enterTextHint': 'Digite o texto aqui (máx. 150 caracteres)',
+      'mobileNumber': 'Número de celular',
+      'countryCode': 'Código do país',
+      'countryIso': 'ISO do país',
+      'otp': 'OTP',
+      'passwordHint': 'Senha',
+      'selectPhoto': 'Selecionar Foto',
+      'gameType': 'Tipo de Jogo',
+      'football': 'Futebol',
+      'futsal': 'Futsal',
+      'ageRange': 'Faixa Etária',
+      'ageCategory': 'Categoria de Idade',
+      'updateTeam': 'Atualizar Equipe',
+      'teamName': 'Nome do Equipe',
+      'shortNameHint': 'Nome Curto (máx. 4 caracteres)',
+      'cityAddress': 'Cidade / Endereço',
+      'selectAgeRange': 'Selecionar faixa etária',
+      'selectAgeCategory': 'Selecionar categoria de idade',
+      'teamNameRequired': 'O nome da equipe é obrigatório',
     },
 
     // ── French ──────────────────────────────────────────────────────────────
@@ -1248,6 +1478,11 @@ class AppStrings {
       'yes': 'OUI',
       'no': 'Non',
       'search': 'Chercher',
+      'searchEllipsis': 'Rechercher...',
+      'locationPermission': 'Autorisation de localisation',
+      'locationPermissionDesc':
+          "SocaLoca demande l'accès à votre localisation pour vous associer à la fédération de football de votre pays. SocaLoca utilise également votre localisation pour trouver le lieu de votre tournoi. Vos données de localisation sont uniquement utilisées pour vous aider à naviguer dans votre parcours footballistique et ne sont pas enregistrées à d'autres fins.",
+      'learnMore': 'En savoir plus',
       'searchHere': 'Chercher ici',
       'playerCoachManagerReferee': 'Joueur/Entraîneur/Manager/Arbitre',
       'byCountry': 'Par pays',
@@ -1394,6 +1629,7 @@ class AppStrings {
       'substitution': 'Remplacement',
       'ownGoal': 'But contre son camp',
       'penalty': 'Penalty',
+      'penaltyMissed': 'Penalty manqué',
       'minutesShort': '(Min.)',
       'selectScorer': 'Sélectionner buteur',
       'selectAssist': 'Sélectionner passeur',
@@ -1535,6 +1771,56 @@ class AppStrings {
       'teamsYouFollow': 'Équipes que vous suivez',
       'takePhotoUpper': 'PRENDRE UNE PHOTO',
       'chooseGalleryUpper': 'CHOISIR DANS LA GALERIE',
+      'warning': 'Avertissement',
+      'confirmEndMatch': 'Voulez-vous vraiment terminer ce match ?',
+      'jerseysAssigned': 'Maillots attribués',
+      'inviteSent': 'Invitation envoyée',
+      'enterAtLeast3Chars': 'Saisissez au moins 3 caractères pour rechercher',
+      'noPlayersFound': 'Aucun joueur trouvé',
+      'invitationSentAll': 'Invitation envoyée à tous les numéros',
+      'profileNameNotAvailable': "Le nom de profil n'est pas disponible",
+      'selectYear': 'Sélectionner une année',
+      'camera': 'Caméra',
+      'teamInfoUpdated': "Informations de l'équipe mises à jour",
+      'pom': 'POM',
+      'score': 'Score',
+      'squad': 'Effectif',
+      'pointsTable': 'Tableau des Points',
+      'stats': 'Stats',
+      'groupStage': 'Phase de Groupes',
+      'knockout': 'Élimination directe',
+      'manOfMatch': 'Homme du Match',
+      'searchAndInvite': 'Rechercher et Inviter',
+      'inviteByPhone': 'Inviter par Téléphone',
+      'createPlayer': 'Créer un Joueur',
+      'all': 'Tous',
+      'joined': 'Rejoint',
+      'pending': 'En attente',
+      'received': 'Reçu',
+      'newRequests': 'Nouvelles Demandes',
+      'newPlayers': 'Nouveaux Joueurs',
+      'jerseyAssigned': 'Maillot Attribué',
+      'phoneNumber': 'Numéro de Téléphone',
+      'jerseyNumberHint': 'Numéro de maillot ou "entraîneur"/"manager"',
+      'enterTextHint': 'Saisissez du texte ici (max. 150 caractères)',
+      'mobileNumber': 'Numéro de mobile',
+      'countryCode': 'Code du pays',
+      'countryIso': 'ISO du pays',
+      'otp': 'OTP',
+      'passwordHint': 'Mot de passe',
+      'selectPhoto': 'Sélectionner une photo',
+      'gameType': 'Type de Jeu',
+      'football': 'Football',
+      'futsal': 'Futsal',
+      'ageRange': "Tranche d'Âge",
+      'ageCategory': "Catégorie d'Âge",
+      'updateTeam': "Mettre à Jour l'Équipe",
+      'teamName': "Nom de l'Équipe",
+      'shortNameHint': 'Nom Court (max. 4 caract.)',
+      'cityAddress': 'Ville / Adresse',
+      'selectAgeRange': "Sélectionner la tranche d'âge",
+      'selectAgeCategory': "Sélectionner la catégorie d'âge",
+      'teamNameRequired': "Le nom de l'équipe est requis",
     },
   };
 }

@@ -89,8 +89,8 @@ class _ClubsPartnersLandingScreenState extends State<ClubsPartnersLandingScreen>
               fontWeight: FontWeight.w400,
             ),
             tabs: [
-              Tab(text: 'Clubs'),
-              Tab(text: 'Partners'),
+              Tab(text: AppStrings.clubs),
+              Tab(text: AppStrings.partners),
             ],
           ),
           Expanded(

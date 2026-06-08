@@ -69,10 +69,10 @@ class _LeagueStatsTabState extends ConsumerState<LeagueStatsTab>
             ),
             tabs: [
               // Tab(text: 'TABLE'),
-              Tab(text: 'Goals'),
-              Tab(text: 'Assists'),
-              Tab(text: 'Cards'),
-              Tab(text: 'POM'),
+              Tab(text: AppStrings.goals),
+              Tab(text: AppStrings.assists),
+              Tab(text: AppStrings.cards),
+              Tab(text: AppStrings.pom),
             ],
           ),
         ),
@@ -210,11 +210,12 @@ class _StatsList extends ConsumerWidget {
       child: Row(
         children: [
           Expanded(
-            child: _buildHeaderText('PLAYERS'),
+            child: _buildHeaderText(AppStrings.players.toUpperCase()),
           ),
           SizedBox(
             width: 52,
-            child: _buildHeaderText('GOALS', textAlign: TextAlign.right),
+            child: _buildHeaderText(AppStrings.goals.toUpperCase(),
+                textAlign: TextAlign.right),
           ),
         ],
       ),
@@ -228,7 +229,7 @@ class _StatsList extends ConsumerWidget {
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Expanded(child: _buildHeaderText('PLAYERS')),
+          Expanded(child: _buildHeaderText(AppStrings.players.toUpperCase())),
           _buildCardHeaderIcon(Colors.red),
           SizedBox(width: 16),
           _buildCardHeaderIcon(AppColors.socaYellow),

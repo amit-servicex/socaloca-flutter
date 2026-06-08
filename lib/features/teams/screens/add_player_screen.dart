@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:socaloca/features/teams/widgets/team_header_widget.dart';
 import '../../../core/constants/api_constants.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/services/location_service.dart';
@@ -111,7 +112,7 @@ class AddPlayerScreen extends StatelessWidget {
         backgroundColor: AppColors.socaPageBg,
         body: Column(
           children: [
-            const ColoredBox(
+            ColoredBox(
               color: Colors.white,
               child: TabBar(
                 isScrollable: true,
@@ -119,20 +120,20 @@ class AddPlayerScreen extends StatelessWidget {
                 unselectedLabelColor: AppColors.socaBlack,
                 indicatorColor: AppColors.socaBlack,
                 indicatorWeight: 3,
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                 ),
-                unselectedLabelStyle: TextStyle(
+                unselectedLabelStyle: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
                 tabs: [
-                  Tab(text: 'SEARCH & INVITE'),
-                  Tab(text: 'INVITE BY PHONE'),
-                  Tab(text: 'CREATE PLAYER'),
+                  Tab(text: AppStrings.searchAndInvite.toUpperCase()),
+                  Tab(text: AppStrings.inviteByPhone.toUpperCase()),
+                  Tab(text: AppStrings.createPlayer.toUpperCase()),
                 ],
               ),
             ),
@@ -269,9 +270,9 @@ class _SearchInviteTabState extends State<_SearchInviteTab>
           _invited.add(pid);
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content:
-                Text('Invite sent', style: TextStyle(fontFamily: 'Poppins')),
+                Text(AppStrings.inviteSent, style: const TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.green,
           ),
         );
@@ -302,7 +303,7 @@ class _SearchInviteTabState extends State<_SearchInviteTab>
             controller: _searchCtrl,
             textInputAction: TextInputAction.search,
             onSubmitted: (_) => _search(reset: true),
-            hintText: 'Search here',
+            hintText: AppStrings.searchHere,
             suffixWidget: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -330,17 +331,17 @@ class _SearchInviteTabState extends State<_SearchInviteTab>
         // Results
         Expanded(
           child: !_hasSearched && !_loading
-              ? const Center(
-                  child: Text('Enter at least 3 characters to search',
-                      style: TextStyle(
+              ? Center(
+                  child: Text(AppStrings.enterAtLeast3Chars,
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: Colors.grey)),
                 )
               : _results.isEmpty && !_loading
-                  ? const Center(
-                      child: Text('No players found',
-                          style: TextStyle(
+                  ? Center(
+                      child: Text(AppStrings.noPlayersFound,
+                          style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 13,
                               color: Colors.grey)),
@@ -598,9 +599,9 @@ class _InviteByPhoneTabState extends State<_InviteByPhoneTab>
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invitation sent to all numbers',
-              style: TextStyle(fontFamily: 'Poppins')),
+        SnackBar(
+          content: Text(AppStrings.invitationSentAll,
+              style: const TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.green,
         ),
       );
@@ -686,7 +687,7 @@ class _InviteByPhoneTabState extends State<_InviteByPhoneTab>
                       controller: _phoneCtrl,
                       keyboardType: TextInputType.phone,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      hintText: 'Phone Number',
+                      hintText: AppStrings.phoneNumber,
                       suffixWidget: InkWell(
                         onTap: () => _addNumber,
                         child: Image.asset("assets/icons/ic_add.png",
@@ -892,9 +893,9 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
     if (!_formKey.currentState!.validate()) return;
     if (_profileAvailable != true) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Profile name is not available',
-              style: TextStyle(fontFamily: 'Poppins')),
+        SnackBar(
+          content: Text(AppStrings.profileNameNotAvailable,
+              style: const TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.red,
         ),
       );
@@ -1087,8 +1088,8 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
                       width: 0, height: 0),
                   iconSize: 18,
                   initialValue: _yearOfBirth,
-                  hint: const Text('Select year',
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+                  hint: Text(AppStrings.selectYear,
+                      style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
                   items: _years
                       .map((y) => DropdownMenuItem(
                           value: y,

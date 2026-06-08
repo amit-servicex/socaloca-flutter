@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/constants/app_strings.dart';
+
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/router/app_routes.dart';
@@ -178,7 +180,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                               color: AppColors.socaBlack,
                             ),
                             decoration: InputDecoration(
-                              hintText: 'Email *',
+                              hintText: AppStrings.email,
                               hintStyle: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,

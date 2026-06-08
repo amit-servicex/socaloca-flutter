@@ -23,7 +23,7 @@ class LanguageSelectionBottomSheet extends ConsumerStatefulWidget {
 
 class _LanguageSelectionBottomSheetState
     extends ConsumerState<LanguageSelectionBottomSheet> {
-  int? _selectedIndex = 0;
+  int? _selectedIndex;
   bool _showError = false;
 
   // Matches Utils.getLanguages() from Android
@@ -33,6 +33,15 @@ class _LanguageSelectionBottomSheetState
     {'name': 'Portugese', 'code': 'pt', 'display': 'Portuguese'},
     {'name': 'French', 'code': 'fr', 'display': 'French'},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    final currentCode = AppStrings.currentLanguage;
+    final index =
+        _languages.indexWhere((language) => language['code'] == currentCode);
+    _selectedIndex = index >= 0 ? index : 0;
+  }
 
   Future<void> _handleSave() async {
     if (_selectedIndex == null) {

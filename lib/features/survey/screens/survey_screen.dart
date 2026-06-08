@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/app_strings.dart';
+
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/storage_service.dart';
@@ -599,7 +601,7 @@ class _FeedbackPage extends StatelessWidget {
                       color: AppColors.socaBlack,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'Enter text here (max 150 characters)',
+                      hintText: AppStrings.enterTextHint,
                       hintStyle: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,

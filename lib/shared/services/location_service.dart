@@ -109,7 +109,7 @@ class LocationService {
             Padding(
               padding: EdgeInsets.fromLTRB(24, 28, 24, 16),
               child: Text(
-                'Location Permission'.tr,
+                AppStrings.locationPermission,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -122,11 +122,7 @@ class LocationService {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'SocaLoca asks for your location access to align you with your '
-                "country's Football Association. SocaLoca also uses your location "
-                'to find your tournament location. Your location data is only used '
-                'to help you navigate through your football journey and is not saved '
-                'for any other purposes.',
+                AppStrings.locationPermissionDesc,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -154,7 +150,7 @@ class LocationService {
                         ),
                       ),
                       child: Text(
-                        'Learn more'.tr,
+                        AppStrings.learnMore,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
@@ -177,7 +173,7 @@ class LocationService {
                         ),
                       ),
                       child: Text(
-                        'OK'.tr,
+                        AppStrings.ok,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,

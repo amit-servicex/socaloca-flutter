@@ -424,8 +424,8 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                         borderRadius: BorderRadius.circular(6)),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: const Text('No',
-                      style: TextStyle(
+                  child: Text(AppStrings.no,
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
@@ -447,8 +447,8 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                         borderRadius: BorderRadius.circular(6)),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: const Text('Yes',
-                      style: TextStyle(
+                  child: Text(AppStrings.yes,
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 14)),
