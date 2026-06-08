@@ -114,17 +114,15 @@ class ClubBioModel with _$ClubBioModel {
       });
     }
 
-    final mappedJson = {
-      'clubDetails': clubDetails.toJson(),
-      'trialDetails': trialDetails?.toJson(),
-      'newsList': newsList.map((n) => n.toJson()).toList(),
-      'matchList': matchList.map((m) => m.toJson()).toList(),
-      'playerList': playerList.map((p) => p.toJson()).toList(),
-      'teamList': teamList.map((t) => t.toJson()).toList(),
-      'sponsorList': sponsorList.map((s) => s.toJson()).toList(),
-    };
-
-    return ClubBioModel.fromJson(mappedJson);
+    return ClubBioModel(
+      clubDetails: clubDetails,
+      trialDetails: trialDetails,
+      newsList: newsList,
+      matchList: matchList,
+      playerList: playerList,
+      teamList: teamList,
+      sponsorList: sponsorList,
+    );
   }
 }
 

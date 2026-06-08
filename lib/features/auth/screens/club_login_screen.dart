@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
@@ -89,6 +91,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
+          log("tohis catch block executre ");
           _errorMessage = e.toString();
           _isLoading = false;
         });

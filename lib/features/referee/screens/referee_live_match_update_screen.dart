@@ -32,6 +32,36 @@ class _RefereeLiveMatchUpdateScreenState
   int _scoreA = 0;
   int _scoreB = 0;
   bool _isSaving = false;
+  bool _isLoadingDetails = false;
+  Map<String, dynamic> _liveRecord = {};
+  List<_LivePlayer> _teamAPlayers = const [];
+  List<_LivePlayer> _teamBPlayers = const [];
+
+  final _goalATime = TextEditingController();
+  final _goalBTime = TextEditingController();
+  final _cardATime = TextEditingController();
+  final _cardBTime = TextEditingController();
+  final _subATime = TextEditingController();
+  final _subBTime = TextEditingController();
+
+  bool _goalAOwn = false;
+  bool _goalBOwn = false;
+  bool _goalAPenalty = false;
+  bool _goalBPenalty = false;
+  bool _goalAPenaltyMissed = false;
+  bool _goalBPenaltyMissed = false;
+  String _cardAType = '';
+  String _cardBType = '';
+  _LivePlayer? _goalAScorer;
+  _LivePlayer? _goalBScorer;
+  _LivePlayer? _goalAAssist;
+  _LivePlayer? _goalBAssist;
+  _LivePlayer? _cardAPlayer;
+  _LivePlayer? _cardBPlayer;
+  _LivePlayer? _subAIn;
+  _LivePlayer? _subBIn;
+  _LivePlayer? _subAOut;
+  _LivePlayer? _subBOut;
 
   @override
   void initState() {
@@ -41,6 +71,18 @@ class _RefereeLiveMatchUpdateScreenState
     _scoreA = int.tryParse(match?.teamAScore ?? '0') ?? 0;
     _scoreB = int.tryParse(match?.teamBScore ?? '0') ?? 0;
     _applyState(_state);
+    _loadLiveDetails();
+  }
+
+  @override
+  void dispose() {
+    _goalATime.dispose();
+    _goalBTime.dispose();
+    _cardATime.dispose();
+    _cardBTime.dispose();
+    _subATime.dispose();
+    _subBTime.dispose();
+    super.dispose();
   }
 
   String get _teamA => widget.match?.teamA ?? 'Team A';
@@ -49,12 +91,113 @@ class _RefereeLiveMatchUpdateScreenState
   bool get _isTerminal =>
       _state == 'FINISH' || _state == 'POSTPONED' || _state == 'ABANDONED';
   bool get _isEditable => !_isTerminal && _state != 'INIT';
+  bool get _isPenaltyMode => _state == 'PENALTY';
   bool get _showStartControls =>
       _state == 'INIT' ||
       _state == 'FIRST_HALF_END' ||
       _state == 'SECOND_HALF_END' ||
       _state == 'EXTRA_TIME_FH_END' ||
       _state == 'EXTRA_TIME_SH_END';
+
+  Future<void> _loadLiveDetails() async {
+    if (_tournamentId.isEmpty || widget.matchId.isEmpty) return;
+    setState(() => _isLoadingDetails = true);
+    final data = await ref.read(refereeRepositoryProvider).getLiveMatchData(
+          matchId: widget.matchId,
+          tournamentId: _tournamentId,
+        );
+    if (!mounted) return;
+    setState(() {
+      _isLoadingDetails = false;
+      if (data == null) return;
+      _liveRecord = _asMap(data['liveRecord']);
+      _teamAPlayers = _extractPlayers(data, widget.match?.teamAId);
+      _teamBPlayers = _extractPlayers(data, widget.match?.teamBId);
+      final serverState = _liveRecord['state']?.toString();
+      if (serverState != null && serverState.isNotEmpty) {
+        _state = _normalizeState(serverState);
+        _applyState(_state);
+      }
+      _syncScoresFromLiveRecord();
+    });
+  }
+
+  void _syncScoresFromLiveRecord() {
+    final myGoals = _intVal(_liveRecord['myGoals']);
+    final oppGoals = _intVal(_liveRecord['opponentGoals']);
+    final myExtra = _intVal(_liveRecord['myExtraTime']);
+    final oppExtra = _intVal(_liveRecord['opponentExtraTime']);
+    final myPenalty = _intVal(_liveRecord['myPenalty']);
+    final oppPenalty = _intVal(_liveRecord['opponentPenalty']);
+    if (_isPenaltyMode) {
+      _scoreA = myPenalty;
+      _scoreB = oppPenalty;
+    } else if (_state == 'ABANDONED' || _state == 'POSTPONED') {
+      _scoreA = 0;
+      _scoreB = 0;
+    } else {
+      _scoreA = myGoals + myExtra;
+      _scoreB = oppGoals + oppExtra;
+    }
+  }
+
+  Map<String, dynamic> _asMap(Object? value) {
+    if (value is Map<String, dynamic>) return value;
+    if (value is Map) {
+      return value.map((key, val) => MapEntry(key.toString(), val));
+    }
+    return {};
+  }
+
+  int _intVal(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    return int.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  List<_LivePlayer> _extractPlayers(Map<String, dynamic> data, String? teamId) {
+    if (teamId == null || teamId.isEmpty) return const [];
+    final found = <String, _LivePlayer>{};
+
+    void walk(Object? value) {
+      if (value is List) {
+        for (final item in value) {
+          walk(item);
+        }
+        return;
+      }
+      if (value is! Map) return;
+      final map = _asMap(value);
+      final playerId =
+          (map['playerId'] ?? map['userId'] ?? map['_id'] ?? map['id'])
+              ?.toString();
+      final mapTeamId = (map['teamId'] ?? map['teamID'])?.toString();
+      final name = (map['shortNameAfterJersey'] ??
+              map['playerName'] ??
+              map['name'] ??
+              map['shortName'] ??
+              map['profileName'])
+          ?.toString();
+      if (playerId != null &&
+          playerId.isNotEmpty &&
+          mapTeamId == teamId &&
+          name != null &&
+          name.isNotEmpty) {
+        found[playerId] = _LivePlayer(
+          id: playerId,
+          name: name.replaceAll('#', ''),
+          teamId: teamId,
+        );
+      }
+      for (final child in map.values) {
+        walk(child);
+      }
+    }
+
+    walk(data['matchDetails'] ?? data);
+    return found.values.toList()
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+  }
 
   String _normalizeState(String? value) {
     if (value == null || value.isEmpty || value == 'upcoming') return 'INIT';
@@ -353,7 +496,7 @@ class _RefereeLiveMatchUpdateScreenState
       child: Column(
         children: [
           Text(
-            title.toUpperCase(),
+            title,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontFamily: 'Poppins',
@@ -402,28 +545,32 @@ class _RefereeLiveMatchUpdateScreenState
           _ScoreRow(
             teamA: _teamA,
             teamB: _teamB,
+            teamALogo: widget.match?.teamALogo,
+            teamBLogo: widget.match?.teamBLogo,
             scoreA: _scoreA,
             scoreB: _scoreB,
-            onScoreA: (v) => setState(() => _scoreA = v),
-            onScoreB: (v) => setState(() => _scoreB = v),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 18),
           _LiveEntryPanel(tab: penalty ? 'Penalty' : _tab),
-          const SizedBox(height: 24),
+          const SizedBox(height: 26),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
+                SizedBox(
+                  width: 230,
                   child: _InlineButton(
-                    label: AppStrings.saveAndPublish.toUpperCase(),
-                    onTap: () => _saveState(_state),
-                  ),
+                      label: AppStrings.saveAndPublish.toUpperCase(),
+                      filled: true,
+                      onTap: () => _saveState(_state)),
                 ),
                 const SizedBox(width: 10),
-                Expanded(
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: 230,
                   child: _InlineButton(
                     label: AppStrings.matchStatus.toUpperCase(),
+                    filled: false,
                     onTap: _openStatusSheet,
                   ),
                 ),
@@ -482,7 +629,7 @@ class _MatchSummary extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 12),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.socaBlack,
                           ),
                           child: const Text(
@@ -677,36 +824,42 @@ class _ScoreRow extends StatelessWidget {
   const _ScoreRow({
     required this.teamA,
     required this.teamB,
+    required this.teamALogo,
+    required this.teamBLogo,
     required this.scoreA,
     required this.scoreB,
-    required this.onScoreA,
-    required this.onScoreB,
   });
 
   final String teamA;
   final String teamB;
+  final String? teamALogo;
+  final String? teamBLogo;
   final int scoreA;
   final int scoreB;
-  final ValueChanged<int> onScoreA;
-  final ValueChanged<int> onScoreB;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            child: _TeamScore(name: teamA, score: scoreA, onChanged: onScoreA)),
-        const Text(
-          '-',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: _TeamScore(name: teamA, logoUrl: teamALogo)),
+          Padding(
+            padding: const EdgeInsets.only(top: 18),
+            child: Text(
+              '$scoreA:$scoreB',
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 34,
+                fontWeight: FontWeight.w800,
+                color: AppColors.socaBlack,
+              ),
+            ),
           ),
-        ),
-        Expanded(
-            child: _TeamScore(name: teamB, score: scoreB, onChanged: onScoreB)),
-      ],
+          Expanded(child: _TeamScore(name: teamB, logoUrl: teamBLogo)),
+        ],
+      ),
     );
   }
 }
@@ -714,84 +867,27 @@ class _ScoreRow extends StatelessWidget {
 class _TeamScore extends StatelessWidget {
   const _TeamScore({
     required this.name,
-    required this.score,
-    required this.onChanged,
+    required this.logoUrl,
   });
 
   final String name;
-  final int score;
-  final ValueChanged<int> onChanged;
+  final String? logoUrl;
 
   @override
   Widget build(BuildContext context) {
+    final displayName = name.trim().isEmpty ? AppStrings.na : name.trim();
+    final parts = displayName.split(' ');
+    final shortName = parts.length > 1 ? parts.last : displayName;
+
     return Column(
       children: [
-        Text(
-          name,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 12,
-          ),
-        ),
+        _TeamLogo(logoUrl: logoUrl),
         const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _SmallButton(
-              label: '-',
-              onTap: () => onChanged((score - 1).clamp(0, 99)),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                '$score',
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            _SmallButton(
-              label: '+',
-              onTap: () => onChanged((score + 1).clamp(0, 99)),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _LiveEntryPanel extends StatelessWidget {
-  const _LiveEntryPanel({required this.tab});
-
-  final String tab;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.socaBlack),
-          color: Colors.white,
-        ),
-        child: Text(
-          tab == 'Penalty'
-              ? 'PENALTY'
-              : tab == 'Cards'
-                  ? 'CARDS'
-                  : tab == 'Substitution'
-                      ? 'SUBSTITUTION'
-                      : 'GOALS',
+        Text(
+          displayName,
           textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -799,6 +895,481 @@ class _LiveEntryPanel extends StatelessWidget {
             color: AppColors.socaBlack,
           ),
         ),
+        Text(
+          '($shortName)',
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            color: AppColors.socaBlack,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TeamLogo extends StatelessWidget {
+  const _TeamLogo({required this.logoUrl});
+
+  final String? logoUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasLogo = logoUrl != null && logoUrl!.trim().isNotEmpty;
+    return Container(
+      width: 66,
+      height: 66,
+      decoration: const BoxDecoration(shape: BoxShape.circle),
+      clipBehavior: Clip.antiAlias,
+      child: hasLogo
+          ? Image.network(
+              logoUrl!,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => const _TeamLogoFallback(),
+            )
+          : const _TeamLogoFallback(),
+    );
+  }
+}
+
+class _TeamLogoFallback extends StatelessWidget {
+  const _TeamLogoFallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      color: AppColors.socaBlack,
+      child: const Icon(Icons.shield, color: AppColors.socaYellow, size: 30),
+    );
+  }
+}
+
+class _LiveEntryPanel extends StatefulWidget {
+  const _LiveEntryPanel({required this.tab});
+
+  final String tab;
+
+  @override
+  State<_LiveEntryPanel> createState() => _LiveEntryPanelState();
+}
+
+class _LiveEntryPanelState extends State<_LiveEntryPanel> {
+  bool _leftOwnGoal = false;
+  bool _leftPenalty = false;
+  bool _rightOwnGoal = false;
+  bool _rightPenalty = false;
+  String _leftCard = '';
+  String _rightCard = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(child: _buildSide(isLeft: true)),
+            Container(
+              width: 1,
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              color: const Color(0xFF312E2E),
+            ),
+            Expanded(child: _buildSide(isLeft: false)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSide({required bool isLeft}) {
+    switch (widget.tab) {
+      case 'Cards':
+        return _CardsFields(
+          selected: isLeft ? _leftCard : _rightCard,
+          onSelected: (value) => setState(
+            () => isLeft ? _leftCard = value : _rightCard = value,
+          ),
+        );
+      case 'Substitution':
+        return const _SubstitutionFields();
+      default:
+        return _GoalFields(
+          ownGoal: isLeft ? _leftOwnGoal : _rightOwnGoal,
+          penalty: isLeft ? _leftPenalty : _rightPenalty,
+          onOwnGoal: (value) => setState(
+            () => isLeft ? _leftOwnGoal = value : _rightOwnGoal = value,
+          ),
+          onPenalty: (value) => setState(
+            () => isLeft ? _leftPenalty = value : _rightPenalty = value,
+          ),
+        );
+    }
+  }
+}
+
+class _GoalFields extends StatelessWidget {
+  const _GoalFields({
+    required this.ownGoal,
+    required this.penalty,
+    required this.onOwnGoal,
+    required this.onPenalty,
+  });
+
+  final bool ownGoal;
+  final bool penalty;
+  final ValueChanged<bool> onOwnGoal;
+  final ValueChanged<bool> onPenalty;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _CheckRow(
+          label: AppStrings.ownGoal,
+          value: ownGoal,
+          onChanged: onOwnGoal,
+        ),
+        const SizedBox(height: 8),
+        _CheckRow(
+          label: AppStrings.penalty,
+          value: penalty,
+          onChanged: onPenalty,
+        ),
+        const SizedBox(height: 12),
+        const _TimeField(),
+        const SizedBox(height: 10),
+        _DropdownBox(label: AppStrings.selectScorer),
+        const SizedBox(height: 10),
+        _DropdownBox(label: AppStrings.selectAssist),
+      ],
+    );
+  }
+}
+
+class _CardsFields extends StatelessWidget {
+  const _CardsFields({
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final String selected;
+  final ValueChanged<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            _CardChoice(
+              label: AppStrings.firstCard,
+              value: 'first',
+              selected: selected == 'first',
+              color: AppColors.socaYellow,
+              textColor: AppColors.socaBlack,
+              onSelected: onSelected,
+            ),
+            const SizedBox(width: 2),
+            _CardChoice(
+              label: AppStrings.secondCard,
+              value: 'second',
+              selected: selected == 'second',
+              color: AppColors.socaYellow,
+              textColor: AppColors.socaBlack,
+              onSelected: onSelected,
+            ),
+            const SizedBox(width: 2),
+            _CardChoice(
+              label: AppStrings.redCardShort,
+              value: 'red',
+              selected: selected == 'red',
+              color: Colors.red,
+              textColor: Colors.white,
+              onSelected: onSelected,
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        const _TimeField(),
+        const SizedBox(height: 12),
+        _DropdownBox(label: AppStrings.selectPlayer),
+      ],
+    );
+  }
+}
+
+class _CardChoice extends StatelessWidget {
+  const _CardChoice({
+    required this.label,
+    required this.value,
+    required this.selected,
+    required this.color,
+    required this.textColor,
+    required this.onSelected,
+  });
+
+  final String label;
+  final String value;
+  final bool selected;
+  final Color color;
+  final Color textColor;
+  final ValueChanged<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () => onSelected(value),
+            child: Container(
+              height: 34,
+              alignment: Alignment.center,
+              color: color,
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13,
+                  color: textColor,
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => onSelected(value),
+            child: SizedBox(
+              height: 34,
+              child: Center(
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey.shade700, width: 1.5),
+                  ),
+                  child: selected
+                      ? Center(
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                        )
+                      : null,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SubstitutionFields extends StatelessWidget {
+  const _SubstitutionFields();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _TimeField(),
+        const SizedBox(height: 12),
+        _DirectionalLabel(label: AppStrings.playerIn, up: false),
+        const SizedBox(height: 8),
+        _DropdownBox(label: AppStrings.selectInPlayer),
+        const SizedBox(height: 12),
+        _DirectionalLabel(label: AppStrings.playerOut, up: true),
+        const SizedBox(height: 8),
+        _DropdownBox(label: AppStrings.selectOutPlayer),
+      ],
+    );
+  }
+}
+
+class _DirectionalLabel extends StatelessWidget {
+  const _DirectionalLabel({required this.label, required this.up});
+
+  final String label;
+  final bool up;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              color: AppColors.socaBlack,
+            ),
+          ),
+        ),
+        const SizedBox(width: 6),
+        Icon(
+          up ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+          color: AppColors.socaBlack,
+          size: 24,
+        ),
+      ],
+    );
+  }
+}
+
+class _CheckRow extends StatelessWidget {
+  const _CheckRow({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String label;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => onChanged(!value),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 24,
+            height: 24,
+            child: Checkbox(
+              value: value,
+              activeColor: AppColors.socaBlack,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              onChanged: (next) => onChanged(next ?? false),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 13,
+                color: AppColors.socaBlack,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TimeField extends StatelessWidget {
+  const _TimeField();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(child: _InputBox(hint: 'Time')),
+        const SizedBox(width: 8),
+        Text(
+          AppStrings.minutesShort,
+          maxLines: 1,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 12,
+            color: AppColors.socaBlack,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _InputBox extends StatelessWidget {
+  const _InputBox({required this.hint});
+
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: TextField(
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          hintText: AppStrings.literal(hint),
+          hintStyle: const TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 16,
+            color: Colors.grey,
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide: const BorderSide(color: AppColors.socaBlack),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+            borderSide:
+                const BorderSide(color: AppColors.socaBlack, width: 1.2),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DropdownBox extends StatelessWidget {
+  const _DropdownBox({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: AppColors.socaBlack),
+        borderRadius: BorderRadius.circular(3),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                color: AppColors.socaBlack,
+              ),
+            ),
+          ),
+          const Icon(Icons.arrow_drop_down, color: Colors.grey, size: 30),
+        ],
       ),
     );
   }
@@ -869,9 +1440,14 @@ class _WideButton extends StatelessWidget {
 }
 
 class _InlineButton extends StatelessWidget {
-  const _InlineButton({required this.label, required this.onTap});
+  const _InlineButton({
+    required this.label,
+    required this.filled,
+    required this.onTap,
+  });
 
   final String label;
+  final bool filled;
   final VoidCallback onTap;
 
   @override
@@ -881,8 +1457,11 @@ class _InlineButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.socaBlack,
-          foregroundColor: AppColors.socaYellow,
+          backgroundColor: filled ? AppColors.socaBlack : Colors.white,
+          foregroundColor: filled ? AppColors.socaYellow : AppColors.socaBlack,
+          side: filled
+              ? BorderSide.none
+              : const BorderSide(color: AppColors.socaBlack),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         ),
@@ -937,38 +1516,6 @@ class _TabButton extends StatelessWidget {
               fontSize: 13,
               color: selected ? AppColors.socaYellow : Colors.white,
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SmallButton extends StatelessWidget {
-  const _SmallButton({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: 32,
-        height: 32,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: AppColors.socaBlack,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: AppColors.socaYellow,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
           ),
         ),
       ),

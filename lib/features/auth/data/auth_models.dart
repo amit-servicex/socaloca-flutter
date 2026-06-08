@@ -1,6 +1,22 @@
 import '../../../core/constants/api_constants.dart';
 import '../../../shared/models/user_model.dart';
 
+bool? _readNullableBool(dynamic value) {
+  if (value == null) return null;
+  if (value is bool) return value;
+  if (value is num) return value != 0;
+
+  final normalized = value.toString().trim().toLowerCase();
+  if (normalized.isEmpty) return null;
+  if (normalized == 'true' || normalized == '1' || normalized == 'yes') {
+    return true;
+  }
+  if (normalized == 'false' || normalized == '0' || normalized == 'no') {
+    return false;
+  }
+  return null;
+}
+
 /// Response from modSignIn
 class LoginResponse {
   const LoginResponse({
@@ -95,14 +111,29 @@ class ClubLoginResponse {
         details['competitions'] =
             (details['comps'] as List).map((e) => e.toString()).join(', ');
       }
+      // liveTrial arrives as "" (empty string) instead of false — normalize to bool
+      // Several legacy club fields arrive as "true"/"false", 1/0, or "".
+      for (final key in [
+        'isVerified',
+        'isRequest',
+        'accepted',
+        'isPartner',
+        'liveTrial',
+        'profile',
+        'isDelete',
+      ]) {
+        if (details.containsKey(key)) {
+          details[key] = _readNullableBool(details[key]);
+        }
+      }
     }
     return ClubLoginResponse(
       status: (resp['status'] as num?)?.toInt() ?? 0,
       message: resp['message'] as String?,
       token: resp['token'] as String?,
       clubUser: details != null ? ClubUserModel.fromJson(details) : null,
-      success: resp['success'] as bool?,
-      isChild: resp['isChild'] as bool?,
+      success: _readNullableBool(resp['success']),
+      isChild: _readNullableBool(resp['isChild']),
       childDetails: resp['childDetails'] as Map<String, dynamic>?,
     );
   }
@@ -133,11 +164,11 @@ class SocialLoginResponse {
     final root = flat ?? wrapped ?? <String, dynamic>{};
 
     final userData = root['userDetails'] as Map<String, dynamic>?;
-    final user = userData != null ? LoginResponse._mapUserDetails(userData) : null;
+    final user =
+        userData != null ? LoginResponse._mapUserDetails(userData) : null;
 
     // token may live at root level or inside userDetails
-    final token = (root['token'] as String?)
-        ?? (userData?['token'] as String?);
+    final token = (root['token'] as String?) ?? (userData?['token'] as String?);
 
     // Android checks !user.isProfile() — user.profile==false means new user
     final isNewUser = !(user?.profile ?? true);

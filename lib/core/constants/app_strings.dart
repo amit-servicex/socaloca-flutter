@@ -194,6 +194,19 @@ class AppStrings {
   static String get goals => _t('goals');
   static String get cards => _t('cards');
   static String get substitution => _t('substitution');
+  static String get ownGoal => _t('ownGoal');
+  static String get penalty => _t('penalty');
+  static String get minutesShort => _t('minutesShort');
+  static String get selectScorer => _t('selectScorer');
+  static String get selectAssist => _t('selectAssist');
+  static String get selectPlayer => _t('selectPlayer');
+  static String get firstCard => _t('firstCard');
+  static String get secondCard => _t('secondCard');
+  static String get redCardShort => _t('redCardShort');
+  static String get playerIn => _t('playerIn');
+  static String get playerOut => _t('playerOut');
+  static String get selectInPlayer => _t('selectInPlayer');
+  static String get selectOutPlayer => _t('selectOutPlayer');
   static String get ongoing => _t('ongoing');
   static String get upcoming => _t('upcoming');
   static String get closed => _t('closed');
@@ -499,6 +512,19 @@ class AppStrings {
       'goals': 'Goals',
       'cards': 'Cards',
       'substitution': 'Substitution',
+      'ownGoal': 'Own Goal',
+      'penalty': 'Penalty',
+      'minutesShort': '(Mins.)',
+      'selectScorer': 'Select Scorer',
+      'selectAssist': 'Select Assist',
+      'selectPlayer': 'Select Player',
+      'firstCard': '1st',
+      'secondCard': '2nd',
+      'redCardShort': 'Red',
+      'playerIn': 'Player In',
+      'playerOut': 'Player Out',
+      'selectInPlayer': 'Select In Player',
+      'selectOutPlayer': 'Select Out Player',
       'ongoing': 'Ongoing',
       'upcoming': 'Upcoming',
       'closed': 'Closed',
@@ -778,6 +804,19 @@ class AppStrings {
       'goals': 'Goles',
       'cards': 'Tarjetas',
       'substitution': 'Sustitución',
+      'ownGoal': 'Gol en propia puerta',
+      'penalty': 'Penalti',
+      'minutesShort': '(Min.)',
+      'selectScorer': 'Seleccionar goleador',
+      'selectAssist': 'Seleccionar asistencia',
+      'selectPlayer': 'Seleccionar jugador',
+      'firstCard': '1ra',
+      'secondCard': '2da',
+      'redCardShort': 'Roja',
+      'playerIn': 'Jugador entra',
+      'playerOut': 'Jugador sale',
+      'selectInPlayer': 'Seleccionar jugador entrante',
+      'selectOutPlayer': 'Seleccionar jugador saliente',
       'ongoing': 'En curso',
       'upcoming': 'Próximos',
       'closed': 'Cerrados',
@@ -1059,6 +1098,19 @@ class AppStrings {
       'goals': 'Gols',
       'cards': 'Cartões',
       'substitution': 'Substituição',
+      'ownGoal': 'Gol contra',
+      'penalty': 'Pênalti',
+      'minutesShort': '(Min.)',
+      'selectScorer': 'Selecionar artilheiro',
+      'selectAssist': 'Selecionar assistência',
+      'selectPlayer': 'Selecionar jogador',
+      'firstCard': '1o',
+      'secondCard': '2o',
+      'redCardShort': 'Verm.',
+      'playerIn': 'Jogador entra',
+      'playerOut': 'Jogador sai',
+      'selectInPlayer': 'Selecionar jogador que entra',
+      'selectOutPlayer': 'Selecionar jogador que sai',
       'ongoing': 'Em andamento',
       'upcoming': 'Próximos',
       'closed': 'Encerrados',
@@ -1340,6 +1392,19 @@ class AppStrings {
       'goals': 'Buts',
       'cards': 'Cartons',
       'substitution': 'Remplacement',
+      'ownGoal': 'But contre son camp',
+      'penalty': 'Penalty',
+      'minutesShort': '(Min.)',
+      'selectScorer': 'Sélectionner buteur',
+      'selectAssist': 'Sélectionner passeur',
+      'selectPlayer': 'Sélectionner joueur',
+      'firstCard': '1er',
+      'secondCard': '2e',
+      'redCardShort': 'Rouge',
+      'playerIn': 'Joueur entrant',
+      'playerOut': 'Joueur sortant',
+      'selectInPlayer': 'Sélectionner entrant',
+      'selectOutPlayer': 'Sélectionner sortant',
       'ongoing': 'En cours',
       'upcoming': 'À venir',
       'closed': 'Terminés',

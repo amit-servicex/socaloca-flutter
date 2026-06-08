@@ -508,17 +508,24 @@ class RefereeRepository {
     required String entry,
     required String state,
     Map<String, dynamic> keyVals = const {},
+    String? listKey,
+    List<Map<String, dynamic>> listVal = const [],
   }) async {
+    final body = <String, dynamic>{
+      'userId': _userId,
+      'matchId': matchId,
+      'tournamentId': tournamentId,
+      'entry': entry,
+      'state': state,
+      'keyVals': keyVals,
+    };
+    if (listKey != null && listKey.isNotEmpty) {
+      body['listKey'] = listKey;
+      body['listVal'] = listVal;
+    }
     final response = await ApiClient.instance.post(
       ApiConstants.saveRefLiveMtchData,
-      body: {
-        'userId': _userId,
-        'matchId': matchId,
-        'tournamentId': tournamentId,
-        'entry': entry,
-        'state': state,
-        'keyVals': keyVals,
-      },
+      body: body,
     );
     final resp = response['response'] as Map<String, dynamic>? ?? {};
     return resp['status'] == 1;
