@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/shared/providers/auth_provider.dart';
 
+import '../../../core/constants/app_strings.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../providers/home_providers.dart';
@@ -20,54 +22,58 @@ const _rootRoutes = {
   AppRoutes.academies,
 };
 
-/// Maps route paths → display titles. Longer keys take priority over shorter
-/// ones so sub-routes match before their parents.
-const _routeTitles = {
-  AppRoutes.mySkillRatings: 'Endorsements',
-  AppRoutes.skillDetailViewAll: 'Skill Detail',
-  AppRoutes.myEndorsementList: 'Endorsements',
-  AppRoutes.myActivities: 'Activities',
-  AppRoutes.createPost: 'Create Post',
-  AppRoutes.editProfile: 'Edit Profile',
-  AppRoutes.myPosts: 'My Posts',
-  AppRoutes.gallery: 'Gallery',
-  AppRoutes.skillDetail: 'Skill Detail',
-  AppRoutes.myBio: 'My Bio',
-  AppRoutes.teams: 'Teams',
-  AppRoutes.tournaments: 'Tournaments',
-  AppRoutes.clubsPartners: 'Clubs & Partners',
-  AppRoutes.players: 'Players',
-  AppRoutes.academies: 'Academies',
-  AppRoutes.matches: 'Matches',
-  AppRoutes.notifications: 'Notifications',
-  AppRoutes.search: 'Search',
-  AppRoutes.profile: 'Profile',
-};
-
+/// Returns the translated app bar title for the given route path.
+/// Called inside build() so AppStrings reads the current language each time.
 String? _titleForPath(String path) {
-  // Sort by descending length so the most-specific match wins first.
-  final keys = _routeTitles.keys.toList()
-    ..sort((a, b) => b.length.compareTo(a.length));
-  for (final key in keys) {
-    if (path == key || path.startsWith('$key/')) return _routeTitles[key];
+  // Static route → translated title
+  if (path == AppRoutes.mySkillRatings ||
+      path == AppRoutes.myEndorsementList ||
+      path.startsWith('${AppRoutes.mySkillRatings}/') ||
+      path.startsWith('${AppRoutes.myEndorsementList}/')) {
+    return AppStrings.endorsements;
   }
-  // Dynamic segments (e.g. /players/:userId → 'Players')
+  if (path == AppRoutes.skillDetail ||
+      path == AppRoutes.skillDetailViewAll ||
+      path.startsWith('${AppRoutes.skillDetail}/')) {
+    return 'Skill Detail';
+  }
+  if (path == AppRoutes.myActivities) { return AppStrings.downloadActivities; }
+  if (path == AppRoutes.createPost) { return AppStrings.createPost; }
+  if (path == AppRoutes.editProfile) { return AppStrings.editProfile; }
+  if (path == AppRoutes.myPosts) { return AppStrings.myPosts; }
+  if (path == AppRoutes.gallery) { return AppStrings.gallery; }
+  if (path == AppRoutes.myBio) { return AppStrings.myBio; }
+  if (path == AppRoutes.teams || path.startsWith('${AppRoutes.teams}/')) {
+    return AppStrings.teams;
+  }
+  if (path == AppRoutes.tournaments ||
+      path.startsWith('${AppRoutes.tournaments}/')) {
+    return AppStrings.tournaments;
+  }
+  if (path == AppRoutes.clubsPartners) return AppStrings.clubsAndPartners;
+  if (path == AppRoutes.players) return AppStrings.players;
+  if (path == AppRoutes.academies) return AppStrings.academies;
+  if (path == AppRoutes.matches) return AppStrings.matches;
+  if (path == AppRoutes.notifications) return AppStrings.notifications;
+  if (path == AppRoutes.search) return AppStrings.search;
+  if (path == AppRoutes.profile) return AppStrings.myBio;
+  // Dynamic segments
   if (path.contains('/people')) return 'People';
   if (path.contains('/likes')) return 'Likes';
-  if (path.startsWith('/players/')) return 'Player';
-  if (path.startsWith('/members/')) return 'Profile';
-  if (path.startsWith('/teams/')) return 'Team';
-  if (path.startsWith('/clubs/')) return 'Club';
-  if (path.startsWith('/tournaments/')) return 'Tournament';
+  if (path.startsWith('/players/')) return AppStrings.players;
+  if (path.startsWith('/members/')) return AppStrings.myBio;
+  if (path.startsWith('/teams/')) return AppStrings.teams;
+  if (path.startsWith('/clubs/')) return AppStrings.clubs;
+  if (path.startsWith('/tournaments/')) return AppStrings.tournaments;
   if (path.startsWith('/cups/')) return 'Cup';
   if (path.startsWith('/fa/')) return 'FA';
-  if (path.startsWith('/confed/')) return 'Confederation';
-  if (path.startsWith('/sponsor/')) return 'Sponsor';
-  if (path.startsWith('/charity/')) return 'Charity';
-  if (path.startsWith('/matches/')) return 'Match';
-  if (path.startsWith('/pickup/')) return 'Pick-Up Match';
-  if (path.startsWith('/one-off-matches/')) return 'Matches';
-  if (path.startsWith('/match-management/')) return 'Match Management';
+  if (path.startsWith('/confed/')) return AppStrings.confederations;
+  if (path.startsWith('/sponsor/')) return AppStrings.sponsors;
+  if (path.startsWith('/charity/')) return AppStrings.charitiesAndNgos;
+  if (path.startsWith('/matches/')) return AppStrings.matches;
+  if (path.startsWith('/pickup/')) return AppStrings.pickup;
+  if (path.startsWith('/one-off-matches/')) return AppStrings.matches;
+  if (path.startsWith('/match-management/')) return AppStrings.matches;
   return null;
 }
 
@@ -82,6 +88,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(localeProvider);
     final notificationCount = ref.watch(notificationCountProvider);
     final location = GoRouterState.of(context).uri.path;
     final isRoot = _rootRoutes.contains(location);

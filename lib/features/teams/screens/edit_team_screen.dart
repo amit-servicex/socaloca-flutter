@@ -132,7 +132,8 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
                 leading:
                     const Icon(Icons.camera_alt, color: AppColors.socaBlack),
                 title: Text(AppStrings.camera,
-                    style: const TextStyle(fontFamily: 'Poppins', fontSize: 16)),
+                    style:
+                        const TextStyle(fontFamily: 'Poppins', fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.camera);
@@ -142,7 +143,8 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
                 leading:
                     const Icon(Icons.photo_library, color: AppColors.socaBlack),
                 title: Text(AppStrings.gallery,
-                    style: const TextStyle(fontFamily: 'Poppins', fontSize: 16)),
+                    style:
+                        const TextStyle(fontFamily: 'Poppins', fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.gallery);

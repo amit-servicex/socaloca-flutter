@@ -328,6 +328,7 @@ class AppStrings {
   static String get requestCancelled => _t('requestCancelled');
   static String get failedToSubmitEndorsement =>
       _t('failedToSubmitEndorsement');
+  static String get requests => _t('requests');
   static String get noPendingRequests => _t('noPendingRequests');
   static String get pendingRequests => _t('pendingRequests');
   static String get teamInvitations => _t('teamInvitations');
@@ -688,6 +689,7 @@ class AppStrings {
       'selectReason': 'Select a reason:',
       'requestCancelled': 'Request cancelled.',
       'failedToSubmitEndorsement': 'Failed to submit endorsement. Try again.',
+      'requests': 'Requests',
       'noPendingRequests': 'No pending requests.',
       'pendingRequests': 'Pending Requests',
       'teamInvitations': 'Team Invitations',
@@ -1037,6 +1039,7 @@ class AppStrings {
       'requestCancelled': 'Solicitud cancelada.',
       'failedToSubmitEndorsement':
           'No se pudo enviar el aval. Inténtalo de nuevo.',
+      'requests': 'Solicitudes',
       'noPendingRequests': 'No hay solicitudes pendientes.',
       'pendingRequests': 'Solicitudes pendientes',
       'teamInvitations': 'Invitaciones de equipo',
@@ -1388,6 +1391,7 @@ class AppStrings {
       'requestCancelled': 'Solicitação cancelada.',
       'failedToSubmitEndorsement':
           'Falha ao enviar recomendação. Tente novamente.',
+      'requests': 'Solicitações',
       'noPendingRequests': 'Nenhuma solicitação pendente.',
       'pendingRequests': 'Solicitações pendentes',
       'teamInvitations': 'Convites de equipe',
@@ -1739,6 +1743,7 @@ class AppStrings {
       'requestCancelled': 'Demande annulée.',
       'failedToSubmitEndorsement':
           "Échec de l'envoi de la recommandation. Réessayez.",
+      'requests': 'Demandes',
       'noPendingRequests': 'Aucune demande en attente.',
       'pendingRequests': 'Demandes en attente',
       'teamInvitations': "Invitations d'équipe",

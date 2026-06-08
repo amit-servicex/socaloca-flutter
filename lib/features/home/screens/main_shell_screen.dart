@@ -122,6 +122,16 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
         return AppStrings.academies.toUpperCase();
       case 'MENU':
         return AppStrings.menu.toUpperCase();
+      case AppRoutes.refereeTournament:
+        return AppStrings.tournaments.toUpperCase();
+      case AppRoutes.refereeRequests:
+        return AppStrings.requests.toUpperCase();
+      case AppRoutes.refereeMatches:
+        return AppStrings.myMatches.toUpperCase();
+      case AppRoutes.refereeLive:
+        return AppStrings.liveMatches.toUpperCase();
+      case AppRoutes.refereeBio:
+        return AppStrings.myBio.toUpperCase();
       default:
         return tab.label;
     }
@@ -145,7 +155,7 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: const HomeAppBar(),
+      appBar: HomeAppBar(),
       endDrawer: HomeDrawer(),
       body: widget.child,
       bottomNavigationBar: Container(
