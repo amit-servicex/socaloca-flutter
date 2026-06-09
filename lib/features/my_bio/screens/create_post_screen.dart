@@ -156,7 +156,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       if (_spaceLoaded && fileMB > _availableMB) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Video larger than available space'.tr)),
+            SnackBar(content: Text(AppStrings.videoLargerThanAvailableSpace)),
           );
         }
         return;
@@ -210,7 +210,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please write something'.tr)),
+        SnackBar(content: Text(AppStrings.pleaseWriteSomething)),
       );
       return;
     }
@@ -218,7 +218,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     if (_postType == _kPostTypeImage) {
       if (_totalImageCount == 0) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please select at least one photo'.tr)),
+          SnackBar(content: Text(AppStrings.pleaseSelectAtLeastOnePhoto)),
         );
         return;
       }
@@ -226,7 +226,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       final hasExistingVideo = _existingVideoSource != null;
       if (!hasExistingVideo && _selectedVideo == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please select a video'.tr)),
+          SnackBar(content: Text(AppStrings.pleaseSelectAVideo)),
         );
         return;
       }
@@ -234,7 +234,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
 
     setState(() {
       _isUploading = true;
-      _uploadStatus = 'Uploading...';
+      _uploadStatus = AppStrings.uploadingEllipsis;
     });
 
     try {
@@ -257,7 +257,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           final img = _selectedImages[i];
           setState(() {
             _uploadStatus =
-                'Uploading photo ${i + 1} of ${_selectedImages.length}...';
+                AppStrings.uploadingPhotoOf(i + 1, _selectedImages.length);
           });
           final size = File(img.path).lengthSync().toDouble();
           final formData = FormData.fromMap({
@@ -285,7 +285,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         // Video
         if (_selectedVideo != null) {
           // Upload new local video (replaces any existing)
-          setState(() => _uploadStatus = 'Uploading video...');
+          setState(() => _uploadStatus = AppStrings.uploadingVideo);
           final size = File(_selectedVideo!.path).lengthSync().toDouble();
           final formData = FormData.fromMap({
             'metadata': '',
@@ -334,7 +334,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           .toList();
 
       setState(() => _uploadStatus =
-          _isEditMode ? 'Updating post...' : 'Publishing post...');
+          _isEditMode ? AppStrings.updatingPost : AppStrings.publishingPost);
 
       final body = <String, dynamic>{
         'userId': userId,
@@ -356,7 +356,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         await ApiClient.instance.post(ApiConstants.editUserPost, body: body);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Post updated successfully!'.tr)),
+          SnackBar(content: Text(AppStrings.postUpdatedSuccessfully)),
         );
         context.pop();
       } else {
@@ -366,7 +366,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         final status = (result['response']?['status'] as num?)?.toInt() ?? 0;
         if (status == 1) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Post published successfully!'.tr)),
+            SnackBar(content: Text(AppStrings.postPublishedSuccessfully)),
           );
           context.pop();
         } else {
@@ -377,7 +377,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+            .showSnackBar(SnackBar(content: Text(AppStrings.errorMessage(e))));
       }
     } finally {
       if (mounted) {
@@ -463,7 +463,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                         fontSize: 14,
                         color: AppColors.socaBlack),
                     decoration: InputDecoration(
-                      hintText: 'Write something'.tr,
+                      hintText: AppStrings.writeSomething,
                       hintStyle: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -486,7 +486,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
-                      'TAG PEOPLE'.tr,
+                      AppStrings.tagPeopleUpper,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
@@ -552,7 +552,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             child: Row(
               children: [
                 Text(
-                  'Post Type'.tr,
+                  AppStrings.postType,
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
@@ -564,7 +564,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 _RadioOption(
                   value: _kPostTypeVideo,
                   groupValue: _postType,
-                  label: 'Videos',
+                  label: AppStrings.videos,
                   onChanged: _isEditMode
                       ? null
                       : (v) => setState(() {
@@ -576,7 +576,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 _RadioOption(
                   value: _kPostTypeImage,
                   groupValue: _postType,
-                  label: 'Photos',
+                  label: AppStrings.photos,
                   onChanged: _isEditMode
                       ? null
                       : (v) => setState(() {
@@ -599,7 +599,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Choose'.tr,
+                    AppStrings.choose,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
@@ -611,18 +611,16 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   _CategoryOption(
                     value: _kSkillVideo,
                     groupValue: _postCat,
-                    title: 'Skill Video',
-                    description:
-                        '(Share videos of you displaying your football skills in matches or in training to be endorsed or rated by SocaLoca users, including coaches and scouts.)',
+                    title: AppStrings.skillVideo,
+                    description: AppStrings.skillVideoDescription,
                     onChanged: (v) => setState(() => _postCat = v!),
                   ),
                   const SizedBox(height: 12),
                   _CategoryOption(
                     value: _kFootballMoments,
                     groupValue: _postCat,
-                    title: 'Football Moments',
-                    description:
-                        '(Share video of your football moments or any other football related content that is beneficial to the SocaLoca user base)',
+                    title: AppStrings.footballMoments,
+                    description: AppStrings.footballMomentsDescription,
                     onChanged: (v) => setState(() => _postCat = v!),
                   ),
                 ],
@@ -649,8 +647,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        'Notify all coaches/managers/scounts to endorse video'
-                            .tr,
+                        AppStrings.notifyCoachesToEndorse,
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -679,7 +676,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   icon: const Icon(Icons.share,
                       size: 16, color: AppColors.socaBlack),
                   label: Text(
-                    'INVITE PLAYERS'.tr,
+                    AppStrings.invitePlayersUpper,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
@@ -710,7 +707,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
               ),
               child: Center(
                 child: Text(
-                  _isEditMode ? 'UPDATE POST'.tr : 'CREATE POST'.tr,
+                  _isEditMode
+                      ? AppStrings.updatePostUpper
+                      : AppStrings.createPostUpper,
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -819,7 +818,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         ],
         if (total < _maxImages) ...[
           Text(
-            'Add Photos ($total/$_maxImages)',
+            AppStrings.addPhotosCount(total, _maxImages),
             style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
@@ -832,18 +831,18 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             children: [
               _MediaBtn(
                   icon: Icons.camera_alt_outlined,
-                  label: 'Camera',
+                  label: AppStrings.camera,
                   onTap: () => _pickImages(ImageSource.camera)),
               const SizedBox(width: 8),
               _MediaBtn(
                   icon: Icons.photo_library_outlined,
-                  label: 'Gallery',
+                  label: AppStrings.gallery,
                   onTap: () => _pickImages(ImageSource.gallery)),
             ],
           ),
           const SizedBox(height: 4),
           Text(
-            '(max $_maxImages photos allowed)',
+            AppStrings.maxPhotosAllowed(_maxImages),
             style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 11,
@@ -955,14 +954,14 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         _MediaBtn(
           icon: Icons.videocam_outlined,
           label: (_selectedVideo != null || existingVideo != null)
-              ? 'Change Video'
-              : 'Upload Videos',
+              ? AppStrings.changeVideo
+              : AppStrings.uploadVideos,
           onTap: _pickVideo,
           fullWidth: true,
         ),
         const SizedBox(height: 4),
         Text(
-          '(max 10 videos allowed)'.tr,
+          AppStrings.maxVideosAllowed,
           style: TextStyle(
               fontFamily: 'Poppins', fontSize: 11, color: Colors.grey.shade600),
         ),
@@ -999,7 +998,7 @@ class _SpaceBar extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Available Space : '.tr,
+                AppStrings.availableSpace,
                 style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
@@ -1020,7 +1019,7 @@ class _SpaceBar extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Used Space : '.tr,
+                AppStrings.usedSpace,
                 style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
@@ -1051,12 +1050,12 @@ class _SpaceBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('0MB'.tr,
+              Text(AppStrings.zeroMB,
                   style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       color: AppColors.socaBlack)),
-              Text('1024MB'.tr,
+              Text(AppStrings.maxMB,
                   style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
@@ -1326,7 +1325,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Tag Players'.tr,
+                      AppStrings.tagPlayers,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -1341,7 +1340,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                       Navigator.of(context).pop();
                     },
                     child: Text(
-                      'Done'.tr,
+                      AppStrings.done,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -1359,7 +1358,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                 controller: _searchController,
                 onChanged: _search,
                 decoration: InputDecoration(
-                  hintText: 'Search players...'.tr,
+                  hintText: AppStrings.searchPlayersEllipsis,
                   hintStyle: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -1392,8 +1391,8 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                     ? Center(
                         child: Text(
                           _searchController.text.length < 2
-                              ? 'Type at least 2 characters to search'
-                              : 'No players found',
+                              ? AppStrings.typeAtLeast2CharsToSearch
+                              : AppStrings.noPlayersFound,
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,

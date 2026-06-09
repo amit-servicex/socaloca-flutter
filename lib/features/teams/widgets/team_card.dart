@@ -123,7 +123,7 @@ class TeamCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Rating  '.tr,
+                          AppStrings.ratingLabel,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -160,7 +160,7 @@ class TeamCard extends StatelessWidget {
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          'VIEW'.tr,
+                          AppStrings.viewUpper,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,

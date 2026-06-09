@@ -155,7 +155,7 @@ class _LeagueMatchManagementTabState
           ),
           SizedBox(height: 16),
           Text(
-            'Access Restricted'.tr,
+            AppStrings.accessRestricted,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -165,7 +165,7 @@ class _LeagueMatchManagementTabState
           ),
           SizedBox(height: 8),
           Text(
-            'Only admins, coaches, and referees\ncan manage matches'.tr,
+            AppStrings.matchManageRestricted,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Poppins',
@@ -190,7 +190,7 @@ class _LeagueMatchManagementTabState
           ),
           SizedBox(height: 16),
           Text(
-            'No Matches'.tr,
+            AppStrings.noMatches,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -200,7 +200,7 @@ class _LeagueMatchManagementTabState
           ),
           SizedBox(height: 8),
           Text(
-            'No matches available for management'.tr,
+            AppStrings.noMatchesAvailableForManagement,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -333,7 +333,7 @@ class _LeagueMatchManagementTabState
                           )
                         else
                           Text(
-                            'VS'.tr,
+                            AppStrings.vs,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 18,
@@ -387,7 +387,7 @@ class _LeagueMatchManagementTabState
                 child: ElevatedButton.icon(
                   onPressed: () => _navigateToMatchManagement(match),
                   icon: Icon(Icons.edit, size: 18),
-                  label: Text('Manage Match'.tr),
+                  label: Text(AppStrings.manageMatch),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.socaYellow,
                     foregroundColor: AppColors.socaBlack,

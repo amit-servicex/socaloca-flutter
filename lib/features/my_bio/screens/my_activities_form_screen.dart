@@ -232,20 +232,21 @@ class _MyActivitiesFormScreenState
 
   Future<void> _submitMatch() async {
     if (_matchDate == null) {
-      _showError('Please select a match date.');
+      _showError(AppStrings.pleaseSelectMatchDate);
       return;
     }
     if (_rating == 0) {
-      _showError('Please rate your performance.');
+      _showError(AppStrings.pleaseRateYourPerformance);
       return;
     }
     if (_goalsCtrl.text.trim().isEmpty) {
-      _showError(
-          'Please enter ${_isGoalkeeper ? 'clean sheets' : 'goals scored'}.');
+      _showError(AppStrings.pleaseEnterMatchMetric(_isGoalkeeper
+          ? AppStrings.cleanSheetsLower
+          : AppStrings.goalsScoredLower));
       return;
     }
     if (_minutesCtrl.text.trim().isEmpty) {
-      _showError('Please enter minutes played.');
+      _showError(AppStrings.pleaseEnterMinutesPlayed);
       return;
     }
 
@@ -280,10 +281,10 @@ class _MyActivitiesFormScreenState
           );
       if (mounted) {
         if (success) {
-          _showSuccess('Match activity added!');
+          _showSuccess(AppStrings.matchActivityAdded);
           _resetMatch();
         } else {
-          _showError('Failed to add match. Please try again.');
+          _showError(AppStrings.failedToAddMatch);
         }
       }
     } catch (e) {
@@ -295,11 +296,11 @@ class _MyActivitiesFormScreenState
 
   Future<void> _submitTraining() async {
     if (_trainDate == null) {
-      _showError('Please select a training date.');
+      _showError(AppStrings.pleaseSelectTrainingDate);
       return;
     }
     if (_trainMinutesCtrl.text.trim().isEmpty) {
-      _showError('Please enter training minutes.');
+      _showError(AppStrings.pleaseEnterTrainingMinutes);
       return;
     }
 
@@ -324,10 +325,10 @@ class _MyActivitiesFormScreenState
           );
       if (mounted) {
         if (success) {
-          _showSuccess('Training session added!');
+          _showSuccess(AppStrings.trainingSessionAdded);
           _resetTraining();
         } else {
-          _showError('Failed to add training. Please try again.');
+          _showError(AppStrings.failedToAddTraining);
         }
       }
     } catch (e) {
@@ -435,7 +436,7 @@ class _MyActivitiesFormScreenState
             color: AppColors.socaBlack,
           ),
           child: Text(
-            'My Activities'.tr,
+            AppStrings.myActivities,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 20,
@@ -446,8 +447,7 @@ class _MyActivitiesFormScreenState
         ),
         SizedBox(height: 12),
         Text(
-          'Keep a record of your own statistics Update your Match Stats & Training Sessions to enhance your profile'
-              .tr,
+          AppStrings.myActivitiesDescription,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
@@ -466,13 +466,13 @@ class _MyActivitiesFormScreenState
     return Row(
       children: [
         _RadioOption(
-          label: 'My Matches',
+          label: AppStrings.myMatches,
           selected: _activeTab == 'match',
           onTap: () => setState(() => _activeTab = 'match'),
         ),
         SizedBox(width: 24),
         _RadioOption(
-          label: 'Training Session',
+          label: AppStrings.trainingSession,
           selected: _activeTab == 'training',
           onTap: () => setState(() => _activeTab = 'training'),
         ),
@@ -487,7 +487,7 @@ class _MyActivitiesFormScreenState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Game Type
-        _FormLabel('game type *'),
+        _FormLabel(AppStrings.gameTypeLabel),
         SizedBox(height: 6),
         _DropdownField<String>(
           value: _gameType,
@@ -497,17 +497,17 @@ class _MyActivitiesFormScreenState
         SizedBox(height: 14),
 
         // Match Date
-        _FormLabel('match date *'),
+        _FormLabel(AppStrings.matchDateLabel),
         SizedBox(height: 6),
         _DateField(
           date: _matchDate,
-          hint: 'Select date',
+          hint: AppStrings.selectDate,
           onTap: _pickMatchDate,
         ),
         SizedBox(height: 14),
 
         // Playing Position
-        _FormLabel('playing position *'),
+        _FormLabel(AppStrings.playingPositionLabel),
         SizedBox(height: 6),
         _DropdownField<String>(
           value: _position,
@@ -522,7 +522,7 @@ class _MyActivitiesFormScreenState
         SizedBox(height: 14),
 
         // Position Type
-        _FormLabel('position type *'),
+        _FormLabel(AppStrings.positionTypeLabel),
         SizedBox(height: 6),
         _DropdownField<String>(
           value: _positionType,
@@ -532,38 +532,40 @@ class _MyActivitiesFormScreenState
         SizedBox(height: 14),
 
         // Goals / Clean Sheet
-        _FormLabel(_isGoalkeeper ? 'clean sheet *' : 'goals scored *'),
+        _FormLabel(_isGoalkeeper
+            ? AppStrings.cleanSheetRequiredLower
+            : AppStrings.goalsScoredRequiredLower),
         SizedBox(height: 6),
         _NumberInput(controller: _goalsCtrl),
         SizedBox(height: 14),
 
         // Assists
-        _FormLabel('number of assists *'),
+        _FormLabel(AppStrings.numberOfAssistsLabel),
         SizedBox(height: 6),
         _NumberInput(controller: _assistsCtrl),
         SizedBox(height: 14),
 
         // Minutes
-        _FormLabel('minutes played *'),
+        _FormLabel(AppStrings.minutesPlayedLabel),
         SizedBox(height: 6),
         _NumberInput(controller: _minutesCtrl),
         SizedBox(height: 14),
 
         // Teams
-        _FormLabel('teams played *'),
+        _FormLabel(AppStrings.teamsPlayedLabel),
         SizedBox(height: 6),
         Row(
           children: [
             Expanded(
               child: _TextInput(
                 controller: _teamACtrl,
-                hint: 'team A',
+                hint: AppStrings.teamA,
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                'vs'.tr,
+                AppStrings.vs,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
@@ -575,7 +577,7 @@ class _MyActivitiesFormScreenState
             Expanded(
               child: _TextInput(
                 controller: _teamBCtrl,
-                hint: 'team B',
+                hint: AppStrings.teamB,
               ),
             ),
           ],
@@ -583,7 +585,7 @@ class _MyActivitiesFormScreenState
         SizedBox(height: 14),
 
         // Rating
-        _FormLabel('rate your performance *'),
+        _FormLabel(AppStrings.rateYourPerformanceLabel),
         SizedBox(height: 10),
         _RatingSelector(
           selected: _rating,
@@ -592,7 +594,7 @@ class _MyActivitiesFormScreenState
         SizedBox(height: 14),
 
         // Notes
-        _FormLabel('how I performed *'),
+        _FormLabel(AppStrings.howIPerformedLabel),
         SizedBox(height: 6),
         _NotesInput(
           controller: _notesCtrl,
@@ -609,17 +611,17 @@ class _MyActivitiesFormScreenState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Training Date
-        _FormLabel('training session date *'),
+        _FormLabel(AppStrings.trainingSessionDateLabel),
         SizedBox(height: 6),
         _DateField(
           date: _trainDate,
-          hint: 'Select date',
+          hint: AppStrings.selectDate,
           onTap: _pickTrainDate,
         ),
         SizedBox(height: 14),
 
         // Training Type
-        _FormLabel('training session type *'),
+        _FormLabel(AppStrings.trainingSessionTypeLabel),
         SizedBox(height: 6),
         _DropdownField<String>(
           value: _trainType,
@@ -629,13 +631,13 @@ class _MyActivitiesFormScreenState
         SizedBox(height: 14),
 
         // Minutes
-        _FormLabel('training session minutes *'),
+        _FormLabel(AppStrings.trainingSessionMinutesLabel),
         SizedBox(height: 6),
         _NumberInput(controller: _trainMinutesCtrl),
         SizedBox(height: 14),
 
         // Notes
-        _FormLabel('training notes *'),
+        _FormLabel(AppStrings.trainingNotesLabel),
         SizedBox(height: 6),
         _NotesInput(
           controller: _trainNotesCtrl,
@@ -668,7 +670,7 @@ class _MyActivitiesFormScreenState
                   ),
                 ),
                 child: Text(
-                  'TAG PLAYERS'.tr,
+                  AppStrings.tagPlayersUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -680,7 +682,7 @@ class _MyActivitiesFormScreenState
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                'or'.tr,
+                AppStrings.or,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 12,
@@ -701,7 +703,7 @@ class _MyActivitiesFormScreenState
                   ),
                 ),
                 child: Text(
-                  'INVITE PLAYERS'.tr,
+                  AppStrings.invitePlayersUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -761,7 +763,7 @@ class _MyActivitiesFormScreenState
                 child: _isSubmitting
                     ? AppLoader(size: 24, centered: false)
                     : Text(
-                        'ADD'.tr,
+                        AppStrings.add.toUpperCase(),
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -784,7 +786,7 @@ class _MyActivitiesFormScreenState
                   ),
                 ),
                 child: Text(
-                  'RESET'.tr,
+                  AppStrings.resetUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -797,7 +799,7 @@ class _MyActivitiesFormScreenState
         ),
         SizedBox(height: 8),
         Text(
-          '* mandatory fields'.tr,
+          AppStrings.mandatoryFields,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 10,
@@ -1144,7 +1146,7 @@ class _TagChip extends StatelessWidget {
             ),
             SizedBox(width: 6),
             Text(
-              name.isEmpty ? 'User' : name,
+              name.isEmpty ? AppStrings.userFallback : name,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 11,
@@ -1283,7 +1285,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Tag Players'.tr,
+                  AppStrings.tagPlayers,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -1297,7 +1299,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                     Navigator.pop(ctx);
                   },
                   child: Text(
-                    'Done'.tr,
+                    AppStrings.done,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -1318,7 +1320,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
               autofocus: true,
               style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
               decoration: InputDecoration(
-                hintText: 'Search by name (min 2 characters)…'.tr,
+                hintText: AppStrings.searchByNameMinTwoCharacters,
                 hintStyle: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -1344,8 +1346,8 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                 ? Center(
                     child: Text(
                       _searchCtrl.text.length < 2
-                          ? 'Type to search players'
-                          : 'No players found',
+                          ? AppStrings.typeToSearchPlayers
+                          : AppStrings.noPlayersFound,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
@@ -1383,7 +1385,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                               : null,
                         ),
                         title: Text(
-                          name.isEmpty ? 'Unknown' : name,
+                          name.isEmpty ? AppStrings.unknown : name,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,

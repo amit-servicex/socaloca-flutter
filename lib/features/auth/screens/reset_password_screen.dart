@@ -85,18 +85,18 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     String? passErr;
     String? confirmErr;
 
-    if (otp.isEmpty) otpErr = 'Please enter OTP';
+    if (otp.isEmpty) otpErr = AppStrings.pleaseEnterOtp;
 
     if (pass.isEmpty) {
-      passErr = 'Please enter a password';
+      passErr = AppStrings.pleaseEnterPassword;
     } else if (pass.length < 6) {
-      passErr = 'Minimum 6 characters';
+      passErr = AppStrings.minimumSixCharacters;
     }
 
     if (confirm.isEmpty) {
-      confirmErr = 'Please confirm password';
+      confirmErr = AppStrings.pleaseConfirmPassword;
     } else if (confirm != pass) {
-      confirmErr = "Password doesn't match";
+      confirmErr = AppStrings.passwordDoesNotMatch;
     }
 
     setState(() {
@@ -125,7 +125,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 
     switch (result) {
       case AuthSuccess():
-        _showToast('Password reset successfully. Please Sign In.');
+        _showToast(AppStrings.passwordResetSuccess);
         // Mirrors Android: Intent with FLAG_ACTIVITY_NEW_TASK | CLEAR_TASK
         if (mounted) context.go(AppRoutes.login);
       case AuthFailure(:final error):
@@ -162,7 +162,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 
     switch (result) {
       case AuthSuccess():
-        _showToast('Verification code sent successfully');
+        _showToast(AppStrings.verificationCodeSent);
         _startResendCooldown();
       case AuthFailure(:final error):
         _showToast(error);
@@ -319,7 +319,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 // ── OTP field ────────────────────────────────────────────
                 _buildField(
                   controller: _otpCtrl,
-                  label: 'OTP *',
+                  label: AppStrings.otpLabel,
                   error: _otpError,
                   keyboardType: TextInputType.number,
                   formatters: [FilteringTextInputFormatter.digitsOnly],
@@ -332,7 +332,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 // ── New Password ─────────────────────────────────────────
                 _buildField(
                   controller: _passCtrl,
-                  label: 'Password *',
+                  label: AppStrings.password,
                   error: _passError,
                   obscure: _obscurePass,
                   onToggleObscure: () =>
@@ -346,7 +346,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 // ── Confirm Password ─────────────────────────────────────
                 _buildField(
                   controller: _confirmCtrl,
-                  label: 'Confirm Password *',
+                  label: AppStrings.confirmPassword,
                   error: _confirmError,
                   obscure: _obscureConfirm,
                   onToggleObscure: () =>
@@ -376,7 +376,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                             ),
                           )
                         : Text(
-                            'RESET'.tr,
+                            AppStrings.resetUpper,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -393,7 +393,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Haven't received the code?  ".tr,
+                      AppStrings.haventReceivedCode,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
@@ -402,7 +402,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     ),
                     _resendSeconds > 0
                         ? Text(
-                            'RESEND (${_resendSeconds}s)',
+                            AppStrings.resendUpperWithSeconds(_resendSeconds),
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 13,
@@ -422,7 +422,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                                     ),
                                   )
                                 : Text(
-                                    'RESEND'.tr,
+                                    AppStrings.resendUpper,
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 13,

@@ -84,7 +84,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
         children: [
           // Upcoming matches section
           _SectionHeader(
-            title: 'Upcoming Matches',
+            title: AppStrings.upcomingMatches,
             showViewAll: _upcoming.isNotEmpty,
             onViewAll: () {
               // TODO: navigate to full upcoming matches list
@@ -92,7 +92,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
           ),
           SizedBox(height: 8),
           if (_upcoming.isEmpty)
-            _EmptyState(message: 'No upcoming matches')
+            _EmptyState(message: AppStrings.noUpcomingMatches)
           else
             ..._upcoming.map((m) => MatchCard(
                   match: m,
@@ -103,7 +103,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
 
           // Played matches section
           _SectionHeader(
-            title: 'Played Matches',
+            title: AppStrings.playedMatches,
             showViewAll: _played.isNotEmpty,
             onViewAll: () {
               // TODO: navigate to full played matches list
@@ -111,7 +111,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
           ),
           SizedBox(height: 8),
           if (_played.isEmpty)
-            _EmptyState(message: 'No played matches')
+            _EmptyState(message: AppStrings.noPlayedMatches)
           else
             ..._played.map((m) => MatchCard(
                   match: m,
@@ -163,7 +163,7 @@ class _SectionHeader extends StatelessWidget {
           GestureDetector(
             onTap: onViewAll,
             child: Text(
-              'View All'.tr,
+              AppStrings.viewAll,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,

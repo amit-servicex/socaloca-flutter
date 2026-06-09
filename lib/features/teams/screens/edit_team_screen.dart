@@ -100,7 +100,7 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error picking image: $e')),
+          SnackBar(content: Text(AppStrings.errorPickingImage(e))),
         );
       }
     }

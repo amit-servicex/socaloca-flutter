@@ -28,11 +28,25 @@ class _LanguageSelectionBottomSheetState
 
   // Matches Utils.getLanguages() from Android
   final List<Map<String, String>> _languages = [
-    {'name': 'English', 'code': 'en', 'display': 'English'},
-    {'name': 'Spanish', 'code': 'es', 'display': 'Spanish'},
-    {'name': 'Portugese', 'code': 'pt', 'display': 'Portuguese'},
-    {'name': 'French', 'code': 'fr', 'display': 'French'},
+    {'name': 'English', 'code': 'en'},
+    {'name': 'Spanish', 'code': 'es'},
+    {'name': 'Portugese', 'code': 'pt'},
+    {'name': 'French', 'code': 'fr'},
   ];
+
+  String _languageDisplayName(String code) {
+    switch (code) {
+      case 'es':
+        return AppStrings.spanishLanguage;
+      case 'pt':
+        return AppStrings.portugueseLanguage;
+      case 'fr':
+        return AppStrings.frenchLanguage;
+      case 'en':
+      default:
+        return AppStrings.englishLanguage;
+    }
+  }
 
   @override
   void initState() {
@@ -157,7 +171,7 @@ class _LanguageSelectionBottomSheetState
                       ),
                       child: Center(
                         child: Text(
-                          language['display']!,
+                          _languageDisplayName(language['code']!),
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight:

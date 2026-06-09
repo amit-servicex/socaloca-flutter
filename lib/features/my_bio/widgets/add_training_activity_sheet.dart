@@ -83,11 +83,11 @@ class _AddTrainingActivitySheetState
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedDate == null) {
-      _showError('Please select a training date');
+      _showError(AppStrings.pleaseSelectTrainingDate);
       return;
     }
     if (_trainType == null) {
-      _showError('Please select a training type');
+      _showError(AppStrings.pleaseSelectTrainingType);
       return;
     }
 
@@ -114,11 +114,11 @@ class _AddTrainingActivitySheetState
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Training session added'.tr)),
+        SnackBar(content: Text(AppStrings.trainingSessionAdded)),
       );
       Navigator.of(context).pop(true);
     } else {
-      _showError('Failed to add training. Please try again.');
+      _showError(AppStrings.failedToAddTraining);
     }
   }
 
@@ -158,7 +158,7 @@ class _AddTrainingActivitySheetState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Add Training Session'.tr,
+                    AppStrings.addTrainingSession,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -185,48 +185,48 @@ class _AddTrainingActivitySheetState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Training Date
-                      _label('Training Date *'),
+                      _label(AppStrings.trainingDateLabel),
                       _DatePicker(
                         date: _selectedDate,
-                        placeholder: 'Select training date',
+                        placeholder: AppStrings.selectTrainingDate,
                         onTap: _pickDate,
                         formatter: _formatDisplay,
                       ),
                       SizedBox(height: 16),
 
                       // Training Type
-                      _label('Training Type *'),
+                      _label(AppStrings.trainingTypeLabel),
                       _DropdownField(
                         value: _trainType,
-                        hint: 'Select training type',
+                        hint: AppStrings.selectTrainingType,
                         items: _trainTypes,
                         onChanged: (v) => setState(() => _trainType = v),
                       ),
                       SizedBox(height: 16),
 
                       // Minutes
-                      _label('Training Minutes *'),
+                      _label(AppStrings.trainingMinutesLabel),
                       TextFormField(
                         controller: _minutesCtrl,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        decoration: _inputDecoration('e.g. 60'),
+                        decoration: _inputDecoration(AppStrings.egSixty),
                         validator: (v) => (v == null || v.trim().isEmpty)
-                            ? 'Enter training minutes'
+                            ? AppStrings.enterTrainingMinutes
                             : null,
                         style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
                       ),
                       SizedBox(height: 16),
 
                       // Notes
-                      _label('Notes (optional)'),
+                      _label(AppStrings.notesOptionalLabel),
                       TextFormField(
                         controller: _notesCtrl,
                         maxLines: 3,
                         decoration: _inputDecoration(
-                            'Describe your training session...'),
+                            AppStrings.describeTrainingSession),
                         style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
                       ),
                       SizedBox(height: 24),

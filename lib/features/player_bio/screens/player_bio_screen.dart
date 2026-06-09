@@ -712,10 +712,10 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
 
                                 // Endorsements
                                 EndorsementsSection(
-                                  endorsements: state.endorsements,
-                                  isLoadingEndorsements:
-                                      state.isLoadingEndorsements,
-                                ),
+                                    endorsements: state.endorsements,
+                                    isLoadingEndorsements:
+                                        state.isLoadingEndorsements,
+                                    userid: user?.id ?? ''),
 
                                 if (state.endorsements.isNotEmpty)
                                   SizedBox(height: 20),

@@ -319,7 +319,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
 
   Widget _buildConfedDropdown(String selected) {
     return SearchableDropdownButton(
-      hint: 'Confederation'.tr,
+      hint: AppStrings.confederation,
       value: selected,
       items: _confedItems.map((e) => e.$2).toList(),
       values: _confedItems.map((e) => e.$1).toList(),
@@ -348,9 +348,8 @@ class _FAsTabState extends ConsumerState<_FAsTab>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "These are the Football Associations that have partnered with SOCALOCA to provide content and services to our users.\n\n"
-                    "If you are a Football Association, you can request to become a SOCALOCA partner and gain access to an individualized hub featuring your logo, branding, and a wide range of features. These include the ability to organize tournaments and leagues using SOCALOCA's tournament module, upload game highlights, training sessions, or interviews directly within the app, engage fans with the latest news and announcements, showcase sponsors, and access a data-driven overview of your Football Association's stakeholders through SOCALOCA Analytics, plus much more.",
+                  Text(
+                    AppStrings.footballAssociationsIntro,
                     style: TextStyle(
                         color: AppColors.socaBlack,
                         fontFamily: 'Poppins',
@@ -360,8 +359,8 @@ class _FAsTabState extends ConsumerState<_FAsTab>
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      const Text(
-                        "Confderations",
+                      Text(
+                        AppStrings.confderations,
                         style: TextStyle(
                             color: AppColors.socaBlack,
                             fontWeight: FontWeight.w600,
@@ -383,7 +382,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
           else if (state.fas.isEmpty)
             SliverFillRemaining(
                 child: Center(
-                    child: Text('No FAs found'.tr,
+                    child: Text(AppStrings.noFasFound,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -473,8 +472,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                "These are the Football Confederations that have partnered with SOCALOCA to provide content and services to our users.\n\n"
-                "If you are a Confederation, you can request to become a SOCALOCA partner and gain access to an individualized hub featuring your logo, branding, and a wide range of features. These include the ability to organize tournaments and leagues using SOCALOCA's tournament module, upload game highlights, training sessions, or interviews directly within the app, engage fans with the latest news and announcements, showcase sponsors, and access a data-driven overview of your Football Confederation's stakeholders through SOCALOCA Analytics, plus much more.",
+                AppStrings.footballConfederationsIntro,
                 style: TextStyle(
                     color: AppColors.socaBlack,
                     fontFamily: 'Poppins',
@@ -488,7 +486,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
           else if (state.confeds.isEmpty)
             SliverFillRemaining(
                 child: Center(
-                    child: Text('No confederations found'.tr,
+                    child: Text(AppStrings.noConfederationsFound,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -581,8 +579,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "These are the Sponsors that have partnered with SOCALOCA to provide content and services to our users.\n\n"
-                    "If you are a Sponsor, you can request to become a SOCALOCA partner and gain access to an individualized hub featuring your logo, branding, and a wide range of features. These include the ability to showcase merchandise and services, promote your company through news and announcements, expand your reach, send push notifications to segmented audiences, measure your CSR impact, and much more.",
+                    AppStrings.sponsorsIntro,
                     style: TextStyle(
                         color: AppColors.socaBlack,
                         fontFamily: 'Poppins',
@@ -608,7 +605,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
           else if (state.sponsors.isEmpty)
             SliverFillRemaining(
                 child: Center(
-                    child: Text('No sponsors found'.tr,
+                    child: Text(AppStrings.noSponsorsFound,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -701,8 +698,7 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "These are the Charities, NGOs, and Social Enterprises that have partnered with SOCALOCA to provide content and services to our users.\n\n"
-                    "If you are a Charity, NGO, or Social Enterprise, you can request to become a SOCALOCA partner and gain access to an individualized hub featuring your logo, branding, and a wide range of features. These include the ability to showcase your projects and initiatives, reach a wider audience, upload videos and photos, engage with followers, measure the impact of your CSR activities, and positively influence the SOCALOCA community.",
+                    AppStrings.charitiesNgosIntro,
                     style: TextStyle(
                         color: AppColors.socaBlack,
                         fontFamily: 'Poppins',
@@ -728,7 +724,7 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
           else if (state.charities.isEmpty)
             SliverFillRemaining(
                 child: Center(
-                    child: Text('No charities & NGOs found'.tr,
+                    child: Text(AppStrings.noCharitiesNgosFound,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,

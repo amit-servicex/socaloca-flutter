@@ -93,7 +93,7 @@ class _CupStatsBottomSheetState extends ConsumerState<CupStatsBottomSheet>
                   const SizedBox(width: 8),
                   // here need to update the design
                   Text(
-                    'Tournament Stats'.tr,
+                    AppStrings.tournamentStats,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
@@ -144,7 +144,7 @@ class _CupStatsBottomSheetState extends ConsumerState<CupStatsBottomSheet>
               child: _roundId == null
                   ? Center(
                       child: Text(
-                        'No rounds available'.tr,
+                        AppStrings.noRoundsAvailable,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 15,
@@ -212,7 +212,7 @@ class _StatsPage extends ConsumerWidget {
                 Icon(_iconFor(statType), size: 56, color: Colors.grey[300]),
                 const SizedBox(height: 12),
                 Text(
-                  'No ${_labelFor(statType)} recorded yet'.tr,
+                  AppStrings.noStatRecordedYet(_labelFor(statType)),
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -232,8 +232,10 @@ class _StatsPage extends ConsumerWidget {
           padding: EdgeInsets.zero,
           itemCount: stats.length + (hasHeader ? 1 : 0),
           itemBuilder: (_, index) {
-            if (showGoalsHeader && index == 0) return const _CupGoalsTableHeader();
-            if (showCardsHeader && index == 0) return const _CupCardsTableHeader();
+            if (showGoalsHeader && index == 0)
+              return const _CupGoalsTableHeader();
+            if (showCardsHeader && index == 0)
+              return const _CupCardsTableHeader();
 
             final i = hasHeader ? index - 1 : index;
             if (showGoalsHeader) return _CupGoalStatRow(stat: stats[i]);
@@ -287,7 +289,8 @@ Widget _buildAvatar(String? url, double size) {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(color: Colors.grey[200], shape: BoxShape.circle),
+      decoration:
+          BoxDecoration(color: Colors.grey[200], shape: BoxShape.circle),
       child: Icon(Icons.person, size: size * 0.5, color: Colors.grey[400]),
     );
   }
@@ -301,7 +304,8 @@ Widget _buildAvatar(String? url, double size) {
     errorWidget: (_, __, ___) => Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(color: Colors.grey[200], shape: BoxShape.circle),
+      decoration:
+          BoxDecoration(color: Colors.grey[200], shape: BoxShape.circle),
       child: Icon(Icons.person, size: size * 0.5, color: Colors.grey[400]),
     ),
   );

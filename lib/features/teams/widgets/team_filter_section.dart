@@ -97,7 +97,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
               child: TextField(
                 controller: _locationController,
                 decoration: InputDecoration(
-                  hintText: 'Location'.tr,
+                  hintText: AppStrings.location,
                   hintStyle: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -197,7 +197,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
               ),
             ),
             child: Text(
-              'GO'.tr,
+              AppStrings.goUpper,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -219,7 +219,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
               visualDensity: VisualDensity.compact,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            Text("      All temas".tr)
+            Text(AppStrings.allTemasLabel)
           ],
         ),
         Divider(

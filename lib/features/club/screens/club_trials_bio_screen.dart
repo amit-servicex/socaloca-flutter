@@ -74,8 +74,8 @@ class _ClubTrialsBioScreenState extends ConsumerState<ClubTrialsBioScreen> {
   }
 
   void _replaceTrial(ClubTrialModel updated) {
-    final index = _trials.indexWhere(
-        (t) => t.effectiveTrialId == updated.effectiveTrialId);
+    final index = _trials
+        .indexWhere((t) => t.effectiveTrialId == updated.effectiveTrialId);
     if (index < 0) return;
     setState(() => _trials[index] = updated);
   }
@@ -91,8 +91,8 @@ class _ClubTrialsBioScreenState extends ConsumerState<ClubTrialsBioScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Live Trials',
+        title: Text(
+          AppStrings.liveTrials,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -106,7 +106,7 @@ class _ClubTrialsBioScreenState extends ConsumerState<ClubTrialsBioScreen> {
           : _trials.isEmpty
               ? Center(
                   child: Text(
-                    'No trials found'.tr,
+                    AppStrings.noTrialsFound,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -226,8 +226,8 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                   ),
                 ),
                 const SizedBox(width: 6),
-                const Text(
-                  'LIVE',
+                Text(
+                  AppStrings.live,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -250,24 +250,28 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
           ),
           const SizedBox(height: 8),
           if ((trial.gender ?? '').isNotEmpty)
-            _InfoRow(label: 'Gender', value: _titleCase(trial.gender!)),
+            _InfoRow(
+                label: AppStrings.genderPlain,
+                value: _titleCase(trial.gender!)),
           if (trial.ageFrom > 0 && trial.ageTo > 0)
             _InfoRow(
-                label: 'Age', value: '${trial.ageFrom} - ${trial.ageTo} Years'),
+                label: AppStrings.age,
+                value:
+                    '${trial.ageFrom} - ${trial.ageTo} ${AppStrings.yearsTitle}'),
           if ((trial.registerDateFrom ?? '').isNotEmpty &&
               (trial.registerDateTo ?? '').isNotEmpty)
             _InfoRow(
-                label: 'Registration',
+                label: AppStrings.registration,
                 value: '${trial.registerDateFrom} - ${trial.registerDateTo}'),
           if ((trial.trialDateFrom ?? '').isNotEmpty &&
               (trial.trialDateTo ?? '').isNotEmpty)
             _InfoRow(
-                label: 'Trial Date',
+                label: AppStrings.trialDate,
                 value: '${trial.trialDateFrom} - ${trial.trialDateTo}'),
           if ((trial.trialVenue ?? '').isNotEmpty ||
               (trial.location ?? '').isNotEmpty)
             _InfoRow(
-              label: 'Location',
+              label: AppStrings.location,
               value: trial.trialVenue ?? trial.location ?? '',
               valueStyle: (trial.lat != 0 && trial.lng != 0)
                   ? const TextStyle(
@@ -279,9 +283,9 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                   : null,
               onTap: (trial.lat != 0 && trial.lng != 0) ? _openMap : null,
             ),
-          _InfoRow(label: 'Cost', value: _costText()),
+          _InfoRow(label: AppStrings.cost, value: _costText()),
           if ((trial.brief ?? '').isNotEmpty)
-            _InfoRow(label: 'Brief', value: trial.brief!),
+            _InfoRow(label: AppStrings.brief, value: trial.brief!),
           const SizedBox(height: 10),
           Align(
             alignment: Alignment.centerRight,
@@ -308,10 +312,10 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
     required bool canRegister,
   }) {
     final label = expired
-        ? 'REGISTRATION CLOSED'.tr
+        ? AppStrings.registrationClosed
         : registered
-            ? 'REGISTERED'.tr
-            : 'REGISTER'.tr;
+            ? AppStrings.registered.toUpperCase()
+            : AppStrings.register.toUpperCase();
     return SizedBox(
       height: 36,
       width: 220,
@@ -321,28 +325,25 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
           foregroundColor: AppColors.socaYellow,
           disabledBackgroundColor: AppColors.socaBlack,
           disabledForegroundColor: AppColors.socaYellow,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
           elevation: 0,
         ),
         onPressed: canRegister ? _tryRegister : null,
         child: Text(
-                label,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w800,
-                  fontSize: 12,
-                ),
-              ),
+          label,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w800,
+            fontSize: 12,
+          ),
+        ),
       ),
     );
   }
 
   Future<void> _tryRegister() async {
     if (!_isEligible()) {
-      _showSnack(
-          'Registration restricted. Your profile does not match the trial criteria.'
-              .tr);
+      _showSnack(AppStrings.registrationRestrictedShort);
       return;
     }
     await _showRegisterDialog();
@@ -366,10 +367,9 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
   int _userAge(Map<String, dynamic> user) {
     final explicit = int.tryParse(user['age']?.toString() ?? '');
     if (explicit != null && explicit > 0) return explicit;
-    final birthYear =
-        int.tryParse(user['yearOfBirth']?.toString() ?? '') ??
-            _birthYearFromDob(user['dob']?.toString()) ??
-            _birthYearFromDob(user['dateOfBirth']?.toString());
+    final birthYear = int.tryParse(user['yearOfBirth']?.toString() ?? '') ??
+        _birthYearFromDob(user['dob']?.toString()) ??
+        _birthYearFromDob(user['dateOfBirth']?.toString());
     if (birthYear == null || birthYear <= 0) return 0;
     return DateTime.now().year - birthYear;
   }
@@ -383,8 +383,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
 
   Future<void> _showRegisterDialog() async {
     final user = StorageService.currentUser ?? {};
-    final name =
-        '${user['firstName'] ?? ''} ${user['lastName'] ?? ''}'.trim();
+    final name = '${user['firstName'] ?? ''} ${user['lastName'] ?? ''}'.trim();
     final emailCtrl =
         TextEditingController(text: user['email']?.toString() ?? '');
     ClubTrialModel? updatedTrial;
@@ -403,7 +402,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             title: done
                 ? null
-                : Text('Register'.tr,
+                : Text(AppStrings.register,
                     style: const TextStyle(
                         fontFamily: 'Poppins', fontWeight: FontWeight.w800)),
             content: done
@@ -414,8 +413,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                           color: Colors.green, size: 52),
                       const SizedBox(height: 12),
                       Text(
-                        'Thank you for participating in live trial. Please check your mail for instructions.'
-                            .tr,
+                        AppStrings.trialRegistrationThanks,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontFamily: 'Poppins', fontSize: 13),
@@ -426,7 +424,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name.isEmpty ? 'Player'.tr : name,
+                      Text(name.isEmpty ? AppStrings.player : name,
                           style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -435,10 +433,9 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                       TextField(
                         controller: emailCtrl,
                         keyboardType: TextInputType.emailAddress,
-                        onChanged: (_) =>
-                            setDState(() => emailError = null),
+                        onChanged: (_) => setDState(() => emailError = null),
                         decoration: InputDecoration(
-                          labelText: 'Email'.tr,
+                          labelText: AppStrings.emailPlain,
                           errorText: emailError,
                           border: const OutlineInputBorder(),
                           contentPadding: const EdgeInsets.symmetric(
@@ -457,7 +454,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                           foregroundColor: AppColors.socaYellow,
                         ),
                         onPressed: () => Navigator.pop(dCtx),
-                        child: Text('GOT IT'.tr,
+                        child: Text(AppStrings.gotItUpper,
                             style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w800)),
@@ -466,9 +463,8 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                   ]
                 : [
                     TextButton(
-                      onPressed:
-                          submitting ? null : () => Navigator.pop(dCtx),
-                      child: Text('Cancel'.tr),
+                      onPressed: submitting ? null : () => Navigator.pop(dCtx),
+                      child: Text(AppStrings.cancel),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -481,8 +477,8 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                               final email = emailCtrl.text.trim();
                               if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$')
                                   .hasMatch(email)) {
-                                setDState(() =>
-                                    emailError = 'Enter a valid email'.tr);
+                                setDState(() => emailError =
+                                    AppStrings.enterValidEmailAddress);
                                 return;
                               }
                               setDState(() => submitting = true);
@@ -500,8 +496,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                                   trialStatus: (trial.trialStatus ??
                                           const ClubTrialStatusModel())
                                       .copyWith(
-                                          canRegister: false,
-                                          registered: true),
+                                          canRegister: false, registered: true),
                                 );
                                 setDState(() {
                                   done = true;
@@ -510,9 +505,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                               } else {
                                 setDState(() => submitting = false);
                                 if (dCtx.mounted) Navigator.pop(dCtx);
-                                _showSnack(
-                                    'Registration failed. Please try again.'
-                                        .tr);
+                                _showSnack(AppStrings.registrationFailed);
                               }
                             },
                       child: submitting
@@ -522,7 +515,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                               child: CircularProgressIndicator(
                                   strokeWidth: 2, color: Colors.white),
                             )
-                          : Text('REGISTER'.tr,
+                          : Text(AppStrings.register.toUpperCase(),
                               style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w800)),
@@ -542,8 +535,8 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
     final lat = trial.lat;
     final lng = trial.lng;
     final venue = Uri.encodeComponent(trial.trialVenue ?? trial.location ?? '');
-    final uri = Uri.parse(
-        'http://maps.google.com/maps?q=loc:$lat,$lng ($venue)');
+    final uri =
+        Uri.parse('http://maps.google.com/maps?q=loc:$lat,$lng ($venue)');
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
@@ -554,7 +547,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
   }
 
   String _costText() {
-    if (trial.cost <= 0) return 'Free'.tr;
+    if (trial.cost <= 0) return AppStrings.free;
     final currency = trial.currency ?? '';
     final symbol = currency == 'USD'
         ? '\$'
@@ -626,9 +619,7 @@ class _InfoRow extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Expanded(
-            child: onTap == null
-                ? text
-                : InkWell(onTap: onTap, child: text),
+            child: onTap == null ? text : InkWell(onTap: onTap, child: text),
           ),
         ],
       ),

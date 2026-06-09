@@ -175,32 +175,32 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_selectedDate == null) {
-      _showError('Please select a match date');
+      _showError(AppStrings.pleaseSelectMatchDate);
       return;
     }
 
     if (_startTime == null) {
-      _showError('Please select start time');
+      _showError(AppStrings.pleaseSelectStartTime);
       return;
     }
 
     if (_endTime == null) {
-      _showError('Please select end time');
+      _showError(AppStrings.pleaseSelectEndTime);
       return;
     }
 
     if (!_validateTimes()) {
-      _showError('End time must be after start time');
+      _showError(AppStrings.endTimeMustBeAfterStartTime);
       return;
     }
 
     if (_selectedAgeGroup == null) {
-      _showError('Please select age group');
+      _showError(AppStrings.pleaseSelectAgeGroup);
       return;
     }
 
     if (_locationController.text.isEmpty) {
-      _showError('Please select location');
+      _showError(AppStrings.pleaseSelectLocation);
       return;
     }
 
@@ -209,7 +209,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
     try {
       final user = ref.read(currentUserProvider);
       if (user == null) {
-        _showError('User not found');
+        _showError(AppStrings.userNotFound);
         return;
       }
 
@@ -244,7 +244,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
         );
         Navigator.pop(context, true); // Return true to refresh list
       } else if (mounted) {
-        _showError('Failed to host match. Please try again.');
+        _showError(AppStrings.failedToHostMatch);
       }
     } catch (e) {
       _showError('Error: $e');
@@ -335,7 +335,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
             // Match Date
             _buildGreyBox(
               text: _selectedDate == null
-                  ? 'Match date *'
+                  ? AppStrings.matchDateLabel
                   : _formatDate(_selectedDate!),
               icon: Image.asset(
                 'assets/icons/ic_calendar.png',
@@ -353,7 +353,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                 Expanded(
                   child: _buildGreyBox(
                     text: _startTime == null
-                        ? 'Start Time *'
+                        ? AppStrings.startTimeRequired
                         : _formatTime(_startTime!),
                     icon: Image.asset(
                       'assets/icons/ic_clock.png',
@@ -367,7 +367,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                 Expanded(
                   child: _buildGreyBox(
                     text: _endTime == null
-                        ? 'End Time *'
+                        ? AppStrings.endTimeRequired
                         : _formatTime(_endTime!),
                     icon: Image.asset(
                       'assets/icons/ic_clock.png',
@@ -405,13 +405,13 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
             // Venue Name
             TextFormField(
               controller: _venueController,
-              decoration: _inputDecoration('Venue name *'),
+              decoration: _inputDecoration(AppStrings.venueNameRequired),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Venue name is required';
+                  return AppStrings.venueNameIsRequired;
                 }
                 if (value.trim().length < 3) {
-                  return 'Venue name must be at least 3 characters';
+                  return AppStrings.venueNameMinLength;
                 }
                 return null;
               },
@@ -439,7 +439,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
                     Expanded(
                       child: Text(
                         _locationController.text.isEmpty
-                            ? 'Select location from map *'
+                            ? AppStrings.selectLocationFromMapRequired
                             : _locationController.text,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -470,15 +470,15 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
             // Max Players
             TextFormField(
               controller: _maxPlayersController,
-              decoration: _inputDecoration('Max players *'),
+              decoration: _inputDecoration(AppStrings.maxPlayersRequired),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Max players is required';
+                  return AppStrings.maxPlayersIsRequired;
                 }
                 final num = int.tryParse(value);
                 if (num == null || num <= 0) {
-                  return 'Must be a positive number';
+                  return AppStrings.mustBePositiveNumber;
                 }
                 return null;
               },
@@ -489,7 +489,7 @@ class _HostPickupMatchScreenState extends ConsumerState<HostPickupMatchScreen> {
             // Match Note
             TextFormField(
               controller: _noteController,
-              decoration: _inputDecoration('Match Note'),
+              decoration: _inputDecoration(AppStrings.matchNoteHint),
               maxLines: 5,
             ),
 

@@ -4,6 +4,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/storage/storage_service.dart';
@@ -116,7 +117,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 ),
               ),
               child: Text(
-                'Skip'.tr,
+                AppStrings.skip,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Poppins',

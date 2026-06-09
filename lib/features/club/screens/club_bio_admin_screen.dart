@@ -44,7 +44,8 @@ class _ClubBioAdminScreenState extends ConsumerState<ClubBioAdminScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final name = StorageService.clubUser?['clubName'] as String? ?? 'Club';
+      final name =
+          StorageService.clubUser?['clubName'] as String? ?? AppStrings.club;
       ref.read(clubAppBarTitleProvider.notifier).state = name;
     });
   }
@@ -55,10 +56,10 @@ class _ClubBioAdminScreenState extends ConsumerState<ClubBioAdminScreen> {
 
     return async.when(
       loading: () => AppLoader(),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      error: (e, _) => Center(child: Text(AppStrings.errorMessage(e))),
       data: (bio) {
         if (bio == null) {
-          return Center(child: Text('Could not load club data. '.tr));
+          return Center(child: Text(AppStrings.couldNotLoadClubData));
         }
         return _BioBody(
             bio: bio, onRefresh: () => ref.invalidate(_clubBioAdminProvider));
@@ -184,7 +185,7 @@ class _BioBody extends ConsumerWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            '${club.followCount} Follower${club.followCount != 1 ? 's' : ''}',
+                            AppStrings.followersCount(club.followCount),
                             style:
                                 TextStyle(fontFamily: 'Poppins', fontSize: 13),
                           ),
@@ -196,14 +197,19 @@ class _BioBody extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildInfoRow('Nickname', club.nickName ?? ''),
-                            _buildInfoRow('Formed In', club.formedYear ?? ''),
-                            _buildInfoRow('Country', club.country ?? ''),
-                            _buildInfoRow('City', club.city ?? ''),
-                            _buildInfoRow('Stadium', club.stadiumsAsStr),
-                            _buildInfoRow('Manager', club.manager ?? ''),
+                            _buildInfoRow(
+                                AppStrings.nickname, club.nickName ?? ''),
+                            _buildInfoRow(
+                                AppStrings.formedIn, club.formedYear ?? ''),
+                            _buildInfoRow(
+                                AppStrings.country, club.country ?? ''),
+                            _buildInfoRow(AppStrings.city, club.city ?? ''),
+                            _buildInfoRow(
+                                AppStrings.stadium, club.stadiumsAsStr),
+                            _buildInfoRow(
+                                AppStrings.manager, club.manager ?? ''),
                             SizedBox(height: 4),
-                            Text('League'.tr,
+                            Text(AppStrings.league,
                                 style: TextStyle(
                                     fontFamily: 'Poppins', fontSize: 13)),
                             if (club.league != null && club.league!.isNotEmpty)
@@ -213,7 +219,7 @@ class _BioBody extends ConsumerWidget {
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700)),
                             SizedBox(height: 4),
-                            Text('Other Competitions'.tr,
+                            Text(AppStrings.otherCompetitions,
                                 style: TextStyle(
                                     fontFamily: 'Poppins', fontSize: 13)),
                             if (club.confed != null && club.confed!.isNotEmpty)
@@ -236,7 +242,7 @@ class _BioBody extends ConsumerWidget {
                 color: AppColors.socaGrey,
                 child: Column(children: [
                   // ── Club Teams ────────────────────────────────────────────────
-                  _SectionHeader(title: 'Club Teams'),
+                  _SectionHeader(title: AppStrings.clubTeams),
                   if (bio.teamList.isNotEmpty)
                     Container(
                       // color: Colors.grey.shade100,
@@ -257,8 +263,9 @@ class _BioBody extends ConsumerWidget {
                                     color: Colors.black),
                                 children: [
                                   TextSpan(
-                                      text:
-                                          t.gender == 'male' ? 'Men' : 'Women',
+                                      text: t.gender == 'male'
+                                          ? AppStrings.men
+                                          : AppStrings.women,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700)),
                                 ],
@@ -281,7 +288,7 @@ class _BioBody extends ConsumerWidget {
               child: Column(
                 children: [
                   // ── Kits ───────────────────────────────────────────────────
-                  _SectionHeader(title: 'Home Kit | Away Kit | Third Kit'),
+                  _SectionHeader(title: AppStrings.homeAwayThirdKit),
                   Container(
                     color: Colors.grey.shade200,
                     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -315,7 +322,7 @@ class _BioBody extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // ── Club Sponsors ──────────────────────────────────────────────────
-                  _SectionHeader(title: 'Club Sponsors'),
+                  _SectionHeader(title: AppStrings.clubSponsors),
                   if (bio.sponsorList.isNotEmpty)
                     Container(
                       // color: Colors.grey.shade100,
@@ -345,7 +352,7 @@ class _BioBody extends ConsumerWidget {
                     ),
                   Padding(
                     padding: EdgeInsets.only(left: 24.0),
-                    child: Text('Kit'.tr,
+                    child: Text(AppStrings.kit,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,

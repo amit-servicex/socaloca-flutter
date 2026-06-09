@@ -259,7 +259,7 @@ class _AndroidMatchRow extends StatelessWidget {
                           child: Text(
                             hasScore
                                 ? '${match.score?.myGoals ?? 0} : ${match.score?.opponentGoals ?? 0}'
-                                : 'vs',
+                                : AppStrings.vsLower,
                             style: TextStyle(
                               color: AppColors.socaBlack,
                               fontFamily: 'Poppins',
@@ -380,7 +380,7 @@ class _TeamLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = ApiConstants.getImageUrl(logoUrl);
     final fallback = name.isEmpty
-        ? 'TEAM'
+        ? AppStrings.teamFallback.toUpperCase()
         : name.substring(0, name.length > 4 ? 4 : name.length).toUpperCase();
 
     return CircleAvatar(

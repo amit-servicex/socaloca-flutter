@@ -708,7 +708,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     if (!_isPlayer && !_isCoach && !_isManager && !_isFan && !_isReferee) {
       log('FAIL: no role selected');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select at least one role'.tr)),
+        SnackBar(content: Text(AppStrings.pleaseSelectAtLeastOneRole)),
       );
       isValid = false;
     }
@@ -732,7 +732,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Select Photo'.tr,
+                AppStrings.selectPhoto,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -744,7 +744,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               ListTile(
                 // leading: Icon(Icons.camera_alt, color: AppColors.socaBlack),
                 title: Text(
-                  'TAKE A PHOTO'.tr,
+                  AppStrings.takePhotoUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -759,7 +759,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               ListTile(
                 // leading: Icon(Icons.photo_library, color: AppColors.socaBlack),
                 title: Text(
-                  'CHOOSE FROM GALLERY'.tr,
+                  AppStrings.chooseGalleryUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -775,7 +775,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 ListTile(
                   leading: Icon(Icons.delete, color: Colors.red),
                   title: Text(
-                    'Remove Photo'.tr,
+                    AppStrings.removePhoto,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -815,7 +815,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error picking image: $e')),
+          SnackBar(content: Text(AppStrings.errorPickingImage(e))),
         );
       }
     }
@@ -839,7 +839,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error picking image: $e')),
+          SnackBar(content: Text(AppStrings.errorPickingImage(e))),
         );
       }
     }
@@ -929,7 +929,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
                 child: Text(
-                  'Select Nationality'.tr,
+                  AppStrings.selectNationality,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -1042,14 +1042,13 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         context.go(AppRoutes.home);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Failed to create profile. Please try again.'.tr)),
+          SnackBar(content: Text(AppStrings.failedCreateProfile)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text(AppStrings.errorMessage(e))),
         );
       }
     } finally {
@@ -1088,7 +1087,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
 
                   // Title
                   Text(
-                    'Create Profile'.tr,
+                    AppStrings.createProfile,
                     style: TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
@@ -1102,7 +1101,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   // First Name
                   CreateProfileTextField(
                     controller: _firstNameController,
-                    hintText: 'first name *'.tr,
+                    hintText: AppStrings.firstNameRequiredLower,
                     onChanged: (_) => setState(() => _firstNameError = null),
                   ),
                   if (_firstNameError != null)
@@ -1113,7 +1112,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   // Last Name
                   CreateProfileTextField(
                     controller: _lastNameController,
-                    hintText: 'last name *'.tr,
+                    hintText: AppStrings.lastNameRequiredLower,
                     onChanged: (_) => setState(() => _lastNameError = null),
                   ),
                   if (_lastNameError != null)
@@ -1124,7 +1123,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   // Profile Name
                   CreateProfileTextField(
                     controller: _profileNameController,
-                    hintText: 'profile name *'.tr,
+                    hintText: AppStrings.profileNameRequiredLower,
                     onChanged: (value) {
                       setState(() {
                         _profileNameError = null;
@@ -1137,7 +1136,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                         : null,
                   ),
                   Text(
-                    'minimum 5 characters'.tr,
+                    AppStrings.minimumFiveCharacters,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
@@ -1165,7 +1164,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                         color: AppColors.socaBlack,
                       ),
                       decoration: InputDecoration(
-                        hintText: 'About Me'.tr,
+                        hintText: AppStrings.aboutMe,
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -1180,7 +1179,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      'max 300 characters'.tr,
+                      AppStrings.max300Characters,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -1193,7 +1192,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
 
                   // Select Role
                   Text(
-                    'Select role *'.tr,
+                    AppStrings.selectRoleRequired,
                     style: TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
@@ -1209,15 +1208,18 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        _buildRoleChip('Player', _isPlayer),
+                        _buildRoleChip(
+                            'Player', AppStrings.playerRole, _isPlayer),
                         SizedBox(width: 10),
-                        _buildRoleChip('Coach', _isCoach),
+                        _buildRoleChip('Coach', AppStrings.coach, _isCoach),
                         SizedBox(width: 10),
-                        _buildRoleChip('Manager', _isManager),
+                        _buildRoleChip(
+                            'Manager', AppStrings.manager, _isManager),
                         SizedBox(width: 10),
-                        _buildRoleChip('Fan', _isFan),
+                        _buildRoleChip('Fan', AppStrings.fan, _isFan),
                         SizedBox(width: 10),
-                        _buildRoleChip('Referee', _isReferee),
+                        _buildRoleChip(
+                            'Referee', AppStrings.referee, _isReferee),
                       ],
                     ),
                   ),
@@ -1238,7 +1240,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            _birthDate ?? 'Date Of Birth *',
+                            _birthDate ?? AppStrings.dateOfBirthRequired,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
@@ -1283,7 +1285,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   Row(
                     children: [
                       Text(
-                        'Gender'.tr,
+                        AppStrings.genderPlain,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -1301,7 +1303,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                               activeColor: AppColors.socaBlack,
                             ),
                             Text(
-                              'Male'.tr,
+                              AppStrings.male,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
@@ -1314,7 +1316,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                               activeColor: AppColors.socaBlack,
                             ),
                             Text(
-                              'Female'.tr,
+                              AppStrings.female,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
@@ -1350,7 +1352,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
 
                   // Mandatory fields note
                   Text(
-                    '* mandatory fields'.tr,
+                    AppStrings.mandatoryFields,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
@@ -1372,7 +1374,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          'SUBMIT'.tr,
+                          AppStrings.submit,
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
@@ -1388,8 +1390,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
 
                   // Privacy / Terms text
                   Text(
-                    'By clicking Submit, you agree to our Terms & Conditions and Privacy Policy.'
-                        .tr,
+                    AppStrings.byClickingSubmitPolicy,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -1413,9 +1414,9 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     );
   }
 
-  Widget _buildRoleChip(String label, bool isSelected) {
+  Widget _buildRoleChip(String value, String label, bool isSelected) {
     return GestureDetector(
-      onTap: () => _onRoleToggle(label, !isSelected),
+      onTap: () => _onRoleToggle(value, !isSelected),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
@@ -1443,7 +1444,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         // Nationality (Player only)
         if (_showPlayerFields) ...[
           Text(
-            'Nationality *'.tr,
+            AppStrings.nationalityRequired,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -1463,7 +1464,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    _nationality.isEmpty ? 'Select' : _nationality,
+                    _nationality.isEmpty ? AppStrings.select : _nationality,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
@@ -1497,7 +1498,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 Expanded(
                   child: Text(
                     _placeName.isEmpty
-                        ? 'Select location from map'
+                        ? AppStrings.selectLocationFromMap
                         : _placeName,
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -1516,7 +1517,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         // Playing Position (Player only)
         if (_showPlayerFields) ...[
           Text(
-            'Playing Position'.tr,
+            AppStrings.playingPositionPlain,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -1546,7 +1547,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         // Jersey Number
         if (_showJerseyNumber) ...[
           Text(
-            'Preferred Jersey Number'.tr,
+            AppStrings.preferredJerseyNumber,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -1556,7 +1557,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           SizedBox(height: 10),
           CreateProfileTextField(
             controller: _jerseyNumberController,
-            hintText: '0 - 99'.tr,
+            hintText: AppStrings.zeroToNinetyNine,
             keyboardType: TextInputType.number,
             maxLength: 2,
           ),
@@ -1566,7 +1567,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         // Playing Level (Player only)
         if (_showPlayerFields) ...[
           Text(
-            'Playing Level *'.tr,
+            AppStrings.playingLevelRequired,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -1585,7 +1586,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           Row(
             children: [
               Text(
-                'Preferred Foot'.tr,
+                AppStrings.preferredFoot,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -1603,7 +1604,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                       activeColor: AppColors.socaBlack,
                     ),
                     Text(
-                      'Right'.tr,
+                      AppStrings.right,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -1616,7 +1617,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                       activeColor: AppColors.socaBlack,
                     ),
                     Text(
-                      'Left'.tr,
+                      AppStrings.left,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -1633,7 +1634,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
 
           // Height
           Text(
-            'Height'.tr,
+            AppStrings.height,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -1643,7 +1644,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           SizedBox(height: 10),
           CreateProfileTextField(
             controller: _heightController,
-            hintText: 'value in cm'.tr,
+            hintText: AppStrings.valueInCm,
             keyboardType: TextInputType.number,
             maxLength: 3,
           ),
@@ -1653,7 +1654,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         // Jersey Size
         if (_showJerseySize) ...[
           Text(
-            'Shirt/Jersey Size'.tr,
+            AppStrings.shirtJerseySize,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -1701,7 +1702,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         // Shoe Size
         if (_showShoeSize) ...[
           Text(
-            'Shoe Size'.tr,
+            AppStrings.shoeSize,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -1759,7 +1760,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 Expanded(
                   child: Text(
                     _placeName.isEmpty
-                        ? 'Select location from map'
+                        ? AppStrings.selectLocationFromMap
                         : _placeName,
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -1785,7 +1786,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Brands you like'.tr,
+              AppStrings.brandsYouLike,
               style: TextStyle(
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w700,
@@ -1845,7 +1846,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Major leagues you follow'.tr,
+              AppStrings.majorLeaguesYouFollow,
               style: TextStyle(
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w700,
@@ -1873,7 +1874,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Teams you follow'.tr,
+              AppStrings.teamsYouFollow,
               style: TextStyle(
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w700,
@@ -1971,7 +1972,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     return Column(
       children: [
         Text(
-          'Upload your profile photo'.tr,
+          AppStrings.uploadProfilePhoto,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 16,
@@ -1994,7 +1995,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 child: Row(
                   children: [
                     Text(
-                      'TAKE A PHOTO'.tr,
+                      AppStrings.takePhotoUpper,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -2021,7 +2022,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     //     color: AppColors.socaYellow, size: 18),
                     // SizedBox(width: 5),
                     Text(
-                      'CHOOSE FROM GALLERY'.tr,
+                      AppStrings.chooseGalleryUpper,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -2050,7 +2051,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       child: Column(
         children: [
           Text(
-            'Choose your avatar'.tr,
+            AppStrings.chooseYourAvatar,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,

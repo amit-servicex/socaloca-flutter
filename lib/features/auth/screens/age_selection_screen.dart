@@ -61,7 +61,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'I am over'.tr,
+                              AppStrings.iAmOver,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
@@ -75,7 +75,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '16 years'.tr,
+                                  AppStrings.sixteenYears,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -86,7 +86,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'old'.tr,
+                                  AppStrings.old,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -124,7 +124,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'I am'.tr,
+                              AppStrings.iAm,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
@@ -138,7 +138,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '13-15 years'.tr,
+                                  AppStrings.thirteenToFifteenYears,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -149,7 +149,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'old'.tr,
+                                  AppStrings.old,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -187,8 +187,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'I am a parent/guardian\nregistering on behalf of a'
-                                  .tr,
+                              AppStrings.parentGuardianRegisteringOnBehalf,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
@@ -204,7 +203,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '7-12'.tr,
+                                  AppStrings.sevenToTwelve,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -215,7 +214,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'years'.tr,
+                                  AppStrings.years,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -226,7 +225,7 @@ class AgeSelectionScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'old'.tr,
+                                  AppStrings.old,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,

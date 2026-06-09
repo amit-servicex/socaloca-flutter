@@ -123,7 +123,7 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
         _goalkeeperSkills =
             skills.where((s) => _goalkeeper.contains(s.skillName)).toList();
       } else {
-        _error = 'Failed to load ratings';
+        _error = AppStrings.failedToLoadRatings;
       }
     } catch (e) {
       _error = e.toString();
@@ -185,7 +185,8 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow,
               ),
-              child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
+              child: Text(AppStrings.retry,
+                  style: TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),
@@ -226,7 +227,7 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
               children: [
                 if (_technicalSkills.isNotEmpty) ...[
                   _CategoryBox(
-                    title: 'Technical',
+                    title: AppStrings.technical,
                     avg: _technicalAvg,
                     skills: _technicalSkills,
                     userId: widget.userId,
@@ -235,7 +236,7 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
                 ],
                 if (_physicalSkills.isNotEmpty) ...[
                   _CategoryBox(
-                    title: 'Physical',
+                    title: AppStrings.physical,
                     avg: _physicalAvg,
                     skills: _physicalSkills,
                     userId: widget.userId,
@@ -244,7 +245,7 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
                 ],
                 if (_mentalSkills.isNotEmpty) ...[
                   _CategoryBox(
-                    title: 'Mental',
+                    title: AppStrings.mental,
                     avg: _mentalAvg,
                     skills: _mentalSkills,
                     userId: widget.userId,
@@ -254,7 +255,7 @@ class _MySkillRatingsScreenState extends ConsumerState<MySkillRatingsScreen> {
                 if (_goalkeeperSkills.isNotEmpty &&
                     playPosition == 'Goalkeeper') ...[
                   _CategoryBox(
-                    title: 'Goalkeeper',
+                    title: AppStrings.goalkeeper,
                     avg: _goalkeeperAvg,
                     skills: _goalkeeperSkills,
                     userId: widget.userId,
@@ -417,7 +418,7 @@ class _ProfileSection extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'OVERALL\nSCORE'.tr,
+                  AppStrings.overallScoreMultiline,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -460,7 +461,7 @@ class _RatingLegend extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Skill & Attribute Rating'.tr,
+            AppStrings.skillAttributeRating,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -470,8 +471,7 @@ class _RatingLegend extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            '1 - Basic  |  2 - Average  |  3 - Good  |  4 - Very Good  |  5 - Outstanding'
-                .tr,
+            AppStrings.ratingLegendDescription,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 11,
@@ -676,7 +676,9 @@ class _SkillCellState extends State<_SkillCell> {
                       if (hasRatings) ...[
                         SizedBox(height: 2),
                         Text(
-                          _isSubmitting ? 'Saving…' : endorseText,
+                          _isSubmitting
+                              ? AppStrings.savingEllipsis
+                              : endorseText,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 10,
@@ -696,7 +698,7 @@ class _SkillCellState extends State<_SkillCell> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '1'.tr,
+                        '1',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
@@ -741,7 +743,7 @@ class _SkillCellState extends State<_SkillCell> {
                         ),
                       ),
                       Text(
-                        '5'.tr,
+                        '5',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,

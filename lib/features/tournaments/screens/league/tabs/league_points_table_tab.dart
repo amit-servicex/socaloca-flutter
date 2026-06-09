@@ -37,7 +37,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'No standings available'.tr,
+                  AppStrings.noStandingsAvailable,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -87,16 +87,23 @@ class LeaguePointsTableTab extends ConsumerWidget {
                   columnSpacing: 16,
                   horizontalMargin: 12,
                   columns: [
-                    DataColumn(label: Text('#'.tr)),
-                    DataColumn(label: Text('Team'.tr)),
-                    DataColumn(label: Text('P'.tr), numeric: true),
-                    DataColumn(label: Text('W'.tr), numeric: true),
-                    DataColumn(label: Text('D'.tr), numeric: true),
-                    DataColumn(label: Text('L'.tr), numeric: true),
-                    DataColumn(label: Text('GF'.tr), numeric: true),
-                    DataColumn(label: Text('GA'.tr), numeric: true),
-                    DataColumn(label: Text('GD'.tr), numeric: true),
-                    DataColumn(label: Text('Pts'.tr), numeric: true),
+                    DataColumn(label: Text(AppStrings.pointsHash)),
+                    DataColumn(label: Text(AppStrings.teamFallback)),
+                    DataColumn(
+                        label: Text(AppStrings.pointsPlayed), numeric: true),
+                    DataColumn(
+                        label: Text(AppStrings.pointsWon), numeric: true),
+                    DataColumn(
+                        label: Text(AppStrings.pointsDrawn), numeric: true),
+                    DataColumn(
+                        label: Text(AppStrings.pointsLost), numeric: true),
+                    DataColumn(label: Text(AppStrings.goalsFor), numeric: true),
+                    DataColumn(
+                        label: Text(AppStrings.goalsAgainst), numeric: true),
+                    DataColumn(
+                        label: Text(AppStrings.goalDifference), numeric: true),
+                    DataColumn(
+                        label: Text(AppStrings.pointsShort), numeric: true),
                   ],
                   rows: table.asMap().entries.map((entry) {
                     final index = entry.key;
@@ -171,13 +178,13 @@ class LeaguePointsTableTab extends ConsumerWidget {
           children: [
             Icon(Icons.error_outline, size: 64, color: Colors.red),
             SizedBox(height: 16),
-            Text('Error loading standings: $error'),
+            Text(AppStrings.errorLoadingStandingsWithError(error)),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(pointsTableProvider(tournamentId));
               },
-              child: Text('Retry'.tr),
+              child: Text(AppStrings.retry),
             ),
           ],
         ),

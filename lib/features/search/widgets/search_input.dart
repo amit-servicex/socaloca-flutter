@@ -40,7 +40,7 @@ class _SearchInputState extends State<SearchInput> {
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
-                hintText: 'Player/Coach/Manager/Referee'.tr,
+                hintText: AppStrings.playerCoachManagerReferee,
                 hintStyle: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,

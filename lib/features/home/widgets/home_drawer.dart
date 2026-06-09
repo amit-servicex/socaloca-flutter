@@ -89,7 +89,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                     SizedBox(height: 10),
                     // Full name — yellow
                     Text(
-                      user.name ?? 'SocaLoca User',
+                      user.name ?? AppStrings.socaLocaUser,
                       style: TextStyle(
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w800,
@@ -106,7 +106,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'SocaLoca ID: '.tr,
+                          AppStrings.socaLocaIdLabel,
                           style: TextStyle(
                             fontFamily: 'Lato',
                             fontSize: 14,
@@ -136,7 +136,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                               onTap: () {
                                 Clipboard.setData(ClipboardData(text: socaId));
                                 AppSnackBar.showSuccess(
-                                    context, 'SocaLoca ID copied');
+                                    context, AppStrings.socaLocaIdCopied);
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(left: 6),
@@ -206,7 +206,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                         final playerBio = bioState.playerBio;
                         if (playerBio == null) {
                           AppSnackBar.showSuccess(
-                              context, 'Loading profile, please try again');
+                              context, AppStrings.loadingProfilePleaseTryAgain);
                           return;
                         }
                         Navigator.of(context).pop();

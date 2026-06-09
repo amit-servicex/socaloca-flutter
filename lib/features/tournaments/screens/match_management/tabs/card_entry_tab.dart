@@ -63,7 +63,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
             child: ElevatedButton.icon(
               onPressed: _isLoading ? null : _showAddCardDialog,
               icon: Icon(Icons.add),
-              label: Text('Add Card'.tr),
+              label: Text(AppStrings.addCard),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
@@ -88,7 +88,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
           Icon(Icons.style, size: 64, color: Colors.grey[400]),
           SizedBox(height: 16),
           Text(
-            'No Cards Recorded'.tr,
+            AppStrings.noCardsRecorded,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -98,7 +98,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
           ),
           SizedBox(height: 8),
           Text(
-            'Tap the button below to add cards'.tr,
+            AppStrings.tapAddCards,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -203,7 +203,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
           title: Text(
-            'Add Card'.tr,
+            AppStrings.addCard,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
           ),
@@ -213,7 +213,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Card Type'.tr,
+                  AppStrings.cardType,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -224,7 +224,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                   children: [
                     Expanded(
                       child: RadioListTile<String>(
-                        title: Text('Yellow'.tr,
+                        title: Text(AppStrings.yellow,
                             style:
                                 TextStyle(fontFamily: 'Poppins', fontSize: 13)),
                         value: 'YELLOW',
@@ -236,7 +236,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     ),
                     Expanded(
                       child: RadioListTile<String>(
-                        title: Text('Red'.tr,
+                        title: Text(AppStrings.red,
                             style:
                                 TextStyle(fontFamily: 'Poppins', fontSize: 13)),
                         value: 'RED',
@@ -249,7 +249,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                   ],
                 ),
                 SizedBox(height: 16),
-                Text('Team'.tr,
+                Text(AppStrings.teamFallback,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -289,7 +289,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                 TextField(
                   controller: playerNameController,
                   decoration: InputDecoration(
-                    labelText: 'Player Name'.tr,
+                    labelText: AppStrings.playerName,
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
@@ -309,9 +309,9 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     LengthLimitingTextInputFormatter(3)
                   ],
                   decoration: InputDecoration(
-                    labelText: 'Minute'.tr,
+                    labelText: AppStrings.minute,
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
-                    hintText: 'e.g., 45'.tr,
+                    hintText: AppStrings.example45,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
                     focusedBorder: OutlineInputBorder(
@@ -327,7 +327,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel'.tr)),
+                child: Text(AppStrings.cancel)),
             ElevatedButton(
               onPressed: () {
                 if (playerNameController.text.isNotEmpty &&
@@ -345,7 +345,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
               ),
-              child: Text('Add'.tr),
+              child: Text(AppStrings.add),
             ),
           ],
         ),
@@ -410,15 +410,15 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Card'.tr,
+        title: Text(AppStrings.deleteCard,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: Text('Are you sure you want to delete this card?'.tr,
+        content: Text(AppStrings.deleteCardConfirmation,
             style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'.tr)),
+              child: Text(AppStrings.cancel)),
           ElevatedButton(
             onPressed: () {
               setState(() => _cards.removeAt(index));
@@ -426,7 +426,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: Text('Delete'.tr),
+            child: Text(AppStrings.delete),
           ),
         ],
       ),
@@ -437,13 +437,14 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Error'.tr,
+        title: Text(AppStrings.error,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
         content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: Text('OK'.tr))
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppStrings.ok))
         ],
       ),
     );

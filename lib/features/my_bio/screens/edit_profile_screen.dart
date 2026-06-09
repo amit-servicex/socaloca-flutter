@@ -660,27 +660,27 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
 
     if (_firstNameController.text.trim().isEmpty) {
-      setState(() => _firstNameError = 'Please enter first name');
+      setState(() => _firstNameError = AppStrings.pleaseEnterFirstName);
       isValid = false;
     }
     if (_lastNameController.text.trim().isEmpty) {
-      setState(() => _lastNameError = 'Please enter last name');
+      setState(() => _lastNameError = AppStrings.pleaseEnterLastName);
       isValid = false;
     }
     if (_profileNameController.text.trim().isEmpty) {
-      setState(() => _profileNameError = 'Please enter profile name');
+      setState(() => _profileNameError = AppStrings.pleaseEnterProfileName);
       isValid = false;
     } else if (_profileNameController.text.trim().length < 5) {
-      setState(() => _profileNameError = 'Minimum 5 characters required');
+      setState(() => _profileNameError = AppStrings.minimumFiveCharsRequired);
       isValid = false;
     }
     if (_birthDate == null) {
-      setState(() => _dobError = 'Please select date of birth');
+      setState(() => _dobError = AppStrings.pleaseSelectDateOfBirth);
       isValid = false;
     }
     if (!_isPlayer && !_isCoach && !_isManager && !_isFan && !_isReferee) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select at least one role'.tr)),
+        SnackBar(content: Text(AppStrings.pleaseSelectAtLeastOneRole)),
       );
       isValid = false;
     }
@@ -701,7 +701,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Select Photo'.tr,
+                AppStrings.selectPhoto,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -712,7 +712,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               SizedBox(height: 20),
               ListTile(
                 leading: Icon(Icons.camera_alt, color: AppColors.socaBlack),
-                title: Text('Camera'.tr,
+                title: Text(AppStrings.camera,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
@@ -724,7 +724,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.photo_library, color: AppColors.socaBlack),
-                title: Text('Gallery'.tr,
+                title: Text(AppStrings.gallery,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
@@ -737,7 +737,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               if (_profileImage != null)
                 ListTile(
                   leading: Icon(Icons.delete, color: Colors.red),
-                  title: Text('Remove Photo'.tr,
+                  title: Text(AppStrings.removePhoto,
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 16,
@@ -768,7 +768,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error picking image: $e')),
+          SnackBar(content: Text(AppStrings.errorPickingImage(e))),
         );
       }
     }
@@ -854,7 +854,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Text(
-                'Select Nationality'.tr,
+                AppStrings.selectNationality,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -953,19 +953,18 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         // Refresh bio data
         ref.read(playerBioProvider(userId).notifier).load();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Profile updated successfully'.tr)),
+          SnackBar(content: Text(AppStrings.profileUpdatedSuccessfully)),
         );
         context.pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Failed to update profile. Please try again.'.tr)),
+          SnackBar(content: Text(AppStrings.failedToUpdateProfileTryAgain)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text(AppStrings.errorMessage(e))),
         );
       }
     } finally {
@@ -999,7 +998,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 // First Name
                 CreateProfileTextField(
                   controller: _firstNameController,
-                  hintText: 'first name *'.tr,
+                  hintText: AppStrings.firstNameRequiredLower,
                   onChanged: (_) => setState(() => _firstNameError = null),
                 ),
                 if (_firstNameError != null)
@@ -1009,7 +1008,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 // Last Name
                 CreateProfileTextField(
                   controller: _lastNameController,
-                  hintText: 'last name *'.tr,
+                  hintText: AppStrings.lastNameRequiredLower,
                   onChanged: (_) => setState(() => _lastNameError = null),
                 ),
                 if (_lastNameError != null)
@@ -1019,7 +1018,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 // Profile Name
                 CreateProfileTextField(
                   controller: _profileNameController,
-                  hintText: 'profile name *'.tr,
+                  hintText: AppStrings.profileNameRequiredLower,
                   onChanged: (_) => setState(() => _profileNameError = null),
                   suffixWidget: _profileNameController.text.trim().length >= 5
                       ? Image.asset("assets/icons/ic_tick_green.png",
@@ -1027,7 +1026,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       : null,
                 ),
                 Text(
-                  'minimum 5 characters'.tr,
+                  AppStrings.minimumFiveCharacters,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
@@ -1053,7 +1052,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       color: AppColors.socaBlack,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'About Me'.tr,
+                      hintText: AppStrings.aboutMe,
                       hintStyle: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -1069,7 +1068,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    'max 300 characters'.tr,
+                    AppStrings.max300Characters,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
@@ -1081,7 +1080,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
                 // Select Role
                 Text(
-                  'Select role *'.tr,
+                  AppStrings.selectRoleRequired,
                   style: TextStyle(
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
@@ -1123,7 +1122,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          _birthDate ?? 'date of birth *',
+                          _birthDate ?? AppStrings.dateOfBirthPlaceholder,
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
@@ -1165,7 +1164,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 Row(
                   children: [
                     Text(
-                      'Gender'.tr,
+                      AppStrings.genderPlain,
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -1178,7 +1177,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       activeColor: AppColors.socaBlack,
                       onChanged: (val) => setState(() => _gender = val!),
                     ),
-                    Text('Male'.tr,
+                    Text(AppStrings.male,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
@@ -1190,7 +1189,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       activeColor: AppColors.socaBlack,
                       onChanged: (val) => setState(() => _gender = val!),
                     ),
-                    Text('Female'.tr,
+                    Text(AppStrings.female,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
@@ -1216,7 +1215,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 SizedBox(height: 30),
 
                 Text(
-                  '* mandatory fields'.tr,
+                  AppStrings.mandatoryFields,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
@@ -1237,7 +1236,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     ),
                     child: Center(
                       child: Text(
-                        'UPDATE'.tr,
+                        AppStrings.updateUpper,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
@@ -1285,7 +1284,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (_showPlayerFields) ...[
-          Text('Nationality *'.tr,
+          Text(AppStrings.nationalityRequired,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -1302,7 +1301,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    _nationality.isEmpty ? 'Select' : _nationality,
+                    _nationality.isEmpty ? AppStrings.select : _nationality,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -1339,7 +1338,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 Expanded(
                   child: Text(
                     _placeName.isEmpty
-                        ? 'Select location from map'
+                        ? AppStrings.selectLocationFromMap
                         : _placeName,
                     style: TextStyle(
                         fontFamily: 'Poppins',
@@ -1355,7 +1354,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         SizedBox(height: 15),
 
         if (_showPlayerFields) ...[
-          Text('Playing Position'.tr,
+          Text(AppStrings.playingPositionPlain,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -1379,7 +1378,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ],
 
         if (_showJerseyNumber) ...[
-          Text('Preferred Jersey Number'.tr,
+          Text(AppStrings.preferredJerseyNumber,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -1387,7 +1386,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           SizedBox(height: 10),
           CreateProfileTextField(
             controller: _jerseyNumberController,
-            hintText: '0 - 99'.tr,
+            hintText: AppStrings.zeroToNinetyNine,
             keyboardType: TextInputType.number,
             maxLength: 2,
           ),
@@ -1395,7 +1394,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ],
 
         if (_showPlayerFields) ...[
-          Text('Playing Level *'.tr,
+          Text(AppStrings.playingLevelRequired,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -1409,7 +1408,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           SizedBox(height: 10),
           Row(
             children: [
-              Text('Preferred Foot'.tr,
+              Text(AppStrings.preferredFoot,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -1421,7 +1420,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 activeColor: AppColors.socaBlack,
                 onChanged: (val) => setState(() => _preferredFoot = val!),
               ),
-              Text('Right'.tr,
+              Text(AppStrings.right,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -1433,7 +1432,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 activeColor: AppColors.socaBlack,
                 onChanged: (val) => setState(() => _preferredFoot = val!),
               ),
-              Text('Left'.tr,
+              Text(AppStrings.left,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -1441,7 +1440,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             ],
           ),
           SizedBox(height: 15),
-          Text('Height'.tr,
+          Text(AppStrings.height,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -1449,7 +1448,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           SizedBox(height: 10),
           CreateProfileTextField(
             controller: _heightController,
-            hintText: 'value in cm'.tr,
+            hintText: AppStrings.valueInCm,
             keyboardType: TextInputType.number,
             maxLength: 3,
           ),
@@ -1457,7 +1456,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ],
 
         if (_showJerseySize) ...[
-          Text('Shirt/Jersey Size'.tr,
+          Text(AppStrings.shirtJerseySize,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -1501,7 +1500,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         ],
 
         if (_showShoeSize) ...[
-          Text('Shoe Size'.tr,
+          Text(AppStrings.shoeSize,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -1544,7 +1543,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Brands you like'.tr,
+              AppStrings.brandsYouLike,
               style: TextStyle(
                   fontFamily: 'Lato',
                   fontWeight: FontWeight.w700,
@@ -1598,7 +1597,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Major leagues you follow'.tr,
+            Text(AppStrings.majorLeaguesYouFollow,
                 style: TextStyle(
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
@@ -1623,7 +1622,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Teams you follow'.tr,
+            Text(AppStrings.teamsYouFollow,
                 style: TextStyle(
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
@@ -1647,7 +1646,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       children: [
         SizedBox(height: 20),
         Text(
-          'Upload your profile photo'.tr,
+          AppStrings.uploadProfilePhoto,
           style: TextStyle(
               fontFamily: 'Poppins', fontSize: 16, color: AppColors.socaBlack),
         ),
@@ -1665,7 +1664,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Center(
-                    child: Text('TAKE A PHOTO'.tr,
+                    child: Text(AppStrings.takePhotoUpper,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -1686,7 +1685,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Center(
-                    child: Text('CHOOSE FROM GALLERY'.tr,
+                    child: Text(AppStrings.chooseGalleryUpper,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,

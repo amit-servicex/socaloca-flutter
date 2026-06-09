@@ -36,7 +36,7 @@ class FaAllCompetitionsScreen extends StatelessWidget {
       body: competitions.isEmpty
           ? Center(
               child: Text(
-                'No competitions found.'.tr,
+                AppStrings.noCompetitionsFound,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,

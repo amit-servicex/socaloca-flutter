@@ -52,7 +52,7 @@ class UpcomingMatchCard extends StatelessWidget {
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      match.homeTeamName ?? 'Team A',
+                      match.homeTeamName ?? AppStrings.teamALabel,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
@@ -70,7 +70,7 @@ class UpcomingMatchCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Text(
-                'VS'.tr,
+                AppStrings.vs,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -87,7 +87,7 @@ class UpcomingMatchCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      match.awayTeamName ?? 'Team B',
+                      match.awayTeamName ?? AppStrings.teamBLabel,
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontFamily: 'Poppins',

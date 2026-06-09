@@ -238,7 +238,7 @@ class _StatsListState extends State<_StatsList> {
     if (widget.stats.isEmpty) {
       return Center(
         child: Text(
-          'No data available'.tr,
+          AppStrings.noDataAvailable,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,

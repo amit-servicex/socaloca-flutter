@@ -275,7 +275,7 @@ class CupInfoTab extends ConsumerWidget {
             elevation: 0,
           ),
           child: Text(
-            'Request to Join Cup'.tr,
+            AppStrings.requestToJoinCup,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
@@ -329,7 +329,7 @@ class _CupInvitationsSection extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Pending Invitations'.tr,
+                AppStrings.pendingInvitations,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -387,7 +387,7 @@ class _CupInvitationRow extends ConsumerWidget {
               elevation: 0,
             ),
             child: Text(
-              'Accept'.tr,
+              AppStrings.accept,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
@@ -407,7 +407,7 @@ class _CupInvitationRow extends ConsumerWidget {
               elevation: 0,
             ),
             child: Text(
-              'Decline'.tr,
+              AppStrings.decline,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
@@ -483,7 +483,7 @@ class CupItineraryButton extends StatelessWidget {
         child: OutlinedButton.icon(
           icon: Icon(Icons.description_outlined),
           label: Text(
-            'View Itinerary'.tr,
+            AppStrings.viewItinerary,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
@@ -513,12 +513,12 @@ class CupItineraryButton extends StatelessWidget {
         showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('Itinerary'.tr),
+            title: Text(AppStrings.itinerary),
             content: SelectableText(docUrl),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text('Close'.tr),
+                child: Text(AppStrings.close),
               ),
             ],
           ),

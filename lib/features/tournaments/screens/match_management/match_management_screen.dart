@@ -54,7 +54,7 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
         title: Text(
-          'Match Management'.tr,
+          AppStrings.matchManagement,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -206,7 +206,7 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
                       )
                     else
                       Text(
-                        'VS'.tr,
+                        AppStrings.vs,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 24,

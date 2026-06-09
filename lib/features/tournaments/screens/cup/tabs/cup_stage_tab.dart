@@ -64,7 +64,7 @@ class _CupStageTabState extends ConsumerState<CupStageTab>
             ),
             SizedBox(height: 16),
             Text(
-              'No rounds available'.tr,
+              AppStrings.noRoundsAvailable,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -93,7 +93,7 @@ class _CupStageTabState extends ConsumerState<CupStageTab>
                 SizedBox(width: 12),
                 Expanded(
                   child: SearchableDropdownButton(
-                    hint: 'Select Round'.tr,
+                    hint: AppStrings.selectRound,
                     value: _selectedRoundId,
                     items: widget.cup.roundsList!
                         .map((r) => r.roundName ?? 'Round ${r.seq}')

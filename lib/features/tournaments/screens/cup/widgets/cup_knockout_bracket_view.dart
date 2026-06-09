@@ -42,7 +42,7 @@ class CupKnockoutBracketView extends ConsumerWidget {
                 Icon(Icons.account_tree, size: 64, color: Colors.grey[400]),
                 const SizedBox(height: 16),
                 Text(
-                  'No knockout matches yet'.tr,
+                  AppStrings.noKnockoutMatchesYet,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -112,13 +112,13 @@ class CupKnockoutBracketView extends ConsumerWidget {
           children: [
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
-            Text('Error loading bracket: $error'),
+            Text(AppStrings.errorLoadingBracket(error)),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(cupKnockoutMatchesProvider(params));
               },
-              child: Text('Retry'.tr),
+              child: Text(AppStrings.retry),
             ),
           ],
         ),

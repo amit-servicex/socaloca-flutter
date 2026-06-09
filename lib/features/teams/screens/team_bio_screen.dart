@@ -224,7 +224,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
 
     if (state.teamBio == null) {
       return Center(
-        child: Text('No team data available'.tr),
+        child: Text(AppStrings.noTeamDataAvailable),
       );
     }
 
@@ -312,7 +312,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            teamDetails.teamName ?? 'Unknown Team'.tr,
+            teamDetails.teamName ?? AppStrings.unknownTeam,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 20,
@@ -335,7 +335,9 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                     if (canFollow) ...[
                       SizedBox(height: 8),
                       _buildTeamActionButton(
-                        label: state.isFollowing ? 'FOLLOWING'.tr : 'FOLLOW'.tr,
+                        label: state.isFollowing
+                            ? AppStrings.following.toUpperCase()
+                            : AppStrings.follow.toUpperCase(),
                         isLoading: state.isFollowLoading,
                         onPressed: state.isFollowLoading
                             ? null
@@ -442,7 +444,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                             color: AppColors.socaBlack,
                           ),
                           children: [
-                            TextSpan(text: '${'Coach'.tr}  '),
+                            TextSpan(text: '${AppStrings.coach}  '),
                             TextSpan(
                               text: teamDetails.coachName!,
                               style: TextStyle(fontWeight: FontWeight.w700),
@@ -454,7 +456,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                     if (state.isArchive) ...[
                       SizedBox(height: 10),
                       Text(
-                        'This team is archived'.tr,
+                        AppStrings.thisTeamIsArchived,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
@@ -466,8 +468,8 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                       SizedBox(height: 12),
                       _buildTeamActionButton(
                         label: state.isPending
-                            ? 'REQUEST PENDING'.tr
-                            : 'SEND REQUEST'.tr,
+                            ? AppStrings.requestPendingUpper
+                            : AppStrings.sendRequestUpper,
                         width: state.isPending ? 132 : 112,
                         isLoading: state.isRequestLoading,
                         onPressed: (!canRequest || state.isRequestLoading)
@@ -482,7 +484,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                                     messenger.showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'Request sent'.tr,
+                                          AppStrings.requestSent,
                                           style: const TextStyle(
                                               fontFamily: 'Poppins'),
                                         ),
@@ -646,8 +648,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
   }
 
   String _followerCountText(int count) {
-    final label = count == 1 ? 'Follower'.tr : 'Followers'.tr;
-    return '$count $label';
+    return AppStrings.followersCount(count);
   }
 
   void _showActionError(BuildContext context, Object error) {
@@ -722,16 +723,18 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (ratingDetails.teamWork > 0)
-          _buildStatBar('Team Work', ratingDetails.teamWork.toDouble()),
+          _buildStatBar(AppStrings.teamWork, ratingDetails.teamWork.toDouble()),
         if (ratingDetails.technical > 0)
-          _buildStatBar('Technical', ratingDetails.technical.toDouble()),
-        if (ratingDetails.aggressiveness > 0)
           _buildStatBar(
-              'Aggressiveness', ratingDetails.aggressiveness.toDouble()),
+              AppStrings.technical, ratingDetails.technical.toDouble()),
+        if (ratingDetails.aggressiveness > 0)
+          _buildStatBar(AppStrings.aggressiveness,
+              ratingDetails.aggressiveness.toDouble()),
         if (ratingDetails.tactical > 0)
-          _buildStatBar('Tactical', ratingDetails.tactical.toDouble()),
+          _buildStatBar(AppStrings.tactical, ratingDetails.tactical.toDouble()),
         if (ratingDetails.overall > 0)
-          _buildStatBar('Overall Rating', ratingDetails.overall.toDouble()),
+          _buildStatBar(
+              AppStrings.overallRating, ratingDetails.overall.toDouble()),
       ],
     );
   }
@@ -782,7 +785,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Players'.tr,
+                AppStrings.players,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 18,
@@ -848,7 +851,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                       ),
                     ),
                     child: Text(
-                      'VIEW ALL'.tr,
+                      AppStrings.viewAll.toUpperCase(),
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 10,
@@ -875,7 +878,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Recent Matches'.tr,
+            AppStrings.recentMatches,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -887,7 +890,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
           if (teamBio.recentMatches.isEmpty)
             Center(
               child: Text(
-                'No matches played yet'.tr,
+                AppStrings.noMatchesPlayedYet,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -971,7 +974,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                 Expanded(
                   child: _buildScoreTeam(
                     imageUrl: team1?.teamImage,
-                    name: team1?.teamName ?? 'Team 1',
+                    name: team1?.teamName ?? AppStrings.teamOne,
                     alignEnd: false,
                   ),
                 ),
@@ -992,7 +995,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                 Expanded(
                   child: _buildScoreTeam(
                     imageUrl: team2?.teamImage,
-                    name: team2?.teamName ?? 'Team 2',
+                    name: team2?.teamName ?? AppStrings.teamTwo,
                     alignEnd: true,
                   ),
                 ),
@@ -1000,7 +1003,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
             ),
             SizedBox(height: 6),
             Text(
-              'Full time'.tr,
+              AppStrings.fullTime,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
@@ -1057,7 +1060,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
 
   String _matchScoreText(TeamMatchModel match) {
     final score = match.score;
-    if (score == null) return 'vs';
+    if (score == null) return AppStrings.vsLower;
 
     final myTeamIsFirst = match.myTeamId != null &&
         match.teams.isNotEmpty &&
@@ -1231,7 +1234,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
           ),
           SizedBox(height: 16),
           Text(
-            'Failed to load team bio'.tr,
+            AppStrings.failedToLoadTeamBio,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -1262,7 +1265,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
               foregroundColor: AppColors.socaYellow,
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
-            child: Text('Retry'.tr),
+            child: Text(AppStrings.retry),
           ),
         ],
       ),

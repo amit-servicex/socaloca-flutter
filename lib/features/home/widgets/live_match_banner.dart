@@ -35,7 +35,7 @@ class LiveMatchBanner extends StatelessWidget {
             ),
             SizedBox(width: 10),
             Text(
-              'Live Match Update'.tr,
+              AppStrings.liveMatchUpdate,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
@@ -53,7 +53,7 @@ class LiveMatchBanner extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(
-                  'VIEW'.tr,
+                  AppStrings.viewUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,

@@ -96,7 +96,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     }
 
     if (state.users.isEmpty) {
-      return _buildMessage('No results found'.tr);
+      return _buildMessage(AppStrings.noResultsFound);
     }
 
     return RefreshIndicator(

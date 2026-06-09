@@ -52,9 +52,6 @@ class TournamentVisibilityToggle extends StatelessWidget {
   }
 }
 
-const _tournamentIntro =
-    'See the listing of tournaments in your area and apply to join a competition if its right for your team. You can also view the progression of competitions in real time, see fixtures, points tables, stats and even match highlights.';
-
 const _countryOptions = [
   'Afghanistan',
   'Albania',
@@ -215,7 +212,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) => _PickerSheet(
-        title: 'Select Country'.tr,
+        title: AppStrings.selectCountry,
         options: _countryOptions,
         current: _selectedCountry,
       ),
@@ -237,7 +234,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            _tournamentIntro.tr,
+            AppStrings.tournamentsIntro,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
@@ -247,7 +244,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
           SizedBox(height: 15),
           // Country Dropdown
           _DropdownField(
-            hint: _selectedCountry ?? 'Country'.tr,
+            hint: _selectedCountry ?? AppStrings.country,
             onTap: _pickCountry,
           ),
 
@@ -268,7 +265,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
                 child: _DropdownField(
                   hint: _filters.gameType ?? 'Game',
                   onTap: () => _pickOption(
-                    title: 'Game Type',
+                    title: AppStrings.gameType,
                     options: _gameTypes,
                     current: _filters.gameType,
                     onSelected: (v) {
@@ -282,7 +279,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
                 child: _DropdownField(
                   hint: _filters.gender ?? 'Gender',
                   onTap: () => _pickOption(
-                    title: 'Gender',
+                    title: AppStrings.genderPlain,
                     options: _genders,
                     current: _filters.gender,
                     onSelected: (v) {
@@ -300,7 +297,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
           _DropdownField(
             hint: _filters.ageGroup ?? 'Age Group',
             onTap: () => _pickOption(
-              title: 'Age Group',
+              title: AppStrings.ageGroup,
               options: _ageGroups,
               current: _filters.ageGroup,
               onSelected: (v) {
@@ -322,7 +319,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
               ),
               child: Center(
                 child: Text(
-                  'GO'.tr,
+                  AppStrings.goUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -336,7 +333,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
           if (_showSearchError) ...[
             SizedBox(height: 5),
             Text(
-              'Please select at least one filter'.tr,
+              AppStrings.pleaseSelectFilter,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins',

@@ -46,7 +46,7 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
         title: Text(
-          'Recent Matches'.tr,
+          AppStrings.recentMatches,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -63,7 +63,7 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
           if (matches.isEmpty) {
             return Center(
               child: Text(
-                'No recent matches'.tr,
+                AppStrings.noRecentMatches,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
@@ -109,7 +109,7 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Error loading matches'.tr,
+                AppStrings.errorLoadingMatches,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
@@ -126,7 +126,7 @@ class _RecentMatchesScreenState extends ConsumerState<RecentMatchesScreen> {
                   backgroundColor: AppColors.socaYellow,
                 ),
                 child: Text(
-                  'Retry'.tr,
+                  AppStrings.retry,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,

@@ -33,7 +33,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
   String? _errorMessage;
 
   // mirrors Android: detect whether input is a SocaLoca ID or email
-  String _inputLabel = 'Email or SocaLoca ID';
+  String _inputLabel = AppStrings.emailOrSocaLocaId;
 
   @override
   void dispose() {
@@ -70,7 +70,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
           final clubUser = data.clubUser;
           if (clubUser == null) {
             setState(() {
-              _errorMessage = 'Invalid credentials';
+              _errorMessage = AppStrings.invalidCredentials;
               _isLoading = false;
             });
             return;
@@ -134,13 +134,14 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       style: TextStyle(fontFamily: 'Poppins', fontSize: 16),
-                      decoration: _inputDecoration('Email */SocaLoca ID *'),
+                      decoration: _inputDecoration(
+                          AppStrings.emailOrSocaLocaIdRequired),
                       validator: (v) {
                         final val = v?.trim() ?? '';
                         if (val.isEmpty)
-                          return 'Please enter email or SocaLoca ID';
+                          return AppStrings.pleaseEnterEmailOrSocaLocaId;
                         if (!_isEmail(val) && !_isSocaLocaId(val)) {
-                          return 'Please enter a valid email or SocaLoca ID';
+                          return AppStrings.pleaseEnterValidEmailOrSocaLocaId;
                         }
                         return null;
                       },
@@ -155,7 +156,8 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                       textInputAction: TextInputAction.go,
                       onFieldSubmitted: (_) => _submit(),
                       style: TextStyle(fontFamily: 'Poppins', fontSize: 16),
-                      decoration: _inputDecoration('Password *').copyWith(
+                      decoration:
+                          _inputDecoration(AppStrings.password).copyWith(
                         suffixIcon: IconButton(
                           icon: !_obscurePass
                               ? Image.asset(
@@ -182,7 +184,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty)
-                          return 'Please enter password';
+                          return AppStrings.pleaseEnterPassword;
                         return null;
                       },
                     ),
@@ -258,7 +260,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                             //     :
 
                             Text(
-                          'LOGIN'.tr,
+                          AppStrings.login.toUpperCase(),
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w800,
@@ -276,7 +278,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                       child: TextButton(
                         onPressed: () => context.push(AppRoutes.registerClub),
                         child: Text(
-                          'Register as a Club',
+                          AppStrings.registerAsClub,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,

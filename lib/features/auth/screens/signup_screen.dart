@@ -74,7 +74,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           child: Column(
             children: [
               Text(
-                'Select Country'.tr,
+                AppStrings.selectCountry,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -329,29 +329,29 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     if (input.isEmpty) {
       setState(() {
-        _mobileOrEmailError = 'Please enter mobile or email';
+        _mobileOrEmailError = AppStrings.pleaseEnterMobileOrEmail;
       });
       isValid = false;
     } else if (_inputType == 'mobile' && input.length < 7) {
       setState(() {
-        _mobileOrEmailError = 'Please enter a valid mobile number';
+        _mobileOrEmailError = AppStrings.pleaseEnterValidMobileNumber;
       });
       isValid = false;
     } else if (_inputType == 'email' && !input.contains('@')) {
       setState(() {
-        _mobileOrEmailError = 'Please enter a valid email';
+        _mobileOrEmailError = AppStrings.pleaseEnterValidEmail;
       });
       isValid = false;
     }
 
     if (password.isEmpty) {
       setState(() {
-        _passwordError = 'Please enter password';
+        _passwordError = AppStrings.pleaseEnterPassword;
       });
       isValid = false;
     } else if (password.length < 6) {
       setState(() {
-        _passwordError = 'Password must be at least 6 characters';
+        _passwordError = AppStrings.passwordAtLeastSixCharacters;
       });
       isValid = false;
     }
@@ -384,8 +384,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           final user = data.user;
           if (user == null) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text('Unexpected response. Please try again.'.tr)),
+              SnackBar(content: Text(AppStrings.unexpectedResponseTryAgain)),
             );
             return;
           }
@@ -421,7 +420,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text(AppStrings.errorMessage(e))),
         );
       }
     } finally {
@@ -436,8 +435,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final passwordStrength = _passwordController.text.isEmpty
         ? null
         : _isPasswordStrong(_passwordController.text)
-            ? 'Strong'
-            : 'Weak';
+            ? AppStrings.strong
+            : AppStrings.weak;
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg, // new_white
@@ -468,7 +467,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     children: [
                       // Title
                       Text(
-                        'Sign Up'.tr,
+                        AppStrings.signUp,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
@@ -483,7 +482,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       // Mobile/Email Input Box
                       SocaLocaMobileEmailField(
                         controller: _mobileOrEmailController,
-                        hintText: 'mobile number or email *'.tr,
+                        hintText: AppStrings.mobileOrEmailRequired,
                         onChanged: _onInputChanged,
                         showCountryCode: _inputType == 'mobile',
                         countryCode: _selectedCountryCode,
@@ -499,7 +498,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       // Password Input Box
                       SocaLocaPasswordField(
                         controller: _passwordController,
-                        hintText: 'password *'.tr,
+                        hintText: AppStrings.password.toLowerCase(),
                         onChanged: _onPasswordChanged,
                       ),
 
@@ -513,7 +512,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Minimum 6 characters'.tr,
+                            AppStrings.minimumSixCharacters,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
@@ -539,7 +538,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '* mandatory fields'.tr,
+                          AppStrings.mandatoryFields,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
@@ -562,7 +561,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              'Continue'.tr,
+                              AppStrings.continueLabel,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w900,
@@ -588,7 +587,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             color: AppColors.socaPageBg,
                             padding: EdgeInsets.symmetric(horizontal: 5),
                             child: Text(
-                              'or continue with'.tr,
+                              AppStrings.orContinueWith,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
@@ -677,8 +676,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             right: 20,
             bottom: 20,
             child: Text(
-              '*SocaLoca only collects the data is necessary to provides its service and\nstores it in the anonymised way in our own self-hosted analytics system.'
-                  .tr,
+              AppStrings.socaLocaPrivacyNotice,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,

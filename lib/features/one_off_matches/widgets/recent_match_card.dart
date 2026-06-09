@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
@@ -53,7 +54,7 @@ class RecentMatchCard extends StatelessWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          match.homeTeamName ?? 'Team A',
+                          match.homeTeamName ?? AppStrings.teamALabel,
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -88,7 +89,7 @@ class RecentMatchCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          match.awayTeamName ?? 'Team B',
+                          match.awayTeamName ?? AppStrings.teamBLabel,
                           textAlign: TextAlign.right,
                           style: const TextStyle(
                             fontFamily: 'Poppins',

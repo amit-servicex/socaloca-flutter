@@ -114,7 +114,7 @@ class _FullScreenVideoScreenState extends State<FullScreenVideoScreen> {
                         color: Colors.white, size: 22),
                     const SizedBox(width: 6),
                     Text(
-                      'Back'.tr,
+                      AppStrings.back,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: Colors.white,
@@ -185,7 +185,7 @@ class FullScreenImageScreen extends StatelessWidget {
                         color: Colors.white, size: 22),
                     const SizedBox(width: 6),
                     Text(
-                      'Back'.tr,
+                      AppStrings.back,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: Colors.white,

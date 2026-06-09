@@ -435,7 +435,7 @@ class PlayerBioNotifier extends StateNotifier<PlayerBioState> {
     try {
       final endorsements = await _repository.getEndorses(
         userId: playerId,
-        endType: 'accept',
+        endType: 2,
         start: 0,
         limit: 1,
       );

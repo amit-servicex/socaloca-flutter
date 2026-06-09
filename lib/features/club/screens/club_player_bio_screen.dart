@@ -71,7 +71,7 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
 
     final name = '${player?.firstName ?? ''} ${player?.lastName ?? ''}'.trim();
     ref.read(clubAppBarTitleProvider.notifier).state =
-        name.isNotEmpty ? name : 'Player';
+        name.isNotEmpty ? name : AppStrings.player;
 
     setState(() {
       _data = _BioState(player: player, football: football, futsal: futsal);
@@ -86,7 +86,7 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
     }
     final d = _data;
     if (d == null || d.player == null) {
-      return Center(child: Text('Player not found'.tr));
+      return Center(child: Text(AppStrings.playerNotFound));
     }
     final p = d.player!;
     final url = ApiConstants.getImageUrl(p.imageUrl);
@@ -118,22 +118,22 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
           SizedBox(height: 16),
 
           // Basic info section
-          _SectionHeader('Basic Info'),
-          _InfoRow('Position', p.position ?? '—'),
-          _InfoRow('Jersey', '#${p.jersey}'),
+          _SectionHeader(AppStrings.basicInfo),
+          _InfoRow(AppStrings.position, p.position ?? '—'),
+          _InfoRow(AppStrings.jersey, '#${p.jersey}'),
 
           SizedBox(height: 16),
 
           // Football stats
           if (d.football != null && d.football!.matchCount > 0) ...[
-            _SectionHeader('Football Stats (${DateTime.now().year})'),
+            _SectionHeader(AppStrings.footballStatsYear(DateTime.now().year)),
             _StatsGrid(stats: d.football!),
             SizedBox(height: 16),
           ],
 
           // Futsal stats
           if (d.futsal != null && d.futsal!.matchCount > 0) ...[
-            _SectionHeader('Futsal Stats (${DateTime.now().year})'),
+            _SectionHeader(AppStrings.futsalStatsYear(DateTime.now().year)),
             _StatsGrid(stats: d.futsal!),
           ],
         ],
@@ -207,10 +207,10 @@ class _StatsGrid extends StatelessWidget {
         children: [
           Row(
             children: [
-              _StatCell('Matches', '${stats.matchCount}'),
-              _StatCell('Goals', '${stats.goalCount}'),
-              _StatCell('Assists', '${stats.assistCount}'),
-              _StatCell('MVP', '${stats.mvpCount}'),
+              _StatCell(AppStrings.matchCountLabel, '${stats.matchCount}'),
+              _StatCell(AppStrings.goals, '${stats.goalCount}'),
+              _StatCell(AppStrings.assists, '${stats.assistCount}'),
+              _StatCell(AppStrings.mvp, '${stats.mvpCount}'),
             ],
           ),
           SizedBox(height: 8),

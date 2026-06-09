@@ -45,7 +45,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
           return Scaffold(
             backgroundColor: AppColors.socaPageBg,
             appBar: AppBar(backgroundColor: Colors.white, elevation: 2),
-            body: _buildError('Club not found'),
+            body: _buildError(AppStrings.clubNotFound),
           );
         }
 
@@ -166,7 +166,9 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                         elevation: 0,
                       ),
                       child: Text(
-                        _isFollowing ? 'FOLLOWING' : 'FOLLOW',
+                        _isFollowing
+                            ? AppStrings.following.toUpperCase()
+                            : AppStrings.follow.toUpperCase(),
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -178,7 +180,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    '${club.followCount} followers',
+                    AppStrings.followersCount(club.followCount),
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
@@ -196,19 +198,20 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
           if (club.orgFifaId != null && club.orgFifaId!.isNotEmpty)
             _buildFifaRow(club.orgFifaId!),
           if (club.nickName != null && club.nickName!.isNotEmpty)
-            ClubBioInfoRow(label: 'Nickname', value: club.nickName!),
+            ClubBioInfoRow(label: AppStrings.nickname, value: club.nickName!),
           if (club.formedYear != null && club.formedYear!.isNotEmpty)
-            ClubBioInfoRow(label: 'Formed', value: club.formedYear!),
+            ClubBioInfoRow(label: AppStrings.formed, value: club.formedYear!),
           if (club.country != null && club.country!.isNotEmpty)
-            ClubBioInfoRow(label: 'Country', value: club.country!),
+            ClubBioInfoRow(label: AppStrings.country, value: club.country!),
           if (club.city != null && club.city!.isNotEmpty)
-            ClubBioInfoRow(label: 'City', value: club.city!),
+            ClubBioInfoRow(label: AppStrings.city, value: club.city!),
           if (club.stadiumsAsStr.isNotEmpty)
-            ClubBioInfoRow(label: 'Stadium', value: club.stadiumsAsStr),
+            ClubBioInfoRow(
+                label: AppStrings.stadium, value: club.stadiumsAsStr),
           if (club.manager != null && club.manager!.isNotEmpty)
-            ClubBioInfoRow(label: 'Manager', value: club.manager!),
+            ClubBioInfoRow(label: AppStrings.manager, value: club.manager!),
           if (club.league != null && club.league!.isNotEmpty)
-            ClubBioInfoRow(label: 'League', value: club.league!),
+            ClubBioInfoRow(label: AppStrings.league, value: club.league!),
 
           // Partnership badge
           if (club.partnerType != null &&
@@ -261,7 +264,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       child: Row(
         children: [
           Text(
-            'FIFA ID: '.tr,
+            AppStrings.fifaIdLabel,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
@@ -287,7 +290,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
 
   Widget _buildPartnerBadge(String partnerType) {
     final label =
-        '${partnerType[0].toUpperCase()}${partnerType.substring(1)} Partner';
+        '${partnerType[0].toUpperCase()}${partnerType.substring(1)} ${AppStrings.partner}';
     final iconColor = partnerType == 'platinum'
         ? Colors.grey[400]!
         : partnerType == 'gold'
@@ -338,7 +341,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       child: Column(
         children: [
           Text(
-            'LIVE TRIAL'.tr,
+            AppStrings.liveTrial,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
@@ -349,7 +352,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
           SizedBox(height: 10),
           if (trial.isRegistered)
             Text(
-              'REGISTERED'.tr,
+              AppStrings.registered.toUpperCase(),
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
@@ -359,7 +362,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             )
           else if (trial.isRegistrationClosed)
             Text(
-              'REGISTRATION CLOSED'.tr,
+              AppStrings.registrationClosed,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
@@ -377,7 +380,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                 ),
               ),
               child: Text(
-                'REGISTER'.tr,
+                AppStrings.register.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -397,7 +400,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClubBioSectionHeader(title: 'News & Announcements'),
+        ClubBioSectionHeader(title: AppStrings.newsAnnouncements),
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -419,65 +422,65 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return GestureDetector(
       onTap: tapUrl != null ? () => _launchUrl(tapUrl) : null,
       child: Card(
-      margin: EdgeInsets.only(bottom: 10),
-      color: Colors.white,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (imageUrl.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  width: 60,
-                  height: 60,
-                  fit: BoxFit.cover,
-                  errorWidget: (_, __, ___) => Container(
-                      width: 60, height: 60, color: AppColors.socaGrey),
+        margin: EdgeInsets.only(bottom: 10),
+        color: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (imageUrl.isNotEmpty)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.cover,
+                    errorWidget: (_, __, ___) => Container(
+                        width: 60, height: 60, color: AppColors.socaGrey),
+                  ),
+                ),
+              if (imageUrl.isNotEmpty) SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (news.title != null && news.title!.isNotEmpty)
+                      Text(
+                        news.title!,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    if (news.description != null &&
+                        news.description!.isNotEmpty) ...[
+                      SizedBox(height: 4),
+                      Text(
+                        news.description!,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.socaBlack,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
                 ),
               ),
-            if (imageUrl.isNotEmpty) SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (news.title != null && news.title!.isNotEmpty)
-                    Text(
-                      news.title!,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  if (news.description != null &&
-                      news.description!.isNotEmpty) ...[
-                    SizedBox(height: 4),
-                    Text(
-                      news.description!,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 11,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.socaBlack,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
@@ -488,7 +491,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClubBioSectionHeader(title: 'Recent Matches'),
+        ClubBioSectionHeader(title: AppStrings.recentMatches),
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -623,7 +626,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Featured Players'.tr,
+                AppStrings.featuredPlayers,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
@@ -636,7 +639,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   // TODO: navigate to full players list
                 },
                 child: Text(
-                  'View All Players'.tr,
+                  AppStrings.viewAllPlayers,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -743,7 +746,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClubBioSectionHeader(title: 'Club Teams'),
+        ClubBioSectionHeader(title: AppStrings.clubTeams),
         SizedBox(
           height: 110,
           child: ListView.builder(
@@ -806,13 +809,16 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
   Widget _buildKitSection(ClubModel clubDetails) {
     final kits = <(String, String)>[];
     if (clubDetails.homeKit != null && clubDetails.homeKit!.isNotEmpty) {
-      kits.add(('Home', ApiConstants.getImageUrl(clubDetails.homeKit)));
+      kits.add(
+          (AppStrings.home, ApiConstants.getImageUrl(clubDetails.homeKit)));
     }
     if (clubDetails.awayKit != null && clubDetails.awayKit!.isNotEmpty) {
-      kits.add(('Away', ApiConstants.getImageUrl(clubDetails.awayKit)));
+      kits.add(
+          (AppStrings.away, ApiConstants.getImageUrl(clubDetails.awayKit)));
     }
     if (clubDetails.thirdKit != null && clubDetails.thirdKit!.isNotEmpty) {
-      kits.add(('Third', ApiConstants.getImageUrl(clubDetails.thirdKit)));
+      kits.add(
+          (AppStrings.third, ApiConstants.getImageUrl(clubDetails.thirdKit)));
     }
 
     if (kits.isEmpty) return SizedBox.shrink();
@@ -822,7 +828,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClubBioSectionHeader(title: 'Kits'),
+          ClubBioSectionHeader(title: AppStrings.kit),
           SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -871,7 +877,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClubBioSectionHeader(title: 'Sponsors'),
+        ClubBioSectionHeader(title: AppStrings.sponsors),
         SizedBox(
           height: 110,
           child: ListView.builder(
@@ -962,7 +968,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
       setState(() => _isFollowing = !_isFollowing);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update follow status: $e')),
+          SnackBar(content: Text(AppStrings.failedToUpdateFollowStatus(e))),
         );
       }
     }

@@ -53,21 +53,21 @@ class _RefereeMyRequestsScreenState
           decoration: const BoxDecoration(
             color: AppColors.socaBlack,
           ),
-          child: const Text(
-            "My Requests",
-            style: TextStyle(
+          child: Text(
+            AppStrings.myRequests,
+            style: const TextStyle(
                 color: AppColors.socaYellow,
                 fontFamily: 'Poppins',
                 fontSize: 20,
                 fontWeight: FontWeight.w600),
           ),
         ),
-        const Padding(
+        Padding(
           padding: const EdgeInsets.only(left: 16, top: 16),
-          child: const Text(
-              style: TextStyle(
-                  color: AppColors.socaBlack, fontWeight: FontWeight.w700),
-              "${"Find all the matches here assigned to you by the Tournament Organisers. You can accept or decline as per your preference. All accepted matches will be under “My Matches” "}"),
+          child: Text(
+              AppStrings.myRequestsDescription,
+              style: const TextStyle(
+                  color: AppColors.socaBlack, fontWeight: FontWeight.w700)),
         ),
         // Tournament filter dropdown
         Padding(
@@ -114,7 +114,7 @@ class _RefereeMyRequestsScreenState
             ),
             data: (matches) => matches.isEmpty
                 ? RefereeEmptyState(
-                    message: 'No pending match requests',
+                    message: AppStrings.noPendingMatchRequests,
                     icon: Icons.inbox_outlined,
                   )
                 : ListView.builder(
@@ -148,7 +148,7 @@ class _RefereeMyRequestsScreenState
           .removeMatch(match.matchId ?? '');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(accept ? 'Request accepted' : 'Request declined'),
+          content: Text(accept ? AppStrings.requestAccepted : AppStrings.requestDeclined),
           backgroundColor: AppColors.socaBlack,
         ),
       );
@@ -302,9 +302,9 @@ class _RequestCard extends StatelessWidget {
                       flex: 3,
                       child: Column(
                         children: [
-                          const Text(
-                            'VS',
-                            style: TextStyle(
+                          Text(
+                            AppStrings.vs.toUpperCase(),
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w800,
                               fontSize: 22,

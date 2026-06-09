@@ -63,8 +63,8 @@ class _AcademyTrialRegisterDialogState
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             success
-                ? 'Registration successful!'
-                : 'Registration failed. Please try again.',
+                ? AppStrings.registrationSuccessful
+                : AppStrings.registrationFailed,
             style: TextStyle(fontFamily: 'Poppins'),
           ),
           backgroundColor: success ? Colors.green : Colors.red,
@@ -121,11 +121,11 @@ class _AcademyTrialRegisterDialogState
               style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Email is required';
+                  return AppStrings.emailIsRequired;
                 }
                 final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
                 if (!emailRegex.hasMatch(value.trim())) {
-                  return 'Enter a valid email address';
+                  return AppStrings.enterValidEmailAddress;
                 }
                 return null;
               },

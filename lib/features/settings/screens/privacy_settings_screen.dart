@@ -27,18 +27,10 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
   bool _aboutExpanded = true;
   bool _manageExpanded = false;
 
-  static const String _aboutText =
-      'SocaLoca is the world\'s first global football social media platform '
-      'dedicated to connecting players, clubs, coaches, referees, and fans. '
-      'Our mission is to make football accessible to everyone, everywhere — '
-      'from grassroots to professional. We provide tools for match management, '
-      'player development, club administration, and community building within '
-      'the beautiful game.';
-
   Future<void> _launch(String url) async {
     final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      if (mounted) AppSnackBar.showError(context, 'Could not open link');
+      if (mounted) AppSnackBar.showError(context, AppStrings.couldNotOpenLink);
     }
   }
 
@@ -73,7 +65,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
               final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
               if (!emailRegex.hasMatch(email)) {
                 setSheetState(
-                    () => emailError = 'Please enter a valid email address');
+                    () => emailError = AppStrings.pleaseEnterValidEmailAddress);
                 return;
               }
               setSheetState(() {
@@ -104,7 +96,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                 setSheetState(() => isSubmitting = false);
                 if (mounted) {
                   AppSnackBar.showError(
-                      context, 'Something went wrong. Please try again.');
+                      context, AppStrings.somethingWentWrongTryAgain);
                 }
               }
             }
@@ -123,10 +115,10 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                           horizontal: 16, vertical: 14),
                       child: Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
-                              'Download Activities',
-                              style: TextStyle(
+                              AppStrings.downloadActivities,
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 15,
@@ -150,9 +142,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'SocaLoca is in compliance with GDPR practices to protect you the user!',
-                            style: TextStyle(
+                          Text(
+                            AppStrings.gdprComplianceText,
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack,
@@ -160,9 +152,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          const Text(
-                            'To request for your data, please fill in your email address here and we shall get back to you on how to pass the data to you.',
-                            style: TextStyle(
+                          Text(
+                            AppStrings.downloadActivityEmailInstructions,
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack,
@@ -240,9 +232,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                                         borderRadius:
                                             BorderRadius.circular(25)),
                                   ),
-                                  child: const Text(
-                                    'CANCEL',
-                                    style: TextStyle(
+                                  child: Text(
+                                    AppStrings.cancel.toUpperCase(),
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w700,
                                       fontSize: 13,
@@ -273,9 +265,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                                             color: AppColors.socaYellow,
                                           ),
                                         )
-                                      : const Text(
-                                          'SUBMIT',
-                                          style: TextStyle(
+                                      : Text(
+                                          AppStrings.submitUpper,
+                                          style: const TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w700,
                                             fontSize: 13,
@@ -320,10 +312,10 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                     horizontal: 16, vertical: 14),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Deactivate/Delete Account',
-                        style: TextStyle(
+                        AppStrings.deactivateDeleteAccount,
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 15,
@@ -347,9 +339,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'We are sorry that you want to leave.',
-                      style: TextStyle(
+                    Text(
+                      AppStrings.sorryToSeeYouLeave,
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
@@ -357,9 +349,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'You may choose to either delete or deactivate your account.',
-                      style: TextStyle(
+                    Text(
+                      AppStrings.deleteOrDeactivateChoice,
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
@@ -367,9 +359,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Deletion will remove your account from the SocaLoca systems and you will not be able to use the account again.',
-                      style: TextStyle(
+                    Text(
+                      AppStrings.deletionDescription,
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
@@ -377,9 +369,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Deactivation will make your account inactive. Should you want to reactivate your account, you just need to login to SocaLoca and your account will be restored.',
-                      style: TextStyle(
+                    Text(
+                      AppStrings.deactivationDescription,
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
@@ -387,9 +379,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Thank you.',
-                      style: TextStyle(
+                    Text(
+                      AppStrings.thankYouTitle,
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
@@ -416,9 +408,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25)),
                             ),
-                            child: const Text(
-                              'DELETE',
-                              style: TextStyle(
+                            child: Text(
+                              AppStrings.delete.toUpperCase(),
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
@@ -442,9 +434,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25)),
                             ),
-                            child: const Text(
-                              'DEACTIVATE',
-                              style: TextStyle(
+                            child: Text(
+                              AppStrings.deactivate.toUpperCase(),
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
@@ -494,8 +486,8 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                 );
                 if (ctx.mounted) Navigator.of(ctx).pop();
                 final msg = permanent
-                    ? 'Account submitted for deletion'
-                    : 'Account deactivated';
+                    ? AppStrings.accountSubmittedForDeletion
+                    : AppStrings.accountDeactivated;
                 if (mounted) AppSnackBar.showSuccess(context, msg);
                 await ref.read(authStateProvider.notifier).logout();
                 if (mounted) context.go(AppRoutes.roleChoice);
@@ -503,7 +495,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                 setSheetState(() => isSubmitting = false);
                 if (mounted) {
                   AppSnackBar.showError(
-                      context, 'Something went wrong. Please try again.');
+                      context, AppStrings.somethingWentWrongTryAgain);
                 }
               }
             }
@@ -575,9 +567,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                                       borderRadius:
                                           BorderRadius.circular(25)),
                                 ),
-                                child: const Text(
-                                  'NO',
-                                  style: TextStyle(
+                                child: Text(
+                                  AppStrings.noUpper,
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
@@ -608,9 +600,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                                           color: AppColors.socaYellow,
                                         ),
                                       )
-                                    : const Text(
-                                        'YES',
-                                        style: TextStyle(
+                                    : Text(
+                                        AppStrings.yesUpper,
+                                        style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w700,
                                           fontSize: 13,
@@ -649,7 +641,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
           // ── About SocaLoca (expandable) ───────────────────────────────
           _SettingsItem(
             icon: Image.asset("none"),
-            title: 'About SocaLoca',
+            title: AppStrings.aboutSocaLoca,
             trailing: Icon(
               _aboutExpanded
                   ? Icons.keyboard_arrow_up
@@ -663,9 +655,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
             Container(
               color: Colors.white,
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-              child: const Text(
-                _aboutText,
-                style: TextStyle(
+              child: Text(
+                AppStrings.aboutSocaLocaText,
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   color: AppColors.socaBlack,
@@ -680,7 +672,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                 height: 24,
                 width: 24,
               ),
-              title: 'Legacy Contact',
+              title: AppStrings.legacyContact,
               onTap: () {
                 context.push(AppRoutes.lagecy_contact);
               }),
@@ -692,7 +684,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
               height: 24,
               width: 24,
             ),
-            title: 'Manage Account',
+            title: AppStrings.manageAccount,
             trailing: Icon(
               _manageExpanded
                   ? Icons.keyboard_arrow_up
@@ -708,7 +700,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
               child: Column(
                 children: [
                   _SettingsSubItem(
-                    title: 'Download Activities',
+                    title: AppStrings.downloadActivities,
                     icon: Icons.download_outlined,
                     onTap: _showDownloadActivityDialog,
                   ),
@@ -716,7 +708,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                       height: 1, thickness: 0.5, color: Color(0xFFDDDDDD),
                       indent: 52),
                   _SettingsSubItem(
-                    title: 'Deactivate / Delete Account',
+                    title: AppStrings.deactivateDeleteAccountSubItem,
                     icon: Icons.delete_outline,
                     onTap: _showDeleteDeactivateChoiceDialog,
                   ),
@@ -733,7 +725,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
               height: 24,
               width: 24,
             ),
-            title: 'Data Privacy',
+            title: AppStrings.dataPrivacy,
             onTap: () => _launch('https://socaloca.football/privacy-policy/'),
           ),
           const Divider(height: 1, thickness: 0.5, color: AppColors.socaBlack),
@@ -745,7 +737,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
               height: 24,
               width: 24,
             ),
-            title: 'Terms & Conditions',
+            title: AppStrings.termsAndConditions,
             onTap: () => _launch('https://socaloca.football/terms-of-service/'),
           ),
           const Divider(height: 1, thickness: 0.5, color: AppColors.socaBlack),
@@ -755,7 +747,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
               height: 24,
               width: 24,
             ),
-            title: 'Sign Out',
+            title: AppStrings.signOut,
             onTap: _signOut,
           ),
           const SizedBox(height: 32),
@@ -787,7 +779,7 @@ class _SettingsItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Row(
           children: [
-            if (title != 'About SocaLoca') icon,
+            if (title != AppStrings.aboutSocaLoca) icon,
             const SizedBox(width: 16),
             Expanded(
               child: Text(
@@ -800,7 +792,7 @@ class _SettingsItem extends StatelessWidget {
                 ),
               ),
             ),
-            if (title == 'Manage Account' || title == 'About SocaLoca')
+            if (title == AppStrings.manageAccount || title == AppStrings.aboutSocaLoca)
               const Icon(Icons.chevron_right,
                   size: 22, color: AppColors.socaBlack),
           ],

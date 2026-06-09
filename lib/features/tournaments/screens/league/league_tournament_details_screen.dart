@@ -77,7 +77,7 @@ class _LeagueTournamentDetailsScreenState
       body: tournamentAsync.when(
         data: (tournament) {
           if (tournament == null) {
-            return Center(child: Text('Tournament not found'.tr));
+            return Center(child: Text(AppStrings.tournamentNotFound));
           }
           return _buildContent(tournament);
         },
@@ -88,12 +88,12 @@ class _LeagueTournamentDetailsScreenState
             children: [
               const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-              Text('Error loading tournament: $error'),
+              Text(AppStrings.errorLoadingTournament(error)),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref
                     .invalidate(tournamentDetailsProvider(widget.tournamentId)),
-                child: Text('Retry'.tr),
+                child: Text(AppStrings.retry),
               ),
             ],
           ),

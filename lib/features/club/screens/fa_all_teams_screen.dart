@@ -36,7 +36,7 @@ class FaAllTeamsScreen extends StatelessWidget {
       body: teams.isEmpty
           ? Center(
               child: Text(
-                'No teams found.'.tr,
+                AppStrings.noTeamsFound,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,

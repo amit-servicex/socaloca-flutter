@@ -82,8 +82,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Enter the final score for this match. The score will be submitted for approval.'
-                          .tr,
+                      AppStrings.scoreEntryHint,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
@@ -123,7 +122,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
-                            'VS'.tr,
+                            AppStrings.vs,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16,
@@ -170,7 +169,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
                   side: BorderSide(color: AppColors.socaBlack),
                 ),
                 child: Text(
-                  'Clear'.tr,
+                  AppStrings.clear,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
@@ -329,7 +328,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Success'.tr,
+          AppStrings.success,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
@@ -339,7 +338,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
+            child: Text(AppStrings.ok),
           ),
         ],
       ),
@@ -351,7 +350,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Error'.tr,
+          AppStrings.error,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
@@ -361,7 +360,7 @@ class _ScoreEntryTabState extends ConsumerState<ScoreEntryTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
+            child: Text(AppStrings.ok),
           ),
         ],
       ),

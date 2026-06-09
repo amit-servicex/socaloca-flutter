@@ -7,9 +7,11 @@ part 'tournament_model.g.dart';
 @freezed
 class TournamentModel with _$TournamentModel {
   const factory TournamentModel({
-    @JsonKey(name: 'tmntId') String? tmntId,
-    @JsonKey(name: 'tmntName') String? tmntName,
-    @JsonKey(name: 'imageUrl') String? imageUrl,
+    @JsonKey(name: 'tournamentId') String? tmntId,
+    @JsonKey(name: 'name') String? tmntName,
+    @JsonKey(name: 'logo') String? imageUrl,
+    String? status,
+    String? tmntType,
   }) = _TournamentModel;
 
   factory TournamentModel.fromJson(Map<String, dynamic> json) =>

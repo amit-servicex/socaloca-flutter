@@ -103,7 +103,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
             child: ElevatedButton.icon(
               onPressed: _isLoading ? null : _saveSquad,
               icon: Icon(Icons.save),
-              label: Text('Save Squad'.tr),
+              label: Text(AppStrings.saveSquad),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
@@ -132,7 +132,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Starting XI'.tr,
+              Text(AppStrings.startingXi,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -155,7 +155,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
             onPressed:
                 starting.length >= 11 ? null : () => _addPlayer(isHome, true),
             icon: Icon(Icons.add, size: 18),
-            label: Text('Add Starting Player'.tr),
+            label: Text(AppStrings.addStartingPlayer),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.socaBlack,
               side: BorderSide(color: AppColors.socaYellow),
@@ -168,7 +168,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Substitutes'.tr,
+              Text(AppStrings.substitutes,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -192,7 +192,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
                 ? null
                 : () => _addPlayer(isHome, false),
             icon: Icon(Icons.add, size: 18),
-            label: Text('Add Substitute'.tr),
+            label: Text(AppStrings.addSubstitute),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.socaBlack,
               side: BorderSide(color: AppColors.socaYellow),
@@ -252,13 +252,13 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add ${isStarting ? "Starting" : "Substitute"} Player',
+        title: Text(AppStrings.addStartingOrSubstitutePlayer(isStarting),
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
         content: TextField(
           controller: controller,
           decoration: InputDecoration(
-            labelText: 'Player Name'.tr,
+            labelText: AppStrings.playerName,
             labelStyle: TextStyle(fontFamily: 'Poppins'),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             focusedBorder: OutlineInputBorder(
@@ -269,7 +269,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'.tr)),
+              child: Text(AppStrings.cancel)),
           ElevatedButton(
             onPressed: () {
               if (controller.text.isNotEmpty) {
@@ -294,7 +294,7 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack),
-            child: Text('Add'.tr),
+            child: Text(AppStrings.add),
           ),
         ],
       ),
@@ -408,13 +408,14 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Success'.tr,
+        title: Text(AppStrings.success,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
         content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: Text('OK'.tr))
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppStrings.ok))
         ],
       ),
     );
@@ -424,13 +425,14 @@ class _SquadManagementTabState extends ConsumerState<SquadManagementTab>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Error'.tr,
+        title: Text(AppStrings.error,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
         content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: Text('OK'.tr))
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppStrings.ok))
         ],
       ),
     );

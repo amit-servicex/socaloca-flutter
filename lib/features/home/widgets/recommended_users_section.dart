@@ -95,7 +95,7 @@ class _RecommendedUsersSectionState
         'https://share.socaloca.football/$path/$userId/u/$currentUserId';
     final name = '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim();
     SharePlus.instance.share(ShareParams(
-      text: '$name - Check out this post on SocaLoca. $url',
+      text: '$name - ${AppStrings.checkOutPostOnSocaLoca(url)}',
     ));
   }
 
@@ -117,7 +117,7 @@ class _RecommendedUsersSectionState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Recently Joined'.tr,
+                AppStrings.recentlyJoined,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -130,7 +130,7 @@ class _RecommendedUsersSectionState
                   context.push(AppRoutes.search);
                 },
                 child: Text(
-                  'View All'.tr,
+                  AppStrings.viewAll,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -226,7 +226,7 @@ class _RecommendedUsersSectionState
                   Row(
                     children: [
                       Text(
-                        'SocaLoca'.tr,
+                        AppStrings.appName,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
@@ -240,7 +240,7 @@ class _RecommendedUsersSectionState
                     ],
                   ),
                   Text(
-                    '5 hrs'.tr, // Static placeholder as per design
+                    AppStrings.fiveHours, // Static placeholder as per design
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: Colors.grey,
@@ -265,10 +265,10 @@ class _RecommendedUsersSectionState
               ),
               children: [
                 TextSpan(
-                    text:
-                        '${user.firstName ?? 'A user'} has joined SocaLoca!!! '),
+                    text: AppStrings.userJoinedSocaLoca(
+                        user.firstName ?? AppStrings.aUser)),
                 TextSpan(
-                  text: 'Check his bio',
+                  text: AppStrings.checkHisBio,
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
               ],
@@ -341,11 +341,12 @@ class _RecommendedUsersSectionState
                               flex: 5,
                               child: Column(
                                 children: [
-                                  _buildDetailRow('Born', '-'),
+                                  _buildDetailRow(AppStrings.born, '-'),
                                   SizedBox(height: 16),
-                                  _buildDetailRow('Height (cms)', '-'),
+                                  _buildDetailRow(AppStrings.heightCms, '-'),
                                   SizedBox(height: 16),
-                                  _buildDetailRow('Preferred Foot', '-'),
+                                  _buildDetailRow(
+                                      AppStrings.preferredFoot, '-'),
                                 ],
                               ),
                             ),
@@ -360,9 +361,9 @@ class _RecommendedUsersSectionState
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  _buildDetailRow('Playing Level', '-'),
+                                  _buildDetailRow(AppStrings.playingLevel, '-'),
                                   SizedBox(height: 16),
-                                  _buildDetailRow('Jersey Size', '-'),
+                                  _buildDetailRow(AppStrings.jerseySize, '-'),
                                 ],
                               ),
                             ),
@@ -397,7 +398,7 @@ class _RecommendedUsersSectionState
                 ),
                 SizedBox(width: 8),
                 Text(
-                  'SHARE'.tr,
+                  AppStrings.shareUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,

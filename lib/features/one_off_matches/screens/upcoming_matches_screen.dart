@@ -44,27 +44,13 @@ class _UpcomingMatchesScreenState extends ConsumerState<UpcomingMatchesScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      appBar: AppBar(
-        title: Text(
-          'Upcoming Matches'.tr,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: AppColors.socaBlack),
-      ),
       body: matchesState.when(
         data: (matches) {
           if (matches.isEmpty) {
             return Center(
               child: Text(
-                'No upcoming matches'.tr,
-                style: TextStyle(
+                AppStrings.noUpcomingMatches,
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
@@ -109,7 +95,7 @@ class _UpcomingMatchesScreenState extends ConsumerState<UpcomingMatchesScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Error loading matches'.tr,
+                AppStrings.errorLoadingMatches,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
@@ -128,7 +114,7 @@ class _UpcomingMatchesScreenState extends ConsumerState<UpcomingMatchesScreen> {
                   backgroundColor: AppColors.socaYellow,
                 ),
                 child: Text(
-                  'Retry'.tr,
+                  AppStrings.retry,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,

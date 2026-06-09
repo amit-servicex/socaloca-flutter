@@ -89,7 +89,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
         backgroundColor: AppColors.socaPageBg,
         body: Center(
           child: Text(
-            'User not logged in'.tr,
+            AppStrings.userNotLoggedIn,
             style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
           ),
         ),
@@ -179,7 +179,8 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow,
               ),
-              child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
+              child: Text(AppStrings.retry,
+                  style: TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),
@@ -189,7 +190,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
     if (state.playerBio == null) {
       return Center(
         child: Text(
-          'Profile not found'.tr,
+          AppStrings.profileNotFound,
           style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
         ),
       );
@@ -252,9 +253,9 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
                 ),
                 SizedBox(height: 20),
                 EndorsementsSection(
-                  endorsements: state.endorsements,
-                  isLoadingEndorsements: state.isLoadingEndorsements,
-                ),
+                    endorsements: state.endorsements,
+                    isLoadingEndorsements: state.isLoadingEndorsements,
+                    userid: _userId),
                 if (state.endorsements.isNotEmpty) SizedBox(height: 20),
                 PlayerTeamsSection(
                   teams: state.teams,
@@ -306,25 +307,25 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _ActionBtn(
-              label: 'CREATE A POST',
+              label: AppStrings.createPostUpper,
               onTap: () => context.push(AppRoutes.createPost),
             ),
             _ActionBtn(
-              label: 'MY STATS',
+              label: AppStrings.myStats.toUpperCase(),
               onTap: () => context.push(
                 AppRoutes.myActivities,
                 extra: {'userId': _userId, 'initialTab': 'match'},
               ),
             ),
             _ActionBtn(
-              label: 'ENDORSEMENTS',
+              label: AppStrings.endorsements.toUpperCase(),
               onTap: () => context.push(
                 AppRoutes.myEndorsementList,
                 extra: {'userId': _userId, 'isOwnProfile': true},
               ),
             ),
             _ActionBtn(
-              label: 'RATINGS',
+              label: AppStrings.ratings.toUpperCase(),
               onTap: () => context.push(
                 AppRoutes.mySkillRatings,
                 extra: {'userId': _userId},

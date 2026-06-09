@@ -216,31 +216,31 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
             ),
             _MoreOptionTile(
               icon: Icons.flag_outlined,
-              label: 'Report Post',
+              label: AppStrings.reportPost,
               onTap: () {
                 Navigator.pop(ctx);
                 _showReasonPicker(
                   context,
-                  title: 'Report Post',
+                  title: AppStrings.reportPost,
                   onConfirm: (cause) => _doReportPost(context, cause),
                 );
               },
             ),
             _MoreOptionTile(
               icon: Icons.block,
-              label: 'Block Post',
+              label: AppStrings.blockPost,
               onTap: () {
                 Navigator.pop(ctx);
                 _showReasonPicker(
                   context,
-                  title: 'Block Post',
+                  title: AppStrings.blockPost,
                   onConfirm: (cause) => _doBlockPost(context, cause),
                 );
               },
             ),
             _MoreOptionTile(
               icon: Icons.person_off_outlined,
-              label: 'Block User',
+              label: AppStrings.blockUser,
               onTap: () {
                 Navigator.pop(ctx);
                 _showBlockUserConfirm(context);
@@ -248,12 +248,12 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
             ),
             _MoreOptionTile(
               icon: Icons.report_outlined,
-              label: 'Report User',
+              label: AppStrings.reportUser,
               onTap: () {
                 Navigator.pop(ctx);
                 _showReasonPicker(
                   context,
-                  title: 'Report User',
+                  title: AppStrings.reportUser,
                   onConfirm: (cause) => _doReportUser(context, cause),
                 );
               },
@@ -308,9 +308,9 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                 ],
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Please select a reason',
-                style: TextStyle(
+              Text(
+                AppStrings.pleaseSelectReason,
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -366,9 +366,9 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'SUBMIT',
-                    style: TextStyle(
+                  child: Text(
+                    AppStrings.submit.toUpperCase(),
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
@@ -397,13 +397,9 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
             color: AppColors.socaBlack,
           ),
         ),
-        content: const Text(
-          'You will no longer receive any post or view any comment from the user '
-          'you are blocking. People you block can no longer tag you, start a '
-          'conversation with you, add you in his/her network or see things you '
-          'post in the SocaLoca feed. If you follow each other, blocking will '
-          'automatically unfollow that user.',
-          style: TextStyle(
+        content: Text(
+          AppStrings.blockUserDescription,
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             color: AppColors.socaBlack,
@@ -479,11 +475,14 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
         createdBy: widget.post.userId,
         cause: cause,
       );
-      _showSnack(context,
-          ok ? 'Report submitted. Thank you.' : 'Failed to report post.',
+      _showSnack(
+          context,
+          ok
+              ? AppStrings.reportSubmittedThankYou
+              : AppStrings.failedToReportPost,
           error: !ok);
     } catch (_) {
-      _showSnack(context, 'Failed to report post.', error: true);
+      _showSnack(context, AppStrings.failedToReportPost, error: true);
     }
   }
 
@@ -497,10 +496,11 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
         postType: widget.post.type,
         cause: cause,
       );
-      _showSnack(context, ok ? 'Post blocked.' : 'Failed to block post.',
+      _showSnack(
+          context, ok ? AppStrings.postBlocked : AppStrings.failedToBlockPost,
           error: !ok);
     } catch (_) {
-      _showSnack(context, 'Failed to block post.', error: true);
+      _showSnack(context, AppStrings.failedToBlockPost, error: true);
     }
   }
 
@@ -512,10 +512,11 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
         userId: userId,
         toUserId: widget.post.userId,
       );
-      _showSnack(context, ok ? 'User blocked.' : 'Failed to block user.',
+      _showSnack(
+          context, ok ? AppStrings.userBlocked : AppStrings.failedToBlockUser,
           error: !ok);
     } catch (_) {
-      _showSnack(context, 'Failed to block user.', error: true);
+      _showSnack(context, AppStrings.failedToBlockUser, error: true);
     }
   }
 
@@ -528,11 +529,14 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
         toUserId: widget.post.userId,
         cause: cause,
       );
-      _showSnack(context,
-          ok ? 'Report submitted. Thank you.' : 'Failed to report user.',
+      _showSnack(
+          context,
+          ok
+              ? AppStrings.reportSubmittedThankYou
+              : AppStrings.failedToReportUser,
           error: !ok);
     } catch (_) {
-      _showSnack(context, 'Failed to report user.', error: true);
+      _showSnack(context, AppStrings.failedToReportUser, error: true);
     }
   }
 
@@ -831,7 +835,9 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           // ),
                           const SizedBox(width: 8),
                           Text(
-                            _isFollowing ? 'Following' : 'Follow',
+                            _isFollowing
+                                ? AppStrings.following
+                                : AppStrings.follow,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,

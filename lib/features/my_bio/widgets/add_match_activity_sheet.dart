@@ -120,19 +120,19 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedDate == null) {
-      _showError('Please select a match date');
+      _showError(AppStrings.pleaseSelectMatchDate);
       return;
     }
     if (_position == null) {
-      _showError('Please select a playing position');
+      _showError(AppStrings.pleaseSelectPlayingPosition);
       return;
     }
     if (_positionType == null) {
-      _showError('Please select a position type');
+      _showError(AppStrings.pleaseSelectPositionType);
       return;
     }
     if (_rating == 0) {
-      _showError('Please rate your performance');
+      _showError(AppStrings.pleaseRateYourPerformance);
       return;
     }
 
@@ -169,11 +169,11 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Match details added'.tr)),
+        SnackBar(content: Text(AppStrings.matchDetailsAdded)),
       );
       Navigator.of(context).pop(true);
     } else {
-      _showError('Failed to add match. Please try again.');
+      _showError(AppStrings.failedToAddMatch);
     }
   }
 
@@ -216,7 +216,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Add ${widget.gameType} Match',
+                    AppStrings.addGameTypeMatch(widget.gameType),
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -243,20 +243,20 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Match Date
-                      _SectionLabel('Match Date *'),
+                      _SectionLabel(AppStrings.matchDateLabel),
                       _DateField(
                         date: _selectedDate,
-                        placeholder: 'Select match date',
+                        placeholder: AppStrings.selectMatchDate,
                         onTap: _pickDate,
                         formatter: _formatDateDisplay,
                       ),
                       SizedBox(height: 16),
 
                       // Playing Position
-                      _SectionLabel('Playing Position *'),
+                      _SectionLabel(AppStrings.playingPositionLabel),
                       _Dropdown<String>(
                         value: _position,
-                        hint: 'Select playing position',
+                        hint: AppStrings.selectPlayingPosition,
                         items: _positions,
                         itemLabel: (v) => v,
                         onChanged: (v) => setState(() {
@@ -268,10 +268,10 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
 
                       // Position Type
                       if (_position != null) ...[
-                        _SectionLabel('Position Type *'),
+                        _SectionLabel(AppStrings.positionTypeLabel),
                         _Dropdown<String>(
                           value: _positionType,
-                          hint: 'Select position type',
+                          hint: AppStrings.selectPositionType,
                           items: positionTypes,
                           itemLabel: (v) => v,
                           onChanged: (v) => setState(() => _positionType = v),
@@ -280,53 +280,58 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                       ],
 
                       // Goals / Goal Saved
-                      _SectionLabel(
-                          _isGoalkeeper ? 'Goals Saved *' : 'Goals Scored *'),
+                      _SectionLabel(_isGoalkeeper
+                          ? AppStrings.goalsSavedRequired
+                          : AppStrings.goalsScoredRequired),
                       _NumberField(
                         controller: _goalsCtrl,
-                        hint: _isGoalkeeper ? 'e.g. 3' : 'e.g. 2',
-                        label: _isGoalkeeper ? 'Goals saved' : 'Goals scored',
+                        hint: _isGoalkeeper
+                            ? AppStrings.egThree
+                            : AppStrings.egTwo,
+                        label: _isGoalkeeper
+                            ? AppStrings.goalsSaved
+                            : AppStrings.goalScored,
                       ),
                       SizedBox(height: 16),
 
                       // Assists
-                      _SectionLabel('Number of Assists *'),
+                      _SectionLabel(AppStrings.numberOfAssistsLabel),
                       _NumberField(
                         controller: _assistsCtrl,
-                        hint: 'e.g. 1',
-                        label: 'Assists',
+                        hint: AppStrings.egOne,
+                        label: AppStrings.assists,
                       ),
                       SizedBox(height: 16),
 
                       // Minutes Played
-                      _SectionLabel('Minutes Played *'),
+                      _SectionLabel(AppStrings.minutesPlayedLabel),
                       _NumberField(
                         controller: _minutesCtrl,
-                        hint: 'e.g. 90',
-                        label: 'Minutes played',
+                        hint: AppStrings.egNinety,
+                        label: AppStrings.minutesPlayedLabel,
                       ),
                       SizedBox(height: 16),
 
                       // My Team Name
-                      _SectionLabel('My Team Name *'),
+                      _SectionLabel(AppStrings.myTeamNameLabel),
                       _TextField(
                         controller: _myTeamCtrl,
-                        hint: 'Enter your team name',
-                        label: 'Team name',
+                        hint: AppStrings.enterYourTeamName,
+                        label: AppStrings.teamName,
                       ),
                       SizedBox(height: 16),
 
                       // Opponent Team Name
-                      _SectionLabel('Opponent Team Name *'),
+                      _SectionLabel(AppStrings.opponentTeamNameLabel),
                       _TextField(
                         controller: _opponentCtrl,
-                        hint: 'Enter opponent team name',
-                        label: 'Opponent team name',
+                        hint: AppStrings.enterOpponentTeamName,
+                        label: AppStrings.opponentTeamName,
                       ),
                       SizedBox(height: 16),
 
                       // Rate Performance 1–10
-                      _SectionLabel('Rate Your Performance (1–10) *'),
+                      _SectionLabel(AppStrings.rateYourPerformanceLabel),
                       SizedBox(height: 8),
                       _RatingRow(
                         value: _rating,
@@ -335,7 +340,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                       SizedBox(height: 16),
 
                       // Notes
-                      _SectionLabel('How I Performed (optional)'),
+                      _SectionLabel(AppStrings.howIPerformedLabel),
                       _NotesField(controller: _notesCtrl),
                       SizedBox(height: 24),
 
@@ -484,8 +489,9 @@ class _NumberField extends StatelessWidget {
             borderSide: BorderSide(color: Colors.grey.shade300),
           ),
         ),
-        validator: (v) =>
-            (v == null || v.trim().isEmpty) ? 'Enter $label' : null,
+        validator: (v) => (v == null || v.trim().isEmpty)
+            ? AppStrings.enterField(label)
+            : null,
         style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
       );
 }
@@ -521,8 +527,9 @@ class _TextField extends StatelessWidget {
             borderSide: BorderSide(color: Colors.grey.shade300),
           ),
         ),
-        validator: (v) =>
-            (v == null || v.trim().isEmpty) ? 'Enter $label' : null,
+        validator: (v) => (v == null || v.trim().isEmpty)
+            ? AppStrings.enterField(label)
+            : null,
         style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
       );
 }
@@ -537,7 +544,7 @@ class _NotesField extends StatelessWidget {
         controller: controller,
         maxLines: 3,
         decoration: InputDecoration(
-          hintText: 'Describe how you performed...'.tr,
+          hintText: AppStrings.describeHowYouPerformed,
           hintStyle: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:socaloca/core/router/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -37,7 +38,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
       backgroundColor: AppColors.socaPageBg,
       body: bioAsync.when(
         data: (bio) {
-          if (bio == null) return _buildError('Charity not found');
+          if (bio == null) return _buildError(AppStrings.charityNotFound);
 
           if (!_followInitialized) {
             _isFollowing = bio.details.following;
@@ -198,7 +199,9 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                     elevation: 0,
                   ),
                   child: Text(
-                    _isFollowing ? 'FOLLOWING' : 'FOLLOW',
+                    _isFollowing
+                        ? AppStrings.following.toUpperCase()
+                        : AppStrings.follow.toUpperCase(),
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
@@ -210,7 +213,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
               ),
               SizedBox(height: 4),
               Text(
-                '${info.followCount} ${info.followCount == 1 ? "Follower" : "Followers"}',
+                AppStrings.followersCount(info.followCount),
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 11,
@@ -225,18 +228,22 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (info.formedYear != null && info.formedYear!.isNotEmpty)
-                  ClubBioInfoRow(label: 'Founded', value: info.formedYear!),
+                  ClubBioInfoRow(
+                      label: AppStrings.founded, value: info.formedYear!),
                 if (info.country != null && info.country!.isNotEmpty)
-                  ClubBioInfoRow(label: 'Country', value: info.country!),
+                  ClubBioInfoRow(
+                      label: AppStrings.country, value: info.country!),
                 if (info.president != null && info.president!.isNotEmpty)
-                  ClubBioInfoRow(label: 'President', value: info.president!),
+                  ClubBioInfoRow(
+                      label: AppStrings.president, value: info.president!),
                 if (info.chairman != null && info.chairman!.isNotEmpty)
-                  ClubBioInfoRow(label: 'Chairman', value: info.chairman!),
+                  ClubBioInfoRow(
+                      label: AppStrings.chairman, value: info.chairman!),
                 if (info.ceo != null && info.ceo!.isNotEmpty)
-                  ClubBioInfoRow(label: 'CEO', value: info.ceo!),
+                  ClubBioInfoRow(label: AppStrings.ceo, value: info.ceo!),
                 if (info.funders != null && info.funders!.isNotEmpty)
                   ClubBioInfoRow(
-                      label: 'Funding Partners', value: info.funders!),
+                      label: AppStrings.fundingPartners, value: info.funders!),
                 if (info.partnerType != null &&
                     info.partnerType!.isNotEmpty &&
                     info.partnerType!.toLowerCase() != 'nopartner') ...[
@@ -298,7 +305,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClubBioSectionHeader(title: 'About'),
+          ClubBioSectionHeader(title: AppStrings.about),
           Divider(color: AppColors.socaBlack, thickness: .7),
           if (imageUrl.isNotEmpty)
             ClipRRect(
@@ -335,7 +342,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClubBioSectionHeader(title: 'News & Announcements'),
+          ClubBioSectionHeader(title: AppStrings.newsAnnouncements),
           Divider(color: AppColors.socaBlack, thickness: .7),
           ListView.separated(
             shrinkWrap: true,
@@ -362,60 +369,60 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
       onTap: tapUrl != null ? () => _launchUrl(tapUrl) : null,
       child: Padding(
         padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (imageUrl.isNotEmpty)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-                errorWidget: (_, __, ___) =>
-                    Container(width: 80, height: 80, color: AppColors.socaGrey),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (imageUrl.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => Container(
+                      width: 80, height: 80, color: AppColors.socaGrey),
+                ),
+              ),
+            if (imageUrl.isNotEmpty) SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (news.newsDate != null && news.newsDate!.isNotEmpty)
+                    Text(
+                      news.newsDate!,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          color: AppColors.textSecondary),
+                    ),
+                  if (news.title != null && news.title!.isNotEmpty)
+                    Text(
+                      news.title!,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  if (news.description != null && news.description!.isNotEmpty)
+                    Text(
+                      news.description!,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          color: AppColors.socaBlack),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
               ),
             ),
-          if (imageUrl.isNotEmpty) SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (news.newsDate != null && news.newsDate!.isNotEmpty)
-                  Text(
-                    news.newsDate!,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 11,
-                        color: AppColors.textSecondary),
-                  ),
-                if (news.title != null && news.title!.isNotEmpty)
-                  Text(
-                    news.title!,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                if (news.description != null && news.description!.isNotEmpty)
-                  Text(
-                    news.description!,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 11,
-                        color: AppColors.socaBlack),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }

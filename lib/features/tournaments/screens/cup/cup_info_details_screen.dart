@@ -49,7 +49,7 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
       body: cupAsync.when(
         data: (cup) {
           if (cup == null) {
-            return Center(child: Text('Tournament not found'.tr));
+            return Center(child: Text(AppStrings.tournamentNotFound));
           }
           return CupInfoTab(
             cup: cup,
@@ -64,12 +64,12 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
             children: [
               const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-              Text('Error loading details: $error'),
+              Text(AppStrings.errorLoadingDetails(error)),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () =>
                     ref.invalidate(cupDetailsProvider(widget.tournamentId)),
-                child: Text('Retry'.tr),
+                child: Text(AppStrings.retry),
               ),
             ],
           ),
@@ -117,18 +117,18 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'No Eligible Teams'.tr,
+          AppStrings.noEligibleTeams,
           style: const TextStyle(
               fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
-          'You don\'t have any teams eligible for this cup.'.tr,
+          AppStrings.noEligibleTeamsCup,
           style: const TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
+            child: Text(AppStrings.ok),
           ),
         ],
       ),
@@ -141,7 +141,7 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Select Team'.tr,
+          AppStrings.selectTeam,
           style: const TextStyle(
               fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
@@ -168,7 +168,7 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'.tr),
+            child: Text(AppStrings.cancel),
           ),
         ],
       ),
@@ -214,7 +214,7 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Success'.tr,
+          AppStrings.success,
           style: const TextStyle(
               fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
@@ -222,7 +222,7 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
+            child: Text(AppStrings.ok),
           ),
         ],
       ),
@@ -234,7 +234,7 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Error'.tr,
+          AppStrings.error,
           style: const TextStyle(
               fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
@@ -242,7 +242,7 @@ class _CupInfoDetailsScreenState extends ConsumerState<CupInfoDetailsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
+            child: Text(AppStrings.ok),
           ),
         ],
       ),

@@ -69,7 +69,7 @@ class _TournamentPointsTableTabState
     if (_table.isEmpty) {
       return Center(
         child: Text(
-          'No points table available'.tr,
+          AppStrings.noPointsTableAvailable,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,

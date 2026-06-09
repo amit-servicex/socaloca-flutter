@@ -271,8 +271,8 @@ class _SearchInviteTabState extends State<_SearchInviteTab>
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:
-                Text(AppStrings.inviteSent, style: const TextStyle(fontFamily: 'Poppins')),
+            content: Text(AppStrings.inviteSent,
+                style: const TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.green,
           ),
         );
@@ -1033,9 +1033,10 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
               children: [
                 _textField(
                   controller: _firstNameCtrl,
-                  hint: 'First name',
-                  validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  hint: AppStrings.firstNamePlain,
+                  validator: (v) => (v == null || v.trim().isEmpty)
+                      ? AppStrings.requiredField
+                      : null,
                 ),
                 const SizedBox(height: 14),
 
@@ -1044,9 +1045,10 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
                 const SizedBox(height: 6),
                 _textField(
                   controller: _lastNameCtrl,
-                  hint: 'Last name',
-                  validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  hint: AppStrings.lastNamePlain,
+                  validator: (v) => (v == null || v.trim().isEmpty)
+                      ? AppStrings.requiredField
+                      : null,
                 ),
                 const SizedBox(height: 14),
 
@@ -1056,7 +1058,7 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
                 _textField(
                   controller: _profileNameCtrl,
                   onChanged: _onProfileNameChanged,
-                  hint: 'Username (min 5 chars)',
+                  hint: AppStrings.usernameMinFiveHint,
                   suffixWidget: _checkingProfile
                       ? const SizedBox(
                           width: 16,
@@ -1072,9 +1074,15 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
                                   color: Colors.red, size: 20)
                               : null,
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Required';
-                    if (v.trim().length < 5) return 'Minimum 5 characters';
-                    if (_profileAvailable == false) return 'Name not available';
+                    if (v == null || v.trim().isEmpty) {
+                      return AppStrings.requiredField;
+                    }
+                    if (v.trim().length < 5) {
+                      return AppStrings.minimumFiveCharacters;
+                    }
+                    if (_profileAvailable == false) {
+                      return AppStrings.nameNotAvailable;
+                    }
                     return null;
                   },
                 ),
@@ -1089,7 +1097,8 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
                   iconSize: 18,
                   initialValue: _yearOfBirth,
                   hint: Text(AppStrings.selectYear,
-                      style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+                      style:
+                          const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
                   items: _years
                       .map((y) => DropdownMenuItem(
                           value: y,
@@ -1098,7 +1107,7 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
                                   fontFamily: 'Poppins', fontSize: 14))))
                       .toList(),
                   onChanged: (v) => setState(() => _yearOfBirth = v),
-                  validator: (v) => v == null ? 'Required' : null,
+                  validator: (v) => v == null ? AppStrings.requiredField : null,
                   decoration: _dropdownDecoration(),
                 ),
                 const SizedBox(height: 14),
@@ -1197,7 +1206,7 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
                                   fontFamily: 'Poppins', fontSize: 13))))
                       .toList(),
                   onChanged: (v) => setState(() => _subPosition = v),
-                  validator: (v) => v == null ? 'Required' : null,
+                  validator: (v) => v == null ? AppStrings.requiredField : null,
                   decoration: _dropdownDecoration(),
                 ),
                 const SizedBox(height: 28),

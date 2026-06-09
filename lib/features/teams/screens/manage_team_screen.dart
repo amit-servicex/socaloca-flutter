@@ -370,8 +370,8 @@ class _NewPlayersTabState extends State<_NewPlayersTab>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-              Text(AppStrings.jerseysAssigned, style: const TextStyle(fontFamily: 'Poppins')),
+          content: Text(AppStrings.jerseysAssigned,
+              style: const TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.green,
         ),
       );
@@ -652,7 +652,8 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: Text(AppStrings.cancel.toUpperCase(),
-                style: const TextStyle(fontFamily: 'Poppins', color: Colors.grey)),
+                style:
+                    const TextStyle(fontFamily: 'Poppins', color: Colors.grey)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -661,7 +662,8 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
               elevation: 0,
             ),
             onPressed: () => Navigator.of(ctx).pop(ctrl.text.trim()),
-            child: Text(AppStrings.save, style: const TextStyle(fontFamily: 'Poppins')),
+            child: Text(AppStrings.save,
+                style: const TextStyle(fontFamily: 'Poppins')),
           ),
         ],
       ),
@@ -1548,7 +1550,8 @@ class _ErrorRetry extends StatelessWidget {
               foregroundColor: AppColors.socaYellow,
               elevation: 0,
             ),
-            child: Text(AppStrings.retry, style: const TextStyle(fontFamily: 'Poppins')),
+            child: Text(AppStrings.retry,
+                style: const TextStyle(fontFamily: 'Poppins')),
           ),
         ],
       ),

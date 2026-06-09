@@ -56,7 +56,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'I am over'.tr,
+                              AppStrings.iAmOver,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
@@ -70,7 +70,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '16 years'.tr,
+                                  AppStrings.sixteenYears,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -81,7 +81,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'old'.tr,
+                                  AppStrings.old,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -119,7 +119,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'I am'.tr,
+                              AppStrings.iAm,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
@@ -133,7 +133,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '13-15 years'.tr,
+                                  AppStrings.thirteenToFifteenYears,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -144,7 +144,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'old'.tr,
+                                  AppStrings.old,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -182,7 +182,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'I am a parent/guardian\nregistering on behalf of a'.tr,
+                              AppStrings.parentGuardianRegisteringOnBehalf,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
@@ -198,7 +198,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '7-12'.tr,
+                                  AppStrings.sevenToTwelve,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -209,7 +209,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'years'.tr,
+                                  AppStrings.years,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -220,7 +220,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  'old'.tr,
+                                  AppStrings.old,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
@@ -269,7 +269,7 @@ class SocialThankYouScreen extends StatelessWidget {
               ),
               SizedBox(height: 60),
               Text(
-                'Thank you for joining SocaLoca!'.tr,
+                AppStrings.thankYouForJoining,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -280,7 +280,7 @@ class SocialThankYouScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                'Please create your profile to get started.'.tr,
+                AppStrings.createProfileToGetStarted,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -301,7 +301,7 @@ class SocialThankYouScreen extends StatelessWidget {
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    'CREATE PROFILE'.tr,
+                    AppStrings.createProfileUpper,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,

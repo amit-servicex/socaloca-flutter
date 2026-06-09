@@ -239,11 +239,11 @@ class _LiveMatchRow extends StatelessWidget {
                           name: match.teamA ?? '',
                           blackLogo: true,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 57, top: 2),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 57, top: 2),
                           child: Text(
-                            'vs',
-                            style: TextStyle(
+                            AppStrings.vsLower,
+                            style: const TextStyle(
                               color: AppColors.socaBlack,
                               fontFamily: 'Poppins',
                               fontSize: 12,
@@ -304,31 +304,31 @@ class _LiveMatchRow extends StatelessWidget {
 String liveMatchStateLabel(String? state) {
   switch (state) {
     case 'INIT':
-      return 'Upcoming';
+      return AppStrings.upcoming;
     case 'FIRST_HALF_START':
-      return 'First Half';
+      return AppStrings.firstHalf;
     case 'FIRST_HALF_END':
-      return 'Half Time';
+      return AppStrings.halfTime;
     case 'SECOND_HALF_START':
-      return 'Second Half';
+      return AppStrings.secondHalf;
     case 'SECOND_HALF_END':
-      return 'Break Before ET';
+      return AppStrings.breakBeforeEt;
     case 'POSTPONED':
-      return 'Postponed';
+      return AppStrings.postponed;
     case 'ABANDONED':
-      return 'Abandoned';
+      return AppStrings.abandoned;
     case 'EXTRA_TIME_FH_START':
-      return 'ET First Half';
+      return AppStrings.etFirstHalf;
     case 'EXTRA_TIME_FH_END':
-      return 'ET Half Time';
+      return AppStrings.etHalfTime;
     case 'EXTRA_TIME_SH_START':
-      return 'ET Second Half';
+      return AppStrings.etSecondHalf;
     case 'EXTRA_TIME_SH_END':
-      return 'After Extra Time';
+      return AppStrings.afterExtraTime;
     case 'PENALTY':
-      return 'Penalty';
+      return AppStrings.penalty;
     case 'FINISH':
-      return 'Full Time';
+      return AppStrings.fullTimeTitle;
     default:
       return '';
   }
@@ -387,7 +387,7 @@ class _TeamLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = ApiConstants.getImageUrl(logoUrl);
     final fallback = name.isEmpty
-        ? 'TEAM'
+        ? AppStrings.teamFallback.toUpperCase()
         : name.substring(0, name.length > 4 ? 4 : name.length).toUpperCase();
 
     return CircleAvatar(

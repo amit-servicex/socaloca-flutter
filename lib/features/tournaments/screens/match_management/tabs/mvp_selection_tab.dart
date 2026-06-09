@@ -51,8 +51,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Select the Man of the Match from the participating players.'
-                        .tr,
+                    AppStrings.selectManOfMatchHint,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
@@ -68,7 +67,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
           // Current MVP Display
           if (_currentMVP != null) ...[
             Text(
-              'Current Man of the Match'.tr,
+              AppStrings.currentManOfMatch,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -136,7 +135,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
                   Icon(Icons.emoji_events, size: 80, color: Colors.grey[300]),
                   SizedBox(height: 16),
                   Text(
-                    'No MVP Selected'.tr,
+                    AppStrings.noMvpSelected,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
@@ -146,7 +145,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Tap the button below to select MVP'.tr,
+                    AppStrings.tapSelectMvp,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -189,7 +188,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: Text('Select Man of the Match'.tr,
+          title: Text(AppStrings.selectManOfMatch,
               style: TextStyle(
                   fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
           content: SingleChildScrollView(
@@ -197,7 +196,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Team'.tr,
+                Text(AppStrings.teamFallback,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -237,7 +236,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
                 TextField(
                   controller: playerNameController,
                   decoration: InputDecoration(
-                    labelText: 'Player Name'.tr,
+                    labelText: AppStrings.playerName,
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
@@ -254,7 +253,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel'.tr)),
+                child: Text(AppStrings.cancel)),
             ElevatedButton(
               onPressed: () {
                 if (playerNameController.text.isNotEmpty) {
@@ -267,7 +266,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaYellow,
                   foregroundColor: AppColors.socaBlack),
-              child: Text('Select'.tr),
+              child: Text(AppStrings.select),
             ),
           ],
         ),
@@ -330,15 +329,15 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Clear MVP'.tr,
+        title: Text(AppStrings.clearMvp,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: Text('Are you sure you want to clear the Man of the Match?'.tr,
+        content: Text(AppStrings.clearMvpConfirmation,
             style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'.tr)),
+              child: Text(AppStrings.cancel)),
           ElevatedButton(
             onPressed: () {
               setState(() => _currentMVP = null);
@@ -346,7 +345,7 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: Text('Clear'.tr),
+            child: Text(AppStrings.clear),
           ),
         ],
       ),
@@ -357,13 +356,14 @@ class _MvpSelectionTabState extends ConsumerState<MvpSelectionTab> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Error'.tr,
+        title: Text(AppStrings.error,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
         content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: Text('OK'.tr))
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppStrings.ok))
         ],
       ),
     );

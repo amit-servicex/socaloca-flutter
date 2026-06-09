@@ -37,8 +37,8 @@ class TrialsLandingScreen extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
               tabs: [
-                Tab(text: 'Clubs'.tr),
-                Tab(text: 'Academies'.tr),
+                Tab(text: AppStrings.clubs),
+                Tab(text: AppStrings.academies),
               ],
             ),
           ),
@@ -75,7 +75,7 @@ class _ClubTrialsTitleWrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(clubAppBarTitleProvider.notifier).state = 'Trials';
+      ref.read(clubAppBarTitleProvider.notifier).state = AppStrings.trials;
     });
     return child;
   }
@@ -163,13 +163,13 @@ class _TrialsListState extends ConsumerState<_TrialsList> {
 
   void _search() {
     if (_country.isEmpty && _fromAge.isEmpty && _toAge.isEmpty) {
-      setState(() => _searchError = 'Please select a filter'.tr);
+      setState(() => _searchError = AppStrings.pleaseSelectFilter);
       return;
     }
     final from = int.tryParse(_fromAge);
     final to = int.tryParse(_toAge);
     if (from != null && to != null && to <= from) {
-      setState(() => _searchError = 'To age must be greater than from age'.tr);
+      setState(() => _searchError = AppStrings.toAgeGreaterThanFromAge);
       return;
     }
     setState(() {
@@ -224,7 +224,7 @@ class _TrialsListState extends ConsumerState<_TrialsList> {
               : _trials.isEmpty
                   ? Center(
                       child: Text(
-                        'No Trials Found'.tr,
+                        AppStrings.noTrialsFound,
                         style: const TextStyle(fontFamily: 'Poppins'),
                       ),
                     )
@@ -297,7 +297,7 @@ class _TrialFilters extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SearchableDropdownButton(
-            hint: 'Select Country'.tr,
+            hint: AppStrings.selectCountry,
             value: country.isEmpty ? null : country,
             items: countries.where((c) => c.isNotEmpty).toList(),
             onChanged: (v) => onCountryChanged(v ?? ''),
@@ -329,7 +329,7 @@ class _TrialFilters extends StatelessWidget {
               Expanded(
                   flex: 2,
                   child: Text(
-                    "Age Range".tr,
+                    AppStrings.ageRange,
                     style: TextStyle(
                         color: AppColors.playedGray,
                         fontFamily: 'Poppins',
@@ -338,7 +338,7 @@ class _TrialFilters extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: SearchableDropdownButton(
-                  hint: 'From'.tr,
+                  hint: AppStrings.from,
                   value: fromAge.isEmpty ? null : fromAge,
                   items: ages.where((a) => a.isNotEmpty).toList(),
                   onChanged: onFromAgeChanged,
@@ -350,7 +350,7 @@ class _TrialFilters extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: SearchableDropdownButton(
-                  hint: 'To'.tr,
+                  hint: AppStrings.to,
                   value: toAge.isEmpty ? null : toAge,
                   items: ages.where((a) => a.isNotEmpty).toList(),
                   onChanged: onToAgeChanged,
@@ -377,11 +377,18 @@ class _TrialFilters extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: _ActionButton(label: 'SEARCH'.tr, onPressed: onSearch),
+                  child: _ActionButton(
+                    label: AppStrings.searchUpper,
+                    onPressed: onSearch,
+                  ),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
-                  child: _ActionButton(label: 'RESET'.tr, onPressed: onReset),
+                  child: _ActionButton(
+                    label: AppStrings.resetUpper,
+                    onPressed: onReset,
+                    isReset: true,
+                  ),
                 ),
               ],
             ),
@@ -411,10 +418,15 @@ class _TrialFilters extends StatelessWidget {
 }
 
 class _ActionButton extends StatelessWidget {
-  const _ActionButton({required this.label, required this.onPressed});
+  const _ActionButton({
+    required this.label,
+    required this.onPressed,
+    this.isReset = false,
+  });
 
   final String label;
   final VoidCallback onPressed;
+  final bool isReset;
 
   @override
   Widget build(BuildContext context) {
@@ -422,10 +434,8 @@ class _ActionButton extends StatelessWidget {
       height: 42,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              label == 'RESET' ? AppColors.socaGrey : AppColors.socaBlack,
-          foregroundColor:
-              label == 'RESET' ? AppColors.socaBlack : AppColors.socaYellow,
+          backgroundColor: isReset ? AppColors.socaGrey : AppColors.socaBlack,
+          foregroundColor: isReset ? AppColors.socaBlack : AppColors.socaYellow,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
         ),
         onPressed: onPressed,
@@ -509,7 +519,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
           if (isLive) ...[
             const SizedBox(height: 2),
             Text(
-              'LIVE NOW'.tr,
+              AppStrings.liveNow,
               style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
@@ -529,20 +539,24 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
             ),
           ),
           const SizedBox(height: 8),
-          _InfoRow(label: 'Reg. Closes', value: trial.registerDateTo ?? ''),
-          _InfoRow(label: 'Trial Starts', value: trial.trialDateFrom ?? ''),
-          _InfoRow(label: 'Gender', value: _titleCase(trial.gender ?? '')),
           _InfoRow(
-            label: 'Age',
+              label: AppStrings.regCloses, value: trial.registerDateTo ?? ''),
+          _InfoRow(
+              label: AppStrings.trialStarts, value: trial.trialDateFrom ?? ''),
+          _InfoRow(
+              label: AppStrings.genderPlain,
+              value: _titleCase(trial.gender ?? '')),
+          _InfoRow(
+            label: AppStrings.age,
             value: trial.ageFrom > 0 && trial.ageTo > 0
                 ? '${trial.ageFrom} - ${trial.ageTo}'
                 : '',
           ),
-          _InfoRow(label: 'Cost', value: _costText(trial)),
-          _InfoRow(label: 'Location', value: trial.location ?? ''),
+          _InfoRow(label: AppStrings.cost, value: _costText(trial)),
+          _InfoRow(label: AppStrings.location, value: trial.location ?? ''),
           if ((trial.trialVenue ?? '').isNotEmpty)
             _InfoRow(
-              label: 'Trial Venue',
+              label: AppStrings.trialVenue,
               value: trial.trialVenue!,
               valueStyle: const TextStyle(
                 fontFamily: 'Poppins',
@@ -553,7 +567,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
               onTap: _openMap,
             ),
           if ((trial.brief ?? '').isNotEmpty)
-            _InfoRow(label: 'Brief', value: trial.brief!),
+            _InfoRow(label: AppStrings.brief, value: trial.brief!),
           const SizedBox(height: 8),
           Align(
             alignment: Alignment.centerRight,
@@ -578,10 +592,10 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
     required bool canRegister,
   }) {
     final label = expired
-        ? 'REGISTRATION CLOSED'.tr
+        ? AppStrings.registrationClosed
         : registered
-            ? 'REGISTERED'.tr
-            : 'REGISTER'.tr;
+            ? AppStrings.registered.toUpperCase()
+            : AppStrings.register.toUpperCase();
     return SizedBox(
       height: 36,
       width: 250,
@@ -615,8 +629,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
   Future<void> _tryRegister() async {
     if (!_isEligible()) {
       _showMessage(
-        'Registration restricted. Your profile does not match the trial criteria. SocaLoca will notify you of future Live trials!'
-            .tr,
+        AppStrings.registrationRestrictedLong,
       );
       return;
     }
@@ -671,7 +684,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
           builder: (dialogContext, setDialogState) {
             return AlertDialog(
               title: Text(
-                'REGISTER'.tr,
+                AppStrings.register.toUpperCase(),
                 style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w800,
@@ -682,7 +695,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name.isEmpty ? 'Player'.tr : name,
+                    name.isEmpty ? AppStrings.player : name,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
@@ -693,7 +706,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: 'Email'.tr,
+                      labelText: AppStrings.emailPlain,
                       errorText: emailError,
                       border: const OutlineInputBorder(),
                     ),
@@ -703,7 +716,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext),
-                  child: Text('Cancel'.tr),
+                  child: Text(AppStrings.cancel),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -714,14 +727,14 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                     final email = emailController.text.trim();
                     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(email)) {
                       setDialogState(() {
-                        emailError = 'Enter a valid email'.tr;
+                        emailError = AppStrings.enterValidEmailAddress;
                       });
                       return;
                     }
                     Navigator.pop(dialogContext);
                     await _register(email, name);
                   },
-                  child: Text('SUBMIT'.tr),
+                  child: Text(AppStrings.submit),
                 ),
               ],
             );
@@ -763,8 +776,8 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
       );
     }
     _showMessage(ok
-        ? 'Registered successfully!'.tr
-        : 'Registration failed. Try again.'.tr);
+        ? AppStrings.registeredSuccessfully
+        : AppStrings.registrationFailedTryAgain);
   }
 
   Future<void> _openMap() async {
@@ -784,7 +797,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
   }
 
   String _costText(ClubTrialModel trial) {
-    if (trial.cost <= 0) return 'Free'.tr;
+    if (trial.cost <= 0) return AppStrings.free;
     final currency = trial.currency?.isNotEmpty == true ? trial.currency! : '';
     return '$currency ${trial.cost}'.trim();
   }

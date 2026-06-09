@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../home/widgets/home_app_bar.dart';
@@ -21,30 +22,30 @@ class RefereeHomeScreen extends ConsumerStatefulWidget {
 class _RefereeHomeScreenState extends ConsumerState<RefereeHomeScreen> {
   int _currentIndex = 0;
 
-  static const _tabs = [
+  static final _tabs = [
     _RefereeNavTab(
       icon: "assets/icons/ic_leaguescups_new.png",
-      label: 'TOURNAMENT',
+      label: AppStrings.tournamentFallback.toUpperCase(),
       route: AppRoutes.refereeTournament,
     ),
     _RefereeNavTab(
       icon: 'assets/icons/ic_referee_my_requests.png',
-      label: 'REQUESTS',
+      label: AppStrings.requests.toUpperCase(),
       route: AppRoutes.refereeRequests,
     ),
     _RefereeNavTab(
       icon: 'assets/icons/ic_referee_my_matches.png',
-      label: 'MY MATCHES',
+      label: AppStrings.myMatches.toUpperCase(),
       route: AppRoutes.refereeMatches,
     ),
     _RefereeNavTab(
       icon: 'assets/images/live_matchs.png',
-      label: 'LIVE',
+      label: AppStrings.live,
       route: AppRoutes.refereeLive,
     ),
     _RefereeNavTab(
       icon: 'assets/icons/ic_my_bio.png',
-      label: 'MY BIO',
+      label: AppStrings.myBio.toUpperCase(),
       route: AppRoutes.refereeBio,
     ),
   ];

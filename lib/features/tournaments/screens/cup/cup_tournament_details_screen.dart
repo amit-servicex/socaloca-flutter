@@ -74,7 +74,7 @@ class _CupTournamentDetailsScreenState
       body: cupAsync.when(
         data: (cup) {
           if (cup == null) {
-            return Center(child: Text('Cup tournament not found'.tr));
+            return Center(child: Text(AppStrings.cupTournamentNotFound));
           }
           return _buildContent(cup);
         },
@@ -85,7 +85,7 @@ class _CupTournamentDetailsScreenState
             children: [
               const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-              Text('Error loading cup: $error'),
+              Text(AppStrings.errorLoadingCup(error)),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -94,7 +94,7 @@ class _CupTournamentDetailsScreenState
                   ref.invalidate(
                       cupReadyOrDetailsProvider(widget.tournamentId));
                 },
-                child: Text('Retry'.tr),
+                child: Text(AppStrings.retry),
               ),
             ],
           ),
@@ -180,7 +180,7 @@ class _CupTournamentDetailsScreenState
               width: 90,
               child: ElevatedButton(
                 child: Text(
-                  'STATS'.tr,
+                  AppStrings.statsUpper,
                   style: const TextStyle(
                     color: AppColors.socaYellow,
                     fontFamily: 'Poppins',
@@ -213,7 +213,7 @@ class _CupTournamentDetailsScreenState
                           size: 64, color: Colors.grey[400]),
                       const SizedBox(height: 16),
                       Text(
-                        'No rounds available'.tr,
+                        AppStrings.noRoundsAvailable,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 16,

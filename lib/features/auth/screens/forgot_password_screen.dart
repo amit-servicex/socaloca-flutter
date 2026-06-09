@@ -67,9 +67,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
   // ── Hint text per sign type ──────────────────────────────────────────────
   String get _hintText => switch (_signType) {
-        _typeEmail => 'enter your Email *',
-        _typeMobile => 'enter your Mobile Number *',
-        _ => 'enter your SOCALOCA ID *',
+        _typeEmail => AppStrings.enterEmailRequired,
+        _typeMobile => AppStrings.enterMobileNumberRequired,
+        _ => AppStrings.enterSocaLocaIdRequired,
       };
 
   // ── Validation ───────────────────────────────────────────────────────────
@@ -78,15 +78,15 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     String? err;
     switch (_signType) {
       case _typeMobile:
-        if (input.length < 7) err = 'Please enter a valid mobile number';
+        if (input.length < 7) err = AppStrings.pleaseEnterValidMobileNumber;
         break;
       case _typeEmail:
         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(input)) {
-          err = 'Please enter a valid email';
+          err = AppStrings.pleaseEnterValidEmail;
         }
         break;
       default:
-        if (input.isEmpty) err = 'Please enter valid SOCALOCA ID';
+        if (input.isEmpty) err = AppStrings.pleaseEnterValidSocaLocaId;
         break;
     }
     setState(() => _inputError = err);
@@ -109,7 +109,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       setState(() => _isLoading = false);
       switch (result) {
         case AuthSuccess():
-          _showToast('Reset link sent to ${_inputCtrl.text.trim()}');
+          _showToast(AppStrings.resetLinkSentTo(_inputCtrl.text.trim()));
           if (mounted) Navigator.of(context).pop();
         case AuthFailure(:final error):
           setState(() => _inputError = error);
@@ -134,7 +134,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           _showAddEmailDialog(data.userId);
           return;
         }
-        _showToast('Verification code sent successfully');
+        _showToast(AppStrings.verificationCodeSent);
         if (mounted) {
           context.push(
             AppRoutes.resetPassword,
@@ -171,7 +171,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setStateDialog) => AlertDialog(
           title: Text(
-            'Add Email'.tr,
+            AppStrings.addEmail,
             style:
                 TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
           ),
@@ -180,14 +180,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'No contact info found for this SocaLoca ID. '
-                'Please enter an email address to receive your OTP.',
+                AppStrings.addEmailOtpPrompt,
                 style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
               ),
               SizedBox(height: 12),
               _buildInputBox(
                 controller: emailCtrl,
-                hint: 'Email address *',
+                hint: AppStrings.emailAddressRequired,
                 keyboardType: TextInputType.emailAddress,
               ),
               if (dialogError != null)
@@ -204,19 +203,20 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: Text('Cancel'.tr, style: TextStyle(fontFamily: 'Poppins')),
+              child: Text(AppStrings.cancel,
+                  style: TextStyle(fontFamily: 'Poppins')),
             ),
             TextButton(
               onPressed: () async {
                 final email = emailCtrl.text.trim();
                 if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
                   setStateDialog(
-                      () => dialogError = 'Please enter a valid email');
+                      () => dialogError = AppStrings.pleaseEnterValidEmail);
                   return;
                 }
                 Navigator.of(ctx).pop();
                 if (mounted) {
-                  _showToast('Verification code sent successfully');
+                  _showToast(AppStrings.verificationCodeSent);
                   context.push(
                     AppRoutes.resetPassword,
                     extra: {
@@ -228,7 +228,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   );
                 }
               },
-              child: Text('SEND OTP'.tr,
+              child: Text(AppStrings.sendOtp,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
@@ -304,7 +304,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           padding: EdgeInsets.all(16),
           child: Column(
             children: [
-              Text('Select Country'.tr,
+              Text(AppStrings.selectCountry,
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
@@ -408,7 +408,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
                 // ── Title ─────────────────────────────────────────────────
                 Text(
-                  'Forgot Password'.tr,
+                  AppStrings.forgotPassword,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -422,7 +422,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 // ── Radio buttons (hidden for club path) ──────────────────
                 if (!widget.isClubPath) ...[
                   _RadioOption(
-                    label: 'SocaLoca ID *',
+                    label: AppStrings.socaLocaIdRequired,
                     value: _typeSclId,
                     groupValue: _signType,
                     onChanged: (v) => setState(() {
@@ -432,7 +432,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     }),
                   ),
                   _RadioOption(
-                    label: 'Email *',
+                    label: AppStrings.emailRequired,
                     value: _typeEmail,
                     groupValue: _signType,
                     onChanged: (v) => setState(() {
@@ -442,7 +442,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     }),
                   ),
                   _RadioOption(
-                    label: 'Mobile Number *',
+                    label: AppStrings.mobileNumberRequired,
                     value: _typeMobile,
                     groupValue: _signType,
                     onChanged: (v) => setState(() {
@@ -556,7 +556,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 // ── Mandatory fields ─────────────────────────────────────
                 SizedBox(height: 10),
                 Text(
-                  '* mandatory fields'.tr,
+                  AppStrings.mandatoryFields,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -582,7 +582,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                             ),
                           )
                         : Text(
-                            widget.isClubPath ? 'SEND RESET LINK' : 'SEND OTP',
+                            widget.isClubPath
+                                ? AppStrings.sendResetLink
+                                : AppStrings.sendOtp,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,

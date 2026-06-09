@@ -8,7 +8,7 @@ import '../../../core/storage/storage_service.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Title provider — each child screen sets this so the AppBar updates.
-final clubAppBarTitleProvider = StateProvider<String>((ref) => 'Club');
+final clubAppBarTitleProvider = StateProvider<String>((ref) => AppStrings.club);
 
 /// Club Admin home shell — AppBar + body only. No bottom navigation.
 class ClubHomeScreen extends ConsumerWidget {
@@ -18,8 +18,9 @@ class ClubHomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final title = ref.watch(clubAppBarTitleProvider);
-    final clubName = StorageService.clubUser?['clubName'] as String? ?? 'Club';
-    final displayTitle = title == 'Club' ? clubName : title;
+    final clubName =
+        StorageService.clubUser?['clubName'] as String? ?? AppStrings.club;
+    final displayTitle = title == AppStrings.club ? clubName : title;
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
@@ -31,7 +32,7 @@ class ClubHomeScreen extends ConsumerWidget {
         leading: Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(
-            'Club Bio'.tr,
+            AppStrings.clubBio,
             // displayTitle,
             style: TextStyle(
               fontFamily: 'Poppins',
@@ -58,7 +59,7 @@ class ClubHomeScreen extends ConsumerWidget {
               height: 28,
               color: const Color.fromARGB(255, 128, 128, 128),
             ),
-            tooltip: 'Logout',
+            tooltip: AppStrings.signOut,
             onPressed: () async {
               await StorageService.setClubLogin(false);
               if (context.mounted) context.go(AppRoutes.roleChoice);

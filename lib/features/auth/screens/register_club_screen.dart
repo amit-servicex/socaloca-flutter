@@ -103,38 +103,38 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
     final contactNumber = _contactNumberCtrl.text.trim();
 
     if (clubName.isEmpty) {
-      setState(() => _clubNameError = 'Please enter club name'.tr);
+      setState(() => _clubNameError = AppStrings.pleaseEnterClubName);
       ok = false;
     }
     if (email.isEmpty) {
-      setState(() => _emailError = 'Please enter email'.tr);
+      setState(() => _emailError = AppStrings.pleaseEnterEmail);
       ok = false;
     } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(email)) {
-      setState(() => _emailError = 'Please enter a valid email'.tr);
+      setState(() => _emailError = AppStrings.pleaseEnterValidEmail);
       ok = false;
     }
     if (_country.isEmpty) {
-      setState(() => _countryError = 'Please select country'.tr);
+      setState(() => _countryError = AppStrings.pleaseSelectCountry);
       ok = false;
     }
     if (_confedName.isEmpty) {
-      setState(() => _confedError = 'Please select confederation'.tr);
+      setState(() => _confedError = AppStrings.pleaseSelectConfederation);
       ok = false;
     }
     if (_leagueName.isEmpty) {
-      setState(() => _leagueError = 'Please select league'.tr);
+      setState(() => _leagueError = AppStrings.pleaseSelectLeague);
       ok = false;
     }
     if (contactName.isEmpty) {
-      setState(() => _contactNameError = 'Please enter contact name'.tr);
+      setState(() => _contactNameError = AppStrings.pleaseEnterContactName);
       ok = false;
     }
     if (contactNumber.isEmpty) {
-      setState(() => _contactNumberError = 'Please enter contact number'.tr);
+      setState(() => _contactNumberError = AppStrings.pleaseEnterContactNumber);
       ok = false;
     } else if (contactNumber.length < 7) {
       setState(
-          () => _contactNumberError = 'Please enter a valid mobile number'.tr);
+          () => _contactNumberError = AppStrings.pleaseEnterValidMobileNumber);
       ok = false;
     }
     return ok;
@@ -164,7 +164,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
     if (status == 1) {
       final isDuplicate = result['isDuplicate'] == true;
       if (isDuplicate) {
-        setState(() => _emailError = 'Email already registered'.tr);
+        setState(() => _emailError = AppStrings.emailAlreadyRegistered);
       } else {
         _showSuccessDialog();
       }
@@ -183,7 +183,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
             const Icon(Icons.check_circle, color: Colors.green, size: 56),
             const SizedBox(height: 16),
             Text(
-              'Thanks for your joining request. We will validate and send you the instructions shortly.',
+              AppStrings.joiningRequestThanks,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: 'Poppins',
@@ -193,7 +193,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Redirects to socaloca.football',
+              AppStrings.redirectsToSocalocaFootball,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: 'Poppins',
@@ -222,8 +222,8 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
                   await launchUrl(uri, mode: LaunchMode.externalApplication);
                 }
               },
-              child: const Text(
-                'GOT IT',
+              child: Text(
+                AppStrings.gotItUpper,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w800,
@@ -329,7 +329,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
               // _fieldLabel('Club Name *'),
               _textField(
                 controller: _clubNameCtrl,
-                hint: 'Enter club name',
+                hint: AppStrings.enterClubName,
                 error: _clubNameError,
                 textCapitalization: TextCapitalization.words,
                 onChanged: (_) => _clearErrors(),
@@ -339,7 +339,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
               // _fieldLabel('Email *'),
               _textField(
                 controller: _emailCtrl,
-                hint: 'Enter club email',
+                hint: AppStrings.enterClubEmail,
                 error: _emailError,
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (_) => _clearErrors(),
@@ -349,7 +349,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
               // _fieldLabel('Country *'),
               _dropdownField(
                 value: _country.isEmpty ? null : _country,
-                hint: 'Select Country *',
+                hint: AppStrings.selectCountryRequired,
                 items: countries,
                 error: _countryError,
                 onChanged: _onCountryChanged,
@@ -359,7 +359,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
               // _fieldLabel('Confederation'),
               _readOnlyField(
                 value: _confedName.isEmpty
-                    ? 'Auto-populated from country'
+                    ? AppStrings.autoPopulatedFromCountry
                     : _confedName,
                 error: _confedError,
               ),
@@ -368,12 +368,12 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
               // _fieldLabel('League *'),
               _leagues.isEmpty
                   ? _readOnlyField(
-                      value: 'Select country first',
+                      value: AppStrings.selectCountryFirst,
                       error: _leagueError,
                     )
                   : _dropdownField(
                       value: _leagueName.isEmpty ? null : _leagueName,
-                      hint: 'Select League *',
+                      hint: AppStrings.selectLeagueRequired,
                       items: _leagues,
                       error: _leagueError,
                       onChanged: (v) {
@@ -386,7 +386,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
               // _fieldLabel('Contact Name *'),
               _textField(
                 controller: _contactNameCtrl,
-                hint: 'Enter contact name',
+                hint: AppStrings.enterContactName,
                 error: _contactNameError,
                 textCapitalization: TextCapitalization.words,
                 onChanged: (_) => _clearErrors(),
@@ -419,7 +419,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
                   ),
                 ),
                 controller: _contactNumberCtrl,
-                hint: 'Enter contact number',
+                hint: AppStrings.enterContactNumber,
                 error: _contactNumberError,
                 keyboardType: TextInputType.phone,
                 maxLength: 10,
@@ -451,8 +451,8 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
                             color: Colors.white,
                           ),
                         )
-                      : const Text(
-                          'SUBMIT',
+                      : Text(
+                          AppStrings.submit,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w800,

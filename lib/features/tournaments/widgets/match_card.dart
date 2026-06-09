@@ -112,7 +112,7 @@ class MatchCard extends StatelessWidget {
                       SizedBox(height: 6),
                       // Full time / Upcoming status
                       Text(
-                        _isPlayed ? 'Full time'.tr : 'Upcoming'.tr,
+                        _isPlayed ? AppStrings.fullTime : AppStrings.upcoming,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w500,

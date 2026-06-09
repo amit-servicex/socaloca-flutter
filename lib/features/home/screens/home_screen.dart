@@ -674,10 +674,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           if (userId.isEmpty)
             Container(
               color: Colors.red.shade100,
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               child: Text(
                 '⚠️ Not logged in - Home feed sections will be empty'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 12,
                   color: Colors.red,

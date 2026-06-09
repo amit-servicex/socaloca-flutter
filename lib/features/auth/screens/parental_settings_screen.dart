@@ -36,7 +36,7 @@ class _ParentalSettingsScreenState
     if (!_consentGiven) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please provide consent to continue'.tr),
+          content: Text(AppStrings.pleaseProvideConsentToContinue),
         ),
       );
       return;
@@ -63,7 +63,7 @@ class _ParentalSettingsScreenState
 
               // Title
               Text(
-                'Parental Controls'.tr,
+                AppStrings.parentalControls,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -77,7 +77,7 @@ class _ParentalSettingsScreenState
 
               // Subtitle
               Text(
-                'Settings'.tr,
+                AppStrings.settings,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
@@ -91,7 +91,7 @@ class _ParentalSettingsScreenState
 
               // Liking and Following Switch
               _buildSwitchRow(
-                'Liking and following',
+                AppStrings.likingAndFollowing,
                 _likingFollowing,
                 (value) => setState(() => _likingFollowing = value),
               ),
@@ -100,7 +100,7 @@ class _ParentalSettingsScreenState
 
               // Uploading Photos & Videos Switch
               _buildSwitchRow(
-                'Uploading photos & videos',
+                AppStrings.uploadingPhotosVideos,
                 _uploading,
                 (value) => setState(() => _uploading = value),
               ),
@@ -120,8 +120,7 @@ class _ParentalSettingsScreenState
                   ),
                   Expanded(
                     child: Text(
-                      'I consent that I am setting the parental controls on behalf of a child and will take full control of this SOCALOCA account'
-                          .tr,
+                      AppStrings.parentalControlConsent,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -148,7 +147,7 @@ class _ParentalSettingsScreenState
                   ),
                   child: Center(
                     child: Text(
-                      'SAVE AND CONTINUE'.tr,
+                      AppStrings.saveAndContinueUpper,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -167,7 +166,7 @@ class _ParentalSettingsScreenState
                 TextButton(
                   onPressed: () {},
                   child: Text(
-                    'Modify pin'.tr,
+                    AppStrings.modifyPin,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,

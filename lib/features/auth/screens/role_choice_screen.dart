@@ -78,7 +78,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                               borderRadius: BorderRadius.circular(3),
                             ),
                             child: Text(
-                              'I AM'.tr,
+                              AppStrings.iAm.toUpperCase(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700, // poppins_bold
@@ -97,7 +97,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           _RadioOption(
                             value: 'player',
                             groupValue: _selectedRole,
-                            label: 'A Player',
+                            label: AppStrings.aPlayer,
                             onChanged: (value) => _onRoleSelected(value!),
                           ),
 
@@ -105,7 +105,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           _RadioOption(
                             value: 'coach',
                             groupValue: _selectedRole,
-                            label: 'A Coach',
+                            label: AppStrings.aCoach,
                             onChanged: (value) => _onRoleSelected(value!),
                           ),
 
@@ -113,7 +113,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           _RadioOption(
                             value: 'manager',
                             groupValue: _selectedRole,
-                            label: 'A Manager',
+                            label: AppStrings.aManager,
                             onChanged: (value) => _onRoleSelected(value!),
                           ),
 
@@ -121,7 +121,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           _RadioOption(
                             value: 'referee',
                             groupValue: _selectedRole,
-                            label: 'A Referee',
+                            label: AppStrings.aReferee,
                             onChanged: (value) => _onRoleSelected(value!),
                           ),
 
@@ -132,7 +132,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           _RadioOption(
                             value: 'fan',
                             groupValue: _selectedRole,
-                            label: 'A Fan',
+                            label: AppStrings.aFan,
                             onChanged: (value) => _onRoleSelected(value!),
                           ),
 
@@ -140,7 +140,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           _RadioOption(
                             value: 'club',
                             groupValue: _selectedRole,
-                            label: 'A Professional Club',
+                            label: AppStrings.aProfessionalClub,
                             onChanged: (value) => _onRoleSelected(value!),
                           ),
                         ],
@@ -158,8 +158,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
             right: 20,
             bottom: 20,
             child: Text(
-              '*SocaLoca only collects the data is necessary to provides its service and\nstores it in the anonymised way in our own self-hosted analytics system.'
-                  .tr,
+              AppStrings.socaLocaPrivacyNotice,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins',

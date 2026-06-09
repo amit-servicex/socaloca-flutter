@@ -52,7 +52,7 @@ class _LeagueInfoDetailsScreenState
       body: tournamentAsync.when(
         data: (tournament) {
           if (tournament == null) {
-            return Center(child: Text('Tournament not found'.tr));
+            return Center(child: Text(AppStrings.tournamentNotFound));
           }
           return LeagueInfoTab(
             tournament: tournament,
@@ -67,12 +67,12 @@ class _LeagueInfoDetailsScreenState
             children: [
               const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-              Text('Error: $error'),
+              Text(AppStrings.errorMessage(error)),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref
                     .invalidate(tournamentDetailsProvider(widget.tournamentId)),
-                child: Text('Retry'.tr),
+                child: Text(AppStrings.retry),
               ),
             ],
           ),
@@ -98,9 +98,8 @@ class _LeagueInfoDetailsScreenState
       data: (teams) {
         if (teams.isEmpty) {
           _showDialog(
-            title: 'No Eligible Teams'.tr,
-            content:
-                'You don\'t have any teams eligible for this tournament.'.tr,
+            title: AppStrings.noEligibleTeams,
+            content: AppStrings.noEligibleTeamsTournament,
           );
         } else {
           _showTeamDialog(teams, tournament);
@@ -112,7 +111,7 @@ class _LeagueInfoDetailsScreenState
         builder: (_) => const AppLoader(),
       ),
       error: (e, _) => _showDialog(
-        title: 'Error'.tr,
+        title: AppStrings.error,
         content: 'Failed to load teams: $e',
       ),
     );
@@ -122,7 +121,7 @@ class _LeagueInfoDetailsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Select Team'.tr,
+        title: Text(AppStrings.selectTeam,
             style: const TextStyle(
                 fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
         content: SizedBox(
@@ -142,7 +141,8 @@ class _LeagueInfoDetailsScreenState
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: Text('Cancel'.tr))
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppStrings.cancel))
         ],
       ),
     );
@@ -168,13 +168,14 @@ class _LeagueInfoDetailsScreenState
     final state = ref.read(joinRequestProvider(widget.tournamentId));
     state.when(
       data: (success) => _showDialog(
-        title: success ? 'Success'.tr : 'Error'.tr,
+        title: success ? AppStrings.success : AppStrings.error,
         content: success
             ? 'Join request submitted successfully!'
             : 'Failed to submit join request',
       ),
       loading: () {},
-      error: (e, _) => _showDialog(title: 'Error'.tr, content: 'Error: $e'),
+      error: (e, _) => _showDialog(
+          title: AppStrings.error, content: AppStrings.errorMessage(e)),
     );
   }
 
@@ -188,7 +189,8 @@ class _LeagueInfoDetailsScreenState
         content: Text(content, style: const TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: Text('OK'.tr))
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppStrings.ok))
         ],
       ),
     );

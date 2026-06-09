@@ -79,17 +79,17 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
   // Validate input based on type
   String? _validateIdentity(String identity) {
     if (identity.isEmpty) {
-      return 'Please enter your email, mobile number or SocaLoca ID';
+      return AppStrings.pleaseEnterYourEmailMobileOrSocaLocaId;
     }
 
     final type = _detectInputType(identity);
 
     if (type == 'mobile' && identity.length < 7) {
-      return 'Please enter valid mobile number';
+      return AppStrings.pleaseEnterValidMobileNumber;
     }
 
     if (type == 'unknown') {
-      return 'Please enter valid email, mobile number or SocaLoca ID';
+      return AppStrings.pleaseEnterValidEmailMobileOrSocaLocaId;
     }
 
     return null;
@@ -146,7 +146,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
           child: Column(
             children: [
               Text(
-                'Select Country'.tr,
+                AppStrings.selectCountry,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -266,11 +266,11 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
 
     // Validate password
     if (password.isEmpty) {
-      AppSnackBar.showError(context, 'Please enter password');
+      AppSnackBar.showError(context, AppStrings.pleaseEnterPassword);
       return;
     }
     if (password.length < 6) {
-      AppSnackBar.showError(context, 'Password must be at least 6 characters');
+      AppSnackBar.showError(context, AppStrings.passwordAtLeastSixCharacters);
       return;
     }
 
@@ -291,7 +291,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
         final user = data.user;
         final token = data.token;
         if (user == null) {
-          _showNotRegisteredDialog(context, 'Mobile is not registered');
+          _showNotRegisteredDialog(context, AppStrings.mobileNotRegistered);
           return;
         }
 
@@ -306,7 +306,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
           if (policyResult is AuthFailure) {
             if (mounted) {
               AppSnackBar.showError(
-                  context, 'Failed to accept policy. Please try again.');
+                  context, AppStrings.failedAcceptPolicyTryAgain);
             }
             return;
           }
@@ -330,10 +330,10 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
         // Match Android error messages
         if (error.toLowerCase().contains('wrong password') ||
             error.toLowerCase().contains('incorrect password')) {
-          AppSnackBar.showError(context, 'Wrong password');
+          AppSnackBar.showError(context, AppStrings.wrongPassword);
         } else if (error.toLowerCase().contains('not registered') ||
             error.toLowerCase().contains('account not found')) {
-          AppSnackBar.showError(context, 'Account not registered');
+          AppSnackBar.showError(context, AppStrings.accountNotRegistered);
         } else {
           AppSnackBar.showError(context, error);
         }
@@ -372,16 +372,18 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
     } on GoogleSignInException catch (e) {
       log('Google SignIn exception: code=${e.code}, desc=${e.description}');
       if (mounted && e.code != GoogleSignInExceptionCode.canceled) {
-        AppSnackBar.showError(context, 'Google sign-in failed (${e.code})');
+        AppSnackBar.showError(
+            context, AppStrings.googleSignInFailedWithCode(e.code));
       }
     } on PlatformException catch (e) {
       log('Google PlatformException: code=${e.code}, msg=${e.message}');
       if (mounted && e.code != 'sign_in_canceled') {
-        AppSnackBar.showError(context, 'Google sign-in failed');
+        AppSnackBar.showError(context, AppStrings.googleSignInFailed);
       }
     } catch (e) {
       log('Google login error: $e');
-      if (mounted) AppSnackBar.showError(context, 'Google sign-in failed');
+      if (mounted)
+        AppSnackBar.showError(context, AppStrings.googleSignInFailed);
     } finally {
       if (mounted) setState(() => _isSocialLoading = false);
     }
@@ -413,7 +415,8 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
         media: 'facebook',
       );
     } catch (_) {
-      if (mounted) AppSnackBar.showError(context, 'Facebook sign-in failed');
+      if (mounted)
+        AppSnackBar.showError(context, AppStrings.facebookSignInFailed);
     } finally {
       if (mounted) setState(() => _isSocialLoading = false);
     }
@@ -447,7 +450,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
           final user = data.user;
           if (user == null) {
             AppSnackBar.showError(
-                context, 'Unexpected response. Please try again.');
+                context, AppStrings.unexpectedResponseTryAgain);
             return;
           }
           await ref
@@ -458,7 +461,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
           final user = data.user;
           if (user == null) {
             _showNotRegisteredDialog(
-                context, 'Unexpected response. Please try again.');
+                context, AppStrings.unexpectedResponseTryAgain);
             return;
           }
           // token may be absent for social login — pass empty string so session
@@ -525,9 +528,9 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                           border: Border.all(color: Colors.black, width: 1.5),
                         ),
                         alignment: Alignment.center,
-                        child: const Text(
-                          'SIGN UP',
-                          style: TextStyle(
+                        child: Text(
+                          AppStrings.signUpUpper,
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
@@ -549,8 +552,8 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          'TRY AGAIN',
-                          style: TextStyle(
+                          AppStrings.tryAgain,
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
@@ -574,9 +577,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
   static Color _pageBg = AppColors.socaPageBg;
   static Color _inputFill = AppColors.socaGrey;
 
-  static String _privacyText =
-      '*SocaLoca only collects the data is necessary to provides its service and\n'
-      'stores it in the anonymised way in our own self-hosted analytics system.';
+  static String _privacyText = AppStrings.socaLocaPrivacyNotice;
 
   /// Rounded grey box with thin black stroke — mirrors rounded_new_gray_5dp_stoke_black_1dp
   BoxDecoration get _inputBoxDecoration => BoxDecoration(
@@ -627,7 +628,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                         children: [
                           // "Login" title
                           Text(
-                            'Login'.tr,
+                            AppStrings.login,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: 'Poppins',
@@ -641,8 +642,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                           SizedBox(height: 30),
                           SocaLocaMobileEmailField(
                             controller: _identityCtrl,
-                            hintText:
-                                'Mobile number */Email */SocaLoca ID *'.tr,
+                            hintText: AppStrings.mobileEmailSocaLocaIdRequired,
                             onChanged: _onIdentityChanged,
                             showCountryCode: _showCountryCode,
                             countryCode: _selectedCountryCode,
@@ -653,7 +653,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                           SizedBox(height: 15),
                           SocaLocaPasswordField(
                             controller: _passCtrl,
-                            hintText: 'Password'.tr,
+                            hintText: AppStrings.passwordHint,
                             textInputAction: TextInputAction.go,
                           ),
 
@@ -663,7 +663,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '* mandatory fields'.tr,
+                                AppStrings.mandatoryFields,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
@@ -676,7 +676,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                                     AppRoutes.forgotPassword,
                                     extra: false),
                                 child: Text(
-                                  'Forgotten Password?'.tr,
+                                  AppStrings.forgottenPassword,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,
@@ -698,8 +698,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                               SizedBox(width: 2),
                               Expanded(
                                 child: Text(
-                                  'Find your new SocaLoca ID in the sliding hamburger menu'
-                                      .tr,
+                                  AppStrings.findSocaLocaIdHint,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
@@ -723,7 +722,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: Text(
-                                'LOG IN'.tr,
+                                AppStrings.logInUpper,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w700,
@@ -744,7 +743,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                                 color: _pageBg,
                                 padding: EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  'or continue with'.tr,
+                                  AppStrings.orContinueWith,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,
@@ -811,7 +810,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                               child: Column(
                                 children: [
                                   Text(
-                                    'Are you a Professional Football Club?'.tr,
+                                    AppStrings.professionalClubQuestion,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
@@ -821,7 +820,7 @@ class _NewLoginScreenState extends ConsumerState<NewLoginScreen> {
                                     ),
                                   ),
                                   Text(
-                                    'Login/Signup here'.tr,
+                                    AppStrings.loginSignupHere,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: 'Poppins',

@@ -102,7 +102,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
         setState(() => _joinedStatus = result['joined'] as String?);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-            request ? 'Joining request sent' : 'Request cancelled',
+            request ? AppStrings.joiningRequestSent : AppStrings.requestCancelled,
             style: TextStyle(fontFamily: 'Poppins'),
           ),
           backgroundColor: AppColors.socaBlack,
@@ -133,7 +133,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       body: bioAsync.when(
         data: (bio) {
           if (bio == null) {
-            return _buildError('Academy not found');
+            return _buildError(AppStrings.academyNotFound);
           }
           if (!_followInitialized) {
             _isFollowing = bio.academyDetails?.following ?? false;
@@ -227,11 +227,11 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
               // Skill Videos
               if (bio.skillVdos.isNotEmpty)
-                _buildVideosSection('Skill Videos', bio.skillVdos),
+                _buildVideosSection(AppStrings.skillVideos, bio.skillVdos),
 
               // Match Videos
               if (bio.matchVdos.isNotEmpty)
-                _buildVideosSection('Match Videos', bio.matchVdos),
+                _buildVideosSection(AppStrings.matchVideos, bio.matchVdos),
 
               // Posts (max 3 + View All)
               if (bio.postList.isNotEmpty) _buildPostsSection(bio),
@@ -374,13 +374,13 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                   children: [
                     if (details?.country != null &&
                         details!.country!.isNotEmpty)
-                      _infoLabelValue('Country', details.country!),
+                      _infoLabelValue(AppStrings.country, details.country!),
                     if (details?.director != null &&
                         details!.director!.isNotEmpty)
-                      _infoLabelValue('Director', details.director!),
+                      _infoLabelValue(AppStrings.director, details.director!),
                     if (details?.formedYear != null &&
                         details!.formedYear!.isNotEmpty)
-                      _infoLabelValue('Founded Year', details.formedYear!),
+                      _infoLabelValue(AppStrings.foundedYear, details.formedYear!),
                   ],
                 ),
               ),
@@ -418,7 +418,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Text(
-          _isFollowing ? 'FOLLOWING' : 'FOLLOW',
+          _isFollowing ? AppStrings.following.toUpperCase() : AppStrings.follow.toUpperCase(),
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -448,7 +448,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           border: Border.all(color: Colors.green),
         ),
         child: Text(
-          'ACADEMY JOINED',
+          AppStrings.academyJoined.toUpperCase(),
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -468,7 +468,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             borderRadius: BorderRadius.circular(5),
           ),
           child: Text(
-            'CANCEL REQUEST',
+            AppStrings.cancelRequest.toUpperCase(),
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
@@ -488,7 +488,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Text(
-          'SEND REQUEST',
+          AppStrings.sendRequest.toUpperCase(),
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -514,7 +514,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'CAT',
+            AppStrings.cat,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Poppins',
@@ -589,7 +589,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                'ABOUT',
+                AppStrings.about.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -634,12 +634,12 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (d.director?.isNotEmpty == true)
-                          _bioCell('Academy Director', d.director!),
+                          _bioCell(AppStrings.academyDirector, d.director!),
                         if (d.director?.isNotEmpty == true &&
                             d.manager?.isNotEmpty == true)
                           SizedBox(height: 12),
                         if (d.manager?.isNotEmpty == true)
-                          _bioCell('Academy Manager', d.manager!),
+                          _bioCell(AppStrings.academyManager, d.manager!),
                       ],
                     ),
                   ),
@@ -652,12 +652,12 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (d.mobile?.isNotEmpty == true)
-                            _bioCell('Academy Contact Number', d.mobile!),
+                            _bioCell(AppStrings.academyContactNumber, d.mobile!),
                           if (d.mobile?.isNotEmpty == true &&
                               d.email?.isNotEmpty == true)
                             SizedBox(height: 12),
                           if (d.email?.isNotEmpty == true)
-                            _bioCell('Academy Contact Email', d.email!),
+                            _bioCell(AppStrings.academyContactEmail, d.email!),
                         ],
                       ),
                     ),
@@ -676,7 +676,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                'BIO',
+                AppStrings.bio.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -788,7 +788,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             left: 10,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: _sectionTitle('Sponsors'),
+              child: _sectionTitle(AppStrings.sponsors),
             ),
           ),
         ],
@@ -873,7 +873,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'TEAMS',
+                AppStrings.teams.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -1016,7 +1016,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _sectionTitle('Posts'),
+                _sectionTitle(AppStrings.posts),
                 if (bio.postList.length > 3)
                   GestureDetector(
                     onTap: () => Navigator.push(
@@ -1075,7 +1075,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'ACADEMY NEWS',
+                AppStrings.academyNews.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,

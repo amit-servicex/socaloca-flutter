@@ -77,7 +77,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
             ),
             SizedBox(height: 16),
             Text(
-              'No groups available'.tr,
+              AppStrings.noGroupsAvailable,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -106,7 +106,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                 SizedBox(width: 12),
                 Expanded(
                   child: SearchableDropdownButton(
-                    hint: 'Select Group'.tr,
+                    hint: AppStrings.selectGroup,
                     value: _selectedGroupId,
                     items: _groups.map((g) => g.groupName ?? 'Group').toList(),
                     values: _groups.map((g) => g.groupId ?? '').toList(),
@@ -146,7 +146,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                   elevation: 0,
                 ),
                 child: Text(
-                  'View Group Standings'.tr,
+                  AppStrings.viewGroupStandings,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -172,7 +172,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
     return groupAsync.when(
       data: (group) {
         if (group == null) {
-          return Center(child: Text('Group not found'.tr));
+          return Center(child: Text(AppStrings.groupNotFound));
         }
 
         final allMatches = [...group.leg1, ...group.leg2];
@@ -189,7 +189,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'No matches in this group'.tr,
+                  AppStrings.noMatchesInThisGroup,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -253,13 +253,13 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
           children: [
             Icon(Icons.error_outline, size: 64, color: Colors.red),
             SizedBox(height: 16),
-            Text('Error loading matches: $error'),
+            Text(AppStrings.errorLoadingMatchesWithError(error)),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(cupGroupMatchesProvider(params));
               },
-              child: Text('Retry'.tr),
+              child: Text(AppStrings.retry),
             ),
           ],
         ),

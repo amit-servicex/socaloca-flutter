@@ -147,7 +147,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
                   if (!state.filters.hasAnyFilter) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Please select at least one filter'.tr),
+                        content: Text(AppStrings.pleaseSelectFilter),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -200,7 +200,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
           Icon(Icons.groups_outlined, size: 80, color: Colors.grey[400]),
           SizedBox(height: 16),
           Text(
-            'No teams found'.tr,
+            AppStrings.noTeamsFound,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -210,7 +210,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
           ),
           SizedBox(height: 8),
           Text(
-            'Try adjusting your filters'.tr,
+            AppStrings.tryAdjustingYourFilters,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -231,7 +231,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
           Icon(Icons.error_outline, size: 80, color: Colors.red[300]),
           SizedBox(height: 16),
           Text(
-            'Failed to load teams'.tr,
+            AppStrings.failedToLoadTeams,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -260,7 +260,7 @@ class _TeamsScreenNewState extends ConsumerState<TeamsScreenNew>
               foregroundColor: AppColors.socaYellow,
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
-            child: Text('Retry'.tr),
+            child: Text(AppStrings.retry),
           ),
         ],
       ),
@@ -290,7 +290,7 @@ Widget _errorTab(String error, VoidCallback onRetry) {
       children: [
         Icon(Icons.error_outline, size: 48, color: Colors.red[300]),
         SizedBox(height: 12),
-        Text('Error: $error',
+        Text(AppStrings.errorMessage(error),
             style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
         SizedBox(height: 16),
         ElevatedButton(
@@ -299,7 +299,8 @@ Widget _errorTab(String error, VoidCallback onRetry) {
             backgroundColor: AppColors.socaBlack,
             foregroundColor: AppColors.socaYellow,
           ),
-          child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
+          child:
+              Text(AppStrings.retry, style: TextStyle(fontFamily: 'Poppins')),
         ),
       ],
     ),
@@ -312,7 +313,7 @@ Widget _teamListTile(
   Widget? trailing,
 }) {
   final teamId = team['teamId'] as String? ?? team['_id'] as String? ?? '';
-  final teamName = team['teamName'] as String? ?? 'Unknown Team';
+  final teamName = team['teamName'] as String? ?? AppStrings.unknownTeam;
   final imageUrl = team['imageUrl'] as String? ?? '';
 
   return Card(
@@ -410,7 +411,7 @@ class _JoinedTeamsTabState extends ConsumerState<_JoinedTeamsTab>
       return AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
-    if (_teams.isEmpty) return _emptyTab('No joined teams.');
+    if (_teams.isEmpty) return _emptyTab(AppStrings.noJoinedTeams);
 
     return RefreshIndicator(
       onRefresh: _load,
@@ -487,7 +488,7 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
         setState(() => _teams.removeAt(index));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Request cancelled.'.tr,
+            content: Text(AppStrings.requestCancelled,
                 style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.green,
           ),
@@ -497,7 +498,8 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
+            content: Text(AppStrings.errorMessage(e),
+                style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -512,7 +514,7 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
       return AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
-    if (_teams.isEmpty) return _emptyTab('No pending requests.');
+    if (_teams.isEmpty) return _emptyTab(AppStrings.noPendingRequests);
 
     return RefreshIndicator(
       onRefresh: _load,
@@ -526,7 +528,7 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
           trailing: TextButton(
             onPressed: () => _cancel(i),
             child: Text(
-              'Cancel'.tr,
+              AppStrings.cancel,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: Colors.red,
@@ -682,7 +684,8 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
+            content: Text(AppStrings.errorMessage(e),
+                style: TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -697,7 +700,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
       return AppLoader();
     }
     if (_error != null) return _errorTab(_error!, _load);
-    if (_teams.isEmpty) return _emptyTab('No team invitations.');
+    if (_teams.isEmpty) return _emptyTab(AppStrings.noTeamInvitations);
 
     return RefreshIndicator(
       onRefresh: _load,
@@ -713,7 +716,8 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
           final team = _teams[i];
           final teamId =
               team['teamId'] as String? ?? team['_id'] as String? ?? '';
-          final teamName = team['teamName'] as String? ?? 'Unknown Team';
+          final teamName =
+              team['teamName'] as String? ?? AppStrings.unknownTeam;
           final imageUrl = team['imageUrl'] as String? ?? '';
 
           return Card(
@@ -762,7 +766,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
                           borderRadius: BorderRadius.circular(6)),
                       elevation: 0,
                     ),
-                    child: Text('Accept'.tr,
+                    child: Text(AppStrings.accept,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -780,7 +784,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
                           borderRadius: BorderRadius.circular(6)),
                       elevation: 0,
                     ),
-                    child: Text('Decline'.tr,
+                    child: Text(AppStrings.decline,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,

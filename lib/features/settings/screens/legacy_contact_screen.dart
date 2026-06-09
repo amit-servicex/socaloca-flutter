@@ -56,16 +56,16 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
     String? emailErr;
 
     if (name.isEmpty) {
-      nameErr = 'Please enter name';
+      nameErr = AppStrings.pleaseEnterName;
     }
 
     if (email.isEmpty) {
-      emailErr = 'Please enter email';
+      emailErr = AppStrings.pleaseEnterEmail;
     } else if (!_isValidEmail(email)) {
-      emailErr = 'Please enter a valid email';
+      emailErr = AppStrings.pleaseEnterValidEmail;
     } else if (myEmail.isNotEmpty &&
         myEmail.toLowerCase() == email.toLowerCase()) {
-      emailErr = 'This is your own email, try another';
+      emailErr = AppStrings.thisIsYourOwnEmail;
     }
 
     setState(() {
@@ -140,9 +140,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
 
                     // ── Description ────────────────────────────────────────
                     Text(
-                      'Your Legacy Contact the person that you may nominate to '
-                      'inherit your account should any unseen circumstances fall '
-                      'upon you and you are unable to access your account.',
+                      AppStrings.legacyContactDescription,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
@@ -152,8 +150,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      ' Nominate your legacy contact by providing their full name '
-                      'and email address.',
+                      AppStrings.legacyContactInstruction,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
@@ -166,7 +163,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                     // ── Name field ─────────────────────────────────────────
                     _FormField(
                       controller: _nameController,
-                      hint: 'Name *',
+                      hint: AppStrings.nameRequired,
                       errorText: _nameError,
                       keyboardType: TextInputType.name,
                       onChanged: (_) {
@@ -180,7 +177,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                     // ── Email field ────────────────────────────────────────
                     _FormField(
                       controller: _emailController,
-                      hint: 'Email *',
+                      hint: AppStrings.emailRequired,
                       errorText: _emailError,
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (_) {
@@ -210,7 +207,7 @@ class _LegacyContactScreenState extends ConsumerState<LegacyContactScreen> {
                                   ),
                                 )
                               : Text(
-                                  state.hasContact ? 'UPDATE' : 'SAVE',
+                                  state.hasContact ? AppStrings.updateUpper : AppStrings.save,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,

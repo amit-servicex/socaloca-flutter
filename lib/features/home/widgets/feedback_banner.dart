@@ -34,7 +34,7 @@ class FeedbackBanner extends StatelessWidget {
             ),
             SizedBox(width: 10),
             Text(
-              'Help us to improve'.tr,
+              AppStrings.helpUsToImprove,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
@@ -52,7 +52,7 @@ class FeedbackBanner extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Text(
-                  'FEEDBACK'.tr,
+                  AppStrings.feedbackUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,

@@ -75,6 +75,7 @@ class _DetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // log("message")
     final myTeamId = detail.myTeam?.teamId ?? '';
     final homeTeamName = detail.myTeam?.teamName ?? '';
     final awayTeamName = detail.opponentTeam?.teamName ?? '';
@@ -158,7 +159,7 @@ class _DetailBody extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
-                              'MANAGE',
+                              AppStrings.manage.toUpperCase(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
@@ -180,7 +181,8 @@ class _DetailBody extends StatelessWidget {
         SliverToBoxAdapter(child: _ScoreHeader(detail: detail)),
 
         // ── GOALS section ─────────────────────────────────────────────────────
-        SliverToBoxAdapter(child: _SectionChip(label: 'GOALS')),
+        SliverToBoxAdapter(
+            child: _SectionChip(label: AppStrings.goals.toUpperCase())),
         SliverToBoxAdapter(
           child: _TwoColumnPanel(
             homeTeamName: homeTeamName,
@@ -194,7 +196,8 @@ class _DetailBody extends StatelessWidget {
 
         // ── CARDS section (only when present) ────────────────────────────────
         if (detail.cards.isNotEmpty) ...[
-          SliverToBoxAdapter(child: _SectionChip(label: 'CARDS')),
+          SliverToBoxAdapter(
+              child: _SectionChip(label: AppStrings.cards.toUpperCase())),
           SliverToBoxAdapter(
             child: _TwoColumnPanel(
               homeTeamName: homeTeamName,
@@ -207,7 +210,9 @@ class _DetailBody extends StatelessWidget {
 
         // ── SUBSTITUTIONS section (only when present) ─────────────────────────
         if (detail.subs.isNotEmpty) ...[
-          SliverToBoxAdapter(child: _SectionChip(label: 'SUBSTITUTIONS')),
+          SliverToBoxAdapter(
+              child:
+                  _SectionChip(label: AppStrings.substitutions.toUpperCase())),
           SliverToBoxAdapter(
             child: _TwoColumnPanel(
               homeTeamName: homeTeamName,
@@ -220,18 +225,22 @@ class _DetailBody extends StatelessWidget {
 
         // ── PENALTY section (only when present) ───────────────────────────────
         if (detail.hasPenalties) ...[
-          SliverToBoxAdapter(child: _SectionChip(label: 'PENALTY SHOOTOUT')),
+          SliverToBoxAdapter(
+              child: _SectionChip(
+                  label: AppStrings.penaltyShootout.toUpperCase())),
           SliverToBoxAdapter(
             child: _TwoColumnPanel(
               homeTeamName: homeTeamName,
               awayTeamName: awayTeamName,
               homeItems: homePens
                   .map((p) => _ColItem(
-                      text: '${p.playerName}${p.missed ? ' (missed)' : ''}'))
+                      text:
+                          '${p.playerName}${p.missed ? ' (${AppStrings.missed})' : ''}'))
                   .toList(),
               awayItems: awayPens
                   .map((p) => _ColItem(
-                      text: '${p.playerName}${p.missed ? ' (missed)' : ''}'))
+                      text:
+                          '${p.playerName}${p.missed ? ' (${AppStrings.missed})' : ''}'))
                   .toList(),
             ),
           ),
@@ -239,7 +248,8 @@ class _DetailBody extends StatelessWidget {
 
         // ── LINE UP section ───────────────────────────────────────────────────
         if (hasLineup) ...[
-          SliverToBoxAdapter(child: _SectionChip(label: 'LINE UP')),
+          SliverToBoxAdapter(
+              child: _SectionChip(label: AppStrings.lineUp.toUpperCase())),
           if (myPlayers.isNotEmpty)
             ..._groupedTeamSlivers(myPlayers, detail.myTeam, detail),
           if (oppPlayers.isNotEmpty)
@@ -681,11 +691,11 @@ class _PlayerAvatar extends StatelessWidget {
 // ─── Position label helper ────────────────────────────────────────────────────
 
 String _posLabel(String pos) {
-  const labels = {
-    'Goalkeeper': 'Goalkeepers',
-    'Defender': 'Defenders',
-    'Midfield': 'Midfielders',
-    'Attack': 'Attackers',
+  final labels = {
+    'Goalkeeper': AppStrings.goalkeepers,
+    'Defender': AppStrings.defenders,
+    'Midfield': AppStrings.midfielders,
+    'Attack': AppStrings.attackers,
   };
   return labels[pos] ?? pos;
 }
@@ -803,7 +813,7 @@ class _ScoreHeader extends StatelessWidget {
                     ),
                     if (detail.hasPenalties)
                       Text(
-                        'Pen: ${detail.myPenalty} - ${detail.opponentPenalty}',
+                        '${AppStrings.penShort}: ${detail.myPenalty} - ${detail.opponentPenalty}',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -954,10 +964,10 @@ class _GoalEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     final ordinal = _ordinal(sequence);
     String label = goal.playerName;
-    if (goal.ownGoal) label += ' (OG)';
-    if (goal.missed) label = '$label (Penalty missed)';
+    if (goal.ownGoal) label += ' (${AppStrings.ogShort})';
+    if (goal.missed) label = '$label (${AppStrings.penaltyMissed})';
     if (goal.assistPlayerName?.isNotEmpty == true && !goal.missed) {
-      label += '\nAssist: ${goal.assistPlayerName}';
+      label += '\n${AppStrings.assist}: ${goal.assistPlayerName}';
     }
 
     return Padding(
@@ -1142,7 +1152,8 @@ class _PenaltyEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ordinal = _ordinal(shot.goalSequence);
-    final label = '$ordinal penalty${shot.missed ? ' (Missed)' : ''}';
+    final label =
+        '$ordinal ${AppStrings.penalty}${shot.missed ? ' (${AppStrings.missed})' : ''}';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),

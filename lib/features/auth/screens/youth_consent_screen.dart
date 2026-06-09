@@ -61,37 +61,37 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
 
     if (parentName.isEmpty) {
       setState(() {
-        _parentNameError = 'Please enter parent/guardian name';
+        _parentNameError = AppStrings.pleaseEnterParentGuardianName;
       });
       isValid = false;
     }
 
     if (parentEmail.isEmpty) {
       setState(() {
-        _parentEmailError = 'Please enter a parent email';
+        _parentEmailError = AppStrings.pleaseEnterParentEmail;
       });
       isValid = false;
     } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(parentEmail)) {
       setState(() {
-        _parentEmailError = 'Please enter a valid parent email';
+        _parentEmailError = AppStrings.pleaseEnterValidParentEmail;
       });
       isValid = false;
     }
 
     if (parentPhone.isEmpty) {
       setState(() {
-        _parentPhoneError = 'Please enter a mobile number';
+        _parentPhoneError = AppStrings.pleaseEnterMobileNumber;
       });
       isValid = false;
     } else if (parentPhone.length < 7) {
       setState(() {
-        _parentPhoneError = 'Please enter a valid mobile number';
+        _parentPhoneError = AppStrings.pleaseEnterValidMobileNumber;
       });
       isValid = false;
     }
 
     if (!_consentChecked) {
-      AppSnackBar.showError(context, 'Please tick the checkbox');
+      AppSnackBar.showError(context, AppStrings.pleaseTickCheckbox);
       isValid = false;
     }
 
@@ -125,7 +125,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppSnackBar.showError(context, 'Error: $e');
+        AppSnackBar.showError(context, AppStrings.errorMessage(e));
       }
     } finally {
       if (mounted) {
@@ -149,8 +149,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
 
                 // Title
                 Text(
-                  'Accounts of users between the ages of 13 and 15 can only be created and managed with a parent or guardian\'s consent.'
-                      .tr,
+                  AppStrings.youthConsentTitle,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -163,7 +162,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                 SizedBox(height: 20),
 
                 Text(
-                  'Please fill out the fields below and tick the checkbox.'.tr,
+                  AppStrings.fillFieldsAndTickCheckbox,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
@@ -175,8 +174,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                 SizedBox(height: 16),
 
                 Text(
-                  'This is confirm that you are the legal guardian and will take full control and accountability of this account upon registering on behalf of a minor.'
-                      .tr,
+                  AppStrings.childGuardianConfirmation,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
@@ -190,7 +188,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
 
                 // Parent/Guardian Name
                 _buildField(
-                  label: 'Parent/Guardians Name*',
+                  label: AppStrings.parentGuardianNameRequired,
                   controller: _parentNameController,
                   error: _parentNameError,
                   inputType: TextInputType.name,
@@ -201,7 +199,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
 
                 // Parent/Guardian Email
                 _buildField(
-                  label: 'Parent/Guardians Email*',
+                  label: AppStrings.parentGuardianEmailRequired,
                   controller: _parentEmailController,
                   error: _parentEmailError,
                   inputType: TextInputType.emailAddress,
@@ -212,7 +210,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
 
                 // Parent/Guardian Phone
                 _buildField(
-                  label: 'Parent/Guardians Phone*',
+                  label: AppStrings.parentGuardianPhoneRequired,
                   controller: _parentPhoneController,
                   error: _parentPhoneError,
                   inputType: TextInputType.phone,
@@ -235,8 +233,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        'I consent that I am registering on behalf of a minor and will take full control of this SocaLoca account.'
-                            .tr,
+                        AppStrings.minorConsentText,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
@@ -262,7 +259,7 @@ class _YouthConsentScreenState extends ConsumerState<YouthConsentScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          "PROCEED",
+                          AppStrings.proceedUpper,
                           style: TextStyle(
                               fontSize: 20,
                               color: AppColors.socaYellow,

@@ -58,19 +58,19 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
     final pin = _getEnteredPin();
 
     if (pin.length != 4) {
-      _showMessage('Please enter all 4 digits');
+      _showMessage(AppStrings.pleaseEnterAllFourDigits);
       return false;
     }
 
     // Check for repeating digits (1111, 2222, etc.)
     if (RegExp(r'^(\d)\1{3}$').hasMatch(pin)) {
-      _showMessage('PIN cannot be all same digits');
+      _showMessage(AppStrings.pinCannotBeSameDigits);
       return false;
     }
 
     // Check for sequential numbers
     if (pin == '1234' || pin == '4321' || pin == '0123' || pin == '3210') {
-      _showMessage('PIN cannot be sequential numbers');
+      _showMessage(AppStrings.pinCannotBeSequential);
       return false;
     }
 
@@ -115,7 +115,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
               // Title
               Center(
                 child: Text(
-                  'Parental Controls'.tr,
+                  AppStrings.parentalControls,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -131,7 +131,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
               // Subtitle
               Center(
                 child: Text(
-                  'Set Your PIN'.tr,
+                  AppStrings.setYourPin,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
@@ -214,7 +214,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                   child: TextButton(
                     onPressed: () {},
                     child: Text(
-                      'Forget pin?'.tr,
+                      AppStrings.forgetPin,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -237,7 +237,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      'SAVE AND CONTINUE'.tr,
+                      AppStrings.saveAndContinueUpper,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -253,8 +253,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
 
               // Info Text
               Text(
-                '*Please note you can modify the pin from the "Parentals Control" in the hamburger menu, located at the top right of SOCALOCA app.'
-                    .tr,
+                AppStrings.parentalPinInfo,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,

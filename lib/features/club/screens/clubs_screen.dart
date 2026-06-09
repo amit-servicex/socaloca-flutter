@@ -254,11 +254,10 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    const Padding(
+                    Padding(
                       padding: const EdgeInsets.all(16),
-                      child: const Text(
-                        "These are the Professional Football Clubs that have partnered with SOCALOCA to provide content and services to our users.\n\n"
-                        "If you are a Professional Football Club, you can request to become a SOCALOCA partner and gain access to a wide range of features, including an individualized hub with your logo and branding, in-app uploads of game highlights, training sessions, and interviews, the ability to advertise upcoming trials through your club’s dedicated hub, showcase your club teams and top players, engage fans with news, announcements, and recent results, display sponsors, and much more.",
+                      child: Text(
+                        AppStrings.clubsPartnerIntro,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -297,7 +296,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                             size: 48, color: AppColors.error),
                         SizedBox(height: 16),
                         Text(
-                          'Error loading clubs'.tr,
+                          AppStrings.errorLoadingClubs,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -319,7 +318,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                         ElevatedButton(
                           onPressed: () =>
                               ref.read(clubsProvider.notifier).load(),
-                          child: Text('Retry'.tr),
+                          child: Text(AppStrings.retry),
                         ),
                       ],
                     ),
@@ -329,7 +328,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                 SliverFillRemaining(
                   child: Center(
                     child: Text(
-                      'No clubs found'.tr,
+                      AppStrings.noClubsFound,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,

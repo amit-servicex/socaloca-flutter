@@ -226,8 +226,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
               children: [
                 // Description Text
                 Text(
-                  'SocaLoca is the home for football academies of any scale, age category, playing level, or location. SocaLoca provides an innovative and intuitive platform designed around the modern needs of a football academy.'
-                      .tr,
+                  AppStrings.academiesDescription,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -239,7 +238,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
 
                 // Country Dropdown
                 SearchableDropdownButton(
-                  hint: 'Country'.tr,
+                  hint: AppStrings.country,
                   value: _selectedCountry,
                   items: _countries,
                   onChanged: _onCountryChanged,
@@ -252,7 +251,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
 
                 // Category Dropdown
                 SearchableDropdownButton(
-                  hint: 'Category'.tr,
+                  hint: AppStrings.category,
                   value: _selectedCategory,
                   items: _categories,
                   onChanged: _onCategoryChanged,
@@ -274,7 +273,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                     ),
                     child: Center(
                       child: Text(
-                        'GO'.tr,
+                        AppStrings.goUpper,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -326,7 +325,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                                 backgroundColor: AppColors.socaBlack,
                                 foregroundColor: AppColors.socaYellow,
                               ),
-                              child: Text('Retry'.tr),
+                              child: Text(AppStrings.retry),
                             ),
                           ],
                         ),
@@ -334,7 +333,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                     : state.academies.isEmpty
                         ? Center(
                             child: Text(
-                              'No academies found.'.tr,
+                              AppStrings.noAcademiesFound,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,

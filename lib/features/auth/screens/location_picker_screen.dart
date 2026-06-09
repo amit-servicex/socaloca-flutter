@@ -259,7 +259,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                                   AppLoader(size: 24, centered: false),
                                   SizedBox(width: 8),
                                   Text(
-                                    'Fetching location...'.tr,
+                                    AppStrings.fetchingLocation,
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 13,
@@ -308,7 +308,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      'SELECT LOCATION'.tr,
+                      AppStrings.selectLocationUpper,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,

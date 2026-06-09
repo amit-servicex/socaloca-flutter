@@ -53,7 +53,7 @@ class TeamPlayersScreen extends ConsumerWidget {
 
     if (state.allPlayers.isEmpty) {
       return Center(
-        child: Text('No players found'.tr),
+        child: Text(AppStrings.noPlayersFound),
       );
     }
 
@@ -74,7 +74,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Players'.tr,
+                      AppStrings.players,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 20,
@@ -313,7 +313,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                           ),
                         ),
                       Text(
-                        'India'.tr, // TODO: Get from player data if available
+                        'India', // TODO: Get from player data if available
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
@@ -424,7 +424,7 @@ class TeamPlayersScreen extends ConsumerWidget {
           ),
           SizedBox(height: 16),
           Text(
-            'Failed to load players'.tr,
+            AppStrings.failedToLoadPlayers,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -455,7 +455,7 @@ class TeamPlayersScreen extends ConsumerWidget {
               foregroundColor: AppColors.socaYellow,
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
-            child: Text('Retry'.tr),
+            child: Text(AppStrings.retry),
           ),
         ],
       ),

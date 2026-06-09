@@ -65,7 +65,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          'Cannot Host Match'.tr,
+          AppStrings.cannotHostMatch,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -73,8 +73,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
           ),
         ),
         content: Text(
-          'Only Players, Coaches, Admins, and Referees can host pickup matches.'
-              .tr,
+          AppStrings.hostMatchRestriction,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
@@ -84,7 +83,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
-              'OK'.tr,
+              AppStrings.ok,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
@@ -124,8 +123,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
           Padding(
             padding: EdgeInsets.fromLTRB(16, 20, 16, 16),
             child: Text(
-              "Can't get 2 full teams to make a match? Fret not. Pick-Up matches allows you to organise an informal kick-about at a specified place and time. Shout out to all nearby that you are organising a pick-up match and get your game on!"
-                  .tr,
+              AppStrings.pickupMatchDescription,
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
@@ -150,7 +148,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                 ),
                 child: Center(
                   child: Text(
-                    'HOST MATCH'.tr,
+                    AppStrings.hostMatchUpper,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
@@ -167,7 +165,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
 
           // Upcoming Matches Title
           Text(
-            'Upcoming Matches'.tr,
+            AppStrings.upcomingMatches,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
@@ -197,7 +195,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          'No upcoming pickup matches'.tr,
+                          AppStrings.noUpcomingPickupMatches,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -247,7 +245,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Error loading matches'.tr,
+                      AppStrings.errorLoadingMatches,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
@@ -266,7 +264,7 @@ class _PickupMatchScreenState extends ConsumerState<PickupMatchScreen> {
                         backgroundColor: AppColors.socaYellow,
                       ),
                       child: Text(
-                        'Retry'.tr,
+                        AppStrings.retry,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,

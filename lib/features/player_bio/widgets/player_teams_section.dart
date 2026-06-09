@@ -124,41 +124,45 @@ class PlayerTeamsSection extends StatelessWidget {
             Positioned(
               top: -30,
               left: 10,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.socaBlack,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      'TEAMS'.tr,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaYellow,
+              child: Container(
+                width: MediaQuery.of(context).size.width * .855,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.socaBlack,
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                    ),
-                  ),
-                  if (teams.length > 3)
-                    GestureDetector(
-                      onTap: () {
-                        // TODO: Navigate to all teams
-                      },
                       child: Text(
-                        'view all'.tr,
+                        'TEAMS'.tr,
                         style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.socaBlack,
+                          color: AppColors.socaYellow,
                         ),
                       ),
                     ),
-                ],
+                    // if (teams.length > 3)
+                    //   GestureDetector(
+                    //     onTap: () {
+                    //       // TODO: Navigate to all teams
+                    //     },
+                    //     child: Text(
+                    //       AppStrings.viewAll,
+                    //       style: TextStyle(
+                    //         fontFamily: 'Poppins',
+                    //         fontSize: 12,
+                    //         fontWeight: FontWeight.w700,
+                    //         color: AppColors.socaBlack,
+                    //       ),
+                    //     ),
+                    //   ),
+                  ],
+                ),
               ),
             ),
           ],

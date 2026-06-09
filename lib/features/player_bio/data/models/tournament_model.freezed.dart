@@ -20,12 +20,14 @@ TournamentModel _$TournamentModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TournamentModel {
-  @JsonKey(name: 'tmntId')
+  @JsonKey(name: 'tournamentId')
   String? get tmntId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'tmntName')
+  @JsonKey(name: 'name')
   String? get tmntName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'imageUrl')
+  @JsonKey(name: 'logo')
   String? get imageUrl => throw _privateConstructorUsedError;
+  String? get status => throw _privateConstructorUsedError;
+  String? get tmntType => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,9 +42,11 @@ abstract class $TournamentModelCopyWith<$Res> {
       _$TournamentModelCopyWithImpl<$Res, TournamentModel>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'tmntId') String? tmntId,
-      @JsonKey(name: 'tmntName') String? tmntName,
-      @JsonKey(name: 'imageUrl') String? imageUrl});
+      {@JsonKey(name: 'tournamentId') String? tmntId,
+      @JsonKey(name: 'name') String? tmntName,
+      @JsonKey(name: 'logo') String? imageUrl,
+      String? status,
+      String? tmntType});
 }
 
 /// @nodoc
@@ -61,6 +65,8 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
     Object? tmntId = freezed,
     Object? tmntName = freezed,
     Object? imageUrl = freezed,
+    Object? status = freezed,
+    Object? tmntType = freezed,
   }) {
     return _then(_value.copyWith(
       tmntId: freezed == tmntId
@@ -75,6 +81,14 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tmntType: freezed == tmntType
+          ? _value.tmntType
+          : tmntType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -88,9 +102,11 @@ abstract class _$$TournamentModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'tmntId') String? tmntId,
-      @JsonKey(name: 'tmntName') String? tmntName,
-      @JsonKey(name: 'imageUrl') String? imageUrl});
+      {@JsonKey(name: 'tournamentId') String? tmntId,
+      @JsonKey(name: 'name') String? tmntName,
+      @JsonKey(name: 'logo') String? imageUrl,
+      String? status,
+      String? tmntType});
 }
 
 /// @nodoc
@@ -107,6 +123,8 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
     Object? tmntId = freezed,
     Object? tmntName = freezed,
     Object? imageUrl = freezed,
+    Object? status = freezed,
+    Object? tmntType = freezed,
   }) {
     return _then(_$TournamentModelImpl(
       tmntId: freezed == tmntId
@@ -121,6 +139,14 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tmntType: freezed == tmntType
+          ? _value.tmntType
+          : tmntType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -129,26 +155,32 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TournamentModelImpl implements _TournamentModel {
   const _$TournamentModelImpl(
-      {@JsonKey(name: 'tmntId') this.tmntId,
-      @JsonKey(name: 'tmntName') this.tmntName,
-      @JsonKey(name: 'imageUrl') this.imageUrl});
+      {@JsonKey(name: 'tournamentId') this.tmntId,
+      @JsonKey(name: 'name') this.tmntName,
+      @JsonKey(name: 'logo') this.imageUrl,
+      this.status,
+      this.tmntType});
 
   factory _$TournamentModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$TournamentModelImplFromJson(json);
 
   @override
-  @JsonKey(name: 'tmntId')
+  @JsonKey(name: 'tournamentId')
   final String? tmntId;
   @override
-  @JsonKey(name: 'tmntName')
+  @JsonKey(name: 'name')
   final String? tmntName;
   @override
-  @JsonKey(name: 'imageUrl')
+  @JsonKey(name: 'logo')
   final String? imageUrl;
+  @override
+  final String? status;
+  @override
+  final String? tmntType;
 
   @override
   String toString() {
-    return 'TournamentModel(tmntId: $tmntId, tmntName: $tmntName, imageUrl: $imageUrl)';
+    return 'TournamentModel(tmntId: $tmntId, tmntName: $tmntName, imageUrl: $imageUrl, status: $status, tmntType: $tmntType)';
   }
 
   @override
@@ -160,12 +192,16 @@ class _$TournamentModelImpl implements _TournamentModel {
             (identical(other.tmntName, tmntName) ||
                 other.tmntName == tmntName) &&
             (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl));
+                other.imageUrl == imageUrl) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.tmntType, tmntType) ||
+                other.tmntType == tmntType));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, tmntId, tmntName, imageUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, tmntId, tmntName, imageUrl, status, tmntType);
 
   @JsonKey(ignore: true)
   @override
@@ -184,23 +220,28 @@ class _$TournamentModelImpl implements _TournamentModel {
 
 abstract class _TournamentModel implements TournamentModel {
   const factory _TournamentModel(
-          {@JsonKey(name: 'tmntId') final String? tmntId,
-          @JsonKey(name: 'tmntName') final String? tmntName,
-          @JsonKey(name: 'imageUrl') final String? imageUrl}) =
-      _$TournamentModelImpl;
+      {@JsonKey(name: 'tournamentId') final String? tmntId,
+      @JsonKey(name: 'name') final String? tmntName,
+      @JsonKey(name: 'logo') final String? imageUrl,
+      final String? status,
+      final String? tmntType}) = _$TournamentModelImpl;
 
   factory _TournamentModel.fromJson(Map<String, dynamic> json) =
       _$TournamentModelImpl.fromJson;
 
   @override
-  @JsonKey(name: 'tmntId')
+  @JsonKey(name: 'tournamentId')
   String? get tmntId;
   @override
-  @JsonKey(name: 'tmntName')
+  @JsonKey(name: 'name')
   String? get tmntName;
   @override
-  @JsonKey(name: 'imageUrl')
+  @JsonKey(name: 'logo')
   String? get imageUrl;
+  @override
+  String? get status;
+  @override
+  String? get tmntType;
   @override
   @JsonKey(ignore: true)
   _$$TournamentModelImplCopyWith<_$TournamentModelImpl> get copyWith =>

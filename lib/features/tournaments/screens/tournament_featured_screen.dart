@@ -124,7 +124,7 @@ class _TournamentFeaturedScreenState
       body: _loading
           ? AppLoader()
           : _tournament == null
-              ? Center(child: Text('Tournament not found'.tr))
+              ? Center(child: Text(AppStrings.tournamentNotFound))
               : Column(
                   children: [
                     // Banner slider
@@ -162,7 +162,7 @@ class _TournamentFeaturedScreenState
                             ),
                           ),
                           child: Text(
-                            'View Tournament Details '.tr,
+                            AppStrings.viewTournamentDetails,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,

@@ -31,7 +31,8 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(clubAppBarTitleProvider.notifier).state = 'Gallery';
+      ref.read(clubAppBarTitleProvider.notifier).state =
+          AppStrings.galleryTitle;
     });
     _load();
     _scroll.addListener(() {
@@ -75,7 +76,7 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
     }
     if (_posts.isEmpty) {
       return Center(
-          child: Text('No Posts'.tr,
+          child: Text(AppStrings.noPosts,
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,

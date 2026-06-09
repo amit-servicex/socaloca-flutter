@@ -35,14 +35,26 @@ String? _titleForPath(String path) {
   if (path == AppRoutes.skillDetail ||
       path == AppRoutes.skillDetailViewAll ||
       path.startsWith('${AppRoutes.skillDetail}/')) {
-    return 'Skill Detail';
+    return AppStrings.skillDetail;
   }
-  if (path == AppRoutes.myActivities) { return AppStrings.downloadActivities; }
-  if (path == AppRoutes.createPost) { return AppStrings.createPost; }
-  if (path == AppRoutes.editProfile) { return AppStrings.editProfile; }
-  if (path == AppRoutes.myPosts) { return AppStrings.myPosts; }
-  if (path == AppRoutes.gallery) { return AppStrings.gallery; }
-  if (path == AppRoutes.myBio) { return AppStrings.myBio; }
+  if (path == AppRoutes.myActivities) {
+    return AppStrings.downloadActivities;
+  }
+  if (path == AppRoutes.createPost) {
+    return AppStrings.createPost;
+  }
+  if (path == AppRoutes.editProfile) {
+    return AppStrings.editProfile;
+  }
+  if (path == AppRoutes.myPosts) {
+    return AppStrings.myPosts;
+  }
+  if (path == AppRoutes.gallery) {
+    return AppStrings.gallery;
+  }
+  if (path == AppRoutes.myBio) {
+    return AppStrings.myBio;
+  }
   if (path == AppRoutes.teams || path.startsWith('${AppRoutes.teams}/')) {
     return AppStrings.teams;
   }
@@ -58,15 +70,15 @@ String? _titleForPath(String path) {
   if (path == AppRoutes.search) return AppStrings.search;
   if (path == AppRoutes.profile) return AppStrings.myBio;
   // Dynamic segments
-  if (path.contains('/people')) return 'People';
-  if (path.contains('/likes')) return 'Likes';
+  if (path.contains('/people')) return AppStrings.people;
+  if (path.contains('/likes')) return AppStrings.likes;
   if (path.startsWith('/players/')) return AppStrings.players;
   if (path.startsWith('/members/')) return AppStrings.myBio;
   if (path.startsWith('/teams/')) return AppStrings.teams;
   if (path.startsWith('/clubs/')) return AppStrings.clubs;
   if (path.startsWith('/tournaments/')) return AppStrings.tournaments;
-  if (path.startsWith('/cups/')) return 'Cup';
-  if (path.startsWith('/fa/')) return 'FA';
+  if (path.startsWith('/cups/')) return AppStrings.cup;
+  if (path.startsWith('/fa/')) return AppStrings.fa;
   if (path.startsWith('/confed/')) return AppStrings.confederations;
   if (path.startsWith('/sponsor/')) return AppStrings.sponsors;
   if (path.startsWith('/charity/')) return AppStrings.charitiesAndNgos;

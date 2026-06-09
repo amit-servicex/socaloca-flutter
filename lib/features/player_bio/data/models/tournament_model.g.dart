@@ -9,15 +9,19 @@ part of 'tournament_model.dart';
 _$TournamentModelImpl _$$TournamentModelImplFromJson(
         Map<String, dynamic> json) =>
     _$TournamentModelImpl(
-      tmntId: json['tmntId'] as String?,
-      tmntName: json['tmntName'] as String?,
-      imageUrl: json['imageUrl'] as String?,
+      tmntId: json['tournamentId'] as String?,
+      tmntName: json['name'] as String?,
+      imageUrl: json['logo'] as String?,
+      status: json['status'] as String?,
+      tmntType: json['tmntType'] as String?,
     );
 
 Map<String, dynamic> _$$TournamentModelImplToJson(
         _$TournamentModelImpl instance) =>
     <String, dynamic>{
-      'tmntId': instance.tmntId,
-      'tmntName': instance.tmntName,
-      'imageUrl': instance.imageUrl,
+      'tournamentId': instance.tmntId,
+      'name': instance.tmntName,
+      'logo': instance.imageUrl,
+      'status': instance.status,
+      'tmntType': instance.tmntType,
     };

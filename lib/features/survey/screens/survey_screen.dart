@@ -32,13 +32,13 @@ class _SurveyScreenState extends ConsumerState<SurveyScreen> {
   bool _isSubmitting = false;
 
   // Matches Android feature keys sent to the API
-  static const _features = [
-    _Feature('Feed', 'FEED'),
-    _Feature('My Bio', 'MY BIO'),
-    _Feature('Pick-Up Match', 'PICK-UP MATCH'),
-    _Feature('Endorsements', 'ENDORSEMENTS'),
-    _Feature('Tournaments', 'TOURNAMENTS'),
-    _Feature('Academies', 'ACADEMIES'),
+  static final _features = [
+    _Feature(AppStrings.feed, 'FEED'),
+    _Feature(AppStrings.myBio, 'MY BIO'),
+    _Feature(AppStrings.pickUpMatch, 'PICK-UP MATCH'),
+    _Feature(AppStrings.endorsements, 'ENDORSEMENTS'),
+    _Feature(AppStrings.tournaments, 'TOURNAMENTS'),
+    _Feature(AppStrings.academies, 'ACADEMIES'),
   ];
 
   @override
@@ -113,7 +113,7 @@ class _SurveyScreenState extends ConsumerState<SurveyScreen> {
                 onSkip: _skip,
                 onNext: () {
                   if (_rating == null) {
-                    _showToast('Please select a rating');
+                    _showToast(AppStrings.pleaseSelectRating);
                     return;
                   }
                   _goNext();
@@ -142,7 +142,8 @@ class _SurveyScreenState extends ConsumerState<SurveyScreen> {
                 controller: _feedbackCtrl,
                 isSubmitting: _isSubmitting,
                 onSkip: () => _submitSurvey(feedback: null),
-                onNext: () => _submitSurvey(feedback: _feedbackCtrl.text.trim()),
+                onNext: () =>
+                    _submitSurvey(feedback: _feedbackCtrl.text.trim()),
                 onClose: _close,
               ),
               _ThankYouPage(onDone: _close),
@@ -201,7 +202,8 @@ class _SurveyHeader extends StatelessWidget {
                 onTap: onClose,
                 child: const Padding(
                   padding: EdgeInsets.all(4),
-                  child: Icon(Icons.close, size: 30, color: AppColors.socaBlack),
+                  child:
+                      Icon(Icons.close, size: 30, color: AppColors.socaBlack),
                 ),
               ),
             ],
@@ -232,13 +234,13 @@ class _SurveyBottomButtons extends StatelessWidget {
   const _SurveyBottomButtons({
     required this.onSkip,
     required this.onNext,
-    this.nextLabel = 'NEXT',
+    this.nextLabel,
     this.isLoading = false,
   });
 
   final VoidCallback onSkip;
   final VoidCallback onNext;
-  final String nextLabel;
+  final String? nextLabel;
   final bool isLoading;
 
   @override
@@ -260,9 +262,9 @@ class _SurveyBottomButtons extends StatelessWidget {
                 border: Border.all(color: AppColors.socaBlack, width: 1),
               ),
               alignment: Alignment.center,
-              child: const Text(
-                'SKIP',
-                style: TextStyle(
+              child: Text(
+                AppStrings.skip.toUpperCase(),
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -293,7 +295,7 @@ class _SurveyBottomButtons extends StatelessWidget {
                       ),
                     )
                   : Text(
-                      nextLabel,
+                      nextLabel ?? AppStrings.nextUpper,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -333,7 +335,7 @@ class _RatingPage extends StatelessWidget {
     return Column(
       children: [
         _SurveyHeader(
-          title: 'Your feedback matters!',
+          title: AppStrings.yourFeedbackMatters,
           progress: progress,
           onClose: onClose,
         ),
@@ -459,7 +461,7 @@ class _FeaturesPage extends StatelessWidget {
     return Column(
       children: [
         _SurveyHeader(
-          title: 'Your feedback matters!',
+          title: AppStrings.yourFeedbackMatters,
           progress: progress,
           onClose: onClose,
         ),
@@ -469,9 +471,9 @@ class _FeaturesPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'What are your favourite features?',
-                  style: TextStyle(
+                Text(
+                  AppStrings.whatAreYourFavouriteFeatures,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
@@ -551,7 +553,7 @@ class _FeedbackPage extends StatelessWidget {
     return Column(
       children: [
         _SurveyHeader(
-          title: 'Your feedback matters!',
+          title: AppStrings.yourFeedbackMatters,
           progress: progress,
           onClose: onClose,
         ),
@@ -564,10 +566,10 @@ class _FeedbackPage extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Do you want to offer us some feedback?',
-                        style: TextStyle(
+                        AppStrings.doYouWantToOfferFeedback,
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -620,7 +622,7 @@ class _FeedbackPage extends StatelessWidget {
         _SurveyBottomButtons(
           onSkip: onSkip,
           onNext: onNext,
-          nextLabel: 'SUBMIT',
+          nextLabel: AppStrings.submitUpper,
           isLoading: isSubmitting,
         ),
       ],
@@ -644,10 +646,10 @@ class _ThankYouPage extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Thank you!',
-                  style: TextStyle(
+                  AppStrings.thankYouTitle,
+                  style: const TextStyle(
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
                     fontSize: 22,
@@ -659,7 +661,8 @@ class _ThankYouPage extends StatelessWidget {
                 onTap: onDone,
                 child: const Padding(
                   padding: EdgeInsets.all(4),
-                  child: Icon(Icons.close, size: 30, color: AppColors.socaBlack),
+                  child:
+                      Icon(Icons.close, size: 30, color: AppColors.socaBlack),
                 ),
               ),
             ],
@@ -674,8 +677,7 @@ class _ThankYouPage extends StatelessWidget {
               value: 1.0,
               minHeight: 10,
               backgroundColor: AppColors.socaGrey,
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(AppColors.socaBlack),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.socaBlack),
             ),
           ),
         ),
@@ -691,9 +693,9 @@ class _ThankYouPage extends StatelessWidget {
                   color: AppColors.socaBlack,
                 ),
                 const SizedBox(height: 40),
-                const Text(
-                  'We highly value your feedback!',
-                  style: TextStyle(
+                Text(
+                  AppStrings.weHighlyValueFeedback,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
@@ -701,9 +703,9 @@ class _ThankYouPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 7),
-                const Text(
-                  'Thank you for giving your feedback, we appreciate your support in helping us to improve the app.',
-                  style: TextStyle(
+                Text(
+                  AppStrings.thankYouFeedbackSupport,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
@@ -727,9 +729,9 @@ class _ThankYouPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               alignment: Alignment.center,
-              child: const Text(
-                'DONE',
-                style: TextStyle(
+              child: Text(
+                AppStrings.doneUpper,
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 14,

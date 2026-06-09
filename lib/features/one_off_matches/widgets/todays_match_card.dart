@@ -56,7 +56,7 @@ class TodaysMatchCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
-                  'LIVE'.tr,
+                  AppStrings.liveUpper,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
@@ -78,7 +78,7 @@ class TodaysMatchCard extends StatelessWidget {
                       _TeamLogo(logoPath: match.homeTeamLogo, size: 80),
                       SizedBox(height: 12),
                       Text(
-                        match.homeTeamName ?? 'Team A',
+                        match.homeTeamName ?? AppStrings.teamALabel,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -95,7 +95,7 @@ class TodaysMatchCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    'VS'.tr,
+                    AppStrings.vs,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
@@ -112,7 +112,7 @@ class TodaysMatchCard extends StatelessWidget {
                       _TeamLogo(logoPath: match.awayTeamLogo, size: 80),
                       SizedBox(height: 12),
                       Text(
-                        match.awayTeamName ?? 'Team B',
+                        match.awayTeamName ?? AppStrings.teamBLabel,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',

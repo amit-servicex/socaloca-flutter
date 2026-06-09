@@ -75,8 +75,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   Future<void> _verify() async {
     if (_enteredOtp.length < _otpLength) {
-      AppSnackBar.showError(
-          context, 'Please enter the full $_otpLength-digit code');
+      AppSnackBar.showError(context, AppStrings.fullDigitCode(_otpLength));
       return;
     }
 
@@ -93,7 +92,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
     switch (result) {
       case AuthSuccess():
-        AppSnackBar.showSuccess(context, 'Verified successfully!');
+        AppSnackBar.showSuccess(context, AppStrings.verifiedSuccessfully);
         // After OTP verification, ALWAYS navigate to create profile
         // This matches Android behavior: OtpFragment -> ThankYouCreateProfile
         context.go(AppRoutes.createProfile);
@@ -137,7 +136,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Verify Code'.tr),
+        title: Text(AppStrings.verifyCode),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: AppColors.textPrimary,
@@ -155,7 +154,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
             ),
             SizedBox(height: 24),
             Text(
-              'Enter verification code'.tr,
+              AppStrings.enterVerificationCode,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins',
@@ -166,7 +165,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
             ),
             SizedBox(height: 8),
             Text(
-              'We sent a 6-digit code to your ${widget.type}.',
+              AppStrings.verificationCodeSentTo(widget.type),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppColors.textSecondary,
@@ -225,7 +224,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
             // ── Verify button ──────────────────────────────────────
             PrimaryButton(
-              label: 'Verify',
+              label: AppStrings.verify,
               onPressed: _verify,
               isLoading: _isLoading,
             ),
@@ -237,7 +236,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                   ? TextButton(
                       onPressed: _startResendTimer,
                       child: Text(
-                        'Resend Code'.tr,
+                        AppStrings.resendCode,
                         style: TextStyle(
                           color: AppColors.primary,
                           fontFamily: 'Poppins',
@@ -246,7 +245,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                       ),
                     )
                   : Text(
-                      'Resend code in ${_resendSeconds}s',
+                      AppStrings.resendCodeIn(_resendSeconds),
                       style: TextStyle(
                         color: AppColors.textSecondary,
                         fontFamily: 'Poppins',

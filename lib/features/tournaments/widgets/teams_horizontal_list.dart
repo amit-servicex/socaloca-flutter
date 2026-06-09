@@ -57,7 +57,7 @@ class TeamsHorizontalList extends StatelessWidget {
                   TextButton(
                     onPressed: onViewAllTap,
                     child: Text(
-                      'View All'.tr,
+                      AppStrings.viewAll,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,

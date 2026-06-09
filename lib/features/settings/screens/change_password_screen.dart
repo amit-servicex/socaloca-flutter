@@ -43,12 +43,12 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     final newPwd = _newCtrl.text.trim();
     final confirm = _confirmCtrl.text.trim();
 
-    if (current.isEmpty) return 'Please enter your current password';
-    if (newPwd.isEmpty) return 'Please enter a new password';
-    if (newPwd.length < 6) return 'New password must be at least 6 characters';
-    if (newPwd == current) return 'New password cannot be the same as current';
-    if (confirm.isEmpty) return 'Please confirm your new password';
-    if (confirm != newPwd) return 'Passwords do not match';
+    if (current.isEmpty) return AppStrings.pleaseEnterCurrentPassword;
+    if (newPwd.isEmpty) return AppStrings.pleaseEnterNewPassword;
+    if (newPwd.length < 6) return AppStrings.newPasswordMinLength;
+    if (newPwd == current) return AppStrings.newPasswordSameAsCurrent;
+    if (confirm.isEmpty) return AppStrings.pleaseConfirmNewPassword;
+    if (confirm != newPwd) return AppStrings.passwordsDoNotMatch;
     return null;
   }
 
@@ -61,8 +61,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 
     final userId = StorageService.userId;
     if (userId == null || userId.isEmpty) {
-      AppSnackBar.showError(
-          context, 'User session not found. Please log in again.');
+      AppSnackBar.showError(context, AppStrings.userSessionNotFound);
       return;
     }
 
@@ -85,7 +84,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       final message = resp['message'] as String? ?? '';
 
       if (status == 1) {
-        AppSnackBar.showSuccess(context, 'Password changed successfully');
+        AppSnackBar.showSuccess(context, AppStrings.passwordChangedSuccessfully);
         _currentCtrl.clear();
         _newCtrl.clear();
         _confirmCtrl.clear();
@@ -94,13 +93,12 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
           context,
           message.isNotEmpty
               ? message
-              : 'Failed to change password. Please try again.',
+              : AppStrings.failedToChangePassword,
         );
       }
     } catch (e) {
       if (mounted) {
-        AppSnackBar.showError(
-            context, 'Something went wrong. Please try again.');
+        AppSnackBar.showError(context, AppStrings.somethingWentWrongTryAgain);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -154,21 +152,21 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             SizedBox(height: 32),
             _PasswordField(
               controller: _currentCtrl,
-              hint: 'Current Password *',
+              hint: AppStrings.currentPasswordHint,
               showPassword: _showCurrent,
               onToggle: () => setState(() => _showCurrent = !_showCurrent),
             ),
             SizedBox(height: 16),
             _PasswordField(
               controller: _newCtrl,
-              hint: 'New Password *',
+              hint: AppStrings.newPasswordHint,
               showPassword: _showNew,
               onToggle: () => setState(() => _showNew = !_showNew),
             ),
             SizedBox(height: 16),
             _PasswordField(
               controller: _confirmCtrl,
-              hint: 'Confirm Password *',
+              hint: AppStrings.confirmPasswordHint,
               showPassword: _showConfirm,
               onToggle: () => setState(() => _showConfirm = !_showConfirm),
               textInputAction: TextInputAction.done,
@@ -289,7 +287,7 @@ class _PasswordField extends StatelessWidget {
           color: AppColors.socaBlack,
         ),
         decoration: InputDecoration(
-          hintText: hint.tr,
+          hintText: hint,
           hintStyle: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 17,

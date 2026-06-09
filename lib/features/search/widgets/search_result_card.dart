@@ -23,8 +23,8 @@ class SearchResultCard extends StatelessWidget {
     final appearanceCount =
         isReferee ? user.refereeMatchCount : user.appearance;
     final appearanceLabel = isReferee
-        ? '${appearanceCount} ${appearanceCount == 1 ? 'Match' : 'Matches'}'
-        : '${appearanceCount} ${appearanceCount == 1 ? 'Appearance' : 'Appearances'}';
+        ? '$appearanceCount ${appearanceCount == 1 ? AppStrings.match : AppStrings.matches}'
+        : '$appearanceCount ${appearanceCount == 1 ? AppStrings.appearance : AppStrings.appearances}';
 
     return InkWell(
       onTap: () => _handleTap(context),
@@ -73,7 +73,7 @@ class SearchResultCard extends StatelessWidget {
                           if (user.displayNationality.isNotEmpty) ...[
                             const SizedBox(height: 2),
                             Text(
-                              'Nationality: ${user.displayNationality}',
+                              '${AppStrings.nationality}: ${user.displayNationality}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -97,7 +97,7 @@ class SearchResultCard extends StatelessWidget {
                           if (!isReferee) ...[
                             const SizedBox(height: 7),
                             Text(
-                              '${user.postCount < 0 ? 0 : user.postCount} ${(user.postCount == 1) ? 'Post' : 'Posts'}',
+                              '${user.postCount < 0 ? 0 : user.postCount} ${(user.postCount == 1) ? AppStrings.post : AppStrings.posts}',
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
@@ -172,7 +172,7 @@ class SearchResultCard extends StatelessWidget {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Profile details not available yet'.tr)),
+      SnackBar(content: Text(AppStrings.profileDetailsNotAvailable)),
     );
   }
 }
@@ -188,10 +188,10 @@ class _StatsBox extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _Metric(value: user.endorsedBy, label: 'ENDORSED BY'.tr),
+        _Metric(value: user.endorsedBy, label: AppStrings.endorsedByUpper),
         if (showFollowers) ...[
           const SizedBox(width: 5),
-          _Metric(value: user.followers, label: 'FOLLOWERS'.tr),
+          _Metric(value: user.followers, label: AppStrings.followersUpper),
         ],
       ],
     );

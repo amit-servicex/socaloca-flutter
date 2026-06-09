@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
@@ -130,15 +131,17 @@ class _MyEndorsementListScreenState
             Text(_error!,
                 style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _refresh,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.socaBlack,
-                foregroundColor: AppColors.socaYellow,
+            Expanded(
+              child: ElevatedButton(
+                onPressed: _refresh,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.socaBlack,
+                  foregroundColor: AppColors.socaYellow,
+                ),
+                child: Text(AppStrings.retry,
+                    style: TextStyle(
+                        fontFamily: 'Poppins', color: AppColors.socaBlack)),
               ),
-              child: Text('Retry'.tr,
-                  style: TextStyle(
-                      fontFamily: 'Poppins', color: AppColors.socaBlack)),
             ),
           ],
         ),
@@ -146,46 +149,50 @@ class _MyEndorsementListScreenState
     }
 
     if (_endorsements.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16,
+      return RefreshIndicator(
+        onRefresh: _refresh,
+        color: AppColors.socaYellow,
+        child: ListView(
+          padding: EdgeInsets.all(16),
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-              color: AppColors.socaBlack,
-              child: Text(
-                "Endorsements".tr,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.socaYellow,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.socaBlack,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    AppStrings.endorsements.toUpperCase(),
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.socaYellow,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Text(
-              "View your Endorsements received by other Players &amp; Coaches Choose to either Publish or Reject the Endorsements received by you."
-                  .tr,
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.socaBlack),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Center(
-              child: Text(
-                'No endorsements yet.'.tr,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.socaBlack),
-              ),
+                SizedBox(height: 12),
+                Text(
+                  AppStrings.endorsementsDescription,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: AppColors.socaBlack.withOpacity(0.8)),
+                ),
+                SizedBox(height: 32),
+                Center(
+                  child: Text(
+                    AppStrings.noEndorsementsYet,
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: AppColors.socaBlack.withOpacity(0.6)),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -195,54 +202,58 @@ class _MyEndorsementListScreenState
     return RefreshIndicator(
       onRefresh: _refresh,
       color: AppColors.socaYellow,
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-            color: AppColors.socaBlack,
-            child: Text(
-              "Endorsements".tr,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: AppColors.socaYellow,
-              ),
-            ),
-          ),
-          Text(
-            "View your Endorsements received by other Players &amp; Coaches Choose to either Publish or Reject the Endorsements received by you."
-                .tr,
-            style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.socaBlack),
-          ),
-          SizedBox(
-            height: 16,
-          ),
-          ListView.separated(
-            padding: EdgeInsets.all(16),
-            itemCount: _endorsements.length + (_hasMore ? 1 : 0),
-            separatorBuilder: (_, __) => SizedBox(height: 12),
-            itemBuilder: (ctx, i) {
-              if (i == _endorsements.length) {
-                _loadMore();
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: AppLoader(),
-                );
-              }
-              return _EndorsementCard(
-                raw: _endorsements[i],
-                isPublishable: widget.isOwnProfile,
-                onPublish: () => _respond(_endorsements[i], 'publish'),
-                onReject: () => _respond(_endorsements[i], 'reject'),
-              );
-            },
-          ),
-        ],
+      child: ListView.separated(
+        padding: EdgeInsets.all(16),
+        itemCount: _endorsements.length + (_hasMore ? 2 : 1),
+        separatorBuilder: (_, i) => SizedBox(height: 12),
+        itemBuilder: (ctx, i) {
+          if (i == 0) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.socaBlack,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    AppStrings.endorsements.toUpperCase(),
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.socaYellow,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  AppStrings.endorsementsDescription,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: AppColors.socaBlack.withOpacity(0.8)),
+                ),
+                SizedBox(height: 8),
+              ],
+            );
+          }
+          final index = i - 1;
+          if (index == _endorsements.length) {
+            _loadMore();
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: AppLoader(),
+            );
+          }
+          return _EndorsementCard(
+            raw: _endorsements[index],
+            isPublishable: widget.isOwnProfile,
+            onPublish: () => _respond(_endorsements[index], 'publish'),
+            onReject: () => _respond(_endorsements[index], 'reject'),
+          );
+        },
       ),
     );
   }
@@ -272,11 +283,12 @@ class _EndorsementCard extends StatelessWidget {
 
   String _role(Map<String, dynamic>? user) {
     if (user == null) return '';
-    if (user['isPlayer'] == true) return 'Player';
-    if (user['isCoach'] == true) return 'Coach';
-    if (user['isAdmin'] == true) return 'Manager';
-    if (user['isFan'] == true) return 'Fan';
-    return '';
+    List<String> roles = [];
+    if (user['isPlayer'] == true) roles.add('Player');
+    if (user['isCoach'] == true) roles.add('Coach');
+    if (user['isAdmin'] == true) roles.add('Manager');
+    if (user['isFan'] == true) roles.add('Fan');
+    return roles.join('/');
   }
 
   @override
@@ -296,23 +308,28 @@ class _EndorsementCard extends StatelessWidget {
     final isPending = published == 0;
 
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.socaGrey,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Endorser header ─────────────────────────────────────────
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              publishedOn,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                color: AppColors.socaBlack.withOpacity(0.7),
+              ),
+            ),
+          ),
+          SizedBox(height: 8),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _Avatar(imageUrl: imageUrl),
               SizedBox(width: 12),
@@ -320,65 +337,59 @@ class _EndorsementCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      name.isEmpty ? 'Unknown' : name,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.socaBlack,
+                    if (reviewText != null && reviewText.isNotEmpty) ...[
+                      Text(
+                        reviewText,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                    ],
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 13,
+                          color: AppColors.socaBlack.withOpacity(0.8),
+                        ),
+                        children: [
+                          TextSpan(
+                            text: name.isEmpty ? AppStrings.unknown : name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                          if (role.isNotEmpty)
+                            TextSpan(
+                              text: ' | $role',
+                            ),
+                        ],
                       ),
                     ),
-                    if (role.isNotEmpty)
+                    if (academyName != null && academyName.isNotEmpty) ...[
+                      SizedBox(height: 4),
                       Text(
-                        role,
+                        academyName.toUpperCase(),
                         style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 11,
-                          color: AppColors.socaGrey,
+                          fontSize: 13,
+                          color: AppColors.socaBlack.withOpacity(0.7),
                         ),
                       ),
-                    if (academyName != null && academyName.isNotEmpty)
-                      Text(
-                        academyName,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 11,
-                          color: AppColors.socaGrey,
-                        ),
-                      ),
+                    ],
                   ],
                 ),
               ),
-              if (publishedOn.isNotEmpty)
-                Text(
-                  publishedOn,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 10,
-                    color: AppColors.socaGrey,
-                  ),
-                ),
             ],
           ),
 
-          // ── Review text ─────────────────────────────────────────────
-          if (reviewText != null && reviewText.isNotEmpty) ...[
-            SizedBox(height: 12),
-            Text(
-              reviewText,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 13,
-                color: AppColors.socaBlack,
-                height: 1.5,
-              ),
-            ),
-          ],
-
           // ── Publish / Reject buttons (own profile, pending) ─────────
           if (isPublishable && isPending) ...[
-            SizedBox(height: 12),
+            SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -388,14 +399,19 @@ class _EndorsementCard extends StatelessWidget {
                       foregroundColor: AppColors.error,
                       side: BorderSide(color: AppColors.error),
                       padding: EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                     ),
                     child: Text(
-                      'Reject'.tr,
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 12),
+                      AppStrings.reject,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: onPublish,
@@ -403,10 +419,15 @@ class _EndorsementCard extends StatelessWidget {
                       backgroundColor: AppColors.socaBlack,
                       foregroundColor: AppColors.socaYellow,
                       padding: EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                     ),
                     child: Text(
-                      'Publish'.tr,
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 12),
+                      AppStrings.publish,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -424,20 +445,39 @@ class _Avatar extends StatelessWidget {
 
   _Avatar({this.imageUrl});
 
+  bool _isValidImageUrl(String? url) {
+    if (url == null || url.isEmpty) return false;
+    if (url.startsWith('file:///')) return false;
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (imageUrl != null && imageUrl!.isNotEmpty) {
-      return CircleAvatar(
-        radius: 22,
-        backgroundColor: Colors.grey.shade200,
-        backgroundImage: NetworkImage(imageUrl!),
-        onBackgroundImageError: (_, __) {},
-      );
-    }
-    return CircleAvatar(
-      radius: 22,
-      backgroundColor: Colors.grey.shade200,
-      child: Icon(Icons.person, color: AppColors.socaGrey, size: 24),
+    return Container(
+      width: 64,
+      height: 64,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+      ),
+      child: ClipOval(
+        child: _isValidImageUrl(imageUrl)
+            ? CachedNetworkImage(
+                imageUrl: ApiConstants.getImageUrl(imageUrl!),
+                fit: BoxFit.cover,
+                placeholder: (context, url) => AppLoader(),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.person,
+                  color: AppColors.socaBlack.withOpacity(0.2),
+                  size: 32,
+                ),
+              )
+            : Icon(
+                Icons.person,
+                color: AppColors.socaBlack.withOpacity(0.2),
+                size: 32,
+              ),
+      ),
     );
   }
 }

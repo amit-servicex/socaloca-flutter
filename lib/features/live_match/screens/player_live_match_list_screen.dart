@@ -382,7 +382,7 @@ class _LiveMatchCard extends StatelessWidget {
                     child: Text(
                       hasScore
                           ? '${item.homeGoals}  —  ${item.awayGoals}'
-                          : 'vs',
+                          : AppStrings.vs,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w800,
@@ -504,7 +504,7 @@ class _LivePulseBadgeState extends State<_LivePulseBadge>
             Icon(Icons.circle, size: 7, color: Colors.white),
             SizedBox(width: 4),
             Text(
-              'LIVE · ${widget.stateLabel}',
+              '${AppStrings.live} · ${widget.stateLabel}',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,

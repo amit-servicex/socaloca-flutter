@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
+import 'package:socaloca/core/router/app_routes.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/match_training_status_model.dart';
@@ -189,10 +191,15 @@ class MyMatchesSection extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // TODO: Navigate to all matches
+                        context.push(
+                          AppRoutes.playerStats.replaceFirst(
+                            ':userId',
+                            playerBio?.userId ?? '',
+                          ),
+                        );
                       },
                       child: Text(
-                        'view all'.tr,
+                        AppStrings.viewAll,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,

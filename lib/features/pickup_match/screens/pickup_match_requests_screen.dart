@@ -73,7 +73,7 @@ class _PickupMatchRequestsScreenState
       final user = ref.read(currentUserProvider);
       if (user == null) {
         setState(() {
-          _errorMessage = 'User not found';
+          _errorMessage = AppStrings.userNotFound;
           _isLoading = false;
         });
         return;
@@ -114,7 +114,7 @@ class _PickupMatchRequestsScreenState
       print('❌ Error loading requests: $e');
       if (mounted) {
         setState(() {
-          _errorMessage = 'Error loading requests';
+          _errorMessage = AppStrings.errorLoadingRequests;
           _isLoading = false;
         });
       }
@@ -125,7 +125,7 @@ class _PickupMatchRequestsScreenState
     try {
       final user = ref.read(currentUserProvider);
       if (user == null) {
-        _showError('User not found');
+        _showError(AppStrings.userNotFound);
         return;
       }
 
@@ -155,14 +155,14 @@ class _PickupMatchRequestsScreenState
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                  'Request ${status == 'accepted' ? 'accepted' : 'declined'}'),
+                  status == 'accepted' ? AppStrings.requestAccepted : AppStrings.requestDeclined),
               backgroundColor: status == 'accepted' ? Colors.green : Colors.red,
             ),
           );
         } else {
           // Revert optimistic update on failure
           _loadRequests();
-          _showError('Failed to update request. Please try again.');
+          _showError(AppStrings.failedToUpdateRequest);
         }
       }
     } catch (e) {
@@ -301,7 +301,7 @@ class _PickupMatchRequestsScreenState
                                 SizedBox(height: 16),
                                 Text(
                                   _selectedFilter == 'All'
-                                      ? 'No requests yet'
+                                      ? AppStrings.noRequestsYet
                                       : 'No $_selectedFilter requests',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
@@ -448,15 +448,15 @@ class _RequestListItem extends StatelessWidget {
     switch (request.status.toLowerCase()) {
       case 'accepted':
         color = Colors.green;
-        text = 'Accepted';
+        text = AppStrings.accepted;
         break;
       case 'declined':
         color = Colors.red;
-        text = 'Declined';
+        text = AppStrings.declined;
         break;
       default:
         color = Colors.orange;
-        text = 'Pending';
+        text = AppStrings.pending;
     }
 
     return Container(

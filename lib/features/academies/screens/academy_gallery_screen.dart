@@ -122,7 +122,7 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
         title: Text(
-          widget.academyName.isNotEmpty ? widget.academyName : 'Gallery',
+          widget.academyName.isNotEmpty ? widget.academyName : AppStrings.gallery,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,

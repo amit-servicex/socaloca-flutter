@@ -67,7 +67,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
             child: ElevatedButton.icon(
               onPressed: _isLoading ? null : _showAddGoalDialog,
               icon: Icon(Icons.add),
-              label: Text('Add Goal'.tr),
+              label: Text(AppStrings.addGoal),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
@@ -96,7 +96,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
           ),
           SizedBox(height: 16),
           Text(
-            'No Goals Recorded'.tr,
+            AppStrings.noGoalsRecorded,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
@@ -106,7 +106,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
           ),
           SizedBox(height: 8),
           Text(
-            'Tap the button below to add goals'.tr,
+            AppStrings.tapAddGoals,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
@@ -217,7 +217,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
           title: Text(
-            'Add Goal'.tr,
+            AppStrings.addGoal,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
@@ -230,7 +230,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
               children: [
                 // Team Selection
                 Text(
-                  'Team'.tr,
+                  AppStrings.teamFallback,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -285,7 +285,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                 TextField(
                   controller: playerNameController,
                   decoration: InputDecoration(
-                    labelText: 'Player Name'.tr,
+                    labelText: AppStrings.playerName,
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -311,9 +311,9 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                     LengthLimitingTextInputFormatter(3),
                   ],
                   decoration: InputDecoration(
-                    labelText: 'Minute'.tr,
+                    labelText: AppStrings.minute,
                     labelStyle: TextStyle(fontFamily: 'Poppins'),
-                    hintText: 'e.g., 23'.tr,
+                    hintText: AppStrings.example23,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -332,7 +332,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'.tr),
+              child: Text(AppStrings.cancel),
             ),
             ElevatedButton(
               onPressed: () {
@@ -350,7 +350,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
               ),
-              child: Text('Add'.tr),
+              child: Text(AppStrings.add),
             ),
           ],
         ),
@@ -420,17 +420,17 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Delete Goal'.tr,
+          AppStrings.deleteGoal,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
-          'Are you sure you want to delete this goal?'.tr,
+          AppStrings.deleteGoalConfirmation,
           style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'.tr),
+            child: Text(AppStrings.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -441,7 +441,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: Text('Delete'.tr),
+            child: Text(AppStrings.delete),
           ),
         ],
       ),
@@ -453,7 +453,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Error'.tr,
+          AppStrings.error,
           style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
         ),
         content: Text(
@@ -463,7 +463,7 @@ class _GoalEntryTabState extends ConsumerState<GoalEntryTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'.tr),
+            child: Text(AppStrings.ok),
           ),
         ],
       ),

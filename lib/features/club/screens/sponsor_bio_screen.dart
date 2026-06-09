@@ -38,7 +38,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
       backgroundColor: AppColors.socaPageBg,
       body: bioAsync.when(
         data: (bio) {
-          if (bio == null) return _buildError('Sponsor not found');
+          if (bio == null) return _buildError(AppStrings.sponsorNotFound);
 
           if (!_followInitialized) {
             _isFollowing = bio.details.following;
@@ -196,7 +196,9 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                     elevation: 0,
                   ),
                   child: Text(
-                    _isFollowing ? 'FOLLOWING' : 'FOLLOW',
+                    _isFollowing
+                        ? AppStrings.following.toUpperCase()
+                        : AppStrings.follow.toUpperCase(),
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
@@ -208,7 +210,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
               ),
               SizedBox(height: 4),
               Text(
-                '${info.followCount} ${info.followCount == 1 ? "Follower" : "Followers"}',
+                AppStrings.followersCount(info.followCount),
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 11,
@@ -224,15 +226,18 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
               children: [
                 if (info.headquarter != null && info.headquarter!.isNotEmpty)
                   ClubBioInfoRow(
-                      label: 'Headquarters', value: info.headquarter!),
+                      label: AppStrings.headquarters, value: info.headquarter!),
                 if (info.formedYear != null && info.formedYear!.isNotEmpty)
-                  ClubBioInfoRow(label: 'Founded', value: info.formedYear!),
+                  ClubBioInfoRow(
+                      label: AppStrings.founded, value: info.formedYear!),
                 if (info.country != null && info.country!.isNotEmpty)
-                  ClubBioInfoRow(label: 'Country', value: info.country!),
+                  ClubBioInfoRow(
+                      label: AppStrings.country, value: info.country!),
                 if (info.ceo != null && info.ceo!.isNotEmpty)
-                  ClubBioInfoRow(label: 'CEO', value: info.ceo!),
+                  ClubBioInfoRow(label: AppStrings.ceo, value: info.ceo!),
                 if (info.founders != null && info.founders!.isNotEmpty)
-                  ClubBioInfoRow(label: 'Founders', value: info.founders!),
+                  ClubBioInfoRow(
+                      label: AppStrings.founders, value: info.founders!),
                 if (info.partnerType != null &&
                     info.partnerType!.isNotEmpty &&
                     info.partnerType!.toLowerCase() != 'nopartner') ...[
@@ -291,7 +296,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClubBioSectionHeader(title: 'Merchandise'),
+          ClubBioSectionHeader(title: AppStrings.merchandise),
           Divider(color: AppColors.socaBlack, thickness: .7),
           ListView.separated(
             shrinkWrap: true,
@@ -362,7 +367,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                     child: Padding(
                       padding: EdgeInsets.only(top: 4),
                       child: Text(
-                        'View'.tr,
+                        AppStrings.view,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
@@ -389,7 +394,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClubBioSectionHeader(title: 'News & Announcements'),
+          ClubBioSectionHeader(title: AppStrings.newsAnnouncements),
           Divider(color: AppColors.socaBlack, thickness: .7),
           ListView.separated(
             shrinkWrap: true,
@@ -416,60 +421,60 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
       onTap: tapUrl != null ? () => _launchUrl(tapUrl) : null,
       child: Padding(
         padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (imageUrl.isNotEmpty)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-                errorWidget: (_, __, ___) =>
-                    Container(width: 80, height: 80, color: AppColors.socaGrey),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (imageUrl.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => Container(
+                      width: 80, height: 80, color: AppColors.socaGrey),
+                ),
+              ),
+            if (imageUrl.isNotEmpty) SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (news.newsDate != null && news.newsDate!.isNotEmpty)
+                    Text(
+                      news.newsDate!,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          color: AppColors.textSecondary),
+                    ),
+                  if (news.title != null && news.title!.isNotEmpty)
+                    Text(
+                      news.title!,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  if (news.description != null && news.description!.isNotEmpty)
+                    Text(
+                      news.description!,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          color: AppColors.socaBlack),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
               ),
             ),
-          if (imageUrl.isNotEmpty) SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (news.newsDate != null && news.newsDate!.isNotEmpty)
-                  Text(
-                    news.newsDate!,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 11,
-                        color: AppColors.textSecondary),
-                  ),
-                if (news.title != null && news.title!.isNotEmpty)
-                  Text(
-                    news.title!,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                if (news.description != null && news.description!.isNotEmpty)
-                  Text(
-                    news.description!,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 11,
-                        color: AppColors.socaBlack),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }

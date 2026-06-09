@@ -429,7 +429,7 @@ class PlayerBioRepository {
   /// Get endorsements
   Future<List<EndorsementModel>> getEndorses({
     required String userId,
-    String endType = 'accept',
+    int endType = 2,
     int start = 0,
     int limit = 1,
   }) async {

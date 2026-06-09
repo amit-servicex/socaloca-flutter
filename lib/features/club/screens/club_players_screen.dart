@@ -31,7 +31,8 @@ class _ClubPlayersScreenState extends ConsumerState<ClubPlayersScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(clubAppBarTitleProvider.notifier).state = 'Players';
+      ref.read(clubAppBarTitleProvider.notifier).state =
+          AppStrings.playersTitle;
     });
     _load();
     _scroll.addListener(() {
@@ -74,8 +75,8 @@ class _ClubPlayersScreenState extends ConsumerState<ClubPlayersScreen> {
     }
     if (_players.isEmpty) {
       return Center(
-          child:
-              Text('No Players'.tr, style: TextStyle(fontFamily: 'Poppins')));
+          child: Text(AppStrings.noPlayers,
+              style: TextStyle(fontFamily: 'Poppins')));
     }
     return RefreshIndicator(
       onRefresh: _refresh,

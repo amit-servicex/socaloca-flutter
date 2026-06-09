@@ -100,8 +100,8 @@ class _RefereeLiveMatchUpdateScreenState
     super.dispose();
   }
 
-  String get _teamA => widget.match?.teamA ?? 'Team A';
-  String get _teamB => widget.match?.teamB ?? 'Team B';
+  String get _teamA => widget.match?.teamA ?? AppStrings.teamA;
+  String get _teamB => widget.match?.teamB ?? AppStrings.teamB;
   String get _tournamentId => widget.match?.tournamentId ?? '';
   String get _currentUserId => StorageService.userId ?? '';
   bool get _isTerminal =>
@@ -273,11 +273,11 @@ class _RefereeLiveMatchUpdateScreenState
     switch (_matchHalf) {
       case 'SECOND_HALF':
       case 'SECOND_HALF_EXTRA_TIME':
-        return 'START SECOND HALF';
+        return AppStrings.startSecondHalf.toUpperCase();
       case 'START_EXTRA_TIME':
-        return 'START EXTRA TIME';
+        return AppStrings.startExtraTime.toUpperCase();
       case 'PENALTY_SHOOTOUT':
-        return 'START PENALTY';
+        return AppStrings.startPenalty.toUpperCase();
       default:
         return AppStrings.startMatch.toUpperCase();
     }
@@ -369,7 +369,7 @@ class _RefereeLiveMatchUpdateScreenState
       }
     });
     if (ok && nextState == 'FINISH') {
-      AppToast.show(context, 'Match ended successfully');
+      AppToast.show(context, AppStrings.matchEndedSuccessfully);
     }
   }
 
@@ -397,8 +397,8 @@ class _RefereeLiveMatchUpdateScreenState
     final rightSelected = _goalBOwn || _goalBScorer != null;
     if (leftSelected == rightSelected) {
       _showError(leftSelected
-          ? 'Select scorer from only ONE team'
-          : 'Please select a scorer');
+          ? AppStrings.selectScorerFromOneTeam
+          : AppStrings.pleaseSelectScorer);
       return;
     }
     final isLeft = leftSelected;
@@ -464,8 +464,8 @@ class _RefereeLiveMatchUpdateScreenState
     final rightSelected = _goalBScorer != null;
     if (leftSelected == rightSelected) {
       _showError(leftSelected
-          ? 'Select scorer from only ONE team'
-          : 'Please select a scorer');
+          ? AppStrings.selectScorerFromOneTeam
+          : AppStrings.pleaseSelectScorer);
       return;
     }
     final player = leftSelected ? _goalAScorer! : _goalBScorer!;
@@ -501,17 +501,17 @@ class _RefereeLiveMatchUpdateScreenState
     final rightSelected = _cardBPlayer != null;
     if (leftSelected == rightSelected) {
       _showError(leftSelected
-          ? 'Select card holder from only ONE team'
-          : 'Please select a card holder');
+          ? AppStrings.selectCardHolderFromOneTeam
+          : AppStrings.pleaseSelectCardHolder);
       return;
     }
     final type = leftSelected ? _cardAType : _cardBType;
     if (type.isEmpty) {
-      _showError('Please select card type (1st / 2nd / Red)');
+      _showError(AppStrings.pleaseSelectCardType);
       return;
     }
     final time = _parseRequiredMinute(
-        leftSelected ? _cardATime : _cardBTime, 'Please select card time');
+        leftSelected ? _cardATime : _cardBTime, AppStrings.pleaseSelectCardTime);
     if (time == null) return;
     if (!_validateEventMinute(time)) return;
     final player = leftSelected ? _cardAPlayer! : _cardBPlayer!;
@@ -548,30 +548,30 @@ class _RefereeLiveMatchUpdateScreenState
     final rightSelected = _subBIn != null || _subBOut != null;
     if (leftSelected == rightSelected) {
       _showError(leftSelected
-          ? 'Select substitution from only ONE team'
-          : 'Please select players for substitution');
+          ? AppStrings.selectSubstitutionFromOneTeam
+          : AppStrings.pleaseSelectPlayersForSubstitution);
       return;
     }
     final playerIn = leftSelected ? _subAIn : _subBIn;
     final playerOut = leftSelected ? _subAOut : _subBOut;
     if (playerIn == null) {
       _showError(leftSelected
-          ? 'Please select player IN for My Team'
-          : 'Please select player IN for Opponent Team');
+          ? AppStrings.pleaseSelectPlayerInForMyTeam
+          : AppStrings.pleaseSelectPlayerInForOpponent);
       return;
     }
     if (playerOut == null) {
       _showError(leftSelected
-          ? 'Please select player OUT for My Team'
-          : 'Please select player OUT for Opponent Team');
+          ? AppStrings.pleaseSelectPlayerOutForMyTeam
+          : AppStrings.pleaseSelectPlayerOutForOpponent);
       return;
     }
     if (playerIn.id == playerOut.id) {
-      _showError('Player IN and Player OUT cannot be the same');
+      _showError(AppStrings.playerInAndOutSame);
       return;
     }
     final time = _parseRequiredMinute(
-        leftSelected ? _subATime : _subBTime, 'Please enter substitution time');
+        leftSelected ? _subATime : _subBTime, AppStrings.pleaseEnterSubstitutionTime);
     if (time == null) return;
     if (!_validateEventMinute(time)) return;
     await _saveEntry(
@@ -632,7 +632,7 @@ class _RefereeLiveMatchUpdateScreenState
   bool _validateEventMinute(int minute) {
     final current = int.tryParse(widget.match?.currentMinute ?? '') ?? 0;
     if (current > 0 && minute > current) {
-      _showError('Event time cannot be greater than match time');
+      _showError(AppStrings.eventTimeTooLarge);
       return false;
     }
     return true;
@@ -724,7 +724,7 @@ class _RefereeLiveMatchUpdateScreenState
               if (_matchHalf == 'FIRST_HALF' ||
                   _matchHalf == 'START_EXTRA_TIME')
                 _StatusOption(
-                  label: 'Half Time',
+                  label: AppStrings.halfTime,
                   onTap: () {
                     context.pop();
                     _saveState(_matchHalf == 'START_EXTRA_TIME'
@@ -734,7 +734,7 @@ class _RefereeLiveMatchUpdateScreenState
                 ),
               if (_matchHalf == 'SECOND_HALF')
                 _StatusOption(
-                  label: 'End Second Half',
+                  label: AppStrings.endSecondHalf,
                   onTap: () {
                     context.pop();
                     _saveState('SECOND_HALF_END');
@@ -742,7 +742,7 @@ class _RefereeLiveMatchUpdateScreenState
                 ),
               if (_matchHalf == 'SECOND_HALF_EXTRA_TIME')
                 _StatusOption(
-                  label: 'End Extra Time',
+                  label: AppStrings.endExtraTime,
                   onTap: () {
                     context.pop();
                     _saveState('EXTRA_TIME_SH_END');
@@ -750,21 +750,21 @@ class _RefereeLiveMatchUpdateScreenState
                 ),
               if (_matchHalf == 'SECOND_HALF' || _state == 'PENALTY')
                 _StatusOption(
-                  label: 'End Match',
+                  label: AppStrings.endMatch,
                   onTap: () {
                     context.pop();
                     _confirmEndMatch();
                   },
                 ),
               _StatusOption(
-                label: 'Postponed',
+                label: AppStrings.postponed,
                 onTap: () {
                   context.pop();
                   _saveState('POSTPONED');
                 },
               ),
               _StatusOption(
-                label: 'Abandoned',
+                label: AppStrings.abandoned,
                 onTap: () {
                   context.pop();
                   _saveState('ABANDONED');
@@ -1014,11 +1014,11 @@ class _RefereeLiveMatchUpdateScreenState
   String _terminalLabel() {
     switch (_state) {
       case 'POSTPONED':
-        return 'POSTPONED';
+        return AppStrings.postponed.toUpperCase();
       case 'ABANDONED':
-        return 'ABANDONED';
+        return AppStrings.abandoned.toUpperCase();
       default:
-        return 'MATCH END';
+        return AppStrings.matchEnd.toUpperCase();
     }
   }
 }
@@ -1060,9 +1060,9 @@ class _MatchSummary extends StatelessWidget {
                           decoration: const BoxDecoration(
                             color: AppColors.socaBlack,
                           ),
-                          child: const Text(
-                            'Live Match Updates',
-                            style: TextStyle(
+                          child: Text(
+                            AppStrings.liveMatchUpdates,
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
                               fontSize: 20,
@@ -1071,9 +1071,9 @@ class _MatchSummary extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        const Text(
-                          'CAUTION',
-                          style: TextStyle(
+                        Text(
+                          AppStrings.caution.toUpperCase(),
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w800,
                             fontSize: 16,
@@ -1081,11 +1081,9 @@ class _MatchSummary extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildBulletPoint(
-                            'Never close the app while the match is live'),
+                        _buildBulletPoint(AppStrings.neverCloseAppDuringMatch),
                         const SizedBox(height: 8),
-                        _buildBulletPoint(
-                            'Tap "SAVE & PUBLISH" only when you are sure'),
+                        _buildBulletPoint(AppStrings.tapSaveAndPublishWhenSure),
                       ],
                     ),
                   ),
@@ -1102,9 +1100,9 @@ class _MatchSummary extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'SCORE',
-                          style: TextStyle(
+                        Text(
+                          AppStrings.score.toUpperCase(),
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
@@ -1122,9 +1120,9 @@ class _MatchSummary extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          'TIME',
-                          style: TextStyle(
+                        Text(
+                          AppStrings.time.toUpperCase(),
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 12,

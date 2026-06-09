@@ -100,9 +100,9 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
     final currentUserId = StorageService.userId ?? '';
     final teamId = team.teamId ?? team.id ?? '';
     final url = 'https://share.socaloca.football/team/$teamId/u/$currentUserId';
-    final name = team.teamName ?? 'Team';
+    final name = team.teamName ?? AppStrings.teamFallback;
     SharePlus.instance.share(ShareParams(
-      text: '$name - Check out this post on SocaLoca. $url',
+      text: '$name - ${AppStrings.checkOutPostOnSocaLoca(url)}',
     ));
   }
 
@@ -228,7 +228,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                     Row(
                                       children: [
                                         Text(
-                                          'SocaLoca'.tr,
+                                          AppStrings.appName,
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 16,
@@ -269,11 +269,11 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                               ),
                               children: [
                                 TextSpan(
-                                  text:
-                                      '${team.teamName ?? 'Team'} has joined SocaLoca!!!\n',
+                                  text: AppStrings.teamJoinedSocaLoca(
+                                      team.teamName ?? AppStrings.teamFallback),
                                 ),
                                 TextSpan(
-                                  text: 'Check team bio',
+                                  text: AppStrings.checkTeamBio,
                                   style: TextStyle(fontWeight: FontWeight.w700),
                                 ),
                               ],
@@ -335,7 +335,8 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                   children: [
                                     Flexible(
                                       child: Text(
-                                        team.teamName ?? 'Team',
+                                        team.teamName ??
+                                            AppStrings.teamFallback,
                                         style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 16,
@@ -359,7 +360,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                 ),
                                 SizedBox(height: 6),
                                 Text(
-                                  team.teamType ?? 'Club',
+                                  team.teamType ?? AppStrings.club,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
@@ -422,7 +423,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              'SHARE'.tr,
+                              AppStrings.shareUpper,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
@@ -484,26 +485,12 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
     final hour =
         dateTime.hour == 0 || dateTime.hour == 12 ? 12 : dateTime.hour % 12;
     final minute = dateTime.minute.toString().padLeft(2, '0');
-    final period = dateTime.hour >= 12 ? 'PM' : 'AM';
+    final period = dateTime.hour >= 12 ? AppStrings.pm : AppStrings.am;
     return '$hour:$minute $period';
   }
 
   String _monthName(int month) {
-    final names = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return names[month - 1];
+    return AppStrings.monthShortName(month);
   }
 }
 

@@ -155,7 +155,7 @@ class _RefereeManageMatchScreenState
       if (details == null) {
         setState(() {
           _isLoadingDetails = false;
-          _detailsError = 'Failed to load match details';
+          _detailsError = AppStrings.failedToLoadMatchDetails;
         });
         return;
       }
@@ -427,10 +427,10 @@ class _RefereeManageMatchScreenState
       final isPenalty = goal['isPenalty'] == true;
       final player = _nonEmpty(
             goal['playerName'],
-            isOwnGoal ? 'Own Goal' : null,
-            isPenalty ? 'Penalty' : null,
+            isOwnGoal ? AppStrings.ownGoal : null,
+            isPenalty ? AppStrings.penalty : null,
           ) ??
-          'Goal';
+          AppStrings.goal;
       return _GoalEntry(
         team: _teamLabelById(teamId),
         player: player,
@@ -450,7 +450,7 @@ class _RefereeManageMatchScreenState
       final isRed = card['redCard'] == true;
       return _CardEntry(
         team: _teamLabelById(teamId),
-        player: _nonEmpty(card['playerName'], card['name']) ?? 'Player',
+        player: _nonEmpty(card['playerName'], card['name']) ?? AppStrings.player,
         playerId: _stringValue(card['playerId']),
         minute: _nonEmpty(card['time'], card['goalTime']) ?? '',
         type: isRed
@@ -614,7 +614,7 @@ class _RefereeManageMatchScreenState
     final full = _detailTeamAName ??
         widget.match?.myTeam?.teamName ??
         widget.match?.teamA ??
-        'Team A';
+        AppStrings.teamA;
     final short = _detailTeamAShortName ?? widget.match?.myTeam?.teamShortName;
     return _formatWithShort(full, short);
   }
@@ -623,7 +623,7 @@ class _RefereeManageMatchScreenState
     final full = _detailTeamBName ??
         widget.match?.opponentTeam?.teamName ??
         widget.match?.teamB ??
-        'Team B';
+        AppStrings.teamB;
     final short =
         _detailTeamBShortName ?? widget.match?.opponentTeam?.teamShortName;
     return _formatWithShort(full, short);
@@ -637,15 +637,15 @@ class _RefereeManageMatchScreenState
     final pA = _scoreValue(_penaltyACtrl);
     final pB = _scoreValue(_penaltyBCtrl);
     if (a == null || b == null) {
-      _showSnack('Please enter score properly', success: false);
+      _showSnack(AppStrings.pleaseEnterScoreProperly, success: false);
       return;
     }
     if (_showExtra && (eA == null || eB == null)) {
-      _showSnack('Please enter extra time details', success: false);
+      _showSnack(AppStrings.pleaseEnterExtraTimeDetails, success: false);
       return;
     }
     if (_showPenalty && (pA == null || pB == null)) {
-      _showSnack('Please enter penalty shootout details', success: false);
+      _showSnack(AppStrings.pleaseEnterPenaltyDetails, success: false);
       return;
     }
 
@@ -676,7 +676,7 @@ class _RefereeManageMatchScreenState
     if (!mounted) return;
     setState(() => _isSavingScore = false);
     if (ok) {
-      _showSnack('Match score saved', success: true);
+      _showSnack(AppStrings.matchScoreSaved, success: true);
       _loadDetails();
     }
   }
@@ -764,7 +764,7 @@ class _RefereeManageMatchScreenState
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              _detailsError ?? 'Failed to load match details',
+              _detailsError ?? AppStrings.failedToLoadMatchDetails,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins',
@@ -900,7 +900,7 @@ class _RefereeManageMatchScreenState
 
         // Extra time toggle
         _expandableSection(
-          title: 'Extra Time',
+          title: AppStrings.extraTime,
           expanded: _showExtra,
           onTap: () => setState(() => _showExtra = !_showExtra),
           child: Row(
@@ -925,7 +925,7 @@ class _RefereeManageMatchScreenState
 
         // Penalty toggle
         _expandableSection(
-          title: 'Penalty',
+          title: AppStrings.penalty,
           expanded: _showPenalty,
           onTap: () => setState(() => _showPenalty = !_showPenalty),
           child: Row(
@@ -1206,11 +1206,11 @@ class _RefereeManageMatchScreenState
                   ),
                 ),
               ),
-              const Expanded(
+              Expanded(
                 flex: 1,
                 child: Text(
-                  'Goal',
-                  style: TextStyle(
+                  AppStrings.goal,
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
@@ -1233,10 +1233,10 @@ class _RefereeManageMatchScreenState
           const SizedBox(height: 12),
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 flex: 1,
                 child: Text(
-                  'Time',
+                  AppStrings.time,
                   style: TextStyle(
                     fontFamily: 'Lato',
                     fontSize: 13,
@@ -1262,10 +1262,10 @@ class _RefereeManageMatchScreenState
             const SizedBox(height: 12),
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   flex: 1,
                   child: Text(
-                    'Scorer',
+                    AppStrings.scorer,
                     style: TextStyle(
                       fontFamily: 'Lato',
                       fontSize: 13,
@@ -1462,11 +1462,11 @@ class _RefereeManageMatchScreenState
             children: [
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 2,
                     child: Text(
-                      'No of cards',
-                      style: TextStyle(
+                      AppStrings.noOfCards,
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 13,
@@ -1500,11 +1500,11 @@ class _RefereeManageMatchScreenState
               const SizedBox(height: 24),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 2,
                     child: Text(
-                      'Player',
-                      style: TextStyle(
+                      AppStrings.player,
+                      style: const TextStyle(
                         fontFamily: 'Lato',
                         fontSize: 14,
                         color: Colors.grey,
@@ -1515,11 +1515,11 @@ class _RefereeManageMatchScreenState
                     flex: 3,
                     child: Row(
                       children: [
-                        Expanded(child: _buildCardTypeButton('1st', true)),
+                        Expanded(child: _buildCardTypeButton(AppStrings.firstCard, true)),
                         const SizedBox(width: 2),
-                        Expanded(child: _buildCardTypeButton('2nd', true)),
+                        Expanded(child: _buildCardTypeButton(AppStrings.secondCard, true)),
                         const SizedBox(width: 2),
-                        Expanded(child: _buildCardTypeButton('Red', false)),
+                        Expanded(child: _buildCardTypeButton(AppStrings.redCardShort, false)),
                       ],
                     ),
                   ),
@@ -1551,7 +1551,7 @@ class _RefereeManageMatchScreenState
     final cards = <Map<String, dynamic>>[];
     for (final card in _cards) {
       if (card.playerId.isEmpty) {
-        _showSnack('Please enter card details for ${card.team}',
+        _showSnack('${AppStrings.pleaseEnterCardDetails} for ${card.team}',
             success: false);
         return;
       }
@@ -1865,7 +1865,7 @@ class _RefereeManageMatchScreenState
       }
     }
     if (player == null) {
-      _showSnack('Please select player of the match', success: false);
+      _showSnack(AppStrings.pleaseSelectPom, success: false);
       return;
     }
     final repo = ref.read(refereeRepositoryProvider);
@@ -1997,11 +1997,11 @@ class _RefereeManageMatchScreenState
             children: [
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 2,
                     child: Text(
-                      'Coach',
-                      style: TextStyle(
+                      AppStrings.coach,
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 13,
@@ -2025,11 +2025,11 @@ class _RefereeManageMatchScreenState
               const SizedBox(height: 16),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 2,
                     child: Text(
-                      'Manager',
-                      style: TextStyle(
+                      AppStrings.manager,
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 13,
@@ -2276,7 +2276,7 @@ class _RefereeManageMatchScreenState
     );
     if (!mounted) return;
     setState(() => _isSavingOfficials = false);
-    if (ok) _showSnack('Club & Team Officials saved', success: true);
+    if (ok) _showSnack(AppStrings.officialsProgressSaved, success: true);
   }
 
   Widget _buildSquadTab(String teamA, String teamB) {
@@ -2461,7 +2461,7 @@ class _RefereeManageMatchScreenState
 
   Future<void> _saveSquad() async {
     if (_selectedMySquad.isEmpty || _selectedOpponentSquad.isEmpty) {
-      _showSnack('Please select players from both teams', success: false);
+      _showSnack(AppStrings.pleaseSelectPlayersFromBothTeams, success: false);
       return;
     }
     final repo = ref.read(refereeRepositoryProvider);
@@ -2777,7 +2777,7 @@ class _RefereeManageMatchScreenState
             children: [
               Expanded(
                 child: _memberDropdown(
-                  hint: 'Player In',
+                  hint: AppStrings.playerIn,
                   members: inPlayers,
                   value: entry.playerId,
                   onChanged: (value) => setState(() {
@@ -2790,7 +2790,7 @@ class _RefereeManageMatchScreenState
               SizedBox(width: 10),
               Expanded(
                 child: _memberDropdown(
-                  hint: 'Player Out',
+                  hint: AppStrings.playerOut,
                   members: outPlayers,
                   value: entry.playerOutId,
                   onChanged: (value) => setState(() {
@@ -2806,7 +2806,7 @@ class _RefereeManageMatchScreenState
           TextField(
             controller: entry.timeCtrl,
             keyboardType: TextInputType.number,
-            decoration: _inputDecoration(hint: 'Minute'),
+            decoration: _inputDecoration(hint: AppStrings.minute),
             style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
           ),
         ],
@@ -2818,7 +2818,7 @@ class _RefereeManageMatchScreenState
     final myCount = int.tryParse(_mySubsCountCtrl.text.trim());
     final opponentCount = int.tryParse(_opponentSubsCountCtrl.text.trim());
     if (myCount == null || opponentCount == null) {
-      _showSnack('Please enter substitute details', success: false);
+      _showSnack(AppStrings.pleaseEnterSubstituteDetails, success: false);
       return;
     }
     setState(() {
@@ -2883,19 +2883,19 @@ class _RefereeManageMatchScreenState
     return Column(
       children: [
         _sectionCard(
-          title: 'Match Incidents',
+          title: AppStrings.matchIncidents,
           child: _multilineField(
             controller: _matchIncidentCtrl,
-            hint: 'Enter text here max 200 characters',
+            hint: AppStrings.enterTextMax200,
           ),
         ),
         if (_showCommissionerReport) ...[
           SizedBox(height: 12),
           _sectionCard(
-            title: 'Match Commissioner Report',
+            title: AppStrings.matchCommissionerReport,
             child: _multilineField(
               controller: _commissionerReportCtrl,
-              hint: 'Enter text here max 300 characters',
+              hint: AppStrings.enterTextMax300,
             ),
           ),
         ],
@@ -2974,8 +2974,7 @@ class _RefereeManageMatchScreenState
     if (!mounted) return;
     setState(() => _isSavingIncident = false);
     if (ok) {
-      _showSnack('Match Commissioner Report successfully saved!!!',
-          success: true);
+      _showSnack(AppStrings.commissionerReportSaved, success: true);
       _loadDetails();
     }
   }
@@ -2998,18 +2997,18 @@ class _RefereeManageMatchScreenState
             ),
           ),
         _buildMediaGridSection(
-          title: 'UPLOAD MATCH PHOTOS',
+          title: AppStrings.uploadMatchPhotos.toUpperCase(),
           items:
               _photos.map((p) => ApiConstants.getImageUrl(p.imageUrl)).toList(),
           onUpload: _isUploadingMedia ? null : _pickAndUploadPhoto,
           onSave: _isSavingPhotos ? null : _savePhotos,
           saving: _isSavingPhotos,
           onRemove: (idx) => setState(() => _photos.removeAt(idx)),
-          saveLabel: 'SAVE PHOTOS',
+          saveLabel: AppStrings.savePhotos.toUpperCase(),
         ),
         const SizedBox(height: 12),
         _buildMediaGridSection(
-          title: 'UPLOAD MATCH HIGHLIGHTS',
+          title: AppStrings.uploadMatchHighlights.toUpperCase(),
           items: _highlightVideos
               .map((v) => v.thumbnail.isNotEmpty ? v.thumbnail : v.videoUrl)
               .toList(),
@@ -3017,11 +3016,11 @@ class _RefereeManageMatchScreenState
           onSave: _isSavingHighlights ? null : _saveHighlights,
           saving: _isSavingHighlights,
           onRemove: (idx) => setState(() => _highlightVideos.removeAt(idx)),
-          saveLabel: 'SAVE HIGHLIGHTS',
+          saveLabel: AppStrings.saveHighlights.toUpperCase(),
         ),
         const SizedBox(height: 12),
         _buildMediaGridSection(
-          title: 'UPLOAD MATCH VIDEOS',
+          title: AppStrings.uploadMatchVideos.toUpperCase(),
           maxItems: 2,
           items: _matchVideos
               .map((v) => v.thumbnail.isNotEmpty ? v.thumbnail : v.videoUrl)
@@ -3030,7 +3029,7 @@ class _RefereeManageMatchScreenState
           onSave: _isSavingMatchVideos ? null : _saveMatchVideos,
           saving: _isSavingMatchVideos,
           onRemove: (idx) => setState(() => _matchVideos.removeAt(idx)),
-          saveLabel: 'SAVE VIDEOS',
+          saveLabel: AppStrings.saveVideos.toUpperCase(),
           extraButton: Expanded(
             child: ElevatedButton(
               onPressed: _isPublishingVideos ? null : _publishMatchVideos,
@@ -3084,7 +3083,7 @@ class _RefereeManageMatchScreenState
             color: AppColors.socaBlack,
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              title.tr,
+              title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: 'Poppins',
@@ -3205,7 +3204,7 @@ class _RefereeManageMatchScreenState
                         child: saving
                             ? const AppLoader(size: 20, centered: false)
                             : Text(
-                                saveLabel.tr,
+                                saveLabel,
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w700,
@@ -3230,12 +3229,12 @@ class _RefereeManageMatchScreenState
 
   Future<void> _pickAndUploadPhoto() async {
     if (_photos.length >= 5) {
-      _showSnack('Maximum 5 photos can be uploaded', success: false);
+      _showSnack(AppStrings.maxPhotosUpload, success: false);
       return;
     }
     final picked = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (picked == null) return;
-    await _runMediaUpload('Uploading photo...', () async {
+    await _runMediaUpload(AppStrings.uploadingPhoto, () async {
       final formData = FormData.fromMap({
         'metadata': '',
         'image': await MultipartFile.fromFile(
@@ -3260,17 +3259,17 @@ class _RefereeManageMatchScreenState
     final picked = await _imagePicker.pickVideo(source: ImageSource.gallery);
     if (picked == null) return;
     if (!_isAllowedVideo(picked.path)) {
-      _showSnack('Please select either mp4 or mov file', success: false);
+      _showSnack(AppStrings.pleaseSelectMp4OrMov, success: false);
       return;
     }
     final size = File(picked.path).lengthSync();
     if (_sizeInMb(size) > 15) {
-      _showSnack('Maximum 15MB video can be uploaded', success: false);
+      _showSnack(AppStrings.maxVideoSizeUpload, success: false);
       return;
     }
     await _uploadVideoFile(
       picked,
-      status: 'Uploading highlight...',
+      status: AppStrings.uploadingHighlight,
       target: _highlightVideos,
       endpoint: ApiConstants.uploadVdo,
       fieldName: 'video',
@@ -3279,18 +3278,18 @@ class _RefereeManageMatchScreenState
 
   Future<void> _pickAndUploadMatchVideo() async {
     if (_matchVideos.length >= 2) {
-      _showSnack('Maximum 2 videos can be uploaded', success: false);
+      _showSnack(AppStrings.maxVideosUpload, success: false);
       return;
     }
     final picked = await _imagePicker.pickVideo(source: ImageSource.gallery);
     if (picked == null) return;
     if (!_isAllowedVideo(picked.path)) {
-      _showSnack('Please select either mp4 or mov file', success: false);
+      _showSnack(AppStrings.pleaseSelectMp4OrMov, success: false);
       return;
     }
     await _uploadVideoFile(
       picked,
-      status: 'Uploading video...',
+      status: AppStrings.uploadingVideo,
       target: _matchVideos,
       endpoint: ApiConstants.uploadLargeFileUrl,
       fieldName: 'file',
@@ -3374,7 +3373,7 @@ class _RefereeManageMatchScreenState
     try {
       await upload();
       if (!mounted) return;
-      setState(() => _mediaStatus = 'Upload complete');
+      setState(() => _mediaStatus = AppStrings.uploadComplete);
     } catch (e) {
       if (!mounted) return;
       _showSnack(e.toString(), success: false);
@@ -3436,7 +3435,7 @@ class _RefereeManageMatchScreenState
     if (!mounted) return;
     setState(() => _isPublishingVideos = false);
     if (ok) {
-      _showSnack('Video published to feed', success: true, long: true);
+      _showSnack(AppStrings.videoPublishedToFeed, success: true, long: true);
       _loadDetails();
     }
   }
@@ -3554,7 +3553,7 @@ class _RefereeManageMatchScreenState
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
               SizedBox(height: 6),
               _memberDropdown(
-                hint: 'Select Scorer',
+                hint: AppStrings.selectScorer,
                 members: _membersForTeamLabel(selectedTeam),
                 value: selectedPlayerId,
                 onChanged: (value) =>
@@ -3565,7 +3564,7 @@ class _RefereeManageMatchScreenState
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
               SizedBox(height: 6),
               _memberDropdown(
-                hint: 'Select Assist',
+                hint: AppStrings.selectAssist,
                 members: _membersForTeamLabel(selectedTeam),
                 value: selectedAssistId,
                 includeNone: true,
@@ -3593,7 +3592,7 @@ class _RefereeManageMatchScreenState
                     final player = _memberById(selectedPlayerId);
                     final minute = minuteCtrl.text.trim();
                     if (player == null || (int.tryParse(minute) ?? 0) <= 0) {
-                      _showSnack('Please enter goal details', success: false);
+                      _showSnack(AppStrings.pleaseEnterGoalDetails, success: false);
                       return;
                     }
                     final assist = _memberById(selectedAssistId);
@@ -3660,13 +3659,13 @@ class _RefereeManageMatchScreenState
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
               SizedBox(height: 6),
               Row(children: [
-                _cardTypeChip('1st', 'firstYellow', cardType,
+                _cardTypeChip(AppStrings.firstCard, 'firstYellow', cardType,
                     (v) => setSheetState(() => cardType = v), Colors.amber),
                 SizedBox(width: 10),
-                _cardTypeChip('2nd', 'secondYellow', cardType,
+                _cardTypeChip(AppStrings.secondCard, 'secondYellow', cardType,
                     (v) => setSheetState(() => cardType = v), Colors.amber),
                 SizedBox(width: 10),
-                _cardTypeChip('Red', 'red', cardType,
+                _cardTypeChip(AppStrings.redCardShort, 'red', cardType,
                     (v) => setSheetState(() => cardType = v), Colors.red),
               ]),
               SizedBox(height: 12),
@@ -3687,7 +3686,7 @@ class _RefereeManageMatchScreenState
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
               SizedBox(height: 6),
               _memberDropdown(
-                hint: 'Select Player',
+                hint: AppStrings.selectPlayer,
                 members: _membersForTeamLabel(selectedTeam),
                 value: selectedPlayerId,
                 onChanged: (value) =>
@@ -3713,7 +3712,7 @@ class _RefereeManageMatchScreenState
                   onPressed: () {
                     final player = _memberById(selectedPlayerId);
                     if (player == null) {
-                      _showSnack('Please enter card details', success: false);
+                      _showSnack(AppStrings.pleaseEnterCardDetails, success: false);
                       return;
                     }
                     setState(() => _cards.add(_CardEntry(
@@ -3970,7 +3969,7 @@ class _RefereeManageMatchScreenState
       ...members.map((member) => member.id),
     ];
     return SearchableDropdownButton(
-      hint: members.isEmpty ? 'No members available' : hint,
+      hint: members.isEmpty ? AppStrings.noMembersAvailable : hint,
       value: value,
       items: items,
       values: values,
@@ -4058,9 +4057,9 @@ class _MatchHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Match Details',
-            style: TextStyle(
+          Text(
+            AppStrings.matchDetails,
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 20,
@@ -4083,7 +4082,7 @@ class _MatchHeader extends StatelessWidget {
                   children: [
                     if (round != null && round.isNotEmpty) ...[
                       Text(
-                        'ROUND : $round',
+                        '${AppStrings.round.toUpperCase()} : $round',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontFamily: 'Poppins',
@@ -4094,10 +4093,10 @@ class _MatchHeader extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                     ],
-                    const Text(
-                      'Match Date',
+                    Text(
+                      AppStrings.matchDate,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
@@ -4106,7 +4105,7 @@ class _MatchHeader extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      displayDate ?? 'TBD',
+                      displayDate ?? AppStrings.tbd,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
@@ -4116,10 +4115,10 @@ class _MatchHeader extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Match Time',
+                    Text(
+                      AppStrings.matchTime,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
@@ -4128,7 +4127,7 @@ class _MatchHeader extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      displayTime ?? 'TBD',
+                      displayTime ?? AppStrings.tbd,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
@@ -4545,10 +4544,10 @@ class _CardEntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isYellow = card.type != 'red';
     final label = card.type == 'secondYellow'
-        ? '2nd'
+        ? AppStrings.secondCard
         : card.type == 'red'
-            ? 'Red'
-            : '1st';
+            ? AppStrings.redCardShort
+            : AppStrings.firstCard;
     return Container(
       margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),

@@ -134,7 +134,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
     if (!_loading && _posts.isEmpty) {
       return Center(
         child: Text(
-          'No posts found'.tr,
+          AppStrings.noPostsFound,
           style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
@@ -253,8 +253,8 @@ class _PostCardState extends State<_PostCard> {
               ListTile(
                 leading: const Icon(Icons.edit_outlined,
                     color: AppColors.socaBlack, size: 22),
-                title: const Text(
-                  'Edit Post',
+                title: Text(
+                  AppStrings.editPost,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 15,
@@ -272,8 +272,8 @@ class _PostCardState extends State<_PostCard> {
               ListTile(
                 leading: const Icon(Icons.delete_outline,
                     color: Colors.red, size: 22),
-                title: const Text(
-                  'Delete Post',
+                title: Text(
+                  AppStrings.deletePost,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 15,
@@ -321,14 +321,13 @@ class _PostCardState extends State<_PostCard> {
                 );
                 if (ctx.mounted) Navigator.of(ctx).pop();
                 if (mounted) {
-                  AppSnackBar.showSuccess(context, 'Post deleted');
+                  AppSnackBar.showSuccess(context, AppStrings.postDeleted);
                   widget.onDeleted();
                 }
               } catch (_) {
                 setSheetState(() => isDeleting = false);
                 if (mounted) {
-                  AppSnackBar.showError(
-                      context, 'Could not delete post. Please try again.');
+                  AppSnackBar.showError(context, AppStrings.couldNotDeletePost);
                 }
               }
             }
@@ -339,8 +338,8 @@ class _PostCardState extends State<_PostCard> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Are you sure you want to delete this post?',
+                    Text(
+                      AppStrings.deletePostConfirm,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -366,8 +365,8 @@ class _PostCardState extends State<_PostCard> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25)),
                             ),
-                            child: const Text(
-                              'CANCEL',
+                            child: Text(
+                              AppStrings.cancel.toUpperCase(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
@@ -396,8 +395,8 @@ class _PostCardState extends State<_PostCard> {
                                       color: Colors.white,
                                     ),
                                   )
-                                : const Text(
-                                    'DELETE',
+                                : Text(
+                                    AppStrings.delete.toUpperCase(),
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w700,
@@ -537,7 +536,7 @@ class _PostCardState extends State<_PostCard> {
 
                   // Double Tap to Cheer Text
                   Text(
-                    'Double Tap to Cheer'.tr,
+                    AppStrings.doubleTapToCheer,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -594,7 +593,7 @@ class _PostCardState extends State<_PostCard> {
                     color: AppColors.socaBlack,
                   ),
                   Text(
-                    'Double Tap to Cheer'.tr,
+                    AppStrings.doubleTapToCheer,
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -638,7 +637,7 @@ class _PostCardState extends State<_PostCard> {
                     size: 20, color: AppColors.socaBlack),
                 const SizedBox(width: 8),
                 Text(
-                  '${widget.post.likeCount ?? 0} cheer',
+                  AppStrings.cheerCount(widget.post.likeCount ?? 0),
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -661,7 +660,7 @@ class _PostCardState extends State<_PostCard> {
                     size: 20, color: AppColors.socaBlack),
                 const SizedBox(width: 8),
                 Text(
-                  'SHARE'.tr,
+                  AppStrings.shareUpper,
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,

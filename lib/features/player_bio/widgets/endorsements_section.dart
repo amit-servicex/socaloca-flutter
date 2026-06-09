@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
+import 'package:socaloca/core/router/app_routes.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
@@ -13,12 +15,12 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class EndorsementsSection extends StatelessWidget {
   final List<EndorsementModel> endorsements;
   final bool isLoadingEndorsements;
-
-  EndorsementsSection({
-    super.key,
-    required this.endorsements,
-    required this.isLoadingEndorsements,
-  });
+  String? userid;
+  EndorsementsSection(
+      {super.key,
+      required this.endorsements,
+      required this.isLoadingEndorsements,
+      this.userid});
 
   bool _isValidImageUrl(String? url) {
     if (url == null || url.isEmpty) return false;
@@ -28,11 +30,12 @@ class EndorsementsSection extends StatelessWidget {
 
   String _getUserRole(EndorserUserModel? user) {
     if (user == null) return '';
-    if (user.isPlayer == true) return 'Player';
-    if (user.isCoach == true) return 'Coach';
-    if (user.isAdmin == true) return 'Manager';
-    if (user.isFan == true) return 'Fan';
-    return '';
+    List<String> roles = [];
+    if (user.isPlayer == true) roles.add('Player');
+    if (user.isCoach == true) roles.add('Coach');
+    if (user.isAdmin == true) roles.add('Manager');
+    if (user.isFan == true) roles.add('Fan');
+    return roles.join('/');
   }
 
   String _formatDate(int? timestamp) {
@@ -47,15 +50,8 @@ class EndorsementsSection extends StatelessWidget {
       return Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.socaGrey,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
         ),
         child: AppLoader(),
       );
@@ -68,187 +64,173 @@ class EndorsementsSection extends StatelessWidget {
     final endorsement = endorsements.first;
     final user = endorsement.userDetails;
 
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 12),
+          padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
+          decoration: BoxDecoration(
+            color: AppColors.socaGrey,
+            borderRadius: BorderRadius.circular(8),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Endorsements'.tr,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  // TODO: Navigate to all endorsements
-                },
+              Align(
+                alignment: Alignment.centerRight,
                 child: Text(
-                  'View All'.tr,
+                  _formatDate(endorsement.addedOn),
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
-                    color: AppColors.socaYellow,
+                    color: AppColors.socaBlack.withOpacity(0.7),
                   ),
                 ),
               ),
-            ],
-          ),
-          SizedBox(height: 12),
-
-          // User Info Row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // User Avatar
-              GestureDetector(
-                onTap: () {
-                  // TODO: Navigate to user profile
-                },
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.socaGrey.withOpacity(0.2),
+              SizedBox(height: 8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // TODO: Navigate to user profile
+                    },
+                    child: Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      child: ClipOval(
+                        child: _isValidImageUrl(user?.imageUrl)
+                            ? CachedNetworkImage(
+                                imageUrl:
+                                    ApiConstants.getImageUrl(user!.imageUrl),
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => AppLoader(),
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.person,
+                                  color: AppColors.socaBlack.withOpacity(0.2),
+                                  size: 32,
+                                ),
+                              )
+                            : Icon(
+                                Icons.person,
+                                color: AppColors.socaBlack.withOpacity(0.2),
+                                size: 32,
+                              ),
+                      ),
+                    ),
                   ),
-                  child: ClipOval(
-                    child: _isValidImageUrl(user?.imageUrl)
-                        ? CachedNetworkImage(
-                            imageUrl:
-                                '${ApiConstants.mediaBaseUrl}${user!.imageUrl}',
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => AppLoader(),
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.person,
-                              color: AppColors.socaGrey,
-                              size: 25,
-                            ),
-                          )
-                        : Icon(
-                            Icons.person,
-                            color: AppColors.socaGrey,
-                            size: 25,
-                          ),
-                  ),
-                ),
-              ),
-
-              SizedBox(width: 12),
-
-              // User Details and Comment
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // User Name and Role
-                    Row(
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            '${user?.firstName ?? ''} ${user?.lastName ?? ''}'
-                                .trim(),
+                        if (endorsement.comment != null &&
+                            endorsement.comment!.isNotEmpty) ...[
+                          Text(
+                            endorsement.comment!,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
-                              fontWeight: FontWeight.w600,
                               color: AppColors.socaBlack,
                             ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 6),
+                        ],
+                        RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 13,
+                              color: AppColors.socaBlack.withOpacity(0.8),
+                            ),
+                            children: [
+                              TextSpan(
+                                text:
+                                    '${user?.firstName ?? ''} ${user?.lastName ?? ''}'
+                                        .trim(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.socaBlack,
+                                ),
+                              ),
+                              if (_getUserRole(user).isNotEmpty)
+                                TextSpan(
+                                  text: ' | ${_getUserRole(user)}',
+                                ),
+                            ],
                           ),
                         ),
-                        if (_getUserRole(user).isNotEmpty)
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.socaYellow.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
+                        if (endorsement.academy?.name != null) ...[
+                          SizedBox(height: 4),
+                          GestureDetector(
+                            onTap: () {
+                              // TODO: Navigate to academy
+                            },
                             child: Text(
-                              _getUserRole(user),
+                              endorsement.academy!.name!.toUpperCase(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.socaBlack,
+                                fontSize: 13,
+                                color: AppColors.socaBlack.withOpacity(0.7),
                               ),
                             ),
                           ),
+                        ],
                       ],
                     ),
-
-                    // Academy Name (if available)
-                    if (endorsement.academy?.name != null) ...[
-                      SizedBox(height: 4),
-                      GestureDetector(
-                        onTap: () {
-                          // TODO: Navigate to academy
-                        },
-                        child: Text(
-                          endorsement.academy!.name!,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 12,
-                            color: AppColors.socaYellow,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ],
-
-                    SizedBox(height: 8),
-
-                    // Comment
-                    if (endorsement.comment != null &&
-                        endorsement.comment!.isNotEmpty)
-                      Text(
-                        endorsement.comment!,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 13,
-                          color: AppColors.socaBlack,
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-
-                    SizedBox(height: 8),
-
-                    // Date
-                    Text(
-                      _formatDate(endorsement.addedOn),
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 11,
-                        color: AppColors.socaGrey,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          top: -10,
+          left: 16,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.socaBlack,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              'Endorsements'.tr.toUpperCase(),
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: AppColors.socaYellow,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: -10,
+          right: 16,
+          child: GestureDetector(
+            onTap: () {
+              context.push(AppRoutes.myEndorsementList,
+                  extra: {'userId': user?.userId, "isOwnProfile": false});
+            },
+            child: Text(
+              'View All'.tr.toLowerCase(),
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.socaBlack,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

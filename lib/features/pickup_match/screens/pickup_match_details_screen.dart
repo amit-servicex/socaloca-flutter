@@ -51,7 +51,7 @@ class _PickupMatchDetailsScreenState
       final user = ref.read(currentUserProvider);
       if (user == null) {
         setState(() {
-          _errorMessage = 'User not found';
+          _errorMessage = AppStrings.userNotFound;
           _isLoading = false;
         });
         return;
@@ -68,14 +68,14 @@ class _PickupMatchDetailsScreenState
           _match = match;
           _isLoading = false;
           if (match == null) {
-            _errorMessage = 'Match not found';
+            _errorMessage = AppStrings.matchNotFound;
           }
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _errorMessage = 'Error loading match details';
+          _errorMessage = AppStrings.errorLoadingMatchDetails;
           _isLoading = false;
         });
       }
@@ -96,7 +96,7 @@ class _PickupMatchDetailsScreenState
     try {
       final user = ref.read(currentUserProvider);
       if (user == null) {
-        _showError('User not found');
+        _showError(AppStrings.userNotFound);
         return;
       }
 
@@ -117,7 +117,7 @@ class _PickupMatchDetailsScreenState
           // Reload match details to update request status
           _loadMatchDetails();
         } else {
-          _showError('Failed to send request. Please try again.');
+          _showError(AppStrings.failedToSendRequest);
         }
       }
     } catch (e) {
@@ -288,14 +288,14 @@ class _PickupMatchDetailsScreenState
           SizedBox(height: 16),
 
           // Details
-          _buildDetailRow(Icons.stadium, 'Venue', _match!.venueName ?? 'N/A'),
+          _buildDetailRow(Icons.stadium, AppStrings.venue, _match!.venueName ?? AppStrings.na),
           SizedBox(height: 12),
           _buildDetailRow(
-              Icons.people, 'Max Players', '${_match!.maxPlayer} players'),
+              Icons.people, AppStrings.maxPlayers, '${_match!.maxPlayer} players'),
           SizedBox(height: 12),
-          _buildDetailRow(Icons.calendar_today, 'Date', _formatDate()),
+          _buildDetailRow(Icons.calendar_today, AppStrings.date, _formatDate()),
           SizedBox(height: 12),
-          _buildDetailRow(Icons.access_time, 'Time', _formatTime()),
+          _buildDetailRow(Icons.access_time, AppStrings.time, _formatTime()),
 
           // Match Note
           if (_match!.matchNote != null && _match!.matchNote!.isNotEmpty) ...[
@@ -365,7 +365,7 @@ class _PickupMatchDetailsScreenState
                   ),
                   SizedBox(height: 4),
                   Text(
-                    _match!.createdByName ?? 'Host',
+                    _match!.createdByName ?? AppStrings.host,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
@@ -461,7 +461,7 @@ class _PickupMatchDetailsScreenState
     VoidCallback? onPressed;
 
     if (isHost) {
-      buttonText = 'VIEW REQUESTS';
+      buttonText = AppStrings.viewRequestsUpper;
       buttonColor = AppColors.socaBlack;
       textColor = AppColors.socaYellow;
       isEnabled = true;
@@ -475,25 +475,25 @@ class _PickupMatchDetailsScreenState
       final requestStatus = _match!.requestStatus;
 
       if (requestStatus == 'accepted') {
-        buttonText = 'ACCEPTED';
+        buttonText = AppStrings.acceptedUpper;
         buttonColor = Colors.green;
         textColor = Colors.white;
         isEnabled = false;
         onPressed = null;
       } else if (requestStatus == 'declined') {
-        buttonText = 'DECLINED';
+        buttonText = AppStrings.declinedUpper;
         buttonColor = Colors.red;
         textColor = Colors.white;
         isEnabled = false;
         onPressed = null;
       } else if (requestStatus == 'pending') {
-        buttonText = 'REQUEST PENDING';
+        buttonText = AppStrings.requestPendingUpper;
         buttonColor = Colors.grey;
         textColor = Colors.white;
         isEnabled = false;
         onPressed = null;
       } else {
-        buttonText = 'REQUEST TO JOIN';
+        buttonText = AppStrings.requestToJoin.toUpperCase();
         buttonColor = AppColors.socaBlack;
         textColor = AppColors.socaYellow;
         isEnabled = !_isRequesting;

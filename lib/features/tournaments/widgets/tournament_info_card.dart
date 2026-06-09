@@ -17,11 +17,11 @@ class TournamentInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final leftFields = <_InfoField>[
-      _InfoField('Age Category'.tr, tournament.ageCat),
-      _InfoField('Gender'.tr, tournament.gender),
-      _InfoField('Game Type'.tr, tournament.gameType),
-      _InfoField('Tournament Type'.tr, _getTournamentType()),
-      _InfoField('Country'.tr, tournament.country),
+      _InfoField(AppStrings.ageCategory, tournament.ageCat),
+      _InfoField(AppStrings.genderPlain, tournament.gender),
+      _InfoField(AppStrings.gameType, tournament.gameType),
+      _InfoField(AppStrings.tournamentType, _getTournamentType()),
+      _InfoField(AppStrings.country, tournament.country),
     ].where((field) => field.value != null && field.value!.isNotEmpty).toList();
 
     String? tournamentDateDisplay = tournament.startDate;
@@ -32,16 +32,16 @@ class TournamentInfoCard extends StatelessWidget {
     }
 
     final rightFields = <_InfoField>[
-      _InfoField('Location'.tr, tournament.location),
-      _InfoField('Tournament Date'.tr, tournamentDateDisplay),
-      _InfoField('Venue'.tr, tournament.venue),
-      _InfoField('Total Number of Teams'.tr,
+      _InfoField(AppStrings.location, tournament.location),
+      _InfoField(AppStrings.tournamentDate, tournamentDateDisplay),
+      _InfoField(AppStrings.venue, tournament.venue),
+      _InfoField(AppStrings.totalNumberOfTeams,
           tournament.teamCount > 0 ? '${tournament.teamCount}' : null),
       _InfoField(
-          'Number of player per team'.tr,
+          AppStrings.numberOfPlayerPerTeam,
           tournament.teamPlayerLimit > 0
               ? '${tournament.teamPlayerLimit}'
-              : (tournament.teamPlayerLimit == 0 ? 'No limit'.tr : null)),
+              : (tournament.teamPlayerLimit == 0 ? AppStrings.noLimit : null)),
     ].where((field) => field.value != null && field.value!.isNotEmpty).toList();
 
     return Card(
@@ -92,12 +92,13 @@ class TournamentInfoCard extends StatelessWidget {
                 ],
               ),
             ),
-            _optionalSection('Notes'.tr, tournament.notes),
-            _optionalSection('Description'.tr, tournament.description,
+            _optionalSection(AppStrings.notes, tournament.notes),
+            _optionalSection(AppStrings.description, tournament.description,
                 isHtml: true),
-            _optionalSection('Prizes'.tr, tournament.prize),
-            _optionalSection('Registration Fees'.tr, tournament.regFee),
-            _optionalSection('Organizer Details'.tr, tournament.orgDetails),
+            _optionalSection(AppStrings.prizes, tournament.prize),
+            _optionalSection(AppStrings.registrationFees, tournament.regFee),
+            _optionalSection(
+                AppStrings.organizerDetails, tournament.orgDetails),
           ],
         ),
       ),

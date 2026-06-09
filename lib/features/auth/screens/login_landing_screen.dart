@@ -68,7 +68,7 @@ class LoginLandingScreen extends StatelessWidget {
                             border: Border.all(color: _black, width: 1),
                           ),
                           child: Text(
-                            'Login'.tr,
+                            AppStrings.login,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
@@ -94,7 +94,7 @@ class LoginLandingScreen extends StatelessWidget {
                             color: _pageBg,
                             padding: EdgeInsets.symmetric(horizontal: 25),
                             child: Text(
-                              'or'.tr,
+                              AppStrings.or,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
@@ -120,7 +120,7 @@ class LoginLandingScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
-                            'Sign Up'.tr,
+                            AppStrings.signUp,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,

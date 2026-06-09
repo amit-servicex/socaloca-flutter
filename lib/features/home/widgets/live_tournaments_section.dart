@@ -159,7 +159,8 @@ class _LiveTournamentsSectionState
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      (tournament.tmntName ?? 'Tournament')
+                                      (tournament.tmntName ??
+                                              AppStrings.tournamentFallback)
                                           .toUpperCase(),
                                       style: TextStyle(
                                         fontFamily: 'Poppins',
@@ -182,7 +183,7 @@ class _LiveTournamentsSectionState
                               ),
                               SizedBox(height: 2),
                               Text(
-                                tournament.startDate ?? 'Unknown Date',
+                                tournament.startDate ?? AppStrings.unknownDate,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
@@ -208,10 +209,11 @@ class _LiveTournamentsSectionState
                         ),
                         children: [
                           TextSpan(
-                              text:
-                                  '${tournament.tmntName ?? 'Tournament'} is live!!! '),
+                              text: AppStrings.tournamentIsLive(
+                                  tournament.tmntName ??
+                                      AppStrings.tournamentFallback)),
                           TextSpan(
-                            text: 'Check tournament details',
+                            text: AppStrings.checkTournamentDetails,
                             style: TextStyle(fontWeight: FontWeight.w700),
                           ),
                         ],
@@ -273,14 +275,18 @@ class _LiveTournamentsSectionState
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          _buildDetailItem('Gender',
-                                              'Male'), // Default fallback
                                           _buildDetailItem(
-                                              'Game Type',
+                                              AppStrings.genderPlain,
+                                              AppStrings
+                                                  .male), // Default fallback
+                                          _buildDetailItem(
+                                              AppStrings.gameType,
                                               tournament.tmntType ??
-                                                  'Football'),
-                                          _buildDetailItem('Country',
-                                              tournament.country ?? 'N/A'),
+                                                  AppStrings.football),
+                                          _buildDetailItem(
+                                              AppStrings.country,
+                                              tournament.country ??
+                                                  AppStrings.na),
                                         ],
                                       ),
                                     ),
@@ -291,20 +297,23 @@ class _LiveTournamentsSectionState
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          _buildDetailItem('Location',
-                                              tournament.city ?? 'N/A'),
-                                          _buildDetailItem('Tournament Date',
-                                              'Started on ${tournament.startDate ?? 'N/A'}'),
+                                          _buildDetailItem(AppStrings.location,
+                                              tournament.city ?? AppStrings.na),
                                           _buildDetailItem(
-                                              'Tournament Venue',
+                                              AppStrings.tournamentDate,
+                                              AppStrings.startedOn(
+                                                  tournament.startDate ??
+                                                      AppStrings.na)),
+                                          _buildDetailItem(
+                                              AppStrings.tournamentVenue,
                                               tournament.city ??
-                                                  'N/A'), // Fallback
+                                                  AppStrings.na), // Fallback
                                           _buildDetailItem(
-                                              'Total Number of Teams',
+                                              AppStrings.totalNumberOfTeams,
                                               '${tournament.teamsCount}'),
                                           _buildDetailItem(
-                                              'Number of player per team',
-                                              'No limit'),
+                                              AppStrings.numberOfPlayerPerTeam,
+                                              AppStrings.noLimit),
                                         ],
                                       ),
                                     ),

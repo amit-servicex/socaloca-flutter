@@ -52,13 +52,15 @@ class _CountryDropdownState extends ConsumerState<_CountryDropdown> {
   @override
   Widget build(BuildContext context) {
     return SearchableDropdownButton(
-      hint: 'By Country'.tr,
+      hint: AppStrings.byCountry,
       value: _selectedCountry,
       items: ['All', ...CountriesList.countries],
       onChanged: (value) {
         setState(() => _selectedCountry = value);
         if (value != null) {
-          ref.read(searchProvider.notifier).addFilter(SearchFilterType.country, value);
+          ref
+              .read(searchProvider.notifier)
+              .addFilter(SearchFilterType.country, value);
         }
       },
       height: 42,
@@ -78,7 +80,7 @@ class _TypeDropdownState extends ConsumerState<_TypeDropdown> {
   @override
   Widget build(BuildContext context) {
     return SearchableDropdownButton(
-      hint: 'By Type'.tr,
+      hint: AppStrings.byType,
       value: _selectedType,
       items: const [
         UserTypeFilter.player,
@@ -89,7 +91,9 @@ class _TypeDropdownState extends ConsumerState<_TypeDropdown> {
       onChanged: (value) {
         setState(() => _selectedType = value);
         if (value != null) {
-          ref.read(searchProvider.notifier).addFilter(SearchFilterType.type, value);
+          ref
+              .read(searchProvider.notifier)
+              .addFilter(SearchFilterType.type, value);
         }
       },
       height: 42,
@@ -113,7 +117,7 @@ class _ChoiceDropdownState extends ConsumerState<_ChoiceDropdown> {
   @override
   Widget build(BuildContext context) {
     return SearchableDropdownButton(
-      hint: 'By Choice'.tr,
+      hint: AppStrings.byChoice,
       value: _selectedChoice,
       items: const [
         SortingFilter.mostPosts,
@@ -124,7 +128,9 @@ class _ChoiceDropdownState extends ConsumerState<_ChoiceDropdown> {
       onChanged: (value) {
         setState(() => _selectedChoice = value);
         if (value != null) {
-          ref.read(searchProvider.notifier).addFilter(SearchFilterType.choice, value);
+          ref
+              .read(searchProvider.notifier)
+              .addFilter(SearchFilterType.choice, value);
         }
       },
       height: 42,

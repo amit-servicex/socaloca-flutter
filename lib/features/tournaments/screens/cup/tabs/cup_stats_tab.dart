@@ -118,7 +118,7 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
 
   Widget _buildGroupStageStats(String? roundId) {
     if (roundId == null || roundId.isEmpty) {
-      return _NoRoundState(message: 'No group round available'.tr);
+      return _NoRoundState(message: AppStrings.noGroupRoundAvailable);
     }
 
     return Column(
@@ -187,7 +187,7 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
 
   Widget _buildKnockoutStats(String? roundId) {
     if (roundId == null || roundId.isEmpty) {
-      return _NoRoundState(message: 'No knockout round available'.tr);
+      return _NoRoundState(message: AppStrings.noKnockoutRoundAvailable);
     }
 
     return Column(
@@ -349,7 +349,7 @@ class _CupStatsList extends ConsumerWidget {
           children: [
             Icon(Icons.error_outline, size: 64, color: Colors.red),
             SizedBox(height: 16),
-            Text('Error loading stats: $error'),
+            Text(AppStrings.errorLoadingStats(error)),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
@@ -371,7 +371,7 @@ class _CupStatsList extends ConsumerWidget {
                   )));
                 }
               },
-              child: Text('Retry'.tr),
+              child: Text(AppStrings.retry),
             ),
           ],
         ),

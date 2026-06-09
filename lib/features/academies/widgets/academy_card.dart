@@ -88,7 +88,7 @@ class AcademyCard extends StatelessWidget {
                   // Category
                   if (academy.category != null && academy.category!.isNotEmpty)
                     Text(
-                      'CATEGORY ${academy.category}',
+                      '${AppStrings.category.toUpperCase()} ${academy.category}',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
