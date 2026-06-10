@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/constants/api_constants.dart';
@@ -16,7 +14,6 @@ import '../../../core/theme/app_colors.dart';
 import '../data/models/referee_match_model.dart';
 import '../providers/referee_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
-import '../../../shared/widgets/searchable_dropdown.dart';
 import '../../../shared/widgets/app_toast.dart';
 
 class RefereeManageMatchScreen extends ConsumerStatefulWidget {
@@ -70,9 +67,13 @@ class _RefereeManageMatchScreenState
   bool _showExtra = true;
   bool _showPenalty = true;
 
-  // Goals/Cards state
+  // Goals/Cards/Penalty state
   final List<_GoalEntry> _goals = [];
   final List<_CardEntry> _cards = [];
+  int _myCardCount = 0;
+  int _opponentCardCount = 0;
+  final List<_PenaltyEntry> _penalties = [];
+  bool _isSavingPenalties = false;
 
   // Android manage-match detail state
   List<_ManageMember> _myPlayers = [];
@@ -136,6 +137,9 @@ class _RefereeManageMatchScreenState
     _commissionerReportCtrl.dispose();
     for (final sub in [..._mySubstitutes, ..._opponentSubstitutes]) {
       sub.dispose();
+    }
+    for (final goal in _goals) {
+      goal.dispose();
     }
     super.dispose();
   }
@@ -271,6 +275,8 @@ class _RefereeManageMatchScreenState
     _photos = _parsePhotos(gallery['photos']);
     _highlightVideos = _parseVideos(gallery['videos']);
     _matchVideos = _parseVideos(gallery['largeVideos']);
+    _syncGoalCountsToScore();
+    _syncPenaltyCountsToScore();
   }
 
   void _applyBasicMatchInfo(
@@ -336,12 +342,20 @@ class _RefereeManageMatchScreenState
       widget.match?.fieldName,
     );
 
+    for (final g in _goals) {
+      g.dispose();
+    }
     _goals
       ..clear()
       ..addAll(_parseGoalEntries(score['goals']));
     _cards
       ..clear()
       ..addAll(_parseCardEntries(score['cards']));
+    _myCardCount = _cards.where((c) => c.team == _displayTeamA).length;
+    _opponentCardCount = _cards.where((c) => c.team == _displayTeamB).length;
+    _penalties
+      ..clear()
+      ..addAll(_parsePenaltyEntries(score['penalty']));
   }
 
   Set<String> _parseSavedSquadIds(dynamic raw) {
@@ -424,22 +438,67 @@ class _RefereeManageMatchScreenState
       final goal = item.cast<String, dynamic>();
       final teamId = _stringValue(goal['teamId']);
       final isOwnGoal = goal['ownGoal'] == true;
-      final isPenalty = goal['isPenalty'] == true;
-      final player = _nonEmpty(
-            goal['playerName'],
-            isOwnGoal ? AppStrings.ownGoal : null,
-            isPenalty ? AppStrings.penalty : null,
-          ) ??
-          AppStrings.goal;
+      final isPenaltyGoal = goal['isPenalty'] == true;
+      final player = _nonEmpty(goal['playerName']) ?? '';
       return _GoalEntry(
         team: _teamLabelById(teamId),
         player: player,
         playerId: _stringValue(goal['playerId']),
         assistPlayerId: _stringValue(goal['assistPlayerId']),
         assistPlayerName: _stringValue(goal['assistPlayerName']),
+        ownGoal: isOwnGoal,
+        isPenalty: isPenaltyGoal,
+        videoId: _stringValue(goal['videoId']),
+        videoUrl: _stringValue(goal['videoUrl']),
         minute: _stringValue(goal['goalTime']),
       );
     }).toList();
+  }
+
+  void _syncGoalCountsToScore() {
+    final scoreA = int.tryParse(_scoreACtrl.text) ?? 0;
+    final scoreB = int.tryParse(_scoreBCtrl.text) ?? 0;
+    final teamA = _displayTeamA;
+    final teamB = _displayTeamB;
+    final myCount = _goals.where((g) => g.team == teamA).length;
+    final oppCount = _goals.where((g) => g.team == teamB).length;
+    for (int i = myCount; i < scoreA; i++) {
+      _goals.add(_GoalEntry(team: teamA));
+    }
+    for (int i = oppCount; i < scoreB; i++) {
+      _goals.add(_GoalEntry(team: teamB));
+    }
+  }
+
+  List<_PenaltyEntry> _parsePenaltyEntries(dynamic raw) {
+    if (raw is! List) return [];
+    return raw.whereType<Map>().map((item) {
+      final p = item.cast<String, dynamic>();
+      final teamId = _stringValue(p['teamId']);
+      return _PenaltyEntry(
+        team: _teamLabelById(teamId),
+        playerId: _stringValue(p['playerId']),
+        playerName: _nonEmpty(p['playerName']) ?? '',
+        missed: p['missed'] == true,
+        videoId: _stringValue(p['videoId']),
+        videoUrl: _stringValue(p['videoUrl']),
+      );
+    }).toList();
+  }
+
+  void _syncPenaltyCountsToScore() {
+    final countA = int.tryParse(_penaltyACtrl.text) ?? 0;
+    final countB = int.tryParse(_penaltyBCtrl.text) ?? 0;
+    final teamA = _displayTeamA;
+    final teamB = _displayTeamB;
+    final myCount = _penalties.where((p) => p.team == teamA).length;
+    final oppCount = _penalties.where((p) => p.team == teamB).length;
+    for (int i = myCount; i < countA; i++) {
+      _penalties.add(_PenaltyEntry(team: teamA));
+    }
+    for (int i = oppCount; i < countB; i++) {
+      _penalties.add(_PenaltyEntry(team: teamB));
+    }
   }
 
   List<_CardEntry> _parseCardEntries(dynamic raw) {
@@ -450,9 +509,9 @@ class _RefereeManageMatchScreenState
       final isRed = card['redCard'] == true;
       return _CardEntry(
         team: _teamLabelById(teamId),
-        player: _nonEmpty(card['playerName'], card['name']) ?? AppStrings.player,
+        player:
+            _nonEmpty(card['playerName'], card['name']) ?? AppStrings.player,
         playerId: _stringValue(card['playerId']),
-        minute: _nonEmpty(card['time'], card['goalTime']) ?? '',
         type: isRed
             ? 'red'
             : card['secondYellowCard'] == true
@@ -472,21 +531,6 @@ class _RefereeManageMatchScreenState
   String _teamIdForLabel(String teamLabel) {
     if (teamLabel == _displayTeamB) return _opponentTeamId;
     return _myTeamId;
-  }
-
-  List<_ManageMember> _membersForTeamLabel(String teamLabel) {
-    if (teamLabel == _displayTeamB) return _opponentPlayers;
-    return _myPlayers;
-  }
-
-  _ManageMember? _memberById(String? id) {
-    if (id == null || id.isEmpty) return null;
-    for (final member in [..._myPlayers, ..._opponentPlayers]) {
-      if (member.id == id || member.playerId == id || member.userId == id) {
-        return member;
-      }
-    }
-    return null;
   }
 
   List<_MatchPhoto> _parsePhotos(dynamic raw) {
@@ -731,21 +775,104 @@ class _RefereeManageMatchScreenState
                 _sectionGap(),
                 _buildGoalsTab(teamA, teamB),
                 _sectionGap(),
-                _buildCardsTab(teamA, teamB),
+
+                // Extra time toggle
+                _expandableSection(
+                  title: AppStrings.extraTime,
+                  expanded: _showExtra,
+                  onTap: () => setState(() => _showExtra = !_showExtra),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: _scoreInput(
+                              label: teamA, controller: _extraACtrl)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Text('–'.tr,
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.socaBlack)),
+                      ),
+                      Expanded(
+                          child: _scoreInput(
+                              label: teamB, controller: _extraBCtrl)),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 12),
+
+                // Penalty toggle
+                _expandableSection(
+                  title: AppStrings.penalty,
+                  expanded: _showPenalty,
+                  onTap: () => setState(() => _showPenalty = !_showPenalty),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: _scoreInput(
+                              label: teamA, controller: _penaltyACtrl)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Text('–'.tr,
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.socaBlack)),
+                      ),
+                      Expanded(
+                          child: _scoreInput(
+                              label: teamB, controller: _penaltyBCtrl)),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+
+                if (_showPenalty) ...[
+                  _buildPenaltyShootoutSection(teamA, teamB),
+                  _sectionGap(),
+                ],
+
+                SizedBox(
+                  // width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isSavingScore ? null : _saveScore,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.socaBlack,
+                      foregroundColor: AppColors.socaYellow,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
+                    ),
+                    child: _isSavingScore
+                        ? AppLoader(size: 24, centered: false)
+                        : Text('SAVE SCORE'.tr,
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13)),
+                  ),
+                ),
                 _sectionGap(),
+
                 _buildAwardsTab(teamA, teamB),
                 _sectionGap(),
-                _buildStaffTab(teamA, teamB),
-                _sectionGap(),
-                _buildOfficialsTab(teamA, teamB),
+                _buildCardsTab(teamA, teamB),
                 _sectionGap(),
                 _buildSquadTab(teamA, teamB),
                 _sectionGap(),
                 _buildSubstitutesTab(teamA, teamB),
                 _sectionGap(),
+                _buildStaffTab(teamA, teamB),
+                _sectionGap(),
+                _buildOfficialsTab(teamA, teamB),
+                _sectionGap(),
+
+                _buildMediaTab(),
                 _buildIncidentsTab(),
                 _sectionGap(),
-                _buildMediaTab(),
               ],
             ),
           ),
@@ -897,77 +1024,6 @@ class _RefereeManageMatchScreenState
           ),
         ),
         SizedBox(height: 12),
-
-        // Extra time toggle
-        _expandableSection(
-          title: AppStrings.extraTime,
-          expanded: _showExtra,
-          onTap: () => setState(() => _showExtra = !_showExtra),
-          child: Row(
-            children: [
-              Expanded(
-                  child: _scoreInput(label: teamA, controller: _extraACtrl)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Text('–'.tr,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack)),
-              ),
-              Expanded(
-                  child: _scoreInput(label: teamB, controller: _extraBCtrl)),
-            ],
-          ),
-        ),
-        SizedBox(height: 12),
-
-        // Penalty toggle
-        _expandableSection(
-          title: AppStrings.penalty,
-          expanded: _showPenalty,
-          onTap: () => setState(() => _showPenalty = !_showPenalty),
-          child: Row(
-            children: [
-              Expanded(
-                  child: _scoreInput(label: teamA, controller: _penaltyACtrl)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Text('–'.tr,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack)),
-              ),
-              Expanded(
-                  child: _scoreInput(label: teamB, controller: _penaltyBCtrl)),
-            ],
-          ),
-        ),
-        SizedBox(height: 20),
-
-        SizedBox(
-          // width: double.infinity,
-          child: ElevatedButton(
-            onPressed: _isSavingScore ? null : _saveScore,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.socaBlack,
-              foregroundColor: AppColors.socaYellow,
-              padding: EdgeInsets.symmetric(vertical: 12),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6)),
-            ),
-            child: _isSavingScore
-                ? AppLoader(size: 24, centered: false)
-                : Text('SAVE SCORE'.tr,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13)),
-          ),
-        ),
       ],
     );
   }
@@ -1015,21 +1071,19 @@ class _RefereeManageMatchScreenState
   Widget _buildGoalsTab(String teamA, String teamB) {
     final teamAGoals = _goals.where((g) => g.team == teamA).toList();
     final teamBGoals = _goals.where((g) => g.team == teamB).toList();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.transparent,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+            border: Border.all(color: AppColors.socaBlack),
           ),
           clipBehavior: Clip.hardEdge,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Header
               Container(
                 color: AppColors.socaBlack,
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1044,89 +1098,47 @@ class _RefereeManageMatchScreenState
                   ),
                 ),
               ),
-              // Team A Section
-              _buildTeamGoalSection(teamA, teamAGoals),
-              // Team B Section
-              _buildTeamGoalSection(teamB, teamBGoals),
-              // Bottom buttons
+              SizedBox(
+                height: 25,
+              ),
+              _buildTeamGoalSection(
+                teamName: teamA,
+                teamId: _myTeamId,
+                opponentTeamId: _opponentTeamId,
+                goals: teamAGoals,
+                players: _myPlayers,
+              ),
+              _buildTeamGoalSection(
+                teamName: teamB,
+                teamId: _opponentTeamId,
+                opponentTeamId: _myTeamId,
+                goals: teamBGoals,
+                players: _opponentPlayers,
+              ),
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          _goals.clear();
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.socaBlack,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          'RESET GOALS'.tr,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
-                            color: AppColors.socaYellow,
-                          ),
-                        ),
-                      ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isSavingGoals ? null : _saveGoals,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.socaBlack,
+                      foregroundColor: AppColors.socaYellow,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
                     ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () => _showAddGoalSheet(teamA, teamB),
-                        icon: const Icon(Icons.add, size: 18),
-                        label: Text(
-                          'ADD GOAL'.tr,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13,
+                    child: _isSavingGoals
+                        ? const AppLoader(size: 24, centered: false)
+                        : Text(
+                            'SAVE ALL GOALS'.tr,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.socaBlack,
-                          foregroundColor: AppColors.socaYellow,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _isSavingGoals ? null : _saveGoals,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.socaBlack,
-                          foregroundColor: AppColors.socaYellow,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
-                        child: _isSavingGoals
-                            ? AppLoader(size: 24, centered: false)
-                            : Text(
-                                'SAVE ALL GOALS'.tr,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 13,
-                                ),
-                              ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ],
@@ -1136,7 +1148,14 @@ class _RefereeManageMatchScreenState
     );
   }
 
-  Widget _buildTeamGoalSection(String teamName, List<_GoalEntry> goals) {
+  Widget _buildTeamGoalSection({
+    required String teamName,
+    required String teamId,
+    required String opponentTeamId,
+    required List<_GoalEntry> goals,
+    required List<_ManageMember> players,
+  }) {
+    double width = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -1153,172 +1172,447 @@ class _RefereeManageMatchScreenState
             ),
           ),
         ),
+        if (players.isEmpty)
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: SizedBox(
+                width: width * 0.55, // change as needed
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final ok = await ref
+                        .read(refereeRepositoryProvider)
+                        .matchSquadAlert(
+                          teamId: teamId,
+                          opponentTeamId: opponentTeamId,
+                          tournamentId: widget.match?.tournamentId ?? '',
+                          matchId: widget.matchId,
+                        );
+
+                    if (!mounted) return;
+
+                    _showSnack(
+                      ok
+                          ? 'Team Manager is notified to update Match Squad'.tr
+                          : AppStrings.somethingWentWrong,
+                      success: ok,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.socaBlack,
+                    foregroundColor: AppColors.socaYellow,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'MATCH SQUAD ALERT'.tr,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Icon(Icons.info_outline, size: 16),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         if (goals.isEmpty)
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              'No goals recorded'.tr,
+              'No goals — set the score first'.tr,
               style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Colors.grey,
-              ),
+                  fontFamily: 'Poppins',
+                  fontSize: 13,
+                  color: AppColors.socaBlack),
             ),
           )
         else
-          ...goals.asMap().entries.map((entry) {
-            final index = entry.key + 1;
-            final goal = entry.value;
-            return _buildGoalRow(index, goal);
-          }),
+          ...goals.asMap().entries.map((e) => _buildGoalCard(
+              index: e.key + 1, goal: e.value, players: players)),
       ],
     );
   }
 
-  Widget _buildGoalRow(int index, _GoalEntry goal) {
-    String suffix = 'th';
-    if (index % 10 == 1 && index % 100 != 11)
-      suffix = 'st';
-    else if (index % 10 == 2 && index % 100 != 12)
-      suffix = 'nd';
-    else if (index % 10 == 3 && index % 100 != 13) suffix = 'rd';
+  Widget _buildGoalCard({
+    required int index,
+    required _GoalEntry goal,
+    required List<_ManageMember> players,
+  }) {
+    // Build ordinal with superscript suffix (e.g. "1ˢᵗ Goal")
+    final num = index.toString();
+    final suffix = _ordinalSuffix(index);
+
+    const labelStyle = TextStyle(
+      fontFamily: 'Poppins',
+      fontSize: 13,
+      color: AppColors.socaBlack,
+    );
+    const rowHeight = 44.0;
+
+    Widget labelCell(String text) => SizedBox(
+          width: 70,
+          child: Text(text, style: labelStyle),
+        );
+
+    Widget rowDivider() =>
+        const Divider(height: 1, thickness: 0.8, color: AppColors.socaBlack);
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Color(0xFFE0E0E0)),
-        ),
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      // decoration: BoxDecoration(
+      //   color: Colors.white,
+      //   borderRadius: BorderRadius.circular(8),
+      //   border: Border.all(color: const Color(0xFFDDDDDD)),
+      // ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Text(
-                  '$index$suffix Goal',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  AppStrings.goal,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.close, size: 16, color: Colors.grey),
-                onPressed: () {
-                  setState(() {
-                    _goals.remove(goal);
-                  });
-                },
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Text(
-                  AppStrings.time,
-                  style: TextStyle(
-                    fontFamily: 'Lato',
-                    fontSize: 13,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  '${goal.minute} (Mins.)',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          if (goal.player.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Row(
+          // ── Header row: "1st Goal"  |  Own Goal □  |  Penalty □ ──────────
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            child: Row(
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    AppStrings.scorer,
-                    style: TextStyle(
-                      fontFamily: 'Lato',
-                      fontSize: 13,
-                      color: Colors.grey,
-                    ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: num,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.top,
+                        child: Text(
+                          suffix,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 9,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '  ${'Goal'.tr}',
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    goal.player,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
-                      color: AppColors.socaBlack,
-                    ),
-                  ),
+                const Spacer(),
+                _goalCheckbox(
+                  label: 'Own Goal'.tr,
+                  value: goal.ownGoal,
+                  onChanged: (v) => setState(() {
+                    goal.ownGoal = v ?? false;
+                    if (goal.ownGoal) goal.isPenalty = false;
+                  }),
+                ),
+                const SizedBox(width: 10),
+                _goalCheckbox(
+                  label: 'penalty'.tr,
+                  value: goal.isPenalty,
+                  onChanged: (v) => setState(() {
+                    goal.isPenalty = v ?? false;
+                    if (goal.isPenalty) goal.ownGoal = false;
+                  }),
                 ),
               ],
             ),
+          ),
+          // rowDivider(),
+
+          // ── Time row ────────────────────────────────────────────────────
+          SizedBox(
+            height: rowHeight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                children: [
+                  labelCell('Time'.tr),
+                  SizedBox(
+                    width: 60,
+                    height: 50,
+                    child: TextField(
+                      controller: goal.minuteCtrl,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(3),
+                      ],
+                      style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 4, vertical: 6),
+                        filled: true,
+                        fillColor: AppColors.socaGrey,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide: const BorderSide(
+                              color: AppColors.socaBlack, width: 0.8),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide: const BorderSide(
+                              color: AppColors.socaBlack, width: 0.8),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide: const BorderSide(
+                              color: AppColors.socaBlack, width: 1),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    '(Mins.)',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 12,
+                        color: AppColors.socaBlack),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          if (!goal.ownGoal) ...[
+            // rowDivider(),
+            // ── Scorer row ────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              child: Row(
+                children: [
+                  labelCell('Scorer'.tr),
+                  Expanded(
+                    child: _memberDropdown(
+                      hint: 'Select the player'.tr,
+                      members: players,
+                      value: goal.playerId.isEmpty ? null : goal.playerId,
+                      onChanged: (id) {
+                        final m = players.where((p) => p.id == id).firstOrNull;
+                        setState(() {
+                          goal.playerId = id ?? '';
+                          goal.player = m?.shortName ?? '';
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // rowDivider(),
+            // ── Assist row ────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              child: Row(
+                children: [
+                  labelCell('Assist'.tr),
+                  Expanded(
+                    child: _memberDropdown(
+                      hint: 'Select the player'.tr,
+                      members: players,
+                      value: goal.assistPlayerId.isEmpty
+                          ? null
+                          : goal.assistPlayerId,
+                      includeNone: true,
+                      onChanged: (id) {
+                        final m = id == null
+                            ? null
+                            : players.where((p) => p.id == id).firstOrNull;
+                        setState(() {
+                          goal.assistPlayerId = id ?? '';
+                          goal.assistPlayerName = m?.shortName ?? '';
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
+
+          // ── Upload video button ──────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: goal.videoUrl.isEmpty
+                    ? () => _pickAndUploadGoalVideo(goal)
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.socaBlack,
+                  foregroundColor: AppColors.socaYellow,
+                  padding: const EdgeInsets.symmetric(vertical: 11),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6)),
+                  elevation: 0,
+                ),
+                child: Text(
+                  goal.videoUrl.isEmpty
+                      ? 'UPLOAD VIDEO (MAX 50 MB)'.tr
+                      : 'VIDEO UPLOADED'.tr,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          rowDivider(),
         ],
       ),
     );
   }
 
+  String _ordinalSuffix(int n) {
+    if (n % 100 >= 11 && n % 100 <= 13) return 'th';
+    switch (n % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  Widget _goalCheckbox({
+    required String label,
+    required bool value,
+    required ValueChanged<bool?> onChanged,
+  }) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 20,
+          height: 20,
+          child: Checkbox(
+            value: value,
+            onChanged: onChanged,
+            activeColor: AppColors.socaBlack,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+        ),
+        const SizedBox(width: 6),
+        Text(label,
+            style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                color: AppColors.socaBlack)),
+      ],
+    );
+  }
+
+  Future<void> _pickAndUploadGoalVideo(_GoalEntry goal) async {
+    final picked = await _imagePicker.pickVideo(source: ImageSource.gallery);
+    if (picked == null) return;
+    if (!_isAllowedVideo(picked.path)) {
+      _showSnack(AppStrings.pleaseSelectMp4OrMov, success: false);
+      return;
+    }
+    final size = File(picked.path).lengthSync();
+    if (_sizeInMb(size) > 50) {
+      _showSnack('Video must be under 50 MB'.tr, success: false);
+      return;
+    }
+    await _runMediaUpload(AppStrings.uploadingVideo, () async {
+      final formData = FormData.fromMap({
+        'metadata': '',
+        'video': await MultipartFile.fromFile(
+          picked.path,
+          filename: picked.name,
+          contentType: DioMediaType('application', 'octet-stream'),
+        ),
+      });
+      final resp = await ApiClient.instance
+          .uploadFile(ApiConstants.uploadVdo, formData: formData);
+      final response =
+          (resp['response'] as Map?)?.cast<String, dynamic>() ?? {};
+      final videoUrl = response['videoUrl']?.toString() ?? '';
+      final videoId = response['videoId']?.toString() ?? '';
+      if (videoUrl.isEmpty || videoId.isEmpty) {
+        throw Exception('Video not uploaded');
+      }
+      setState(() {
+        goal.videoUrl = videoUrl;
+        goal.videoId = videoId;
+      });
+    });
+  }
+
   Future<void> _saveGoals() async {
     final goals = <Map<String, dynamic>>[];
-    for (var i = 0; i < _goals.length; i++) {
-      final goal = _goals[i];
-      final goalTime = int.tryParse(goal.minute);
-      final playerId = goal.playerId;
-      if (goalTime == null || goalTime <= 0 || playerId.isEmpty) {
+    int seq = 1;
+    for (final goal in _goals) {
+      final goalTime = int.tryParse(goal.minuteCtrl.text.trim()) ?? 0;
+      if (goalTime <= 0 && !goal.ownGoal) {
         _showSnack(
-          'Please enter ${_ordinal(i + 1)} goal details for ${goal.team}',
+          'Please enter goal $seq details for ${goal.team}',
           success: false,
         );
         return;
       }
-      goals.add({
-        'goalSequence': i + 1,
+      if (!goal.ownGoal && goal.playerId.isEmpty) {
+        _showSnack(
+          'Please select scorer for goal $seq of ${goal.team}',
+          success: false,
+        );
+        return;
+      }
+      final entry = <String, dynamic>{
+        'goalSequence': seq,
         'teamId': _teamIdForLabel(goal.team),
-        'ownGoal': false,
-        'playerId': playerId,
-        'playerName': goal.player,
-        'assistPlayerId': goal.assistPlayerId,
-        'assistPlayerName': goal.assistPlayerName,
-        'isPenalty': false,
+        'ownGoal': goal.ownGoal,
+        'isPenalty': goal.isPenalty,
         'goalTime': goalTime,
-        'videoId': '',
-        'videoUrl': '',
-      });
+        'addedBy': StorageService.userId ?? '',
+        'videoId': goal.videoId,
+        'videoUrl': goal.videoUrl,
+      };
+      if (!goal.ownGoal) {
+        entry['playerId'] = goal.playerId;
+        entry['playerName'] = goal.player;
+        entry['assistPlayerId'] = goal.assistPlayerId;
+        entry['assistPlayerName'] = goal.assistPlayerName;
+      }
+      goals.add(entry);
+      seq++;
     }
 
     setState(() => _isSavingGoals = true);
@@ -1333,17 +1627,62 @@ class _RefereeManageMatchScreenState
     if (ok) _loadDetails();
   }
 
-  Widget _buildCardsTab(String teamA, String teamB) {
-    final teamACards = _cards.where((card) => card.team == teamA).toList();
-    final teamBCards = _cards.where((card) => card.team == teamB).toList();
+  Future<void> _savePenaltyAttempts() async {
+    final entries = <Map<String, dynamic>>[];
+    int seq = 1;
+    for (final p in _penalties) {
+      if (!p.missed && p.playerId.isEmpty) {
+        _showSnack(
+          'Please select a player for attempt $seq of ${p.team}',
+          success: false,
+        );
+        return;
+      }
+      final entry = <String, dynamic>{
+        'goalSequence': seq,
+        'teamId': _teamIdForLabel(p.team),
+        'ownGoal': false,
+        'missed': p.missed,
+        'goalTime': 0,
+        'addedBy': StorageService.userId ?? '',
+        'videoId': p.videoId,
+        'videoUrl': p.videoUrl,
+      };
+      if (!p.missed) {
+        entry['playerId'] = p.playerId;
+        entry['playerName'] = p.playerName;
+        entry['assistPlayerId'] = '';
+        entry['assistPlayerName'] = '';
+      }
+      entries.add(entry);
+      seq++;
+    }
+
+    setState(() => _isSavingPenalties = true);
+    final ok = await ref.read(refereeRepositoryProvider).savePenaltyAttempts(
+          matchId: widget.matchId,
+          tournamentId: widget.match?.tournamentId ?? '',
+          matchType: _matchType,
+          goals: entries,
+        );
+    if (!mounted) return;
+    setState(() => _isSavingPenalties = false);
+    if (ok) _loadDetails();
+  }
+
+  // ── Penalty Shootout UI ───────────────────────────────────────────────────
+
+  Widget _buildPenaltyShootoutSection(String teamA, String teamB) {
+    final teamAAttempts = _penalties.where((p) => p.team == teamA).toList();
+    final teamBAttempts = _penalties.where((p) => p.team == teamB).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           decoration: BoxDecoration(
-            // color: const Color(0xFFF8F8F8),
-            // borderRadius: BorderRadius.circular(8),
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: AppColors.socaBlack),
           ),
           clipBehavior: Clip.hardEdge,
@@ -1351,6 +1690,374 @@ class _RefereeManageMatchScreenState
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Header
+              Container(
+                color: AppColors.socaBlack,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  'PENALTY SHOOTOUT'.tr,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              // Mini score row
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        teamA,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                    _scoreBox(_penaltyACtrl),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        ':',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w800,
+                          fontSize: 22,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                    _scoreBox(_penaltyBCtrl),
+                    Expanded(
+                      child: Text(
+                        teamB,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(
+                  height: 1, thickness: 0.8, color: AppColors.socaBlack),
+              const SizedBox(height: 8),
+              // Team A attempts
+              _buildPenaltyTeamSection(
+                teamName: teamA,
+                attempts: teamAAttempts,
+                players: _myPlayers,
+              ),
+              // Team B attempts
+              _buildPenaltyTeamSection(
+                teamName: teamB,
+                attempts: teamBAttempts,
+                players: _opponentPlayers,
+              ),
+              // Buttons
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed:
+                            _isSavingPenalties ? null : _savePenaltyAttempts,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.socaBlack,
+                          foregroundColor: AppColors.socaYellow,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6)),
+                        ),
+                        child: _isSavingPenalties
+                            ? const AppLoader(size: 22, centered: false)
+                            : Text(
+                                'SAVE ALL ATTEMPTS'.tr,
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                ),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _penalties.clear();
+                            _syncPenaltyCountsToScore();
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.socaBlack,
+                          foregroundColor: AppColors.socaYellow,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6)),
+                        ),
+                        child: Text(
+                          'RESET'.tr,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPenaltyTeamSection({
+    required String teamName,
+    required List<_PenaltyEntry> attempts,
+    required List<_ManageMember> players,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          color: AppColors.socaBlack,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Text(
+            teamName,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        if (attempts.isEmpty)
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'No attempts — set the penalty score first'.tr,
+              style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13,
+                  color: AppColors.socaBlack),
+            ),
+          )
+        else
+          ...attempts.asMap().entries.map((e) => _buildPenaltyAttemptCard(
+              index: e.key + 1, attempt: e.value, players: players)),
+      ],
+    );
+  }
+
+  Widget _buildPenaltyAttemptCard({
+    required int index,
+    required _PenaltyEntry attempt,
+    required List<_ManageMember> players,
+  }) {
+    final num = index.toString();
+    final suffix = _ordinalSuffix(index);
+
+    const labelStyle = TextStyle(
+      fontFamily: 'Poppins',
+      fontSize: 13,
+      color: AppColors.socaBlack,
+    );
+
+    Widget rowDivider() =>
+        const Divider(height: 1, thickness: 0.8, color: AppColors.socaBlack);
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header: "1st Attempts"  |  penalty Missed □
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            child: Row(
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: num,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.top,
+                        child: Text(
+                          suffix,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 9,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '  ${'Attempts'.tr}',
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                _goalCheckbox(
+                  label: 'penalty Missed'.tr,
+                  value: attempt.missed,
+                  onChanged: (v) => setState(() {
+                    attempt.missed = v ?? false;
+                  }),
+                ),
+              ],
+            ),
+          ),
+          // Attempt By row (hidden when missed)
+          if (!attempt.missed)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    child: Text('Attempt By'.tr, style: labelStyle),
+                  ),
+                  Expanded(
+                    child: _memberDropdown(
+                      hint: 'Select the player'.tr,
+                      members: players,
+                      value: attempt.playerId.isEmpty ? null : attempt.playerId,
+                      onChanged: (id) {
+                        final m = players.where((p) => p.id == id).firstOrNull;
+                        setState(() {
+                          attempt.playerId = id ?? '';
+                          attempt.playerName = m?.shortName ?? '';
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          // Upload video button
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: attempt.videoUrl.isEmpty
+                    ? () => _pickAndUploadPenaltyVideo(attempt)
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.socaBlack,
+                  foregroundColor: AppColors.socaYellow,
+                  padding: const EdgeInsets.symmetric(vertical: 11),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6)),
+                  elevation: 0,
+                ),
+                child: Text(
+                  attempt.videoUrl.isEmpty
+                      ? 'UPLOAD VIDEO (MAX 50 MB)'.tr
+                      : 'VIDEO UPLOADED'.tr,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          rowDivider(),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickAndUploadPenaltyVideo(_PenaltyEntry attempt) async {
+    final picked = await _imagePicker.pickVideo(source: ImageSource.gallery);
+    if (picked == null) return;
+    if (!_isAllowedVideo(picked.path)) {
+      _showSnack(AppStrings.pleaseSelectMp4OrMov, success: false);
+      return;
+    }
+    final size = File(picked.path).lengthSync();
+    if (_sizeInMb(size) > 50) {
+      _showSnack('Video must be under 50 MB'.tr, success: false);
+      return;
+    }
+    await _runMediaUpload(AppStrings.uploadingVideo, () async {
+      final formData = FormData.fromMap({
+        'metadata': '',
+        'video': await MultipartFile.fromFile(
+          picked.path,
+          filename: picked.name,
+          contentType: DioMediaType('application', 'octet-stream'),
+        ),
+      });
+      final resp = await ApiClient.instance
+          .uploadFile(ApiConstants.uploadVdo, formData: formData);
+      final response =
+          (resp['response'] as Map?)?.cast<String, dynamic>() ?? {};
+      final videoUrl = response['videoUrl']?.toString() ?? '';
+      final videoId = response['videoId']?.toString() ?? '';
+      if (videoUrl.isEmpty || videoId.isEmpty) {
+        throw Exception('Video not uploaded');
+      }
+      setState(() {
+        attempt.videoUrl = videoUrl;
+        attempt.videoId = videoId;
+      });
+    });
+  }
+
+  Widget _buildCardsTab(String teamA, String teamB) {
+    final teamACards = _cards.where((c) => c.team == teamA).toList();
+    final teamBCards = _cards.where((c) => c.team == teamB).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.socaBlack),
+          ),
+          // clipBehavior: Clip.hardEdge,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
               Container(
                 color: AppColors.socaBlack,
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1365,70 +2072,59 @@ class _RefereeManageMatchScreenState
                   ),
                 ),
               ),
-              // Team A
-              SizedBox(
-                height: 8,
+              const SizedBox(height: 15),
+              _buildTeamCardSection(
+                teamName: teamA,
+                cards: teamACards,
+                count: _myCardCount,
+                players: _myPlayers,
+                onCountChanged: (n) => setState(() {
+                  _myCardCount = n;
+                  _cards.removeWhere((c) => c.team == teamA);
+                  for (int i = 0; i < n; i++) {
+                    _cards.add(_CardEntry(team: teamA));
+                  }
+                }),
               ),
-              _buildTeamCardSection(teamA, teamACards),
-              // Team B
-              SizedBox(
-                height: 8,
+              const SizedBox(height: 8),
+              _buildTeamCardSection(
+                teamName: teamB,
+                cards: teamBCards,
+                count: _opponentCardCount,
+                players: _opponentPlayers,
+                onCountChanged: (n) => setState(() {
+                  _opponentCardCount = n;
+                  _cards.removeWhere((c) => c.team == teamB);
+                  for (int i = 0; i < n; i++) {
+                    _cards.add(_CardEntry(team: teamB));
+                  }
+                }),
               ),
-              _buildTeamCardSection(teamB, teamBCards),
-              // Bottom button
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () => _showAddCardSheet(teamA, teamB),
-                        icon: const Icon(Icons.add, size: 18),
-                        label: Text(
-                          'ADD CARD'.tr,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.socaBlack,
-                          foregroundColor: AppColors.socaYellow,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isSavingCards ? null : _saveCards,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.socaBlack,
+                      foregroundColor: AppColors.socaYellow,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _isSavingCards ? null : _saveCards,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.socaBlack,
-                          foregroundColor: AppColors.socaYellow,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                    child: _isSavingCards
+                        ? const AppLoader(size: 24, centered: false)
+                        : Text(
+                            'SAVE ALL CARDS'.tr,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
-                        child: _isSavingCards
-                            ? AppLoader(size: 24, centered: false)
-                            : Text(
-                                'SAVE ALL CARDS'.tr,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 13,
-                                ),
-                              ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ],
@@ -1438,7 +2134,13 @@ class _RefereeManageMatchScreenState
     );
   }
 
-  Widget _buildTeamCardSection(String teamName, List<_CardEntry> cards) {
+  Widget _buildTeamCardSection({
+    required String teamName,
+    required List<_CardEntry> cards,
+    required int count,
+    required List<_ManageMember> players,
+    required ValueChanged<int> onCountChanged,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -1457,89 +2159,185 @@ class _RefereeManageMatchScreenState
         ),
         Container(
           color: Colors.white,
-          padding: const EdgeInsets.all(16),
+          // padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      AppStrings.noOfCards,
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13,
-                        color: AppColors.socaBlack,
+              // "No of cards" row — 0-10 dropdown
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      flex: 2,
+                      child: Text(
+                        'No of cards',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          color: AppColors.socaBlack,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF6F6F6),
-                        border: Border.all(color: const Color(0xFFE0E0E0)),
-                        borderRadius: BorderRadius.circular(6),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.socaBlack),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<int>(
+                            value: count,
+                            isExpanded: true,
+                            icon: Image.asset(
+                              "assets/images/dropdown.png",
+                              width: 16,
+                              height: 16,
+                            ),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 13,
+                              color: AppColors.socaBlack,
+                            ),
+                            items: List.generate(
+                              11,
+                              (i) => DropdownMenuItem(
+                                value: i,
+                                child: Text('$i'),
+                              ),
+                            ),
+                            onChanged: (v) {
+                              if (v != null) onCountChanged(v);
+                            },
+                          ),
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                ),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      flex: 5,
+                      child: Text(
+                        'Player',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 5,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${cards.length}',
-                              style: const TextStyle(
-                                  fontFamily: 'Poppins', fontSize: 13)),
-                          const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                          Expanded(
+                              child: _buildCardTypeButton(
+                                  AppStrings.firstCard, true)),
+                          const SizedBox(width: 2),
+                          Expanded(
+                              child: _buildCardTypeButton(
+                                  AppStrings.secondCard, true)),
+                          const SizedBox(width: 2),
+                          Expanded(
+                              child: _buildCardTypeButton(
+                                  AppStrings.redCardShort, false)),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      AppStrings.player,
-                      style: const TextStyle(
-                        fontFamily: 'Lato',
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Row(
+              Divider(
+                color: AppColors.socaBlack,
+                height: 1,
+                thickness: .6,
+              ),
+              const SizedBox(height: 8),
+
+              if (cards.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                // Column header: Player | 1st | 2nd | Red
+                // One row per card entry
+                ...cards.map((card) => Column(
                       children: [
-                        Expanded(child: _buildCardTypeButton(AppStrings.firstCard, true)),
-                        const SizedBox(width: 2),
-                        Expanded(child: _buildCardTypeButton(AppStrings.secondCard, true)),
-                        const SizedBox(width: 2),
-                        Expanded(child: _buildCardTypeButton(AppStrings.redCardShort, false)),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 8, left: 8, right: 8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: _memberDropdown(
+                                  hint: 'Select the player'.tr,
+                                  members: players,
+                                  value: card.playerId.isEmpty
+                                      ? null
+                                      : card.playerId,
+                                  onChanged: (id) {
+                                    final m = players
+                                        .where((p) => p.id == id)
+                                        .firstOrNull;
+                                    setState(() {
+                                      card.playerId = id ?? '';
+                                      card.player = m?.shortName ?? '';
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                flex: 4,
+                                child: RadioGroup<String>(
+                                  groupValue: card.type,
+                                  onChanged: (v) => setState(
+                                      () => card.type = v ?? card.type),
+                                  child: Row(
+                                    children: const [
+                                      Expanded(
+                                          child: Radio<String>(
+                                        value: 'firstYellow',
+                                        activeColor: AppColors.socaBlack,
+                                      )),
+                                      Expanded(
+                                          child: Radio<String>(
+                                        value: 'secondYellow',
+                                        activeColor: AppColors.socaBlack,
+                                      )),
+                                      Expanded(
+                                          child: Radio<String>(
+                                        value: 'red',
+                                        activeColor: AppColors.socaBlack,
+                                      )),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          color: AppColors.socaBlack,
+                          height: .6,
+                          thickness: .6,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        )
                       ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (cards.isEmpty)
-                Text(
-                  'No cards recorded'.tr,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                )
-              else
-                ...cards.map((card) => _CardEntryCard(
-                      card: card,
-                      onRemove: () => setState(() => _cards.remove(card)),
                     )),
+              ],
             ],
           ),
         ),
@@ -1579,8 +2377,12 @@ class _RefereeManageMatchScreenState
 
   Widget _buildCardTypeButton(String label, bool isYellow) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      color: isYellow ? const Color(0xFFFFEB3B) : const Color(0xFFE50000),
+      height: 40,
+      width: 65,
+      // padding: const EdgeInsets.symmetric(
+      //   vertical: 16,
+      // ),
+      color: isYellow ? AppColors.socaYellow : AppColors.liveRed,
       alignment: Alignment.center,
       child: Text(
         label,
@@ -1595,17 +2397,107 @@ class _RefereeManageMatchScreenState
   }
 
   Widget _buildAwardsTab(String teamA, String teamB) {
-    final mvpPlayers = _mvpTeam == 'my' ? _myPlayers : _opponentPlayers;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8F8F8),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+          // clipBehavior: Clip.hardEdge,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                width: double.infinity,
+                color: AppColors.socaBlack,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  'CLEAN SHEET'.tr,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      teamA,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _memberDropdown(
+                      hint: 'Select the player'.tr,
+                      members: _myPlayers,
+                      value: _selectedMyCleanSheetPlayerId,
+                      includeNone: true,
+                      onChanged: (value) =>
+                          setState(() => _selectedMyCleanSheetPlayerId = value),
+                      backgroundColor: const Color(0xFFEAEAEA),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      teamB,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _memberDropdown(
+                      hint: 'Select the player'.tr,
+                      members: _opponentPlayers,
+                      value: _selectedOpponentCleanSheetPlayerId,
+                      includeNone: true,
+                      onChanged: (value) => setState(
+                          () => _selectedOpponentCleanSheetPlayerId = value),
+                      backgroundColor: const Color(0xFFEAEAEA),
+                    ),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: InkWell(
+                        onTap: _isSavingCleanSheet ? null : _saveCleanSheet,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: _isSavingCleanSheet
+                              ? const AppLoader(size: 20, centered: false)
+                              : Text(
+                                  'SAVE CLEAN SHEET'.tr,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                    color: AppColors.socaYellow,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          clipBehavior: Clip.hardEdge,
+        ),
+        SizedBox(height: 12),
+        Container(
+          // clipBehavior: Clip.hardEdge,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -1750,107 +2642,6 @@ class _RefereeManageMatchScreenState
             ],
           ),
         ),
-        SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8F8F8),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                width: double.infinity,
-                color: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  'CLEAN SHEET'.tr,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      teamA,
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: AppColors.socaBlack,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    _memberDropdown(
-                      hint: 'Select the player'.tr,
-                      members: _myPlayers,
-                      value: _selectedMyCleanSheetPlayerId,
-                      includeNone: true,
-                      onChanged: (value) =>
-                          setState(() => _selectedMyCleanSheetPlayerId = value),
-                      backgroundColor: const Color(0xFFEAEAEA),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      teamB,
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: AppColors.socaBlack,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    _memberDropdown(
-                      hint: 'Select the player'.tr,
-                      members: _opponentPlayers,
-                      value: _selectedOpponentCleanSheetPlayerId,
-                      includeNone: true,
-                      onChanged: (value) => setState(
-                          () => _selectedOpponentCleanSheetPlayerId = value),
-                      backgroundColor: const Color(0xFFEAEAEA),
-                    ),
-                    const SizedBox(height: 24),
-                    Center(
-                      child: InkWell(
-                        onTap: _isSavingCleanSheet ? null : _saveCleanSheet,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: AppColors.socaBlack,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: _isSavingCleanSheet
-                              ? const AppLoader(size: 20, centered: false)
-                              : Text(
-                                  'SAVE CLEAN SHEET'.tr,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 12,
-                                    color: AppColors.socaYellow,
-                                  ),
-                                ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -1887,80 +2678,84 @@ class _RefereeManageMatchScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8F8F8),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                width: double.infinity,
-                color: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  'COACH/MANAGER'.tr,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: double.infinity,
+              color: AppColors.socaBlack,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                'COACH/MANAGER'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: Colors.white,
                 ),
               ),
-              _buildStaffTeamSection(
-                teamName: teamA,
-                coachValue: _selectedMyCoachId,
-                managerValue: _selectedMyManagerId,
-                admins: _myAdmins,
-                onCoachChanged: (value) =>
-                    setState(() => _selectedMyCoachId = value),
-                onManagerChanged: (value) =>
-                    setState(() => _selectedMyManagerId = value),
-              ),
-              _buildStaffTeamSection(
-                teamName: teamB,
-                coachValue: _selectedOpponentCoachId,
-                managerValue: _selectedOpponentManagerId,
-                admins: _opponentAdmins,
-                onCoachChanged: (value) =>
-                    setState(() => _selectedOpponentCoachId = value),
-                onManagerChanged: (value) =>
-                    setState(() => _selectedOpponentManagerId = value),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Center(
-                  child: InkWell(
-                    onTap: _isSavingCoachManager ? null : _saveCoachManager,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.socaBlack,
-                        borderRadius: BorderRadius.circular(6),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.socaBlack),
+                  borderRadius: BorderRadius.circular(8)),
+              child: Column(
+                children: [
+                  _buildStaffTeamSection(
+                    teamName: teamA,
+                    coachValue: _selectedMyCoachId,
+                    managerValue: _selectedMyManagerId,
+                    admins: _myAdmins,
+                    onCoachChanged: (value) =>
+                        setState(() => _selectedMyCoachId = value),
+                    onManagerChanged: (value) =>
+                        setState(() => _selectedMyManagerId = value),
+                  ),
+                  _buildStaffTeamSection(
+                    teamName: teamB,
+                    coachValue: _selectedOpponentCoachId,
+                    managerValue: _selectedOpponentManagerId,
+                    admins: _opponentAdmins,
+                    onCoachChanged: (value) =>
+                        setState(() => _selectedOpponentCoachId = value),
+                    onManagerChanged: (value) =>
+                        setState(() => _selectedOpponentManagerId = value),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                      child: InkWell(
+                        onTap: _isSavingCoachManager ? null : _saveCoachManager,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: _isSavingCoachManager
+                              ? const AppLoader(size: 20, centered: false)
+                              : Text(
+                                  'SAVE ALL COACH/MANAGER'.tr,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                    color: AppColors.socaYellow,
+                                  ),
+                                ),
+                        ),
                       ),
-                      child: _isSavingCoachManager
-                          ? const AppLoader(size: 20, centered: false)
-                          : Text(
-                              'SAVE ALL COACH/MANAGER'.tr,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                                color: AppColors.socaYellow,
-                              ),
-                            ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ],
     );
@@ -2092,80 +2887,84 @@ class _RefereeManageMatchScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8F8F8),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                width: double.infinity,
-                color: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  'CLUB & TEAM OFFICIALS'.tr,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: double.infinity,
+              color: AppColors.socaBlack,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                'CLUB & TEAM OFFICIALS'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: Colors.white,
                 ),
               ),
-              _buildOfficialTeamSection(
-                teamName: teamA,
-                officials: _myOfficialOptions,
-                selected: _selectedMyOfficials,
-                onChanged: (key, checked) => setState(() {
-                  checked
-                      ? _selectedMyOfficials.add(key)
-                      : _selectedMyOfficials.remove(key);
-                }),
-              ),
-              _buildOfficialTeamSection(
-                teamName: teamB,
-                officials: _opponentOfficialOptions,
-                selected: _selectedOpponentOfficials,
-                onChanged: (key, checked) => setState(() {
-                  checked
-                      ? _selectedOpponentOfficials.add(key)
-                      : _selectedOpponentOfficials.remove(key);
-                }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Center(
-                  child: InkWell(
-                    onTap: _isSavingOfficials ? null : _saveOfficials,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.socaBlack,
-                        borderRadius: BorderRadius.circular(6),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.socaBlack),
+                  borderRadius: BorderRadius.circular(8)),
+              child: Column(
+                children: [
+                  _buildOfficialTeamSection(
+                    teamName: teamA,
+                    officials: _myOfficialOptions,
+                    selected: _selectedMyOfficials,
+                    onChanged: (key, checked) => setState(() {
+                      checked
+                          ? _selectedMyOfficials.add(key)
+                          : _selectedMyOfficials.remove(key);
+                    }),
+                  ),
+                  _buildOfficialTeamSection(
+                    teamName: teamB,
+                    officials: _opponentOfficialOptions,
+                    selected: _selectedOpponentOfficials,
+                    onChanged: (key, checked) => setState(() {
+                      checked
+                          ? _selectedOpponentOfficials.add(key)
+                          : _selectedOpponentOfficials.remove(key);
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                      child: InkWell(
+                        onTap: _isSavingOfficials ? null : _saveOfficials,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: _isSavingOfficials
+                              ? const AppLoader(size: 20, centered: false)
+                              : Text(
+                                  'SAVE'.tr,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                    color: AppColors.socaYellow,
+                                  ),
+                                ),
+                        ),
                       ),
-                      child: _isSavingOfficials
-                          ? const AppLoader(size: 20, centered: false)
-                          : Text(
-                              'SAVE'.tr,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                                color: AppColors.socaYellow,
-                              ),
-                            ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ],
     );
@@ -2213,7 +3012,7 @@ class _RefereeManageMatchScreenState
         child: Text(
           'No officials available'.tr,
           style: const TextStyle(
-              fontFamily: 'Poppins', fontSize: 13, color: Colors.grey),
+              fontFamily: 'Poppins', fontSize: 13, color: AppColors.socaBlack),
         ),
       );
     }
@@ -2235,7 +3034,7 @@ class _RefereeManageMatchScreenState
                       onChanged(official.key, checked ?? false),
                   activeColor: AppColors.socaBlack,
                   checkColor: AppColors.socaYellow,
-                  side: const BorderSide(color: Colors.grey),
+                  side: const BorderSide(color: AppColors.socaBlack),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),
                 ),
@@ -2283,80 +3082,84 @@ class _RefereeManageMatchScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8F8F8),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                width: double.infinity,
-                color: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  'SQUAD SELECTION'.tr,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: double.infinity,
+              color: AppColors.socaBlack,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                'SQUAD SELECTION'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: Colors.white,
                 ),
               ),
-              _buildSquadTeamSection(
-                teamName: teamA,
-                players: _myPlayers,
-                selected: _selectedMySquad,
-                onChanged: (id, checked) => setState(() {
-                  checked
-                      ? _selectedMySquad.add(id)
-                      : _selectedMySquad.remove(id);
-                }),
-              ),
-              _buildSquadTeamSection(
-                teamName: teamB,
-                players: _opponentPlayers,
-                selected: _selectedOpponentSquad,
-                onChanged: (id, checked) => setState(() {
-                  checked
-                      ? _selectedOpponentSquad.add(id)
-                      : _selectedOpponentSquad.remove(id);
-                }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Center(
-                  child: InkWell(
-                    onTap: _isSavingSquad ? null : _saveSquad,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.socaBlack,
-                        borderRadius: BorderRadius.circular(6),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.socaBlack)),
+              child: Column(
+                children: [
+                  _buildSquadTeamSection(
+                    teamName: teamA,
+                    players: _myPlayers,
+                    selected: _selectedMySquad,
+                    onChanged: (id, checked) => setState(() {
+                      checked
+                          ? _selectedMySquad.add(id)
+                          : _selectedMySquad.remove(id);
+                    }),
+                  ),
+                  _buildSquadTeamSection(
+                    teamName: teamB,
+                    players: _opponentPlayers,
+                    selected: _selectedOpponentSquad,
+                    onChanged: (id, checked) => setState(() {
+                      checked
+                          ? _selectedOpponentSquad.add(id)
+                          : _selectedOpponentSquad.remove(id);
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                      child: InkWell(
+                        onTap: _isSavingSquad ? null : _saveSquad,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: _isSavingSquad
+                              ? const AppLoader(size: 20, centered: false)
+                              : Text(
+                                  'SAVE SQUAD'.tr,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                    color: AppColors.socaYellow,
+                                  ),
+                                ),
+                        ),
                       ),
-                      child: _isSavingSquad
-                          ? const AppLoader(size: 20, centered: false)
-                          : Text(
-                              'SAVE SQUAD'.tr,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                                color: AppColors.socaYellow,
-                              ),
-                            ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ],
     );
@@ -2404,7 +3207,7 @@ class _RefereeManageMatchScreenState
         child: Text(
           'No players available'.tr,
           style: const TextStyle(
-              fontFamily: 'Poppins', fontSize: 13, color: Colors.grey),
+              fontFamily: 'Poppins', fontSize: 13, color: AppColors.socaBlack),
         ),
       );
     }
@@ -2426,7 +3229,7 @@ class _RefereeManageMatchScreenState
                       onChanged(player.playerId, checked ?? false),
                   activeColor: AppColors.socaBlack,
                   checkColor: AppColors.socaYellow,
-                  side: const BorderSide(color: Colors.grey),
+                  side: const BorderSide(color: AppColors.socaBlack),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),
                 ),
@@ -2487,236 +3290,228 @@ class _RefereeManageMatchScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8F8F8),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                width: double.infinity,
-                color: AppColors.socaBlack,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  'SUBSTITUTE'.tr,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: Colors.white,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: double.infinity,
+              color: AppColors.socaBlack,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                'SUBSTITUTE'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          teamA,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: TextField(
+                          controller: _mySubsCountCtrl,
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            filled: true,
+                            fillColor: Colors.white,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide:
+                                  const BorderSide(color: AppColors.socaBlack),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide:
+                                  const BorderSide(color: AppColors.socaBlack),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          '-',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: TextField(
+                          controller: _opponentSubsCountCtrl,
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            filled: true,
+                            fillColor: Colors.white,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide:
+                                  const BorderSide(color: AppColors.socaBlack),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide:
+                                  const BorderSide(color: AppColors.socaBlack),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          teamB,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            teamA,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                              color: AppColors.socaBlack,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: TextField(
-                            controller: _mySubsCountCtrl,
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16),
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.zero,
-                              filled: true,
-                              fillColor: Colors.white,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                    color: AppColors.socaBlack),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12),
-                          child: Text(
-                            '-',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24,
-                              color: AppColors.socaBlack,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: TextField(
-                            controller: _opponentSubsCountCtrl,
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16),
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.zero,
-                              filled: true,
-                              fillColor: Colors.white,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                    color: AppColors.socaBlack),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            teamB,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                              color: AppColors.socaBlack,
-                            ),
-                          ),
-                        ),
-                      ],
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: _generateSubstituteRows,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.socaBlack,
+                      foregroundColor: AppColors.socaYellow,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
                     ),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: _generateSubstituteRows,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.socaBlack,
-                        foregroundColor: AppColors.socaYellow,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6)),
-                      ),
-                      child: Text(
-                        'ADD SUBSTITUTE'.tr,
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (_mySubstitutes.isNotEmpty ||
-                  _opponentSubstitutes.isNotEmpty) ...[
-                if (_mySubstitutes.isNotEmpty) ...[
-                  Container(
-                    color: AppColors.socaBlack,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
                     child: Text(
-                      teamA,
+                      'ADD SUBSTITUTE'.tr,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: Colors.white,
+                        fontSize: 12,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: _substituteList(
-                      entries: _mySubstitutes,
-                      inPlayers: _mySubInPlayers,
-                      outPlayers: _myPlayers,
-                      teamId: _myTeamId,
-                    ),
-                  ),
                 ],
-                if (_opponentSubstitutes.isNotEmpty) ...[
-                  Container(
-                    color: AppColors.socaBlack,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    child: Text(
-                      teamB,
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
+              ),
+            ),
+            if (_mySubstitutes.isNotEmpty ||
+                _opponentSubstitutes.isNotEmpty) ...[
+              if (_mySubstitutes.isNotEmpty) ...[
+                Container(
+                  color: AppColors.socaBlack,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Text(
+                    teamA,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color: Colors.white,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: _substituteList(
-                      entries: _opponentSubstitutes,
-                      inPlayers: _opponentSubInPlayers,
-                      outPlayers: _opponentPlayers,
-                      teamId: _opponentTeamId,
-                    ),
-                  ),
-                ],
+                ),
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: _isSavingSubstitutes ? null : _saveSubstitutes,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.socaBlack,
-                        foregroundColor: AppColors.socaYellow,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6)),
-                      ),
-                      child: _isSavingSubstitutes
-                          ? const AppLoader(size: 20, centered: false)
-                          : Text('SAVE SUBSTITUTES'.tr,
-                              style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12)),
-                    ),
+                  child: _substituteList(
+                    entries: _mySubstitutes,
+                    inPlayers: _mySubInPlayers,
+                    outPlayers: _myPlayers,
+                    teamId: _myTeamId,
                   ),
                 ),
               ],
+              if (_opponentSubstitutes.isNotEmpty) ...[
+                Container(
+                  color: AppColors.socaBlack,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Text(
+                    teamB,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: _substituteList(
+                    entries: _opponentSubstitutes,
+                    inPlayers: _opponentSubInPlayers,
+                    outPlayers: _opponentPlayers,
+                    teamId: _opponentTeamId,
+                  ),
+                ),
+              ],
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: _isSavingSubstitutes ? null : _saveSubstitutes,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.socaBlack,
+                      foregroundColor: AppColors.socaYellow,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
+                    ),
+                    child: _isSavingSubstitutes
+                        ? const AppLoader(size: 20, centered: false)
+                        : Text('SAVE SUBSTITUTES'.tr,
+                            style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12)),
+                  ),
+                ),
+              ),
             ],
-          ),
+          ],
         ),
       ],
     );
@@ -2731,8 +3526,8 @@ class _RefereeManageMatchScreenState
     if (entries.isEmpty) {
       return Text(
         'No substitutes recorded'.tr,
-        style:
-            TextStyle(fontFamily: 'Poppins', fontSize: 13, color: Colors.grey),
+        style: TextStyle(
+            fontFamily: 'Poppins', fontSize: 13, color: AppColors.socaBlack),
       );
     }
     return Column(
@@ -2913,7 +3708,7 @@ class _RefereeManageMatchScreenState
             ),
             child: _isSavingIncident
                 ? AppLoader(size: 24, centered: false)
-                : Text('SAVE INCIDENTS'.tr,
+                : Text('SAVE'.tr,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -3069,161 +3864,149 @@ class _RefereeManageMatchScreenState
     Widget? extraButton,
     int maxItems = 5,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F8F8),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFE0E0E0)),
-      ),
-      clipBehavior: Clip.hardEdge,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            color: AppColors.socaBlack,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-                color: Colors.white,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          color: AppColors.socaBlack,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
+              color: Colors.white,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(maxItems, (index) {
-                      final hasItem = index < items.length;
-                      return Padding(
-                        padding: EdgeInsets.only(
-                            right: index == maxItems - 1 ? 0 : 12),
-                        child: hasItem
-                            ? Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  Container(
-                                    width: 72,
-                                    height: 72,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black12,
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          color: const Color(0xFFE0E0E0)),
-                                      image: items[index].isNotEmpty &&
-                                              (items[index]
-                                                      .startsWith('http') ||
-                                                  items[index]
-                                                      .startsWith('https'))
-                                          ? DecorationImage(
-                                              image: NetworkImage(items[index]),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : null,
-                                    ),
-                                    child: items[index].isEmpty ||
-                                            !(items[index].startsWith('http') ||
-                                                items[index]
-                                                    .startsWith('https'))
-                                        ? const Center(
-                                            child: Icon(Icons.image,
-                                                color: Colors.grey))
-                                        : null,
-                                  ),
-                                  Positioned(
-                                    top: -6,
-                                    right: -6,
-                                    child: InkWell(
-                                      onTap: () => onRemove(index),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(2),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const Icon(Icons.close,
-                                            size: 14, color: Colors.grey),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : InkWell(
-                                onTap: onUpload,
-                                child: Container(
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(maxItems, (index) {
+                    final hasItem = index < items.length;
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          right: index == maxItems - 1 ? 0 : 12),
+                      child: hasItem
+                          ? Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Container(
                                   width: 72,
                                   height: 72,
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: Colors.black12,
+                                    borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
                                         color: const Color(0xFFE0E0E0)),
-                                    borderRadius: BorderRadius.circular(8),
+                                    image: items[index].isNotEmpty &&
+                                            (items[index].startsWith('http') ||
+                                                items[index]
+                                                    .startsWith('https'))
+                                        ? DecorationImage(
+                                            image: NetworkImage(items[index]),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null,
                                   ),
-                                  child: Center(
+                                  child: items[index].isEmpty ||
+                                          !(items[index].startsWith('http') ||
+                                              items[index].startsWith('https'))
+                                      ? const Center(
+                                          child: Icon(Icons.image,
+                                              color: AppColors.socaBlack))
+                                      : null,
+                                ),
+                                Positioned(
+                                  top: -6,
+                                  right: -6,
+                                  child: InkWell(
+                                    onTap: () => onRemove(index),
                                     child: Container(
-                                      width: 50,
-                                      height: 50,
+                                      padding: const EdgeInsets.all(2),
                                       decoration: const BoxDecoration(
-                                        color: AppColors.socaBlack,
+                                        color: Colors.white,
                                         shape: BoxShape.circle,
                                       ),
-                                      child: const Icon(
-                                          Icons.add_photo_alternate,
-                                          size: 26,
-                                          color: Colors.white),
+                                      child: const Icon(Icons.close,
+                                          size: 14, color: AppColors.socaBlack),
                                     ),
                                   ),
                                 ),
-                              ),
-                      );
-                    }),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: onSave,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.socaBlack,
-                          foregroundColor: AppColors.socaYellow,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)),
-                        ),
-                        child: saving
-                            ? const AppLoader(size: 20, centered: false)
-                            : Text(
-                                saveLabel,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12,
+                              ],
+                            )
+                          : InkWell(
+                              onTap: onUpload,
+                              child: Container(
+                                width: 72,
+                                height: 72,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: const Color(0xFFE0E0E0)),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.socaBlack,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(Icons.add_photo_alternate,
+                                        size: 26, color: Colors.white),
+                                  ),
                                 ),
                               ),
-                      ),
-                    ),
-                    if (extraButton != null) ...[
-                      const SizedBox(width: 12),
-                      extraButton,
-                    ],
-                  ],
+                            ),
+                    );
+                  }),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: onSave,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.socaBlack,
+                        foregroundColor: AppColors.socaYellow,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6)),
+                      ),
+                      child: saving
+                          ? const AppLoader(size: 20, centered: false)
+                          : Text(
+                              saveLabel,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
+                    ),
+                  ),
+                  if (extraButton != null) ...[
+                    const SizedBox(width: 12),
+                    extraButton,
+                  ],
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -3505,268 +4288,27 @@ class _RefereeManageMatchScreenState
     if (ok) _loadDetails();
   }
 
-  void _showAddGoalSheet(String teamA, String teamB) {
-    final minuteCtrl = TextEditingController();
-    String selectedTeam = teamA;
-    String? selectedPlayerId;
-    String? selectedAssistId;
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
-      builder: (_) => StatefulBuilder(
-        builder: (ctx, setSheetState) => Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 20,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Add Goal'.tr,
-                  style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16)),
-              SizedBox(height: 16),
-              Text('Team'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-              SizedBox(height: 6),
-              _teamDropdown(
-                value: selectedTeam,
-                teamA: teamA,
-                teamB: teamB,
-                onChanged: (v) => setSheetState(() {
-                  selectedTeam = v ?? teamA;
-                  selectedPlayerId = null;
-                  selectedAssistId = null;
-                }),
-              ),
-              SizedBox(height: 12),
-              Text('Player Name'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-              SizedBox(height: 6),
-              _memberDropdown(
-                hint: AppStrings.selectScorer,
-                members: _membersForTeamLabel(selectedTeam),
-                value: selectedPlayerId,
-                onChanged: (value) =>
-                    setSheetState(() => selectedPlayerId = value),
-              ),
-              SizedBox(height: 12),
-              Text('Assist'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-              SizedBox(height: 6),
-              _memberDropdown(
-                hint: AppStrings.selectAssist,
-                members: _membersForTeamLabel(selectedTeam),
-                value: selectedAssistId,
-                includeNone: true,
-                onChanged: (value) =>
-                    setSheetState(() => selectedAssistId = value),
-              ),
-              SizedBox(height: 12),
-              Text('Minute'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-              SizedBox(height: 6),
-              TextField(
-                controller: minuteCtrl,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(3),
-                ],
-                decoration: _inputDecoration(hint: "e.g. 45'"),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                // width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    final player = _memberById(selectedPlayerId);
-                    final minute = minuteCtrl.text.trim();
-                    if (player == null || (int.tryParse(minute) ?? 0) <= 0) {
-                      _showSnack(AppStrings.pleaseEnterGoalDetails, success: false);
-                      return;
-                    }
-                    final assist = _memberById(selectedAssistId);
-                    setState(() => _goals.add(_GoalEntry(
-                          team: selectedTeam,
-                          player: player.shortName,
-                          playerId: player.id,
-                          assistPlayerId: assist?.id ?? '',
-                          assistPlayerName: assist?.shortName ?? '',
-                          minute: minute,
-                        )));
-                    Navigator.pop(ctx);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.socaBlack,
-                    foregroundColor: AppColors.socaYellow,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
-                  ),
-                  child: Text('ADD'.tr,
-                      style: TextStyle(
-                          fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showAddCardSheet(String teamA, String teamB) {
-    final minuteCtrl = TextEditingController();
-    String selectedTeam = teamA;
-    String? selectedPlayerId;
-    String cardType = 'firstYellow';
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
-      builder: (_) => StatefulBuilder(
-        builder: (ctx, setSheetState) => Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 20,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Add Card'.tr,
-                  style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16)),
-              SizedBox(height: 16),
-              Text('Card Type'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-              SizedBox(height: 6),
-              Row(children: [
-                _cardTypeChip(AppStrings.firstCard, 'firstYellow', cardType,
-                    (v) => setSheetState(() => cardType = v), Colors.amber),
-                SizedBox(width: 10),
-                _cardTypeChip(AppStrings.secondCard, 'secondYellow', cardType,
-                    (v) => setSheetState(() => cardType = v), Colors.amber),
-                SizedBox(width: 10),
-                _cardTypeChip(AppStrings.redCardShort, 'red', cardType,
-                    (v) => setSheetState(() => cardType = v), Colors.red),
-              ]),
-              SizedBox(height: 12),
-              Text('Team'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-              SizedBox(height: 6),
-              _teamDropdown(
-                value: selectedTeam,
-                teamA: teamA,
-                teamB: teamB,
-                onChanged: (v) => setSheetState(() {
-                  selectedTeam = v ?? teamA;
-                  selectedPlayerId = null;
-                }),
-              ),
-              SizedBox(height: 12),
-              Text('Player Name'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-              SizedBox(height: 6),
-              _memberDropdown(
-                hint: AppStrings.selectPlayer,
-                members: _membersForTeamLabel(selectedTeam),
-                value: selectedPlayerId,
-                onChanged: (value) =>
-                    setSheetState(() => selectedPlayerId = value),
-              ),
-              SizedBox(height: 12),
-              Text('Minute'.tr,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-              SizedBox(height: 6),
-              TextField(
-                controller: minuteCtrl,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(3),
-                ],
-                decoration: _inputDecoration(hint: "e.g. 55'"),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                // width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    final player = _memberById(selectedPlayerId);
-                    if (player == null) {
-                      _showSnack(AppStrings.pleaseEnterCardDetails, success: false);
-                      return;
-                    }
-                    setState(() => _cards.add(_CardEntry(
-                          team: selectedTeam,
-                          player: player.shortName,
-                          playerId: player.id,
-                          minute: minuteCtrl.text.trim(),
-                          type: cardType,
-                        )));
-                    Navigator.pop(ctx);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.socaBlack,
-                    foregroundColor: AppColors.socaYellow,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
-                  ),
-                  child: Text('ADD'.tr,
-                      style: TextStyle(
-                          fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   // ─── Helpers ────────────────────────────────────────────────────────────────
 
   Widget _sectionCard({required String title, required Widget child}) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Color(0xFFE0E0E0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
-                  color: AppColors.socaBlack)),
-          SizedBox(height: 12),
-          child,
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          color: AppColors.socaBlack,
+          padding: EdgeInsets.all(16),
+          child: Center(
+            child: Text(title.toUpperCase(),
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: Colors.white)),
+          ),
+        ),
+        SizedBox(height: 12),
+        child,
+      ],
     );
   }
 
@@ -3777,11 +4319,7 @@ class _RefereeManageMatchScreenState
     required Widget child,
   }) {
     return Container(
-      decoration: const BoxDecoration(
-          // color: Colors.white,
-          // borderRadius: BorderRadius.circular(8),
-          // border: Border.all(color: const Color(0xFFE0E0E0)),
-          ),
+      decoration: const BoxDecoration(),
       clipBehavior: Clip.hardEdge,
       child: Column(
         children: [
@@ -3806,12 +4344,12 @@ class _RefereeManageMatchScreenState
                       ),
                     ),
                   ),
-                  Icon(
-                    expanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: Colors.white,
-                  ),
+                  // Icon(
+                  //   expanded
+                  //       ? Icons.keyboard_arrow_up
+                  //       : Icons.keyboard_arrow_down,
+                  //   color: Colors.white,
+                  // ),
                 ],
               ),
             ),
@@ -3836,7 +4374,7 @@ class _RefereeManageMatchScreenState
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                fontFamily: 'Lato', fontSize: 11, color: Colors.grey)),
+                fontFamily: 'Lato', fontSize: 11, color: AppColors.socaBlack)),
         SizedBox(height: 6),
         SizedBox(
           width: 60,
@@ -3874,81 +4412,20 @@ class _RefereeManageMatchScreenState
 
   InputDecoration _inputDecoration({String? hint}) {
     return InputDecoration(
+      fillColor: AppColors.socaGrey,
       hintText: hint,
-      hintStyle:
-          TextStyle(fontFamily: 'Poppins', fontSize: 13, color: Colors.grey),
+      hintStyle: TextStyle(
+          fontFamily: 'Poppins', fontSize: 13, color: AppColors.socaBlack),
       contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(color: Color(0xFFE0E0E0))),
+          borderSide: BorderSide(color: AppColors.socaBlack)),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(color: Color(0xFFE0E0E0))),
+          borderSide: BorderSide(color: AppColors.socaBlack)),
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
           borderSide: BorderSide(color: AppColors.socaBlack, width: 1.5)),
-    );
-  }
-
-  Widget _teamDropdown({
-    required String value,
-    required String teamA,
-    required String teamB,
-    required ValueChanged<String?> onChanged,
-  }) {
-    return SearchableDropdownButton(
-      hint: value,
-      value: value,
-      items: [teamA, teamB],
-      onChanged: onChanged,
-      fontSize: 13,
-    );
-  }
-
-  Widget _teamChoice(String teamA, String teamB) {
-    return Row(
-      children: [
-        Expanded(
-          child: _teamChoiceButton(
-            label: teamA,
-            value: 'my',
-          ),
-        ),
-        SizedBox(width: 8),
-        Expanded(
-          child: _teamChoiceButton(
-            label: teamB,
-            value: 'opponent',
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _teamChoiceButton({required String label, required String value}) {
-    final selected = _mvpTeam == value;
-    return OutlinedButton(
-      onPressed: () => setState(() {
-        _mvpTeam = value;
-        _selectedMvpPlayerId = null;
-      }),
-      style: OutlinedButton.styleFrom(
-        backgroundColor: selected ? AppColors.socaBlack : Colors.white,
-        foregroundColor: selected ? AppColors.socaYellow : AppColors.socaBlack,
-        side: BorderSide(color: AppColors.socaBlack),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-      ),
-      child: Text(
-        label,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w700,
-          fontSize: 12,
-        ),
-      ),
     );
   }
 
@@ -3960,59 +4437,85 @@ class _RefereeManageMatchScreenState
     bool includeNone = false,
     Color backgroundColor = Colors.white,
   }) {
-    final items = [
-      if (includeNone) 'None',
-      ...members.map((member) => member.label),
-    ];
-    final values = [
-      if (includeNone) '',
-      ...members.map((member) => member.id),
-    ];
-    return SearchableDropdownButton(
-      hint: members.isEmpty ? AppStrings.noMembersAvailable : hint,
-      value: value,
-      items: items,
-      values: values,
-      enabled: members.isNotEmpty || includeNone,
-      onChanged: (selected) {
-        onChanged(selected?.isEmpty == true ? null : selected);
-      },
-      fontSize: 13,
-      backgroundColor: backgroundColor,
+    final isEmpty = members.isEmpty && !includeNone;
+    final effectiveHint = isEmpty ? AppStrings.noMembersAvailable : hint;
+
+    // Ensure the value exists in the list to prevent DropdownButton errors
+    String? dropdownValue;
+    if (value != null && value.isNotEmpty) {
+      if (members.any((m) => m.id == value)) {
+        dropdownValue = value;
+      }
+    } else if (value == '' && includeNone) {
+      dropdownValue = '';
+    }
+
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: AppColors.socaBlack)),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isExpanded: true,
+          value: dropdownValue,
+          hint: Text(
+            effectiveHint,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.socaBlack),
+          ),
+          icon: Image.asset(
+            'assets/images/dropdown.png',
+            width: 14,
+            height: 14,
+            errorBuilder: (_, __, ___) =>
+                const Icon(Icons.arrow_drop_down, size: 18, color: Colors.grey),
+          ),
+          items: [
+            if (includeNone)
+              const DropdownMenuItem<String>(
+                value: '',
+                child: Text('None',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: AppColors.socaBlack)),
+              ),
+            ...members.map((m) {
+              return DropdownMenuItem<String>(
+                value: m.id,
+                child: Text(
+                  m.label,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.socaBlack),
+                ),
+              );
+            }).toList(),
+          ],
+          onChanged: isEmpty
+              ? null
+              : (val) {
+                  onChanged(val == '' ? null : val);
+                },
+        ),
+      ),
     );
   }
 
   void _showSnack(String message, {required bool success, bool long = false}) {
     AppToast.show(context, message.tr, long: long);
-  }
-
-  Widget _labelText(String text) => Text(text,
-      style: TextStyle(
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w600,
-          fontSize: 13,
-          color: AppColors.socaBlack));
-
-  Widget _cardTypeChip(String label, String value, String current,
-      ValueChanged<String> onTap, Color color) {
-    final selected = value == current;
-    return GestureDetector(
-      onTap: () => onTap(value),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected ? color : Colors.white,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: color, width: 1.5),
-        ),
-        child: Text(label,
-            style: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-                color: selected ? Colors.white : color)),
-      ),
-    );
   }
 }
 
@@ -4205,7 +4708,7 @@ class _MatchHeader extends StatelessWidget {
     final fallback = name.isEmpty
         ? 'TEAM'
         : name.substring(0, name.length > 4 ? 4 : name.length).toUpperCase();
-    log("this is te team name and url $name $url");
+    // log("this is te team name and url $name $url");
     return Column(
       children: [
         CircleAvatar(
@@ -4461,143 +4964,60 @@ class _MatchVideoFile {
 
 class _GoalEntry {
   final String team;
-  final String player;
-  final String playerId;
-  final String assistPlayerId;
-  final String assistPlayerName;
-  final String minute;
+  String player;
+  String playerId;
+  String assistPlayerId;
+  String assistPlayerName;
+  bool ownGoal;
+  bool isPenalty;
+  String videoId;
+  String videoUrl;
+  final TextEditingController minuteCtrl;
+
   _GoalEntry({
     required this.team,
-    required this.player,
-    required this.minute,
+    this.player = '',
     this.playerId = '',
     this.assistPlayerId = '',
     this.assistPlayerName = '',
-  });
+    this.ownGoal = false,
+    this.isPenalty = false,
+    this.videoId = '',
+    this.videoUrl = '',
+    String minute = '',
+  }) : minuteCtrl = TextEditingController(text: minute);
+
+  void dispose() => minuteCtrl.dispose();
 }
 
 class _CardEntry {
   final String team;
-  final String player;
-  final String playerId;
-  final String minute;
-  final String type; // 'firstYellow' | 'secondYellow' | 'red'
+  String player;
+  String playerId;
+  String type; // 'firstYellow' | 'secondYellow' | 'red'
   _CardEntry({
     required this.team,
-    required this.player,
-    required this.minute,
-    required this.type,
+    this.player = '',
     this.playerId = '',
+    this.type = 'firstYellow',
   });
 }
 
-class _GoalCard extends StatelessWidget {
-  _GoalCard({required this.goal, required this.onRemove});
-  final _GoalEntry goal;
-  final VoidCallback onRemove;
+// ─── Penalty Attempt data model ─────────────────────────────────────────────
+class _PenaltyEntry {
+  final String team;
+  String playerId;
+  String playerName;
+  bool missed;
+  String videoId;
+  String videoUrl;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Color(0xFFE0E0E0)),
-      ),
-      child: Row(children: [
-        Text('⚽'.tr, style: TextStyle(fontSize: 18)),
-        SizedBox(width: 10),
-        Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(goal.player,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    color: AppColors.socaBlack)),
-            Text(
-                '${goal.team}${goal.minute.isNotEmpty ? "  ${goal.minute}'" : ""}',
-                style: TextStyle(
-                    fontFamily: 'Lato', fontSize: 12, color: Colors.grey)),
-          ]),
-        ),
-        IconButton(
-          icon: Icon(Icons.close, size: 18, color: Colors.grey),
-          onPressed: onRemove,
-          padding: EdgeInsets.zero,
-          constraints: BoxConstraints(),
-        ),
-      ]),
-    );
-  }
-}
-
-class _CardEntryCard extends StatelessWidget {
-  _CardEntryCard({required this.card, required this.onRemove});
-  final _CardEntry card;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    final isYellow = card.type != 'red';
-    final label = card.type == 'secondYellow'
-        ? AppStrings.secondCard
-        : card.type == 'red'
-            ? AppStrings.redCardShort
-            : AppStrings.firstCard;
-    return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Color(0xFFE0E0E0)),
-      ),
-      child: Row(children: [
-        Container(
-          width: 14,
-          height: 20,
-          decoration: BoxDecoration(
-            color: isYellow ? Colors.amber : Colors.red,
-            borderRadius: BorderRadius.circular(3),
-          ),
-        ),
-        SizedBox(width: 10),
-        Text(
-          label,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
-            fontSize: 12,
-            color: isYellow ? AppColors.socaBlack : Colors.red,
-          ),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(card.player,
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                    color: AppColors.socaBlack)),
-            Text(
-                '${card.team}${card.minute.isNotEmpty ? "  ${card.minute}'" : ""}',
-                style: TextStyle(
-                    fontFamily: 'Lato', fontSize: 12, color: Colors.grey)),
-          ]),
-        ),
-        IconButton(
-          icon: Icon(Icons.close, size: 18, color: Colors.grey),
-          onPressed: onRemove,
-          padding: EdgeInsets.zero,
-          constraints: BoxConstraints(),
-        ),
-      ]),
-    );
-  }
+  _PenaltyEntry({
+    required this.team,
+    this.playerId = '',
+    this.playerName = '',
+    this.missed = false,
+    this.videoId = '',
+    this.videoUrl = '',
+  });
 }

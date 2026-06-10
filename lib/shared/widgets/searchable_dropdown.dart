@@ -244,10 +244,69 @@ class SearchableDropdownField extends StatelessWidget {
     return value;
   }
 
+  List<DropdownMenuItem<String>> get _dropdownItems =>
+      List.generate(items.length, (i) {
+        final val = values != null ? values![i] : items[i];
+        return DropdownMenuItem<String>(
+          value: val,
+          child: Text(
+            items[i],
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ),
+        );
+      });
+
   @override
   Widget build(BuildContext context) {
     final label = _displayLabel;
     final hasValue = label != null && label.isNotEmpty;
+
+    final borderColor = error != null ? Colors.red : const Color(0xFFDDDDDD);
+
+    if (items.length <= 20) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          border: Border.all(color: borderColor),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            isExpanded: true,
+            value: value,
+            hint: Text(
+              hint,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+            items: _dropdownItems,
+            onChanged: (v) {
+              if (v != null) onChanged(v);
+            },
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+            icon: Image.asset(
+              'assets/images/dropdown.png',
+              width: 14,
+              height: 14,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.arrow_drop_down, size: 20),
+            ),
+          ),
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: () async {
         final picked = await showSearchableSheet(
@@ -262,8 +321,7 @@ class SearchableDropdownField extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          border: Border.all(
-              color: error != null ? Colors.red : const Color(0xFFDDDDDD)),
+          border: Border.all(color: borderColor),
           borderRadius: BorderRadius.circular(6),
         ),
         child: Row(
@@ -335,10 +393,70 @@ class SearchableDropdownButton extends StatelessWidget {
     return value;
   }
 
+  List<DropdownMenuItem<String>> get _dropdownItems =>
+      List.generate(items.length, (i) {
+        final val = values != null ? values![i] : items[i];
+        return DropdownMenuItem<String>(
+          value: val,
+          child: Text(
+            items[i],
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: fontSize,
+              color: AppColors.socaBlack,
+            ),
+          ),
+        );
+      });
+
   @override
   Widget build(BuildContext context) {
     final label = _displayLabel;
     final hasValue = label != null && label.isNotEmpty;
+
+    final containerDecoration = BoxDecoration(
+      color: backgroundColor ?? AppColors.socaGrey,
+      borderRadius: BorderRadius.circular(5),
+    );
+
+    if (items.length <= 20) {
+      return Container(
+        width: width,
+        height: height,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: containerDecoration,
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            isExpanded: true,
+            value: value,
+            hint: Text(
+              hint,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: fontSize,
+                color: AppColors.socaBlack.withValues(alpha: 0.6),
+              ),
+            ),
+            items: _dropdownItems,
+            onChanged: enabled ? onChanged : null,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: fontSize,
+              color: AppColors.socaBlack,
+            ),
+            icon: Image.asset(
+              'assets/images/dropdown.png',
+              width: 14,
+              height: 14,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.arrow_drop_down, size: 18),
+            ),
+          ),
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: enabled
           ? () async {
@@ -356,10 +474,7 @@ class SearchableDropdownButton extends StatelessWidget {
         width: width,
         height: height,
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          color: backgroundColor ?? AppColors.socaGrey,
-          borderRadius: BorderRadius.circular(5),
-        ),
+        decoration: containerDecoration,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

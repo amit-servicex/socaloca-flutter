@@ -1790,7 +1790,7 @@ class AppStrings {
       'takePhotoUpper': 'TAKE A PHOTO',
       'chooseGalleryUpper': 'CHOOSE FROM GALLERY',
       'removePhoto': 'Remove Photo',
-      'selectNationality': 'Select Nationality',
+      'selectNationality': 'Select a country',
       'firstNameRequiredLower': 'first name *',
       'lastNameRequiredLower': 'last name *',
       'profileNameRequiredLower': 'profile name *',
@@ -3435,7 +3435,7 @@ class AppStrings {
       'startedOn': 'Started on {date}', // TODO: translate
       'noJoinedTeams': 'No joined teams.', // TODO: translate
       'removePhoto': 'Remove Photo', // TODO: translate
-      'selectNationality': 'Select Nationality', // TODO: translate
+      'selectNationality': 'Select a country', // TODO: translate
       'firstNameRequiredLower': 'first name *', // TODO: translate
       'lastNameRequiredLower': 'last name *', // TODO: translate
       'profileNameRequiredLower': 'profile name *', // TODO: translate
@@ -4724,7 +4724,7 @@ class AppStrings {
       'startedOn': 'Started on {date}', // TODO: translate
       'noJoinedTeams': 'No joined teams.', // TODO: translate
       'removePhoto': 'Remove Photo', // TODO: translate
-      'selectNationality': 'Select Nationality', // TODO: translate
+      'selectNationality': 'Select a country', // TODO: translate
       'firstNameRequiredLower': 'first name *', // TODO: translate
       'lastNameRequiredLower': 'last name *', // TODO: translate
       'profileNameRequiredLower': 'profile name *', // TODO: translate
@@ -6032,7 +6032,7 @@ class AppStrings {
       'startedOn': 'Started on {date}', // TODO: translate
       'noJoinedTeams': 'No joined teams.', // TODO: translate
       'removePhoto': 'Remove Photo', // TODO: translate
-      'selectNationality': 'Select Nationality', // TODO: translate
+      'selectNationality': 'Select a country', // TODO: translate
       'firstNameRequiredLower': 'first name *', // TODO: translate
       'lastNameRequiredLower': 'last name *', // TODO: translate
       'profileNameRequiredLower': 'profile name *', // TODO: translate

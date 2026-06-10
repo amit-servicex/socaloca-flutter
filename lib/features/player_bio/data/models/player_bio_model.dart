@@ -59,6 +59,10 @@ class PlayerBioModel with _$PlayerBioModel {
     @JsonKey(name: 'isCoach') bool? isCoach,
     @JsonKey(name: 'isAdmin') bool? isAdmin,
     @JsonKey(name: 'isFan') bool? isFan,
+    @JsonKey(name: 'isReferee') bool? isReferee,
+    @JsonKey(name: 'brands') List<String>? brands,
+    @JsonKey(name: 'leagueFollow') String? leagueFollow,
+    @JsonKey(name: 'teamFollow') String? teamFollow,
   }) = _PlayerBioModel;
 
   factory PlayerBioModel.fromJson(Map<String, dynamic> json) =>

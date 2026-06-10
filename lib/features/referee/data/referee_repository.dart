@@ -630,4 +630,52 @@ class RefereeRepository {
       keyVals: keyVals,
     );
   }
+
+  Future<bool> matchSquadAlert({
+    required String teamId,
+    required String opponentTeamId,
+    required String tournamentId,
+    required String matchId,
+  }) async {
+    try {
+      final resp = await ApiClient.instance.post(
+        ApiConstants.mtchSquadAlert,
+        body: {
+          'teamId': teamId,
+          'opponentTeamId': opponentTeamId,
+          'tournamentId': tournamentId,
+          'userId': _userId,
+          'matchId': matchId,
+        },
+      );
+      return resp['success'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> savePenaltyAttempts({
+    required String matchId,
+    required String tournamentId,
+    required String matchType,
+    required List<Map<String, dynamic>> goals,
+  }) async {
+    final response = await ApiClient.instance.post(
+      ApiConstants.saveRefMtchPenaltyGoals,
+      body: {
+        'tournamentId': tournamentId,
+        'userId': _userId,
+        'matchId': matchId,
+        'matchType': matchType,
+        'goals': goals
+            .map((g) => {
+                  ...g,
+                  if (!g.containsKey('addedBy')) 'addedBy': _userId,
+                })
+            .toList(),
+      },
+    );
+    final resp = response['response'] as Map<String, dynamic>? ?? {};
+    return resp['status'] == 1;
+  }
 }

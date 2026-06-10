@@ -162,7 +162,7 @@ class _TournamentsLandingScreenState
       _TournamentTabSpec(label: AppStrings.upcoming, status: 'upcoming'),
     ];
 
-    if (!_usesTournamentOnlyLanding(user)) {
+    if (true) {
       tabs.add(
         _TournamentTabSpec(label: AppStrings.myLeaguesCups, status: 'my'),
       );
@@ -201,6 +201,7 @@ class _TournamentTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabBar(
+      isScrollable: true,
       controller: controller,
       labelColor: Colors.black,
       unselectedLabelColor: Colors.black.withValues(alpha: 0.6),
@@ -216,7 +217,7 @@ class _TournamentTabBar extends StatelessWidget {
       ),
       indicatorColor: Colors.black,
       indicatorWeight: 3,
-      isScrollable: false,
+      // isScrollable: false,
       dividerColor: Colors.transparent,
       tabs: [
         for (final tab in tabs) Tab(text: tab.label),

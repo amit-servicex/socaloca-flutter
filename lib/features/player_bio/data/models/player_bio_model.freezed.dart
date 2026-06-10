@@ -96,6 +96,14 @@ mixin _$PlayerBioModel {
   bool? get isAdmin => throw _privateConstructorUsedError;
   @JsonKey(name: 'isFan')
   bool? get isFan => throw _privateConstructorUsedError;
+  @JsonKey(name: 'isReferee')
+  bool? get isReferee => throw _privateConstructorUsedError;
+  @JsonKey(name: 'brands')
+  List<String>? get brands => throw _privateConstructorUsedError;
+  @JsonKey(name: 'leagueFollow')
+  String? get leagueFollow => throw _privateConstructorUsedError;
+  @JsonKey(name: 'teamFollow')
+  String? get teamFollow => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -147,7 +155,11 @@ abstract class $PlayerBioModelCopyWith<$Res> {
       @JsonKey(name: 'isPlayer') bool? isPlayer,
       @JsonKey(name: 'isCoach') bool? isCoach,
       @JsonKey(name: 'isAdmin') bool? isAdmin,
-      @JsonKey(name: 'isFan') bool? isFan});
+      @JsonKey(name: 'isFan') bool? isFan,
+      @JsonKey(name: 'isReferee') bool? isReferee,
+      @JsonKey(name: 'brands') List<String>? brands,
+      @JsonKey(name: 'leagueFollow') String? leagueFollow,
+      @JsonKey(name: 'teamFollow') String? teamFollow});
 }
 
 /// @nodoc
@@ -201,6 +213,10 @@ class _$PlayerBioModelCopyWithImpl<$Res, $Val extends PlayerBioModel>
     Object? isCoach = freezed,
     Object? isAdmin = freezed,
     Object? isFan = freezed,
+    Object? isReferee = freezed,
+    Object? brands = freezed,
+    Object? leagueFollow = freezed,
+    Object? teamFollow = freezed,
   }) {
     return _then(_value.copyWith(
       userId: freezed == userId
@@ -355,6 +371,22 @@ class _$PlayerBioModelCopyWithImpl<$Res, $Val extends PlayerBioModel>
           ? _value.isFan
           : isFan // ignore: cast_nullable_to_non_nullable
               as bool?,
+      isReferee: freezed == isReferee
+          ? _value.isReferee
+          : isReferee // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      brands: freezed == brands
+          ? _value.brands
+          : brands // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      leagueFollow: freezed == leagueFollow
+          ? _value.leagueFollow
+          : leagueFollow // ignore: cast_nullable_to_non_nullable
+              as String?,
+      teamFollow: freezed == teamFollow
+          ? _value.teamFollow
+          : teamFollow // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -405,7 +437,11 @@ abstract class _$$PlayerBioModelImplCopyWith<$Res>
       @JsonKey(name: 'isPlayer') bool? isPlayer,
       @JsonKey(name: 'isCoach') bool? isCoach,
       @JsonKey(name: 'isAdmin') bool? isAdmin,
-      @JsonKey(name: 'isFan') bool? isFan});
+      @JsonKey(name: 'isFan') bool? isFan,
+      @JsonKey(name: 'isReferee') bool? isReferee,
+      @JsonKey(name: 'brands') List<String>? brands,
+      @JsonKey(name: 'leagueFollow') String? leagueFollow,
+      @JsonKey(name: 'teamFollow') String? teamFollow});
 }
 
 /// @nodoc
@@ -457,6 +493,10 @@ class __$$PlayerBioModelImplCopyWithImpl<$Res>
     Object? isCoach = freezed,
     Object? isAdmin = freezed,
     Object? isFan = freezed,
+    Object? isReferee = freezed,
+    Object? brands = freezed,
+    Object? leagueFollow = freezed,
+    Object? teamFollow = freezed,
   }) {
     return _then(_$PlayerBioModelImpl(
       userId: freezed == userId
@@ -611,6 +651,22 @@ class __$$PlayerBioModelImplCopyWithImpl<$Res>
           ? _value.isFan
           : isFan // ignore: cast_nullable_to_non_nullable
               as bool?,
+      isReferee: freezed == isReferee
+          ? _value.isReferee
+          : isReferee // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      brands: freezed == brands
+          ? _value._brands
+          : brands // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      leagueFollow: freezed == leagueFollow
+          ? _value.leagueFollow
+          : leagueFollow // ignore: cast_nullable_to_non_nullable
+              as String?,
+      teamFollow: freezed == teamFollow
+          ? _value.teamFollow
+          : teamFollow // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -656,7 +712,12 @@ class _$PlayerBioModelImpl implements _PlayerBioModel {
       @JsonKey(name: 'isPlayer') this.isPlayer,
       @JsonKey(name: 'isCoach') this.isCoach,
       @JsonKey(name: 'isAdmin') this.isAdmin,
-      @JsonKey(name: 'isFan') this.isFan});
+      @JsonKey(name: 'isFan') this.isFan,
+      @JsonKey(name: 'isReferee') this.isReferee,
+      @JsonKey(name: 'brands') final List<String>? brands,
+      @JsonKey(name: 'leagueFollow') this.leagueFollow,
+      @JsonKey(name: 'teamFollow') this.teamFollow})
+      : _brands = brands;
 
   factory _$PlayerBioModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlayerBioModelImplFromJson(json);
@@ -775,10 +836,30 @@ class _$PlayerBioModelImpl implements _PlayerBioModel {
   @override
   @JsonKey(name: 'isFan')
   final bool? isFan;
+  @override
+  @JsonKey(name: 'isReferee')
+  final bool? isReferee;
+  final List<String>? _brands;
+  @override
+  @JsonKey(name: 'brands')
+  List<String>? get brands {
+    final value = _brands;
+    if (value == null) return null;
+    if (_brands is EqualUnmodifiableListView) return _brands;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  @JsonKey(name: 'leagueFollow')
+  final String? leagueFollow;
+  @override
+  @JsonKey(name: 'teamFollow')
+  final String? teamFollow;
 
   @override
   String toString() {
-    return 'PlayerBioModel(userId: $userId, firstName: $firstName, lastName: $lastName, profileName: $profileName, imageUrl: $imageUrl, playPosition: $playPosition, playPositionType: $playPositionType, country: $country, countryIso: $countryIso, nationality: $nationality, nationalityIso: $nationalityIso, preferredJersey: $preferredJersey, height: $height, preferredFoot: $preferredFoot, playLevel: $playLevel, jerseySize: $jerseySize, shoeSize: $shoeSize, shoeSizeUnit: $shoeSizeUnit, gender: $gender, dob: $dob, yearOfBirth: $yearOfBirth, type: $type, aboutMe: $aboutMe, postCount: $postCount, likeCount: $likeCount, followCount: $followCount, followingCount: $followingCount, followedByMe: $followedByMe, likedByMe: $likedByMe, isOnline: $isOnline, lastOnline: $lastOnline, isVerifyBadge: $isVerifyBadge, sclId: $sclId, ghaId: $ghaId, isPlayer: $isPlayer, isCoach: $isCoach, isAdmin: $isAdmin, isFan: $isFan)';
+    return 'PlayerBioModel(userId: $userId, firstName: $firstName, lastName: $lastName, profileName: $profileName, imageUrl: $imageUrl, playPosition: $playPosition, playPositionType: $playPositionType, country: $country, countryIso: $countryIso, nationality: $nationality, nationalityIso: $nationalityIso, preferredJersey: $preferredJersey, height: $height, preferredFoot: $preferredFoot, playLevel: $playLevel, jerseySize: $jerseySize, shoeSize: $shoeSize, shoeSizeUnit: $shoeSizeUnit, gender: $gender, dob: $dob, yearOfBirth: $yearOfBirth, type: $type, aboutMe: $aboutMe, postCount: $postCount, likeCount: $likeCount, followCount: $followCount, followingCount: $followingCount, followedByMe: $followedByMe, likedByMe: $likedByMe, isOnline: $isOnline, lastOnline: $lastOnline, isVerifyBadge: $isVerifyBadge, sclId: $sclId, ghaId: $ghaId, isPlayer: $isPlayer, isCoach: $isCoach, isAdmin: $isAdmin, isFan: $isFan, isReferee: $isReferee, brands: $brands, leagueFollow: $leagueFollow, teamFollow: $teamFollow)';
   }
 
   @override
@@ -849,7 +930,14 @@ class _$PlayerBioModelImpl implements _PlayerBioModel {
                 other.isPlayer == isPlayer) &&
             (identical(other.isCoach, isCoach) || other.isCoach == isCoach) &&
             (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin) &&
-            (identical(other.isFan, isFan) || other.isFan == isFan));
+            (identical(other.isFan, isFan) || other.isFan == isFan) &&
+            (identical(other.isReferee, isReferee) ||
+                other.isReferee == isReferee) &&
+            const DeepCollectionEquality().equals(other._brands, _brands) &&
+            (identical(other.leagueFollow, leagueFollow) ||
+                other.leagueFollow == leagueFollow) &&
+            (identical(other.teamFollow, teamFollow) ||
+                other.teamFollow == teamFollow));
   }
 
   @JsonKey(ignore: true)
@@ -893,7 +981,11 @@ class _$PlayerBioModelImpl implements _PlayerBioModel {
         isPlayer,
         isCoach,
         isAdmin,
-        isFan
+        isFan,
+        isReferee,
+        const DeepCollectionEquality().hash(_brands),
+        leagueFollow,
+        teamFollow
       ]);
 
   @JsonKey(ignore: true)
@@ -913,44 +1005,49 @@ class _$PlayerBioModelImpl implements _PlayerBioModel {
 
 abstract class _PlayerBioModel implements PlayerBioModel {
   const factory _PlayerBioModel(
-      {@JsonKey(name: 'userId') final String? userId,
-      @JsonKey(name: 'firstName') final String? firstName,
-      @JsonKey(name: 'lastName') final String? lastName,
-      @JsonKey(name: 'profileName') final String? profileName,
-      @JsonKey(name: 'imageUrl') final String? imageUrl,
-      @JsonKey(name: 'playPosition') final String? playPosition,
-      @JsonKey(name: 'playPositionType') final String? playPositionType,
-      @JsonKey(name: 'country') final String? country,
-      @JsonKey(name: 'countryIso') final String? countryIso,
-      @JsonKey(name: 'nationality') final String? nationality,
-      @JsonKey(name: 'nationalityIso') final String? nationalityIso,
-      @JsonKey(name: 'preferredJersey') final String? preferredJersey,
-      @JsonKey(name: 'height') final int? height,
-      @JsonKey(name: 'preferredFoot') final String? preferredFoot,
-      @JsonKey(name: 'playLevel') final String? playLevel,
-      @JsonKey(name: 'jerseySize') final String? jerseySize,
-      @JsonKey(name: 'shoeSize') final String? shoeSize,
-      @JsonKey(name: 'shoeSizeUnit') final String? shoeSizeUnit,
-      @JsonKey(name: 'gender') final String? gender,
-      @JsonKey(name: 'dob') final String? dob,
-      @JsonKey(name: 'yearOfBirth') final int? yearOfBirth,
-      @JsonKey(name: 'type') final String? type,
-      @JsonKey(name: 'aboutMe') final String? aboutMe,
-      @JsonKey(name: 'postCount') final int? postCount,
-      @JsonKey(name: 'likeCount') final int? likeCount,
-      @JsonKey(name: 'followCount') final int? followCount,
-      @JsonKey(name: 'followingCount') final int? followingCount,
-      @JsonKey(name: 'followedByMe') final bool? followedByMe,
-      @JsonKey(name: 'likedByMe') final bool? likedByMe,
-      @JsonKey(name: 'isOnline') final bool? isOnline,
-      @JsonKey(name: 'lastOnline') final int? lastOnline,
-      @JsonKey(name: 'isVerifyBadge') final bool? isVerifyBadge,
-      @JsonKey(name: 'sclId') final String? sclId,
-      @JsonKey(name: 'ghaId') final String? ghaId,
-      @JsonKey(name: 'isPlayer') final bool? isPlayer,
-      @JsonKey(name: 'isCoach') final bool? isCoach,
-      @JsonKey(name: 'isAdmin') final bool? isAdmin,
-      @JsonKey(name: 'isFan') final bool? isFan}) = _$PlayerBioModelImpl;
+          {@JsonKey(name: 'userId') final String? userId,
+          @JsonKey(name: 'firstName') final String? firstName,
+          @JsonKey(name: 'lastName') final String? lastName,
+          @JsonKey(name: 'profileName') final String? profileName,
+          @JsonKey(name: 'imageUrl') final String? imageUrl,
+          @JsonKey(name: 'playPosition') final String? playPosition,
+          @JsonKey(name: 'playPositionType') final String? playPositionType,
+          @JsonKey(name: 'country') final String? country,
+          @JsonKey(name: 'countryIso') final String? countryIso,
+          @JsonKey(name: 'nationality') final String? nationality,
+          @JsonKey(name: 'nationalityIso') final String? nationalityIso,
+          @JsonKey(name: 'preferredJersey') final String? preferredJersey,
+          @JsonKey(name: 'height') final int? height,
+          @JsonKey(name: 'preferredFoot') final String? preferredFoot,
+          @JsonKey(name: 'playLevel') final String? playLevel,
+          @JsonKey(name: 'jerseySize') final String? jerseySize,
+          @JsonKey(name: 'shoeSize') final String? shoeSize,
+          @JsonKey(name: 'shoeSizeUnit') final String? shoeSizeUnit,
+          @JsonKey(name: 'gender') final String? gender,
+          @JsonKey(name: 'dob') final String? dob,
+          @JsonKey(name: 'yearOfBirth') final int? yearOfBirth,
+          @JsonKey(name: 'type') final String? type,
+          @JsonKey(name: 'aboutMe') final String? aboutMe,
+          @JsonKey(name: 'postCount') final int? postCount,
+          @JsonKey(name: 'likeCount') final int? likeCount,
+          @JsonKey(name: 'followCount') final int? followCount,
+          @JsonKey(name: 'followingCount') final int? followingCount,
+          @JsonKey(name: 'followedByMe') final bool? followedByMe,
+          @JsonKey(name: 'likedByMe') final bool? likedByMe,
+          @JsonKey(name: 'isOnline') final bool? isOnline,
+          @JsonKey(name: 'lastOnline') final int? lastOnline,
+          @JsonKey(name: 'isVerifyBadge') final bool? isVerifyBadge,
+          @JsonKey(name: 'sclId') final String? sclId,
+          @JsonKey(name: 'ghaId') final String? ghaId,
+          @JsonKey(name: 'isPlayer') final bool? isPlayer,
+          @JsonKey(name: 'isCoach') final bool? isCoach,
+          @JsonKey(name: 'isAdmin') final bool? isAdmin,
+          @JsonKey(name: 'isFan') final bool? isFan,
+          @JsonKey(name: 'isReferee') final bool? isReferee,
+          @JsonKey(name: 'brands') final List<String>? brands,
+          @JsonKey(name: 'leagueFollow') final String? leagueFollow,
+          @JsonKey(name: 'teamFollow') final String? teamFollow}) =
+      _$PlayerBioModelImpl;
 
   factory _PlayerBioModel.fromJson(Map<String, dynamic> json) =
       _$PlayerBioModelImpl.fromJson;
@@ -1069,6 +1166,18 @@ abstract class _PlayerBioModel implements PlayerBioModel {
   @override
   @JsonKey(name: 'isFan')
   bool? get isFan;
+  @override
+  @JsonKey(name: 'isReferee')
+  bool? get isReferee;
+  @override
+  @JsonKey(name: 'brands')
+  List<String>? get brands;
+  @override
+  @JsonKey(name: 'leagueFollow')
+  String? get leagueFollow;
+  @override
+  @JsonKey(name: 'teamFollow')
+  String? get teamFollow;
   @override
   @JsonKey(ignore: true)
   _$$PlayerBioModelImplCopyWith<_$PlayerBioModelImpl> get copyWith =>

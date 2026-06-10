@@ -108,7 +108,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
     final title = isHome ? null : _titleForPath(location);
     final showBack = !isRoot;
     final user = ref.read(currentUserProvider);
-    log("this is the user role ${user?.isReferee}");
+    // log("this is the user role ${user?.isReferee}");
     return SafeArea(
       child: Container(
         height: 56,

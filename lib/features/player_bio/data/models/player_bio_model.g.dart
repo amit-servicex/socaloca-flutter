@@ -46,6 +46,11 @@ _$PlayerBioModelImpl _$$PlayerBioModelImplFromJson(Map<String, dynamic> json) =>
       isCoach: json['isCoach'] as bool?,
       isAdmin: json['isAdmin'] as bool?,
       isFan: json['isFan'] as bool?,
+      isReferee: json['isReferee'] as bool?,
+      brands:
+          (json['brands'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      leagueFollow: json['leagueFollow'] as String?,
+      teamFollow: json['teamFollow'] as String?,
     );
 
 Map<String, dynamic> _$$PlayerBioModelImplToJson(
@@ -89,4 +94,8 @@ Map<String, dynamic> _$$PlayerBioModelImplToJson(
       'isCoach': instance.isCoach,
       'isAdmin': instance.isAdmin,
       'isFan': instance.isFan,
+      'isReferee': instance.isReferee,
+      'brands': instance.brands,
+      'leagueFollow': instance.leagueFollow,
+      'teamFollow': instance.teamFollow,
     };

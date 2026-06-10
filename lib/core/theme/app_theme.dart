@@ -61,6 +61,7 @@ class AppTheme {
 
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
+            foregroundColor: AppColors.socaBlack,
             textStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
@@ -174,6 +175,7 @@ class AppTheme {
         ),
 
         dialogTheme: const DialogThemeData(
+          backgroundColor: Colors.white,
           titleTextStyle: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -185,6 +187,22 @@ class AppTheme {
             fontSize: 14,
             color: AppColors.textSecondary,
           ),
+        ),
+
+        datePickerTheme: const DatePickerThemeData(
+          backgroundColor: Colors.white,
+          headerBackgroundColor: Colors.black,
+          headerForegroundColor: Colors.white,
+          dayForegroundColor: WidgetStatePropertyAll(Colors.black),
+          dayBackgroundColor: WidgetStatePropertyAll(Colors.white),
+          todayForegroundColor: WidgetStatePropertyAll(Colors.black),
+          todayBackgroundColor: WidgetStatePropertyAll(Colors.white),
+          rangePickerBackgroundColor: Colors.white,
+          yearForegroundColor: WidgetStatePropertyAll(Colors.black),
+          yearBackgroundColor: WidgetStatePropertyAll(Colors.white),
+          weekdayStyle: TextStyle(color: Colors.black),
+          dayStyle: TextStyle(color: Colors.black),
+          yearStyle: TextStyle(color: Colors.black),
         ),
 
         dividerColor: AppColors.divider,
