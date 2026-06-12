@@ -252,8 +252,8 @@ class _LiveTournamentsSectionState
                               if (index > 0)
                                 Icon(
                                   Icons.arrow_back_ios_new,
-                                  color: AppColors.socaBlack,
-                                  size: 32,
+                                  color: AppColors.playedGray,
+                                  size: 50,
                                 ),
                             ],
                           ),
@@ -323,8 +323,8 @@ class _LiveTournamentsSectionState
                                     state.isLoadingMore)
                                   Icon(
                                     Icons.arrow_forward_ios,
-                                    color: AppColors.socaBlack,
-                                    size: 32,
+                                    color: AppColors.playedGray,
+                                    size: 50,
                                   ),
                               ],
                             ),

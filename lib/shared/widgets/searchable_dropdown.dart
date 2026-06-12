@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 
@@ -357,19 +359,23 @@ class SearchableDropdownField extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class SearchableDropdownButton extends StatelessWidget {
-  const SearchableDropdownButton({
-    super.key,
-    required this.hint,
-    required this.items,
-    required this.onChanged,
-    this.value,
-    this.values,
-    this.width,
-    this.height = 48,
-    this.backgroundColor,
-    this.fontSize = 13,
-    this.enabled = true,
-  });
+  const SearchableDropdownButton(
+      {super.key,
+      required this.hint,
+      required this.items,
+      required this.onChanged,
+      this.value,
+      this.values,
+      this.width,
+      this.height = 50,
+      this.backgroundColor,
+      this.fillColor,
+      this.border,
+      this.fontSize = 13,
+      this.enabled = true,
+      this.alwaysUseSheet = false,
+      this.sheetTitle,
+      this.radious});
 
   final String hint;
   final String? value;
@@ -379,9 +385,13 @@ class SearchableDropdownButton extends StatelessWidget {
   final double? width;
   final double height;
   final Color? backgroundColor;
+  final Color? fillColor;
+  final BoxBorder? border;
   final double fontSize;
   final bool enabled;
-
+  final bool alwaysUseSheet;
+  final String? sheetTitle;
+  final double? radious;
   String? get _displayLabel {
     if (value == null) return null;
     if (values != null) {
@@ -415,11 +425,12 @@ class SearchableDropdownButton extends StatelessWidget {
     final hasValue = label != null && label.isNotEmpty;
 
     final containerDecoration = BoxDecoration(
-      color: backgroundColor ?? AppColors.socaGrey,
-      borderRadius: BorderRadius.circular(5),
+      color: fillColor ?? backgroundColor ?? AppColors.socaGrey,
+      borderRadius: BorderRadius.circular(radious ?? 5),
+      border: border,
     );
-
-    if (items.length <= 20) {
+    log("this is the item count of the dropdown ${items.length}");
+    if (!alwaysUseSheet && items.length <= 20) {
       return Container(
         width: width,
         height: height,
@@ -462,7 +473,7 @@ class SearchableDropdownButton extends StatelessWidget {
           ? () async {
               final picked = await showSearchableSheet(
                 context: context,
-                title: hint,
+                title: sheetTitle ?? hint,
                 items: items,
                 values: values,
                 selected: value,

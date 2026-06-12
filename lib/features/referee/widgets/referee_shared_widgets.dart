@@ -45,10 +45,10 @@ class RefereeTournamentDropdown extends StatelessWidget {
             value: selectedValue,
             isExpanded: true,
             focusColor: Colors.transparent,
-            icon: const Icon(
-              Icons.arrow_drop_down,
-              color: AppColors.socaBlack,
-              size: 32,
+            icon: Image.asset(
+              "assets/images/dropdown.png",
+              width: 16,
+              height: 16,
             ),
             dropdownColor: Colors.white,
             style: const TextStyle(

@@ -190,35 +190,53 @@ Map<String, dynamic> _$$TournamentMatchModelImplToJson(
 _$PointsTableEntryImpl _$$PointsTableEntryImplFromJson(
         Map<String, dynamic> json) =>
     _$PointsTableEntryImpl(
+      rowId: (json['rowId'] as num?)?.toInt(),
+      tournamentId: json['tmntId'] as String?,
+      matchId: json['matchId'] as String?,
       teamId: json['teamId'] as String?,
       teamName: json['teamName'] as String?,
-      teamLogo: json['teamLogo'] as String?,
+      teamShortName: json['teamShortName'] as String?,
+      teamLogo: json['imageUrl'] as String?,
       seq: (json['seq'] as num?)?.toInt() ?? 0,
-      played: (json['played'] as num?)?.toInt() ?? 0,
-      won: (json['win'] as num?)?.toInt() ?? 0,
-      drawn: (json['draw'] as num?)?.toInt() ?? 0,
-      lost: (json['loss'] as num?)?.toInt() ?? 0,
+      played: (json['pl'] as num?)?.toInt() ?? 0,
+      won: (json['wn'] as num?)?.toInt() ?? 0,
+      drawn: (json['dr'] as num?)?.toInt() ?? 0,
+      lost: (json['ls'] as num?)?.toInt() ?? 0,
       goalsFor: (json['gf'] as num?)?.toInt() ?? 0,
       goalsAgainst: (json['ga'] as num?)?.toInt() ?? 0,
       goalDifference: (json['gd'] as num?)?.toInt() ?? 0,
       points: (json['pts'] as num?)?.toInt() ?? 0,
+      sortOrder: (json['sort_order'] as num?)?.toInt(),
+      comment: json['cmt'] as String?,
+      active: (json['active'] as num?)?.toInt(),
+      updatedBy: json['updtBy'] as String?,
+      updatedTime: json['updtTime'] as String?,
     );
 
 Map<String, dynamic> _$$PointsTableEntryImplToJson(
         _$PointsTableEntryImpl instance) =>
     <String, dynamic>{
+      'rowId': instance.rowId,
+      'tmntId': instance.tournamentId,
+      'matchId': instance.matchId,
       'teamId': instance.teamId,
       'teamName': instance.teamName,
-      'teamLogo': instance.teamLogo,
+      'teamShortName': instance.teamShortName,
+      'imageUrl': instance.teamLogo,
       'seq': instance.seq,
-      'played': instance.played,
-      'win': instance.won,
-      'draw': instance.drawn,
-      'loss': instance.lost,
+      'pl': instance.played,
+      'wn': instance.won,
+      'dr': instance.drawn,
+      'ls': instance.lost,
       'gf': instance.goalsFor,
       'ga': instance.goalsAgainst,
       'gd': instance.goalDifference,
       'pts': instance.points,
+      'sort_order': instance.sortOrder,
+      'cmt': instance.comment,
+      'active': instance.active,
+      'updtBy': instance.updatedBy,
+      'updtTime': instance.updatedTime,
     };
 
 _$PlayerStatEntryImpl _$$PlayerStatEntryImplFromJson(

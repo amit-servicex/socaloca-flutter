@@ -900,7 +900,11 @@ class _DropdownField<T> extends StatelessWidget {
     final strValue = value.toString();
     return SearchableDropdownButton(
       hint: strValue,
+      border: Border.all(color: AppColors.socaBlack),
+      fillColor: Colors.transparent,
       value: strValue,
+      height: 50,
+      radious: 0,
       items: strItems,
       onChanged: (v) {
         if (v == null) return;

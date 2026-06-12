@@ -2079,16 +2079,23 @@ PointsTableEntry _$PointsTableEntryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PointsTableEntry {
+  int? get rowId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'tmntId')
+  String? get tournamentId => throw _privateConstructorUsedError;
+  String? get matchId => throw _privateConstructorUsedError;
   String? get teamId => throw _privateConstructorUsedError;
   String? get teamName => throw _privateConstructorUsedError;
+  String? get teamShortName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'imageUrl')
   String? get teamLogo => throw _privateConstructorUsedError;
   int get seq => throw _privateConstructorUsedError;
+  @JsonKey(name: 'pl')
   int get played => throw _privateConstructorUsedError;
-  @JsonKey(name: 'win')
+  @JsonKey(name: 'wn')
   int get won => throw _privateConstructorUsedError;
-  @JsonKey(name: 'draw')
+  @JsonKey(name: 'dr')
   int get drawn => throw _privateConstructorUsedError;
-  @JsonKey(name: 'loss')
+  @JsonKey(name: 'ls')
   int get lost => throw _privateConstructorUsedError;
   @JsonKey(name: 'gf')
   int get goalsFor => throw _privateConstructorUsedError;
@@ -2098,6 +2105,15 @@ mixin _$PointsTableEntry {
   int get goalDifference => throw _privateConstructorUsedError;
   @JsonKey(name: 'pts')
   int get points => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sort_order')
+  int? get sortOrder => throw _privateConstructorUsedError;
+  @JsonKey(name: 'cmt')
+  String? get comment => throw _privateConstructorUsedError;
+  int? get active => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updtBy')
+  String? get updatedBy => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updtTime')
+  String? get updatedTime => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -2112,18 +2128,27 @@ abstract class $PointsTableEntryCopyWith<$Res> {
       _$PointsTableEntryCopyWithImpl<$Res, PointsTableEntry>;
   @useResult
   $Res call(
-      {String? teamId,
+      {int? rowId,
+      @JsonKey(name: 'tmntId') String? tournamentId,
+      String? matchId,
+      String? teamId,
       String? teamName,
-      String? teamLogo,
+      String? teamShortName,
+      @JsonKey(name: 'imageUrl') String? teamLogo,
       int seq,
-      int played,
-      @JsonKey(name: 'win') int won,
-      @JsonKey(name: 'draw') int drawn,
-      @JsonKey(name: 'loss') int lost,
+      @JsonKey(name: 'pl') int played,
+      @JsonKey(name: 'wn') int won,
+      @JsonKey(name: 'dr') int drawn,
+      @JsonKey(name: 'ls') int lost,
       @JsonKey(name: 'gf') int goalsFor,
       @JsonKey(name: 'ga') int goalsAgainst,
       @JsonKey(name: 'gd') int goalDifference,
-      @JsonKey(name: 'pts') int points});
+      @JsonKey(name: 'pts') int points,
+      @JsonKey(name: 'sort_order') int? sortOrder,
+      @JsonKey(name: 'cmt') String? comment,
+      int? active,
+      @JsonKey(name: 'updtBy') String? updatedBy,
+      @JsonKey(name: 'updtTime') String? updatedTime});
 }
 
 /// @nodoc
@@ -2139,8 +2164,12 @@ class _$PointsTableEntryCopyWithImpl<$Res, $Val extends PointsTableEntry>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? rowId = freezed,
+    Object? tournamentId = freezed,
+    Object? matchId = freezed,
     Object? teamId = freezed,
     Object? teamName = freezed,
+    Object? teamShortName = freezed,
     Object? teamLogo = freezed,
     Object? seq = null,
     Object? played = null,
@@ -2151,8 +2180,25 @@ class _$PointsTableEntryCopyWithImpl<$Res, $Val extends PointsTableEntry>
     Object? goalsAgainst = null,
     Object? goalDifference = null,
     Object? points = null,
+    Object? sortOrder = freezed,
+    Object? comment = freezed,
+    Object? active = freezed,
+    Object? updatedBy = freezed,
+    Object? updatedTime = freezed,
   }) {
     return _then(_value.copyWith(
+      rowId: freezed == rowId
+          ? _value.rowId
+          : rowId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      tournamentId: freezed == tournamentId
+          ? _value.tournamentId
+          : tournamentId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      matchId: freezed == matchId
+          ? _value.matchId
+          : matchId // ignore: cast_nullable_to_non_nullable
+              as String?,
       teamId: freezed == teamId
           ? _value.teamId
           : teamId // ignore: cast_nullable_to_non_nullable
@@ -2160,6 +2206,10 @@ class _$PointsTableEntryCopyWithImpl<$Res, $Val extends PointsTableEntry>
       teamName: freezed == teamName
           ? _value.teamName
           : teamName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      teamShortName: freezed == teamShortName
+          ? _value.teamShortName
+          : teamShortName // ignore: cast_nullable_to_non_nullable
               as String?,
       teamLogo: freezed == teamLogo
           ? _value.teamLogo
@@ -2201,6 +2251,26 @@ class _$PointsTableEntryCopyWithImpl<$Res, $Val extends PointsTableEntry>
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
               as int,
+      sortOrder: freezed == sortOrder
+          ? _value.sortOrder
+          : sortOrder // ignore: cast_nullable_to_non_nullable
+              as int?,
+      comment: freezed == comment
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String?,
+      active: freezed == active
+          ? _value.active
+          : active // ignore: cast_nullable_to_non_nullable
+              as int?,
+      updatedBy: freezed == updatedBy
+          ? _value.updatedBy
+          : updatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedTime: freezed == updatedTime
+          ? _value.updatedTime
+          : updatedTime // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -2214,18 +2284,27 @@ abstract class _$$PointsTableEntryImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? teamId,
+      {int? rowId,
+      @JsonKey(name: 'tmntId') String? tournamentId,
+      String? matchId,
+      String? teamId,
       String? teamName,
-      String? teamLogo,
+      String? teamShortName,
+      @JsonKey(name: 'imageUrl') String? teamLogo,
       int seq,
-      int played,
-      @JsonKey(name: 'win') int won,
-      @JsonKey(name: 'draw') int drawn,
-      @JsonKey(name: 'loss') int lost,
+      @JsonKey(name: 'pl') int played,
+      @JsonKey(name: 'wn') int won,
+      @JsonKey(name: 'dr') int drawn,
+      @JsonKey(name: 'ls') int lost,
       @JsonKey(name: 'gf') int goalsFor,
       @JsonKey(name: 'ga') int goalsAgainst,
       @JsonKey(name: 'gd') int goalDifference,
-      @JsonKey(name: 'pts') int points});
+      @JsonKey(name: 'pts') int points,
+      @JsonKey(name: 'sort_order') int? sortOrder,
+      @JsonKey(name: 'cmt') String? comment,
+      int? active,
+      @JsonKey(name: 'updtBy') String? updatedBy,
+      @JsonKey(name: 'updtTime') String? updatedTime});
 }
 
 /// @nodoc
@@ -2239,8 +2318,12 @@ class __$$PointsTableEntryImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? rowId = freezed,
+    Object? tournamentId = freezed,
+    Object? matchId = freezed,
     Object? teamId = freezed,
     Object? teamName = freezed,
+    Object? teamShortName = freezed,
     Object? teamLogo = freezed,
     Object? seq = null,
     Object? played = null,
@@ -2251,8 +2334,25 @@ class __$$PointsTableEntryImplCopyWithImpl<$Res>
     Object? goalsAgainst = null,
     Object? goalDifference = null,
     Object? points = null,
+    Object? sortOrder = freezed,
+    Object? comment = freezed,
+    Object? active = freezed,
+    Object? updatedBy = freezed,
+    Object? updatedTime = freezed,
   }) {
     return _then(_$PointsTableEntryImpl(
+      rowId: freezed == rowId
+          ? _value.rowId
+          : rowId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      tournamentId: freezed == tournamentId
+          ? _value.tournamentId
+          : tournamentId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      matchId: freezed == matchId
+          ? _value.matchId
+          : matchId // ignore: cast_nullable_to_non_nullable
+              as String?,
       teamId: freezed == teamId
           ? _value.teamId
           : teamId // ignore: cast_nullable_to_non_nullable
@@ -2260,6 +2360,10 @@ class __$$PointsTableEntryImplCopyWithImpl<$Res>
       teamName: freezed == teamName
           ? _value.teamName
           : teamName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      teamShortName: freezed == teamShortName
+          ? _value.teamShortName
+          : teamShortName // ignore: cast_nullable_to_non_nullable
               as String?,
       teamLogo: freezed == teamLogo
           ? _value.teamLogo
@@ -2301,6 +2405,26 @@ class __$$PointsTableEntryImplCopyWithImpl<$Res>
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
               as int,
+      sortOrder: freezed == sortOrder
+          ? _value.sortOrder
+          : sortOrder // ignore: cast_nullable_to_non_nullable
+              as int?,
+      comment: freezed == comment
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String?,
+      active: freezed == active
+          ? _value.active
+          : active // ignore: cast_nullable_to_non_nullable
+              as int?,
+      updatedBy: freezed == updatedBy
+          ? _value.updatedBy
+          : updatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updatedTime: freezed == updatedTime
+          ? _value.updatedTime
+          : updatedTime // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -2309,42 +2433,61 @@ class __$$PointsTableEntryImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PointsTableEntryImpl implements _PointsTableEntry {
   const _$PointsTableEntryImpl(
-      {this.teamId,
+      {this.rowId,
+      @JsonKey(name: 'tmntId') this.tournamentId,
+      this.matchId,
+      this.teamId,
       this.teamName,
-      this.teamLogo,
+      this.teamShortName,
+      @JsonKey(name: 'imageUrl') this.teamLogo,
       this.seq = 0,
-      this.played = 0,
-      @JsonKey(name: 'win') this.won = 0,
-      @JsonKey(name: 'draw') this.drawn = 0,
-      @JsonKey(name: 'loss') this.lost = 0,
+      @JsonKey(name: 'pl') this.played = 0,
+      @JsonKey(name: 'wn') this.won = 0,
+      @JsonKey(name: 'dr') this.drawn = 0,
+      @JsonKey(name: 'ls') this.lost = 0,
       @JsonKey(name: 'gf') this.goalsFor = 0,
       @JsonKey(name: 'ga') this.goalsAgainst = 0,
       @JsonKey(name: 'gd') this.goalDifference = 0,
-      @JsonKey(name: 'pts') this.points = 0});
+      @JsonKey(name: 'pts') this.points = 0,
+      @JsonKey(name: 'sort_order') this.sortOrder,
+      @JsonKey(name: 'cmt') this.comment,
+      this.active,
+      @JsonKey(name: 'updtBy') this.updatedBy,
+      @JsonKey(name: 'updtTime') this.updatedTime});
 
   factory _$PointsTableEntryImpl.fromJson(Map<String, dynamic> json) =>
       _$$PointsTableEntryImplFromJson(json);
 
   @override
+  final int? rowId;
+  @override
+  @JsonKey(name: 'tmntId')
+  final String? tournamentId;
+  @override
+  final String? matchId;
+  @override
   final String? teamId;
   @override
   final String? teamName;
   @override
+  final String? teamShortName;
+  @override
+  @JsonKey(name: 'imageUrl')
   final String? teamLogo;
   @override
   @JsonKey()
   final int seq;
   @override
-  @JsonKey()
+  @JsonKey(name: 'pl')
   final int played;
   @override
-  @JsonKey(name: 'win')
+  @JsonKey(name: 'wn')
   final int won;
   @override
-  @JsonKey(name: 'draw')
+  @JsonKey(name: 'dr')
   final int drawn;
   @override
-  @JsonKey(name: 'loss')
+  @JsonKey(name: 'ls')
   final int lost;
   @override
   @JsonKey(name: 'gf')
@@ -2358,10 +2501,24 @@ class _$PointsTableEntryImpl implements _PointsTableEntry {
   @override
   @JsonKey(name: 'pts')
   final int points;
+  @override
+  @JsonKey(name: 'sort_order')
+  final int? sortOrder;
+  @override
+  @JsonKey(name: 'cmt')
+  final String? comment;
+  @override
+  final int? active;
+  @override
+  @JsonKey(name: 'updtBy')
+  final String? updatedBy;
+  @override
+  @JsonKey(name: 'updtTime')
+  final String? updatedTime;
 
   @override
   String toString() {
-    return 'PointsTableEntry(teamId: $teamId, teamName: $teamName, teamLogo: $teamLogo, seq: $seq, played: $played, won: $won, drawn: $drawn, lost: $lost, goalsFor: $goalsFor, goalsAgainst: $goalsAgainst, goalDifference: $goalDifference, points: $points)';
+    return 'PointsTableEntry(rowId: $rowId, tournamentId: $tournamentId, matchId: $matchId, teamId: $teamId, teamName: $teamName, teamShortName: $teamShortName, teamLogo: $teamLogo, seq: $seq, played: $played, won: $won, drawn: $drawn, lost: $lost, goalsFor: $goalsFor, goalsAgainst: $goalsAgainst, goalDifference: $goalDifference, points: $points, sortOrder: $sortOrder, comment: $comment, active: $active, updatedBy: $updatedBy, updatedTime: $updatedTime)';
   }
 
   @override
@@ -2369,9 +2526,15 @@ class _$PointsTableEntryImpl implements _PointsTableEntry {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PointsTableEntryImpl &&
+            (identical(other.rowId, rowId) || other.rowId == rowId) &&
+            (identical(other.tournamentId, tournamentId) ||
+                other.tournamentId == tournamentId) &&
+            (identical(other.matchId, matchId) || other.matchId == matchId) &&
             (identical(other.teamId, teamId) || other.teamId == teamId) &&
             (identical(other.teamName, teamName) ||
                 other.teamName == teamName) &&
+            (identical(other.teamShortName, teamShortName) ||
+                other.teamShortName == teamShortName) &&
             (identical(other.teamLogo, teamLogo) ||
                 other.teamLogo == teamLogo) &&
             (identical(other.seq, seq) || other.seq == seq) &&
@@ -2385,13 +2548,43 @@ class _$PointsTableEntryImpl implements _PointsTableEntry {
                 other.goalsAgainst == goalsAgainst) &&
             (identical(other.goalDifference, goalDifference) ||
                 other.goalDifference == goalDifference) &&
-            (identical(other.points, points) || other.points == points));
+            (identical(other.points, points) || other.points == points) &&
+            (identical(other.sortOrder, sortOrder) ||
+                other.sortOrder == sortOrder) &&
+            (identical(other.comment, comment) || other.comment == comment) &&
+            (identical(other.active, active) || other.active == active) &&
+            (identical(other.updatedBy, updatedBy) ||
+                other.updatedBy == updatedBy) &&
+            (identical(other.updatedTime, updatedTime) ||
+                other.updatedTime == updatedTime));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, teamId, teamName, teamLogo, seq,
-      played, won, drawn, lost, goalsFor, goalsAgainst, goalDifference, points);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        rowId,
+        tournamentId,
+        matchId,
+        teamId,
+        teamName,
+        teamShortName,
+        teamLogo,
+        seq,
+        played,
+        won,
+        drawn,
+        lost,
+        goalsFor,
+        goalsAgainst,
+        goalDifference,
+        points,
+        sortOrder,
+        comment,
+        active,
+        updatedBy,
+        updatedTime
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -2410,40 +2603,61 @@ class _$PointsTableEntryImpl implements _PointsTableEntry {
 
 abstract class _PointsTableEntry implements PointsTableEntry {
   const factory _PointsTableEntry(
-      {final String? teamId,
-      final String? teamName,
-      final String? teamLogo,
-      final int seq,
-      final int played,
-      @JsonKey(name: 'win') final int won,
-      @JsonKey(name: 'draw') final int drawn,
-      @JsonKey(name: 'loss') final int lost,
-      @JsonKey(name: 'gf') final int goalsFor,
-      @JsonKey(name: 'ga') final int goalsAgainst,
-      @JsonKey(name: 'gd') final int goalDifference,
-      @JsonKey(name: 'pts') final int points}) = _$PointsTableEntryImpl;
+          {final int? rowId,
+          @JsonKey(name: 'tmntId') final String? tournamentId,
+          final String? matchId,
+          final String? teamId,
+          final String? teamName,
+          final String? teamShortName,
+          @JsonKey(name: 'imageUrl') final String? teamLogo,
+          final int seq,
+          @JsonKey(name: 'pl') final int played,
+          @JsonKey(name: 'wn') final int won,
+          @JsonKey(name: 'dr') final int drawn,
+          @JsonKey(name: 'ls') final int lost,
+          @JsonKey(name: 'gf') final int goalsFor,
+          @JsonKey(name: 'ga') final int goalsAgainst,
+          @JsonKey(name: 'gd') final int goalDifference,
+          @JsonKey(name: 'pts') final int points,
+          @JsonKey(name: 'sort_order') final int? sortOrder,
+          @JsonKey(name: 'cmt') final String? comment,
+          final int? active,
+          @JsonKey(name: 'updtBy') final String? updatedBy,
+          @JsonKey(name: 'updtTime') final String? updatedTime}) =
+      _$PointsTableEntryImpl;
 
   factory _PointsTableEntry.fromJson(Map<String, dynamic> json) =
       _$PointsTableEntryImpl.fromJson;
 
   @override
+  int? get rowId;
+  @override
+  @JsonKey(name: 'tmntId')
+  String? get tournamentId;
+  @override
+  String? get matchId;
+  @override
   String? get teamId;
   @override
   String? get teamName;
   @override
+  String? get teamShortName;
+  @override
+  @JsonKey(name: 'imageUrl')
   String? get teamLogo;
   @override
   int get seq;
   @override
+  @JsonKey(name: 'pl')
   int get played;
   @override
-  @JsonKey(name: 'win')
+  @JsonKey(name: 'wn')
   int get won;
   @override
-  @JsonKey(name: 'draw')
+  @JsonKey(name: 'dr')
   int get drawn;
   @override
-  @JsonKey(name: 'loss')
+  @JsonKey(name: 'ls')
   int get lost;
   @override
   @JsonKey(name: 'gf')
@@ -2457,6 +2671,20 @@ abstract class _PointsTableEntry implements PointsTableEntry {
   @override
   @JsonKey(name: 'pts')
   int get points;
+  @override
+  @JsonKey(name: 'sort_order')
+  int? get sortOrder;
+  @override
+  @JsonKey(name: 'cmt')
+  String? get comment;
+  @override
+  int? get active;
+  @override
+  @JsonKey(name: 'updtBy')
+  String? get updatedBy;
+  @override
+  @JsonKey(name: 'updtTime')
+  String? get updatedTime;
   @override
   @JsonKey(ignore: true)
   _$$PointsTableEntryImplCopyWith<_$PointsTableEntryImpl> get copyWith =>

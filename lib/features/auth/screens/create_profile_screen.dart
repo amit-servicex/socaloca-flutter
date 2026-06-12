@@ -578,7 +578,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
   bool get _showBrands =>
       (_isPlayer || _isCoach || _isManager || _isFan) && !_isReferee;
   bool get _showFanLocation => _isFan || _isReferee;
-  bool get _showLeaguesTeams => _isFan;
+  bool get _showLeaguesTeams => _isFan || _isPlayer || _isCoach || _isManager;
 
   void _onRoleToggle(String role, bool value) {
     setState(() {
@@ -1986,7 +1986,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             InkWell(
               onTap: _pickImageFromCamera,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
@@ -2011,7 +2011,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             InkWell(
               onTap: _pickImageFromGallery,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                 decoration: BoxDecoration(
                   color: AppColors.socaBlack,
                   borderRadius: BorderRadius.circular(5),

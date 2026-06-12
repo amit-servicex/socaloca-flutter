@@ -594,11 +594,11 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                           ),
                           Container(
                             width: 1,
-                            height: 14,
+                            height: 30,
                             color: AppColors.socaBlack,
                             margin: const EdgeInsets.symmetric(horizontal: 8),
                           ),
-                          Text('🌍'.tr, style: const TextStyle(fontSize: 18)),
+                          _buildCountryFlag(),
                         ],
                       ),
                       const SizedBox(height: 2),
@@ -614,7 +614,11 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.more_vert, color: AppColors.socaBlack),
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: AppColors.socaBlack,
+                    size: 35,
+                  ),
                   onPressed: () => _showMoreOptions(context),
                 ),
               ],
@@ -908,7 +912,122 @@ class _FeedPostCardState extends ConsumerState<FeedPostCard>
     final period = date.hour >= 12 ? 'PM' : 'AM';
     return '${months[date.month - 1]} ${date.day}, $hour:$minute$period';
   }
+
+  Widget _buildCountryFlag() {
+    final flagIso = _flagIsoCode();
+
+    if (flagIso == null) {
+      return const Icon(
+        Icons.flag,
+        size: 18,
+        color: Colors.green,
+      );
+    }
+
+    return Container(
+      width: 35,
+      height: 25,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey, width: 0.5),
+        borderRadius: BorderRadius.circular(2),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.network(
+        'https://flagcdn.com/w40/${flagIso.toLowerCase()}.png',
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => const Icon(
+          Icons.flag,
+          color: Colors.green,
+        ),
+      ),
+    );
+  }
+
+  String? _flagIsoCode() {
+    final metadata = widget.post.metadata;
+    final userDetails = metadata?['userDetails'] as Map<String, dynamic>?;
+
+    final directIso = _normalizeIso(metadata?['nationalityIso']) ??
+        _normalizeIso(metadata?['countryIso']) ??
+        _normalizeIso(metadata?['countryCode']) ??
+        _normalizeIso(userDetails?['nationalityIso']) ??
+        _normalizeIso(userDetails?['countryIso']) ??
+        _normalizeIso(userDetails?['countryCode']);
+    if (directIso != null) return directIso;
+
+    final country = (userDetails?['country'] ?? metadata?['country'])
+        ?.toString()
+        .trim()
+        .toLowerCase();
+    if (country == null || country.isEmpty) return null;
+    return _countryNameToIso[country];
+  }
+
+  String? _normalizeIso(dynamic value) {
+    final iso = value?.toString().trim();
+    if (iso == null || iso.isEmpty) return null;
+    return iso.length == 2 ? iso.toUpperCase() : null;
+  }
 }
+
+const Map<String, String> _countryNameToIso = {
+  'afghanistan': 'AF',
+  'albania': 'AL',
+  'algeria': 'DZ',
+  'argentina': 'AR',
+  'australia': 'AU',
+  'austria': 'AT',
+  'bangladesh': 'BD',
+  'belgium': 'BE',
+  'brazil': 'BR',
+  'canada': 'CA',
+  'chile': 'CL',
+  'china': 'CN',
+  'colombia': 'CO',
+  'denmark': 'DK',
+  'egypt': 'EG',
+  'england': 'GB',
+  'finland': 'FI',
+  'france': 'FR',
+  'germany': 'DE',
+  'greece': 'GR',
+  'india': 'IN',
+  'indonesia': 'ID',
+  'ireland': 'IE',
+  'republic of ireland': 'IE',
+  'italy': 'IT',
+  'japan': 'JP',
+  'kenya': 'KE',
+  'korea republic': 'KR',
+  'south korea': 'KR',
+  'malaysia': 'MY',
+  'mexico': 'MX',
+  'netherlands': 'NL',
+  'new zealand': 'NZ',
+  'nigeria': 'NG',
+  'norway': 'NO',
+  'pakistan': 'PK',
+  'peru': 'PE',
+  'philippines': 'PH',
+  'poland': 'PL',
+  'portugal': 'PT',
+  'russia': 'RU',
+  'saudi arabia': 'SA',
+  'singapore': 'SG',
+  'south africa': 'ZA',
+  'spain': 'ES',
+  'sweden': 'SE',
+  'switzerland': 'CH',
+  'thailand': 'TH',
+  'türkiye': 'TR',
+  'turkey': 'TR',
+  'ukraine': 'UA',
+  'united arab emirates': 'AE',
+  'usa': 'US',
+  'united states': 'US',
+  'united states of america': 'US',
+  'vietnam': 'VN',
+};
 
 // ── More Option Tile ──────────────────────────────────────────────────────────
 

@@ -202,81 +202,93 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundColor: Colors.black,
-                                child: Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: Image.asset(
-                                    'assets/images/logo_transparent.png',
-                                    color: Colors.white,
-                                    errorBuilder: (_, __, ___) => Icon(
-                                      Icons.sports_soccer,
-                                      color: Colors.white,
+                          Container(
+                            // color: AppColors.socaGrey,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 25,
+                                  backgroundColor: Colors.transparent,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: Image.asset(
+                                      'assets/images/logo.png',
+                                      // color: Colors.white,
+                                      errorBuilder: (_, __, ___) => Icon(
+                                        Icons.sports_soccer,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          AppStrings.appName,
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.socaBlack,
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            AppStrings.appName,
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.socaBlack,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(width: 4),
-                                        Icon(
-                                          Icons.verified,
-                                          color: AppColors.socaBlack,
-                                          size: 20,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 2),
-                                    Text(
-                                      joinedText ?? '',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: AppColors.socaGrey,
+                                          SizedBox(width: 4),
+                                          Image.asset(
+                                            "assets/icons/ic_verified_new_2.png",
+                                            width: 24,
+                                            height: 24,
+                                          )
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                color: AppColors.socaBlack,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: AppStrings.teamJoinedSocaLoca(
-                                      team.teamName ?? AppStrings.teamFallback),
-                                ),
-                                TextSpan(
-                                  text: AppStrings.checkTeamBio,
-                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                      SizedBox(height: 2),
+                                      Text(
+                                        joinedText ?? '',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColors.playedGray,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          InkWell(
+                            onTap: () {
+                              context.push(AppRoutes.teamBio
+                                  .replaceFirst(':teamId', team.teamId ?? ''));
+                            },
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14,
+                                  color: AppColors.socaBlack,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: AppStrings.teamJoinedSocaLoca(
+                                        team.teamName ??
+                                            AppStrings.teamFallback),
+                                  ),
+                                  TextSpan(
+                                    text: AppStrings.checkTeamBio,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -303,15 +315,16 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                     ),
                             child: Icon(
                               Icons.arrow_back_ios_new,
-                              size: 32,
+                              //  color: AppColors.playedGray,
+                              size: 50,
                               color: isFirst
                                   ? AppColors.socaGrey.withOpacity(0.3)
-                                  : AppColors.socaBlack,
+                                  : AppColors.playedGray,
                             ),
                           ),
                           SizedBox(width: 12),
                           CircleAvatar(
-                            radius: 40,
+                            radius: 50,
                             backgroundColor: AppColors.socaGrey.withAlpha(36),
                             backgroundImage: team.teamLogo != null &&
                                     team.teamLogo!.isNotEmpty &&
@@ -391,10 +404,10 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                     ),
                             child: Icon(
                               Icons.arrow_forward_ios,
-                              size: 32,
+                              size: 50,
                               color: isLast
                                   ? AppColors.socaGrey.withOpacity(0.3)
-                                  : AppColors.socaBlack,
+                                  : AppColors.playedGray,
                             ),
                           ),
                         ],

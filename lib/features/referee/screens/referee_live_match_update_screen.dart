@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -48,6 +50,8 @@ class _RefereeLiveMatchUpdateScreenState
   int _scoreB = 0;
   bool _isSaving = false;
   bool _isLoadingDetails = false;
+  Timer? _matchClockTimer;
+  String _elapsedMatchTime = '00:00';
   Map<String, dynamic> _liveRecord = {};
   List<_LivePlayer> _teamAPlayers = const [];
   List<_LivePlayer> _teamBPlayers = const [];
@@ -87,10 +91,12 @@ class _RefereeLiveMatchUpdateScreenState
     _scoreB = int.tryParse(match?.teamBScore ?? '0') ?? 0;
     _applyState(_state);
     _loadLiveDetails();
+    _syncMatchClockTimer();
   }
 
   @override
   void dispose() {
+    _matchClockTimer?.cancel();
     _goalATime.dispose();
     _goalBTime.dispose();
     _cardATime.dispose();
@@ -140,6 +146,7 @@ class _RefereeLiveMatchUpdateScreenState
         _applyState(_state);
       }
       _syncScoresFromLiveRecord();
+      _syncMatchClockTimer();
     });
   }
 
@@ -174,6 +181,72 @@ class _RefereeLiveMatchUpdateScreenState
     if (value is int) return value;
     if (value is num) return value.toInt();
     return int.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  int? _timestampVal(Object? value) {
+    if (value == null) return null;
+    if (value is num) return _normalizeEpochMillis(value.toInt());
+
+    final raw = value.toString().trim();
+    if (raw.isEmpty || raw == 'null') return null;
+
+    final numeric = int.tryParse(raw);
+    if (numeric != null) return _normalizeEpochMillis(numeric);
+
+    final parsedDate = DateTime.tryParse(raw);
+    return parsedDate?.millisecondsSinceEpoch;
+  }
+
+  int _normalizeEpochMillis(int value) {
+    // API fields in this screen are normally milliseconds, but accept seconds
+    // too so the clock survives either backend representation.
+    return value < 100000000000 ? value * 1000 : value;
+  }
+
+  void _syncMatchClockTimer() {
+    _matchClockTimer?.cancel();
+    _refreshElapsedMatchTime();
+
+    if (_timestampVal(_liveRecord['startTimeGmt']) == null || _isTerminal) {
+      _matchClockTimer = null;
+      return;
+    }
+
+    _matchClockTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      setState(_refreshElapsedMatchTime);
+    });
+  }
+
+  void _refreshElapsedMatchTime() {
+    final startTime = _timestampVal(_liveRecord['startTimeGmt']);
+    if (startTime == null) {
+      _elapsedMatchTime = '00:00';
+      return;
+    }
+
+    final endTime = _terminalTime ?? DateTime.now().millisecondsSinceEpoch;
+    final elapsedMs = (endTime - startTime).clamp(0, 1 << 53);
+    _elapsedMatchTime =
+        _formatMatchClock(Duration(milliseconds: elapsedMs.toInt()));
+  }
+
+  int? get _terminalTime {
+    if (_state == 'FINISH') return _timestampVal(_liveRecord['finishTime']);
+    if (_state == 'POSTPONED') {
+      return _timestampVal(_liveRecord['postponedTime']);
+    }
+    if (_state == 'ABANDONED') {
+      return _timestampVal(_liveRecord['abandonedTime']);
+    }
+    return null;
+  }
+
+  String _formatMatchClock(Duration duration) {
+    final totalSeconds = duration.inSeconds;
+    final minutes = totalSeconds ~/ 60;
+    final seconds = totalSeconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   List<_LivePlayer> _extractPlayers(Map<String, dynamic> data, String? teamId) {
@@ -349,23 +422,25 @@ class _RefereeLiveMatchUpdateScreenState
       return;
     }
     setState(() => _isSaving = true);
+    final keyVals = {..._scoreKeyVals(), ..._timestampKeyVals(nextState)};
     final ok = await ref.read(refereeRepositoryProvider).saveLiveMatchState(
-      matchId: widget.matchId,
-      tournamentId: _tournamentId,
-      state: nextState,
-      keyVals: {..._scoreKeyVals(), ..._timestampKeyVals(nextState)},
-    );
+          matchId: widget.matchId,
+          tournamentId: _tournamentId,
+          state: nextState,
+          keyVals: keyVals,
+        );
     if (!mounted) return;
     setState(() {
       _isSaving = false;
       if (ok) {
         _state = nextState;
-        _liveRecord = {..._liveRecord, 'state': nextState};
+        _liveRecord = {..._liveRecord, ...keyVals, 'state': nextState};
         _applyState(nextState);
         if (nextState == 'POSTPONED' || nextState == 'ABANDONED') {
           _scoreA = 0;
           _scoreB = 0;
         }
+        _syncMatchClockTimer();
       }
     });
     if (ok && nextState == 'FINISH') {
@@ -510,8 +585,8 @@ class _RefereeLiveMatchUpdateScreenState
       _showError(AppStrings.pleaseSelectCardType);
       return;
     }
-    final time = _parseRequiredMinute(
-        leftSelected ? _cardATime : _cardBTime, AppStrings.pleaseSelectCardTime);
+    final time = _parseRequiredMinute(leftSelected ? _cardATime : _cardBTime,
+        AppStrings.pleaseSelectCardTime);
     if (time == null) return;
     if (!_validateEventMinute(time)) return;
     final player = leftSelected ? _cardAPlayer! : _cardBPlayer!;
@@ -570,8 +645,8 @@ class _RefereeLiveMatchUpdateScreenState
       _showError(AppStrings.playerInAndOutSame);
       return;
     }
-    final time = _parseRequiredMinute(
-        leftSelected ? _subATime : _subBTime, AppStrings.pleaseEnterSubstitutionTime);
+    final time = _parseRequiredMinute(leftSelected ? _subATime : _subBTime,
+        AppStrings.pleaseEnterSubstitutionTime);
     if (time == null) return;
     if (!_validateEventMinute(time)) return;
     await _saveEntry(
@@ -817,6 +892,7 @@ class _RefereeLiveMatchUpdateScreenState
                     match: widget.match,
                     scoreA: _scoreA,
                     scoreB: _scoreB,
+                    elapsedTime: _elapsedMatchTime,
                     stateTitle: title,
                   ),
                   if (_showStartControls) _buildStartControls(),
@@ -1028,12 +1104,14 @@ class _MatchSummary extends StatelessWidget {
     required this.match,
     required this.scoreA,
     required this.scoreB,
+    required this.elapsedTime,
     required this.stateTitle,
   });
 
   final RefereeMatchModel? match;
   final int scoreA;
   final int scoreB;
+  final String elapsedTime;
   final String stateTitle;
 
   @override
@@ -1139,9 +1217,9 @@ class _MatchSummary extends StatelessWidget {
                               height: 28,
                             ),
                             const SizedBox(width: 4),
-                            const Text(
-                              '00:00',
-                              style: TextStyle(
+                            Text(
+                              elapsedTime,
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16,
@@ -1345,7 +1423,8 @@ class _TeamLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasLogo = logoUrl != null && logoUrl!.trim().isNotEmpty;
+    final logo = logoUrl;
+    final hasLogo = logo != null && logo.trim().isNotEmpty;
     return Container(
       width: 80,
       height: 80,
@@ -1353,7 +1432,7 @@ class _TeamLogo extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: hasLogo
           ? Image.network(
-              ApiConstants.getImageUrl(logoUrl)!,
+              ApiConstants.getImageUrl(logo),
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => const _TeamLogoFallback(),
             )
@@ -1924,6 +2003,7 @@ class _InputBox extends StatelessWidget {
         controller: controller,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
+          fillColor: Colors.transparent,
           hintText: AppStrings.literal(hint),
           hintStyle: const TextStyle(
             fontFamily: 'Poppins',

@@ -178,7 +178,7 @@ class _RecommendedUsersSectionState
                 left: 0,
                 child: IconButton(
                   icon: Icon(Icons.arrow_back_ios_new,
-                      size: 32, color: Colors.black54),
+                      size: 50, color: AppColors.playedGray),
                   onPressed: _prevPage,
                 ),
               ),
@@ -188,7 +188,7 @@ class _RecommendedUsersSectionState
                 right: 0,
                 child: IconButton(
                   icon: Icon(Icons.arrow_forward_ios,
-                      size: 32, color: Colors.black54),
+                      size: 50, color: AppColors.playedGray),
                   onPressed: _nextPage,
                 ),
               ),

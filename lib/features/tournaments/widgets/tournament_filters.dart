@@ -3,6 +3,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:socaloca/core/storage/storage_service.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/searchable_dropdown.dart';
 import '../data/tournament_models.dart';
 
 /// Pinned NATIONAL / GLOBAL visibility toggle.
@@ -181,50 +182,6 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
     widget.onFiltersChanged(updated);
   }
 
-  Future<void> _pickOption({
-    required String title,
-    required List<String> options,
-    required String? current,
-    required void Function(String?) onSelected,
-  }) async {
-    final result = await showModalBottomSheet<String>(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (ctx) => _PickerSheet(
-        title: title,
-        options: options,
-        current: current,
-      ),
-    );
-    if (result != null) {
-      onSelected(result);
-    }
-  }
-
-  Future<void> _pickCountry() async {
-    final result = await showModalBottomSheet<String>(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (ctx) => _PickerSheet(
-        title: AppStrings.selectCountry,
-        options: _countryOptions,
-        current: _selectedCountry,
-      ),
-    );
-    if (result != null) {
-      setState(() {
-        _selectedCountry = result;
-        _showSearchError = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -243,9 +200,17 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
           ),
           SizedBox(height: 15),
           // Country Dropdown
-          _DropdownField(
+          _FilterDropdown(
             hint: _selectedCountry ?? AppStrings.country,
-            onTap: _pickCountry,
+            title: AppStrings.selectCountry,
+            value: _selectedCountry,
+            items: _countryOptions,
+            onChanged: (value) {
+              setState(() {
+                _selectedCountry = value;
+                _showSearchError = false;
+              });
+            },
           ),
 
           SizedBox(height: 10),
@@ -262,30 +227,27 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
           Row(
             children: [
               Expanded(
-                child: _DropdownField(
+                child: _FilterDropdown(
                   hint: _filters.gameType ?? 'Game',
-                  onTap: () => _pickOption(
-                    title: AppStrings.gameType,
-                    options: _gameTypes,
-                    current: _filters.gameType,
-                    onSelected: (v) {
-                      setState(() => _filters = _filters.copyWith(gameType: v));
-                    },
-                  ),
+                  title: AppStrings.gameType,
+                  value: _filters.gameType,
+                  items: _gameTypes,
+                  onChanged: (value) {
+                    setState(
+                        () => _filters = _filters.copyWith(gameType: value));
+                  },
                 ),
               ),
               SizedBox(width: 12),
               Expanded(
-                child: _DropdownField(
+                child: _FilterDropdown(
                   hint: _filters.gender ?? 'Gender',
-                  onTap: () => _pickOption(
-                    title: AppStrings.genderPlain,
-                    options: _genders,
-                    current: _filters.gender,
-                    onSelected: (v) {
-                      setState(() => _filters = _filters.copyWith(gender: v));
-                    },
-                  ),
+                  title: AppStrings.genderPlain,
+                  value: _filters.gender,
+                  items: _genders,
+                  onChanged: (value) {
+                    setState(() => _filters = _filters.copyWith(gender: value));
+                  },
                 ),
               ),
             ],
@@ -294,16 +256,14 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
           SizedBox(height: 10),
 
           // Age Group Dropdown
-          _DropdownField(
+          _FilterDropdown(
             hint: _filters.ageGroup ?? 'Age Group',
-            onTap: () => _pickOption(
-              title: AppStrings.ageGroup,
-              options: _ageGroups,
-              current: _filters.ageGroup,
-              onSelected: (v) {
-                setState(() => _filters = _filters.copyWith(ageGroup: v));
-              },
-            ),
+            title: AppStrings.ageGroup,
+            value: _filters.ageGroup,
+            items: _ageGroups,
+            onChanged: (value) {
+              setState(() => _filters = _filters.copyWith(ageGroup: value));
+            },
           ),
 
           SizedBox(height: 15),
@@ -389,40 +349,33 @@ class _ToggleBtn extends StatelessWidget {
   }
 }
 
-class _DropdownField extends StatelessWidget {
-  _DropdownField({
+class _FilterDropdown extends StatelessWidget {
+  _FilterDropdown({
     required this.hint,
-    required this.onTap,
+    required this.title,
+    required this.value,
+    required this.items,
+    required this.onChanged,
   });
+
   final String hint;
-  final VoidCallback onTap;
+  final String title;
+  final String? value;
+  final List<String> items;
+  final ValueChanged<String?> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        constraints: BoxConstraints(minHeight: 42),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              hint,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: AppColors.socaBlack,
-              ),
-            ),
-            Image.asset("assets/images/dropdown.png", width: 12, height: 12),
-          ],
-        ),
-      ),
+    return SearchableDropdownButton(
+      hint: hint,
+      sheetTitle: title,
+      value: value,
+      items: items,
+      height: 42,
+      backgroundColor: Colors.grey.shade200,
+      fontSize: 12,
+      // alwaysUseSheet: true,
+      onChanged: onChanged,
     );
   }
 }
@@ -452,6 +405,7 @@ class _TextField extends StatelessWidget {
           color: AppColors.socaBlack,
         ),
         decoration: InputDecoration(
+          fillColor: Colors.transparent,
           hintText: hint,
           hintStyle: TextStyle(
             fontFamily: 'Poppins',
@@ -459,76 +413,14 @@ class _TextField extends StatelessWidget {
             color: Colors.grey.shade600,
           ),
           border: InputBorder.none,
+          errorBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          focusedErrorBorder: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 14),
         ),
       ),
-    );
-  }
-}
-
-/// Bottom sheet picker for filter options
-class _PickerSheet extends StatelessWidget {
-  _PickerSheet({
-    required this.title,
-    required this.options,
-    required this.current,
-  });
-
-  final String title;
-  final List<String> options;
-  final String? current;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(height: 12),
-        Container(
-          width: 40,
-          height: 4,
-          decoration: BoxDecoration(
-            color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        SizedBox(height: 12),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Divider(),
-        ...options.map((option) => ListTile(
-              title: Text(
-                option,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight:
-                      option == current ? FontWeight.w700 : FontWeight.w400,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-              trailing: option == current
-                  ? Icon(Icons.check, color: AppColors.socaBlack)
-                  : null,
-              onTap: () => Navigator.pop(context, option),
-            )),
-        SizedBox(height: 16),
-      ],
     );
   }
 }

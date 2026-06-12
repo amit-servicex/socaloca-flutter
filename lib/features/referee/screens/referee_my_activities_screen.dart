@@ -107,7 +107,7 @@ class _RefereeMyActivitiesScreenState
           onPressed: () => context.pop(),
         ),
         title: Text(
-          'My Activities'.tr,
+          AppStrings.myActivities,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,

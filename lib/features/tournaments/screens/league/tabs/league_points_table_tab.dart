@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +121,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
                         DataCell(
                           Row(
                             children: [
-                              _buildTeamLogo(team.teamLogo, 24),
+                              _buildTeamLogo(team.teamLogo, 30),
                               SizedBox(width: 8),
                               SizedBox(
                                 width: 120,
@@ -193,6 +195,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
   }
 
   Widget _buildTeamLogo(String? logoUrl, double size) {
+    log("this is the team logo url table point ${logoUrl}");
     if (logoUrl == null || logoUrl.isEmpty) {
       return Container(
         width: size,
@@ -210,7 +213,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
     }
 
     final fullImageUrl = ApiConstants.getImageUrl(logoUrl);
-
+    log("this is the team logo url ${fullImageUrl}");
     if (fullImageUrl.isEmpty) {
       return Container(
         width: size,
@@ -227,28 +230,34 @@ class LeaguePointsTableTab extends ConsumerWidget {
       );
     }
 
-    return ClipOval(
-      child: CachedNetworkImage(
-        imageUrl: fullImageUrl,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Container(
+    return Container(
+      padding: EdgeInsets.all(1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(size),
+          border: Border.all(color: AppColors.socaBlack)),
+      child: ClipOval(
+        child: CachedNetworkImage(
+          imageUrl: fullImageUrl,
           width: size,
           height: size,
-          color: Colors.grey[200],
-        ),
-        errorWidget: (context, url, error) => Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
+          fit: BoxFit.cover,
+          placeholder: (context, url) => Container(
+            width: size,
+            height: size,
             color: Colors.grey[200],
-            shape: BoxShape.circle,
           ),
-          child: Icon(
-            Icons.shield,
-            size: size * 0.6,
-            color: Colors.grey[400],
+          errorWidget: (context, url, error) => Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.shield,
+              size: size * 0.6,
+              color: Colors.grey[400],
+            ),
           ),
         ),
       ),

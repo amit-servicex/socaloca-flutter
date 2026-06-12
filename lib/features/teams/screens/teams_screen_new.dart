@@ -1,5 +1,7 @@
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:socaloca/core/constants/api_constants.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -310,38 +312,169 @@ Widget _errorTab(String error, VoidCallback onRetry) {
 Widget _teamListTile(
   BuildContext context,
   Map<String, dynamic> team, {
-  Widget? trailing,
+  Widget? actionButtons,
 }) {
   final teamId = team['teamId'] as String? ?? team['_id'] as String? ?? '';
   final teamName = team['teamName'] as String? ?? AppStrings.unknownTeam;
   final imageUrl = team['imageUrl'] as String? ?? '';
+  final country = team['country'] as String? ?? '';
+  final memberText = team['memberText'] as String? ?? '';
+  final gameTypeYear = team['gameTypeYear'] as String? ?? '';
+  final rating = (team['rating'] as num?)?.toDouble() ?? 0.0;
+  final progressValue = (rating / 5.0).clamp(0.0, 1.0);
+
+  void navigate() {
+    if (teamId.isNotEmpty) {
+      context.push(AppRoutes.teamBio.replaceFirst(':teamId', teamId));
+    }
+  }
 
   return Card(
-    margin: EdgeInsets.zero,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-    child: ListTile(
-      leading: CircleAvatar(
-        backgroundImage: imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
-        backgroundColor: AppColors.socaGrey,
-        child: imageUrl.isEmpty
-            ? Icon(Icons.group, color: AppColors.socaBlack)
-            : null,
-      ),
-      title: Text(
-        teamName,
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-          color: AppColors.socaBlack,
+    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    color: Colors.white,
+    elevation: 4,
+    shadowColor: Colors.black12,
+    child: InkWell(
+      onTap: navigate,
+      borderRadius: BorderRadius.circular(10),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey[200],
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: imageUrl.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: ApiConstants.getImageUrl(imageUrl),
+                      fit: BoxFit.cover,
+                      placeholder: (_, __) => AppLoader(),
+                      errorWidget: (_, __, ___) => Icon(Icons.emoji_events,
+                          size: 32, color: Colors.grey),
+                    )
+                  : Icon(Icons.emoji_events, size: 32, color: Colors.grey),
+            ),
+            SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (gameTypeYear.isNotEmpty) ...[
+                    Text(
+                      gameTypeYear,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                  ],
+                  Text(
+                    teamName,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.socaBlack,
+                      height: 1.2,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (country.isNotEmpty) ...[
+                    SizedBox(height: 3),
+                    Text(
+                      country,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                  ],
+                  if (memberText.isNotEmpty) ...[
+                    SizedBox(height: 3),
+                    Text(
+                      memberText,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 12,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                  ],
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        AppStrings.ratingLabel,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(2),
+                          child: LinearProgressIndicator(
+                            value: progressValue,
+                            minHeight: 3,
+                            backgroundColor: AppColors.socaBlack,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.socaBlack,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: navigate,
+                        child: Container(
+                          width: 80,
+                          height: 48,
+                          padding: EdgeInsets.symmetric(vertical: 9),
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            AppStrings.viewUpper,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.socaYellow,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (actionButtons != null) ...[
+                        SizedBox(width: 8),
+                        actionButtons,
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
-      trailing:
-          trailing ?? Icon(Icons.chevron_right, color: AppColors.socaBlack),
-      onTap: teamId.isNotEmpty
-          ? () =>
-              context.push(AppRoutes.teamBio.replaceFirst(':teamId', teamId))
-          : null,
     ),
   );
 }
@@ -525,14 +658,20 @@ class _PendingTeamsTabState extends ConsumerState<_PendingTeamsTab>
         itemBuilder: (context, i) => _teamListTile(
           context,
           _teams[i],
-          trailing: TextButton(
-            onPressed: () => _cancel(i),
-            child: Text(
-              AppStrings.cancel,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: Colors.red,
-                fontWeight: FontWeight.w600,
+          actionButtons: Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.socaBlack,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8))),
+              onPressed: () => _cancel(i),
+              child: Text(
+                AppStrings.cancel,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: AppColors.socaYellow,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -713,85 +852,52 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
           if (i == _teams.length) {
             return AppLoader();
           }
-          final team = _teams[i];
-          final teamId =
-              team['teamId'] as String? ?? team['_id'] as String? ?? '';
-          final teamName =
-              team['teamName'] as String? ?? AppStrings.unknownTeam;
-          final imageUrl = team['imageUrl'] as String? ?? '';
-
-          return Card(
-            margin: EdgeInsets.zero,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage:
-                        imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
-                    backgroundColor: AppColors.socaGrey,
-                    child: imageUrl.isEmpty
-                        ? Icon(Icons.group, color: AppColors.socaBlack)
-                        : null,
+          return _teamListTile(
+            context,
+            _teams[i],
+            actionButtons: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: () => _respond(i, true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    elevation: 0,
                   ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: teamId.isNotEmpty
-                          ? () => context.push(
-                              AppRoutes.teamBio.replaceFirst(':teamId', teamId))
-                          : null,
-                      child: Text(
-                        teamName,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: AppColors.socaBlack,
-                        ),
-                      ),
+                  child: Text(
+                    AppStrings.accept,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
                     ),
                   ),
-                  SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () => _respond(i, true),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
-                      elevation: 0,
-                    ),
-                    child: Text(AppStrings.accept,
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12)),
+                ),
+                SizedBox(width: 6),
+                ElevatedButton(
+                  onPressed: () => _respond(i, false),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                    elevation: 0,
                   ),
-                  SizedBox(width: 6),
-                  ElevatedButton(
-                    onPressed: () => _respond(i, false),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
-                      elevation: 0,
+                  child: Text(
+                    AppStrings.decline,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
                     ),
-                    child: Text(AppStrings.decline,
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12)),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },

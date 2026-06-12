@@ -212,8 +212,7 @@ class _RadioOption extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color:
-                      isSelected ? AppColors.socaYellow : AppColors.socaBlack,
+                  color: AppColors.socaBlack,
                   width: 2,
                 ),
               ),
@@ -224,7 +223,7 @@ class _RadioOption extends StatelessWidget {
                         height: 10,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: AppColors.socaYellow,
+                          color: AppColors.socaBlack,
                         ),
                       ),
                     )

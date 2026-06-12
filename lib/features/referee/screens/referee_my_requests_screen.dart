@@ -64,8 +64,7 @@ class _RefereeMyRequestsScreenState
         ),
         Padding(
           padding: const EdgeInsets.only(left: 16, top: 16),
-          child: Text(
-              AppStrings.myRequestsDescription,
+          child: Text(AppStrings.myRequestsDescription,
               style: const TextStyle(
                   color: AppColors.socaBlack, fontWeight: FontWeight.w700)),
         ),
@@ -148,7 +147,8 @@ class _RefereeMyRequestsScreenState
           .removeMatch(match.matchId ?? '');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(accept ? AppStrings.requestAccepted : AppStrings.requestDeclined),
+          content: Text(
+              accept ? AppStrings.requestAccepted : AppStrings.requestDeclined),
           backgroundColor: AppColors.socaBlack,
         ),
       );
@@ -220,6 +220,13 @@ class _RequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final teamAName = match.myTeam?.teamName?.isNotEmpty == true
+        ? match.myTeam!.teamName!
+        : match.teamA ?? '';
+    final teamBName = match.opponentTeam?.teamName?.isNotEmpty == true
+        ? match.opponentTeam!.teamName!
+        : match.teamB ?? '';
+
     // log("ghtis isvsjfv ${match.teamALogo}");
     return Container(
       // margin: const EdgeInsets.only(bottom: 16),
@@ -268,22 +275,42 @@ class _RequestCard extends StatelessWidget {
                       child: Column(
                         children: [
                           CircleAvatar(
-                            radius: 36,
+                            radius: 48,
                             backgroundColor: Colors.transparent,
                             backgroundImage: match.teamALogo != null &&
-                                    match.teamALogo!.isNotEmpty
+                                    match.teamALogo!.isNotEmpty &&
+                                    match.teamBLogo != "logo.png"
                                 ? NetworkImage(
                                     ApiConstants.getImageUrl(match.teamALogo!))
                                 : null,
                             child: match.teamALogo == null ||
-                                    match.teamALogo!.isEmpty
-                                ? const Icon(Icons.sports_soccer,
-                                    size: 36, color: Colors.grey)
+                                    match.teamALogo!.isEmpty ||
+                                    match.teamBLogo == "logo.png"
+                                ? Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.socaBlack,
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: Center(
+                                      child: Text(match.teamA ?? '',
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: AppColors.socaYellow,
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                          )),
+                                    ),
+                                  )
                                 : null,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            match.teamA ?? '',
+                            teamAName,
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -331,21 +358,42 @@ class _RequestCard extends StatelessWidget {
                       child: Column(
                         children: [
                           CircleAvatar(
-                            radius: 36,
+                            radius: 48,
                             backgroundColor: Colors.transparent,
                             backgroundImage: match.teamBLogo != null &&
-                                    match.teamBLogo!.isNotEmpty
-                                ? NetworkImage(match.teamBLogo!)
+                                    match.teamBLogo!.isNotEmpty &&
+                                    match.teamBLogo != "logo.png"
+                                ? NetworkImage(
+                                    ApiConstants.getImageUrl(match.teamBLogo!))
                                 : null,
                             child: match.teamBLogo == null ||
-                                    match.teamBLogo!.isEmpty
-                                ? const Icon(Icons.sports_soccer,
-                                    size: 36, color: Colors.grey)
+                                    match.teamBLogo!.isEmpty ||
+                                    match.teamBLogo == "logo.png"
+                                ? Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.socaBlack,
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: Center(
+                                      child: Text(match.teamB ?? '',
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: AppColors.socaYellow,
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                          )),
+                                    ),
+                                  )
                                 : null,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            match.teamB ?? '',
+                            teamBName,
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

@@ -30,8 +30,8 @@ class LiveMatchBanner extends StatelessWidget {
           children: [
             Image.asset(
               'assets/images/sl_live.gif',
-              height: 24,
-              width: 50,
+              height: 30,
+              width: 70,
             ),
             SizedBox(width: 10),
             Text(

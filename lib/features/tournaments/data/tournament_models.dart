@@ -150,18 +150,27 @@ extension TournamentMatchModelX on TournamentMatchModel {
 @freezed
 class PointsTableEntry with _$PointsTableEntry {
   const factory PointsTableEntry({
+    int? rowId,
+    @JsonKey(name: 'tmntId') String? tournamentId,
+    String? matchId,
     String? teamId,
     String? teamName,
-    String? teamLogo,
+    String? teamShortName,
+    @JsonKey(name: 'imageUrl') String? teamLogo,
     @Default(0) int seq,
-    @Default(0) int played,
-    @JsonKey(name: 'win') @Default(0) int won,
-    @JsonKey(name: 'draw') @Default(0) int drawn,
-    @JsonKey(name: 'loss') @Default(0) int lost,
+    @JsonKey(name: 'pl') @Default(0) int played,
+    @JsonKey(name: 'wn') @Default(0) int won,
+    @JsonKey(name: 'dr') @Default(0) int drawn,
+    @JsonKey(name: 'ls') @Default(0) int lost,
     @JsonKey(name: 'gf') @Default(0) int goalsFor,
     @JsonKey(name: 'ga') @Default(0) int goalsAgainst,
     @JsonKey(name: 'gd') @Default(0) int goalDifference,
     @JsonKey(name: 'pts') @Default(0) int points,
+    @JsonKey(name: 'sort_order') int? sortOrder,
+    @JsonKey(name: 'cmt') String? comment,
+    int? active,
+    @JsonKey(name: 'updtBy') String? updatedBy,
+    @JsonKey(name: 'updtTime') String? updatedTime,
   }) = _PointsTableEntry;
 
   factory PointsTableEntry.fromJson(Map<String, dynamic> json) =>

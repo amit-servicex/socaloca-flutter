@@ -384,14 +384,17 @@ class _TeamLogo extends StatelessWidget {
         : name.substring(0, name.length > 4 ? 4 : name.length).toUpperCase();
 
     return CircleAvatar(
-      radius: 20,
-      backgroundColor: blackLogo ? AppColors.socaBlack : AppColors.socaYellow,
-      backgroundImage: url.isNotEmpty ? NetworkImage(url) : null,
-      child: url.isEmpty
+      radius: 25,
+      backgroundColor: AppColors.socaBlack,
+      backgroundImage:
+          url.isNotEmpty && url != "${ApiConstants.imageBaseUrl}logo.png"
+              ? NetworkImage(url)
+              : null,
+      child: url.isEmpty || url == "${ApiConstants.imageBaseUrl}logo.png"
           ? Text(
               fallback,
               style: TextStyle(
-                color: blackLogo ? AppColors.socaYellow : AppColors.socaBlack,
+                color: AppColors.socaYellow,
                 fontFamily: 'Poppins',
                 fontSize: 9,
                 fontWeight: FontWeight.w700,

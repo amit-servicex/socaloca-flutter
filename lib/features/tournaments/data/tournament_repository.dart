@@ -45,7 +45,9 @@ class TournamentRepository {
         'status': status, // INTEGER: 1, 2, or 3
         'visibility': visibility, // 'local' or 'global'
         'ownCountry': ownCountry, // user's own country — required
-        'country': country, // filter country (empty string = all)
+        'country': country == ''
+            ? 'Ghana'
+            : country, // filter country (empty string = all)
         'confed': confed, // confederation filter
         'location': location, // location text search
         'gender': gender.toLowerCase(),
