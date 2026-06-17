@@ -5,10 +5,10 @@
 /// signIn, signUp, getFeedNetwork, or createProfile back here.
 class ApiConstants {
   ApiConstants._();
-
-  static const String baseUrl = 'https://organise.socaloca.football:9757/';
-  // static const String baseUrl = 'http://52.89.63.249:9757/';
-
+//
+  // static const String baseUrl = 'https://organise.socaloca.football:9757/';
+  static const String baseUrl = 'http://52.89.63.249:9757/';
+//
   static const String imageBaseUrl =
       'https://soca-loca.s3-us-west-2.amazonaws.com/dev/';
   static const String phpBaseUrl = 'http://52.89.63.249/supersoca/rest/';

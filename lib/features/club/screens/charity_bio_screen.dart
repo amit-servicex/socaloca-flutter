@@ -227,36 +227,37 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (info.formedYear != null && info.formedYear!.isNotEmpty)
-                  ClubBioInfoRow(
-                      label: AppStrings.founded, value: info.formedYear!),
-                if (info.country != null && info.country!.isNotEmpty)
-                  ClubBioInfoRow(
-                      label: AppStrings.country, value: info.country!),
-                if (info.president != null && info.president!.isNotEmpty)
-                  ClubBioInfoRow(
-                      label: AppStrings.president, value: info.president!),
-                if (info.chairman != null && info.chairman!.isNotEmpty)
-                  ClubBioInfoRow(
-                      label: AppStrings.chairman, value: info.chairman!),
-                if (info.ceo != null && info.ceo!.isNotEmpty)
-                  ClubBioInfoRow(label: AppStrings.ceo, value: info.ceo!),
-                if (info.funders != null && info.funders!.isNotEmpty)
-                  ClubBioInfoRow(
-                      label: AppStrings.fundingPartners, value: info.funders!),
-                if (info.partnerType != null &&
-                    info.partnerType!.isNotEmpty &&
-                    info.partnerType!.toLowerCase() != 'nopartner') ...[
-                  SizedBox(height: 8),
-                  Text(
-                    info.displayPartnerLabel,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.socaBlack),
-                  ),
-                ],
+                // if (info.formedYear != null && info.formedYear!.isNotEmpty)
+                ClubBioInfoRow(
+                    label: AppStrings.founded, value: info.formedYear ?? ''),
+                // if (info.country != null && info.country!.isNotEmpty)
+                ClubBioInfoRow(
+                    label: AppStrings.country, value: info.country ?? ''),
+                // if (info.president != null && info.president!.isNotEmpty)
+                ClubBioInfoRow(
+                    label: AppStrings.president, value: info.president ?? ''),
+                // if (info.chairman != null && info.chairman!.isNotEmpty)
+                ClubBioInfoRow(
+                    label: AppStrings.chairman, value: info.chairman ?? ''),
+                // if (info.ceo != null && info.ceo!.isNotEmpty)
+                ClubBioInfoRow(label: AppStrings.ceo, value: info.ceo ?? ''),
+                // if (info.funders != null && info.funders!.isNotEmpty)
+                ClubBioInfoRow(
+                    label: AppStrings.fundingPartners,
+                    value: info.funders ?? ''),
+                // if (info.partnerType != null &&
+                //     info.partnerType!.isNotEmpty &&
+                //     info.partnerType!.toLowerCase() != 'nopartner') ...[
+                //   SizedBox(height: 8),
+                //   Text(
+                //     info.displayPartnerLabel,
+                //     style: TextStyle(
+                //         fontFamily: 'Poppins',
+                //         fontSize: 12,
+                //         fontWeight: FontWeight.w700,
+                //         color: AppColors.socaBlack),
+                //   ),
+                // ],
               ],
             ),
           ),
@@ -267,23 +268,21 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
 
   Widget _buildEntityImage(String imageUrl) {
     return Container(
-      width: 90,
-      height: 90,
+      width: 100,
+      height: 100,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
+        shape: BoxShape.rectangle,
         color: AppColors.socaGrey,
         border: Border.all(color: AppColors.socaGrey, width: 2),
       ),
-      child: ClipOval(
-        child: imageUrl.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.cover,
-                placeholder: (_, __) => Container(color: AppColors.socaGrey),
-                errorWidget: (_, __, ___) => _imageFallback(),
-              )
-            : _imageFallback(),
-      ),
+      child: imageUrl.isNotEmpty
+          ? CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              placeholder: (_, __) => Container(color: AppColors.socaGrey),
+              errorWidget: (_, __, ___) => _imageFallback(),
+            )
+          : _imageFallback(),
     );
   }
 

@@ -21,7 +21,7 @@ class ClubBioInfoRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 80,
+            // width: 130,
             child: Text(
               '$label:',
               style: const TextStyle(
@@ -35,7 +35,7 @@ class ClubBioInfoRow extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              value,
+              value ?? '',
               style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,

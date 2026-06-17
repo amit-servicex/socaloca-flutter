@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:socaloca/core/constants/app_strings.dart';
 
 import '../../../shared/widgets/searchable_dropdown.dart';
 

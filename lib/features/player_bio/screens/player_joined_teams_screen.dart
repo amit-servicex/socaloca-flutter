@@ -57,8 +57,8 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
           // Sort by sortId descending if available
           final sorted = List<Map<String, dynamic>>.from(teams);
           sorted.sort((a, b) {
-            final aSort = (a['sortId'] as num?)?.toInt() ?? 0;
-            final bSort = (b['sortId'] as num?)?.toInt() ?? 0;
+            final aSort = a['sortId']?.toString() ?? '';
+            final bSort = b['sortId']?.toString() ?? '';
             return bSort.compareTo(aSort);
           });
           return ListView.separated(

@@ -35,6 +35,9 @@ _$ClubModelImpl _$$ClubModelImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => StadiumModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      comps:
+          (json['comps'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
     );
 
 Map<String, dynamic> _$$ClubModelImplToJson(_$ClubModelImpl instance) =>
@@ -63,6 +66,7 @@ Map<String, dynamic> _$$ClubModelImplToJson(_$ClubModelImpl instance) =>
       'likeCount': instance.likeCount,
       'plan': instance.plan,
       'stadiums': instance.stadiums,
+      'comps': instance.comps,
     };
 
 _$StadiumModelImpl _$$StadiumModelImplFromJson(Map<String, dynamic> json) =>

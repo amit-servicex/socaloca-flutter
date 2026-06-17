@@ -47,6 +47,7 @@ import '../../features/club/screens/club_bio_screen.dart';
 import '../../features/club/screens/fa_bio_screen.dart';
 import '../../features/club/screens/sponsor_bio_screen.dart';
 import '../../features/club/screens/charity_bio_screen.dart';
+import '../../features/club/screens/confed_bio_screen.dart';
 import '../../features/player_bio/screens/player_bio_screen.dart';
 import '../../features/player_bio/screens/player_joined_teams_screen.dart';
 import '../../features/player_bio/screens/player_likes_screen.dart';
@@ -642,19 +643,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 // ),
                 SearchScreen(),
           ),
-          GoRoute(
-            path: AppRoutes.fullScreenVideo,
-            name: 'fullScreenVideo',
-            builder: (ctx, state) {
-              final extra = state.extra as Map<String, dynamic>?;
-              final videoUrl = extra?['videoUrl'] as String? ?? '';
-              final thumbnail = extra?['thumbnail'] as String?;
-              return FullScreenVideoScreen(
-                videoUrl: videoUrl,
-                thumbnail: thumbnail,
-              );
-            },
-          ),
 
           // ─── Team Bio (detail screen outside shell) ──────────────────────
           GoRoute(
@@ -768,9 +756,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.confedBio,
             name: 'confedBio',
-            builder: (ctx, state) => Scaffold(
-              body: Center(child: Text('Confederation Bio — Coming Soon'.tr)),
-            ),
+            builder: (ctx, state) {
+              final confedId = state.pathParameters['confedId']!;
+              return ConfedBioScreen(confedId: confedId);
+            },
           ),
           GoRoute(
             path: AppRoutes.sponsorBio,
@@ -941,6 +930,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             },
           ),
         ],
+      ),
+      GoRoute(
+        path: AppRoutes.fullScreenVideo,
+        name: 'fullScreenVideo',
+        builder: (ctx, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final videoUrl = extra?['videoUrl'] as String? ?? '';
+          final thumbnail = extra?['thumbnail'] as String?;
+          return FullScreenVideoScreen(
+            videoUrl: videoUrl,
+            thumbnail: thumbnail,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.fullScreenImage,
+        name: 'fullScreenImage',
+        builder: (ctx, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final imageUrl = extra?['imageUrl'] as String? ?? '';
+          return FullScreenImageScreen(imageUrl: imageUrl);
+        },
       ),
 
       // ─── Club Admin shell (separate from common + referee shells) ─────────

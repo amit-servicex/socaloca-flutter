@@ -47,7 +47,7 @@ String? _titleForPath(String path) {
     return AppStrings.editProfile;
   }
   if (path == AppRoutes.myPosts) {
-    return AppStrings.myPosts;
+    return AppStrings.posts;
   }
   if (path == AppRoutes.gallery) {
     return AppStrings.gallery;
@@ -73,7 +73,7 @@ String? _titleForPath(String path) {
   if (path.contains('/people')) return AppStrings.people;
   if (path.contains('/likes')) return AppStrings.likes;
   if (path.startsWith('/players/')) return AppStrings.players;
-  if (path.startsWith('/members/')) return AppStrings.myBio;
+  if (path.startsWith('/members/')) return AppStrings.coachManagerBio;
   if (path.startsWith('/teams/')) return AppStrings.teams;
   if (path.startsWith('/clubs/')) return AppStrings.clubs;
   if (path.startsWith('/tournaments/')) return AppStrings.tournaments;

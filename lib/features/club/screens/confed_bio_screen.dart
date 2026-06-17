@@ -1,168 +1,103 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:go_router/go_router.dart';
-import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:socaloca/core/router/app_routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../data/models/club_news_model.dart';
-import '../data/models/club_sponsor_model.dart';
-import '../data/models/fa_bio_model.dart';
-import '../providers/fa_bio_provider.dart';
+import '../data/models/confed_bio_model.dart';
+import '../providers/confed_bio_provider.dart';
+import '../data/repositories/partners_repository.dart';
 import '../widgets/club_bio_info_row.dart';
 import '../widgets/club_bio_section_header.dart';
-import 'fa_all_competitions_screen.dart';
-import 'fa_all_teams_screen.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
-class FaBioScreen extends ConsumerStatefulWidget {
-  final String faId;
+class ConfedBioScreen extends ConsumerStatefulWidget {
+  final String confedId;
 
-  FaBioScreen({super.key, required this.faId});
+  ConfedBioScreen({super.key, required this.confedId});
 
   @override
-  ConsumerState<FaBioScreen> createState() => _FaBioScreenState();
+  ConsumerState<ConfedBioScreen> createState() => _ConfedBioScreenState();
 }
 
-class _FaBioScreenState extends ConsumerState<FaBioScreen> {
+class _ConfedBioScreenState extends ConsumerState<ConfedBioScreen> {
   bool _isFollowing = false;
   bool _followInitialized = false;
 
   @override
   Widget build(BuildContext context) {
-    final bioAsync = ref.watch(faBioProvider(widget.faId));
+    final bioAsync = ref.watch(confedBioProvider(widget.confedId));
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       body: bioAsync.when(
         data: (bio) {
-          if (bio == null) return _buildError(AppStrings.faNotFound);
+          if (bio == null) return _buildError(AppStrings.confedNotFound);
 
           if (!_followInitialized) {
-            _isFollowing = bio.faDetails.following;
+            _isFollowing = bio.confedDetails.following;
             _followInitialized = true;
           }
 
           return CustomScrollView(
             slivers: [
-              // _buildAppBar(bio.faDetails.faName, bio.faDetails.website),
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      color: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * .5,
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    bio.faDetails.faName,
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.socaBlack,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                child: VerticalDivider(
-                                  color: AppColors.socaBlack,
-                                  thickness: 1,
-                                  width: 20,
-                                ),
-                              ),
-                              Image.asset(
-                                "assets/icons/ic_platinum_badge.png",
-                                width: 28,
-                                height: 28,
-                              ),
-                              IconButton(
-                                icon: Image.asset(
-                                  "assets/images/ic_gallery.png",
-                                  width: 28,
-                                  height: 28,
-                                ),
-                                onPressed: () {
-                                  context.push(
-                                    AppRoutes.myPosts,
-                                    extra: {
-                                      'userId': bio.faDetails.faId,
-                                      'isOwnProfile': false,
-                                    },
-                                  );
-                                },
-                              ),
-                              if (bio.faDetails.website != null)
-                                IconButton(
-                                  icon: Image.asset(
-                                    "assets/icons/ic_website.png",
-                                    width: 28,
-                                    height: 28,
-                                  ),
-                                  onPressed: () =>
-                                      _launchUrl(bio.faDetails.website ?? ''),
-                                ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    // White box: large FA name again (matches faName2 in XML)
-                    _buildNameBox(bio.faDetails.faName),
+                    // ── Top bar: confedName + badge + gallery + website ──────
+                    _buildTopBar(bio),
 
-                    // Basic info: image + follow | info rows
+                    SizedBox(height: 4),
+
+                    // ── Large confed name ────────────────────────────────────
+                    _buildNameBox(bio.confedDetails.confedName),
+
+                    // ── Basic info: image + follow | info rows ───────────────
                     _buildBasicInfo(bio),
 
-                    // News & Announcements
+                    // ── News & Announcements ─────────────────────────────────
                     if (bio.newsList.isNotEmpty) ...[
                       SizedBox(height: 12),
                       _buildDivider(),
                       _buildNewsSection(bio.newsList),
                     ],
 
-                    // Competitions
+                    // ── Competitions ─────────────────────────────────────────
                     if (bio.compList.isNotEmpty) ...[
                       SizedBox(height: 12),
                       _buildDivider(),
                       _buildCompetitionsSection(
-                          bio.faDetails.faName, bio.compList),
+                          bio.confedDetails.confedName, bio.compList),
                     ],
 
-                    // Featured Teams
-                    if (bio.teamList.isNotEmpty) ...[
+                    // ── Featured FAs ─────────────────────────────────────────
+                    if (bio.fasList.isNotEmpty) ...[
                       SizedBox(height: 12),
                       _buildDivider(),
-                      _buildTeamsSection(bio.faDetails.faName, bio.teamList),
+                      _buildFAsSection(
+                          bio.confedDetails.confedName, bio.fasList),
                     ],
 
-                    // Sponsors
+                    // ── Official Merchandise ─────────────────────────────────
+                    if (bio.merchandises.isNotEmpty) ...[
+                      SizedBox(height: 12),
+                      _buildDivider(),
+                      _buildMerchandiseSection(bio.merchandises),
+                    ],
+
+                    // ── Sponsors ─────────────────────────────────────────────
                     if (bio.sponsorList.isNotEmpty) ...[
                       SizedBox(height: 12),
                       _buildDivider(),
                       _buildSponsorsSection(bio.sponsorList),
                     ],
 
-                    SizedBox(height: 40),
+                    SizedBox(height: 50),
                   ],
                 ),
               ),
@@ -175,45 +110,112 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     );
   }
 
-  // ─── App Bar ─────────────────────────────────────────────────────────────
+  // ─── Top bar ─────────────────────────────────────────────────────────────
 
-  Widget _buildAppBar(String faName, String? website) {
-    return SliverAppBar(
-      backgroundColor: Colors.white,
-      elevation: 2,
-      pinned: true,
-      title: Text(
-        faName,
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-          color: AppColors.socaBlack,
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.photo_library, size: 25, color: AppColors.socaBlack),
-          onPressed: () {},
-        ),
-        if (website != null && website.isNotEmpty)
-          IconButton(
-            icon: Icon(Icons.language, size: 25, color: AppColors.socaBlack),
-            onPressed: () => _launchUrl(website),
+  Widget _buildTopBar(ConfedBioModel bio) {
+    final confed = bio.confedDetails;
+    final partnerType = confed.partnerType?.toLowerCase();
+    final hasBadge = partnerType != null &&
+        partnerType.isNotEmpty &&
+        partnerType != 'nopartner';
+
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * .5,
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    confed.confedName,
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.socaBlack,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-      ],
+          Row(
+            children: [
+              if (hasBadge) ...[
+                const SizedBox(
+                  height: 30,
+                  child: VerticalDivider(
+                    color: AppColors.socaBlack,
+                    thickness: 1,
+                    width: 20,
+                  ),
+                ),
+                _buildBadgeIcon(partnerType),
+              ],
+              IconButton(
+                icon: Image.asset(
+                  'assets/images/ic_gallery.png',
+                  width: 28,
+                  height: 28,
+                ),
+                onPressed: () {
+                  context.push(
+                    AppRoutes.myPosts,
+                    extra: {
+                      'userId': confed.confedId,
+                      'isOwnProfile': false,
+                    },
+                  );
+                },
+              ),
+              if (confed.website != null && confed.website!.isNotEmpty)
+                IconButton(
+                  icon: Image.asset(
+                    'assets/icons/ic_website.png',
+                    width: 28,
+                    height: 28,
+                  ),
+                  onPressed: () => _launchUrl(confed.website ?? ''),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  // ─── Large name text (faName2 in XML, white bg) ───────────────────────────
+  Widget _buildBadgeIcon(String? partnerType) {
+    String assetPath;
+    switch (partnerType) {
+      case 'platinum':
+        assetPath = 'assets/icons/ic_platinum_badge.png';
+        break;
+      case 'gold':
+        assetPath = 'assets/icons/ic_gold_badge.png';
+        break;
+      case 'silver':
+        assetPath = 'assets/icons/ic_silver_badge.png';
+        break;
+      default:
+        return SizedBox.shrink();
+    }
+    return Image.asset(assetPath, width: 28, height: 28);
+  }
 
-  Widget _buildNameBox(String faName) {
+  // ─── Large name box ───────────────────────────────────────────────────────
+
+  Widget _buildNameBox(String confedName) {
     return Container(
       width: double.infinity,
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
       child: Text(
-        faName,
+        confedName,
         style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
@@ -226,8 +228,8 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
 
   // ─── Basic Info ──────────────────────────────────────────────────────────
 
-  Widget _buildBasicInfo(FaBioModel bio) {
-    final fa = bio.faDetails;
+  Widget _buildBasicInfo(ConfedBioModel bio) {
+    final confed = bio.confedDetails;
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
@@ -237,7 +239,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
           // Left: image + follow button + follower count
           Column(
             children: [
-              _buildFaImage(fa.fullImageUrl),
+              _buildConfedImage(confed.fullImageUrl),
               SizedBox(height: 8),
               SizedBox(
                 width: 100,
@@ -266,7 +268,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
               ),
               SizedBox(height: 4),
               Text(
-                AppStrings.followersCount(fa.followCount),
+                AppStrings.followersCount(confed.followCount),
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 11,
@@ -284,42 +286,22 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // if (fa.confed != null && fa.confed!.isNotEmpty)
+                // if (confed.formedYear != null && confed.formedYear!.isNotEmpty)
                 ClubBioInfoRow(
-                    label: AppStrings.confederation, value: fa.confed ?? ''),
-                // if (fa.formedYear != null && fa.formedYear!.isNotEmpty)
+                  label: AppStrings.foundation,
+                  value: confed.formedYear ?? '',
+                ),
+                // if (confed.president != null && confed.president!.isNotEmpty)
                 ClubBioInfoRow(
-                    label: AppStrings.foundation, value: fa.formedYear ?? ''),
-                // if (fa.country != null && fa.country!.isNotEmpty)
+                  label: AppStrings.president,
+                  value: confed.president ?? '',
+                ),
+                // if (confed.genSecretary != null &&
+                // confed.genSecretary!.isNotEmpty)
                 ClubBioInfoRow(
-                    label: AppStrings.country, value: fa.country ?? ''),
-                // if (fa.stadium != null && fa.stadium!.isNotEmpty)
-                ClubBioInfoRow(
-                    label: AppStrings.stadium, value: fa.stadium ?? ''),
-                // if (fa.president != null && fa.president!.isNotEmpty)
-                ClubBioInfoRow(
-                    label: AppStrings.president, value: fa.president ?? ''),
-                // if (fa.genSecretary != null && fa.genSecretary!.isNotEmpty)
-                ClubBioInfoRow(
-                    label: AppStrings.generalSecretary,
-                    value: fa.genSecretary ?? ''),
-
-                // Partnership badge
-                // if (fa.partnerType != null &&
-                //     fa.partnerType!.isNotEmpty &&
-                //     fa.partnerType!.toLowerCase() != 'nopartner') ...[
-                //   SizedBox(height: 8),
-                //   Text(
-                //     fa.displayPartnerLabel,
-                //     style: TextStyle(
-                //       fontFamily: 'Poppins',
-                //       fontSize: 12,
-                //       fontWeight: FontWeight.w700,
-                //       color: AppColors.socaBlack,
-                //     ),
-                //   ),
-
-                // ],
+                  label: AppStrings.generalSecretary,
+                  value: confed.genSecretary ?? '',
+                ),
               ],
             ),
           ),
@@ -328,36 +310,34 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     );
   }
 
-  Widget _buildFaImage(String imageUrl) {
+  Widget _buildConfedImage(String imageUrl) {
     return Container(
-      width: 90,
-      height: 90,
+      width: 100,
+      height: 100,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
+        shape: BoxShape.rectangle,
         color: AppColors.socaGrey,
         border: Border.all(color: AppColors.socaGrey, width: 2),
       ),
-      child: ClipOval(
-        child: imageUrl.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.cover,
-                placeholder: (_, __) => Container(color: AppColors.socaGrey),
-                errorWidget: (_, __, ___) => _imageFallback(),
-              )
-            : _imageFallback(),
-      ),
+      child: imageUrl.isNotEmpty
+          ? CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              placeholder: (_, __) => Container(color: AppColors.socaGrey),
+              errorWidget: (_, __, ___) => _imageFallback(),
+            )
+          : _imageFallback(),
     );
   }
 
   Widget _imageFallback() => Container(
         color: AppColors.socaGrey,
-        child: Icon(Icons.sports_soccer, color: AppColors.socaBlack, size: 40),
+        child: Icon(Icons.public, color: AppColors.socaBlack, size: 40),
       );
 
   Widget _buildDivider() => Container(height: 8, color: AppColors.socaPageBg);
 
-  // ─── News & Announcements ────────────────────────────────────────────────
+  // ─── News & Announcements ─────────────────────────────────────────────────
 
   Widget _buildNewsSection(List<ClubNewsModel> newsList) {
     return Container(
@@ -366,10 +346,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClubBioSectionHeader(title: AppStrings.newsAnnouncements),
-          Divider(
-            color: AppColors.socaBlack,
-            thickness: .7,
-          ),
+          Divider(color: AppColors.socaBlack, thickness: .7),
           ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -401,17 +378,18 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Thumbnail
             if (imageUrl.isNotEmpty)
               ClipRRect(
-                // borderRadius: BorderRadius.circular(6),
                 child: CachedNetworkImage(
                   imageUrl: imageUrl,
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,
                   errorWidget: (_, __, ___) => Container(
-                      width: 80, height: 80, color: AppColors.socaGrey),
+                    width: 80,
+                    height: 80,
+                    color: AppColors.socaGrey,
+                  ),
                 ),
               ),
             if (imageUrl.isNotEmpty) SizedBox(width: 12),
@@ -462,9 +440,10 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     );
   }
 
-  // ─── Competitions ────────────────────────────────────────────────────────
+  // ─── Competitions ─────────────────────────────────────────────────────────
 
-  Widget _buildCompetitionsSection(String faName, List<FaCompModel> comps) {
+  Widget _buildCompetitionsSection(
+      String confedName, List<ConfedCompItemModel> comps) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -485,15 +464,9 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => FaAllCompetitionsScreen(
-                        faName: faName,
-                        competitions: comps,
-                      ),
-                    ),
-                  ),
+                  onTap: () {
+                    // Sub-screen stub — to be implemented in a future phase
+                  },
                   child: Text(
                     AppStrings.viewAllCompetitions,
                     style: TextStyle(
@@ -507,31 +480,22 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
               ],
             ),
           ),
-          SizedBox(
-            height: 5,
-          ),
-          Divider(
-            color: AppColors.socaBlack,
-            thickness: .7,
-            height: 0,
-          ),
+          SizedBox(height: 5),
+          Divider(color: AppColors.socaBlack, thickness: .7, height: 0),
           Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: ProviderScope(
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.2,
-                  mainAxisExtent: 100,
-                  crossAxisSpacing: 1,
-                  mainAxisSpacing: 1,
-                ),
-                itemCount: comps.length,
-                itemBuilder: (context, i) => _buildCompCard(comps[i]),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 100,
+                crossAxisSpacing: 1,
+                mainAxisSpacing: 1,
               ),
+              itemCount: comps.length,
+              itemBuilder: (context, i) => _buildCompCard(comps[i]),
             ),
           ),
         ],
@@ -539,14 +503,13 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     );
   }
 
-  Widget _buildCompCard(FaCompModel comp) {
+  Widget _buildCompCard(ConfedCompItemModel comp) {
     final imageUrl = comp.fullImageUrl;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(right: BorderSide(color: AppColors.socaBlack)),
       ),
-      width: 200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -561,42 +524,26 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
             )
           else
             Icon(Icons.emoji_events, size: 40, color: AppColors.socaBlack),
-          // SizedBox(height: 6),
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: 8),
-          //   child: Text(
-          //     comp.compName,
-          //     style: TextStyle(
-          //       fontFamily: 'Poppins',
-          //       fontSize: 11,
-          //       fontWeight: FontWeight.w600,
-          //       color: AppColors.socaBlack,
-          //     ),
-          //     textAlign: TextAlign.center,
-          //     maxLines: 2,
-          //     overflow: TextOverflow.ellipsis,
-          //   ),
-          // ),
         ],
       ),
     );
   }
 
-  // ─── Featured Teams ──────────────────────────────────────────────────────
+  // ─── Featured FAs ─────────────────────────────────────────────────────────
 
-  Widget _buildTeamsSection(String faName, List<FaTeamModel> teams) {
+  Widget _buildFAsSection(String confedName, List<ConfedFAItemModel> fas) {
     return Container(
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(20, 12, 16, 8),
+            padding: EdgeInsets.fromLTRB(20, 12, 16, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppStrings.featuredTeams,
+                  AppStrings.featuredFAs,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -605,17 +552,11 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => FaAllTeamsScreen(
-                        faName: faName,
-                        teams: teams,
-                      ),
-                    ),
-                  ),
+                  onTap: () {
+                    // Sub-screen stub — to be implemented in a future phase
+                  },
                   child: Text(
-                    AppStrings.viewAllTeams,
+                    AppStrings.viewAllFAs,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
@@ -627,86 +568,136 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
               ],
             ),
           ),
-          Divider(
-            color: AppColors.socaBlack,
-            thickness: .7,
+          SizedBox(height: 5),
+          Divider(color: AppColors.socaBlack, thickness: .7, height: 0),
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 100,
+                crossAxisSpacing: 1,
+                mainAxisSpacing: 1,
+              ),
+              itemCount: fas.length,
+              itemBuilder: (context, i) => _buildFACard(fas[i]),
+            ),
           ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemCount: teams.length,
-            separatorBuilder: (_, __) =>
-                Divider(height: 1, color: AppColors.socaGrey),
-            itemBuilder: (context, i) => _buildTeamRow(teams[i]),
-          ),
-          SizedBox(height: 8),
         ],
       ),
     );
   }
 
-  Widget _buildTeamRow(FaTeamModel team) {
-    final imageUrl = team.fullImageUrl;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Row(
+  Widget _buildFACard(ConfedFAItemModel fa) {
+    final imageUrl = fa.fullImageUrl;
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(right: BorderSide(color: AppColors.socaBlack)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (imageUrl.isNotEmpty)
+            CachedNetworkImage(
+              imageUrl: imageUrl,
+              width: 64,
+              height: 64,
+              fit: BoxFit.contain,
+              errorWidget: (_, __, ___) => Icon(
+                Icons.sports_soccer,
+                size: 40,
+                color: AppColors.socaBlack,
+              ),
+            )
+          else
+            Icon(Icons.sports_soccer, size: 40, color: AppColors.socaBlack),
+        ],
+      ),
+    );
+  }
+
+  // ─── Official Merchandise ─────────────────────────────────────────────────
+
+  Widget _buildMerchandiseSection(List<ConfedMerchandiseModel> items) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClubBioSectionHeader(title: AppStrings.officialMerchandise),
+          SizedBox(
+            height: 120,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+              itemCount: items.length,
+              itemBuilder: (context, i) => _buildMerchandiseItem(items[i]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMerchandiseItem(ConfedMerchandiseModel item) {
+    final imageUrl = item.fullImageUrl;
+    return Container(
+      width: 90,
+      margin: EdgeInsets.only(right: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 72,
+            height: 72,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
               color: AppColors.socaGrey,
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: ClipOval(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
               child: imageUrl.isNotEmpty
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => Icon(Icons.group,
-                          size: 24, color: AppColors.socaBlack),
+                      errorWidget: (_, __, ___) => Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 32,
+                        color: AppColors.socaBlack,
+                      ),
                     )
-                  : Icon(Icons.group, size: 24, color: AppColors.socaBlack),
+                  : Icon(
+                      Icons.shopping_bag_outlined,
+                      size: 32,
+                      color: AppColors.socaBlack,
+                    ),
             ),
           ),
-          SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  team.teamName,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.socaBlack,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (team.teamTypeLabel.isNotEmpty)
-                  Text(
-                    team.teamTypeLabel,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-              ],
+          SizedBox(height: 4),
+          Text(
+            item.prodName,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: AppColors.socaBlack,
             ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
     );
   }
 
-  // ─── Sponsors ────────────────────────────────────────────────────────────
+  // ─── Sponsors ─────────────────────────────────────────────────────────────
 
-  Widget _buildSponsorsSection(List<ClubSponsorModel> sponsors) {
+  Widget _buildSponsorsSection(List<ConfedSponsorModel> sponsors) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -727,7 +718,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     );
   }
 
-  Widget _buildSponsorItem(ClubSponsorModel sponsor) {
+  Widget _buildSponsorItem(ConfedSponsorModel sponsor) {
     final imageUrl = sponsor.fullImageUrl;
     return Container(
       width: 90,
@@ -748,8 +739,11 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => Icon(Icons.business,
-                          size: 32, color: AppColors.socaBlack),
+                      errorWidget: (_, __, ___) => Icon(
+                        Icons.business,
+                        size: 32,
+                        color: AppColors.socaBlack,
+                      ),
                     )
                   : Icon(Icons.business, size: 32, color: AppColors.socaBlack),
             ),
@@ -772,7 +766,7 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     );
   }
 
-  // ─── Error ───────────────────────────────────────────────────────────────
+  // ─── Error ────────────────────────────────────────────────────────────────
 
   Widget _buildError(String message) {
     return Center(
@@ -794,11 +788,13 @@ class _FaBioScreenState extends ConsumerState<FaBioScreen> {
     );
   }
 
-  // ─── Actions ─────────────────────────────────────────────────────────────
+  // ─── Actions ──────────────────────────────────────────────────────────────
 
   void _handleFollowTap() {
     setState(() => _isFollowing = !_isFollowing);
-    // TODO: call followFA API
+    ref.read(partnersRepositoryProvider).followConfed(
+          confedId: widget.confedId,
+        );
   }
 
   Future<void> _launchUrl(String url) async {

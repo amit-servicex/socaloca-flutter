@@ -413,6 +413,7 @@ class SearchableDropdownButton extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: fontSize,
+              fontWeight: FontWeight.bold,
               color: AppColors.socaBlack,
             ),
           ),
@@ -497,7 +498,9 @@ class SearchableDropdownButton extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: fontSize,
-                  fontWeight: FontWeight.w400,
+                  // fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.bold,
+
                   color: hasValue
                       ? AppColors.socaBlack
                       : AppColors.socaBlack.withValues(alpha: 0.6),

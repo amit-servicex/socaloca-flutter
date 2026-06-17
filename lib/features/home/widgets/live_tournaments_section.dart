@@ -250,10 +250,16 @@ class _LiveTournamentsSectionState
                                     : null,
                               ),
                               if (index > 0)
-                                Icon(
-                                  Icons.arrow_back_ios_new,
-                                  color: AppColors.playedGray,
-                                  size: 50,
+                                GestureDetector(
+                                  onTap: () => _pageController.previousPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeInOut,
+                                  ),
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_new,
+                                    color: AppColors.playedGray,
+                                    size: 50,
+                                  ),
                                 ),
                             ],
                           ),
@@ -321,10 +327,17 @@ class _LiveTournamentsSectionState
                                 ),
                                 if (index < state.items.length - 1 ||
                                     state.isLoadingMore)
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: AppColors.playedGray,
-                                    size: 50,
+                                  GestureDetector(
+                                    onTap: () => _pageController.nextPage(
+                                      duration:
+                                          const Duration(milliseconds: 400),
+                                      curve: Curves.easeInOut,
+                                    ),
+                                    child: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: AppColors.playedGray,
+                                      size: 50,
+                                    ),
                                   ),
                               ],
                             ),

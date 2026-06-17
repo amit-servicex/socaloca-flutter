@@ -108,7 +108,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                               // Country display
                               Container(
                                 width: 100,
-                                height: 42,
+                                height: 50,
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(horizontal: 5),
                                 decoration: BoxDecoration(

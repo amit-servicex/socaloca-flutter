@@ -108,8 +108,10 @@ class ClubRepository {
   }
 
   /// Get club bio/details
-  /// Matches getClubBio API from Android
-  Future<ClubBioModel?> getClubBio({
+  /// Matches getClubBio API from Android.
+  /// Returns a record of (ClubBioModel?, npsSurvey) where npsSurvey reflects
+  /// the server-driven flag that triggers the NPS rating dialog.
+  Future<(ClubBioModel?, bool)> getClubBio({
     required String clubId,
     required String userId,
   }) async {
@@ -126,15 +128,19 @@ class ClubRepository {
 
       print('📦 API Response keys: ${response.keys.toList()}');
 
-      // The API returns nested response: { response: { status, details } }
+      // The API returns nested response: { response: { status, npsSurvey, details } }
       final responseData = response['response'] as Map<String, dynamic>?;
 
       if (responseData == null) {
         print('🔴 No response data found');
-        return null;
+        return (null, false);
       }
 
       print('📦 Response data keys: ${responseData.keys.toList()}');
+
+      // Extract server-driven NPS flag (same as Android: data.has("npsSurvey"))
+      final npsSurvey = responseData['npsSurvey'] == true ||
+          response['npsSurvey'] == true;
 
       if (responseData['status'] == 1 && responseData['details'] != null) {
         final detailsJson = responseData['details'] as Map<String, dynamic>;
@@ -142,52 +148,117 @@ class ClubRepository {
 
         try {
           final clubBio = ClubBioModel.fromApiJson(detailsJson);
-          print('✅ Successfully parsed club bio');
-          return clubBio;
+          print('✅ Successfully parsed club bio (npsSurvey: $npsSurvey)');
+          return (clubBio, npsSurvey);
         } catch (e) {
           print('❌ Error parsing club bio: $e');
           print('Details JSON: $detailsJson');
-          return null;
+          return (null, false);
         }
       }
 
       print('⚠️ No details in response or status != 1');
-      return null;
+      return (null, false);
     } catch (e, stackTrace) {
       print('❌ Error in getClubBio: $e');
       print('Stack trace: $stackTrace');
-      return null;
+      return (null, false);
+    }
+  }
+
+  /// Submit 5-question NPS survey.
+  /// Matches saveNps API from Android (NPSSurveyActivity.saveSurvey).
+  /// Returns true if server acknowledges (status field present in response).
+  Future<bool> saveNps({
+    required int q1,
+    required int q2,
+    required int q3,
+    required int q4,
+    required int q5,
+    String? comment,
+  }) async {
+    try {
+      final user = StorageService.currentUser ?? {};
+      final accId = user['userId'] ?? StorageService.userId ?? '';
+
+      // Android: "user" for ClubPlayer/Player/Coach/Admin, "club" otherwise
+      final accountType = user['accountType'] as String? ?? '';
+      final isUserType = ['ClubPlayer', 'Player', 'Coach', 'Admin']
+          .contains(accountType);
+      final accType = isUserType ? 'user' : 'club';
+
+      final response = await ApiClient.instance.post(
+        ApiConstants.saveNps,
+        body: {
+          'accId': accId,
+          'accType': accType,
+          'q1': q1,
+          'q2': q2,
+          'q3': q3,
+          'q4': q4,
+          'q5': q5,
+          'comment': comment ?? '',
+          'app': 'flutter',
+        },
+      );
+
+      final data = response['response'] as Map<String, dynamic>? ?? response;
+      return data.containsKey('status');
+    } catch (e) {
+      print('❌ Error in saveNps: $e');
+      return false;
     }
   }
 
   /// Follow/unfollow a club
   /// Matches followClub API from Android
-  Future<bool> followClub({
+  /// Returns the server-side [isFollow] flag, or null on error.
+  Future<bool?> followClub({
     required String clubId,
     required String userId,
   }) async {
     try {
       print('📡 Calling followClub API for clubId: $clubId');
+      final user = StorageService.currentUser ?? {};
       final response = await ApiClient.instance.post(
         ApiConstants.followClub,
         body: {
-          'clubId': clubId,
           'userId': userId,
+          'clubId': clubId,
+          'myName':
+              '${user['firstName'] ?? ''} ${user['lastName'] ?? ''}'.trim(),
+          'myImageUrl': user['imageUrl'] ?? '',
+          'country': user['country'] ?? '',
+          'gender': user['gender'] ?? '',
+          'birthYear': user['birthYear']?.toString() ?? '',
+          'isPlayer': user['isPlayer'] ?? false,
+          'isCoach': user['isCoach'] ?? false,
+          'isAdmin': user['isAdmin'] ?? false,
+          'isFan': user['isFan'] ?? false,
         },
       );
 
       print('📦 Follow club response: $response');
 
-      // Check for success
-      final status = response['status'];
-      final success = status == 1 || status == '1';
+      // Prefer the explicit isFollow flag from the response body
+      final responseData =
+          response['response'] as Map<String, dynamic>? ?? response;
+      if (responseData.containsKey('isFollow')) {
+        final raw = responseData['isFollow'];
+        if (raw is bool) return raw;
+        if (raw == 1 || raw == '1' || raw == 'true') return true;
+        return false;
+      }
 
+      // Fall back to status check
+      final status = responseData['status'] ?? response['status'];
+      final success = status == 1 || status == '1';
       print(success ? '✅ Follow club successful' : '⚠️ Follow club failed');
       return success;
     } catch (e, stackTrace) {
       print('❌ Error in followClub: $e');
       print('Stack trace: $stackTrace');
-      return false;
+      return null;
     }
   }
 

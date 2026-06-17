@@ -9,6 +9,9 @@ import '../../../core/theme/app_colors.dart';
 import '../data/models/club_player_model.dart';
 import '../data/models/club_player_stats_model.dart';
 import '../data/repositories/club_repository.dart';
+import '../../player_bio/data/models/player_post_model.dart';
+import '../../player_bio/providers/player_bio_provider.dart';
+import '../../player_bio/widgets/player_posts_section.dart';
 import 'club_home_screen.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
@@ -16,7 +19,8 @@ class _BioState {
   final ClubPlayerModel? player;
   final ClubPlayerStatsModel? football;
   final ClubPlayerStatsModel? futsal;
-  _BioState({this.player, this.football, this.futsal});
+  final List<PlayerPostModel> posts;
+  _BioState({this.player, this.football, this.futsal, this.posts = const []});
 }
 
 /// Club Player Bio Screen — Screen 3 of the Club shell.
@@ -40,20 +44,25 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
 
   Future<void> _fetch() async {
     final clubId = StorageService.clubId ?? '';
+    final myId = StorageService.userId ?? '';
     final year = DateTime.now().year;
 
     // Parallel API calls
-    final results = await Future.wait([
+    final results = await Future.wait<dynamic>([
       ref
           .read(clubRepositoryProvider)
           .getClubPlayerDetails(playerId: widget.playerId, clubId: clubId),
       ref
           .read(clubRepositoryProvider)
           .getPlayerStats(playerId: widget.playerId, year: year),
+      ref
+          .read(playerBioRepositoryProvider)
+          .getUserPosts(userId: widget.playerId, myId: myId),
     ]);
 
     final player = results[0] as ClubPlayerModel?;
     final statsMap = results[1] as Map<String, dynamic>;
+    final posts = (results[2] as List).cast<PlayerPostModel>();
 
     ClubPlayerStatsModel? football;
     ClubPlayerStatsModel? futsal;
@@ -74,7 +83,8 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
         name.isNotEmpty ? name : AppStrings.player;
 
     setState(() {
-      _data = _BioState(player: player, football: football, futsal: futsal);
+      _data = _BioState(
+          player: player, football: football, futsal: futsal, posts: posts);
       _loading = false;
     });
   }
@@ -136,6 +146,14 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
             _SectionHeader(AppStrings.futsalStatsYear(DateTime.now().year)),
             _StatsGrid(stats: d.futsal!),
           ],
+
+          // Posts
+          PlayerPostsSection(
+            posts: d.posts,
+            isLoadingPosts: false,
+          ),
+
+          const SizedBox(height: 20),
         ],
       ),
     );

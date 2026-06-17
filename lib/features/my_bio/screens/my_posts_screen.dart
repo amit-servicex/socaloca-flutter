@@ -52,6 +52,9 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
     super.initState();
     _loadPosts();
     _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(playerBioProvider(widget.userId).notifier).load();
+    });
   }
 
   @override
@@ -111,7 +114,8 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final playerBio = ref.watch(playerBioProvider(widget.userId)).playerBio;
+    final bioState = ref.watch(playerBioProvider(widget.userId));
+    final playerBio = bioState.playerBio;
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
@@ -122,49 +126,137 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
               child: const Icon(Icons.add, color: AppColors.socaYellow),
             )
           : null,
-      body: _buildBody(playerBio),
+      body: _buildBody(playerBio, bioState),
     );
   }
 
-  Widget _buildBody(PlayerBioModel? playerBio) {
-    if (_loading && _posts.isEmpty) {
-      return const AppLoader();
-    }
+  Widget _buildProfileHeader(
+      PlayerBioModel playerBio, PlayerBioState bioState) {
+    final name =
+        '${playerBio.firstName ?? ''} ${playerBio.lastName ?? ''}'.trim();
+    final imageUrl = ApiConstants.getImageUrl(playerBio.imageUrl ?? '');
 
-    if (!_loading && _posts.isEmpty) {
-      return Center(
-        child: Text(
-          AppStrings.noPostsFound,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-            color: AppColors.socaBlack,
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          // Profile avatar
+          ClipOval(
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              width: 60,
+              height: 60,
+              fit: BoxFit.cover,
+              errorWidget: (_, __, ___) => const CircleAvatar(
+                radius: 30,
+                backgroundColor: AppColors.socaGrey,
+                child: Icon(Icons.person, color: Colors.white, size: 30),
+              ),
+            ),
           ),
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: () => _loadPosts(refresh: true),
-      color: AppColors.socaYellow,
-      child: ListView.separated(
-        controller: _scrollController,
-        itemCount: _posts.length + (_loading ? 1 : 0),
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
-        itemBuilder: (context, index) {
-          if (index == _posts.length) {
-            return const AppLoader();
-          }
-          return _PostCard(
-            post: _posts[index],
-            playerBio: playerBio,
-            isOwn: _isOwn,
-            onDeleted: () => _handlePostDeleted(_posts[index].postId ?? ''),
-            onEditRequested: () => _handleEditRequested(_posts[index]),
-          );
-        },
+          const SizedBox(width: 14),
+          // Name + follow button
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                    color: AppColors.socaBlack,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (!_isOwn) ...[
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: () => ref
+                        .read(playerBioProvider(widget.userId).notifier)
+                        .toggleFollow(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 7),
+                      decoration: BoxDecoration(
+                        color: bioState.isFollowing
+                            ? AppColors.socaYellow
+                            : AppColors.socaBlack,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        bioState.isFollowing ? 'FOLLOWING' : 'FOLLOW',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: bioState.isFollowing
+                              ? AppColors.socaBlack
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildBody(PlayerBioModel? playerBio, PlayerBioState bioState) {
+    return Column(
+      children: [
+        // Profile header
+        if (playerBio != null) _buildProfileHeader(playerBio, bioState),
+
+        // Posts list
+        Expanded(
+          child: _loading && _posts.isEmpty
+              ? const AppLoader()
+              : !_loading && _posts.isEmpty
+                  ? Center(
+                      child: Text(
+                        AppStrings.noPostsFound,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () => _loadPosts(refresh: true),
+                      color: AppColors.socaYellow,
+                      child: ListView.separated(
+                        controller: _scrollController,
+                        itemCount: _posts.length + (_loading ? 1 : 0),
+                        separatorBuilder: (_, __) => const SizedBox(height: 8),
+                        itemBuilder: (context, index) {
+                          if (index == _posts.length) {
+                            return const AppLoader();
+                          }
+                          return _PostCard(
+                            post: _posts[index],
+                            playerBio: playerBio,
+                            isOwn: _isOwn,
+                            onDeleted: () =>
+                                _handlePostDeleted(_posts[index].postId ?? ''),
+                            onEditRequested: () =>
+                                _handleEditRequested(_posts[index]),
+                          );
+                        },
+                      ),
+                    ),
+        ),
+      ],
     );
   }
 }
@@ -488,11 +580,30 @@ class _PostCardState extends State<_PostCard> {
                 runSpacing: 6,
                 children: widget.post.tagged!.map((tag) {
                   final t = tag as Map<String, dynamic>;
-                  final name = t['name'] as String? ?? '';
+                  final tagType = t['tagType'] as String? ?? 'user';
                   final tagId = t['tagId'] as String? ?? '';
                   final imageUrl =
                       ApiConstants.getImageUrl(t['imageUrl'] as String?);
-                  return TagChip(name: name, imageUrl: imageUrl, id: tagId);
+
+                  // Academy tags use 'name'; user tags use 'firstName'+'lastName'
+                  final String name;
+                  if (tagType == 'academy') {
+                    name = t['name'] as String? ?? '';
+                  } else {
+                    final first = t['firstName'] as String? ?? '';
+                    final last = t['lastName'] as String? ?? '';
+                    name = '$first $last'.trim();
+                  }
+
+                  return TagChip(
+                    name: name,
+                    imageUrl: imageUrl,
+                    id: tagId,
+                    tagType: tagType,
+                    isPlayer: t['isPlayer'] as bool? ?? false,
+                    isCoach: t['isCoach'] as bool? ?? false,
+                    isAdmin: t['isAdmin'] as bool? ?? false,
+                  );
                 }).toList(),
               ),
             ),

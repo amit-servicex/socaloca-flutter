@@ -8,8 +8,11 @@ import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../data/tournament_models.dart';
 import '../data/tournament_repository.dart';
+import '../data/repositories/cup_repository.dart';
 import '../widgets/tournament_card.dart';
 import '../widgets/tournament_filters.dart';
+import 'league/league_info_details_screen.dart';
+import 'cup/cup_info_details_screen.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Status integer constants — matches Android Params.java exactly
@@ -42,6 +45,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   final int _limit = 10;
 
   TournamentFilters _filters = TournamentFilters();
+  String? _tappingId;
 
   @override
   bool get wantKeepAlive => true;
@@ -188,6 +192,59 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
     });
   }
 
+  Future<void> _navigateToTournament(TournamentModel t) async {
+    final id = t.effectiveId;
+    if (id.isEmpty) return;
+    if (_tappingId != null) return;
+
+    final tmntType = t.tmntType?.trim().toUpperCase();
+    final rule = t.rule?.trim().toUpperCase();
+    final isCup = tmntType == 'CUP' ||
+        rule == 'CUP' ||
+        rule == 'GROUP' ||
+        rule == 'KNOCKOUT';
+
+    setState(() => _tappingId = id);
+
+    try {
+      final currentUser = ref.read(currentUserProvider);
+      final userId = currentUser?.id ?? '';
+
+      if (isCup) {
+        final cup = await ref
+            .read(cupRepositoryProvider)
+            .getCupReadyDetail(userId: userId, tournamentId: id);
+
+        if (!mounted) return;
+        if (cup == null || (cup.roundsList?.isEmpty ?? true)) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => CupInfoDetailsScreen(tournamentId: id),
+          ));
+        } else {
+          context.push(AppRoutes.cupDetail.replaceFirst(':cupId', id));
+        }
+      } else {
+        final matches =
+            await ref.read(tournamentRepositoryProvider).getTournamentMatches(
+                  userId: userId,
+                  tournamentId: id,
+                  isUpcoming: false,
+                );
+
+        if (!mounted) return;
+        if (matches.isEmpty) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => LeagueInfoDetailsScreen(tournamentId: id),
+          ));
+        } else {
+          context.push(AppRoutes.tournamentDetail.replaceFirst(':tmntId', id));
+        }
+      }
+    } finally {
+      if (mounted) setState(() => _tappingId = null);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -276,11 +333,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                                 tournament: t,
                                 showFollow: showFollow,
                                 onFollow: () => _toggleFollow(index),
-                                onTap: () {
-                                  final route = _detailsRouteFor(t);
-                                  if (route == null) return;
-                                  context.push(route);
-                                },
+                                onTap: () => _navigateToTournament(t),
                               );
                             },
                             childCount:
@@ -294,20 +347,5 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
         ),
       ],
     );
-  }
-
-  String? _detailsRouteFor(TournamentModel tournament) {
-    final id = tournament.effectiveId;
-    if (id.isEmpty) return null;
-
-    final tmntType = tournament.tmntType?.trim().toUpperCase();
-    final rule = tournament.rule?.trim().toUpperCase();
-    final isCup = tmntType == 'CUP' ||
-        rule == 'CUP' ||
-        rule == 'GROUP' ||
-        rule == 'KNOCKOUT';
-
-    final route = isCup ? AppRoutes.cupDetail : AppRoutes.tournamentDetail;
-    return route.replaceFirst(isCup ? ':cupId' : ':tmntId', id);
   }
 }

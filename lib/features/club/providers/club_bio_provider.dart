@@ -4,9 +4,11 @@ import '../../../core/storage/storage_service.dart';
 import '../data/models/club_bio_model.dart';
 import '../data/repositories/club_repository.dart';
 
-/// Provider for single club bio/details
+/// Provider for single club bio/details.
+/// Returns (ClubBioModel?, npsSurvey) — the npsSurvey bool mirrors the
+/// server-driven flag that triggers the NPS rating dialog (same as Android).
 final clubBioProvider =
-    FutureProvider.family<ClubBioModel?, String>((ref, clubId) async {
+    FutureProvider.family<(ClubBioModel?, bool), String>((ref, clubId) async {
   final userId = StorageService.userId ?? '';
   return ref.read(clubRepositoryProvider).getClubBio(
         clubId: clubId,
@@ -14,21 +16,22 @@ final clubBioProvider =
       );
 });
 
-/// Provider for follow club action
+/// Provider for follow club action.
+/// Returns the server-side isFollow flag (nullable — null means error).
 final followClubProvider =
-    FutureProvider.family<bool, String>((ref, clubId) async {
+    FutureProvider.family<bool?, String>((ref, clubId) async {
   final userId = StorageService.userId ?? '';
-  final success = await ref.read(clubRepositoryProvider).followClub(
+  final isFollow = await ref.read(clubRepositoryProvider).followClub(
         clubId: clubId,
         userId: userId,
       );
 
   // Invalidate club bio to refresh follow status
-  if (success) {
+  if (isFollow != null) {
     ref.invalidate(clubBioProvider(clubId));
   }
 
-  return success;
+  return isFollow;
 });
 
 /// Provider for trial registration action
@@ -50,4 +53,26 @@ final trialRegisterProvider = FutureProvider.family<
   }
 
   return success;
+});
+
+/// Provider for submitting the NPS 5-question survey.
+/// Returns true if the server acknowledged (status field present in response).
+final saveNpsProvider = FutureProvider.family<
+    bool,
+    ({
+      int q1,
+      int q2,
+      int q3,
+      int q4,
+      int q5,
+      String comment,
+    })>((ref, params) async {
+  return ref.read(clubRepositoryProvider).saveNps(
+        q1: params.q1,
+        q2: params.q2,
+        q3: params.q3,
+        q4: params.q4,
+        q5: params.q5,
+        comment: params.comment.isEmpty ? null : params.comment,
+      );
 });

@@ -64,8 +64,8 @@ class _PlayerReceivedTeamsScreenState
       if (mounted) {
         final sorted = List<Map<String, dynamic>>.from(teams)
           ..sort((a, b) {
-            final aSort = (a['sortId'] as num?)?.toInt() ?? 0;
-            final bSort = (b['sortId'] as num?)?.toInt() ?? 0;
+            final aSort = a['sortId']?.toString() ?? '';
+            final bSort = b['sortId']?.toString() ?? '';
             return bSort.compareTo(aSort);
           });
         setState(() {
@@ -98,8 +98,8 @@ class _PlayerReceivedTeamsScreenState
       if (mounted) {
         final sorted = List<Map<String, dynamic>>.from(teams)
           ..sort((a, b) {
-            final aSort = (a['sortId'] as num?)?.toInt() ?? 0;
-            final bSort = (b['sortId'] as num?)?.toInt() ?? 0;
+            final aSort = a['sortId']?.toString() ?? '';
+            final bSort = b['sortId']?.toString() ?? '';
             return bSort.compareTo(aSort);
           });
         setState(() {

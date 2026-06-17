@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/features/club/data/models/club_model.dart';
+import 'package:socaloca/features/club/data/models/club_news_model.dart';
+import 'package:socaloca/features/club/data/models/club_player_model.dart';
+import 'package:socaloca/shared/models/match_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/api_constants.dart';
@@ -102,8 +105,18 @@ class _BioBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final club = bio.clubDetails;
-    final isPartner = club.isPartner;
     final logoUrl = ApiConstants.getImageUrl(club.imageUrl);
+
+    // ── FIX 4: resolve badge asset from partnerType ──────────────────────────
+    String? badgeAsset;
+    final pt = club.partnerType;
+    if (pt == 'platinum') {
+      badgeAsset = 'assets/icons/ic_platinum_badge.png';
+    } else if (pt == 'gold') {
+      badgeAsset = 'assets/icons/ic_gold_badge.png';
+    } else if (pt == 'silver') {
+      badgeAsset = 'assets/icons/ic_silver_badge.png';
+    }
 
     return RefreshIndicator(
       onRefresh: () async => onRefresh(),
@@ -113,7 +126,6 @@ class _BioBody extends ConsumerWidget {
           children: [
             // ── Top Bar ──────────────────────────────────────────────
             Container(
-              // color: AppColors.socaGrey,
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
@@ -126,11 +138,13 @@ class _BioBody extends ConsumerWidget {
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  SizedBox(width: 12),
-                  Container(width: 1.5, height: 24, color: AppColors.socaBlack),
-                  SizedBox(width: 12),
-                  Image.asset("assets/icons/ic_platinum_badge.png",
-                      width: 28, height: 28),
+                  if (badgeAsset != null) ...[
+                    SizedBox(width: 12),
+                    Container(
+                        width: 1.5, height: 24, color: AppColors.socaBlack),
+                    SizedBox(width: 12),
+                    Image.asset(badgeAsset, width: 28, height: 28),
+                  ],
                   Spacer(),
                   IconButton(
                     icon: Image.asset("assets/icons/ic_gallery_new.png",
@@ -228,15 +242,84 @@ class _BioBody extends ConsumerWidget {
                                       fontFamily: 'Poppins',
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700)),
+                            if (club.comps.isNotEmpty) ...[
+                              SizedBox(height: 4),
+                              Text(AppStrings.competitions,
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins', fontSize: 13)),
+                              Text(club.competitionsStr,
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700)),
+                            ],
                           ],
                         ),
                       ),
                     ],
                   ),
+
+                  // ── FIX 5: Upgrade button when not a partner ─────────────
+                  if (!(club.isPartner)) ...[
+                    SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final clubId = StorageService.clubId ?? '';
+                          final repo = ref.read(clubRepositoryProvider);
+                          final ok = await repo.upgradeClubPlan(clubId: clubId);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(ok
+                                    ? AppStrings.upgradationRequestSent
+                                    : AppStrings.somethingWentWrong),
+                              ),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.socaBlack,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child: Text(
+                          AppStrings.upgrade,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: AppColors.socaYellow,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
             SizedBox(height: 12),
+
+            // ── FIX 6: News section ───────────────────────────────────────
+            if (bio.newsList.isNotEmpty) ...[
+              _buildNewsSection(bio.newsList),
+              SizedBox(height: 12),
+            ],
+
+            // ── FIX 6: Matches section ────────────────────────────────────
+            if (bio.matchList.isNotEmpty) ...[
+              _buildMatchesSection(bio.matchList),
+              SizedBox(height: 12),
+            ],
+
+            // ── FIX 6: Players section ────────────────────────────────────
+            if (bio.playerList.isNotEmpty) ...[
+              _buildPlayersSection(bio.playerList),
+              SizedBox(height: 12),
+            ],
 
             Container(
                 color: AppColors.socaGrey,
@@ -245,7 +328,6 @@ class _BioBody extends ConsumerWidget {
                   _SectionHeader(title: AppStrings.clubTeams),
                   if (bio.teamList.isNotEmpty)
                     Container(
-                      // color: Colors.grey.shade100,
                       width: double.infinity,
                       padding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -325,7 +407,6 @@ class _BioBody extends ConsumerWidget {
                   _SectionHeader(title: AppStrings.clubSponsors),
                   if (bio.sponsorList.isNotEmpty)
                     Container(
-                      // color: Colors.grey.shade100,
                       width: double.infinity,
                       padding: EdgeInsets.all(16),
                       child: Wrap(
@@ -363,6 +444,268 @@ class _BioBody extends ConsumerWidget {
               ),
             ),
             SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── FIX 6: News section ───────────────────────────────────────────────────
+
+  Widget _buildNewsSection(List<ClubNewsModel> newsList) {
+    return Container(
+      color: AppColors.socaGrey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionHeader(title: AppStrings.newsAnnouncements),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            itemCount: newsList.length,
+            itemBuilder: (_, i) => _buildNewsCard(newsList[i]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNewsCard(ClubNewsModel news) {
+    final imageUrl = news.fullImageUrl;
+    return Card(
+      margin: EdgeInsets.only(bottom: 8),
+      color: Colors.white,
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (imageUrl.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  width: 56,
+                  height: 56,
+                  fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => Container(
+                      width: 56, height: 56, color: AppColors.socaGrey),
+                ),
+              ),
+            if (imageUrl.isNotEmpty) SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (news.title != null && news.title!.isNotEmpty)
+                    Text(news.title!,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.socaBlack),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                  if (news.description != null &&
+                      news.description!.isNotEmpty) ...[
+                    SizedBox(height: 4),
+                    Text(news.description!,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 11,
+                            color: AppColors.socaBlack),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── FIX 6: Matches section ────────────────────────────────────────────────
+
+  Widget _buildMatchesSection(List<MatchModel> matches) {
+    return Container(
+      color: AppColors.socaGrey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionHeader(title: AppStrings.recentMatches),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            itemCount: matches.length,
+            itemBuilder: (_, i) => _buildMatchCard(matches[i]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMatchCard(MatchModel match) {
+    final homeScore = match.score?.homeGoals ?? 0;
+    final awayScore = match.score?.awayGoals ?? 0;
+    final homeLogo = ApiConstants.getImageUrl(match.homeTeamLogo);
+    final awayLogo = ApiConstants.getImageUrl(match.awayTeamLogo);
+
+    return Card(
+      margin: EdgeInsets.only(bottom: 8),
+      color: Colors.white,
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  _buildTeamLogo(homeLogo),
+                  SizedBox(height: 4),
+                  Text(match.homeTeamName,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.socaBlack),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: Text('$homeScore - $awayScore',
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.socaBlack)),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  _buildTeamLogo(awayLogo),
+                  SizedBox(height: 4),
+                  Text(match.awayTeamName,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.socaBlack),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTeamLogo(String imageUrl) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration:
+          BoxDecoration(shape: BoxShape.circle, color: AppColors.socaGrey),
+      child: ClipOval(
+        child: imageUrl.isNotEmpty
+            ? CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                errorWidget: (_, __, ___) => Icon(Icons.sports_soccer,
+                    size: 22, color: AppColors.socaBlack),
+              )
+            : Icon(Icons.sports_soccer, size: 22, color: AppColors.socaBlack),
+      ),
+    );
+  }
+
+  // ── FIX 6: Players section ────────────────────────────────────────────────
+
+  Widget _buildPlayersSection(List<ClubPlayerModel> players) {
+    return Container(
+      color: AppColors.socaGrey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionHeader(title: AppStrings.featuredPlayers),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1.1,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: players.length,
+            itemBuilder: (_, i) => _buildPlayerCard(players[i]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlayerCard(ClubPlayerModel player) {
+    final imageUrl = player.fullImageUrl;
+    return Card(
+      color: Colors.white,
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: AppColors.socaGrey),
+              child: ClipOval(
+                child: imageUrl.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        fit: BoxFit.cover,
+                        errorWidget: (_, __, ___) => Icon(Icons.person,
+                            size: 28, color: AppColors.socaBlack),
+                      )
+                    : Icon(Icons.person, size: 28, color: AppColors.socaBlack),
+              ),
+            ),
+            SizedBox(height: 6),
+            Text(player.fullName,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.socaBlack),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis),
+            if (player.position != null && player.position!.isNotEmpty)
+              Text(player.position!,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 10,
+                      color: AppColors.textSecondary),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis),
           ],
         ),
       ),

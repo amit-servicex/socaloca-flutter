@@ -46,6 +46,7 @@ mixin _$ClubModel {
   int get likeCount => throw _privateConstructorUsedError;
   int get plan => throw _privateConstructorUsedError;
   List<StadiumModel> get stadiums => throw _privateConstructorUsedError;
+  List<String> get comps => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -82,7 +83,8 @@ abstract class $ClubModelCopyWith<$Res> {
       int followCount,
       int likeCount,
       int plan,
-      List<StadiumModel> stadiums});
+      List<StadiumModel> stadiums,
+      List<String> comps});
 }
 
 /// @nodoc
@@ -122,6 +124,7 @@ class _$ClubModelCopyWithImpl<$Res, $Val extends ClubModel>
     Object? likeCount = null,
     Object? plan = null,
     Object? stadiums = null,
+    Object? comps = null,
   }) {
     return _then(_value.copyWith(
       clubId: null == clubId
@@ -220,6 +223,10 @@ class _$ClubModelCopyWithImpl<$Res, $Val extends ClubModel>
           ? _value.stadiums
           : stadiums // ignore: cast_nullable_to_non_nullable
               as List<StadiumModel>,
+      comps: null == comps
+          ? _value.comps
+          : comps // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -256,7 +263,8 @@ abstract class _$$ClubModelImplCopyWith<$Res>
       int followCount,
       int likeCount,
       int plan,
-      List<StadiumModel> stadiums});
+      List<StadiumModel> stadiums,
+      List<String> comps});
 }
 
 /// @nodoc
@@ -294,6 +302,7 @@ class __$$ClubModelImplCopyWithImpl<$Res>
     Object? likeCount = null,
     Object? plan = null,
     Object? stadiums = null,
+    Object? comps = null,
   }) {
     return _then(_$ClubModelImpl(
       clubId: null == clubId
@@ -392,6 +401,10 @@ class __$$ClubModelImplCopyWithImpl<$Res>
           ? _value._stadiums
           : stadiums // ignore: cast_nullable_to_non_nullable
               as List<StadiumModel>,
+      comps: null == comps
+          ? _value._comps
+          : comps // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -423,8 +436,10 @@ class _$ClubModelImpl implements _ClubModel {
       this.followCount = 0,
       this.likeCount = 0,
       this.plan = 0,
-      final List<StadiumModel> stadiums = const []})
-      : _stadiums = stadiums;
+      final List<StadiumModel> stadiums = const [],
+      final List<String> comps = const []})
+      : _stadiums = stadiums,
+        _comps = comps;
 
   factory _$ClubModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ClubModelImplFromJson(json);
@@ -492,9 +507,18 @@ class _$ClubModelImpl implements _ClubModel {
     return EqualUnmodifiableListView(_stadiums);
   }
 
+  final List<String> _comps;
+  @override
+  @JsonKey()
+  List<String> get comps {
+    if (_comps is EqualUnmodifiableListView) return _comps;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_comps);
+  }
+
   @override
   String toString() {
-    return 'ClubModel(clubId: $clubId, id: $id, clubName: $clubName, partnerType: $partnerType, country: $country, city: $city, nickName: $nickName, formedYear: $formedYear, manager: $manager, confed: $confed, league: $league, website: $website, imageUrl: $imageUrl, homeKit: $homeKit, awayKit: $awayKit, thirdKit: $thirdKit, orgFifaId: $orgFifaId, following: $following, trialBadge: $trialBadge, isPartner: $isPartner, followCount: $followCount, likeCount: $likeCount, plan: $plan, stadiums: $stadiums)';
+    return 'ClubModel(clubId: $clubId, id: $id, clubName: $clubName, partnerType: $partnerType, country: $country, city: $city, nickName: $nickName, formedYear: $formedYear, manager: $manager, confed: $confed, league: $league, website: $website, imageUrl: $imageUrl, homeKit: $homeKit, awayKit: $awayKit, thirdKit: $thirdKit, orgFifaId: $orgFifaId, following: $following, trialBadge: $trialBadge, isPartner: $isPartner, followCount: $followCount, likeCount: $likeCount, plan: $plan, stadiums: $stadiums, comps: $comps)';
   }
 
   @override
@@ -537,7 +561,8 @@ class _$ClubModelImpl implements _ClubModel {
             (identical(other.likeCount, likeCount) ||
                 other.likeCount == likeCount) &&
             (identical(other.plan, plan) || other.plan == plan) &&
-            const DeepCollectionEquality().equals(other._stadiums, _stadiums));
+            const DeepCollectionEquality().equals(other._stadiums, _stadiums) &&
+            const DeepCollectionEquality().equals(other._comps, _comps));
   }
 
   @JsonKey(ignore: true)
@@ -567,7 +592,8 @@ class _$ClubModelImpl implements _ClubModel {
         followCount,
         likeCount,
         plan,
-        const DeepCollectionEquality().hash(_stadiums)
+        const DeepCollectionEquality().hash(_stadiums),
+        const DeepCollectionEquality().hash(_comps)
       ]);
 
   @JsonKey(ignore: true)
@@ -609,7 +635,8 @@ abstract class _ClubModel implements ClubModel {
       final int followCount,
       final int likeCount,
       final int plan,
-      final List<StadiumModel> stadiums}) = _$ClubModelImpl;
+      final List<StadiumModel> stadiums,
+      final List<String> comps}) = _$ClubModelImpl;
 
   factory _ClubModel.fromJson(Map<String, dynamic> json) =
       _$ClubModelImpl.fromJson;
@@ -663,6 +690,8 @@ abstract class _ClubModel implements ClubModel {
   int get plan;
   @override
   List<StadiumModel> get stadiums;
+  @override
+  List<String> get comps;
   @override
   @JsonKey(ignore: true)
   _$$ClubModelImplCopyWith<_$ClubModelImpl> get copyWith =>

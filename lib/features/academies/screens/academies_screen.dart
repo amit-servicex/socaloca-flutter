@@ -209,164 +209,161 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
-      // appBar: AppBar(
-      //   title: Text('Academies'.tr),
-      //   backgroundColor: AppColors.socaBlack,
-      //   foregroundColor: AppColors.socaYellow,
-      //   elevation: 0,
-      // ),
-      body: Column(
-        children: [
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
           // Description and Filters Section
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Description Text
-                Text(
-                  AppStrings.academiesDescription,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: AppColors.socaBlack,
-                  ),
-                ),
-
-                SizedBox(height: 15),
-
-                // Country Dropdown
-                SearchableDropdownButton(
-                  hint: AppStrings.country,
-                  value: _selectedCountry,
-                  items: _countries,
-                  onChanged: _onCountryChanged,
-                  height: 42,
-                  fontSize: 12,
-                  backgroundColor: AppColors.socaGrey.withValues(alpha: 0.3),
-                ),
-
-                SizedBox(height: 10),
-
-                // Category Dropdown
-                SearchableDropdownButton(
-                  hint: AppStrings.category,
-                  value: _selectedCategory,
-                  items: _categories,
-                  onChanged: _onCategoryChanged,
-                  height: 42,
-                  fontSize: 12,
-                  backgroundColor: AppColors.socaGrey.withValues(alpha: 0.3),
-                ),
-
-                SizedBox(height: 15),
-
-                // GO Button
-                GestureDetector(
-                  onTap: _onGoPressed,
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
+          SliverToBoxAdapter(
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Description Text
+                  Text(
+                    AppStrings.academiesDescription,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
                       color: AppColors.socaBlack,
-                      borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(
-                      child: Text(
-                        AppStrings.goUpper,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.socaYellow,
+                  ),
+
+                  SizedBox(height: 15),
+
+                  // Country Dropdown
+                  SearchableDropdownButton(
+                    hint: AppStrings.country,
+                    value: _selectedCountry,
+                    items: _countries,
+                    onChanged: _onCountryChanged,
+                    height: 42,
+                    fontSize: 12,
+                    backgroundColor: AppColors.socaGrey.withValues(alpha: 0.3),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Category Dropdown
+                  SearchableDropdownButton(
+                    hint: AppStrings.category,
+                    value: _selectedCategory,
+                    items: _categories,
+                    onChanged: _onCategoryChanged,
+                    height: 42,
+                    fontSize: 12,
+                    backgroundColor: AppColors.socaGrey.withValues(alpha: 0.3),
+                  ),
+
+                  SizedBox(height: 15),
+
+                  // GO Button
+                  GestureDetector(
+                    onTap: _onGoPressed,
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppColors.socaBlack,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          AppStrings.goUpper,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.socaYellow,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
           // Divider
-          Container(
-            height: 0.5,
-            color: AppColors.socaBlack,
+          SliverToBoxAdapter(
+            child: Container(height: 0.5, color: AppColors.socaBlack),
           ),
 
           // Academies List
-          Expanded(
-            child: state.isLoading
-                ? AppLoader()
-                : state.error != null
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              size: 48,
-                              color: AppColors.error,
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              state.error!,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                color: AppColors.socaBlack,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: _onGoPressed,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.socaBlack,
-                                foregroundColor: AppColors.socaYellow,
-                              ),
-                              child: Text(AppStrings.retry),
-                            ),
-                          ],
-                        ),
-                      )
-                    : state.academies.isEmpty
-                        ? Center(
-                            child: Text(
-                              AppStrings.noAcademiesFound,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.socaBlack,
-                              ),
-                            ),
-                          )
-                        : ListView.builder(
-                            controller: _scrollController,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 10,
-                            ),
-                            itemCount: state.academies.length +
-                                (state.isLoadingMore ? 1 : 0),
-                            itemBuilder: (context, index) {
-                              if (index == state.academies.length) {
-                                return Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: AppLoader(),
-                                );
-                              }
-
-                              final academy = state.academies[index];
-                              return AcademyCard(
-                                academy: academy,
-                                onViewTap: () =>
-                                    _onAcademyTap(academy.academyId),
-                              );
-                            },
-                          ),
-          ),
+          if (state.isLoading)
+            SliverFillRemaining(
+              child: Center(child: AppLoader()),
+            )
+          else if (state.error != null)
+            SliverFillRemaining(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: AppColors.error,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      state.error!,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        color: AppColors.socaBlack,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _onGoPressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.socaBlack,
+                        foregroundColor: AppColors.socaYellow,
+                      ),
+                      child: Text(AppStrings.retry),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else if (state.academies.isEmpty)
+            SliverFillRemaining(
+              child: Center(
+                child: Text(
+                  AppStrings.noAcademiesFound,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.socaBlack,
+                  ),
+                ),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              sliver: SliverList.builder(
+                itemCount:
+                    state.academies.length + (state.isLoadingMore ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == state.academies.length) {
+                    return Padding(
+                      padding: EdgeInsets.all(16),
+                      child: AppLoader(),
+                    );
+                  }
+                  final academy = state.academies[index];
+                  return AcademyCard(
+                    academy: academy,
+                    onViewTap: () => _onAcademyTap(academy.academyId),
+                  );
+                },
+              ),
+            ),
         ],
       ),
     );

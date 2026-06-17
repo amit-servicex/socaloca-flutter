@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -518,8 +520,8 @@ class _JoinedTeamsTabState extends ConsumerState<_JoinedTeamsTab>
       if (mounted) {
         final sorted = List<Map<String, dynamic>>.from(teams)
           ..sort((a, b) {
-            final aSort = (a['sortId'] as num?)?.toInt() ?? 0;
-            final bSort = (b['sortId'] as num?)?.toInt() ?? 0;
+            final aSort = a['sortId']?.toString() ?? '';
+            final bSort = b['sortId']?.toString() ?? '';
             return bSort.compareTo(aSort);
           });
         setState(() {
@@ -719,6 +721,7 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
   }
 
   void _onScroll() {
+    if (!_scrollController.hasClients) return;
     if (_scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 100 &&
         !_isLoadingMore &&
@@ -739,8 +742,8 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
       if (mounted) {
         final sorted = List<Map<String, dynamic>>.from(teams)
           ..sort((a, b) {
-            final aSort = (a['sortId'] as num?)?.toInt() ?? 0;
-            final bSort = (b['sortId'] as num?)?.toInt() ?? 0;
+            final aSort = a['sortId']?.toString() ?? '';
+            final bSort = b['sortId']?.toString() ?? '';
             return bSort.compareTo(aSort);
           });
         setState(() {
@@ -771,8 +774,8 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
       if (mounted) {
         final sorted = List<Map<String, dynamic>>.from(teams)
           ..sort((a, b) {
-            final aSort = (a['sortId'] as num?)?.toInt() ?? 0;
-            final bSort = (b['sortId'] as num?)?.toInt() ?? 0;
+            final aSort = a['sortId']?.toString() ?? '';
+            final bSort = b['sortId']?.toString() ?? '';
             return bSort.compareTo(aSort);
           });
         setState(() {
@@ -787,6 +790,286 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
         setState(() => _isLoadingMore = false);
       }
     }
+  }
+
+  Widget _buildReceivedCard(BuildContext context, int i) {
+    final team = _teams[i];
+    final teamId = team['teamId'] as String? ?? team['_id'] as String? ?? '';
+    final teamName = team['teamName'] as String? ?? '';
+    final imageUrl = team['imageUrl'] as String? ?? '';
+    final country = team['country'] as String? ?? '';
+    final gameTypeYear = team['gameTypeYear'] as String? ?? '';
+    final rating = (team['rating'] as num?)?.toDouble() ?? 0.0;
+    final progressValue = (rating / 5.0).clamp(0.0, 1.0);
+
+    final rawCount = team['memberCount'] ?? team['members'];
+    final memberText = rawCount != null
+        ? '$rawCount Members'
+        : (team['memberText'] as String? ?? '');
+
+    final invitor = team['invitor'] as Map<String, dynamic>?;
+    final invitorFirst = invitor?['firstName'] as String? ?? '';
+    final invitorLast = invitor?['lastName'] as String? ?? '';
+    final inviterName = '$invitorFirst $invitorLast'.trim();
+    final inviterImage = invitor?['imageUrl'] as String? ?? '';
+    final invitorUserId = invitor?['userId'] as String? ?? '';
+    final invitorIsPlayer = invitor?['isPlayer'] == true;
+
+    void navigateToInvitor() {
+      if (invitorUserId.isEmpty) return;
+      if (invitorIsPlayer) {
+        log("this si the clientable event player ");
+
+        context
+            .push(AppRoutes.playerBio.replaceFirst(':userId', invitorUserId));
+      } else {
+        log("this si the clientable event ");
+
+        context.push(
+            AppRoutes.coachAdminBio.replaceFirst(':userId', invitorUserId));
+      }
+    }
+
+    void navigate() {
+      if (teamId.isNotEmpty) {
+        context.push(AppRoutes.teamBio.replaceFirst(':teamId', teamId));
+      }
+    }
+
+    return Column(
+      children: [
+        if (inviterName.isNotEmpty) ...[
+          Divider(height: 1, color: AppColors.socaBlack),
+          Padding(
+            padding: EdgeInsets.fromLTRB(14, 12, 14, 10),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: navigateToInvitor,
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      // color: Colors.grey[200],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: inviterImage.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: ApiConstants.getImageUrl(inviterImage),
+                            fit: BoxFit.cover,
+                            errorWidget: (_, __, ___) => Icon(Icons.person,
+                                size: 20, color: Colors.grey),
+                          )
+                        : Icon(Icons.person, size: 20, color: Colors.grey),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: navigateToInvitor,
+                    child: Text(
+                      '$inviterName has invited you to join',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: AppColors.socaBlack,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: AppColors.socaBlack),
+        ],
+        Card(
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          color: Colors.white,
+          elevation: 4,
+          shadowColor: Colors.black12,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Inviter row ──────────────────────────────────────────
+
+              // ── Team info ─────────────────────────────────────────────
+              GestureDetector(
+                onTap: navigate,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(14, 14, 14, 0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 72,
+                        height: 72,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[200],
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: imageUrl.isNotEmpty
+                            ? CachedNetworkImage(
+                                imageUrl: ApiConstants.getImageUrl(imageUrl),
+                                fit: BoxFit.cover,
+                                placeholder: (_, __) => AppLoader(),
+                                errorWidget: (_, __, ___) => Icon(
+                                    Icons.emoji_events,
+                                    size: 28,
+                                    color: Colors.grey),
+                              )
+                            : Icon(Icons.emoji_events,
+                                size: 28, color: Colors.grey),
+                      ),
+                      SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (gameTypeYear.isNotEmpty) ...[
+                              Text(
+                                gameTypeYear,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                            ],
+                            Text(
+                              teamName,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.socaBlack,
+                                height: 1.2,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            if (country.isNotEmpty) ...[
+                              SizedBox(height: 3),
+                              Text(
+                                country,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 13,
+                                  color: AppColors.socaBlack,
+                                ),
+                              ),
+                            ],
+                            if (memberText.isNotEmpty) ...[
+                              SizedBox(height: 3),
+                              Text(
+                                memberText,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                  color: AppColors.socaBlack,
+                                ),
+                              ),
+                            ],
+                            SizedBox(height: 6),
+                            Row(
+                              children: [
+                                Text(
+                                  AppStrings.ratingLabel,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 12,
+                                    color: AppColors.socaBlack,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(2),
+                                    child: LinearProgressIndicator(
+                                      value: progressValue,
+                                      minHeight: 3,
+                                      backgroundColor: Colors.grey[300],
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.socaBlack,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 14),
+
+              // ── ACCEPT / DECLINE buttons ──────────────────────────────
+              Padding(
+                padding: EdgeInsets.fromLTRB(14, 0, 14, 14),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _respond(i, true),
+                        child: Container(
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                                color: AppColors.socaBlack, width: 1.5),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            AppStrings.accept.toUpperCase(),
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                              color: AppColors.socaBlack,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _respond(i, false),
+                        child: Container(
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: AppColors.socaBlack,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            AppStrings.decline.toUpperCase(),
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Future<void> _respond(int index, bool accept) async {
@@ -845,61 +1128,14 @@ class _ReceivedTeamsTabState extends ConsumerState<_ReceivedTeamsTab>
       onRefresh: _load,
       child: ListView.separated(
         controller: _scrollController,
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.symmetric(vertical: 12),
         itemCount: _teams.length + (_isLoadingMore ? 1 : 0),
         separatorBuilder: (_, __) => SizedBox(height: 8),
         itemBuilder: (context, i) {
           if (i == _teams.length) {
             return AppLoader();
           }
-          return _teamListTile(
-            context,
-            _teams[i],
-            actionButtons: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _respond(i, true),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    AppStrings.accept,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 6),
-                ElevatedButton(
-                  onPressed: () => _respond(i, false),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    AppStrings.decline,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
+          return _buildReceivedCard(context, i);
         },
       ),
     );

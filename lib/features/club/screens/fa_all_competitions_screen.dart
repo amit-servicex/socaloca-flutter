@@ -19,20 +19,21 @@ class FaAllCompetitionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        title: Text(
-          faName,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        iconTheme: IconThemeData(color: AppColors.socaBlack),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 1,
+      //   title: Text(
+      //     faName,
+      //     style: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontSize: 16,
+      //       fontWeight: FontWeight.w700,
+      //       color: AppColors.socaBlack,
+      //     ),
+      //   ),
+      //   iconTheme: IconThemeData(color: AppColors.socaBlack),
+      // ),
+
       body: competitions.isEmpty
           ? Center(
               child: Text(
@@ -59,14 +60,17 @@ class FaAllCompetitionsScreen extends StatelessWidget {
 
   Widget _buildRow(FaCompModel comp) {
     final imageUrl = comp.fullImageUrl;
-    return Padding(
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(color: AppColors.socaBlack, width: .7))),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           Container(
             width: 44,
             height: 44,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.socaGrey,
             ),

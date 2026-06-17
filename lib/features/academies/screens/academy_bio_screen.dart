@@ -102,7 +102,9 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
         setState(() => _joinedStatus = result['joined'] as String?);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-            request ? AppStrings.joiningRequestSent : AppStrings.requestCancelled,
+            request
+                ? AppStrings.joiningRequestSent
+                : AppStrings.requestCancelled,
             style: TextStyle(fontFamily: 'Poppins'),
           ),
           backgroundColor: AppColors.socaBlack,
@@ -380,7 +382,8 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                       _infoLabelValue(AppStrings.director, details.director!),
                     if (details?.formedYear != null &&
                         details!.formedYear!.isNotEmpty)
-                      _infoLabelValue(AppStrings.foundedYear, details.formedYear!),
+                      _infoLabelValue(
+                          AppStrings.foundedYear, details.formedYear!),
                   ],
                 ),
               ),
@@ -418,7 +421,9 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Text(
-          _isFollowing ? AppStrings.following.toUpperCase() : AppStrings.follow.toUpperCase(),
+          _isFollowing
+              ? AppStrings.following.toUpperCase()
+              : AppStrings.follow.toUpperCase(),
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
@@ -652,7 +657,8 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (d.mobile?.isNotEmpty == true)
-                            _bioCell(AppStrings.academyContactNumber, d.mobile!),
+                            _bioCell(
+                                AppStrings.academyContactNumber, d.mobile!),
                           if (d.mobile?.isNotEmpty == true &&
                               d.email?.isNotEmpty == true)
                             SizedBox(height: 12),
@@ -741,44 +747,66 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
               itemBuilder: (_, i) {
                 final s = sponsors[i];
                 final logoUrl = _imageUrl(s.logo);
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.socaGrey.withValues(alpha: 0.2),
-                      ),
-                      child: ClipOval(
-                        child: logoUrl.isNotEmpty
-                            ? CachedNetworkImage(
-                                imageUrl: logoUrl,
-                                fit: BoxFit.cover,
-                                errorWidget: (_, __, ___) => Icon(
-                                    Icons.business,
-                                    color: AppColors.socaBlack),
-                              )
-                            : Icon(Icons.business, color: AppColors.socaBlack),
-                      ),
-                    ),
-                    if (s.name?.isNotEmpty == true)
-                      SizedBox(
-                        width: 64,
-                        child: Text(
-                          s.name!,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 9,
-                            color: AppColors.socaBlack,
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                final hasWebsite = s.website != null && s.website!.isNotEmpty;
+                log("this si the webside like of the sopsor item ${s.website} ${hasWebsite}");
+                return GestureDetector(
+                  onTap: hasWebsite
+                      ? () async {
+                          var rawUrl = (s.website ?? '').trim();
+                          if (!rawUrl.startsWith('http://') &&
+                              !rawUrl.startsWith('https://')) {
+                            rawUrl = 'https://$rawUrl';
+                          }
+                          final uri = Uri.tryParse(rawUrl);
+                          if (uri != null) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        }
+                      : null,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.socaGrey.withValues(alpha: 0.2),
+                          border: hasWebsite
+                              ? Border.all(color: AppColors.socaBlack, width: 1)
+                              : null,
+                        ),
+                        child: ClipOval(
+                          child: logoUrl.isNotEmpty
+                              ? CachedNetworkImage(
+                                  imageUrl: logoUrl,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (_, __, ___) => Icon(
+                                      Icons.business,
+                                      color: AppColors.socaBlack),
+                                )
+                              : Icon(Icons.business,
+                                  color: AppColors.socaBlack),
                         ),
                       ),
-                  ],
+                      if (s.name?.isNotEmpty == true)
+                        SizedBox(
+                          width: 64,
+                          child: Text(
+                            s.name!,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 9,
+                              color: AppColors.socaBlack,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                    ],
+                  ),
                 );
               },
             ),

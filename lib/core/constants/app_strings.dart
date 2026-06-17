@@ -78,6 +78,7 @@ class AppStrings {
   static String get na => _t('na');
   static String get gotIt => _t('gotIt');
   static String get upgrade => _t('upgrade');
+  static String get upgradationRequestSent => _t('upgradationRequestSent');
   static String get helpdesk => _t('helpdesk');
   static String get mandatoryFields => _t('mandatoryFields');
   static String get goToHome => _t('goToHome');
@@ -478,6 +479,9 @@ class AppStrings {
   static String get menu => _t('menu');
   static String get retry => _t('retry');
   static String get ok => _t('ok');
+  static String get sorry => _t('sorry');
+  static String get likeFollowBlockedParental =>
+      _t('likeFollowBlockedParental');
   static String get block => _t('block');
   static String get blockUser => _t('blockUser');
   static String checkOutPostOnSocaLoca(String url) =>
@@ -974,6 +978,7 @@ class AppStrings {
   static String get cat => _t('cat');
   static String get about => _t('about');
   static String get bio => _t('bio');
+  static String get coachManagerBio => _t('coachManagerBio');
   static String get academyDirector => _t('academyDirector');
   static String get academyManager => _t('academyManager');
   static String get academyContactNumber => _t('academyContactNumber');
@@ -1278,6 +1283,21 @@ class AppStrings {
   static String get men => _t('men');
   static String get women => _t('women');
   static String get kit => _t('kit');
+
+  // ── NPS Survey strings ─────────────────────────────────────────────────────
+  static String get rateYourExperience => _t('rateYourExperience');
+  static String get yourInputMakesADifference =>
+      _t('yourInputMakesADifference');
+  static String get npsQ1 => _t('npsQ1');
+  static String get npsQ2 => _t('npsQ2');
+  static String get npsQ3 => _t('npsQ3');
+  static String get npsQ4 => _t('npsQ4');
+  static String get npsQ5 => _t('npsQ5');
+  static String get npsQ6 => _t('npsQ6');
+  static String get pleaseAnswerAllMandatoryQuestions =>
+      _t('pleaseAnswerAllMandatoryQuestions');
+  static String get npsThankYouTitle => _t('npsThankYouTitle');
+  static String get npsThankYouBody => _t('npsThankYouBody');
   static String get playersTitle => _t('playersTitle');
   static String get galleryTitle => _t('galleryTitle');
   static String get liveTrials => _t('liveTrials');
@@ -1313,6 +1333,10 @@ class AppStrings {
   static String get viewAllCompetitions => _t('viewAllCompetitions');
   static String get featuredTeams => _t('featuredTeams');
   static String get viewAllTeams => _t('viewAllTeams');
+  static String get featuredFAs => _t('featuredFAs');
+  static String get viewAllFAs => _t('viewAllFAs');
+  static String get officialMerchandise => _t('officialMerchandise');
+  static String get confedNotFound => _t('confedNotFound');
   static String get headquarters => _t('headquarters');
   static String get founded => _t('founded');
   static String get ceo => _t('ceo');
@@ -1383,6 +1407,7 @@ class AppStrings {
       'na': 'N/A',
       'gotIt': 'Got It',
       'upgrade': 'UPGRADE',
+      'upgradationRequestSent': 'Upgradation request sent',
       'helpdesk': 'Helpdesk',
       'mandatoryFields': '* mandatory fields',
       'goToHome': 'Go to Home',
@@ -2132,6 +2157,7 @@ class AppStrings {
       'cat': 'CAT',
       'about': 'About',
       'bio': 'Bio',
+      'coachManagerBio': 'Coach/Manager Bio',
       'academyDirector': 'Academy Director',
       'academyManager': 'Academy Manager',
       'academyContactNumber': 'Academy Contact Number',
@@ -2441,6 +2467,22 @@ class AppStrings {
       'men': 'Men',
       'women': 'Women',
       'kit': 'Kit',
+      // NPS Survey
+      'rateYourExperience': 'NPS Survey',
+      'yourInputMakesADifference': 'Your input makes a diffrence',
+      'npsQ1':
+          'On a scale of 1-5, how likely are you to recommend SOCALOCA to a friend or colleague? *',
+      'npsQ2':
+          'Overall, how satisfied or dissatisfied are you with SOCALOCA? *',
+      'npsQ3': 'How would you rate the quality of our App and Consoles? *',
+      'npsQ4':
+          'How responsive have we been to your questions about our services? *',
+      'npsQ5': 'How likely are you to use our service again in the future? *',
+      'npsQ6': 'Do you have any comments, questions, or concerns?',
+      'pleaseAnswerAllMandatoryQuestions':
+          'Please fill all the mandatory questions marked with *',
+      'npsThankYouTitle': 'Thank you!',
+      'npsThankYouBody': 'Your response has successfully been recorded.',
       'playersTitle': 'Players',
       'galleryTitle': 'Gallery',
       'liveTrials': 'Live Trials',
@@ -2476,6 +2518,10 @@ class AppStrings {
       'viewAllCompetitions': 'view all competitions',
       'featuredTeams': 'Featured Teams',
       'viewAllTeams': 'view all teams',
+      'featuredFAs': 'Featured FAs',
+      'viewAllFAs': 'View All FAs',
+      'officialMerchandise': 'Official Merchandise',
+      'confedNotFound': 'Confederation not found',
       'headquarters': 'Headquarters',
       'founded': 'Founded',
       'ceo': 'CEO',
@@ -2495,6 +2541,9 @@ class AppStrings {
       'followerCount': '{count} Follower',
       'followersCount': '{count} Followers',
       'failedToUpdateFollowStatus': 'Failed to update follow status: {error}',
+      'sorry': 'Sorry!!!',
+      'likeFollowBlockedParental':
+          'Your liking/following rights are blocked in parental controls. Please consult your parent/guardian.',
       'footballStatsYear': 'Football Stats ({year})',
       'futsalStatsYear': 'Futsal Stats ({year})',
       'cannotHostMatch': 'Cannot Host Match',
@@ -2593,6 +2642,7 @@ class AppStrings {
       'na': 'N/D',
       'gotIt': 'Entendido',
       'upgrade': 'MEJORAR',
+      'upgradationRequestSent': 'Solicitud de actualización enviada',
       'helpdesk': 'Ayuda',
       'mandatoryFields': '* campos obligatorios',
       'goToHome': 'Ir a inicio',
@@ -2969,6 +3019,7 @@ class AppStrings {
       'cat': 'CAT',
       'about': 'Acerca de',
       'bio': 'Bio',
+      'coachManagerBio': 'Coach/Manager Bio',
       'academyDirector': 'Director de la academia',
       'academyManager': 'Manager de la academia',
       'academyContactNumber': 'Número de contacto de la academia',
@@ -3733,6 +3784,27 @@ class AppStrings {
       'men': 'Men', // TODO: translate
       'women': 'Women', // TODO: translate
       'kit': 'Kit', // TODO: translate
+      // NPS Survey
+      'rateYourExperience': 'NPS Survey', // TODO: translate
+      'yourInputMakesADifference':
+          'Your input makes a diffrence', // TODO: translate
+      'npsQ1':
+          'On a scale of 1-5, how likely are you to recommend SOCALOCA to a friend or colleague? *', // TODO: translate
+      'npsQ2':
+          'Overall, how satisfied or dissatisfied are you with SOCALOCA? *', // TODO: translate
+      'npsQ3':
+          'How would you rate the quality of our App and Consoles? *', // TODO: translate
+      'npsQ4':
+          'How responsive have we been to your questions about our services? *', // TODO: translate
+      'npsQ5':
+          'How likely are you to use our service again in the future? *', // TODO: translate
+      'npsQ6':
+          'Do you have any comments, questions, or concerns?', // TODO: translate
+      'pleaseAnswerAllMandatoryQuestions':
+          'Please fill all the mandatory questions marked with *', // TODO: translate
+      'npsThankYouTitle': 'Thank you!', // TODO: translate
+      'npsThankYouBody':
+          'Your response has successfully been recorded.', // TODO: translate
       'playersTitle': 'Players', // TODO: translate
       'galleryTitle': 'Gallery', // TODO: translate
       'liveTrials': 'Live Trials', // TODO: translate
@@ -3770,6 +3842,10 @@ class AppStrings {
       'viewAllCompetitions': 'view all competitions', // TODO: translate
       'featuredTeams': 'Featured Teams', // TODO: translate
       'viewAllTeams': 'view all teams', // TODO: translate
+      'featuredFAs': 'Featured FAs', // TODO: translate
+      'viewAllFAs': 'View All FAs', // TODO: translate
+      'officialMerchandise': 'Official Merchandise', // TODO: translate
+      'confedNotFound': 'Confederation not found', // TODO: translate
       'headquarters': 'Headquarters', // TODO: translate
       'founded': 'Founded', // TODO: translate
       'ceo': 'CEO', // TODO: translate
@@ -3790,6 +3866,9 @@ class AppStrings {
       'followersCount': '{count} Followers', // TODO: translate
       'failedToUpdateFollowStatus':
           'Failed to update follow status: {error}', // TODO: translate
+      'sorry': 'Sorry!!!', // TODO: translate
+      'likeFollowBlockedParental':
+          'Your liking/following rights are blocked in parental controls. Please consult your parent/guardian.', // TODO: translate
       'footballStatsYear': 'Football Stats ({year})', // TODO: translate
       'futsalStatsYear': 'Futsal Stats ({year})', // TODO: translate
       'cannotHostMatch': 'Cannot Host Match', // TODO: translate
@@ -3894,6 +3973,7 @@ class AppStrings {
       'na': 'N/D',
       'gotIt': 'Entendi',
       'upgrade': 'ATUALIZAR',
+      'upgradationRequestSent': 'Solicitação de atualização enviada',
       'helpdesk': 'Suporte',
       'mandatoryFields': '* campos obrigatórios',
       'goToHome': 'Ir Para Principal',
@@ -4269,6 +4349,7 @@ class AppStrings {
       'cat': 'CAT',
       'about': 'Sobre',
       'bio': 'Bio',
+      'coachManagerBio': 'Coach/Manager Bio',
       'academyDirector': 'Diretor da academia',
       'academyManager': 'Gerente da academia',
       'academyContactNumber': 'Número de contato da academia',
@@ -5022,6 +5103,27 @@ class AppStrings {
       'men': 'Men', // TODO: translate
       'women': 'Women', // TODO: translate
       'kit': 'Kit', // TODO: translate
+      // NPS Survey
+      'rateYourExperience': 'NPS Survey', // TODO: translate
+      'yourInputMakesADifference':
+          'Your input makes a diffrence', // TODO: translate
+      'npsQ1':
+          'On a scale of 1-5, how likely are you to recommend SOCALOCA to a friend or colleague? *', // TODO: translate
+      'npsQ2':
+          'Overall, how satisfied or dissatisfied are you with SOCALOCA? *', // TODO: translate
+      'npsQ3':
+          'How would you rate the quality of our App and Consoles? *', // TODO: translate
+      'npsQ4':
+          'How responsive have we been to your questions about our services? *', // TODO: translate
+      'npsQ5':
+          'How likely are you to use our service again in the future? *', // TODO: translate
+      'npsQ6':
+          'Do you have any comments, questions, or concerns?', // TODO: translate
+      'pleaseAnswerAllMandatoryQuestions':
+          'Please fill all the mandatory questions marked with *', // TODO: translate
+      'npsThankYouTitle': 'Thank you!', // TODO: translate
+      'npsThankYouBody':
+          'Your response has successfully been recorded.', // TODO: translate
       'playersTitle': 'Players', // TODO: translate
       'galleryTitle': 'Gallery', // TODO: translate
       'liveTrials': 'Live Trials', // TODO: translate
@@ -5059,6 +5161,10 @@ class AppStrings {
       'viewAllCompetitions': 'view all competitions', // TODO: translate
       'featuredTeams': 'Featured Teams', // TODO: translate
       'viewAllTeams': 'view all teams', // TODO: translate
+      'featuredFAs': 'Featured FAs', // TODO: translate
+      'viewAllFAs': 'View All FAs', // TODO: translate
+      'officialMerchandise': 'Official Merchandise', // TODO: translate
+      'confedNotFound': 'Confederation not found', // TODO: translate
       'headquarters': 'Headquarters', // TODO: translate
       'founded': 'Founded', // TODO: translate
       'ceo': 'CEO', // TODO: translate
@@ -5079,6 +5185,9 @@ class AppStrings {
       'followersCount': '{count} Followers', // TODO: translate
       'failedToUpdateFollowStatus':
           'Failed to update follow status: {error}', // TODO: translate
+      'sorry': 'Sorry!!!', // TODO: translate
+      'likeFollowBlockedParental':
+          'Your liking/following rights are blocked in parental controls. Please consult your parent/guardian.', // TODO: translate
       'footballStatsYear': 'Football Stats ({year})', // TODO: translate
       'futsalStatsYear': 'Futsal Stats ({year})', // TODO: translate
       'cannotHostMatch': 'Cannot Host Match', // TODO: translate
@@ -5183,6 +5292,7 @@ class AppStrings {
       'na': 'N/A',
       'gotIt': 'Compris',
       'upgrade': 'AMÉLIORER',
+      'upgradationRequestSent': "Demande de mise à niveau envoyée",
       'helpdesk': 'Assistance',
       'mandatoryFields': '* champs obligatoires',
       'goToHome': "Revenir à l'accueil",
@@ -5562,6 +5672,7 @@ class AppStrings {
       'cat': 'CAT',
       'about': 'À propos',
       'bio': 'Bio',
+      'coachManagerBio': 'Coach/Manager Bio',
       'academyDirector': "Directeur de l'académie",
       'academyManager': "Manager de l'académie",
       'academyContactNumber': "Numéro de contact de l'académie",
@@ -6330,6 +6441,27 @@ class AppStrings {
       'men': 'Men', // TODO: translate
       'women': 'Women', // TODO: translate
       'kit': 'Kit', // TODO: translate
+      // NPS Survey
+      'rateYourExperience': 'NPS Survey', // TODO: translate
+      'yourInputMakesADifference':
+          'Your input makes a diffrence', // TODO: translate
+      'npsQ1':
+          'On a scale of 1-5, how likely are you to recommend SOCALOCA to a friend or colleague? *', // TODO: translate
+      'npsQ2':
+          'Overall, how satisfied or dissatisfied are you with SOCALOCA? *', // TODO: translate
+      'npsQ3':
+          'How would you rate the quality of our App and Consoles? *', // TODO: translate
+      'npsQ4':
+          'How responsive have we been to your questions about our services? *', // TODO: translate
+      'npsQ5':
+          'How likely are you to use our service again in the future? *', // TODO: translate
+      'npsQ6':
+          'Do you have any comments, questions, or concerns?', // TODO: translate
+      'pleaseAnswerAllMandatoryQuestions':
+          'Please fill all the mandatory questions marked with *', // TODO: translate
+      'npsThankYouTitle': 'Thank you!', // TODO: translate
+      'npsThankYouBody':
+          'Your response has successfully been recorded.', // TODO: translate
       'playersTitle': 'Players', // TODO: translate
       'galleryTitle': 'Gallery', // TODO: translate
       'liveTrials': 'Live Trials', // TODO: translate
@@ -6367,6 +6499,10 @@ class AppStrings {
       'viewAllCompetitions': 'view all competitions', // TODO: translate
       'featuredTeams': 'Featured Teams', // TODO: translate
       'viewAllTeams': 'view all teams', // TODO: translate
+      'featuredFAs': 'Featured FAs', // TODO: translate
+      'viewAllFAs': 'View All FAs', // TODO: translate
+      'officialMerchandise': 'Official Merchandise', // TODO: translate
+      'confedNotFound': 'Confederation not found', // TODO: translate
       'headquarters': 'Headquarters', // TODO: translate
       'founded': 'Founded', // TODO: translate
       'ceo': 'CEO', // TODO: translate
@@ -6387,6 +6523,9 @@ class AppStrings {
       'followersCount': '{count} Followers', // TODO: translate
       'failedToUpdateFollowStatus':
           'Failed to update follow status: {error}', // TODO: translate
+      'sorry': 'Sorry!!!', // TODO: translate
+      'likeFollowBlockedParental':
+          'Your liking/following rights are blocked in parental controls. Please consult your parent/guardian.', // TODO: translate
       'footballStatsYear': 'Football Stats ({year})', // TODO: translate
       'futsalStatsYear': 'Futsal Stats ({year})', // TODO: translate
       'cannotHostMatch': 'Cannot Host Match', // TODO: translate

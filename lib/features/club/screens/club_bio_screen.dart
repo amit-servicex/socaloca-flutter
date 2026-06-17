@@ -3,29 +3,23 @@ import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:socaloca/features/club/data/models/club_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/api_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/club_bio_model.dart';
-import '../data/models/club_model.dart';
 import '../data/models/club_news_model.dart';
 import '../data/models/club_player_model.dart';
-import '../data/models/club_sponsor_model.dart';
-import '../data/models/club_team_model.dart';
 import '../providers/club_bio_provider.dart';
-import '../widgets/club_bio_info_row.dart';
-import '../widgets/club_bio_section_header.dart';
 import '../../../shared/models/match_model.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
+import 'nps_survey_screen.dart';
 
 class ClubBioScreen extends ConsumerStatefulWidget {
   final String clubId;
 
-  ClubBioScreen({
-    super.key,
-    required this.clubId,
-  });
+  const ClubBioScreen({super.key, required this.clubId});
 
   @override
   ConsumerState<ClubBioScreen> createState() => _ClubBioScreenState();
@@ -34,300 +28,437 @@ class ClubBioScreen extends ConsumerStatefulWidget {
 class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
   bool _isFollowing = false;
   bool _followInitialized = false;
+  // Guard: show the NPS dialog only once per screen load (same as Android)
+  bool _npsDialogShown = false;
 
   @override
   Widget build(BuildContext context) {
     final bioAsync = ref.watch(clubBioProvider(widget.clubId));
 
-    return bioAsync.when(
-      data: (bio) {
-        if (bio == null) {
-          return Scaffold(
-            backgroundColor: AppColors.socaPageBg,
-            appBar: AppBar(backgroundColor: Colors.white, elevation: 2),
-            body: _buildError(AppStrings.clubNotFound),
-          );
-        }
+    return Scaffold(
+      backgroundColor: AppColors.socaPageBg,
+      body: SafeArea(
+        child: bioAsync.when(
+          loading: () => AppLoader(),
+          error: (e, _) => _buildError(e.toString()),
+          data: (result) {
+            final (bio, npsSurvey) = result;
+            if (bio == null) return _buildError(AppStrings.clubNotFound);
 
-        if (!_followInitialized) {
-          _isFollowing = bio.clubDetails.following;
-          _followInitialized = true;
-        }
+            if (!_followInitialized) {
+              _isFollowing = bio.clubDetails.following;
+              _followInitialized = true;
+            }
 
-        return Scaffold(
-          backgroundColor: AppColors.socaPageBg,
-          appBar:
-              _buildAppBar(bio.clubDetails.clubName, bio.clubDetails.website),
-          body: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20),
-                    _buildBasicInfo(bio),
-                    if (bio.newsList.isNotEmpty) ...[
-                      SizedBox(height: 16),
-                      _buildNewsSection(bio.newsList),
-                    ],
-                    if (bio.matchList.isNotEmpty) ...[
-                      SizedBox(height: 16),
-                      _buildMatchesSection(bio.matchList),
-                    ],
-                    if (bio.playerList.isNotEmpty) ...[
-                      SizedBox(height: 16),
-                      _buildPlayersSection(bio.playerList),
-                    ],
-                    if (bio.teamList.isNotEmpty) ...[
-                      SizedBox(height: 16),
-                      _buildTeamsSection(bio.teamList),
-                    ],
-                    _buildKitSection(bio.clubDetails),
-                    if (bio.sponsorList.isNotEmpty) ...[
-                      SizedBox(height: 16),
-                      _buildSponsorsSection(bio.sponsorList),
-                    ],
-                    SizedBox(height: 40),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-      loading: () => Scaffold(
-        backgroundColor: AppColors.socaPageBg,
-        body: AppLoader(),
-      ),
-      error: (error, stack) => Scaffold(
-        backgroundColor: AppColors.socaPageBg,
-        body: _buildError(error.toString()),
-      ),
-    );
-  }
+            // Trigger NPS dialog when server flag is true — once per load
+            if (npsSurvey && !_npsDialogShown) {
+              _npsDialogShown = true;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) _showNpsSurveyDialog();
+              });
+            }
 
-  // ─── App Bar ─────────────────────────────────────────────────────────────
+            final club = bio.clubDetails;
+            final logoUrl = ApiConstants.getImageUrl(club.imageUrl);
 
-  AppBar _buildAppBar(String clubName, String? website) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 2,
-      title: Text(
-        clubName,
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
-          color: AppColors.socaBlack,
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.photo_library, size: 25, color: AppColors.socaBlack),
-          onPressed: () {},
-        ),
-        if (website != null && website.isNotEmpty)
-          IconButton(
-            icon: Icon(Icons.language, size: 25, color: AppColors.socaBlack),
-            onPressed: () => _launchUrl(website),
-          ),
-      ],
-    );
-  }
+            // Resolve badge asset from partnerType
+            String? badgeAsset;
+            final pt = club.partnerType;
+            if (pt == 'platinum') {
+              badgeAsset = 'assets/icons/ic_platinum_badge.png';
+            } else if (pt == 'gold') {
+              badgeAsset = 'assets/icons/ic_gold_badge.png';
+            } else if (pt == 'silver') {
+              badgeAsset = 'assets/icons/ic_silver_badge.png';
+            }
 
-  // ─── Basic Info (image + follow + info rows + trial) ─────────────────────
-
-  Widget _buildBasicInfo(ClubBioModel bio) {
-    final club = bio.clubDetails;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image + follow button row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildClubImage(club.fullImageUrl),
-              SizedBox(width: 16),
-              Column(
+            return SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 110,
-                    child: ElevatedButton(
-                      onPressed: _handleFollowTap,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.socaBlack,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
+                  // ── Top Bar ────────────────────────────────────────────
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        Text(
+                          club.clubName,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18,
+                            color: AppColors.socaBlack,
+                          ),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        _isFollowing
-                            ? AppStrings.following.toUpperCase()
-                            : AppStrings.follow.toUpperCase(),
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.socaYellow,
+                        if (badgeAsset != null) ...[
+                          SizedBox(width: 12),
+                          Container(
+                              width: 1.5,
+                              height: 24,
+                              color: AppColors.socaBlack),
+                          SizedBox(width: 12),
+                          Image.asset(badgeAsset, width: 28, height: 28),
+                        ],
+                        Spacer(),
+                        IconButton(
+                          icon: Image.asset('assets/icons/ic_gallery_new.png',
+                              width: 28, height: 28),
+                          onPressed: () {},
                         ),
-                      ),
+                        if (club.website != null && club.website!.isNotEmpty)
+                          IconButton(
+                            icon: Image.asset('assets/icons/ic_website.png',
+                                width: 28, height: 28),
+                            onPressed: () => _launchUrl(club.website!),
+                          ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 4),
-                  Text(
-                    AppStrings.followersCount(club.followCount),
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.socaBlack,
+                  SizedBox(height: 12),
+
+                  // ── Club Info ────────────────────────────────────────────
+                  Container(
+                    color: Colors.white,
+                    width: double.infinity,
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          club.clubName,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                            color: AppColors.socaBlack,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Logo + followers count
+                            Column(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  // color: Colors.black,
+                                  padding: EdgeInsets.all(4),
+                                  child: logoUrl.isNotEmpty
+                                      ? CachedNetworkImage(
+                                          imageUrl: logoUrl,
+                                          fit: BoxFit.contain)
+                                      : Icon(Icons.shield,
+                                          color: AppColors.socaYellow,
+                                          size: 48),
+                                ),
+                                SizedBox(height: 8),
+                                SizedBox(
+                                  width: 100,
+                                  child: ElevatedButton(
+                                    onPressed: _handleFollowTap,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.socaBlack,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 12),
+                                    ),
+                                    child: Text(
+                                      _isFollowing
+                                          ? AppStrings.following.toUpperCase()
+                                          : AppStrings.follow.toUpperCase(),
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14,
+                                        color: AppColors.socaYellow,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  AppStrings.followersCount(club.followCount),
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins', fontSize: 13),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 16),
+                            // Info rows
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      _buildInfoRow(AppStrings.fifaIdLabel,
+                                          club.orgFifaId ?? ''),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, bottom: 4),
+                                        child: Image.asset(
+                                          "assets/icons/id_verified.png",
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  _buildInfoRow(
+                                      AppStrings.nickname, club.nickName ?? ''),
+                                  _buildInfoRow(AppStrings.formedIn,
+                                      club.formedYear ?? ''),
+                                  _buildInfoRow(
+                                      AppStrings.country, club.country ?? ''),
+                                  _buildInfoRow(
+                                      AppStrings.city, club.city ?? ''),
+                                  _buildInfoRow(
+                                      AppStrings.stadium, club.stadiumsAsStr),
+                                  _buildInfoRow(
+                                      AppStrings.manager, club.manager ?? ''),
+                                  SizedBox(height: 4),
+                                  Text(AppStrings.league,
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins', fontSize: 13)),
+                                  if (club.league != null &&
+                                      club.league!.isNotEmpty)
+                                    Text(club.league!,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700)),
+                                  SizedBox(height: 4),
+                                  Text(AppStrings.otherCompetitions,
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins', fontSize: 13)),
+                                  if (club.confed != null &&
+                                      club.confed!.isNotEmpty)
+                                    Text(club.confed!,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700)),
+                                  if (club.comps.isNotEmpty) ...[
+                                    SizedBox(height: 4),
+                                    Text(AppStrings.competitions,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 13)),
+                                    Text(club.competitionsStr,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700)),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Follow button (replaces Upgrade button from admin)
+
+                        // Trial section
+                        if (bio.trialDetails?.trialBadge == true) ...[
+                          SizedBox(height: 12),
+                          _buildTrialSection(bio.trialDetails!),
+                        ],
+                      ],
                     ),
                   ),
+                  SizedBox(height: 12),
+
+                  // ── News ────────────────────────────────────────────────
+                  if (bio.newsList.isNotEmpty) ...[
+                    _buildNewsSection(bio.newsList),
+                    SizedBox(height: 12),
+                  ],
+
+                  // ── Matches ─────────────────────────────────────────────
+                  if (bio.matchList.isNotEmpty) ...[
+                    _buildMatchesSection(bio.matchList),
+                    SizedBox(height: 12),
+                  ],
+
+                  // ── Players ─────────────────────────────────────────────
+                  if (bio.playerList.isNotEmpty) ...[
+                    _buildPlayersSection(bio.playerList),
+                    SizedBox(height: 12),
+                  ],
+
+                  // ── Club Teams ───────────────────────────────────────────
+                  Container(
+                    color: AppColors.socaGrey,
+                    child: Column(
+                      children: [
+                        _SectionHeader(title: AppStrings.clubTeams),
+                        if (bio.teamList.isNotEmpty)
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 24),
+                            child: Wrap(
+                              spacing: 24,
+                              runSpacing: 12,
+                              children: bio.teamList.map((t) {
+                                if (t.ageGroup != null &&
+                                    t.ageGroup!.isNotEmpty) {
+                                  return RichText(
+                                    text: TextSpan(
+                                      text: '${t.ageGroup ?? ''} ',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 15,
+                                          color: Colors.black),
+                                      children: [
+                                        TextSpan(
+                                          text: t.gender == 'male'
+                                              ? AppStrings.men
+                                              : AppStrings.women,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                                return Text(
+                                  t.teamName ?? '',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 12),
+
+                  // ── Kits ─────────────────────────────────────────────────
+                  Container(
+                    color: AppColors.socaGrey,
+                    child: Column(
+                      children: [
+                        _SectionHeader(title: AppStrings.homeAwayThirdKit),
+                        Container(
+                          color: Colors.grey.shade200,
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: [
+                                _KitCard(url: club.homeKit),
+                                VerticalDivider(
+                                    width: 0,
+                                    thickness: 1,
+                                    color: AppColors.socaBlack),
+                                _KitCard(url: club.awayKit),
+                                VerticalDivider(
+                                    width: 1,
+                                    thickness: 1,
+                                    color: AppColors.socaBlack),
+                                _KitCard(url: club.thirdKit),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 12),
+
+                  // ── Sponsors ─────────────────────────────────────────────
+                  Container(
+                    color: AppColors.socaGrey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _SectionHeader(title: AppStrings.clubSponsors),
+                        if (bio.sponsorList.isNotEmpty)
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(16),
+                            child: Wrap(
+                              spacing: 16,
+                              runSpacing: 16,
+                              children: bio.sponsorList.map((s) {
+                                final url = ApiConstants.getImageUrl(s.logo);
+                                return Container(
+                                  width: 70,
+                                  height: 37,
+                                  color: Colors.transparent,
+                                  child: url.isNotEmpty
+                                      ? CachedNetworkImage(
+                                          imageUrl: url, fit: BoxFit.contain)
+                                      : Center(
+                                          child: Text(
+                                            s.name ?? '',
+                                            style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 24.0),
+                          child: Text(AppStrings.kit,
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        SizedBox(height: 24),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 24),
                 ],
               ),
-            ],
-          ),
-          SizedBox(height: 16),
-
-          // Info rows
-          if (club.orgFifaId != null && club.orgFifaId!.isNotEmpty)
-            _buildFifaRow(club.orgFifaId!),
-          if (club.nickName != null && club.nickName!.isNotEmpty)
-            ClubBioInfoRow(label: AppStrings.nickname, value: club.nickName!),
-          if (club.formedYear != null && club.formedYear!.isNotEmpty)
-            ClubBioInfoRow(label: AppStrings.formed, value: club.formedYear!),
-          if (club.country != null && club.country!.isNotEmpty)
-            ClubBioInfoRow(label: AppStrings.country, value: club.country!),
-          if (club.city != null && club.city!.isNotEmpty)
-            ClubBioInfoRow(label: AppStrings.city, value: club.city!),
-          if (club.stadiumsAsStr.isNotEmpty)
-            ClubBioInfoRow(
-                label: AppStrings.stadium, value: club.stadiumsAsStr),
-          if (club.manager != null && club.manager!.isNotEmpty)
-            ClubBioInfoRow(label: AppStrings.manager, value: club.manager!),
-          if (club.league != null && club.league!.isNotEmpty)
-            ClubBioInfoRow(label: AppStrings.league, value: club.league!),
-
-          // Partnership badge
-          if (club.partnerType != null &&
-              club.partnerType!.isNotEmpty &&
-              club.partnerType!.toLowerCase() != 'nopartner') ...[
-            SizedBox(height: 8),
-            _buildPartnerBadge(club.partnerType!),
-          ],
-
-          // Trial section
-          if (bio.trialDetails?.trialBadge == true) ...[
-            SizedBox(height: 12),
-            _buildTrialSection(bio.trialDetails!),
-          ],
-        ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildClubImage(String imageUrl) {
-    return Container(
-      width: 80,
-      height: 80,
-      padding: EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.socaGrey,
-      ),
-      child: ClipOval(
-        child: imageUrl.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.cover,
-                placeholder: (_, __) => Container(color: AppColors.socaGrey),
-                errorWidget: (_, __, ___) => _imageFallback(),
-              )
-            : _imageFallback(),
-      ),
-    );
-  }
+  // ── Info row (matches admin _buildInfoRow) ──────────────────────────────────
 
-  Widget _imageFallback() => Container(
-        color: AppColors.socaGrey,
-        child: Icon(Icons.sports_soccer, color: AppColors.socaBlack, size: 40),
+  Widget _buildInfoRow(String label, String value) {
+    if (value.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.only(bottom: 4),
+        child: Text('$label:',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
       );
-
-  Widget _buildFifaRow(String fifaId) {
+    }
     return Padding(
       padding: EdgeInsets.only(bottom: 4),
-      child: Row(
-        children: [
-          Text(
-            AppStrings.fifaIdLabel,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: AppColors.socaBlack,
-            ),
-          ),
-          Text(
-            fifaId,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: AppColors.socaBlack,
-            ),
-          ),
-          SizedBox(width: 6),
-          Icon(Icons.verified, size: 18, color: AppColors.success),
-        ],
+      child: RichText(
+        text: TextSpan(
+          text: '$label: ',
+          style: TextStyle(
+              fontFamily: 'Poppins', fontSize: 13, color: Colors.black),
+          children: [
+            TextSpan(
+                text: value, style: TextStyle(fontWeight: FontWeight.w700)),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildPartnerBadge(String partnerType) {
-    final label =
-        '${partnerType[0].toUpperCase()}${partnerType.substring(1)} ${AppStrings.partner}';
-    final iconColor = partnerType == 'platinum'
-        ? Colors.grey[400]!
-        : partnerType == 'gold'
-            ? Colors.amber
-            : Colors.grey[600]!;
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.workspace_premium, size: 28, color: iconColor),
-          SizedBox(width: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: AppColors.socaBlack,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // ── Trial section ────────────────────────────────────────────────────────────
 
   Widget _buildTrialSection(ClubTrialStatusModel trial) {
     return Container(
@@ -354,21 +485,19 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
             Text(
               AppStrings.registered.toUpperCase(),
               style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.success,
-              ),
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.success),
             )
           else if (trial.isRegistrationClosed)
             Text(
               AppStrings.registrationClosed,
               style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.error,
-              ),
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.error),
             )
           else if (trial.isRegisterBtn)
             ElevatedButton(
@@ -376,17 +505,15 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
+                    borderRadius: BorderRadius.circular(5)),
               ),
               child: Text(
                 AppStrings.register.toUpperCase(),
                 style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.socaYellow,
-                ),
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.socaYellow),
               ),
             ),
         ],
@@ -394,21 +521,24 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     );
   }
 
-  // ─── News & Announcements ────────────────────────────────────────────────
+  // ── News ──────────────────────────────────────────────────────────────────────
 
   Widget _buildNewsSection(List<ClubNewsModel> newsList) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClubBioSectionHeader(title: AppStrings.newsAnnouncements),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          itemCount: newsList.length,
-          itemBuilder: (context, index) => _buildNewsCard(newsList[index]),
-        ),
-      ],
+    return Container(
+      color: AppColors.socaGrey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionHeader(title: AppStrings.newsAnnouncements),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            itemCount: newsList.length,
+            itemBuilder: (_, i) => _buildNewsCard(newsList[i]),
+          ),
+        ],
+      ),
     );
   }
 
@@ -422,7 +552,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return GestureDetector(
       onTap: tapUrl != null ? () => _launchUrl(tapUrl) : null,
       child: Card(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: EdgeInsets.only(bottom: 8),
         color: Colors.white,
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -436,11 +566,11 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   borderRadius: BorderRadius.circular(6),
                   child: CachedNetworkImage(
                     imageUrl: imageUrl,
-                    width: 60,
-                    height: 60,
+                    width: 56,
+                    height: 56,
                     fit: BoxFit.cover,
                     errorWidget: (_, __, ___) => Container(
-                        width: 60, height: 60, color: AppColors.socaGrey),
+                        width: 56, height: 56, color: AppColors.socaGrey),
                   ),
                 ),
               if (imageUrl.isNotEmpty) SizedBox(width: 10),
@@ -449,31 +579,24 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (news.title != null && news.title!.isNotEmpty)
-                      Text(
-                        news.title!,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.socaBlack,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      Text(news.title!,
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.socaBlack),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis),
                     if (news.description != null &&
                         news.description!.isNotEmpty) ...[
                       SizedBox(height: 4),
-                      Text(
-                        news.description!,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.socaBlack,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      Text(news.description!,
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 11,
+                              color: AppColors.socaBlack),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis),
                     ],
                   ],
                 ),
@@ -485,21 +608,24 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     );
   }
 
-  // ─── Recent Matches ──────────────────────────────────────────────────────
+  // ── Matches ───────────────────────────────────────────────────────────────────
 
   Widget _buildMatchesSection(List<MatchModel> matches) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClubBioSectionHeader(title: AppStrings.recentMatches),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          itemCount: matches.length,
-          itemBuilder: (context, index) => _buildMatchCard(matches[index]),
-        ),
-      ],
+    return Container(
+      color: AppColors.socaGrey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionHeader(title: AppStrings.recentMatches),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            itemCount: matches.length,
+            itemBuilder: (_, i) => _buildMatchCard(matches[i]),
+          ),
+        ],
+      ),
     );
   }
 
@@ -510,7 +636,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     final awayLogo = ApiConstants.getImageUrl(match.awayTeamLogo);
 
     return Card(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 8),
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -518,72 +644,57 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
-            // Home team
             Expanded(
               child: Column(
                 children: [
                   _buildSmallTeamLogo(homeLogo),
                   SizedBox(height: 4),
-                  Text(
-                    match.homeTeamName,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.socaBlack,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(match.homeTeamName,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.socaBlack),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),
-            // Score
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Column(
                 children: [
-                  Text(
-                    '$homeScore - $awayScore',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.socaBlack,
-                    ),
-                  ),
-                  if (match.matchDate != null && match.matchDate!.isNotEmpty)
-                    Text(
-                      match.matchDate!,
+                  Text('$homeScore - $awayScore',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 10,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.socaBlack)),
+                  if (match.matchDate != null && match.matchDate!.isNotEmpty)
+                    Text(match.matchDate!,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.textSecondary)),
                 ],
               ),
             ),
-            // Away team
             Expanded(
               child: Column(
                 children: [
                   _buildSmallTeamLogo(awayLogo),
                   SizedBox(height: 4),
-                  Text(
-                    match.awayTeamName,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.socaBlack,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(match.awayTeamName,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.socaBlack),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),
@@ -597,10 +708,8 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     return Container(
       width: 44,
       height: 44,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.socaGrey,
-      ),
+      decoration:
+          BoxDecoration(shape: BoxShape.circle, color: AppColors.socaGrey),
       child: ClipOval(
         child: imageUrl.isNotEmpty
             ? CachedNetworkImage(
@@ -614,58 +723,30 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     );
   }
 
-  // ─── Featured Players ────────────────────────────────────────────────────
+  // ── Players ───────────────────────────────────────────────────────────────────
 
   Widget _buildPlayersSection(List<ClubPlayerModel> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppStrings.featuredPlayers,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.socaBlack,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  // TODO: navigate to full players list
-                },
-                child: Text(
-                  AppStrings.viewAllPlayers,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.socaBlack,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ],
+    return Container(
+      color: AppColors.socaGrey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionHeader(title: AppStrings.featuredPlayers),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.fromLTRB(16, 8, 16, 12),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1.1,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: players.length,
+            itemBuilder: (_, i) => _buildPlayerCard(players[i]),
           ),
-        ),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.1,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemCount: players.length,
-          itemBuilder: (context, index) => _buildPlayerCard(players[index]),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -684,9 +765,7 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.socaGrey,
-              ),
+                  shape: BoxShape.circle, color: AppColors.socaGrey),
               child: ClipOval(
                 child: imageUrl.isNotEmpty
                     ? CachedNetworkImage(
@@ -699,244 +778,39 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
               ),
             ),
             SizedBox(height: 6),
-            Text(
-              player.fullName,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: AppColors.socaBlack,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            if (player.position != null && player.position!.isNotEmpty)
-              Text(
-                player.position!,
+            Text(player.fullName,
                 style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.textSecondary,
-                ),
+                    fontFamily: 'Poppins',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.socaBlack),
                 textAlign: TextAlign.center,
                 maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+                overflow: TextOverflow.ellipsis),
+            if (player.position != null && player.position!.isNotEmpty)
+              Text(player.position!,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.textSecondary),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis),
             if (player.jersey != 0)
-              Text(
-                '#${player.jersey}',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.textSecondary,
-                ),
-              ),
+              Text('#${player.jersey}',
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.textSecondary)),
           ],
         ),
       ),
     );
   }
 
-  // ─── Club Teams ──────────────────────────────────────────────────────────
-
-  Widget _buildTeamsSection(List<ClubTeamModel> teams) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClubBioSectionHeader(title: AppStrings.clubTeams),
-        SizedBox(
-          height: 110,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            itemCount: teams.length,
-            itemBuilder: (context, index) => _buildTeamCard(teams[index]),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTeamCard(ClubTeamModel team) {
-    final imageUrl = team.fullImageUrl;
-    return Container(
-      width: 90,
-      margin: EdgeInsets.only(right: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.socaGrey,
-            ),
-            child: ClipOval(
-              child: imageUrl.isNotEmpty
-                  ? CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => Icon(Icons.group,
-                          size: 32, color: AppColors.socaBlack),
-                    )
-                  : Icon(Icons.group, size: 32, color: AppColors.socaBlack),
-            ),
-          ),
-          SizedBox(height: 6),
-          Text(
-            team.teamName ?? '',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: AppColors.socaBlack,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Kits ────────────────────────────────────────────────────────────────
-
-  Widget _buildKitSection(ClubModel clubDetails) {
-    final kits = <(String, String)>[];
-    if (clubDetails.homeKit != null && clubDetails.homeKit!.isNotEmpty) {
-      kits.add(
-          (AppStrings.home, ApiConstants.getImageUrl(clubDetails.homeKit)));
-    }
-    if (clubDetails.awayKit != null && clubDetails.awayKit!.isNotEmpty) {
-      kits.add(
-          (AppStrings.away, ApiConstants.getImageUrl(clubDetails.awayKit)));
-    }
-    if (clubDetails.thirdKit != null && clubDetails.thirdKit!.isNotEmpty) {
-      kits.add(
-          (AppStrings.third, ApiConstants.getImageUrl(clubDetails.thirdKit)));
-    }
-
-    if (kits.isEmpty) return SizedBox.shrink();
-
-    return Padding(
-      padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClubBioSectionHeader(title: AppStrings.kit),
-          SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: kits.map((kit) {
-              return Column(
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: AppColors.socaGrey,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: CachedNetworkImage(
-                        imageUrl: kit.$2,
-                        fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => Icon(Icons.sports_soccer,
-                            color: AppColors.socaBlack),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    kit.$1,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.socaBlack,
-                    ),
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Sponsors ────────────────────────────────────────────────────────────
-
-  Widget _buildSponsorsSection(List<ClubSponsorModel> sponsors) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClubBioSectionHeader(title: AppStrings.sponsors),
-        SizedBox(
-          height: 110,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            itemCount: sponsors.length,
-            itemBuilder: (context, index) => _buildSponsorCard(sponsors[index]),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSponsorCard(ClubSponsorModel sponsor) {
-    final imageUrl = sponsor.fullImageUrl;
-    return Container(
-      width: 90,
-      margin: EdgeInsets.only(right: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: AppColors.socaGrey,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: imageUrl.isNotEmpty
-                  ? CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => Icon(Icons.business,
-                          size: 32, color: AppColors.socaBlack),
-                    )
-                  : Icon(Icons.business, size: 32, color: AppColors.socaBlack),
-            ),
-          ),
-          SizedBox(height: 6),
-          Text(
-            sponsor.name ?? '',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: AppColors.socaBlack,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Error ───────────────────────────────────────────────────────────────
+  // ── Error ─────────────────────────────────────────────────────────────────────
 
   Widget _buildError(String message) {
     return Center(
@@ -945,20 +819,82 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
         children: [
           Icon(Icons.error_outline, size: 48, color: AppColors.error),
           SizedBox(height: 16),
-          Text(
-            message,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 16,
-              color: AppColors.socaBlack,
-            ),
-          ),
+          Text(message,
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  color: AppColors.socaBlack)),
         ],
       ),
     );
   }
 
-  // ─── Actions ─────────────────────────────────────────────────────────────
+  // ── NPS Survey dialog ─────────────────────────────────────────────────────────
+
+  void _showNpsSurveyDialog() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: Colors.white,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 28),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        child: SizedBox(
+          width: 305,
+          height: 190,
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 22),
+                    child: Text(
+                      '${AppStrings.rateYourExperience} ${AppStrings.yourInputMakesADifference}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+              Container(height: 1, color: Colors.grey.shade400),
+              SizedBox(
+                height: 86,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _NpsDialogButton(
+                      label: AppStrings.no.toUpperCase(),
+                      filled: false,
+                      onTap: () {
+                        Navigator.of(dialogContext).pop();
+                      },
+                    ),
+                    const SizedBox(width: 14),
+                    _NpsDialogButton(
+                      label: AppStrings.ok.toUpperCase(),
+                      filled: true,
+                      onTap: () {
+                        Navigator.of(dialogContext).pop();
+
+                        Future.microtask(() {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const NpsSurveyScreen(),
+                            ),
+                          );
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Actions ───────────────────────────────────────────────────────────────────
 
   void _handleFollowTap() async {
     setState(() => _isFollowing = !_isFollowing);
@@ -979,5 +915,100 @@ class _ClubBioScreenState extends ConsumerState<ClubBioScreen> {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
+  }
+}
+
+class _NpsDialogButton extends StatelessWidget {
+  const _NpsDialogButton({
+    required this.label,
+    required this.filled,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool filled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 116,
+      height: 40,
+      child: Material(
+        color: filled ? AppColors.socaBlack : Colors.white,
+        borderRadius: BorderRadius.circular(4),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(4),
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppColors.socaBlack, width: 1),
+            ),
+            child: Text(
+              label,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+                color: filled ? AppColors.socaYellow : AppColors.socaBlack,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Section Header (identical to admin _SectionHeader) ───────────────────────
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              color: AppColors.socaBlack,
+            ),
+          ),
+        ),
+        Divider(thickness: .8, color: AppColors.socaBlack, height: 0),
+      ],
+    );
+  }
+}
+
+// ── Kit Card (identical to admin _KitCard) ────────────────────────────────────
+
+class _KitCard extends StatelessWidget {
+  const _KitCard({this.url});
+  final String? url;
+
+  @override
+  Widget build(BuildContext context) {
+    final fullUrl = ApiConstants.getImageUrl(url);
+    return Expanded(
+      child: Container(
+        height: 140,
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        color: Colors.white,
+        child: fullUrl.isNotEmpty
+            ? CachedNetworkImage(imageUrl: fullUrl, fit: BoxFit.contain)
+            : Image.asset('assets/images/kit.png'),
+      ),
+    );
   }
 }

@@ -19,20 +19,21 @@ class FaAllTeamsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        title: Text(
-          faName,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: AppColors.socaBlack,
-          ),
-        ),
-        iconTheme: IconThemeData(color: AppColors.socaBlack),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 1,
+      //   title: Text(
+      //     faName,
+      //     style: TextStyle(
+      //       fontFamily: 'Poppins',
+      //       fontSize: 16,
+      //       fontWeight: FontWeight.w700,
+      //       color: AppColors.socaBlack,
+      //     ),
+      //   ),
+      //   iconTheme: IconThemeData(color: AppColors.socaBlack),
+      // ),
+
       body: teams.isEmpty
           ? Center(
               child: Text(
@@ -59,8 +60,11 @@ class FaAllTeamsScreen extends StatelessWidget {
 
   Widget _buildRow(FaTeamModel team) {
     final imageUrl = team.fullImageUrl;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(color: AppColors.socaBlack, width: .7))),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           Container(
@@ -90,30 +94,49 @@ class FaAllTeamsScreen extends StatelessWidget {
           ),
           SizedBox(width: 14),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  team.teamName,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.socaBlack,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (team.teamTypeLabel.isNotEmpty)
-                  Text(
-                    team.teamTypeLabel,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.textSecondary,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      team.teamName,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.socaBlack,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    if (team.teamTypeLabel.isNotEmpty)
+                      Text(
+                        team.teamTypeLabel,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.socaBlack,
+                        ),
+                      ),
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.socaBlack,
+                    borderRadius: BorderRadius.circular(8),
                   ),
+                  child: const Text(
+                    "FEATURED",
+                    style: const TextStyle(
+                        color: AppColors.socaYellow,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
               ],
             ),
           ),

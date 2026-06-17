@@ -3,8 +3,10 @@ import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/api_constants.dart';
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../data/models/player_post_model.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
@@ -70,9 +72,33 @@ class PlayerPostsSection extends StatelessWidget {
                     final post = posts[index];
                     final mediaUrl = _getFirstMediaUrl(post);
                     log("this is the media url: $mediaUrl  ${post.toJson()}");
+                    final source = post.sources?.isNotEmpty == true
+                        ? post.sources!.first
+                        : null;
+                    final videoUrl = source?.videoUrl ?? '';
+                    final imageUrl = source?.url ?? '';
+                    final isVideo = videoUrl.isNotEmpty;
+
                     return GestureDetector(
                       onTap: () {
-                        // TODO: Navigate to post detail
+                        if (isVideo) {
+                          context.push(
+                            AppRoutes.fullScreenVideo,
+                            extra: {
+                              'videoUrl': ApiConstants.getImageUrl(videoUrl),
+                              'thumbnail': imageUrl.isNotEmpty
+                                  ? ApiConstants.getImageUrl(imageUrl)
+                                  : null,
+                            },
+                          );
+                        } else if (imageUrl.isNotEmpty) {
+                          context.push(
+                            AppRoutes.fullScreenImage,
+                            extra: {
+                              'imageUrl': ApiConstants.getImageUrl(imageUrl),
+                            },
+                          );
+                        }
                       },
                       child: Container(
                         width: 120,
@@ -105,6 +131,22 @@ class PlayerPostsSection extends StatelessWidget {
                                     Icons.article,
                                     color: AppColors.socaGrey,
                                     size: 40,
+                                  ),
+                                ),
+
+                              // Play icon overlay for video posts
+                              if (isVideo)
+                                Center(
+                                  child: Icon(
+                                    Icons.play_circle_outline,
+                                    color: Colors.white.withValues(alpha: 0.9),
+                                    size: 36,
+                                    shadows: const [
+                                      Shadow(
+                                        color: Colors.black54,
+                                        blurRadius: 6,
+                                      ),
+                                    ],
                                   ),
                                 ),
 

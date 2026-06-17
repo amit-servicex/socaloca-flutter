@@ -58,11 +58,14 @@ class _PlayerStatsScreenState extends ConsumerState<PlayerStatsScreen> {
                   children: [
                     // ── Header ────────────────────────────────────────────────
                     Container(
-                      margin: EdgeInsets.only(left: 16, top: 16),
+                      margin: EdgeInsets.only(
+                        left: 16,
+                        top: 16,
+                      ),
                       // width: double.infinity,
                       color: AppColors.socaBlack,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      padding: EdgeInsets.only(
+                          left: 16, top: 16, right: 60, bottom: 16),
                       child: Text(
                         'Match Stats'.tr,
                         style: TextStyle(
@@ -131,13 +134,16 @@ class _YearDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final strItems = years.map((y) => y.toString()).toList();
     return SizedBox(
-      width: 160,
+      width: 250,
       child: SearchableDropdownButton(
         hint: 'select year *'.tr,
         value: selectedYear?.toString(),
         items: strItems,
         onChanged: (v) => onChanged(v != null ? int.tryParse(v) : null),
         fontSize: 13,
+        border: Border.all(color: AppColors.socaBlack),
+        radious: 0,
+        fillColor: Colors.transparent,
       ),
     );
   }

@@ -131,7 +131,7 @@ class ClubCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       child: Text(
-        'LIVE TRIAL'.tr,
+        AppStrings.liveTrial,
         style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 12,
@@ -158,7 +158,7 @@ class ClubCard extends StatelessWidget {
           elevation: 0,
         ),
         child: Text(
-          'VIEW'.tr,
+          AppStrings.viewUpper,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 12,

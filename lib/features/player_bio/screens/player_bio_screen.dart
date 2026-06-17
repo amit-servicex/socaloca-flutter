@@ -412,92 +412,61 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                           Divider(height: 1, color: AppColors.socaBlack),
 
                           // Tab Buttons (Stats, Endorse, Rate)
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // STATS
-                                GestureDetector(
-                                  onTap: () {
-                                    context.push(
-                                      AppRoutes.playerStats.replaceFirst(
-                                        ':userId',
-                                        widget.playerId,
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    width: 90,
-                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                          color: AppColors.socaBlack,
-                                          width: 1.5),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Text(
-                                      'STATS'.tr,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.socaBlack,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                // ENDORSE
-                                InkWell(
-                                  onTap: () {
-                                    final playerBio = state.playerBio;
-                                    final playerName = playerBio != null
-                                        ? '${playerBio.firstName ?? ''} ${playerBio.lastName ?? ''}'
-                                            .trim()
-                                        : 'Player';
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => EndorsePlayerScreen(
-                                          playerId: widget.playerId,
-                                          playerName: playerName,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    width: 90,
-                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.socaBlack,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Text(
-                                      'ENDORSE'.tr,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.socaYellow,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                // RATE
-                                if (!isOwnProfile && user?.isFan == false)
+                          if (widget.isCoachAdminProfile != true) ...[
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 15),
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // STATS
                                   GestureDetector(
                                     onTap: () {
+                                      context.push(
+                                        AppRoutes.playerStats.replaceFirst(
+                                          ':userId',
+                                          widget.playerId,
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 90,
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color: AppColors.socaBlack,
+                                            width: 1.5),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Text(
+                                        'STATS'.tr,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.socaBlack,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  // ENDORSE
+                                  InkWell(
+                                    onTap: () {
+                                      final playerBio = state.playerBio;
+                                      final playerName = playerBio != null
+                                          ? '${playerBio.firstName ?? ''} ${playerBio.lastName ?? ''}'
+                                              .trim()
+                                          : 'Player';
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => MySkillRatingsScreen(
-                                            userId: widget.playerId,
+                                          builder: (_) => EndorsePlayerScreen(
+                                            playerId: widget.playerId,
+                                            playerName: playerName,
                                           ),
                                         ),
                                       );
@@ -511,7 +480,7 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Text(
-                                        'RATE'.tr,
+                                        'ENDORSE'.tr,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: 'Poppins',
@@ -522,11 +491,47 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                       ),
                                     ),
                                   ),
-                              ],
+                                  SizedBox(width: 8),
+                                  // RATE
+                                  if (!isOwnProfile && user?.isFan == false)
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                MySkillRatingsScreen(
+                                              userId: widget.playerId,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        width: 90,
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.socaBlack,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Text(
+                                          'RATE'.tr,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.socaYellow,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
-                          ),
-
-                          Divider(height: 1, color: AppColors.socaBlack),
+                            Divider(height: 1, color: AppColors.socaBlack),
+                          ],
 
                           // Action Buttons Row
                           Container(
@@ -678,38 +683,38 @@ class _PlayerBioScreenState extends ConsumerState<PlayerBioScreen> {
                                 ),
 
                                 SizedBox(height: 20),
+                                if (widget.isCoachAdminProfile != true) ...[
+                                  // Competition Stats Summary
+                                  CompetitionStatsSummarySection(
+                                    footballStats: state.footballStats,
+                                    futsalStats: state.futsalStats,
+                                    playerBio: state.playerBio!,
+                                    isLoadingStats: state.isLoadingStats,
+                                  ),
 
-                                // Competition Stats Summary
-                                CompetitionStatsSummarySection(
-                                  footballStats: state.footballStats,
-                                  futsalStats: state.futsalStats,
-                                  playerBio: state.playerBio!,
-                                  isLoadingStats: state.isLoadingStats,
-                                ),
+                                  SizedBox(height: 20),
 
-                                SizedBox(height: 20),
+                                  // My Matches (Football & Futsal)
+                                  MyMatchesSection(
+                                    footballMatches: state.footballMatches,
+                                    futsalMatches: state.futsalMatches,
+                                    playerBio: state.playerBio!,
+                                    isOwnProfile: isOwnProfile,
+                                    isLoadingMatches: state.isLoadingMatches,
+                                  ),
 
-                                // My Matches (Football & Futsal)
-                                MyMatchesSection(
-                                  footballMatches: state.footballMatches,
-                                  futsalMatches: state.futsalMatches,
-                                  playerBio: state.playerBio!,
-                                  isOwnProfile: isOwnProfile,
-                                  isLoadingMatches: state.isLoadingMatches,
-                                ),
+                                  SizedBox(height: 20),
 
-                                SizedBox(height: 20),
+                                  // Training Stats
+                                  TrainingStatsSection(
+                                    trainCurrMonth: state.trainCurrMonth,
+                                    trainPrevMonth: state.trainPrevMonth,
+                                    isOwnProfile: isOwnProfile,
+                                    isLoadingMatches: state.isLoadingMatches,
+                                  ),
 
-                                // Training Stats
-                                TrainingStatsSection(
-                                  trainCurrMonth: state.trainCurrMonth,
-                                  trainPrevMonth: state.trainPrevMonth,
-                                  isOwnProfile: isOwnProfile,
-                                  isLoadingMatches: state.isLoadingMatches,
-                                ),
-
-                                SizedBox(height: 20),
-
+                                  SizedBox(height: 20),
+                                ],
                                 // Endorsements
                                 EndorsementsSection(
                                     endorsements: state.endorsements,

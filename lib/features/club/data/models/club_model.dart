@@ -33,6 +33,7 @@ class ClubModel with _$ClubModel {
     @Default(0) int likeCount,
     @Default(0) int plan,
     @Default([]) List<StadiumModel> stadiums,
+    @Default([]) List<String> comps,
   }) = _ClubModel;
 
   factory ClubModel.fromJson(Map<String, dynamic> json) =>
@@ -106,6 +107,7 @@ class ClubModel with _$ClubModel {
         'likeCount': safeParseInt(json['likeCount']),
         'plan': safeParseInt(json['plan']),
         'stadiums': stadiumsList.map((s) => s.toJson()).toList(),
+        'comps': (json['comps'] as List<dynamic>?)?.cast<String>() ?? <String>[],
       };
 
       return ClubModel.fromJson(mappedJson);
@@ -143,6 +145,9 @@ extension ClubModelX on ClubModel {
   /// Get stadiums as comma-separated string
   String get stadiumsAsStr =>
       stadiums.where((s) => s.name != null).map((s) => s.name!).join(', ');
+
+  /// Get competitions as comma-separated string
+  String get competitionsStr => comps.join(', ');
 
   /// Get full image URL
   String get fullImageUrl => ApiConstants.getImageUrl(imageUrl);

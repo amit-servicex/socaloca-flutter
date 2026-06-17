@@ -587,10 +587,10 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
               ),
             ],
           ),
-          if (teamBio.ratingDetails != null) ...[
-            SizedBox(height: 20),
-            _buildTeamStats(teamBio.ratingDetails!),
-          ],
+          // if (teamBio.ratingDetails != null) ...[
+          SizedBox(height: 20),
+          _buildTeamStats(teamBio.ratingDetails ?? RatingDetailsModel()),
+          // ],
         ],
       ),
     );
@@ -722,19 +722,18 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (ratingDetails.teamWork > 0)
-          _buildStatBar(AppStrings.teamWork, ratingDetails.teamWork.toDouble()),
-        if (ratingDetails.technical > 0)
-          _buildStatBar(
-              AppStrings.technical, ratingDetails.technical.toDouble()),
-        if (ratingDetails.aggressiveness > 0)
-          _buildStatBar(AppStrings.aggressiveness,
-              ratingDetails.aggressiveness.toDouble()),
-        if (ratingDetails.tactical > 0)
-          _buildStatBar(AppStrings.tactical, ratingDetails.tactical.toDouble()),
-        if (ratingDetails.overall > 0)
-          _buildStatBar(
-              AppStrings.overallRating, ratingDetails.overall.toDouble()),
+        // if (ratingDetails.teamWork > 0)
+        _buildStatBar(AppStrings.teamWork, ratingDetails.teamWork.toDouble()),
+        // if (ratingDetails.technical > 0)
+        _buildStatBar(AppStrings.technical, ratingDetails.technical.toDouble()),
+        // if (ratingDetails.aggressiveness > 0)
+        _buildStatBar(
+            AppStrings.aggressiveness, ratingDetails.aggressiveness.toDouble()),
+        // if (ratingDetails.tactical > 0)
+        _buildStatBar(AppStrings.tactical, ratingDetails.tactical.toDouble()),
+        // if (ratingDetails.overall > 0)
+        _buildStatBar(
+            AppStrings.overallRating, ratingDetails.overall.toDouble()),
       ],
     );
   }
@@ -745,7 +744,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
       child: Row(
         children: [
           SizedBox(
-            width: 120,
+            width: 130,
             child: Text(
               label,
               style: TextStyle(
@@ -762,8 +761,8 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
               child: LinearProgressIndicator(
                 value: value / 5.0,
                 backgroundColor: Colors.grey[300],
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-                minHeight: 3,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.socaGrey),
+                minHeight: 6,
               ),
             ),
           ),
