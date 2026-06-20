@@ -13,7 +13,7 @@ import '../data/models/club_model.dart';
 class ClubCard extends StatelessWidget {
   final ClubModel club;
 
-  ClubCard({
+  const ClubCard({
     super.key,
     required this.club,
   });
@@ -21,30 +21,30 @@ class ClubCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.fromLTRB(5, 10, 5, 5),
+      margin: const EdgeInsets.fromLTRB(5, 10, 5, 5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       color: Colors.white,
       elevation: 4,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+        padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildClubImage(),
-            SizedBox(width: 17),
+            const SizedBox(width: 17),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (club.trialBadge) ...[
                     _buildTrialBadge(),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                   ],
                   Text(
                     club.clubName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -55,7 +55,7 @@ class ClubCard extends StatelessWidget {
                   ),
                   Text(
                     club.partnerLabel,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
@@ -67,14 +67,14 @@ class ClubCard extends StatelessWidget {
                   if (club.country != null && club.country!.isNotEmpty)
                     Text(
                       club.country!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: AppColors.socaBlack,
                       ),
                     ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   _buildViewButton(context),
                 ],
               ),
@@ -89,8 +89,8 @@ class ClubCard extends StatelessWidget {
     return Container(
       width: 80,
       height: 80,
-      padding: EdgeInsets.all(3),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(3),
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -103,7 +103,7 @@ class ClubCard extends StatelessWidget {
                     Container(color: AppColors.socaGrey),
                 errorWidget: (context, url, error) => Container(
                   color: AppColors.socaGrey,
-                  child: Icon(
+                  child: const Icon(
                     Icons.sports_soccer,
                     color: AppColors.socaBlack,
                     size: 40,
@@ -112,7 +112,7 @@ class ClubCard extends StatelessWidget {
               )
             : Container(
                 color: AppColors.socaGrey,
-                child: Icon(
+                child: const Icon(
                   Icons.sports_soccer,
                   color: AppColors.socaBlack,
                   size: 40,
@@ -124,7 +124,7 @@ class ClubCard extends StatelessWidget {
 
   Widget _buildTrialBadge() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: AppColors.socaBlack, width: 1),
@@ -132,7 +132,7 @@ class ClubCard extends StatelessWidget {
       ),
       child: Text(
         AppStrings.liveTrial,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 12,
           fontWeight: FontWeight.w700,
@@ -154,12 +154,12 @@ class ClubCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           elevation: 0,
         ),
         child: Text(
           AppStrings.viewUpper,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 12,
             fontWeight: FontWeight.w700,

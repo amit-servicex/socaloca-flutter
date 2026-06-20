@@ -6,7 +6,7 @@ import 'package:socaloca/features/teams/data/models/team_bio_model.dart';
 
 class TeamHeader extends StatelessWidget {
   final TeamDetailsModel teamDetails;
-  const TeamHeader({required this.teamDetails});
+  const TeamHeader({super.key, required this.teamDetails});
 
   @override
   Widget build(BuildContext context) {

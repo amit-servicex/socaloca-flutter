@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,14 +30,14 @@ class MostEndorsedSection extends ConsumerWidget {
         FeedSectionHeader(
           title: AppStrings.mostEndorsedPlayers,
         ),
-        Divider(
+        const Divider(
           color: AppColors.socaBlack,
           thickness: .7,
           height: 0,
           // indent: 12,
           // endIndent: 12,
         ),
-        SizedBox(
+        const SizedBox(
           height: 8,
         ),
         SizedBox(

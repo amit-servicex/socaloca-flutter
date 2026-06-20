@@ -16,7 +16,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// - Upcoming Matches (next 3)
 /// - Recent Matches (last 3 with scores)
 class OneOffMatchesScreen extends ConsumerWidget {
-  OneOffMatchesScreen({super.key});
+  const OneOffMatchesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +38,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
                   ref.invalidate(recentMatchesPreviewProvider);
                 },
                 child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
+                  physics: const AlwaysScrollableScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -46,16 +46,17 @@ class OneOffMatchesScreen extends ConsumerWidget {
                       todaysMatch.when(
                         data: (match) {
                           if (match == null) {
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           }
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 16, 16, 0),
                                 child: Text(
                                   AppStrings.todaysMatch.toUpperCase(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 16,
@@ -72,24 +73,24 @@ class OneOffMatchesScreen extends ConsumerWidget {
                             ],
                           );
                         },
-                        loading: () => SizedBox(
+                        loading: () => const SizedBox(
                           height: 200,
                           child: AppLoader(),
                         ),
-                        error: (_, __) => SizedBox.shrink(),
+                        error: (_, __) => const SizedBox.shrink(),
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Upcoming Matches Section
                       upcomingMatches.when(
                         data: (matches) {
                           if (matches.isEmpty) {
                             return Padding(
-                              padding: EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(16),
                               child: Text(
                                 AppStrings.noUpcomingMatches,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14,
@@ -102,14 +103,15 @@ class OneOffMatchesScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 8),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       AppStrings.upcomingMatches.toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16,
@@ -122,7 +124,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
                                       },
                                       child: Text(
                                         AppStrings.viewAll,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14,
@@ -142,15 +144,15 @@ class OneOffMatchesScreen extends ConsumerWidget {
                             ],
                           );
                         },
-                        loading: () => SizedBox(
+                        loading: () => const SizedBox(
                           height: 150,
                           child: AppLoader(),
                         ),
                         error: (_, __) => Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Text(
                             AppStrings.errorLoadingUpcomingMatches,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
@@ -160,17 +162,17 @@ class OneOffMatchesScreen extends ConsumerWidget {
                         ),
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Recent Matches Section
                       recentMatches.when(
                         data: (matches) {
                           if (matches.isEmpty) {
                             return Padding(
-                              padding: EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(16),
                               child: Text(
                                 AppStrings.noRecentMatches,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14,
@@ -183,14 +185,15 @@ class OneOffMatchesScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 8),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       AppStrings.recentMatches.toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16,
@@ -203,7 +206,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
                                       },
                                       child: Text(
                                         AppStrings.viewAll,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14,
@@ -223,15 +226,15 @@ class OneOffMatchesScreen extends ConsumerWidget {
                             ],
                           );
                         },
-                        loading: () => SizedBox(
+                        loading: () => const SizedBox(
                           height: 150,
                           child: AppLoader(),
                         ),
                         error: (_, __) => Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Text(
                             AppStrings.errorLoadingRecentMatches,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
@@ -241,7 +244,7 @@ class OneOffMatchesScreen extends ConsumerWidget {
                         ),
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),

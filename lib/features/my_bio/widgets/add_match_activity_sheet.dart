@@ -14,7 +14,7 @@ class AddMatchActivitySheet extends ConsumerStatefulWidget {
   final String userId;
   final String gameType; // 'Football' or 'Futsal'
 
-  AddMatchActivitySheet({
+  const AddMatchActivitySheet({
     super.key,
     required this.userId,
     required this.gameType,
@@ -97,7 +97,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
       lastDate: DateTime.now(),
       builder: (ctx, child) => Theme(
         data: Theme.of(ctx).copyWith(
-          colorScheme: ColorScheme.light(
+          colorScheme: const ColorScheme.light(
             primary: AppColors.socaBlack,
             onPrimary: AppColors.socaYellow,
           ),
@@ -201,7 +201,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
           children: [
             // ── Handle ──────────────────────────────────────────────────
             Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
+              margin: const EdgeInsets.symmetric(vertical: 8),
               width: 40,
               height: 4,
               decoration: BoxDecoration(
@@ -211,13 +211,13 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
             ),
             // ── Title ────────────────────────────────────────────────────
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     AppStrings.addGameTypeMatch(widget.gameType),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -225,18 +225,18 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.close),
+                    icon: const Icon(Icons.close),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
             ),
-            Divider(height: 1),
+            const Divider(height: 1),
             // ── Form ─────────────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollCtrl,
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -250,7 +250,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                         onTap: _pickDate,
                         formatter: _formatDateDisplay,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Playing Position
                       _SectionLabel(AppStrings.playingPositionLabel),
@@ -260,11 +260,11 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                         items: _positions,
                         itemLabel: (v) => v,
                         onChanged: (v) => setState(() {
-                          final _position = v;
-                          final _positionType = null;
+                          final position = v;
+                          const positionType = null;
                         }),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Position Type
                       if (_position != null) ...[
@@ -276,7 +276,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                           itemLabel: (v) => v,
                           onChanged: (v) => setState(() => _positionType = v),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                       ],
 
                       // Goals / Goal Saved
@@ -292,7 +292,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                             ? AppStrings.goalsSaved
                             : AppStrings.goalScored,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Assists
                       _SectionLabel(AppStrings.numberOfAssistsLabel),
@@ -301,7 +301,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                         hint: AppStrings.egOne,
                         label: AppStrings.assists,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Minutes Played
                       _SectionLabel(AppStrings.minutesPlayedLabel),
@@ -310,7 +310,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                         hint: AppStrings.egNinety,
                         label: AppStrings.minutesPlayedLabel,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // My Team Name
                       _SectionLabel(AppStrings.myTeamNameLabel),
@@ -319,7 +319,7 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                         hint: AppStrings.enterYourTeamName,
                         label: AppStrings.teamName,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Opponent Team Name
                       _SectionLabel(AppStrings.opponentTeamNameLabel),
@@ -328,24 +328,24 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
                         hint: AppStrings.enterOpponentTeamName,
                         label: AppStrings.opponentTeamName,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Rate Performance 1–10
                       _SectionLabel(AppStrings.rateYourPerformanceLabel),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       _RatingRow(
                         value: _rating,
                         onChanged: (v) => setState(() => _rating = v),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Notes
                       _SectionLabel(AppStrings.howIPerformedLabel),
                       _NotesField(controller: _notesCtrl),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
                       // Submit button
-                      AppLoader(size: 24, centered: false),
+                      const AppLoader(size: 24, centered: false),
                     ],
                   ),
                 ),
@@ -362,14 +362,14 @@ class _AddMatchActivitySheetState extends ConsumerState<AddMatchActivitySheet> {
 
 class _SectionLabel extends StatelessWidget {
   final String text;
-  _SectionLabel(this.text);
+  const _SectionLabel(this.text);
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(bottom: 6),
+        padding: const EdgeInsets.only(bottom: 6),
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -385,7 +385,7 @@ class _DateField extends StatelessWidget {
   final VoidCallback onTap;
   final String Function(DateTime) formatter;
 
-  _DateField({
+  const _DateField({
     required this.date,
     required this.placeholder,
     required this.onTap,
@@ -396,7 +396,7 @@ class _DateField extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade300),
             borderRadius: BorderRadius.circular(8),
@@ -415,7 +415,7 @@ class _DateField extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(Icons.calendar_today_outlined,
+              const Icon(Icons.calendar_today_outlined,
                   size: 18, color: AppColors.socaGrey),
             ],
           ),
@@ -430,7 +430,7 @@ class _Dropdown<T> extends StatelessWidget {
   final String Function(T) itemLabel;
   final void Function(T?) onChanged;
 
-  _Dropdown({
+  const _Dropdown({
     required this.value,
     required this.hint,
     required this.items,
@@ -461,7 +461,7 @@ class _NumberField extends StatelessWidget {
   final String hint;
   final String label;
 
-  _NumberField({
+  const _NumberField({
     required this.controller,
     required this.hint,
     required this.label,
@@ -479,7 +479,8 @@ class _NumberField extends StatelessWidget {
             fontSize: 13,
             color: Colors.grey.shade400,
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -492,7 +493,7 @@ class _NumberField extends StatelessWidget {
         validator: (v) => (v == null || v.trim().isEmpty)
             ? AppStrings.enterField(label)
             : null,
-        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
       );
 }
 
@@ -501,7 +502,7 @@ class _TextField extends StatelessWidget {
   final String hint;
   final String label;
 
-  _TextField({
+  const _TextField({
     required this.controller,
     required this.hint,
     required this.label,
@@ -517,7 +518,8 @@ class _TextField extends StatelessWidget {
             fontSize: 13,
             color: Colors.grey.shade400,
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -530,14 +532,14 @@ class _TextField extends StatelessWidget {
         validator: (v) => (v == null || v.trim().isEmpty)
             ? AppStrings.enterField(label)
             : null,
-        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
       );
 }
 
 class _NotesField extends StatelessWidget {
   final TextEditingController controller;
 
-  _NotesField({required this.controller});
+  const _NotesField({required this.controller});
 
   @override
   Widget build(BuildContext context) => TextFormField(
@@ -550,7 +552,8 @@ class _NotesField extends StatelessWidget {
             fontSize: 13,
             color: Colors.grey.shade400,
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -560,7 +563,7 @@ class _NotesField extends StatelessWidget {
             borderSide: BorderSide(color: Colors.grey.shade300),
           ),
         ),
-        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
       );
 }
 
@@ -568,7 +571,7 @@ class _RatingRow extends StatelessWidget {
   final int value;
   final void Function(int) onChanged;
 
-  _RatingRow({required this.value, required this.onChanged});
+  const _RatingRow({required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) => Wrap(

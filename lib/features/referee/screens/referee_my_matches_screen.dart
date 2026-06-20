@@ -393,7 +393,7 @@ class _TeamLogo extends StatelessWidget {
       child: url.isEmpty || url == "${ApiConstants.imageBaseUrl}logo.png"
           ? Text(
               fallback,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.socaYellow,
                 fontFamily: 'Poppins',
                 fontSize: 9,

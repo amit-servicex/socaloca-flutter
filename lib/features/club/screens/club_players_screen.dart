@@ -14,7 +14,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Club Players List — Screen 2 of the Club shell.
 class ClubPlayersScreen extends ConsumerStatefulWidget {
-  ClubPlayersScreen({super.key});
+  const ClubPlayersScreen({super.key});
   @override
   ConsumerState<ClubPlayersScreen> createState() => _ClubPlayersScreenState();
 }
@@ -23,7 +23,7 @@ class _ClubPlayersScreenState extends ConsumerState<ClubPlayersScreen> {
   final _scroll = ScrollController();
   final _players = <ClubPlayerModel>[];
   bool _loading = false;
-  bool _hasMore = true;
+  final bool _hasMore = true;
   int _start = 0;
   static const _limit = 10;
 
@@ -54,16 +54,16 @@ class _ClubPlayersScreenState extends ConsumerState<ClubPlayersScreen> {
         .getClubPlayerList(clubId: clubId, start: _start, limit: _limit);
     setState(() {
       _players.addAll(result);
-      final _hasMore = result.length >= _limit;
-      final _loading = false;
+      final hasMore = result.length >= _limit;
+      const loading = false;
     });
   }
 
   Future<void> _refresh() async {
     setState(() {
       _players.clear();
-      final _start = 0;
-      final _hasMore = true;
+      const start = 0;
+      const hasMore = true;
     });
     await _load();
   }
@@ -71,22 +71,22 @@ class _ClubPlayersScreenState extends ConsumerState<ClubPlayersScreen> {
   @override
   Widget build(BuildContext context) {
     if (_players.isEmpty && _loading) {
-      return AppLoader();
+      return const AppLoader();
     }
     if (_players.isEmpty) {
       return Center(
           child: Text(AppStrings.noPlayers,
-              style: TextStyle(fontFamily: 'Poppins')));
+              style: const TextStyle(fontFamily: 'Poppins')));
     }
     return RefreshIndicator(
       onRefresh: _refresh,
       child: ListView.builder(
         controller: _scroll,
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         itemCount: _players.length + (_loading ? 1 : 0),
         itemBuilder: (_, i) {
           if (i >= _players.length) {
-            return AppLoader();
+            return const AppLoader();
           }
           final p = _players[i];
           return _PlayerRow(
@@ -100,7 +100,7 @@ class _ClubPlayersScreenState extends ConsumerState<ClubPlayersScreen> {
 }
 
 class _PlayerRow extends StatelessWidget {
-  _PlayerRow({required this.player, required this.onTap});
+  const _PlayerRow({required this.player, required this.onTap});
   final ClubPlayerModel player;
   final VoidCallback onTap;
 
@@ -110,8 +110,8 @@ class _PlayerRow extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(bottom: 10),
-        padding: EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -119,7 +119,7 @@ class _PlayerRow extends StatelessWidget {
             BoxShadow(
                 color: Colors.black.withOpacity(0.06),
                 blurRadius: 6,
-                offset: Offset(0, 2))
+                offset: const Offset(0, 2))
           ],
         ),
         child: Row(
@@ -134,16 +134,17 @@ class _PlayerRow extends StatelessWidget {
                           width: 52,
                           height: 52,
                           fit: BoxFit.cover))
-                  : Icon(Icons.person, color: AppColors.socaBlack, size: 28),
+                  : const Icon(Icons.person,
+                      color: AppColors.socaBlack, size: 28),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     '${player.firstName ?? ''} ${player.lastName ?? ''}'.trim(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                         fontSize: 14),
@@ -158,7 +159,7 @@ class _PlayerRow extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: Colors.grey),
+            const Icon(Icons.chevron_right, color: Colors.grey),
           ],
         ),
       ),

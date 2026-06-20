@@ -13,7 +13,7 @@ import '../../../shared/widgets/searchable_dropdown.dart';
 
 /// Academies screen - main tab for browsing academies
 class AcademiesScreen extends ConsumerStatefulWidget {
-  AcademiesScreen({super.key});
+  const AcademiesScreen({super.key});
 
   @override
   ConsumerState<AcademiesScreen> createState() => _AcademiesScreenState();
@@ -154,7 +154,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
     });
 
     // Auto-search after country change (with delay)
-    Future.delayed(Duration(milliseconds: 250), () {
+    Future.delayed(const Duration(milliseconds: 250), () {
       if (mounted) {
         final notifier = ref.read(academiesProvider.notifier);
         if (country == 'All') {
@@ -216,21 +216,21 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
           SliverToBoxAdapter(
             child: Container(
               color: Colors.white,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Description Text
                   Text(
                     AppStrings.academiesDescription,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
                       color: AppColors.socaBlack,
                     ),
                   ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Country Dropdown
                   SearchableDropdownButton(
@@ -243,7 +243,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                     backgroundColor: AppColors.socaGrey.withValues(alpha: 0.3),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Category Dropdown
                   SearchableDropdownButton(
@@ -256,7 +256,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                     backgroundColor: AppColors.socaGrey.withValues(alpha: 0.3),
                   ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // GO Button
                   GestureDetector(
@@ -270,7 +270,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                       child: Center(
                         child: Text(
                           AppStrings.goUpper,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -292,7 +292,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
 
           // Academies List
           if (state.isLoading)
-            SliverFillRemaining(
+            const SliverFillRemaining(
               child: Center(child: AppLoader()),
             )
           else if (state.error != null)
@@ -301,22 +301,22 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.error_outline,
                       size: 48,
                       color: AppColors.error,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
                       state.error!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: _onGoPressed,
                       style: ElevatedButton.styleFrom(
@@ -334,7 +334,7 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
               child: Center(
                 child: Text(
                   AppStrings.noAcademiesFound,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -345,13 +345,13 @@ class _AcademiesScreenState extends ConsumerState<AcademiesScreen> {
             )
           else
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               sliver: SliverList.builder(
                 itemCount:
                     state.academies.length + (state.isLoadingMore ? 1 : 0),
                 itemBuilder: (context, index) {
                   if (index == state.academies.length) {
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.all(16),
                       child: AppLoader(),
                     );

@@ -12,7 +12,7 @@ class AcademyCard extends StatelessWidget {
   final AcademyModel academy;
   final VoidCallback onViewTap;
 
-  AcademyCard({
+  const AcademyCard({
     super.key,
     required this.academy,
     required this.onViewTap,
@@ -27,13 +27,13 @@ class AcademyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 7.5),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 7.5),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -50,7 +50,7 @@ class AcademyCard extends StatelessWidget {
                     ? CachedNetworkImage(
                         imageUrl: ApiConstants.getImageUrl(academy.imageUrl),
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => AppLoader(),
+                        placeholder: (context, url) => const AppLoader(),
                         errorWidget: (context, url, error) => Image.asset(
                           'assets/images/logo.png',
                           fit: BoxFit.cover,
@@ -63,7 +63,7 @@ class AcademyCard extends StatelessWidget {
               ),
             ),
 
-            SizedBox(width: 17),
+            const SizedBox(width: 17),
 
             // Academy Details
             Expanded(
@@ -73,7 +73,7 @@ class AcademyCard extends StatelessWidget {
                   // Academy Name
                   Text(
                     academy.name ?? '',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -83,13 +83,13 @@ class AcademyCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
 
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
 
                   // Category
                   if (academy.category != null && academy.category!.isNotEmpty)
                     Text(
                       '${AppStrings.category.toUpperCase()} ${academy.category}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -99,13 +99,13 @@ class AcademyCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
 
                   // City
                   if (academy.city != null && academy.city!.isNotEmpty)
                     Text(
                       academy.city!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -115,21 +115,21 @@ class AcademyCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   // VIEW Button
                   GestureDetector(
                     onTap: onViewTap,
                     child: Container(
                       width: 80,
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         color: AppColors.socaBlack,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Text(
                         'VIEW'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w700,

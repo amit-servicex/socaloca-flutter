@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
@@ -17,7 +16,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Featured tournament screen — mirrors Android TournamentsFragment
 /// Shows banner slider + header + tabs (Matches, Points Table, Stats)
 class TournamentFeaturedScreen extends ConsumerStatefulWidget {
-  TournamentFeaturedScreen({
+  const TournamentFeaturedScreen({
     super.key,
     required this.tournamentId,
     this.isReferee = false,
@@ -122,7 +121,7 @@ class _TournamentFeaturedScreenState
       // ),
 
       body: _loading
-          ? AppLoader()
+          ? const AppLoader()
           : _tournament == null
               ? Center(child: Text(AppStrings.tournamentNotFound))
               : Column(
@@ -147,7 +146,7 @@ class _TournamentFeaturedScreenState
                     // "View Tournament Details" button
                     Container(
                       color: Colors.white,
-                      padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -156,14 +155,14 @@ class _TournamentFeaturedScreenState
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.socaBlack,
-                            padding: EdgeInsets.symmetric(vertical: 12),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
                           child: Text(
                             AppStrings.viewTournamentDetails,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
                               fontSize: 14,
@@ -183,12 +182,12 @@ class _TournamentFeaturedScreenState
                         unselectedLabelColor: AppColors.socaBlack,
                         indicatorColor: AppColors.socaBlack,
                         indicatorWeight: 3,
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                         ),
-                        unselectedLabelStyle: TextStyle(
+                        unselectedLabelStyle: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           fontWeight: FontWeight.w500,

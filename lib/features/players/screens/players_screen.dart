@@ -13,7 +13,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Players screen matching Android FanPlayersFragment
 class PlayersScreen extends ConsumerStatefulWidget {
-  PlayersScreen({super.key});
+  const PlayersScreen({super.key});
 
   @override
   ConsumerState<PlayersScreen> createState() => _PlayersScreenState();
@@ -94,12 +94,12 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController,
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
                     // Filter section
                     Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
                           // Country and Playing Position row
@@ -110,14 +110,15 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                                 width: 100,
                                 height: 50,
                                 alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
                                 decoration: BoxDecoration(
                                   color: AppColors.socaGrey,
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: Text(
                                   country,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
@@ -129,7 +130,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                                 ),
                               ),
 
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
 
                               // Playing Position dropdown
                               Expanded(
@@ -145,7 +146,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                             ],
                           ),
 
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
                           // Age Group and Gender row
                           Row(
@@ -162,7 +163,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                                 ),
                               ),
 
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
 
                               // Gender dropdown
                               Expanded(
@@ -178,7 +179,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                             ],
                           ),
 
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
 
                           // GO button
                           GestureDetector(
@@ -192,10 +193,10 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: state.isLoading
-                                  ? AppLoader(size: 24, centered: false)
+                                  ? const AppLoader(size: 24, centered: false)
                                   : Text(
                                       'GO'.tr,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
@@ -210,24 +211,24 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
 
                     // Players list
                     if (state.isLoading && state.players.isEmpty)
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(50),
                         child: AppLoader(),
                       )
                     else if (state.error != null && state.players.isEmpty)
                       Padding(
-                        padding: EdgeInsets.all(50),
+                        padding: const EdgeInsets.all(50),
                         child: Column(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.error_outline,
                               size: 48,
                               color: AppColors.error,
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Text(
                               state.error!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -235,7 +236,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: () =>
                                   ref.read(playersProvider.notifier).load(),
@@ -250,10 +251,10 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                       )
                     else if (state.players.isEmpty)
                       Padding(
-                        padding: EdgeInsets.all(50),
+                        padding: const EdgeInsets.all(50),
                         child: Text(
                           'No players found'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -264,12 +265,12 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                     else
                       ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: state.players.length +
                             (state.isLoadingMore ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index == state.players.length) {
-                            return Padding(
+                            return const Padding(
                               padding: EdgeInsets.all(16),
                               child: AppLoader(),
                             );

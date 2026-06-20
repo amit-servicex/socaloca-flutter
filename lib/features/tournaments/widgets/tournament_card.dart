@@ -92,7 +92,7 @@ class TournamentCard extends StatelessWidget {
                           tournament.location!.isNotEmpty)
                         Text(
                           tournament.location!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
@@ -108,7 +108,7 @@ class TournamentCard extends StatelessWidget {
                       if (startLabel.isNotEmpty)
                         Text(
                           startLabel,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
@@ -240,7 +240,7 @@ class _TagRow extends StatelessWidget {
           // Sport label — plain text, no pill
           Text(
             gameType,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               fontWeight: FontWeight.w400,
@@ -266,7 +266,7 @@ class _TournamentLogo extends StatelessWidget {
       height: 100,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Color(0xFF1A1A1A),
+        color: const Color(0xFF1A1A1A),
         border: Border.all(color: AppColors.socaBlack, width: 3),
       ),
       child: ClipOval(

@@ -17,7 +17,7 @@ import '../providers/auth_provider.dart';
 /// POST clubLogin with { uKey, passKey }.
 /// On success → saves ClubUser + sets isClubLogin → navigates to /club/bio.
 class ClubLoginScreen extends ConsumerStatefulWidget {
-  ClubLoginScreen({super.key});
+  const ClubLoginScreen({super.key});
 
   @override
   ConsumerState<ClubLoginScreen> createState() => _ClubLoginScreenState();
@@ -33,7 +33,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
   String? _errorMessage;
 
   // mirrors Android: detect whether input is a SocaLoca ID or email
-  String _inputLabel = AppStrings.emailOrSocaLocaId;
+  final String _inputLabel = AppStrings.emailOrSocaLocaId;
 
   @override
   void dispose() {
@@ -104,12 +104,12 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5), // match light grey background
+      backgroundColor: const Color(0xFFF5F5F5), // match light grey background
       body: Stack(
         children: [
           SafeArea(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -133,20 +133,22 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                       onChanged: _onUKeyChanged,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 16),
+                      style:
+                          const TextStyle(fontFamily: 'Poppins', fontSize: 16),
                       decoration: _inputDecoration(
                           AppStrings.emailOrSocaLocaIdRequired),
                       validator: (v) {
                         final val = v?.trim() ?? '';
-                        if (val.isEmpty)
+                        if (val.isEmpty) {
                           return AppStrings.pleaseEnterEmailOrSocaLocaId;
+                        }
                         if (!_isEmail(val) && !_isSocaLocaId(val)) {
                           return AppStrings.pleaseEnterValidEmailOrSocaLocaId;
                         }
                         return null;
                       },
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Password field
                     TextFormField(
@@ -155,7 +157,8 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                       obscureText: _obscurePass,
                       textInputAction: TextInputAction.go,
                       onFieldSubmitted: (_) => _submit(),
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 16),
+                      style:
+                          const TextStyle(fontFamily: 'Poppins', fontSize: 16),
                       decoration:
                           _inputDecoration(AppStrings.password).copyWith(
                         suffixIcon: IconButton(
@@ -183,14 +186,15 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                         ),
                       ),
                       validator: (v) {
-                        if (v == null || v.isEmpty)
+                        if (v == null || v.isEmpty) {
                           return AppStrings.pleaseEnterPassword;
+                        }
                         return null;
                       },
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
 
-                    Text(
+                    const Text(
                       '* mandatory fields',
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -201,10 +205,10 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
 
                     // Error message
                     if (_errorMessage != null) ...[
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
                         decoration: BoxDecoration(
                           color: AppColors.error.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(6),
@@ -213,13 +217,13 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.error_outline,
+                            const Icon(Icons.error_outline,
                                 size: 16, color: AppColors.error),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 _errorMessage!,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Lato',
                                     fontSize: 13,
                                     color: AppColors.error),
@@ -230,7 +234,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                       ),
                     ],
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Login button
                     SizedBox(
@@ -261,7 +265,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
 
                             Text(
                           AppStrings.login.toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w800,
                             fontSize: 15,
@@ -271,7 +275,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                       ),
                     ),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Register as Club link
                     Center(
@@ -279,7 +283,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
                         onPressed: () => context.push(AppRoutes.registerClub),
                         child: Text(
                           AppStrings.registerAsClub,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
@@ -296,7 +300,7 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
           if (_isLoading)
             Container(
               color: Colors.black54,
-              child: AppLoader(size: 500),
+              child: const AppLoader(size: 500),
             ),
         ],
       ),
@@ -307,27 +311,27 @@ class _ClubLoginScreenState extends ConsumerState<ClubLoginScreen> {
     return InputDecoration(
       fillColor: Colors.transparent,
       labelText: label,
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
         fontFamily: 'Poppins',
         fontSize: 20,
         fontWeight: FontWeight.w500,
         color: AppColors.socaBlack,
       ),
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
       border: UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.grey.shade400),
       ),
       enabledBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.grey.shade400),
       ),
-      focusedBorder: UnderlineInputBorder(
+      focusedBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.socaBlack, width: 1.5),
       ),
-      errorBorder: UnderlineInputBorder(
+      errorBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.error),
       ),
-      focusedErrorBorder: UnderlineInputBorder(
+      focusedErrorBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.error, width: 1.5),
       ),
     );

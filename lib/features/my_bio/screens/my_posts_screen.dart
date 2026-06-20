@@ -347,7 +347,7 @@ class _PostCardState extends State<_PostCard> {
                     color: AppColors.socaBlack, size: 22),
                 title: Text(
                   AppStrings.editPost,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 15,
                     color: AppColors.socaBlack,
@@ -366,7 +366,7 @@ class _PostCardState extends State<_PostCard> {
                     color: Colors.red, size: 22),
                 title: Text(
                   AppStrings.deletePost,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 15,
                     color: Colors.red,
@@ -433,7 +433,7 @@ class _PostCardState extends State<_PostCard> {
                     Text(
                       AppStrings.deletePostConfirm,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
@@ -459,7 +459,7 @@ class _PostCardState extends State<_PostCard> {
                             ),
                             child: Text(
                               AppStrings.cancel.toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
@@ -489,7 +489,7 @@ class _PostCardState extends State<_PostCard> {
                                   )
                                 : Text(
                                     AppStrings.delete.toUpperCase(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w700,
                                       fontSize: 13,

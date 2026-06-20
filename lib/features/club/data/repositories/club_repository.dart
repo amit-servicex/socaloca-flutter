@@ -64,7 +64,7 @@ class ClubRepository {
           return [];
         }
 
-        final clubsJson = clubsData as List;
+        final clubsJson = clubsData;
         print('✅ Found ${clubsJson.length} clubs in response');
         print('✅ Parsing clubs...');
 
@@ -73,7 +73,7 @@ class ClubRepository {
           try {
             final clubData = clubsJson[i];
             print(
-                '📦 Processing club $i: ${clubData is Map ? (clubData as Map)['clubName'] : 'invalid'}');
+                '📦 Processing club $i: ${clubData is Map ? (clubData)['clubName'] : 'invalid'}');
 
             if (clubData is Map<String, dynamic>) {
               final club = ClubModel.fromApiJson(clubData);
@@ -139,8 +139,8 @@ class ClubRepository {
       print('📦 Response data keys: ${responseData.keys.toList()}');
 
       // Extract server-driven NPS flag (same as Android: data.has("npsSurvey"))
-      final npsSurvey = responseData['npsSurvey'] == true ||
-          response['npsSurvey'] == true;
+      final npsSurvey =
+          responseData['npsSurvey'] == true || response['npsSurvey'] == true;
 
       if (responseData['status'] == 1 && responseData['details'] != null) {
         final detailsJson = responseData['details'] as Map<String, dynamic>;
@@ -183,8 +183,8 @@ class ClubRepository {
 
       // Android: "user" for ClubPlayer/Player/Coach/Admin, "club" otherwise
       final accountType = user['accountType'] as String? ?? '';
-      final isUserType = ['ClubPlayer', 'Player', 'Coach', 'Admin']
-          .contains(accountType);
+      final isUserType =
+          ['ClubPlayer', 'Player', 'Coach', 'Admin'].contains(accountType);
       final accType = isUserType ? 'user' : 'club';
 
       final response = await ApiClient.instance.post(

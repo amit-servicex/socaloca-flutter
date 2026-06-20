@@ -16,7 +16,7 @@ class CardEntryTab extends ConsumerStatefulWidget {
   final TournamentMatchModel match;
   final String tournamentId;
 
-  CardEntryTab({
+  const CardEntryTab({
     super.key,
     required this.matchId,
     required this.match,
@@ -39,7 +39,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
           child: _cards.isEmpty
               ? _buildEmptyView()
               : ListView.builder(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   itemCount: _cards.length,
                   itemBuilder: (context, index) {
                     return _buildCardCard(_cards[index], index);
@@ -47,14 +47,14 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                 ),
         ),
         Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
                 blurRadius: 10,
-                offset: Offset(0, -2),
+                offset: const Offset(0, -2),
               ),
             ],
           ),
@@ -62,12 +62,12 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: _isLoading ? null : _showAddCardDialog,
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               label: Text(AppStrings.addCard),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaYellow,
                 foregroundColor: AppColors.socaBlack,
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -86,7 +86,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.style, size: 64, color: Colors.grey[400]),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             AppStrings.noCardsRecorded,
             style: TextStyle(
@@ -96,7 +96,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
               color: Colors.grey[700],
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             AppStrings.tapAddCards,
             style: TextStyle(
@@ -115,13 +115,13 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
     final cardColor = isRed ? Colors.red : Colors.yellow[700]!;
 
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             Container(
@@ -133,20 +133,20 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
               ),
               child: Icon(Icons.style, color: cardColor, size: 24),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     card.playerName ?? 'Unknown Player',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
                       Text(
@@ -157,9 +157,9 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                           color: Colors.grey[600],
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 2,
                         ),
@@ -184,7 +184,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
             ),
             IconButton(
               onPressed: () => _deleteCard(index),
-              icon: Icon(Icons.delete_outline, color: Colors.red),
+              icon: const Icon(Icons.delete_outline, color: Colors.red),
             ),
           ],
         ),
@@ -204,8 +204,8 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
         builder: (context, setState) => AlertDialog(
           title: Text(
             AppStrings.addCard,
-            style:
-                TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+            style: const TextStyle(
+                fontFamily: 'Poppins', fontWeight: FontWeight.w700),
           ),
           content: SingleChildScrollView(
             child: Column(
@@ -214,7 +214,7 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
               children: [
                 Text(
                   AppStrings.cardType,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -225,8 +225,8 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     Expanded(
                       child: RadioListTile<String>(
                         title: Text(AppStrings.yellow,
-                            style:
-                                TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                            style: const TextStyle(
+                                fontFamily: 'Poppins', fontSize: 13)),
                         value: 'YELLOW',
                         groupValue: cardType,
                         onChanged: (value) => setState(() => cardType = value!),
@@ -237,8 +237,8 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     Expanded(
                       child: RadioListTile<String>(
                         title: Text(AppStrings.red,
-                            style:
-                                TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                            style: const TextStyle(
+                                fontFamily: 'Poppins', fontSize: 13)),
                         value: 'RED',
                         groupValue: cardType,
                         onChanged: (value) => setState(() => cardType = value!),
@@ -248,20 +248,20 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(AppStrings.teamFallback,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         fontWeight: FontWeight.w600)),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: RadioListTile<String>(
                         title: Text(widget.match.homeTeamName ?? 'Home',
-                            style:
-                                TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                            style: const TextStyle(
+                                fontFamily: 'Poppins', fontSize: 13)),
                         value: 'home',
                         groupValue: selectedTeam,
                         onChanged: (value) =>
@@ -273,8 +273,8 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     Expanded(
                       child: RadioListTile<String>(
                         title: Text(widget.match.awayTeamName ?? 'Away',
-                            style:
-                                TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                            style: const TextStyle(
+                                fontFamily: 'Poppins', fontSize: 13)),
                         value: 'away',
                         groupValue: selectedTeam,
                         onChanged: (value) =>
@@ -285,22 +285,22 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: playerNameController,
                   decoration: InputDecoration(
                     labelText: AppStrings.playerName,
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          BorderSide(color: AppColors.socaYellow, width: 2),
+                      borderSide: const BorderSide(
+                          color: AppColors.socaYellow, width: 2),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: minuteController,
                   keyboardType: TextInputType.number,
@@ -310,14 +310,14 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
                   ],
                   decoration: InputDecoration(
                     labelText: AppStrings.minute,
-                    labelStyle: TextStyle(fontFamily: 'Poppins'),
+                    labelStyle: const TextStyle(fontFamily: 'Poppins'),
                     hintText: AppStrings.example45,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8)),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          BorderSide(color: AppColors.socaYellow, width: 2),
+                      borderSide: const BorderSide(
+                          color: AppColors.socaYellow, width: 2),
                     ),
                   ),
                 ),
@@ -411,10 +411,10 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppStrings.deleteCard,
-            style:
-                TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
+            style: const TextStyle(
+                fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
         content: Text(AppStrings.deleteCardConfirmation,
-            style: TextStyle(fontFamily: 'Poppins')),
+            style: const TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
@@ -438,9 +438,9 @@ class _CardEntryTabState extends ConsumerState<CardEntryTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppStrings.error,
-            style:
-                TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
-        content: Text(message, style: TextStyle(fontFamily: 'Poppins')),
+            style: const TextStyle(
+                fontFamily: 'Poppins', fontWeight: FontWeight.w700)),
+        content: Text(message, style: const TextStyle(fontFamily: 'Poppins')),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),

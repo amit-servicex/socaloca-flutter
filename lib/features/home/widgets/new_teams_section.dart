@@ -16,7 +16,7 @@ import '../providers/home_feed_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class NewTeamsSection extends ConsumerStatefulWidget {
-  NewTeamsSection({super.key});
+  const NewTeamsSection({super.key});
 
   @override
   ConsumerState<NewTeamsSection> createState() => _NewTeamsSectionState();
@@ -36,7 +36,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
 
   void _startAutoSlide() {
     _autoSlideTimer?.cancel();
-    _autoSlideTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _autoSlideTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (!_pageController.hasClients) return;
 
       final state = ref.read(feedNewTeamsProvider);
@@ -50,13 +50,13 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
           // Loop back to the beginning if no more items
           _pageController.animateToPage(
             0,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut,
           );
         }
       } else {
         _pageController.nextPage(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       }
@@ -112,8 +112,8 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
     final state = ref.watch(feedNewTeamsProvider);
     // log("this is the data of the recently joined teams ${state.items}");
 
-    if (state.isLoading) return SizedBox.shrink();
-    if (state.items.isEmpty) return SizedBox.shrink();
+    if (state.isLoading) return const SizedBox.shrink();
+    if (state.items.isEmpty) return const SizedBox.shrink();
 
     final itemCount = state.items.length + (state.hasMore ? 1 : 0);
 
@@ -124,13 +124,13 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
         Container(
           width: double.infinity,
           color: AppColors.socaBlack,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 AppStrings.recentlyJoinedTeams,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -143,7 +143,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                 },
                 child: Text(
                   AppStrings.viewAll,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -176,7 +176,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
               }
 
               if (index == state.items.length) {
-                return AppLoader();
+                return const AppLoader();
               }
 
               final team = state.items[index];
@@ -198,7 +198,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                   children: [
                     // ── Announcement section ───────────────────────────
                     Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -211,18 +211,18 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                   radius: 25,
                                   backgroundColor: Colors.transparent,
                                   child: Padding(
-                                    padding: EdgeInsets.all(4.0),
+                                    padding: const EdgeInsets.all(4.0),
                                     child: Image.asset(
                                       'assets/images/logo.png',
                                       // color: Colors.white,
-                                      errorBuilder: (_, __, ___) => Icon(
+                                      errorBuilder: (_, __, ___) => const Icon(
                                         Icons.sports_soccer,
                                         color: Colors.white,
                                       ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 12),
+                                const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -232,14 +232,14 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                         children: [
                                           Text(
                                             AppStrings.appName,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 16,
                                               fontWeight: FontWeight.w700,
                                               color: AppColors.socaBlack,
                                             ),
                                           ),
-                                          SizedBox(width: 4),
+                                          const SizedBox(width: 4),
                                           Image.asset(
                                             "assets/icons/ic_verified_new_2.png",
                                             width: 24,
@@ -247,10 +247,10 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                           )
                                         ],
                                       ),
-                                      SizedBox(height: 2),
+                                      const SizedBox(height: 2),
                                       Text(
                                         joinedText ?? '',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400,
@@ -263,7 +263,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           InkWell(
                             onTap: () {
                               context.push(AppRoutes.teamBio
@@ -271,7 +271,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                             },
                             child: RichText(
                               text: TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 14,
                                   color: AppColors.socaBlack,
@@ -284,8 +284,8 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                   ),
                                   TextSpan(
                                     text: AppStrings.checkTeamBio,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w700),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w700),
                                   ),
                                 ],
                               ),
@@ -302,15 +302,16 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
 
                     // ── Profile row with chevron navigation ───────────
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 24),
                       child: Row(
                         children: [
                           GestureDetector(
                             onTap: isFirst
                                 ? null
                                 : () => _pageController.previousPage(
-                                      duration: Duration(milliseconds: 350),
+                                      duration:
+                                          const Duration(milliseconds: 350),
                                       curve: Curves.easeInOut,
                                     ),
                             child: Icon(
@@ -322,7 +323,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                   : AppColors.playedGray,
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           CircleAvatar(
                             radius: 50,
                             backgroundColor: AppColors.socaGrey.withAlpha(36),
@@ -335,11 +336,11 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                             child: team.teamLogo == null ||
                                     team.teamLogo!.isEmpty ||
                                     team.teamLogo!.startsWith('file:///')
-                                ? Icon(Icons.groups,
+                                ? const Icon(Icons.groups,
                                     size: 40, color: AppColors.socaGrey)
                                 : null,
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,7 +351,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                       child: Text(
                                         team.teamName ??
                                             AppStrings.teamFallback,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
@@ -363,28 +364,28 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                                     if (team.country != null &&
                                         team.country!.isNotEmpty)
                                       Padding(
-                                        padding: EdgeInsets.only(left: 8),
+                                        padding: const EdgeInsets.only(left: 8),
                                         child: Text(
                                           _countryFlag(team.country),
-                                          style: TextStyle(fontSize: 18),
+                                          style: const TextStyle(fontSize: 18),
                                         ),
                                       ),
                                   ],
                                 ),
-                                SizedBox(height: 6),
+                                const SizedBox(height: 6),
                                 Text(
                                   team.teamType ?? AppStrings.club,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                     color: AppColors.socaBlack,
                                   ),
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Text(
                                   teamLocation,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
@@ -394,12 +395,13 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                               ],
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           GestureDetector(
                             onTap: isLast
                                 ? null
                                 : () => _pageController.nextPage(
-                                      duration: Duration(milliseconds: 350),
+                                      duration:
+                                          const Duration(milliseconds: 350),
                                       curve: Curves.easeInOut,
                                     ),
                             child: Icon(
@@ -415,7 +417,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                     ),
 
                     // ── Divider ────────────────────────────────────────
-                    Divider(
+                    const Divider(
                       color: AppColors.socaBlack,
                       height: 1,
                       thickness: .8,
@@ -424,8 +426,8 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                     InkWell(
                       onTap: () => _onShareTeam(team),
                       child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -434,10 +436,10 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                               width: 28,
                               height: 28,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
                               AppStrings.shareUpper,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -448,7 +450,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
                         ),
                       ),
                     ),
-                    Divider(
+                    const Divider(
                       color: AppColors.socaBlack,
                       height: 1,
                       thickness: .8,
@@ -463,14 +465,14 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
         // ── Page indicator dots ──────────────────────────────────────────
         if (state.items.length > 1)
           Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 state.items.length.clamp(0, 8),
                 (i) => AnimatedContainer(
-                  duration: Duration(milliseconds: 250),
-                  margin: EdgeInsets.symmetric(horizontal: 3),
+                  duration: const Duration(milliseconds: 250),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
                   width: _currentPage == i ? 18 : 6,
                   height: 6,
                   decoration: BoxDecoration(
@@ -484,7 +486,7 @@ class _NewTeamsSectionState extends ConsumerState<NewTeamsSection> {
             ),
           ),
 
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }

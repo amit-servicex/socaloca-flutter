@@ -22,7 +22,7 @@ int _kClosed = 3;
 
 /// CommonOngoingTournamentsFragment / CommonUpcomingTournamentsFragment equivalent
 class TournamentListScreen extends ConsumerStatefulWidget {
-  TournamentListScreen({
+  const TournamentListScreen({
     super.key,
     required this.status,
   });
@@ -44,7 +44,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   int _start = 0;
   final int _limit = 10;
 
-  TournamentFilters _filters = TournamentFilters();
+  TournamentFilters _filters = const TournamentFilters();
   String? _tappingId;
 
   @override
@@ -288,7 +288,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                               size: 64,
                               color: AppColors.socaBlack.withOpacity(0.3),
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Text(
                               AppStrings.noTournamentsFound,
                               style: TextStyle(
@@ -320,12 +320,12 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
 
                       // Tournament cards
                       SliverPadding(
-                        padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               if (index >= _tournaments.length) {
-                                return AppLoader();
+                                return const AppLoader();
                               }
 
                               final t = _tournaments[index];

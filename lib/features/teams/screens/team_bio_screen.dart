@@ -215,7 +215,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
 
   Widget _buildBody(BuildContext context, TeamBioState state) {
     if (state.isLoading) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     if (state.error != null) {
@@ -236,7 +236,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
         await ref.read(teamBioProvider(teamId).notifier).refresh();
       },
       child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -246,13 +246,13 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
             // Team Info Section
             _buildTeamInfoSection(context, ref, teamBio, state),
 
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
 
             // Players Section
             if (teamBio.players.isNotEmpty)
               _buildPlayersSection(context, teamBio),
 
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
 
             // Recent Matches Section
             _buildRecentMatchesSection(teamBio),
@@ -307,20 +307,20 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(18, 18, 18, 20),
+      padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             teamDetails.teamName ?? AppStrings.unknownTeam,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 20,
               fontWeight: FontWeight.w700,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -333,7 +333,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                       shortName: teamDetails.teamShortName,
                     ),
                     if (canFollow) ...[
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       _buildTeamActionButton(
                         label: state.isFollowing
                             ? AppStrings.following.toUpperCase()
@@ -354,11 +354,11 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                               },
                       ),
                     ],
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       _followerCountText(state.followCount),
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         color: AppColors.socaBlack,
@@ -367,7 +367,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                   ],
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -378,7 +378,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                         if (teamDetails.ageCategory != null &&
                             teamDetails.ageCategory!.isNotEmpty) ...[
                           Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 9,
                               vertical: 3,
                             ),
@@ -388,7 +388,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                             ),
                             child: Text(
                               teamDetails.ageCategory!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
@@ -396,14 +396,14 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                         ],
                         Flexible(
                           child: Text(
                             teamDetails.gameType ?? '',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 13,
                               color: AppColors.socaBlack,
@@ -414,20 +414,20 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                     ),
                     if (teamDetails.country != null &&
                         teamDetails.country!.isNotEmpty) ...[
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       Text(
                         teamDetails.country!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack,
                         ),
                       ),
                     ],
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Text(
                       '${teamDetails.memberCount} Member${teamDetails.memberCount == 1 ? "" : "s"}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         color: AppColors.socaBlack,
@@ -435,10 +435,10 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                     ),
                     if (teamDetails.coachName != null &&
                         teamDetails.coachName!.isNotEmpty) ...[
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       RichText(
                         text: TextSpan(
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,
                             color: AppColors.socaBlack,
@@ -447,17 +447,18 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                             TextSpan(text: '${AppStrings.coach}  '),
                             TextSpan(
                               text: teamDetails.coachName!,
-                              style: TextStyle(fontWeight: FontWeight.w700),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w700),
                             ),
                           ],
                         ),
                       ),
                     ],
                     if (state.isArchive) ...[
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         AppStrings.thisTeamIsArchived,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -465,7 +466,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                         ),
                       ),
                     ] else if (canRequest || state.isPending) ...[
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       _buildTeamActionButton(
                         label: state.isPending
                             ? AppStrings.requestPendingUpper
@@ -588,8 +589,8 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
             ],
           ),
           // if (teamBio.ratingDetails != null) ...[
-          SizedBox(height: 20),
-          _buildTeamStats(teamBio.ratingDetails ?? RatingDetailsModel()),
+          const SizedBox(height: 20),
+          _buildTeamStats(teamBio.ratingDetails ?? const RatingDetailsModel()),
           // ],
         ],
       ),
@@ -612,7 +613,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
           disabledBackgroundColor: AppColors.socaBlack,
           foregroundColor: AppColors.socaYellow,
           disabledForegroundColor: AppColors.socaYellow,
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           minimumSize: Size(width, 28),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
@@ -621,7 +622,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
           elevation: 0,
         ),
         child: isLoading
-            ? SizedBox(
+            ? const SizedBox(
                 width: 14,
                 height: 14,
                 child: CircularProgressIndicator(
@@ -636,7 +637,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                 child: Text(
                   label,
                   maxLines: 1,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -657,7 +658,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
       SnackBar(
         content: Text(
           error.toString(),
-          style: TextStyle(fontFamily: 'Poppins'),
+          style: const TextStyle(fontFamily: 'Poppins'),
         ),
         backgroundColor: Colors.red,
       ),
@@ -684,7 +685,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
               fit: BoxFit.cover,
               placeholder: (_, __) => Container(
                 color: Colors.grey[200],
-                child: AppLoader(),
+                child: const AppLoader(),
               ),
               errorWidget: (_, __, ___) => _buildDefaultLogo(shortName),
             )
@@ -702,7 +703,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
           initials,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 16,
             fontWeight: FontWeight.w700,
@@ -714,7 +715,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
 
     return Container(
       color: Colors.grey[200],
-      child: Icon(Icons.emoji_events, size: 36, color: Colors.grey),
+      child: const Icon(Icons.emoji_events, size: 36, color: Colors.grey),
     );
   }
 
@@ -740,28 +741,29 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
 
   Widget _buildStatBar(String label, double value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 14),
       child: Row(
         children: [
           SizedBox(
             width: 130,
             child: Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: Colors.black87,
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(2),
               child: LinearProgressIndicator(
                 value: value / 5.0,
                 backgroundColor: Colors.grey[300],
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.socaGrey),
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(AppColors.socaGrey),
                 minHeight: 6,
               ),
             ),
@@ -774,7 +776,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
   Widget _buildPlayersSection(BuildContext context, TeamBioModel teamBio) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -785,7 +787,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
             children: [
               Text(
                 AppStrings.players,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -803,7 +805,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                     itemBuilder: (context, index) {
                       final player = teamBio.players[index];
                       return Padding(
-                        padding: EdgeInsets.only(right: 5),
+                        padding: const EdgeInsets.only(right: 5),
                         child: Column(
                           children: [
                             Container(
@@ -844,14 +846,15 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.socaBlack,
                       foregroundColor: AppColors.socaYellow,
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                     child: Text(
                       AppStrings.viewAll.toUpperCase(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
@@ -862,7 +865,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           // Show first 4 players in a horizontal row
         ],
       ),
@@ -872,25 +875,25 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
   Widget _buildRecentMatchesSection(TeamBioModel teamBio) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             AppStrings.recentMatches,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           if (teamBio.recentMatches.isEmpty)
             Center(
               child: Text(
                 AppStrings.noMatchesPlayedYet,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -901,9 +904,9 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
           else
             ListView.separated(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: teamBio.recentMatches.length,
-              separatorBuilder: (context, index) => SizedBox(height: 12),
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final match = teamBio.recentMatches[index];
                 return _buildMatchCard(context, match);
@@ -937,15 +940,15 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
         }
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(18, 18, 18, 16),
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
         decoration: BoxDecoration(
-          color: Color(0xFFF7F7F7),
+          color: const Color(0xFFF7F7F7),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.12),
               blurRadius: 10,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -958,14 +961,14 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: Colors.black87,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
             ],
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -982,7 +985,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                   child: Text(
                     scoreText,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 31,
                       fontWeight: FontWeight.w700,
@@ -1000,20 +1003,20 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Text(
               AppStrings.fullTime,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: Colors.black87,
               ),
             ),
             if (dateText.isNotEmpty) ...[
-              SizedBox(height: 14),
+              const SizedBox(height: 14),
               Text(
                 dateText,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   color: Colors.black87,
@@ -1039,13 +1042,13 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
           alignment: alignEnd ? Alignment.centerRight : Alignment.centerLeft,
           child: _buildTeamMatchLogo(imageUrl, 40),
         ),
-        SizedBox(height: 7),
+        const SizedBox(height: 7),
         Text(
           name,
           textAlign: alignEnd ? TextAlign.right : TextAlign.left,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             fontWeight: FontWeight.w700,
@@ -1142,7 +1145,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
           width: size,
           height: size,
           color: Colors.grey[200],
-          child: AppLoader(),
+          child: const AppLoader(),
         ),
         errorWidget: (context, url, error) => Container(
           width: size,
@@ -1202,7 +1205,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
         width: size,
         height: size,
         color: Colors.grey[200],
-        child: AppLoader(),
+        child: const AppLoader(),
       ),
       errorWidget: (context, url, error) => Container(
         width: size,
@@ -1231,7 +1234,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
             size: 80,
             color: Colors.red[300],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             AppStrings.failedToLoadTeamBio,
             style: TextStyle(
@@ -1241,9 +1244,9 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               error,
               style: TextStyle(
@@ -1254,7 +1257,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               ref.read(teamBioProvider(teamId).notifier).refresh();
@@ -1262,7 +1265,7 @@ class _TeamBioScreenState extends ConsumerState<TeamBioScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
             child: Text(AppStrings.retry),
           ),

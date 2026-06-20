@@ -10,7 +10,6 @@ import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_loader.dart';
 import '../models/live_match_models.dart';
 import '../providers/live_match_providers.dart';
-import 'dart:developer';
 // ─── Screen entry point ───────────────────────────────────────────────────────
 
 class LiveMatchDetailsScreen extends ConsumerWidget {
@@ -35,7 +34,7 @@ class LiveMatchDetailsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       body: detailState.isLoading && detailState.detail == null
-          ? AppLoader()
+          ? const AppLoader()
           : detailState.error != null && detailState.detail == null
               ? _ErrorView(
                   error: detailState.error!,
@@ -160,7 +159,7 @@ class _DetailBody extends StatelessWidget {
                             ),
                             child: Text(
                               AppStrings.manage.toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 12,
@@ -322,7 +321,7 @@ class _SectionChip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 12,
@@ -814,7 +813,7 @@ class _ScoreHeader extends StatelessWidget {
                     if (detail.hasPenalties)
                       Text(
                         '${AppStrings.penShort}: ${detail.myPenalty} - ${detail.opponentPenalty}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                           fontSize: 10,
@@ -1208,7 +1207,7 @@ class _MinuteBubble extends StatelessWidget {
       ),
       child: Text(
         "$minute'",
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w700,
           fontSize: 11,

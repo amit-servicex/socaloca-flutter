@@ -16,7 +16,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class LeaguePointsTableTab extends ConsumerWidget {
   final String tournamentId;
 
-  LeaguePointsTableTab({
+  const LeaguePointsTableTab({
     super.key,
     required this.tournamentId,
   });
@@ -37,7 +37,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
                   size: 64,
                   color: Colors.grey[400],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   AppStrings.noStandingsAvailable,
                   style: TextStyle(
@@ -60,7 +60,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
-                margin: EdgeInsets.all(12),
+                margin: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -68,20 +68,19 @@ class LeaguePointsTableTab extends ConsumerWidget {
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
                       blurRadius: 4,
-                      offset: Offset(0, 2),
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 child: DataTable(
-                  headingRowColor:
-                      MaterialStateProperty.all(AppColors.socaBlack),
-                  headingTextStyle: TextStyle(
+                  headingRowColor: WidgetStateProperty.all(AppColors.socaBlack),
+                  headingTextStyle: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: AppColors.socaYellow,
                   ),
-                  dataTextStyle: TextStyle(
+                  dataTextStyle: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     color: AppColors.socaBlack,
@@ -113,7 +112,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
                     final isEven = index % 2 == 0;
 
                     return DataRow(
-                      color: MaterialStateProperty.all(
+                      color: WidgetStateProperty.all(
                         isEven ? Colors.grey[50] : Colors.white,
                       ),
                       cells: [
@@ -122,13 +121,13 @@ class LeaguePointsTableTab extends ConsumerWidget {
                           Row(
                             children: [
                               _buildTeamLogo(team.teamLogo, 30),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               SizedBox(
                                 width: 120,
                                 child: Text(
                                   team.teamName ?? 'Unknown',
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -158,7 +157,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
                         DataCell(
                           Text(
                             '${team.points}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               color: AppColors.socaBlack,
                             ),
@@ -173,15 +172,15 @@ class LeaguePointsTableTab extends ConsumerWidget {
           ),
         );
       },
-      loading: () => AppLoader(),
+      loading: () => const AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 64, color: Colors.red),
-            SizedBox(height: 16),
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
             Text(AppStrings.errorLoadingStandingsWithError(error)),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(pointsTableProvider(tournamentId));
@@ -195,7 +194,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
   }
 
   Widget _buildTeamLogo(String? logoUrl, double size) {
-    log("this is the team logo url table point ${logoUrl}");
+    log("this is the team logo url table point $logoUrl");
     if (logoUrl == null || logoUrl.isEmpty) {
       return Container(
         width: size,
@@ -213,7 +212,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
     }
 
     final fullImageUrl = ApiConstants.getImageUrl(logoUrl);
-    log("this is the team logo url ${fullImageUrl}");
+    log("this is the team logo url $fullImageUrl");
     if (fullImageUrl.isEmpty) {
       return Container(
         width: size,
@@ -231,7 +230,7 @@ class LeaguePointsTableTab extends ConsumerWidget {
     }
 
     return Container(
-      padding: EdgeInsets.all(1),
+      padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(size),
           border: Border.all(color: AppColors.socaBlack)),

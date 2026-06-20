@@ -22,7 +22,7 @@ final _playerJoinedTeamsProvider =
 class PlayerJoinedTeamsScreen extends ConsumerWidget {
   final String playerId;
 
-  PlayerJoinedTeamsScreen({super.key, required this.playerId});
+  const PlayerJoinedTeamsScreen({super.key, required this.playerId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,17 +37,17 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
         elevation: 0,
       ),
       body: teamsAsync.when(
-        loading: () => AppLoader(),
+        loading: () => const AppLoader(),
         error: (e, _) => Center(
           child: Text('Error: $e',
-              style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+              style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
         ),
         data: (teams) {
           if (teams.isEmpty) {
             return Center(
               child: Text(
                 'No joined teams.'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack),
@@ -62,9 +62,9 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
             return bSort.compareTo(aSort);
           });
           return ListView.separated(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             itemCount: sorted.length,
-            separatorBuilder: (_, __) => SizedBox(height: 8),
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
             itemBuilder: (context, i) {
               final team = sorted[i];
               final teamId =
@@ -81,20 +81,20 @@ class PlayerJoinedTeamsScreen extends ConsumerWidget {
                         imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
                     backgroundColor: AppColors.socaGrey,
                     child: imageUrl.isEmpty
-                        ? Icon(Icons.group, color: AppColors.socaBlack)
+                        ? const Icon(Icons.group, color: AppColors.socaBlack)
                         : null,
                   ),
                   title: Text(
                     teamName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  trailing:
-                      Icon(Icons.chevron_right, color: AppColors.socaBlack),
+                  trailing: const Icon(Icons.chevron_right,
+                      color: AppColors.socaBlack),
                   onTap: teamId.isNotEmpty
                       ? () => context.push(
                           AppRoutes.teamBio.replaceFirst(':teamId', teamId))

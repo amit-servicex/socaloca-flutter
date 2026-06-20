@@ -25,7 +25,7 @@ class _BioState {
 
 /// Club Player Bio Screen — Screen 3 of the Club shell.
 class ClubPlayerBioScreen extends ConsumerStatefulWidget {
-  ClubPlayerBioScreen({super.key, required this.playerId});
+  const ClubPlayerBioScreen({super.key, required this.playerId});
   final String playerId;
   @override
   ConsumerState<ClubPlayerBioScreen> createState() =>
@@ -92,7 +92,7 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return AppLoader();
+      return const AppLoader();
     }
     final d = _data;
     if (d == null || d.player == null) {
@@ -102,7 +102,7 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
     final url = ApiConstants.getImageUrl(p.imageUrl);
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -120,25 +120,25 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
                               width: 112,
                               height: 112,
                               fit: BoxFit.cover))
-                      : Icon(Icons.person, size: 56),
+                      : const Icon(Icons.person, size: 56),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // Basic info section
           _SectionHeader(AppStrings.basicInfo),
           _InfoRow(AppStrings.position, p.position ?? '—'),
           _InfoRow(AppStrings.jersey, '#${p.jersey}'),
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // Football stats
           if (d.football != null && d.football!.matchCount > 0) ...[
             _SectionHeader(AppStrings.footballStatsYear(DateTime.now().year)),
             _StatsGrid(stats: d.football!),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
           ],
 
           // Futsal stats
@@ -161,13 +161,13 @@ class _ClubPlayerBioScreenState extends ConsumerState<ClubPlayerBioScreen> {
 }
 
 class _SectionHeader extends StatelessWidget {
-  _SectionHeader(this.title);
+  const _SectionHeader(this.title);
   final String title;
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.only(bottom: 8),
         child: Text(title,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -176,12 +176,12 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  _InfoRow(this.label, this.value);
+  const _InfoRow(this.label, this.value);
   final String label;
   final String value;
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(bottom: 6),
+        padding: const EdgeInsets.only(bottom: 6),
         child: Row(
           children: [
             SizedBox(
@@ -194,7 +194,7 @@ class _InfoRow extends StatelessWidget {
             ),
             Expanded(
               child: Text(value,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 13)),
@@ -205,13 +205,13 @@ class _InfoRow extends StatelessWidget {
 }
 
 class _StatsGrid extends StatelessWidget {
-  _StatsGrid({required this.stats});
+  const _StatsGrid({required this.stats});
   final ClubPlayerStatsModel stats;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -219,7 +219,7 @@ class _StatsGrid extends StatelessWidget {
             BoxShadow(
                 color: Colors.black.withOpacity(0.06),
                 blurRadius: 6,
-                offset: Offset(0, 2))
+                offset: const Offset(0, 2))
           ]),
       child: Column(
         children: [
@@ -231,18 +231,18 @@ class _StatsGrid extends StatelessWidget {
               _StatCell(AppStrings.mvp, '${stats.mvpCount}'),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Row(
             children: [
-              Icon(Icons.square, color: Colors.yellow, size: 16),
-              SizedBox(width: 4),
+              const Icon(Icons.square, color: Colors.yellow, size: 16),
+              const SizedBox(width: 4),
               Text('${stats.yellowCardCount}',
-                  style: TextStyle(fontFamily: 'Poppins')),
-              SizedBox(width: 16),
-              Icon(Icons.square, color: Colors.red, size: 16),
-              SizedBox(width: 4),
+                  style: const TextStyle(fontFamily: 'Poppins')),
+              const SizedBox(width: 16),
+              const Icon(Icons.square, color: Colors.red, size: 16),
+              const SizedBox(width: 4),
               Text('${stats.redCardCount}',
-                  style: TextStyle(fontFamily: 'Poppins')),
+                  style: const TextStyle(fontFamily: 'Poppins')),
             ],
           ),
         ],
@@ -252,7 +252,7 @@ class _StatsGrid extends StatelessWidget {
 }
 
 class _StatCell extends StatelessWidget {
-  _StatCell(this.label, this.value);
+  const _StatCell(this.label, this.value);
   final String label;
   final String value;
   @override
@@ -260,7 +260,7 @@ class _StatCell extends StatelessWidget {
         child: Column(
           children: [
             Text(value,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w800,
                     fontSize: 18)),

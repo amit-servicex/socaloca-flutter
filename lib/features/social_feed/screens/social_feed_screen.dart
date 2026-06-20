@@ -10,7 +10,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Social Feed Screen matching Android CommonHomeFeedFragment.
 class SocialFeedScreen extends ConsumerStatefulWidget {
-  SocialFeedScreen({super.key});
+  const SocialFeedScreen({super.key});
 
   @override
   ConsumerState<SocialFeedScreen> createState() => _SocialFeedScreenState();
@@ -38,13 +38,13 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
 
         return Column(
           children: [
-            FeedHeaderWidget(),
+            const FeedHeaderWidget(),
             if (posts.isEmpty)
               Padding(
-                padding: EdgeInsets.all(32),
+                padding: const EdgeInsets.all(32),
                 child: Text(
                   'No posts yet'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
                     color: AppColors.socaBlack,
@@ -54,8 +54,8 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
             else
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(vertical: 8),
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 itemCount: posts.length,
                 itemBuilder: (context, index) =>
                     FeedPostCard(post: posts[index]),
@@ -63,37 +63,37 @@ class _SocialFeedScreenState extends ConsumerState<SocialFeedScreen> {
           ],
         );
       },
-      loading: () => Padding(
+      loading: () => const Padding(
         padding: EdgeInsets.all(32),
         child: AppLoader(),
       ),
       error: (error, stack) => Padding(
-        padding: EdgeInsets.all(32),
+        padding: const EdgeInsets.all(32),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 48, color: AppColors.error),
-              SizedBox(height: 16),
+              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+              const SizedBox(height: 16),
               Text(
                 'Error loading feed'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 error.toString(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 12,
                   color: Colors.grey,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref.read(feedProvider.notifier).refresh(),
                 style: ElevatedButton.styleFrom(

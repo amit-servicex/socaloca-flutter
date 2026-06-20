@@ -13,7 +13,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Mirrors Android FanChangePasswordFragment.
 /// Payload: { userId, currentPassword, newPassword }
 class ChangePasswordScreen extends ConsumerStatefulWidget {
-  ChangePasswordScreen({super.key});
+  const ChangePasswordScreen({super.key});
 
   @override
   ConsumerState<ChangePasswordScreen> createState() =>
@@ -84,16 +84,15 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       final message = resp['message'] as String? ?? '';
 
       if (status == 1) {
-        AppSnackBar.showSuccess(context, AppStrings.passwordChangedSuccessfully);
+        AppSnackBar.showSuccess(
+            context, AppStrings.passwordChangedSuccessfully);
         _currentCtrl.clear();
         _newCtrl.clear();
         _confirmCtrl.clear();
       } else {
         AppSnackBar.showError(
           context,
-          message.isNotEmpty
-              ? message
-              : AppStrings.failedToChangePassword,
+          message.isNotEmpty ? message : AppStrings.failedToChangePassword,
         );
       }
     } catch (e) {
@@ -120,16 +119,16 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(26, 30, 26, 40),
+        padding: const EdgeInsets.fromLTRB(26, 30, 26, 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Center(child: _ProfileAvatar(imagePath: profileImage)),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             Text(
               'SocaLoca ID'.tr,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -141,7 +140,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
               Text(
                 socaId,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -149,21 +148,21 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   color: AppColors.socaBlack,
                 ),
               ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             _PasswordField(
               controller: _currentCtrl,
               hint: AppStrings.currentPasswordHint,
               showPassword: _showCurrent,
               onToggle: () => setState(() => _showCurrent = !_showCurrent),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _PasswordField(
               controller: _newCtrl,
               hint: AppStrings.newPasswordHint,
               showPassword: _showNew,
               onToggle: () => setState(() => _showNew = !_showNew),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _PasswordField(
               controller: _confirmCtrl,
               hint: AppStrings.confirmPasswordHint,
@@ -172,16 +171,16 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
               textInputAction: TextInputAction.done,
               onSubmitted: (_) => _submit(),
             ),
-            SizedBox(height: 38),
+            const SizedBox(height: 38),
             Text(
               '* mandatory fields'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,
               ),
             ),
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             GestureDetector(
               onTap: _isLoading ? null : _submit,
               child: Container(
@@ -192,10 +191,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: _isLoading
-                    ? AppLoader(size: 24, centered: false)
+                    ? const AppLoader(size: 24, centered: false)
                     : Text(
                         'CHANGE PASSWORD'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 20,
@@ -212,7 +211,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 }
 
 class _ProfileAvatar extends StatelessWidget {
-  _ProfileAvatar({this.imagePath});
+  const _ProfileAvatar({this.imagePath});
 
   final String? imagePath;
 
@@ -223,8 +222,8 @@ class _ProfileAvatar extends StatelessWidget {
     return Container(
       width: 80,
       height: 80,
-      padding: EdgeInsets.all(2),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(2),
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.black,
       ),
@@ -242,7 +241,7 @@ class _ProfileAvatar extends StatelessWidget {
 
   Widget _fallback() {
     return Container(
-      color: Color(0xFFE9E9E9),
+      color: const Color(0xFFE9E9E9),
       child: Icon(
         Icons.person,
         size: 42,
@@ -253,7 +252,7 @@ class _ProfileAvatar extends StatelessWidget {
 }
 
 class _PasswordField extends StatelessWidget {
-  _PasswordField({
+  const _PasswordField({
     required this.controller,
     required this.hint,
     required this.showPassword,
@@ -273,7 +272,7 @@ class _PasswordField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFF0F0F0),
+        color: const Color(0xFFF0F0F0),
         borderRadius: BorderRadius.circular(2),
       ),
       child: TextField(
@@ -281,20 +280,21 @@ class _PasswordField extends StatelessWidget {
         obscureText: !showPassword,
         textInputAction: textInputAction,
         onSubmitted: onSubmitted,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 17,
           color: AppColors.socaBlack,
         ),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 17,
             color: AppColors.socaBlack,
           ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           suffixIcon: IconButton(
             icon: showPassword
                 ? Image.asset(

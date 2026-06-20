@@ -11,7 +11,7 @@ import '../../../shared/widgets/searchable_dropdown.dart';
 class PlayerStatsScreen extends ConsumerStatefulWidget {
   final String playerId;
 
-  PlayerStatsScreen({
+  const PlayerStatsScreen({
     super.key,
     required this.playerId,
   });
@@ -41,12 +41,12 @@ class _PlayerStatsScreenState extends ConsumerState<PlayerStatsScreen> {
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       body: state.isLoading
-          ? AppLoader()
+          ? const AppLoader()
           : state.playerBio == null
               ? Center(
                   child: Text(
                     'Player not found'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaBlack,
@@ -58,17 +58,17 @@ class _PlayerStatsScreenState extends ConsumerState<PlayerStatsScreen> {
                   children: [
                     // ── Header ────────────────────────────────────────────────
                     Container(
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                         left: 16,
                         top: 16,
                       ),
                       // width: double.infinity,
                       color: AppColors.socaBlack,
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                           left: 16, top: 16, right: 60, bottom: 16),
                       child: Text(
                         'Match Stats'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                           fontSize: 20,
@@ -79,20 +79,20 @@ class _PlayerStatsScreenState extends ConsumerState<PlayerStatsScreen> {
 
                     // ── Year selector ─────────────────────────────────────────
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16, 20, 16, 0),
+                      padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Select year to view players Match Stats'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: AppColors.socaBlack,
                             ),
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           _YearDropdown(
                             selectedYear: _selectedYear,
                             years: _years,
@@ -106,7 +106,7 @@ class _PlayerStatsScreenState extends ConsumerState<PlayerStatsScreen> {
                     if (_selectedYear != null)
                       Expanded(
                         child: state.isLoadingStats
-                            ? AppLoader()
+                            ? const AppLoader()
                             : StatsTabContent(
                                 playerId: widget.playerId,
                                 playerBio: state.playerBio!,
@@ -120,7 +120,7 @@ class _PlayerStatsScreenState extends ConsumerState<PlayerStatsScreen> {
 }
 
 class _YearDropdown extends StatelessWidget {
-  _YearDropdown({
+  const _YearDropdown({
     required this.selectedYear,
     required this.years,
     required this.onChanged,

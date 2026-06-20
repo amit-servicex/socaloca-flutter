@@ -17,7 +17,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 import '../../../shared/widgets/app_toast.dart';
 
 class RefereeManageMatchScreen extends ConsumerStatefulWidget {
-  RefereeManageMatchScreen({
+  const RefereeManageMatchScreen({
     super.key,
     required this.matchId,
     required this.match,
@@ -743,7 +743,7 @@ class _RefereeManageMatchScreenState
     return Scaffold(
       backgroundColor: AppColors.socaPageBg,
       body: _isLoadingDetails
-          ? AppLoader()
+          ? const AppLoader()
           : _detailsError != null
               ? _buildErrorState()
               : _buildManageReport(teamA, teamB, isCompleted),
@@ -752,7 +752,7 @@ class _RefereeManageMatchScreenState
 
   Widget _buildManageReport(String teamA, String teamB, bool isCompleted) {
     return SingleChildScrollView(
-      padding: EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.only(bottom: 24),
       child: Column(
         children: [
           _MatchHeader(
@@ -767,7 +767,7 @@ class _RefereeManageMatchScreenState
             fieldName: _detailFieldName,
           ),
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -787,9 +787,9 @@ class _RefereeManageMatchScreenState
                           child: _scoreInput(
                               label: teamA, controller: _extraACtrl)),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text('–'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
@@ -801,7 +801,7 @@ class _RefereeManageMatchScreenState
                     ],
                   ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
 
                 // Penalty toggle
                 _expandableSection(
@@ -814,9 +814,9 @@ class _RefereeManageMatchScreenState
                           child: _scoreInput(
                               label: teamA, controller: _penaltyACtrl)),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text('–'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
@@ -828,7 +828,7 @@ class _RefereeManageMatchScreenState
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 if (_showPenalty) ...[
                   _buildPenaltyShootoutSection(teamA, teamB),
@@ -842,14 +842,14 @@ class _RefereeManageMatchScreenState
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.socaBlack,
                       foregroundColor: AppColors.socaYellow,
-                      padding: EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6)),
                     ),
                     child: _isSavingScore
-                        ? AppLoader(size: 24, centered: false)
+                        ? const AppLoader(size: 24, centered: false)
                         : Text('SAVE SCORE'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13)),
@@ -881,25 +881,25 @@ class _RefereeManageMatchScreenState
     );
   }
 
-  Widget _sectionGap() => SizedBox(height: 16);
+  Widget _sectionGap() => const SizedBox(height: 16);
 
   Widget _buildErrorState() {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(24),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               _detailsError ?? AppStrings.failedToLoadMatchDetails,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: Colors.red,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: _loadDetails,
               style: ElevatedButton.styleFrom(
@@ -919,7 +919,7 @@ class _RefereeManageMatchScreenState
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               // color: Colors.white,
               // borderRadius: BorderRadius.circular(8),
               // border: Border.all(color: const Color(0xFFE0E0E0)),
@@ -1023,7 +1023,7 @@ class _RefereeManageMatchScreenState
             ],
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
       ],
     );
   }
@@ -1098,7 +1098,7 @@ class _RefereeManageMatchScreenState
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               _buildTeamGoalSection(
@@ -2259,7 +2259,7 @@ class _RefereeManageMatchScreenState
                   ],
                 ),
               ),
-              Divider(
+              const Divider(
                 color: AppColors.socaBlack,
                 height: 1,
                 thickness: .6,
@@ -2303,8 +2303,8 @@ class _RefereeManageMatchScreenState
                                   groupValue: card.type,
                                   onChanged: (v) => setState(
                                       () => card.type = v ?? card.type),
-                                  child: Row(
-                                    children: const [
+                                  child: const Row(
+                                    children: [
                                       Expanded(
                                           child: Radio<String>(
                                         value: 'firstYellow',
@@ -2327,12 +2327,12 @@ class _RefereeManageMatchScreenState
                             ],
                           ),
                         ),
-                        Divider(
+                        const Divider(
                           color: AppColors.socaBlack,
                           height: .6,
                           thickness: .6,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         )
                       ],
@@ -2495,7 +2495,7 @@ class _RefereeManageMatchScreenState
             ],
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Container(
           // clipBehavior: Clip.hardEdge,
           child: Column(
@@ -2696,7 +2696,7 @@ class _RefereeManageMatchScreenState
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -2905,7 +2905,7 @@ class _RefereeManageMatchScreenState
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -3100,7 +3100,7 @@ class _RefereeManageMatchScreenState
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -3526,7 +3526,7 @@ class _RefereeManageMatchScreenState
     if (entries.isEmpty) {
       return Text(
         'No substitutes recorded'.tr,
-        style: TextStyle(
+        style: const TextStyle(
             fontFamily: 'Poppins', fontSize: 13, color: AppColors.socaBlack),
       );
     }
@@ -3549,8 +3549,8 @@ class _RefereeManageMatchScreenState
     required String teamId,
   }) {
     return Container(
-      margin: EdgeInsets.only(bottom: 14),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.socaGrey,
         borderRadius: BorderRadius.circular(6),
@@ -3560,14 +3560,14 @@ class _RefereeManageMatchScreenState
         children: [
           Text(
             '${_ordinal(entry.seq)} Substitute'.tr,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 13,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -3582,7 +3582,7 @@ class _RefereeManageMatchScreenState
                   }),
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: _memberDropdown(
                   hint: AppStrings.playerOut,
@@ -3597,12 +3597,12 @@ class _RefereeManageMatchScreenState
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextField(
             controller: entry.timeCtrl,
             keyboardType: TextInputType.number,
             decoration: _inputDecoration(hint: AppStrings.minute),
-            style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+            style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
           ),
         ],
       ),
@@ -3685,7 +3685,7 @@ class _RefereeManageMatchScreenState
           ),
         ),
         if (_showCommissionerReport) ...[
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           _sectionCard(
             title: AppStrings.matchCommissionerReport,
             child: _multilineField(
@@ -3694,7 +3694,7 @@ class _RefereeManageMatchScreenState
             ),
           ),
         ],
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         SizedBox(
           // width: double.infinity,
           child: ElevatedButton(
@@ -3702,14 +3702,14 @@ class _RefereeManageMatchScreenState
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
             ),
             child: _isSavingIncident
-                ? AppLoader(size: 24, centered: false)
+                ? const AppLoader(size: 24, centered: false)
                 : Text('SAVE'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 13)),
@@ -3730,7 +3730,7 @@ class _RefereeManageMatchScreenState
       maxLength: 1000,
       textCapitalization: TextCapitalization.sentences,
       decoration: _inputDecoration(hint: hint),
-      style: TextStyle(
+      style: const TextStyle(
         fontFamily: 'Poppins',
         fontSize: 14,
         color: AppColors.socaBlack,
@@ -4296,17 +4296,17 @@ class _RefereeManageMatchScreenState
       children: [
         Container(
           color: AppColors.socaBlack,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Center(
             child: Text(title.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
                     color: Colors.white)),
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         child,
       ],
     );
@@ -4373,9 +4373,9 @@ class _RefereeManageMatchScreenState
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Lato', fontSize: 11, color: AppColors.socaBlack)),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         SizedBox(
           width: 60,
           child: TextField(
@@ -4386,23 +4386,23 @@ class _RefereeManageMatchScreenState
               LengthLimitingTextInputFormatter(2),
             ],
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 22,
                 color: AppColors.socaBlack),
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: Color(0xFFE0E0E0))),
+                  borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: Color(0xFFE0E0E0))),
+                  borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
                   borderSide:
-                      BorderSide(color: AppColors.socaBlack, width: 1.5)),
+                      const BorderSide(color: AppColors.socaBlack, width: 1.5)),
             ),
           ),
         ),
@@ -4414,18 +4414,18 @@ class _RefereeManageMatchScreenState
     return InputDecoration(
       fillColor: AppColors.socaGrey,
       hintText: hint,
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
           fontFamily: 'Poppins', fontSize: 13, color: AppColors.socaBlack),
-      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(color: AppColors.socaBlack)),
+          borderSide: const BorderSide(color: AppColors.socaBlack)),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(color: AppColors.socaBlack)),
+          borderSide: const BorderSide(color: AppColors.socaBlack)),
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(color: AppColors.socaBlack, width: 1.5)),
+          borderSide: const BorderSide(color: AppColors.socaBlack, width: 1.5)),
     );
   }
 
@@ -4502,7 +4502,7 @@ class _RefereeManageMatchScreenState
                       color: AppColors.socaBlack),
                 ),
               );
-            }).toList(),
+            }),
           ],
           onChanged: isEmpty
               ? null
@@ -4522,7 +4522,7 @@ class _RefereeManageMatchScreenState
 // ─── Match header ─────────────────────────────────────────────────────────────
 
 class _MatchHeader extends StatelessWidget {
-  _MatchHeader({
+  const _MatchHeader({
     required this.match,
     this.teamA,
     this.teamB,

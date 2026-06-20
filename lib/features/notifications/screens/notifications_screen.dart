@@ -8,7 +8,7 @@ import '../widgets/notification_shimmer.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
-  NotificationsScreen({super.key});
+  const NotificationsScreen({super.key});
 
   @override
   ConsumerState<NotificationsScreen> createState() =>
@@ -56,7 +56,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
   Widget _buildBody(NotificationsState state) {
     if (state.isLoading) {
-      return NotificationShimmer();
+      return const NotificationShimmer();
     }
 
     if (state.error != null && state.notifications.isEmpty) {
@@ -74,10 +74,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       child: ListView.separated(
         controller: _scrollController,
         itemCount: state.notifications.length + (state.isLoadingMore ? 1 : 0),
-        separatorBuilder: (context, index) => Divider(height: 1),
+        separatorBuilder: (context, index) => const Divider(height: 1),
         itemBuilder: (context, index) {
           if (index == state.notifications.length) {
-            return Padding(
+            return const Padding(
               padding: EdgeInsets.all(16.0),
               child: AppLoader(),
             );
@@ -95,12 +95,12 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.notifications_none,
             size: 80,
             color: AppColors.socaBlack,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'No notifications yet'.tr,
             style: const TextStyle(
@@ -109,7 +109,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'When you get notifications, they\'ll show up here'.tr,
             style: const TextStyle(
@@ -133,7 +133,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             size: 80,
             color: Colors.red[300],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'Failed to load notifications'.tr,
             style: TextStyle(
@@ -142,9 +142,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               error,
               style: TextStyle(
@@ -154,7 +154,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               ref.read(notificationsProvider.notifier).refresh();
@@ -162,7 +162,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
             child: Text('Retry'.tr),
           ),

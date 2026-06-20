@@ -13,7 +13,7 @@ class ParentalSettingsScreen extends ConsumerStatefulWidget {
   final String pin;
   final bool isRegistration;
 
-  ParentalSettingsScreen({
+  const ParentalSettingsScreen({
     super.key,
     required this.consentId,
     required this.pin,
@@ -56,15 +56,15 @@ class _ParentalSettingsScreenState
       backgroundColor: AppColors.socaPageBg,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              Spacer(),
+              const Spacer(),
 
               // Title
               Text(
                 AppStrings.parentalControls,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 28,
@@ -73,12 +73,12 @@ class _ParentalSettingsScreenState
                 textAlign: TextAlign.center,
               ),
 
-              SizedBox(height: 28),
+              const SizedBox(height: 28),
 
               // Subtitle
               Text(
                 AppStrings.settings,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   fontSize: 18,
@@ -87,7 +87,7 @@ class _ParentalSettingsScreenState
                 textAlign: TextAlign.center,
               ),
 
-              SizedBox(height: 36),
+              const SizedBox(height: 36),
 
               // Liking and Following Switch
               _buildSwitchRow(
@@ -96,7 +96,7 @@ class _ParentalSettingsScreenState
                 (value) => setState(() => _likingFollowing = value),
               ),
 
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // Uploading Photos & Videos Switch
               _buildSwitchRow(
@@ -105,7 +105,7 @@ class _ParentalSettingsScreenState
                 (value) => setState(() => _uploading = value),
               ),
 
-              Spacer(),
+              const Spacer(),
 
               // Consent Checkbox
               Row(
@@ -121,7 +121,7 @@ class _ParentalSettingsScreenState
                   Expanded(
                     child: Text(
                       AppStrings.parentalControlConsent,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         fontSize: 13,
@@ -133,7 +133,7 @@ class _ParentalSettingsScreenState
                 ],
               ),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Save Button
               InkWell(
@@ -148,7 +148,7 @@ class _ParentalSettingsScreenState
                   child: Center(
                     child: Text(
                       AppStrings.saveAndContinueUpper,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
@@ -159,7 +159,7 @@ class _ParentalSettingsScreenState
                 ),
               ),
 
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Modify PIN Button (only show if not registration)
               if (!widget.isRegistration)
@@ -167,7 +167,7 @@ class _ParentalSettingsScreenState
                   onPressed: () {},
                   child: Text(
                     AppStrings.modifyPin,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaBlack,
@@ -175,7 +175,7 @@ class _ParentalSettingsScreenState
                   ),
                 ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -196,11 +196,11 @@ class _ParentalSettingsScreenState
           activeThumbColor: AppColors.socaYellow,
           activeTrackColor: AppColors.socaYellow.withValues(alpha: 0.5),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 18,

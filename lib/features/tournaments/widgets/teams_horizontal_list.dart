@@ -17,7 +17,7 @@ class TeamsHorizontalList extends StatelessWidget {
   final VoidCallback? onViewAllTap;
   final Function(String teamId)? onTeamTap;
 
-  TeamsHorizontalList({
+  const TeamsHorizontalList({
     super.key,
     required this.teams,
     this.onViewAllTap,
@@ -26,17 +26,17 @@ class TeamsHorizontalList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (teams.isEmpty) return SizedBox.shrink();
+    if (teams.isEmpty) return const SizedBox.shrink();
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -44,7 +44,7 @@ class TeamsHorizontalList extends StatelessWidget {
                   children: [
                     Text(
                       'Teams Playing (${teams.length})',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -58,7 +58,7 @@ class TeamsHorizontalList extends StatelessWidget {
                     onPressed: onViewAllTap,
                     child: Text(
                       AppStrings.viewAll,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -70,14 +70,14 @@ class TeamsHorizontalList extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
 
           // Horizontal List
           SizedBox(
             height: 150,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               itemCount: teams.length,
               itemBuilder: (context, index) {
                 final team = teams[index];
@@ -97,7 +97,7 @@ class TeamsHorizontalList extends StatelessWidget {
       onTap: onTeamTap != null ? () => onTeamTap!(team.id) : null,
       child: Container(
         width: 100,
-        margin: EdgeInsets.symmetric(horizontal: 4),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -111,11 +111,11 @@ class TeamsHorizontalList extends StatelessWidget {
               child: _buildTeamLogo(ApiConstants.getImageUrl(team.logo), 80),
             ),
 
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
 
             // Team Name
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
                 team.name ?? 'Unknown',
                 style: const TextStyle(
@@ -136,7 +136,7 @@ class TeamsHorizontalList extends StatelessWidget {
   }
 
   Widget _buildTeamLogo(String? logoUrl, double size) {
-    log("this is the image url ${logoUrl}");
+    log("this is the image url $logoUrl");
     if (logoUrl == null || logoUrl.isEmpty) {
       return Container(
         width: size,
@@ -180,7 +180,7 @@ class TeamsHorizontalList extends StatelessWidget {
         width: size,
         height: size,
         color: Colors.grey[200],
-        child: AppLoader(),
+        child: const AppLoader(),
       ),
       errorWidget: (context, url, error) => Container(
         width: size,

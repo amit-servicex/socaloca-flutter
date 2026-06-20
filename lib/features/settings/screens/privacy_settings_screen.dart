@@ -245,8 +245,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed:
-                                      isSubmitting ? null : handleSubmit,
+                                  onPressed: isSubmitting ? null : handleSubmit,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.socaBlack,
                                     foregroundColor: AppColors.socaYellow,
@@ -308,8 +307,8 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
             children: [
               // ── Header ────────────────────────────────────────────────
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 child: Row(
                   children: [
                     Expanded(
@@ -403,8 +402,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                               side: const BorderSide(
                                   color: AppColors.socaBlack, width: 1.5),
                               foregroundColor: AppColors.socaBlack,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 14),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25)),
                             ),
@@ -429,8 +427,7 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.socaBlack,
                               foregroundColor: AppColors.socaYellow,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 14),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25)),
                             ),
@@ -561,11 +558,10 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                                   side: const BorderSide(
                                       color: AppColors.socaBlack, width: 1.5),
                                   foregroundColor: AppColors.socaBlack,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 14),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(25)),
+                                      borderRadius: BorderRadius.circular(25)),
                                 ),
                                 child: Text(
                                   AppStrings.noUpper,
@@ -580,16 +576,14 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: ElevatedButton(
-                                onPressed:
-                                    isSubmitting ? null : handleConfirm,
+                                onPressed: isSubmitting ? null : handleConfirm,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.socaBlack,
                                   foregroundColor: AppColors.socaYellow,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 14),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(25)),
+                                      borderRadius: BorderRadius.circular(25)),
                                 ),
                                 child: isSubmitting
                                     ? const SizedBox(
@@ -705,7 +699,9 @@ class _PrivacySettingsScreenState extends ConsumerState<PrivacySettingsScreen> {
                     onTap: _showDownloadActivityDialog,
                   ),
                   const Divider(
-                      height: 1, thickness: 0.5, color: Color(0xFFDDDDDD),
+                      height: 1,
+                      thickness: 0.5,
+                      color: Color(0xFFDDDDDD),
                       indent: 52),
                   _SettingsSubItem(
                     title: AppStrings.deactivateDeleteAccountSubItem,
@@ -792,7 +788,8 @@ class _SettingsItem extends StatelessWidget {
                 ),
               ),
             ),
-            if (title == AppStrings.manageAccount || title == AppStrings.aboutSocaLoca)
+            if (title == AppStrings.manageAccount ||
+                title == AppStrings.aboutSocaLoca)
               const Icon(Icons.chevron_right,
                   size: 22, color: AppColors.socaBlack),
           ],

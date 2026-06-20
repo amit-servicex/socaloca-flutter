@@ -15,7 +15,7 @@ class CupStageTab extends ConsumerStatefulWidget {
   final String tournamentId;
   final TournamentCupModel cup;
 
-  CupStageTab({
+  const CupStageTab({
     super.key,
     required this.tournamentId,
     required this.cup,
@@ -62,7 +62,7 @@ class _CupStageTabState extends ConsumerState<CupStageTab>
               size: 64,
               color: Colors.grey[400],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               AppStrings.noRoundsAvailable,
               style: TextStyle(
@@ -82,15 +82,15 @@ class _CupStageTabState extends ConsumerState<CupStageTab>
         if (widget.cup.roundsList!.length > 1)
           Container(
             color: Colors.white,
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.filter_list,
                   color: AppColors.socaBlack,
                   size: 20,
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: SearchableDropdownButton(
                     hint: AppStrings.selectRound,

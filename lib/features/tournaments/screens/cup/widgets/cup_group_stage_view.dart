@@ -21,7 +21,7 @@ class CupGroupStageView extends ConsumerStatefulWidget {
   final String roundId;
   final TournamentCupModel cup;
 
-  CupGroupStageView({
+  const CupGroupStageView({
     super.key,
     required this.tournamentId,
     required this.roundId,
@@ -50,7 +50,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
     // Get groups from the selected round
     final round = widget.cup.roundsList?.firstWhere(
       (r) => r.roundId == widget.roundId,
-      orElse: () => CupRoundModel(),
+      orElse: () => const CupRoundModel(),
     );
 
     if (round?.groups != null && round!.groups!.isNotEmpty) {
@@ -75,7 +75,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
               size: 64,
               color: Colors.grey[400],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               AppStrings.noGroupsAvailable,
               style: TextStyle(
@@ -95,15 +95,15 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
         if (_groups.length > 1)
           Container(
             color: Colors.white,
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.group_work,
                   color: AppColors.socaBlack,
                   size: 20,
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: SearchableDropdownButton(
                     hint: AppStrings.selectGroup,
@@ -124,14 +124,14 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
         Expanded(
           child: _selectedGroupId != null
               ? _buildGroupMatches(_selectedGroupId!)
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
         ),
 
         // View Standings Button
         if (_selectedGroupId != null)
           Container(
             color: Colors.white,
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -139,7 +139,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow,
-                  padding: EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -147,7 +147,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                 ),
                 child: Text(
                   AppStrings.viewGroupStandings,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
@@ -187,7 +187,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
                   size: 64,
                   color: Colors.grey[400],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   AppStrings.noMatchesInThisGroup,
                   style: TextStyle(
@@ -206,7 +206,7 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
             ref.invalidate(cupGroupMatchesProvider(params));
           },
           child: ListView.builder(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             itemCount: allMatches.length,
             itemBuilder: (context, index) {
               final match = allMatches[index];
@@ -246,15 +246,15 @@ class _CupGroupStageViewState extends ConsumerState<CupGroupStageView>
           ),
         );
       },
-      loading: () => AppLoader(),
+      loading: () => const AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 64, color: Colors.red),
-            SizedBox(height: 16),
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
             Text(AppStrings.errorLoadingMatchesWithError(error)),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 ref.invalidate(cupGroupMatchesProvider(params));

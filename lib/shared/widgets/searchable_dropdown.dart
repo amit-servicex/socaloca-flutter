@@ -173,9 +173,9 @@ class _SearchableSheetState extends State<_SearchableSheet> {
                           // color: isSelected
                           //     ? AppColors.socaYellow.withValues(alpha: 0.15)
                           //     : null,
-                          decoration: BoxDecoration(
-                            border: const Border(
-                              bottom: const BorderSide(
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
                                 color: AppColors.socaGrey,
                                 width: .8,
                               ),

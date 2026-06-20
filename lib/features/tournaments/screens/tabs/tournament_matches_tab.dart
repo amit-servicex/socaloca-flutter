@@ -14,7 +14,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// Matches tab — mirrors Android TournamentMatchesFragment
 /// Shows upcoming and played matches (3 each, with "View All" button)
 class TournamentMatchesTab extends ConsumerStatefulWidget {
-  TournamentMatchesTab({super.key, required this.tournamentId});
+  const TournamentMatchesTab({super.key, required this.tournamentId});
   final String tournamentId;
 
   @override
@@ -71,7 +71,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
     super.build(context);
 
     if (_loading) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     return RefreshIndicator(
@@ -80,7 +80,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
         await _load();
       },
       child: ListView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         children: [
           // Upcoming matches section
           _SectionHeader(
@@ -90,7 +90,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
               // TODO: navigate to full upcoming matches list
             },
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           if (_upcoming.isEmpty)
             _EmptyState(message: AppStrings.noUpcomingMatches)
           else
@@ -99,7 +99,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
                   onTap: () => _openMatchDetails(context, m),
                 )),
 
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           // Played matches section
           _SectionHeader(
@@ -109,7 +109,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
               // TODO: navigate to full played matches list
             },
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           if (_played.isEmpty)
             _EmptyState(message: AppStrings.noPlayedMatches)
           else
@@ -136,7 +136,7 @@ class _TournamentMatchesTabState extends ConsumerState<TournamentMatchesTab>
 }
 
 class _SectionHeader extends StatelessWidget {
-  _SectionHeader({
+  const _SectionHeader({
     required this.title,
     required this.showViewAll,
     this.onViewAll,
@@ -152,7 +152,7 @@ class _SectionHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 15,
@@ -164,7 +164,7 @@ class _SectionHeader extends StatelessWidget {
             onTap: onViewAll,
             child: Text(
               AppStrings.viewAll,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -179,13 +179,13 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _EmptyState extends StatelessWidget {
-  _EmptyState({required this.message});
+  const _EmptyState({required this.message});
   final String message;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(vertical: 24),
       child: Center(
         child: Text(
           message,

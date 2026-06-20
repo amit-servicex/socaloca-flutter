@@ -17,7 +17,7 @@ import '../providers/auth_provider.dart';
 /// Receives `userId` and `type` via GoRouter extras (Map<String, String>).
 /// 6-digit OTP with auto-advance, 60 s resend countdown.
 class OtpScreen extends ConsumerStatefulWidget {
-  OtpScreen({super.key, required this.userId, required this.type});
+  const OtpScreen({super.key, required this.userId, required this.type});
 
   final String userId;
   final String type; // 'email' | 'phone'
@@ -59,7 +59,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   void _startResendTimer() {
     _resendSeconds = 60;
     _resendTimer?.cancel();
-    _resendTimer = Timer.periodic(Duration(seconds: 1), (_) {
+    _resendTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
       setState(() {
         if (_resendSeconds > 0) {
@@ -142,38 +142,38 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         foregroundColor: AppColors.textPrimary,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // ── Header ────────────────────────────────────────────
-            Icon(
+            const Icon(
               Icons.mark_email_read_outlined,
               size: 64,
               color: AppColors.primary,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             Text(
               AppStrings.enterVerificationCode,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 22,
                 color: AppColors.textPrimary,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               AppStrings.verificationCodeSentTo(widget.type),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontFamily: 'Poppins',
                 fontSize: 14,
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
 
             // ── OTP cells ─────────────────────────────────────────
             Row(
@@ -192,7 +192,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                       textAlign: TextAlign.center,
                       maxLength: 1,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Poppins',
@@ -203,13 +203,13 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                         contentPadding: EdgeInsets.zero,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              BorderSide(color: AppColors.border, width: 1.5),
+                          borderSide: const BorderSide(
+                              color: AppColors.border, width: 1.5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              BorderSide(color: AppColors.primary, width: 2),
+                          borderSide: const BorderSide(
+                              color: AppColors.primary, width: 2),
                         ),
                         filled: true,
                         fillColor: AppColors.inputBackground,
@@ -220,7 +220,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 );
               }),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
 
             // ── Verify button ──────────────────────────────────────
             PrimaryButton(
@@ -228,7 +228,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               onPressed: _verify,
               isLoading: _isLoading,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // ── Resend ─────────────────────────────────────────────
             Center(
@@ -237,7 +237,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                       onPressed: _startResendTimer,
                       child: Text(
                         AppStrings.resendCode,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.primary,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -246,7 +246,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                     )
                   : Text(
                       AppStrings.resendCodeIn(_resendSeconds),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.textSecondary,
                         fontFamily: 'Poppins',
                         fontSize: 13,

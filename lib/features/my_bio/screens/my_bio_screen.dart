@@ -11,7 +11,6 @@ import '../../player_bio/providers/player_bio_provider.dart';
 import '../../player_bio/widgets/player_bio_header.dart';
 import '../../player_bio/widgets/player_bio_stats_counters.dart';
 import '../../player_bio/widgets/player_bio_details_section.dart';
-import '../../player_bio/widgets/stats_tab_content.dart';
 import '../../player_bio/widgets/competition_stats_summary_section.dart';
 import '../../player_bio/widgets/my_matches_section.dart';
 import '../../player_bio/widgets/training_stats_section.dart';
@@ -27,7 +26,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// My Bio screen — shows the logged-in user's own bio profile.
 /// Single scrollable layout — no tabs.
 class MyBioScreen extends ConsumerStatefulWidget {
-  MyBioScreen({super.key});
+  const MyBioScreen({super.key});
 
   @override
   ConsumerState<MyBioScreen> createState() => _MyBioScreenState();
@@ -90,7 +89,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
         body: Center(
           child: Text(
             AppStrings.userNotLoggedIn,
-            style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+            style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
           ),
         ),
       );
@@ -152,7 +151,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
 
   Widget _buildBody(PlayerBioState state) {
     if (state.isLoading) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     if (state.error != null) {
@@ -160,18 +159,18 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            SizedBox(height: 16),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const SizedBox(height: 16),
             Text(
               state.error!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 color: AppColors.socaBlack,
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () =>
                   ref.read(playerBioProvider(_userId).notifier).load(),
@@ -180,7 +179,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
                 foregroundColor: AppColors.socaYellow,
               ),
               child: Text(AppStrings.retry,
-                  style: TextStyle(fontFamily: 'Poppins')),
+                  style: const TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),
@@ -191,7 +190,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
       return Center(
         child: Text(
           AppStrings.profileNotFound,
-          style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+          style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
         ),
       );
     }
@@ -206,19 +205,19 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
             isOwnProfile: true,
           ),
 
-          Divider(height: 1, color: AppColors.socaBlack),
+          const Divider(height: 1, color: AppColors.socaBlack),
 
           // ── Engagement stats (Posts · Cheers · Followers · Following) ───
           PlayerBioStatsCounters(playerBio: state.playerBio!),
 
-          Divider(height: 1, color: AppColors.socaBlack),
+          const Divider(height: 1, color: AppColors.socaBlack),
 
           // ── Quick action buttons ─────────────────────────────────────────
           _buildActionButtons(),
 
           // ── All bio sections ─────────────────────────────────────────────
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -226,14 +225,14 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
                   playerBio: state.playerBio!,
                   isOwnProfile: true,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CompetitionStatsSummarySection(
                   footballStats: state.footballStats,
                   futsalStats: state.futsalStats,
                   playerBio: state.playerBio!,
                   isLoadingStats: state.isLoadingStats,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 MyMatchesSection(
                   footballMatches: state.footballMatches,
                   futsalMatches: state.futsalMatches,
@@ -243,7 +242,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
                   onAddFootball: () => _showAddMatchSheet('Football'),
                   onAddFutsal: () => _showAddMatchSheet('Futsal'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TrainingStatsSection(
                   trainCurrMonth: state.trainCurrMonth,
                   trainPrevMonth: state.trainPrevMonth,
@@ -251,44 +250,44 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
                   isLoadingMatches: state.isLoadingMatches,
                   onAdd: _showAddTrainingSheet,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 EndorsementsSection(
                     endorsements: state.endorsements,
                     isLoadingEndorsements: state.isLoadingEndorsements,
                     userid: _userId),
-                if (state.endorsements.isNotEmpty) SizedBox(height: 20),
+                if (state.endorsements.isNotEmpty) const SizedBox(height: 20),
                 PlayerTeamsSection(
                   teams: state.teams,
                   isLoadingTeams: state.isLoadingTeams,
                 ),
-                if (state.teams.isNotEmpty) SizedBox(height: 20),
+                if (state.teams.isNotEmpty) const SizedBox(height: 20),
                 AcademiesSection(
                   academies: state.academies,
                   isLoadingAcademies: state.isLoadingAcademies,
                 ),
-                if (state.academies.isNotEmpty) SizedBox(height: 20),
+                if (state.academies.isNotEmpty) const SizedBox(height: 20),
                 TournamentsSection(
                   tournaments: state.tournaments,
                   isLoadingTournaments: state.isLoadingTournaments,
                 ),
-                if (state.tournaments.isNotEmpty) SizedBox(height: 20),
+                if (state.tournaments.isNotEmpty) const SizedBox(height: 20),
                 PlayerSkillsSection(
                     skills: state.skills,
                     overallRating: state.overallRating,
                     isLoadingSkills: state.isLoadingSkills,
                     isOwnProfile: true,
                     userid: _userId),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 PlayerPostsSection(
                   posts: state.posts,
                   isLoadingPosts: state.isLoadingPosts,
                 ),
-                if (state.posts.isNotEmpty) SizedBox(height: 20),
+                if (state.posts.isNotEmpty) const SizedBox(height: 20),
                 TaggedVideosSection(
                   taggedVideos: state.taggedVideos,
                   isLoadingTaggedVideos: state.isLoadingTaggedVideos,
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -300,7 +299,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
   Widget _buildActionButtons() {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -334,7 +333,7 @@ class _MyBioScreenState extends ConsumerState<MyBioScreen> {
             GestureDetector(
               onTap: _handleShare,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Image.asset(
                   "assets/icons/ic_share.png",
                   width: 24,
@@ -353,7 +352,7 @@ class _ActionBtn extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
-  _ActionBtn({
+  const _ActionBtn({
     required this.label,
     required this.onTap,
   });
@@ -363,15 +362,15 @@ class _ActionBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-        margin: EdgeInsets.symmetric(horizontal: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+        margin: const EdgeInsets.symmetric(horizontal: 2),
         decoration: BoxDecoration(
           color: AppColors.socaBlack,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 10,
             fontWeight: FontWeight.w700,

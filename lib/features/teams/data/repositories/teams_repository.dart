@@ -72,10 +72,8 @@ class TeamsRepository {
             teamsData[i] as Map<String, dynamic>,
           );
           // Ensure required non-nullable fields have fallback values
-          teamJson['teamId'] =
-              teamJson['teamId'] ?? teamJson['_id'] ?? '';
-          teamJson['teamName'] =
-              teamJson['teamName'] ?? teamJson['name'] ?? '';
+          teamJson['teamId'] = teamJson['teamId'] ?? teamJson['_id'] ?? '';
+          teamJson['teamName'] = teamJson['teamName'] ?? teamJson['name'] ?? '';
           final team = TeamModel.fromJson(teamJson);
           teams.add(team);
         } catch (e, stackTrace) {

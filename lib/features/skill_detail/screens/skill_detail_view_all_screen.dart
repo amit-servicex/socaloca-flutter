@@ -18,7 +18,7 @@ class SkillDetailViewAllScreen extends StatefulWidget {
   final String role;
   final String roleLabel;
 
-  SkillDetailViewAllScreen({
+  const SkillDetailViewAllScreen({
     super.key,
     required this.playerId,
     required this.skillName,
@@ -33,7 +33,7 @@ class SkillDetailViewAllScreen extends StatefulWidget {
 }
 
 class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
-  static int _limit = 20;
+  static const int _limit = 20;
 
   final List<SkillRaterModel> _raters = [];
   final ScrollController _scrollController = ScrollController();
@@ -148,7 +148,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
   Widget _buildBody() {
     // Initial load state
     if (_raters.isEmpty && _isLoading) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     // Error on first load
@@ -157,11 +157,11 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            SizedBox(height: 12),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const SizedBox(height: 12),
             Text(_error!,
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
-            SizedBox(height: 12),
+                style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
                 _start = 0;
@@ -173,7 +173,8 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow,
               ),
-              child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
+              child: Text('Retry'.tr,
+                  style: const TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),
@@ -196,7 +197,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
     }
 
     return Container(
-      margin: EdgeInsets.all(12),
+      margin: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -204,7 +205,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -213,7 +214,7 @@ class _SkillDetailViewAllScreenState extends State<SkillDetailViewAllScreen> {
         itemCount: _raters.length + (_isLoading || _hasMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index == _raters.length) {
-            return Padding(
+            return const Padding(
               padding: EdgeInsets.all(16),
               child: AppLoader(),
             );

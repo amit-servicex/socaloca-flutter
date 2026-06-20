@@ -10,7 +10,7 @@ class EndorsePlayerScreen extends ConsumerStatefulWidget {
   final String playerId;
   final String playerName;
 
-  EndorsePlayerScreen({
+  const EndorsePlayerScreen({
     super.key,
     required this.playerId,
     required this.playerName,
@@ -26,7 +26,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
   bool _hasError = false;
   bool _isSubmitting = false;
 
-  static int _maxChars = 200;
+  static const int _maxChars = 200;
 
   @override
   void dispose() {
@@ -77,7 +77,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
           SnackBar(
             content: Text(
               'It will update as soon as ${widget.playerName} accepts it.',
-              style: TextStyle(fontFamily: 'Poppins'),
+              style: const TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: Colors.green,
           ),
@@ -87,7 +87,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to submit endorsement. Try again.'.tr,
-                style: TextStyle(fontFamily: 'Poppins')),
+                style: const TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -96,7 +96,8 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
+            content: Text('Error: $e',
+                style: const TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -121,12 +122,12 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
         children: [
           // ── Black header banner ───────────────────────────────────────────
           Container(
-            margin: EdgeInsets.only(left: 16, top: 10),
+            margin: const EdgeInsets.only(left: 16, top: 10),
             color: AppColors.socaBlack,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Text(
               'Endorse'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -138,7 +139,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
           // ── Body ─────────────────────────────────────────────────────────
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -146,7 +147,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                   Text(
                     'Assist other Players & Coaches by giving an endorsement'
                         .tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
@@ -166,22 +167,22 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                       if (_hasError) setState(() => _hasError = false);
                       setState(() {});
                     },
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
                       color: AppColors.socaBlack,
                     ),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(12),
                     ),
                   ),
 
                   // Text input with plain border
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   // max characters label
-                  Align(
+                  const Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
                       padding: EdgeInsets.only(top: 4),
@@ -196,7 +197,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // ADD / RESET buttons
                   Row(
@@ -207,7 +208,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
                         onPressed: _isSubmitting ? null : _submit,
                         isLoading: _isSubmitting,
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       _ActionButton(
                         label: 'RESET',
                         onPressed: _isSubmitting ? null : _reset,
@@ -225,7 +226,7 @@ class _EndorsePlayerScreenState extends ConsumerState<EndorsePlayerScreen> {
 }
 
 class _ActionButton extends StatelessWidget {
-  _ActionButton({
+  const _ActionButton({
     required this.label,
     required this.onPressed,
     this.isLoading = false,
@@ -241,11 +242,11 @@ class _ActionButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: 100,
-        padding: EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         color: onPressed == null ? Colors.grey.shade400 : AppColors.socaBlack,
         alignment: Alignment.center,
         child: isLoading
-            ? SizedBox(
+            ? const SizedBox(
                 width: 16,
                 height: 16,
                 child: CircularProgressIndicator(
@@ -255,7 +256,7 @@ class _ActionButton extends StatelessWidget {
               )
             : Text(
                 label,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 13,

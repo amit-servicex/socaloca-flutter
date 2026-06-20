@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:socaloca/shared/models/team_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../shared/providers/auth_provider.dart';
 import '../../../data/tournament_models.dart';
@@ -27,7 +24,7 @@ class LeagueInfoTab extends ConsumerWidget {
   final VoidCallback onFollowTap;
   final VoidCallback onRequestToJoin;
 
-  LeagueInfoTab({
+  const LeagueInfoTab({
     super.key,
     required this.tournament,
     required this.onFollowTap,
@@ -88,18 +85,18 @@ class LeagueInfoTab extends ConsumerWidget {
           // Tournament Info Card
           TournamentInfoCard(tournament: tournament),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Teams Playing
           if (tournament.teams != null && tournament.teams!.isNotEmpty)
             TeamsHorizontalList(
               teams: tournament.teams!,
               onTeamTap: (teamId) {
-                context.push('/teams/${teamId}');
+                context.push('/teams/$teamId');
               },
             ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Sponsors
           if (tournament.sponsors != null && tournament.sponsors!.isNotEmpty)
@@ -107,7 +104,7 @@ class LeagueInfoTab extends ConsumerWidget {
               sponsors: tournament.sponsors!,
             ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Itinerary Button
           if (tournament.itinerary?.canView == true &&
@@ -115,35 +112,35 @@ class LeagueInfoTab extends ConsumerWidget {
               tournament.itinerary!.doc!.isNotEmpty)
             _LeagueItineraryButton(docUrl: tournament.itinerary!.doc!),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Invitations Section (admin/coach only)
           if (user != null && (user.isAdmin || user.isCoach))
             _LeagueInvitationsSection(tournament: tournament),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Request to Join Button
           _buildRequestToJoinButton(user),
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       ),
     );
   }
 
   Widget _buildRequestToJoinButton(dynamic user) {
-    if (user == null) return SizedBox.shrink();
+    if (user == null) return const SizedBox.shrink();
 
     // Only admin or coach can request to join
-    if (!user.isAdmin && !user.isCoach) return SizedBox.shrink();
+    if (!user.isAdmin && !user.isCoach) return const SizedBox.shrink();
 
     // Referees cannot join
-    if (user.isReferee == true) return SizedBox.shrink();
+    if (user.isReferee == true) return const SizedBox.shrink();
 
     // Cannot join live or ended tournaments
     final status = tournament.status?.toLowerCase() ?? '';
-    if (status == 'live' || status == 'end') return SizedBox.shrink();
+    if (status == 'live' || status == 'end') return const SizedBox.shrink();
 
     // Local tournaments: user's country must match tournament country
     final visibility = tournament.visibility?.toLowerCase() ?? 'global';
@@ -153,13 +150,13 @@ class LeagueInfoTab extends ConsumerWidget {
       if (userCountry.isEmpty ||
           tmntCountry.isEmpty ||
           userCountry != tmntCountry) {
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       }
     }
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
@@ -167,7 +164,7 @@ class LeagueInfoTab extends ConsumerWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.socaYellow,
             foregroundColor: AppColors.socaBlack,
-            padding: EdgeInsets.symmetric(vertical: 14),
+            padding: const EdgeInsets.symmetric(vertical: 14),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -175,7 +172,7 @@ class LeagueInfoTab extends ConsumerWidget {
           ),
           child: Text(
             AppStrings.requestToJoin,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 15,
@@ -191,7 +188,7 @@ class LeagueInfoTab extends ConsumerWidget {
 class _LeagueInvitationsSection extends ConsumerWidget {
   final TournamentModel tournament;
 
-  _LeagueInvitationsSection({required this.tournament});
+  const _LeagueInvitationsSection({required this.tournament});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -200,23 +197,23 @@ class _LeagueInvitationsSection extends ConsumerWidget {
 
     return invitesAsync.when(
       data: (teams) {
-        if (teams.isEmpty) return SizedBox.shrink();
+        if (teams.isEmpty) return const SizedBox.shrink();
         return Container(
           color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 AppStrings.pendingInvitations,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               ...teams.map(
                 (team) => _LeagueInvitationRow(
                   team: team,
@@ -227,8 +224,8 @@ class _LeagueInvitationsSection extends ConsumerWidget {
           ),
         );
       },
-      loading: () => SizedBox.shrink(),
-      error: (_, __) => SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }
@@ -238,7 +235,7 @@ class _LeagueInvitationRow extends ConsumerWidget {
   final TeamModel team;
   final TournamentModel tournament;
 
-  _LeagueInvitationRow({
+  const _LeagueInvitationRow({
     required this.team,
     required this.tournament,
   });
@@ -248,13 +245,13 @@ class _LeagueInvitationRow extends ConsumerWidget {
     final tournamentId = tournament.effectiveId;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
           Expanded(
             child: Text(
               team.name ?? 'Unknown Team',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -262,40 +259,40 @@ class _LeagueInvitationRow extends ConsumerWidget {
               ),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           ElevatedButton(
             onPressed: () => _respond(context, ref, tournamentId, accept: true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
               elevation: 0,
             ),
             child: Text(
               AppStrings.accept,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 13),
             ),
           ),
-          SizedBox(width: 6),
+          const SizedBox(width: 6),
           ElevatedButton(
             onPressed: () =>
                 _respond(context, ref, tournamentId, accept: false),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
               elevation: 0,
             ),
             child: Text(
               AppStrings.decline,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 13),
@@ -332,7 +329,7 @@ class _LeagueInvitationRow extends ConsumerWidget {
               success
                   ? (accept ? 'Invitation accepted.' : 'Invitation declined.')
                   : 'Action failed. Please try again.',
-              style: TextStyle(fontFamily: 'Poppins'),
+              style: const TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: success ? Colors.green : Colors.red,
           ),
@@ -344,7 +341,7 @@ class _LeagueInvitationRow extends ConsumerWidget {
           SnackBar(
             content: Text(
               'Error: $e',
-              style: TextStyle(fontFamily: 'Poppins'),
+              style: const TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: Colors.red,
           ),
@@ -358,20 +355,20 @@ class _LeagueInvitationRow extends ConsumerWidget {
 class _LeagueItineraryButton extends StatelessWidget {
   final String docUrl;
 
-  _LeagueItineraryButton({required this.docUrl});
+  const _LeagueItineraryButton({required this.docUrl});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: SizedBox(
         width: double.infinity,
         child: OutlinedButton.icon(
-          icon: Icon(Icons.description_outlined),
+          icon: const Icon(Icons.description_outlined),
           label: Text(
             AppStrings.viewItinerary,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 14,
@@ -379,7 +376,7 @@ class _LeagueItineraryButton extends StatelessWidget {
           ),
           onPressed: () => _launch(context),
           style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),

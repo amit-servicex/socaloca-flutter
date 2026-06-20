@@ -12,7 +12,7 @@ class UpcomingMatchCard extends StatelessWidget {
   final TournamentMatchModel match;
   final VoidCallback onTap;
 
-  UpcomingMatchCard({
+  const UpcomingMatchCard({
     super.key,
     required this.match,
     required this.onTap,
@@ -29,8 +29,8 @@ class UpcomingMatchCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: EdgeInsets.all(16),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -38,7 +38,7 @@ class UpcomingMatchCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -49,11 +49,11 @@ class UpcomingMatchCard extends StatelessWidget {
               child: Row(
                 children: [
                   _TeamLogo(logoPath: match.homeTeamLogo, size: 40),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       match.homeTeamName ?? AppStrings.teamALabel,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
@@ -68,10 +68,10 @@ class UpcomingMatchCard extends StatelessWidget {
 
             // VS
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
                 AppStrings.vs,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -89,7 +89,7 @@ class UpcomingMatchCard extends StatelessWidget {
                     child: Text(
                       match.awayTeamName ?? AppStrings.teamBLabel,
                       textAlign: TextAlign.right,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
@@ -98,7 +98,7 @@ class UpcomingMatchCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   _TeamLogo(logoPath: match.awayTeamLogo, size: 40),
                 ],
               ),
@@ -111,7 +111,7 @@ class UpcomingMatchCard extends StatelessWidget {
 }
 
 class _TeamLogo extends StatelessWidget {
-  _TeamLogo({this.logoPath, this.size = 48});
+  const _TeamLogo({this.logoPath, this.size = 48});
   final String? logoPath;
   final double size;
 
@@ -121,7 +121,7 @@ class _TeamLogo extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -130,13 +130,13 @@ class _TeamLogo extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => Icon(
+                errorWidget: (_, __, ___) => const Icon(
                   Icons.shield,
                   color: AppColors.socaBlack,
                   size: 24,
                 ),
               )
-            : Icon(Icons.shield, color: AppColors.socaBlack, size: 24),
+            : const Icon(Icons.shield, color: AppColors.socaBlack, size: 24),
       ),
     );
   }

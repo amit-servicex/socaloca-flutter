@@ -10,7 +10,7 @@ class PlayerBioHeader extends StatelessWidget {
   final PlayerBioModel playerBio;
   final bool isOwnProfile;
 
-  PlayerBioHeader({
+  const PlayerBioHeader({
     super.key,
     required this.playerBio,
     required this.isOwnProfile,
@@ -27,7 +27,7 @@ class PlayerBioHeader extends StatelessWidget {
     final flagIso = _flagIsoCode(playerBio);
 
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 10),
+      padding: const EdgeInsets.only(top: 20, bottom: 10),
       color: Colors.white,
       child: Column(
         children: [
@@ -53,14 +53,14 @@ class PlayerBioHeader extends StatelessWidget {
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(
                             color: AppColors.socaGrey,
-                            child: Icon(Icons.person,
+                            child: const Icon(Icons.person,
                                 size: 60, color: Colors.white),
                           ),
                         )
                       : Container(
                           color: AppColors.socaGrey,
-                          child:
-                              Icon(Icons.person, size: 60, color: Colors.white),
+                          child: const Icon(Icons.person,
+                              size: 60, color: Colors.white),
                         ),
                 ),
               ),
@@ -84,7 +84,7 @@ class PlayerBioHeader extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
 
           // Player Name and Jersey
           Row(
@@ -92,7 +92,7 @@ class PlayerBioHeader extends StatelessWidget {
             children: [
               Text(
                 '$firstName $lastName'.trim(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
@@ -100,24 +100,25 @@ class PlayerBioHeader extends StatelessWidget {
                 ),
               ),
               if (isVerified) ...[
-                SizedBox(width: 5),
-                Icon(
+                const SizedBox(width: 5),
+                const Icon(
                   Icons.verified,
                   size: 20,
                   color: Colors.blue,
                 ),
               ],
               if (preferredJersey != null && preferredJersey.isNotEmpty) ...[
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     preferredJersey,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -129,13 +130,13 @@ class PlayerBioHeader extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
 
           // Profile Name
           if (profileName.isNotEmpty)
             Text(
               profileName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -143,7 +144,7 @@ class PlayerBioHeader extends StatelessWidget {
               ),
             ),
 
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
 
           // Android uses nationalityIso first, then falls back to country name.
           if (flagIso != null)
@@ -164,19 +165,19 @@ class PlayerBioHeader extends StatelessWidget {
                 ),
               ),
             ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Text(
             "SocaLoca ID: ".tr,
-            style: TextStyle(
+            style: const TextStyle(
                 color: AppColors.socaBlack,
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 fontWeight: FontWeight.w700),
           ),
           Text("${playerBio.sclId}",
-              style: TextStyle(
+              style: const TextStyle(
                   color: AppColors.socaBlack,
                   fontFamily: 'Poppins',
                   fontSize: 14,

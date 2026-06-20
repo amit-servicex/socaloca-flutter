@@ -16,7 +16,7 @@ class CupStatsTab extends ConsumerStatefulWidget {
   final String tournamentId;
   final TournamentCupModel cup;
 
-  CupStatsTab({
+  const CupStatsTab({
     super.key,
     required this.tournamentId,
     required this.cup,
@@ -68,12 +68,12 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
             unselectedLabelColor: AppColors.socaBlack.withOpacity(0.5),
             indicatorColor: AppColors.socaYellow,
             indicatorWeight: 2,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 13,
             ),
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 13,
@@ -132,12 +132,12 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
             indicatorColor: AppColors.socaYellow,
             indicatorWeight: 2,
             isScrollable: true,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 13,
             ),
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 13,
@@ -201,12 +201,12 @@ class _CupStatsTabState extends ConsumerState<CupStatsTab>
             indicatorColor: AppColors.socaYellow,
             indicatorWeight: 2,
             isScrollable: true,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 13,
             ),
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 13,
@@ -261,7 +261,7 @@ class _CupStatsList extends ConsumerWidget {
   final String statType;
   final bool isGroupMode;
 
-  _CupStatsList({
+  const _CupStatsList({
     required this.tournamentId,
     required this.roundId,
     required this.statType,
@@ -298,7 +298,7 @@ class _CupStatsList extends ConsumerWidget {
                   size: 64,
                   color: Colors.grey[400],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   'No ${_getStatTypeLabel()} yet',
                   style: TextStyle(
@@ -333,7 +333,7 @@ class _CupStatsList extends ConsumerWidget {
             }
           },
           child: ListView.builder(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             itemCount: stats.length,
             itemBuilder: (context, index) {
               final stat = stats[index];
@@ -342,15 +342,15 @@ class _CupStatsList extends ConsumerWidget {
           ),
         );
       },
-      loading: () => AppLoader(),
+      loading: () => const AppLoader(),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 64, color: Colors.red),
-            SizedBox(height: 16),
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
             Text(AppStrings.errorLoadingStats(error)),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 if (isGroupMode) {
@@ -381,7 +381,7 @@ class _CupStatsList extends ConsumerWidget {
 
   Widget _buildStatCard(CupPlayerStatEntry stat, int position) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -389,12 +389,12 @@ class _CupStatsList extends ConsumerWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -419,7 +419,7 @@ class _CupStatsList extends ConsumerWidget {
                 ),
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             // Player Photo
             ClipOval(
               child: _buildPlayerPhoto(stat.playerImage, 48),
@@ -428,7 +428,7 @@ class _CupStatsList extends ConsumerWidget {
         ),
         title: Text(
           stat.playerName ?? 'Unknown',
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 15,
             fontWeight: FontWeight.w600,
@@ -527,10 +527,10 @@ class _CupStatsList extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   '${stat.yellowCards}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -550,10 +550,10 @@ class _CupStatsList extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   '${stat.redCards}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -566,14 +566,14 @@ class _CupStatsList extends ConsumerWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.socaYellow,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
         '${stat.count}',
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           fontWeight: FontWeight.w700,

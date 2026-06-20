@@ -5,7 +5,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 class SearchInput extends StatefulWidget {
   final Function(String) onSearch;
 
-  SearchInput({
+  const SearchInput({
     super.key,
     required this.onSearch,
   });

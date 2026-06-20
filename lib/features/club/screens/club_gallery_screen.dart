@@ -14,7 +14,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Club Gallery / Posts — Screen 4 of the Club shell.
 class ClubGalleryScreen extends ConsumerStatefulWidget {
-  ClubGalleryScreen({super.key});
+  const ClubGalleryScreen({super.key});
   @override
   ConsumerState<ClubGalleryScreen> createState() => _ClubGalleryScreenState();
 }
@@ -72,12 +72,12 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
   @override
   Widget build(BuildContext context) {
     if (_posts.isEmpty && _loading) {
-      return AppLoader();
+      return const AppLoader();
     }
     if (_posts.isEmpty) {
       return Center(
           child: Text(AppStrings.noPosts,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
         itemCount: _posts.length + (_loading ? 1 : 0),
         itemBuilder: (_, i) {
           if (i >= _posts.length) {
-            return AppLoader();
+            return const AppLoader();
           }
           return _PostCard(post: _posts[i]);
         },
@@ -101,7 +101,7 @@ class _ClubGalleryScreenState extends ConsumerState<ClubGalleryScreen> {
 }
 
 class _PostCard extends StatelessWidget {
-  _PostCard({required this.post});
+  const _PostCard({required this.post});
   final ClubPostModel post;
 
   @override
@@ -113,7 +113,7 @@ class _PostCard extends StatelessWidget {
         : '';
 
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 12),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,25 +132,29 @@ class _PostCard extends StatelessWidget {
             Container(
               height: 200,
               color: AppColors.socaGrey,
-              child: Center(child: Icon(Icons.image_not_supported, size: 48)),
+              child: const Center(
+                  child: Icon(Icons.image_not_supported, size: 48)),
             ),
 
           Padding(
-            padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (post.postCaption != null && post.postCaption!.isNotEmpty)
                   Text(post.postCaption!,
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-                SizedBox(height: 6),
+                      style:
+                          const TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+                const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(Icons.favorite_border, size: 15, color: Colors.grey),
-                    SizedBox(width: 4),
+                    const Icon(Icons.favorite_border,
+                        size: 15, color: Colors.grey),
+                    const SizedBox(width: 4),
                     Text('${post.likeCount ?? 0}',
-                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-                    Spacer(),
+                        style: const TextStyle(
+                            fontFamily: 'Poppins', fontSize: 12)),
+                    const Spacer(),
                     Text(ts,
                         style: TextStyle(
                             fontFamily: 'Poppins',

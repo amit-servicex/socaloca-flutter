@@ -8,13 +8,12 @@ import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/app_snackbar.dart';
 import '../data/auth_models.dart';
 import '../providers/auth_provider.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Child Consent Screen (7-12 years old)
 /// Collects minor's name and parent/guardian information before signup
 /// Matches fragment_child_consent.xml layout
 class ChildConsentScreen extends ConsumerStatefulWidget {
-  ChildConsentScreen({super.key});
+  const ChildConsentScreen({super.key});
 
   @override
   ConsumerState<ChildConsentScreen> createState() => _ChildConsentScreenState();
@@ -111,7 +110,7 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
       switch (result) {
         case AuthSuccess(:final data):
           // Extract consentId from response
-          final consentId = data.consentId as String? ?? '';
+          final consentId = data.consentId ?? '';
           // Navigate to PIN setup screen
           context.push('${AppRoutes.pinSetup}?consentId=$consentId');
 
@@ -136,16 +135,16 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
 
                 // Title
                 Text(
                   AppStrings.childConsentIntro,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
@@ -154,11 +153,11 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 Text(
                   AppStrings.fillFieldsAndTickCheckbox,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                     fontSize: 15,
@@ -166,11 +165,11 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                   ),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 Text(
                   AppStrings.childGuardianConfirmation,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                     fontSize: 15,
@@ -179,7 +178,7 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                   ),
                 ),
 
-                SizedBox(height: 36),
+                const SizedBox(height: 36),
 
                 // Childs Name
                 _buildField(
@@ -190,7 +189,7 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                   onChanged: (_) => _removeErrors(),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Parent/Guardian Name
                 _buildField(
@@ -201,7 +200,7 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                   onChanged: (_) => _removeErrors(),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Parent/Guardian Email
                 _buildField(
@@ -212,7 +211,7 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                   onChanged: (_) => _removeErrors(),
                 ),
 
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
 
                 // Consent checkbox
                 Row(
@@ -228,7 +227,7 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                     Expanded(
                       child: Text(
                         AppStrings.minorConsentText,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
                           fontSize: 12,
@@ -239,14 +238,14 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                   ],
                 ),
 
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
 
                 // Proceed button
                 InkWell(
                   onTap: _isLoading ? null : _handleProceed,
                   child: Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 18),
+                      padding: const EdgeInsets.symmetric(vertical: 18),
                       decoration: BoxDecoration(
                         color: AppColors.socaBlack,
                         borderRadius: BorderRadius.circular(5),
@@ -254,7 +253,7 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                       child: Center(
                         child: Text(
                           AppStrings.proceedUpper,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 20,
                               color: AppColors.socaYellow,
                               fontWeight: FontWeight.bold),
@@ -264,7 +263,7 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
                       ),
                 ),
 
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
               ],
             ),
           ),
@@ -285,14 +284,14 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 15,
             color: AppColors.socaBlack,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
             color: AppColors.socaGrey,
@@ -302,12 +301,12 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
             controller: controller,
             keyboardType: inputType,
             onChanged: onChanged,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -316,10 +315,10 @@ class _ChildConsentScreenState extends ConsumerState<ChildConsentScreen> {
         ),
         if (error != null)
           Padding(
-            padding: EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 5),
             child: Text(
               error,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
                 fontSize: 12,

@@ -75,11 +75,11 @@ class LocationService {
       // 2. Request a fresh fix — use network-quality accuracy (faster than GPS).
       log('LocationService: requesting fresh position...');
       position = await Geolocator.getCurrentPosition(
-        locationSettings: LocationSettings(
+        locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.lowest, // network/cell-tower — much faster
         ),
       ).timeout(
-        Duration(seconds: 20),
+        const Duration(seconds: 20),
         onTimeout: () {
           log('LocationService: getCurrentPosition timed out');
           throw Exception('location timeout');
@@ -107,11 +107,11 @@ class LocationService {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(24, 28, 24, 16),
+              padding: const EdgeInsets.fromLTRB(24, 28, 24, 16),
               child: Text(
                 AppStrings.locationPermission,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 20,
@@ -120,11 +120,11 @@ class LocationService {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 AppStrings.locationPermissionDesc,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -133,8 +133,8 @@ class LocationService {
                 ),
               ),
             ),
-            SizedBox(height: 24),
-            Divider(height: 1, color: Color(0xFFE0E0E0)),
+            const SizedBox(height: 24),
+            const Divider(height: 1, color: Color(0xFFE0E0E0)),
             IntrinsicHeight(
               child: Row(
                 children: [
@@ -142,8 +142,8 @@ class LocationService {
                     child: TextButton(
                       onPressed: () => Navigator.of(ctx).pop(false),
                       style: TextButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(14),
                           ),
@@ -151,7 +151,7 @@ class LocationService {
                       ),
                       child: Text(
                         AppStrings.learnMore,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
                           fontSize: 15,
@@ -160,13 +160,13 @@ class LocationService {
                       ),
                     ),
                   ),
-                  VerticalDivider(width: 1, color: Color(0xFFE0E0E0)),
+                  const VerticalDivider(width: 1, color: Color(0xFFE0E0E0)),
                   Expanded(
                     child: TextButton(
                       onPressed: () => Navigator.of(ctx).pop(true),
                       style: TextButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(14),
                           ),
@@ -174,7 +174,7 @@ class LocationService {
                       ),
                       child: Text(
                         AppStrings.ok,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 15,

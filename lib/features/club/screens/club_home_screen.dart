@@ -12,7 +12,7 @@ final clubAppBarTitleProvider = StateProvider<String>((ref) => AppStrings.club);
 
 /// Club Admin home shell — AppBar + body only. No bottom navigation.
 class ClubHomeScreen extends ConsumerWidget {
-  ClubHomeScreen({super.key, required this.child});
+  const ClubHomeScreen({super.key, required this.child});
   final Widget child;
 
   @override
@@ -30,11 +30,11 @@ class ClubHomeScreen extends ConsumerWidget {
         leadingWidth: 160,
         centerTitle: false,
         leading: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Text(
             AppStrings.clubBio,
             // displayTitle,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 17,
@@ -44,7 +44,7 @@ class ClubHomeScreen extends ConsumerWidget {
         ),
         title: Image.asset("assets/images/logo.png", height: 30),
         // centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         // leading: context.canPop()
         //     ? IconButton(
         //         icon: Icon(Icons.arrow_back),

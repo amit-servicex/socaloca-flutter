@@ -118,9 +118,8 @@ class SponsorBioModel {
 
   factory SponsorBioModel.fromApiJson(Map<String, dynamic> json) {
     final details = json['sponDetails'] != null
-        ? SponsorInfoModel.fromJson(
-            json['sponDetails'] as Map<String, dynamic>)
-        : SponsorInfoModel(sponsorId: '', sponsorName: '');
+        ? SponsorInfoModel.fromJson(json['sponDetails'] as Map<String, dynamic>)
+        : const SponsorInfoModel(sponsorId: '', sponsorName: '');
 
     final merchandises = (json['merchandises'] as List?)
             ?.whereType<Map<String, dynamic>>()
@@ -134,8 +133,7 @@ class SponsorBioModel {
             .map(ClubNewsModel.fromApiJson)
             .toList() ??
         [];
-    newsList.sort(
-        (a, b) => (b.newsDateGmt).compareTo(a.newsDateGmt));
+    newsList.sort((a, b) => (b.newsDateGmt).compareTo(a.newsDateGmt));
 
     return SponsorBioModel(
       details: details,
@@ -237,11 +235,10 @@ class CharityBioModel {
     final details = json['charityDetails'] != null
         ? CharityInfoModel.fromJson(
             json['charityDetails'] as Map<String, dynamic>)
-        : CharityInfoModel(charityId: '', charityName: '');
+        : const CharityInfoModel(charityId: '', charityName: '');
 
     final bioArea = json['bioArea'] != null
-        ? CharityBioAreaModel.fromJson(
-            json['bioArea'] as Map<String, dynamic>)
+        ? CharityBioAreaModel.fromJson(json['bioArea'] as Map<String, dynamic>)
         : null;
 
     final newsList = (json['newsList'] as List?)
@@ -249,8 +246,7 @@ class CharityBioModel {
             .map(ClubNewsModel.fromApiJson)
             .toList() ??
         [];
-    newsList.sort(
-        (a, b) => (b.newsDateGmt).compareTo(a.newsDateGmt));
+    newsList.sort((a, b) => (b.newsDateGmt).compareTo(a.newsDateGmt));
 
     return CharityBioModel(
       details: details,

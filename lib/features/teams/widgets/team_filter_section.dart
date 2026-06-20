@@ -9,7 +9,7 @@ class TeamFilterSection extends ConsumerStatefulWidget {
   final String userCountry;
   final VoidCallback onSearch;
 
-  TeamFilterSection({
+  const TeamFilterSection({
     super.key,
     required this.userCountry,
     required this.onSearch,
@@ -77,14 +77,15 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
           children: [
             Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   widget.userCountry,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: Colors.black87,
@@ -92,7 +93,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                 ),
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: TextField(
                 controller: _locationController,
@@ -130,7 +131,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                     borderSide: BorderSide.none,
                   ),
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 onChanged: (value) {
                   ref.read(teamsProvider.notifier).setLocation(value);
@@ -139,7 +140,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             ),
           ],
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
 
         // Game Type and Gender Row
         Row(
@@ -157,7 +158,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                 },
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: _buildDropdown(
                 value: _selectedGender,
@@ -173,7 +174,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             ),
           ],
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
 
         // Age Range Dropdown
         _buildDropdown(
@@ -187,7 +188,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                 .setAgeRange(value == 'Age Range' ? '' : value);
           },
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
 
         // Age Category Dropdown
         _buildDropdown(
@@ -201,7 +202,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
                 .setAgeCategory(value == 'Age Category' ? '' : value);
           },
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
 
         // GO Button
         SizedBox(
@@ -211,14 +212,14 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
             child: Text(
               AppStrings.goUpper,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -226,12 +227,12 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             ),
           ),
         ),
-        Divider(
+        const Divider(
           color: AppColors.socaBlack,
         ),
         Row(
           children: [
-            Radio(
+            const Radio(
               value: true,
               autofocus: true,
               groupValue: true,
@@ -242,7 +243,7 @@ class _TeamFilterSectionState extends ConsumerState<TeamFilterSection> {
             Text(AppStrings.allTemasLabel)
           ],
         ),
-        Divider(
+        const Divider(
           color: AppColors.socaBlack,
         )
       ],

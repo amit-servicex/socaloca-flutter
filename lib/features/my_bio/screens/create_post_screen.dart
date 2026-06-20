@@ -17,17 +17,17 @@ import '../../player_bio/data/models/player_post_model.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 // ── Post category constants (from Android Params.java) ────────────────────────
-final _kSkillVideo = 'skill';
-final _kFootballMoments = 'moment';
-final _kPostTypeImage = 'image';
-final _kPostTypeVideo = 'video';
+const _kSkillVideo = 'skill';
+const _kFootballMoments = 'moment';
+const _kPostTypeImage = 'image';
+const _kPostTypeVideo = 'video';
 
 /// Create / Edit Post screen — mirrors Android CreatePostFragment / EditPostFragment.
 /// Pass [editPost] to pre-fill the form for editing an existing post.
 class CreatePostScreen extends ConsumerStatefulWidget {
   final PlayerPostModel? editPost;
 
-  CreatePostScreen({super.key, this.editPost});
+  const CreatePostScreen({super.key, this.editPost});
 
   @override
   ConsumerState<CreatePostScreen> createState() => _CreatePostScreenState();
@@ -406,7 +406,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AppLoader(),
+          const AppLoader(),
           if (_uploadStatus.isNotEmpty) ...[
             const SizedBox(height: 16),
             Text(
@@ -1359,7 +1359,7 @@ class _TagPlayersSheetState extends State<_TagPlayersSheet> {
                 onChanged: _search,
                 decoration: InputDecoration(
                   hintText: AppStrings.searchPlayersEllipsis,
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaGrey),

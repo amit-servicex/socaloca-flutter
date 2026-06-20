@@ -8,7 +8,7 @@ import 'partners_screen.dart';
 /// Top-level landing matching Android CommonClubsPartnersLandingFragment:
 /// TabLayout (fixed, 2 tabs) → Clubs | Partners
 class ClubsPartnersLandingScreen extends StatefulWidget {
-  ClubsPartnersLandingScreen({super.key});
+  const ClubsPartnersLandingScreen({super.key});
 
   @override
   State<ClubsPartnersLandingScreen> createState() =>
@@ -78,12 +78,12 @@ class _ClubsPartnersLandingScreenState extends State<ClubsPartnersLandingScreen>
             indicatorWeight: 3,
             labelColor: AppColors.socaBlack,
             unselectedLabelColor: AppColors.textSecondary,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -97,8 +97,8 @@ class _ClubsPartnersLandingScreenState extends State<ClubsPartnersLandingScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                ClubsScreen(),
-                PartnersScreen(),
+                const ClubsScreen(),
+                const PartnersScreen(),
               ],
             ),
           ),

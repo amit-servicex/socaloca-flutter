@@ -28,7 +28,7 @@ import '../providers/auth_provider.dart';
 ///
 /// [isClubPath] = true → club reset (token-based, no OTP).
 class ResetPasswordScreen extends ConsumerStatefulWidget {
-  ResetPasswordScreen({
+  const ResetPasswordScreen({
     super.key,
     this.isClubPath = false,
     this.userId = '',
@@ -137,7 +137,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           // Non-OTP error — show as general snackbar
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(error, style: TextStyle(fontFamily: 'Poppins')),
+              content:
+                  Text(error, style: const TextStyle(fontFamily: 'Poppins')),
               backgroundColor: Colors.red,
             ),
           );
@@ -172,7 +173,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   void _startResendCooldown() {
     setState(() => _resendSeconds = 60);
     _resendTimer?.cancel();
-    _resendTimer = Timer.periodic(Duration(seconds: 1), (_) {
+    _resendTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
       setState(() {
         if (_resendSeconds > 0) {
@@ -187,7 +188,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   void _showToast(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(msg, style: TextStyle(fontFamily: 'Poppins')),
+        content: Text(msg, style: const TextStyle(fontFamily: 'Poppins')),
         backgroundColor: AppColors.socaBlack,
       ),
     );
@@ -215,7 +216,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
               color: error != null ? Colors.red : Colors.black,
               width: 0.8,
             ),
-            boxShadow: [BoxShadow(color: Color(0x22000000), blurRadius: 8)],
+            boxShadow: [
+              const BoxShadow(color: Color(0x22000000), blurRadius: 8)
+            ],
           ),
           child: Row(
             children: [
@@ -226,7 +229,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                   obscuringCharacter: '*',
                   keyboardType: keyboardType,
                   inputFormatters: formatters,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     color: AppColors.socaBlack,
@@ -238,13 +241,13 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     disabledBorder: InputBorder.none,
                     focusedErrorBorder: InputBorder.none,
                     hintText: label,
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: Colors.grey),
                     border: InputBorder.none,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 14),
                   ),
                   onChanged: (_) {
                     if (onClearError != null) onClearError();
@@ -255,7 +258,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 GestureDetector(
                   onTap: onToggleObscure,
                   child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: !obscure
                           ? Image.asset(
                               "assets/icons/ic_password_eye.png",
@@ -273,10 +276,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         ),
         if (error != null)
           Padding(
-            padding: EdgeInsets.only(top: 6, left: 2),
+            padding: const EdgeInsets.only(top: 6, left: 2),
             child: Text(
               error,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 color: Colors.red,
@@ -292,7 +295,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
+      value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
       ),
@@ -300,7 +303,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         backgroundColor: AppColors.socaPageBg,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -327,7 +330,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     if (_otpError != null) setState(() => _otpError = null);
                   },
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
 
                 // ── New Password ─────────────────────────────────────────
                 _buildField(
@@ -341,7 +344,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     if (_passError != null) setState(() => _passError = null);
                   },
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
 
                 // ── Confirm Password ─────────────────────────────────────
                 _buildField(
@@ -357,7 +360,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     }
                   },
                 ),
-                SizedBox(height: 28),
+                const SizedBox(height: 28),
 
                 // ── RESET button ─────────────────────────────────────────
                 GestureDetector(
@@ -367,7 +370,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     height: 60,
                     color: AppColors.socaBlack,
                     child: _isLoading
-                        ? SizedBox(
+                        ? const SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
@@ -377,7 +380,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                           )
                         : Text(
                             AppStrings.resetUpper,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
                               fontSize: 22,
@@ -386,7 +389,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                           ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // ── Resend row ────────────────────────────────────────────
                 Row(
@@ -394,7 +397,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                   children: [
                     Text(
                       AppStrings.haventReceivedCode,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         color: AppColors.socaBlack,
@@ -403,7 +406,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     _resendSeconds > 0
                         ? Text(
                             AppStrings.resendUpperWithSeconds(_resendSeconds),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
@@ -413,7 +416,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                         : GestureDetector(
                             onTap: _isResending ? null : _resend,
                             child: _isResending
-                                ? SizedBox(
+                                ? const SizedBox(
                                     width: 14,
                                     height: 14,
                                     child: CircularProgressIndicator(
@@ -423,7 +426,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                                   )
                                 : Text(
                                     AppStrings.resendUpper,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700,
@@ -434,7 +437,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                           ),
                   ],
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
               ],
             ),
           ),

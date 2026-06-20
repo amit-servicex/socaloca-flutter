@@ -18,7 +18,7 @@ class SkillDetailScreen extends StatefulWidget {
   final String skillName;
   final String skillShort;
 
-  SkillDetailScreen({
+  const SkillDetailScreen({
     super.key,
     required this.playerId,
     required this.skillName,
@@ -106,25 +106,26 @@ class _SkillDetailScreenState extends State<SkillDetailScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return AppLoader();
+      return const AppLoader();
     }
     if (_error != null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            SizedBox(height: 12),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const SizedBox(height: 12),
             Text(_error!,
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
-            SizedBox(height: 12),
+                style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: _load,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow,
               ),
-              child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
+              child: Text('Retry'.tr,
+                  style: const TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),
@@ -132,28 +133,29 @@ class _SkillDetailScreenState extends State<SkillDetailScreen> {
     }
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── Header: skill name + total endorsed count ──────────────────
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               children: [
                 Text(
                   widget.skillName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.socaBlack,
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 if (_totalCount > 0)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(12),
@@ -170,7 +172,7 @@ class _SkillDetailScreenState extends State<SkillDetailScreen> {
               ],
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
 
           // ── Role sections ──────────────────────────────────────────────
           _RoleSection(
@@ -179,7 +181,7 @@ class _SkillDetailScreenState extends State<SkillDetailScreen> {
             emptyText: 'Coaches yet to endorse',
             onViewAll: () => _viewAll('coach', 'Coaches'),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           _RoleSection(
             title: 'Players',
             raters: _players,
@@ -187,21 +189,21 @@ class _SkillDetailScreenState extends State<SkillDetailScreen> {
             showPosition: true,
             onViewAll: () => _viewAll('player', 'Players'),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           _RoleSection(
             title: 'Managers',
             raters: _admins,
             emptyText: 'Managers yet to endorse',
             onViewAll: () => _viewAll('admin', 'Managers'),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           _RoleSection(
             title: 'Fans',
             raters: _fans,
             emptyText: 'Fans yet to endorse',
             onViewAll: () => _viewAll('fan', 'Fans'),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -217,7 +219,7 @@ class _RoleSection extends StatelessWidget {
   final bool showPosition;
   final VoidCallback onViewAll;
 
-  _RoleSection({
+  const _RoleSection({
     required this.title,
     required this.raters,
     required this.emptyText,
@@ -235,7 +237,7 @@ class _RoleSection extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -244,13 +246,13 @@ class _RoleSection extends StatelessWidget {
         children: [
           // Header row: title + view all button
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -261,15 +263,15 @@ class _RoleSection extends StatelessWidget {
                   GestureDetector(
                     onTap: onViewAll,
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: AppColors.socaBlack,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         'View All'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -281,16 +283,16 @@ class _RoleSection extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 1, thickness: 0.5, color: Colors.black12),
+          const Divider(height: 1, thickness: 0.5, color: Colors.black12),
 
           // List or empty state
           if (raters.isEmpty)
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
                 child: Text(
                   emptyText,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

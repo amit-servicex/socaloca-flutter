@@ -107,7 +107,8 @@ class ClubModel with _$ClubModel {
         'likeCount': safeParseInt(json['likeCount']),
         'plan': safeParseInt(json['plan']),
         'stadiums': stadiumsList.map((s) => s.toJson()).toList(),
-        'comps': (json['comps'] as List<dynamic>?)?.cast<String>() ?? <String>[],
+        'comps':
+            (json['comps'] as List<dynamic>?)?.cast<String>() ?? <String>[],
       };
 
       return ClubModel.fromJson(mappedJson);

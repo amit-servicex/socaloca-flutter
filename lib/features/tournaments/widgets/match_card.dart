@@ -10,7 +10,7 @@ import '../data/tournament_models.dart';
 
 /// Match card widget — mirrors Android TournamentUpcomingMatchesAdapter / TournamentPlayedMatchesAdapter
 class MatchCard extends StatelessWidget {
-  MatchCard({
+  const MatchCard({
     super.key,
     required this.match,
     this.onTap,
@@ -27,8 +27,8 @@ class MatchCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(bottom: 8),
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -36,7 +36,7 @@ class MatchCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               blurRadius: 6,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -54,7 +54,7 @@ class MatchCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
 
             // Teams and Score
@@ -67,10 +67,10 @@ class MatchCard extends StatelessWidget {
                   child: Column(
                     children: [
                       _TeamLogo(logoPath: match.homeTeamLogo),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         match.homeTeamName ?? 'TBD',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 12,
@@ -91,8 +91,8 @@ class MatchCard extends StatelessWidget {
                     children: [
                       // Score Box or VS Box
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(8),
@@ -101,7 +101,7 @@ class MatchCard extends StatelessWidget {
                           _isPlayed
                               ? '${match.homeScore} : ${match.awayScore}'
                               : 'VS',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
                             fontSize: 24,
@@ -109,7 +109,7 @@ class MatchCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       // Full time / Upcoming status
                       Text(
                         _isPlayed ? AppStrings.fullTime : AppStrings.upcoming,
@@ -120,20 +120,20 @@ class MatchCard extends StatelessWidget {
                           color: AppColors.socaBlack.withOpacity(0.6),
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       // Date Pill
                       if (match.matchDate != null &&
                           match.matchDate!.isNotEmpty)
                         Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             match.matchDate!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 11,
                               fontWeight: FontWeight.w500,
@@ -151,10 +151,10 @@ class MatchCard extends StatelessWidget {
                   child: Column(
                     children: [
                       _TeamLogo(logoPath: match.awayTeamLogo),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         match.awayTeamName ?? 'TBD',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 12,
@@ -177,7 +177,7 @@ class MatchCard extends StatelessWidget {
 }
 
 class _TeamLogo extends StatelessWidget {
-  _TeamLogo({this.logoPath});
+  const _TeamLogo({this.logoPath});
   final String? logoPath;
 
   @override
@@ -186,7 +186,7 @@ class _TeamLogo extends StatelessWidget {
     return Container(
       width: 48,
       height: 48,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.socaGrey,
       ),
@@ -195,13 +195,13 @@ class _TeamLogo extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => Icon(
+                errorWidget: (_, __, ___) => const Icon(
                   Icons.shield,
                   color: AppColors.socaBlack,
                   size: 24,
                 ),
               )
-            : Icon(Icons.shield, color: AppColors.socaBlack, size: 24),
+            : const Icon(Icons.shield, color: AppColors.socaBlack, size: 24),
       ),
     );
   }

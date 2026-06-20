@@ -7,7 +7,7 @@ import '../models/match_model.dart';
 import 'status_badge.dart';
 
 class MatchCard extends StatelessWidget {
-  MatchCard({
+  const MatchCard({
     super.key,
     required this.match,
     this.onTap,
@@ -21,24 +21,24 @@ class MatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           child: Column(
             children: [
               if (showTournament && match.tournamentName != null) ...[
                 Text(
                   match.tournamentName!,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 11,
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
               ],
               Row(
                 children: [
@@ -52,28 +52,28 @@ class MatchCard extends StatelessWidget {
                 ],
               ),
               if (match.matchDate != null || match.venue != null) ...[
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (match.matchDate != null)
                       Text(
                         match.matchDate!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 11,
                           color: AppColors.textSecondary,
                         ),
                       ),
                     if (match.matchDate != null && match.venue != null)
                       Text(' • '.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: AppColors.textSecondary, fontSize: 11)),
                     if (match.venue != null)
                       Flexible(
                         child: Text(
                           match.venue!,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11,
                             color: AppColors.textSecondary,
                           ),
@@ -93,13 +93,13 @@ class MatchCard extends StatelessWidget {
     return Column(
       children: [
         _teamLogo(logoUrl),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(
           name,
           textAlign: isHome ? TextAlign.right : TextAlign.left,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12,
           ),
@@ -125,25 +125,25 @@ class MatchCard extends StatelessWidget {
     return Container(
       width: 44,
       height: 44,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.border,
         shape: BoxShape.circle,
       ),
-      child: Icon(Icons.sports_soccer, color: AppColors.textSecondary),
+      child: const Icon(Icons.sports_soccer, color: AppColors.textSecondary),
     );
   }
 
   Widget _scoreWidget() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         children: [
           if (match.status != null) StatusBadge.matchStatus(match.status!),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           if (match.score != null)
             Text(
               '${match.score!.homeGoals}  -  ${match.score!.awayGoals}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
                 color: AppColors.textPrimary,
@@ -152,7 +152,7 @@ class MatchCard extends StatelessWidget {
           else
             Text(
               'vs'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
                 color: AppColors.textSecondary,

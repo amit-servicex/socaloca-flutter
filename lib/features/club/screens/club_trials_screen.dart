@@ -330,7 +330,7 @@ class _TrialFilters extends StatelessWidget {
                   flex: 2,
                   child: Text(
                     AppStrings.ageRange,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColors.playedGray,
                         fontFamily: 'Poppins',
                         fontSize: 12),

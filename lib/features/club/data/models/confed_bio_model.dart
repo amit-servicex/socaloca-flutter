@@ -220,7 +220,8 @@ class ConfedBioModel {
     final compList = <ConfedCompItemModel>[];
     if (json['compList'] is List) {
       for (final c in json['compList'] as List) {
-        if (c is Map<String, dynamic>) compList.add(ConfedCompItemModel.fromJson(c));
+        if (c is Map<String, dynamic>)
+          compList.add(ConfedCompItemModel.fromJson(c));
       }
       compList.sort((a, b) {
         final s = a.seq.compareTo(b.seq);
@@ -231,7 +232,8 @@ class ConfedBioModel {
     final fasList = <ConfedFAItemModel>[];
     if (json['fasList'] is List) {
       for (final f in json['fasList'] as List) {
-        if (f is Map<String, dynamic>) fasList.add(ConfedFAItemModel.fromJson(f));
+        if (f is Map<String, dynamic>)
+          fasList.add(ConfedFAItemModel.fromJson(f));
       }
       fasList.sort((a, b) {
         final s = a.seq.compareTo(b.seq);
@@ -242,7 +244,8 @@ class ConfedBioModel {
     final merchandises = <ConfedMerchandiseModel>[];
     if (json['merchandises'] is List) {
       for (final m in json['merchandises'] as List) {
-        if (m is Map<String, dynamic>) merchandises.add(ConfedMerchandiseModel.fromJson(m));
+        if (m is Map<String, dynamic>)
+          merchandises.add(ConfedMerchandiseModel.fromJson(m));
       }
       merchandises.sort((a, b) => a.seq.compareTo(b.seq));
     }
@@ -250,7 +253,8 @@ class ConfedBioModel {
     final sponsorList = <ConfedSponsorModel>[];
     if (json['sponsorList'] is List) {
       for (final s in json['sponsorList'] as List) {
-        if (s is Map<String, dynamic>) sponsorList.add(ConfedSponsorModel.fromJson(s));
+        if (s is Map<String, dynamic>)
+          sponsorList.add(ConfedSponsorModel.fromJson(s));
       }
       sponsorList.sort((a, b) => a.seq.compareTo(b.seq));
     }

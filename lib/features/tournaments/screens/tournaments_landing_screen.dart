@@ -126,9 +126,9 @@ class _TournamentsLandingScreenState
                           tabs: tournamentTabs,
                         ),
                         // ONE-OFF tab
-                        OneOffMatchesScreen(),
+                        const OneOffMatchesScreen(),
                         // PICK-UP tab — accessible to all roles
-                        PickupMatchScreen(),
+                        const PickupMatchScreen(),
                       ],
                     ),
             ),

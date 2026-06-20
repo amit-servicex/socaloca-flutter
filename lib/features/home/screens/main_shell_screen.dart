@@ -25,6 +25,9 @@ class MainShellScreen extends ConsumerStatefulWidget {
 class _MainShellScreenState extends ConsumerState<MainShellScreen> {
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // Route of the currently pushed tab page; null when on home.
+  // Set on push, cleared when the user pops back (await completes).
+  String? _activePushedRoute;
 
   // Regular user tabs (non-referee roles)
   static const _tabs = [
@@ -94,15 +97,29 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
     ),
   ];
 
-  void _onTap(int index, List<_NavTab> tabs) {
-    setState(() => _currentIndex = index);
+  Future<void> _onTap(int index, List<_NavTab> tabs) async {
     final route = tabs[index].route;
     if (route == 'MENU') {
+      setState(() => _currentIndex = index);
       _scaffoldKey.currentState?.openEndDrawer();
-    } else if (route == AppRoutes.home) {
+      return;
+    }
+
+    // Prevent double-pushing: while a tab page is on the stack, ignore re-taps.
+    if (_activePushedRoute == route) return;
+
+    setState(() {
+      _currentIndex = index;
+      _activePushedRoute = route;
+    });
+
+    if (route == AppRoutes.home) {
       context.go(route);
+      if (mounted) setState(() => _activePushedRoute = null);
     } else {
-      context.push(route);
+      await context.push(route);
+      // Reached here only after the user pops back to the shell.
+      if (mounted) setState(() => _activePushedRoute = null);
     }
   }
 
@@ -155,8 +172,8 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: HomeAppBar(),
-      endDrawer: HomeDrawer(),
+      appBar: const HomeAppBar(),
+      endDrawer: const HomeDrawer(),
       body: widget.child,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

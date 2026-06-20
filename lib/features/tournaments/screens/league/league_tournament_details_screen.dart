@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 import '../../../../core/constants/api_constants.dart';
@@ -146,12 +145,12 @@ class _LeagueTournamentDetailsScreenState
             unselectedLabelColor: AppColors.socaBlack,
             indicatorColor: AppColors.socaBlack,
             indicatorWeight: 3,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w700,
             ),
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w500,

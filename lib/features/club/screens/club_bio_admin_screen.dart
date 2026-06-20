@@ -36,7 +36,7 @@ final _clubBioAdminProvider =
 
 /// Club Bio Admin Dashboard — Screen 1 of the Club shell.
 class ClubBioAdminScreen extends ConsumerStatefulWidget {
-  ClubBioAdminScreen({super.key});
+  const ClubBioAdminScreen({super.key});
 
   @override
   ConsumerState<ClubBioAdminScreen> createState() => _ClubBioAdminScreenState();
@@ -58,7 +58,7 @@ class _ClubBioAdminScreenState extends ConsumerState<ClubBioAdminScreen> {
     final async = ref.watch(_clubBioAdminProvider);
 
     return async.when(
-      loading: () => AppLoader(),
+      loading: () => const AppLoader(),
       error: (e, _) => Center(child: Text(AppStrings.errorMessage(e))),
       data: (bio) {
         if (bio == null) {
@@ -72,29 +72,29 @@ class _ClubBioAdminScreenState extends ConsumerState<ClubBioAdminScreen> {
 }
 
 class _BioBody extends ConsumerWidget {
-  _BioBody({required this.bio, required this.onRefresh});
+  const _BioBody({required this.bio, required this.onRefresh});
   final ClubBioModel bio;
   final VoidCallback onRefresh;
 
   Widget _buildInfoRow(String label, String value) {
     if (value.isEmpty) {
       return Padding(
-        padding: EdgeInsets.only(bottom: 4),
+        padding: const EdgeInsets.only(bottom: 4),
         child: Text('$label:',
-            style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+            style: const TextStyle(fontFamily: 'Poppins', fontSize: 13)),
       );
     }
     return Padding(
-      padding: EdgeInsets.only(bottom: 4),
+      padding: const EdgeInsets.only(bottom: 4),
       child: RichText(
         text: TextSpan(
           text: '$label: ',
-          style: TextStyle(
+          style: const TextStyle(
               fontFamily: 'Poppins', fontSize: 13, color: Colors.black),
           children: [
             TextSpan(
               text: value,
-              style: TextStyle(fontWeight: FontWeight.w700),
+              style: const TextStyle(fontWeight: FontWeight.w700),
             ),
           ],
         ),
@@ -126,12 +126,12 @@ class _BioBody extends ConsumerWidget {
           children: [
             // ── Top Bar ──────────────────────────────────────────────
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
                   Text(
                     club.clubName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w800,
                       fontSize: 18,
@@ -139,13 +139,13 @@ class _BioBody extends ConsumerWidget {
                     ),
                   ),
                   if (badgeAsset != null) ...[
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Container(
                         width: 1.5, height: 24, color: AppColors.socaBlack),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Image.asset(badgeAsset, width: 28, height: 28),
                   ],
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
                     icon: Image.asset("assets/icons/ic_gallery_new.png",
                         width: 28, height: 28),
@@ -160,26 +160,26 @@ class _BioBody extends ConsumerWidget {
                 ],
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             // ── Club info ─────────────────────────────────────────────────
             Container(
               color: Colors.white,
               width: double.infinity,
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     club.clubName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w800,
                       fontSize: 16,
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -190,22 +190,22 @@ class _BioBody extends ConsumerWidget {
                             width: 100,
                             height: 100,
                             color: Colors.black,
-                            padding: EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(4),
                             child: logoUrl.isNotEmpty
                                 ? CachedNetworkImage(
                                     imageUrl: logoUrl, fit: BoxFit.contain)
-                                : Icon(Icons.shield,
+                                : const Icon(Icons.shield,
                                     color: AppColors.socaYellow, size: 48),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             AppStrings.followersCount(club.followCount),
-                            style:
-                                TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                            style: const TextStyle(
+                                fontFamily: 'Poppins', fontSize: 13),
                           ),
                         ],
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       // Info Column
                       Expanded(
                         child: Column(
@@ -222,33 +222,33 @@ class _BioBody extends ConsumerWidget {
                                 AppStrings.stadium, club.stadiumsAsStr),
                             _buildInfoRow(
                                 AppStrings.manager, club.manager ?? ''),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(AppStrings.league,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Poppins', fontSize: 13)),
                             if (club.league != null && club.league!.isNotEmpty)
                               Text(club.league!,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700)),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(AppStrings.otherCompetitions,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Poppins', fontSize: 13)),
                             if (club.confed != null && club.confed!.isNotEmpty)
                               Text(club.confed!,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700)),
                             if (club.comps.isNotEmpty) ...[
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(AppStrings.competitions,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontFamily: 'Poppins', fontSize: 13)),
                               Text(club.competitionsStr,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700)),
@@ -261,7 +261,7 @@ class _BioBody extends ConsumerWidget {
 
                   // ── FIX 5: Upgrade button when not a partner ─────────────
                   if (!(club.isPartner)) ...[
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -284,11 +284,11 @@ class _BioBody extends ConsumerWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         child: Text(
                           AppStrings.upgrade,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
@@ -301,24 +301,24 @@ class _BioBody extends ConsumerWidget {
                 ],
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             // ── FIX 6: News section ───────────────────────────────────────
             if (bio.newsList.isNotEmpty) ...[
               _buildNewsSection(bio.newsList),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
             ],
 
             // ── FIX 6: Matches section ────────────────────────────────────
             if (bio.matchList.isNotEmpty) ...[
               _buildMatchesSection(bio.matchList),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
             ],
 
             // ── FIX 6: Players section ────────────────────────────────────
             if (bio.playerList.isNotEmpty) ...[
               _buildPlayersSection(bio.playerList),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
             ],
 
             Container(
@@ -329,8 +329,8 @@ class _BioBody extends ConsumerWidget {
                   if (bio.teamList.isNotEmpty)
                     Container(
                       width: double.infinity,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 24),
                       child: Wrap(
                         spacing: 24,
                         runSpacing: 12,
@@ -339,7 +339,7 @@ class _BioBody extends ConsumerWidget {
                             return RichText(
                               text: TextSpan(
                                 text: '${t.ageGroup ?? ''} ',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 15,
                                     color: Colors.black),
@@ -348,14 +348,14 @@ class _BioBody extends ConsumerWidget {
                                       text: t.gender == 'male'
                                           ? AppStrings.men
                                           : AppStrings.women,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.w700)),
                                 ],
                               ),
                             );
                           }
                           return Text(t.teamName ?? '',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600));
@@ -364,7 +364,7 @@ class _BioBody extends ConsumerWidget {
                     ),
                 ])),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Container(
               color: AppColors.socaGrey,
               child: Column(
@@ -373,17 +373,18 @@ class _BioBody extends ConsumerWidget {
                   _SectionHeader(title: AppStrings.homeAwayThirdKit),
                   Container(
                     color: Colors.grey.shade200,
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                     child: IntrinsicHeight(
                       child: Row(
                         children: [
                           _KitCard(url: club.homeKit),
-                          VerticalDivider(
+                          const VerticalDivider(
                               width: 0,
                               thickness: 1,
                               color: AppColors.socaBlack),
                           _KitCard(url: club.awayKit),
-                          VerticalDivider(
+                          const VerticalDivider(
                               width: 1,
                               thickness: 1,
                               color: AppColors.socaBlack),
@@ -395,7 +396,7 @@ class _BioBody extends ConsumerWidget {
                 ],
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             Container(
               color: AppColors.socaGrey,
@@ -408,7 +409,7 @@ class _BioBody extends ConsumerWidget {
                   if (bio.sponsorList.isNotEmpty)
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Wrap(
                         spacing: 16,
                         runSpacing: 16,
@@ -423,7 +424,7 @@ class _BioBody extends ConsumerWidget {
                                     imageUrl: url, fit: BoxFit.contain)
                                 : Center(
                                     child: Text(s.name ?? '',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600))),
@@ -432,18 +433,18 @@ class _BioBody extends ConsumerWidget {
                       ),
                     ),
                   Padding(
-                    padding: EdgeInsets.only(left: 24.0),
+                    padding: const EdgeInsets.only(left: 24.0),
                     child: Text(AppStrings.kit,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w500)),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -461,8 +462,8 @@ class _BioBody extends ConsumerWidget {
           _SectionHeader(title: AppStrings.newsAnnouncements),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemCount: newsList.length,
             itemBuilder: (_, i) => _buildNewsCard(newsList[i]),
           ),
@@ -474,12 +475,12 @@ class _BioBody extends ConsumerWidget {
   Widget _buildNewsCard(ClubNewsModel news) {
     final imageUrl = news.fullImageUrl;
     return Card(
-      margin: EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 8),
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -495,14 +496,14 @@ class _BioBody extends ConsumerWidget {
                       width: 56, height: 56, color: AppColors.socaGrey),
                 ),
               ),
-            if (imageUrl.isNotEmpty) SizedBox(width: 10),
+            if (imageUrl.isNotEmpty) const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (news.title != null && news.title!.isNotEmpty)
                     Text(news.title!,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -511,9 +512,9 @@ class _BioBody extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis),
                   if (news.description != null &&
                       news.description!.isNotEmpty) ...[
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(news.description!,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 11,
                             color: AppColors.socaBlack),
@@ -540,8 +541,8 @@ class _BioBody extends ConsumerWidget {
           _SectionHeader(title: AppStrings.recentMatches),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemCount: matches.length,
             itemBuilder: (_, i) => _buildMatchCard(matches[i]),
           ),
@@ -557,21 +558,21 @@ class _BioBody extends ConsumerWidget {
     final awayLogo = ApiConstants.getImageUrl(match.awayTeamLogo);
 
     return Card(
-      margin: EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 8),
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           children: [
             Expanded(
               child: Column(
                 children: [
                   _buildTeamLogo(homeLogo),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(match.homeTeamName,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -583,9 +584,9 @@ class _BioBody extends ConsumerWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text('$homeScore - $awayScore',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -595,9 +596,9 @@ class _BioBody extends ConsumerWidget {
               child: Column(
                 children: [
                   _buildTeamLogo(awayLogo),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(match.awayTeamName,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -618,17 +619,18 @@ class _BioBody extends ConsumerWidget {
     return Container(
       width: 40,
       height: 40,
-      decoration:
-          BoxDecoration(shape: BoxShape.circle, color: AppColors.socaGrey),
+      decoration: const BoxDecoration(
+          shape: BoxShape.circle, color: AppColors.socaGrey),
       child: ClipOval(
         child: imageUrl.isNotEmpty
             ? CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => Icon(Icons.sports_soccer,
+                errorWidget: (_, __, ___) => const Icon(Icons.sports_soccer,
                     size: 22, color: AppColors.socaBlack),
               )
-            : Icon(Icons.sports_soccer, size: 22, color: AppColors.socaBlack),
+            : const Icon(Icons.sports_soccer,
+                size: 22, color: AppColors.socaBlack),
       ),
     );
   }
@@ -644,9 +646,9 @@ class _BioBody extends ConsumerWidget {
           _SectionHeader(title: AppStrings.featuredPlayers),
           GridView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 1.1,
               crossAxisSpacing: 10,
@@ -667,29 +669,30 @@ class _BioBody extends ConsumerWidget {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               width: 52,
               height: 52,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: AppColors.socaGrey),
               child: ClipOval(
                 child: imageUrl.isNotEmpty
                     ? CachedNetworkImage(
                         imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => Icon(Icons.person,
+                        errorWidget: (_, __, ___) => const Icon(Icons.person,
                             size: 28, color: AppColors.socaBlack),
                       )
-                    : Icon(Icons.person, size: 28, color: AppColors.socaBlack),
+                    : const Icon(Icons.person,
+                        size: 28, color: AppColors.socaBlack),
               ),
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Text(player.fullName,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
@@ -699,7 +702,7 @@ class _BioBody extends ConsumerWidget {
                 overflow: TextOverflow.ellipsis),
             if (player.position != null && player.position!.isNotEmpty)
               Text(player.position!,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 10,
                       color: AppColors.textSecondary),
@@ -716,7 +719,7 @@ class _BioBody extends ConsumerWidget {
 // ── Small helper widgets ──────────────────────────────────────────────────────
 
 class _SectionHeader extends StatelessWidget {
-  _SectionHeader({required this.title});
+  const _SectionHeader({required this.title});
   final String title;
 
   @override
@@ -725,10 +728,10 @@ class _SectionHeader extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 15,
@@ -736,7 +739,7 @@ class _SectionHeader extends StatelessWidget {
             ),
           ),
         ),
-        Divider(
+        const Divider(
           thickness: .8,
           color: AppColors.socaBlack,
           height: 0,
@@ -747,7 +750,7 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _KitCard extends StatelessWidget {
-  _KitCard({this.url});
+  const _KitCard({this.url});
   final String? url;
 
   @override
@@ -756,7 +759,7 @@ class _KitCard extends StatelessWidget {
     return Expanded(
       child: Container(
         height: 140,
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         color: Colors.white,
         child: fullUrl.isNotEmpty
             ? CachedNetworkImage(imageUrl: fullUrl, fit: BoxFit.contain)

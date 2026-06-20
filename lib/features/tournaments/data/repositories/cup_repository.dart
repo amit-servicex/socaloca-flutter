@@ -54,14 +54,12 @@ class CupRepository {
       List<CupTeamModel>? teams;
       if (response['teams'] != null && response['teams'] is List) {
         final teamsData = response['teams'] as List;
-        teams = teamsData
-            .map((json) {
-              final t = Map<String, dynamic>.from(json as Map<String, dynamic>);
-              t['logo'] = t['imageUrl'] ?? t['logo'];
-              t['teamName'] = t['teamName'] ?? t['name'];
-              return CupTeamModel.fromJson(t);
-            })
-            .toList();
+        teams = teamsData.map((json) {
+          final t = Map<String, dynamic>.from(json as Map<String, dynamic>);
+          t['logo'] = t['imageUrl'] ?? t['logo'];
+          t['teamName'] = t['teamName'] ?? t['name'];
+          return CupTeamModel.fromJson(t);
+        }).toList();
       }
 
       // Parse sponsors
@@ -146,14 +144,12 @@ class CupRepository {
       List<CupTeamModel>? teams;
       if (response['teams'] != null && response['teams'] is List) {
         final teamsData = response['teams'] as List;
-        teams = teamsData
-            .map((json) {
-              final t = Map<String, dynamic>.from(json as Map<String, dynamic>);
-              t['logo'] = t['imageUrl'] ?? t['logo'];
-              t['teamName'] = t['teamName'] ?? t['name'];
-              return CupTeamModel.fromJson(t);
-            })
-            .toList();
+        teams = teamsData.map((json) {
+          final t = Map<String, dynamic>.from(json as Map<String, dynamic>);
+          t['logo'] = t['imageUrl'] ?? t['logo'];
+          t['teamName'] = t['teamName'] ?? t['name'];
+          return CupTeamModel.fromJson(t);
+        }).toList();
       }
 
       List<CupSponsorModel>? sponsors;
@@ -330,11 +326,13 @@ class CupRepository {
           roundId: m['roundId'] as String?,
           homeTeamId: myTeamId,
           homeTeamName: (m['myTeamName'] ?? m['homeTeamName']) as String?,
-          homeTeamShortName: (m['myTeamShortName'] ?? m['homeTeamShortName']) as String?,
+          homeTeamShortName:
+              (m['myTeamShortName'] ?? m['homeTeamShortName']) as String?,
           homeTeamLogo: myTeamLogo,
           awayTeamId: opponentTeamId,
           awayTeamName: (m['opponentTeamName'] ?? m['awayTeamName']) as String?,
-          awayTeamShortName: (m['opponentTeamShortName'] ?? m['awayTeamShortName']) as String?,
+          awayTeamShortName:
+              (m['opponentTeamShortName'] ?? m['awayTeamShortName']) as String?,
           awayTeamLogo: opponentTeamLogo,
           homeScore: score != null
               ? (score['myGoals'] as num?)?.toInt()
@@ -364,7 +362,8 @@ class CupRepository {
           matchTime: m['matchTime'] as String?,
           matchName: m['matchName'] as String?,
           matchDateMs: (m['matchDateTimeGmt'] as num?)?.toInt() ??
-              (m['matchDateMs'] as num?)?.toInt() ?? 0,
+              (m['matchDateMs'] as num?)?.toInt() ??
+              0,
           venue: m['stadiumName'] as String?,
           city: m['city'] as String?,
           fieldName: m['fieldName'] as String?,

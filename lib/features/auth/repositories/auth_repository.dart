@@ -508,8 +508,7 @@ class AuthRepository {
           ApiConstants.uploadImage,
           formData: formData,
         );
-        final uploadedUrl =
-            uploadResp['response']?['image'] as String? ?? '';
+        final uploadedUrl = uploadResp['response']?['image'] as String? ?? '';
         if (uploadedUrl.isNotEmpty) {
           imageUrl = uploadedUrl;
           log('✅ Profile image uploaded: $imageUrl');
@@ -639,8 +638,7 @@ class AuthRepository {
           ApiConstants.uploadImage,
           formData: formData,
         );
-        final uploadedUrl =
-            uploadResp['response']?['image'] as String? ?? '';
+        final uploadedUrl = uploadResp['response']?['image'] as String? ?? '';
         if (uploadedUrl.isNotEmpty) {
           imageUrl = uploadedUrl;
           log('✅ Profile image uploaded: $imageUrl');

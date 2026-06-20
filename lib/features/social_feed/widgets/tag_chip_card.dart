@@ -6,6 +6,7 @@ import 'package:socaloca/core/theme/app_colors.dart';
 
 class TagChip extends StatelessWidget {
   const TagChip({
+    super.key,
     required this.name,
     required this.imageUrl,
     required this.id,
@@ -66,7 +67,8 @@ class TagChip extends StatelessWidget {
                       color: AppColors.socaBlack,
                     ),
                   )
-                : const Icon(Icons.person, size: 18, color: AppColors.socaBlack),
+                : const Icon(Icons.person,
+                    size: 18, color: AppColors.socaBlack),
           ),
           const SizedBox(width: 6),
           Text(

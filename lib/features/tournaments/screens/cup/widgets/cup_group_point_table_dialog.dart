@@ -16,7 +16,7 @@ class CupGroupPointTableDialog extends ConsumerWidget {
   final String roundId;
   final String groupId;
 
-  CupGroupPointTableDialog({
+  const CupGroupPointTableDialog({
     super.key,
     required this.tournamentId,
     required this.roundId,
@@ -35,9 +35,9 @@ class CupGroupPointTableDialog extends ConsumerWidget {
 
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: EdgeInsets.all(16),
+      insetPadding: const EdgeInsets.all(16),
       child: Container(
-        constraints: BoxConstraints(maxHeight: 600),
+        constraints: const BoxConstraints(maxHeight: 600),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -47,8 +47,8 @@ class CupGroupPointTableDialog extends ConsumerWidget {
           children: [
             // Header
             Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
@@ -57,16 +57,16 @@ class CupGroupPointTableDialog extends ConsumerWidget {
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.table_chart,
                     color: AppColors.socaYellow,
                     size: 20,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       AppStrings.groupStandings,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -75,10 +75,10 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.close, color: AppColors.socaYellow),
+                    icon: const Icon(Icons.close, color: AppColors.socaYellow),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
+                    constraints: const BoxConstraints(),
                   ),
                 ],
               ),
@@ -91,10 +91,10 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                   if (table.isEmpty) {
                     return Center(
                       child: Padding(
-                        padding: EdgeInsets.all(32),
+                        padding: const EdgeInsets.all(32),
                         child: Text(
                           AppStrings.noStandingsAvailable,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                           ),
@@ -107,18 +107,18 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                     scrollDirection: Axis.horizontal,
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: DataTable(
-                          headingRowColor: MaterialStateProperty.all(
+                          headingRowColor: WidgetStateProperty.all(
                             Colors.grey[100],
                           ),
-                          headingTextStyle: TextStyle(
+                          headingTextStyle: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                             color: AppColors.socaBlack,
                           ),
-                          dataTextStyle: TextStyle(
+                          dataTextStyle: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             color: AppColors.socaBlack,
@@ -159,7 +159,7 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                             final isEven = index % 2 == 0;
 
                             return DataRow(
-                              color: MaterialStateProperty.all(
+                              color: WidgetStateProperty.all(
                                 isEven ? Colors.white : Colors.grey[50],
                               ),
                               cells: [
@@ -168,13 +168,13 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                                   Row(
                                     children: [
                                       _buildTeamLogo(team.teamLogo, 24),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       SizedBox(
                                         width: 100,
                                         child: Text(
                                           team.teamName ?? 'Unknown',
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -204,7 +204,7 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                                 DataCell(
                                   Text(
                                     '${team.points}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.socaBlack,
                                     ),
@@ -218,15 +218,15 @@ class CupGroupPointTableDialog extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => AppLoader(),
+                loading: () => const AppLoader(),
                 error: (error, stack) => Center(
                   child: Padding(
-                    padding: EdgeInsets.all(32),
+                    padding: const EdgeInsets.all(32),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.error_outline, color: Colors.red),
-                        SizedBox(height: 8),
+                        const Icon(Icons.error_outline, color: Colors.red),
+                        const SizedBox(height: 8),
                         Text(
                           AppStrings.errorLoadingStandings,
                           style: TextStyle(

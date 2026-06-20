@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:socaloca/core/constants/app_strings.dart';
 
 import 'package:socaloca/features/my_bio/screens/my_bio_screen.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyBioScreen extends StatelessWidget {
-  RefereeMyBioScreen({super.key});
+  const RefereeMyBioScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MyBioScreen();
+    return const MyBioScreen();
   }
 }
 

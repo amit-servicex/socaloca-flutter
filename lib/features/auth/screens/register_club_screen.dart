@@ -224,7 +224,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
               },
               child: Text(
                 AppStrings.gotItUpper,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w800,
                 ),
@@ -453,7 +453,7 @@ class _RegisterClubScreenState extends ConsumerState<RegisterClubScreen> {
                         )
                       : Text(
                           AppStrings.submit,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w800,
                             fontSize: 24,

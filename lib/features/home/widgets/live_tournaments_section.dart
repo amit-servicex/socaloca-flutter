@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +12,7 @@ import '../../../core/theme/app_colors.dart';
 import '../providers/home_feed_providers.dart';
 
 class LiveTournamentsSection extends ConsumerStatefulWidget {
-  LiveTournamentsSection({super.key});
+  const LiveTournamentsSection({super.key});
 
   @override
   ConsumerState<LiveTournamentsSection> createState() =>
@@ -32,7 +31,7 @@ class _LiveTournamentsSectionState
   }
 
   void _startAutoSlide() {
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (_pageController.hasClients) {
         final state = ref.read(feedLiveTmntsProvider);
         if (state.items.isEmpty) return;
@@ -43,7 +42,7 @@ class _LiveTournamentsSectionState
         }
         _pageController.animateToPage(
           nextPage,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       }
@@ -62,8 +61,8 @@ class _LiveTournamentsSectionState
     ref.watch(localeProvider);
     final state = ref.watch(feedLiveTmntsProvider);
 
-    if (state.isLoading && state.items.isEmpty) return SizedBox.shrink();
-    if (state.items.isEmpty) return SizedBox.shrink();
+    if (state.isLoading && state.items.isEmpty) return const SizedBox.shrink();
+    if (state.items.isEmpty) return const SizedBox.shrink();
 
     // log("this is the data of the ongoing tournaments ${state.items}");
 
@@ -74,13 +73,13 @@ class _LiveTournamentsSectionState
         Container(
           width: double.infinity,
           color: AppColors.socaBlack,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 AppStrings.ongoingTournaments,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -94,7 +93,7 @@ class _LiveTournamentsSectionState
                 },
                 child: Text(
                   AppStrings.viewAll,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -126,7 +125,7 @@ class _LiveTournamentsSectionState
               final tournament = state.items[index];
 
               return Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -146,11 +145,11 @@ class _LiveTournamentsSectionState
                           child: tournament.imageUrl == null ||
                                   tournament.imageUrl!.isEmpty ||
                                   tournament.imageUrl!.startsWith('file:///')
-                              ? Icon(Icons.sports_soccer,
+                              ? const Icon(Icons.sports_soccer,
                                   color: AppColors.socaGrey)
                               : null,
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +161,7 @@ class _LiveTournamentsSectionState
                                       (tournament.tmntName ??
                                               AppStrings.tournamentFallback)
                                           .toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
@@ -175,13 +174,13 @@ class _LiveTournamentsSectionState
                                   if (tournament.country != null &&
                                       tournament.country!.isNotEmpty)
                                     Padding(
-                                      padding: EdgeInsets.only(left: 4),
+                                      padding: const EdgeInsets.only(left: 4),
                                       child: _buildCountryFlag(
                                           tournament.country!),
                                     ),
                                 ],
                               ),
-                              SizedBox(height: 2),
+                              const SizedBox(height: 2),
                               Text(
                                 tournament.startDate ?? AppStrings.unknownDate,
                                 style: TextStyle(
@@ -197,12 +196,12 @@ class _LiveTournamentsSectionState
                       ],
                     ),
 
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // Banner Text
                     RichText(
                       text: TextSpan(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           color: AppColors.socaBlack,
@@ -214,13 +213,13 @@ class _LiveTournamentsSectionState
                                       AppStrings.tournamentFallback)),
                           TextSpan(
                             text: AppStrings.checkTournamentDetails,
-                            style: TextStyle(fontWeight: FontWeight.w700),
+                            style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
                     ),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Details block
                     Expanded(
@@ -245,7 +244,7 @@ class _LiveTournamentsSectionState
                                         tournament.imageUrl!.isEmpty ||
                                         tournament.imageUrl!
                                             .startsWith('file:///')
-                                    ? Icon(Icons.sports_soccer,
+                                    ? const Icon(Icons.sports_soccer,
                                         size: 40, color: AppColors.socaGrey)
                                     : null,
                               ),
@@ -264,7 +263,7 @@ class _LiveTournamentsSectionState
                             ],
                           ),
 
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
 
                           // Right side details
                           Expanded(
@@ -357,23 +356,23 @@ class _LiveTournamentsSectionState
 
   Widget _buildDetailItem(String title, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 0),
+      padding: const EdgeInsets.only(bottom: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 10,
               fontWeight: FontWeight.w400,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 2),
+          const SizedBox(height: 2),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -389,10 +388,10 @@ class _LiveTournamentsSectionState
 
   Widget _buildCountryFlag(String country) {
     if (country.toLowerCase() == 'ghana') {
-      return Text('🇬🇭'.tr, style: TextStyle(fontSize: 18));
+      return Text('🇬🇭'.tr, style: const TextStyle(fontSize: 18));
     } else if (country.toLowerCase() == 'india') {
-      return Text('🇮🇳'.tr, style: TextStyle(fontSize: 18));
+      return Text('🇮🇳'.tr, style: const TextStyle(fontSize: 18));
     }
-    return Icon(Icons.flag, size: 18);
+    return const Icon(Icons.flag, size: 18);
   }
 }

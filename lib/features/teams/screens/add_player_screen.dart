@@ -634,9 +634,9 @@ class _InviteByPhoneTabState extends State<_InviteByPhoneTab>
           color: Colors.white,
           child: Column(
             children: [
-              Text(
+              const Text(
                 'Invite players',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -710,9 +710,8 @@ class _InviteByPhoneTabState extends State<_InviteByPhoneTab>
                             ),
                             const SizedBox(width: 16),
                             const Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16.0),
-                              child: const VerticalDivider(
+                              padding: EdgeInsets.symmetric(vertical: 16.0),
+                              child: VerticalDivider(
                                 color: AppColors.socaBlack,
                                 thickness: 1,
                                 width: 1,
@@ -1298,9 +1297,8 @@ class _CreatePlayerTabState extends State<_CreatePlayerTab>
     );
   }
 
-  InputDecoration _dropdownDecoration() => InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+  InputDecoration _dropdownDecoration() => const InputDecoration(
+        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
         border: InputBorder.none,
         focusedBorder: InputBorder.none,
         errorBorder: InputBorder.none,

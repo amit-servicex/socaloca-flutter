@@ -147,7 +147,7 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
                     ),
                   ),
                 ),
-                Divider(
+                const Divider(
                   height: 1,
                   thickness: 1,
                   color: AppColors.socaGrey,
@@ -199,7 +199,7 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
-        leading: SizedBox(
+        leading: const SizedBox(
           width: 0,
         ),
         bottom: PreferredSize(
@@ -212,7 +212,7 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
         centerTitle: true,
         title: Text(
           AppStrings.rateYourExperience.replaceFirst('!', ''),
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 16,
@@ -223,7 +223,7 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 100),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 100),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -268,7 +268,7 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     AppStrings.npsQ6,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -276,7 +276,7 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
@@ -286,21 +286,22 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: AppColors.socaBlack),
+                        borderSide:
+                            const BorderSide(color: AppColors.socaBlack),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide:
-                            BorderSide(color: AppColors.socaBlack, width: 1.5),
+                        borderSide: const BorderSide(
+                            color: AppColors.socaBlack, width: 1.5),
                       ),
                       hintText: '',
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
                     ),
-                    style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                    style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
               ],
             ),
           ),
@@ -309,7 +310,7 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
           if (_isLoading)
             Container(
               color: Colors.black.withValues(alpha: 0.3),
-              child: AppLoader(),
+              child: const AppLoader(),
             ),
         ],
       ),
@@ -317,21 +318,21 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
       // Bottom action buttons: RESET | SAVE (matches Android layout)
       bottomNavigationBar: Container(
         color: Colors.white,
-        padding: EdgeInsets.fromLTRB(20, 12, 20, 24),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         child: Row(
           children: [
             Expanded(
               child: OutlinedButton(
                 onPressed: _isLoading ? null : _reset,
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: AppColors.socaBlack),
+                  side: const BorderSide(color: AppColors.socaBlack),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)),
-                  padding: EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 child: Text(
                   AppStrings.resetUpper,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     color: AppColors.socaBlack,
@@ -339,7 +340,7 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
                 ),
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _save,
@@ -347,12 +348,12 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
                   backgroundColor: AppColors.socaBlack,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)),
-                  padding: EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   elevation: 0,
                 ),
                 child: Text(
                   AppStrings.save.toUpperCase(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     color: AppColors.socaYellow,
@@ -445,5 +446,5 @@ class _NpsSurveyScreenState extends ConsumerState<NpsSurveyScreen> {
   }
 
   Widget _divider() =>
-      Divider(height: 8, thickness: 0.8, color: AppColors.socaGrey);
+      const Divider(height: 8, thickness: 0.8, color: AppColors.socaGrey);
 }

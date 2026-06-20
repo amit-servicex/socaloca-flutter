@@ -11,7 +11,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class PlayerPendingTeamsScreen extends ConsumerStatefulWidget {
   final String playerId;
 
-  PlayerPendingTeamsScreen({super.key, required this.playerId});
+  const PlayerPendingTeamsScreen({super.key, required this.playerId});
 
   @override
   ConsumerState<PlayerPendingTeamsScreen> createState() =>
@@ -69,7 +69,7 @@ class _PlayerPendingTeamsScreenState
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Request cancelled.'.tr,
-                style: TextStyle(fontFamily: 'Poppins')),
+                style: const TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.green,
           ),
         );
@@ -78,7 +78,8 @@ class _PlayerPendingTeamsScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
+            content: Text('Error: $e',
+                style: const TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -97,22 +98,23 @@ class _PlayerPendingTeamsScreenState
         elevation: 0,
       ),
       body: _isLoading
-          ? AppLoader()
+          ? const AppLoader()
           : _error != null
               ? Center(
                   child: Text('Error: $_error',
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14)))
+                      style:
+                          const TextStyle(fontFamily: 'Poppins', fontSize: 14)))
               : _teams.isEmpty
                   ? Center(
                       child: Text('No pending requests.'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack)))
                   : ListView.separated(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       itemCount: _teams.length,
-                      separatorBuilder: (_, __) => SizedBox(height: 8),
+                      separatorBuilder: (_, __) => const SizedBox(height: 8),
                       itemBuilder: (context, i) {
                         final team = _teams[i];
                         final teamId = team['teamId'] as String? ??
@@ -132,13 +134,13 @@ class _PlayerPendingTeamsScreenState
                                   : null,
                               backgroundColor: AppColors.socaGrey,
                               child: imageUrl.isEmpty
-                                  ? Icon(Icons.group,
+                                  ? const Icon(Icons.group,
                                       color: AppColors.socaBlack)
                                   : null,
                             ),
                             title: Text(
                               teamName,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
@@ -149,7 +151,7 @@ class _PlayerPendingTeamsScreenState
                               onPressed: () => _cancel(team, i),
                               child: Text(
                                 'Cancel'.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Colors.red,
                                   fontWeight: FontWeight.w600,
@@ -157,8 +159,8 @@ class _PlayerPendingTeamsScreenState
                               ),
                             ),
                             onTap: teamId.isNotEmpty
-                                ? () =>
-                                    context.push(AppRoutes.teamBio.replaceFirst(':teamId', teamId))
+                                ? () => context.push(AppRoutes.teamBio
+                                    .replaceFirst(':teamId', teamId))
                                 : null,
                           ),
                         );

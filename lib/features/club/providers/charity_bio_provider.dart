@@ -5,5 +5,7 @@ import '../data/repositories/partners_repository.dart';
 
 final charityBioProvider =
     FutureProvider.family<CharityBioModel?, String>((ref, charityId) async {
-  return ref.read(partnersRepositoryProvider).getCharityBio(charityId: charityId);
+  return ref
+      .read(partnersRepositoryProvider)
+      .getCharityBio(charityId: charityId);
 });

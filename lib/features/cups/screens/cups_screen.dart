@@ -4,7 +4,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 // TODO: Implement CupsScreen
 // See flutter_migration_docs/screens/ for full spec
 class CupsScreen extends StatelessWidget {
-  CupsScreen({super.key});
+  const CupsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -44,7 +44,7 @@ class MyActivitiesFormScreen extends ConsumerStatefulWidget {
   final String initialTab; // 'match' or 'training'
   final String? initialGameType;
 
-  MyActivitiesFormScreen({
+  const MyActivitiesFormScreen({
     super.key,
     required this.userId,
     this.initialTab = 'match',
@@ -143,7 +143,7 @@ class _MyActivitiesFormScreenState
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (_) => _TagPlayersSheet(
@@ -196,7 +196,7 @@ class _MyActivitiesFormScreenState
       lastDate: now,
       builder: (ctx, child) => Theme(
         data: Theme.of(ctx).copyWith(
-          colorScheme: ColorScheme.light(
+          colorScheme: const ColorScheme.light(
             primary: AppColors.socaBlack,
             onPrimary: AppColors.socaYellow,
           ),
@@ -217,7 +217,7 @@ class _MyActivitiesFormScreenState
       lastDate: now,
       builder: (ctx, child) => Theme(
         data: Theme.of(ctx).copyWith(
-          colorScheme: ColorScheme.light(
+          colorScheme: const ColorScheme.light(
             primary: AppColors.socaBlack,
             onPrimary: AppColors.socaYellow,
           ),
@@ -402,21 +402,21 @@ class _MyActivitiesFormScreenState
 
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               _buildRadioToggle(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               if (_activeTab == 'match') _buildMatchForm(),
               if (_activeTab == 'training') _buildTrainingForm(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildTagSection(),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               _buildSubmitButton(),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -431,13 +431,13 @@ class _MyActivitiesFormScreenState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: const BoxDecoration(
             color: AppColors.socaBlack,
           ),
           child: Text(
             AppStrings.myActivities,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -445,10 +445,10 @@ class _MyActivitiesFormScreenState
             ),
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Text(
           AppStrings.myActivitiesDescription,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -470,7 +470,7 @@ class _MyActivitiesFormScreenState
           selected: _activeTab == 'match',
           onTap: () => setState(() => _activeTab = 'match'),
         ),
-        SizedBox(width: 24),
+        const SizedBox(width: 24),
         _RadioOption(
           label: AppStrings.trainingSession,
           selected: _activeTab == 'training',
@@ -488,27 +488,27 @@ class _MyActivitiesFormScreenState
       children: [
         // Game Type
         _FormLabel(AppStrings.gameTypeLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _DropdownField<String>(
           value: _gameType,
           items: _gameTypes,
           onChanged: (v) => setState(() => _gameType = v!),
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Match Date
         _FormLabel(AppStrings.matchDateLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _DateField(
           date: _matchDate,
           hint: AppStrings.selectDate,
           onTap: _pickMatchDate,
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Playing Position
         _FormLabel(AppStrings.playingPositionLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _DropdownField<String>(
           value: _position,
           items: _positions,
@@ -519,41 +519,41 @@ class _MyActivitiesFormScreenState
             });
           },
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Position Type
         _FormLabel(AppStrings.positionTypeLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _DropdownField<String>(
           value: _positionType,
           items: _positionTypes[_position]!,
           onChanged: (v) => setState(() => _positionType = v!),
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Goals / Clean Sheet
         _FormLabel(_isGoalkeeper
             ? AppStrings.cleanSheetRequiredLower
             : AppStrings.goalsScoredRequiredLower),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _NumberInput(controller: _goalsCtrl),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Assists
         _FormLabel(AppStrings.numberOfAssistsLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _NumberInput(controller: _assistsCtrl),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Minutes
         _FormLabel(AppStrings.minutesPlayedLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _NumberInput(controller: _minutesCtrl),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Teams
         _FormLabel(AppStrings.teamsPlayedLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         Row(
           children: [
             Expanded(
@@ -563,10 +563,10 @@ class _MyActivitiesFormScreenState
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 AppStrings.vs,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -582,20 +582,20 @@ class _MyActivitiesFormScreenState
             ),
           ],
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Rating
         _FormLabel(AppStrings.rateYourPerformanceLabel),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         _RatingSelector(
           selected: _rating,
           onSelect: (v) => setState(() => _rating = v),
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Notes
         _FormLabel(AppStrings.howIPerformedLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _NotesInput(
           controller: _notesCtrl,
           maxLength: 150,
@@ -612,33 +612,33 @@ class _MyActivitiesFormScreenState
       children: [
         // Training Date
         _FormLabel(AppStrings.trainingSessionDateLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _DateField(
           date: _trainDate,
           hint: AppStrings.selectDate,
           onTap: _pickTrainDate,
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Training Type
         _FormLabel(AppStrings.trainingSessionTypeLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _DropdownField<String>(
           value: _trainType,
           items: _trainTypes,
           onChanged: (v) => setState(() => _trainType = v!),
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Minutes
         _FormLabel(AppStrings.trainingSessionMinutesLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _NumberInput(controller: _trainMinutesCtrl),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 
         // Notes
         _FormLabel(AppStrings.trainingNotesLabel),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         _NotesInput(
           controller: _trainNotesCtrl,
           maxLength: 150,
@@ -662,16 +662,16 @@ class _MyActivitiesFormScreenState
                 onPressed: _openTagPlayers,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.socaBlack,
-                  side: BorderSide(color: AppColors.socaBlack),
+                  side: const BorderSide(color: AppColors.socaBlack),
                   backgroundColor: Colors.transparent,
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
                 child: Text(
                   AppStrings.tagPlayersUpper,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -680,10 +680,10 @@ class _MyActivitiesFormScreenState
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 AppStrings.or,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 12,
                   color: AppColors.socaBlack,
@@ -697,14 +697,14 @@ class _MyActivitiesFormScreenState
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow,
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
                 child: Text(
                   AppStrings.invitePlayersUpper,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -717,7 +717,7 @@ class _MyActivitiesFormScreenState
 
         // Tagged user chips
         if (_taggedUsers.isNotEmpty) ...[
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -755,16 +755,16 @@ class _MyActivitiesFormScreenState
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow,
                   disabledBackgroundColor: AppColors.socaGrey,
-                  padding: EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
                 child: _isSubmitting
-                    ? AppLoader(size: 24, centered: false)
+                    ? const AppLoader(size: 24, centered: false)
                     : Text(
                         AppStrings.add.toUpperCase(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -772,7 +772,7 @@ class _MyActivitiesFormScreenState
                       ),
               ),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton(
                 onPressed: _isSubmitting ? null : _reset,
@@ -780,14 +780,14 @@ class _MyActivitiesFormScreenState
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow,
                   disabledBackgroundColor: AppColors.socaGrey,
-                  padding: EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
                 child: Text(
                   AppStrings.resetUpper,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -797,10 +797,10 @@ class _MyActivitiesFormScreenState
             ),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           AppStrings.mandatoryFields,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 10,
             color: AppColors.socaBlack,
@@ -818,7 +818,7 @@ class _RadioOption extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  _RadioOption({
+  const _RadioOption({
     required this.label,
     required this.selected,
     required this.onTap,
@@ -844,7 +844,7 @@ class _RadioOption extends StatelessWidget {
                       child: Container(
                         width: 10,
                         height: 10,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.socaBlack,
                         ),
@@ -852,7 +852,7 @@ class _RadioOption extends StatelessWidget {
                     )
                   : null,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
@@ -869,12 +869,12 @@ class _RadioOption extends StatelessWidget {
 
 class _FormLabel extends StatelessWidget {
   final String text;
-  _FormLabel(this.text);
+  const _FormLabel(this.text);
 
   @override
   Widget build(BuildContext context) => Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 12,
           fontWeight: FontWeight.w500,
@@ -888,7 +888,7 @@ class _DropdownField<T> extends StatelessWidget {
   final List<T> items;
   final ValueChanged<T?> onChanged;
 
-  _DropdownField({
+  const _DropdownField({
     required this.value,
     required this.items,
     required this.onChanged,
@@ -921,7 +921,7 @@ class _DateField extends StatelessWidget {
   final String hint;
   final VoidCallback onTap;
 
-  _DateField({
+  const _DateField({
     required this.date,
     required this.hint,
     required this.onTap,
@@ -931,7 +931,7 @@ class _DateField extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
             color: Colors.transparent,
             border: Border.all(color: AppColors.socaBlack),
@@ -965,14 +965,14 @@ class _DateField extends StatelessWidget {
 class _NumberInput extends StatelessWidget {
   final TextEditingController controller;
 
-  _NumberInput({required this.controller});
+  const _NumberInput({required this.controller});
 
   @override
   Widget build(BuildContext context) => TextField(
         controller: controller,
         keyboardType: TextInputType.number,
-        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
-        decoration: InputDecoration(
+        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        decoration: const InputDecoration(
           filled: true,
           fillColor: Colors.transparent,
           contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -996,28 +996,29 @@ class _TextInput extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
 
-  _TextInput({required this.controller, required this.hint});
+  const _TextInput({required this.controller, required this.hint});
 
   @override
   Widget build(BuildContext context) => TextField(
         controller: controller,
-        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
               fontFamily: 'Poppins', fontSize: 13, color: Colors.grey.shade400),
           filled: true,
           fillColor: Colors.transparent,
-          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          border: OutlineInputBorder(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          border: const OutlineInputBorder(
             borderRadius: BorderRadius.zero,
             borderSide: BorderSide(color: AppColors.socaBlack),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.zero,
             borderSide: BorderSide(color: AppColors.socaBlack),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.zero,
             borderSide: BorderSide(color: AppColors.socaBlack),
           ),
@@ -1029,15 +1030,15 @@ class _NotesInput extends StatelessWidget {
   final TextEditingController controller;
   final int maxLength;
 
-  _NotesInput({required this.controller, required this.maxLength});
+  const _NotesInput({required this.controller, required this.maxLength});
 
   @override
   Widget build(BuildContext context) => TextField(
         controller: controller,
         maxLines: 5,
         maxLength: maxLength,
-        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
-        decoration: InputDecoration(
+        style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+        decoration: const InputDecoration(
           filled: true,
           fillColor: Colors.transparent,
           contentPadding: EdgeInsets.all(14),
@@ -1066,7 +1067,7 @@ class _RatingSelector extends StatelessWidget {
   final int selected;
   final ValueChanged<int> onSelect;
 
-  _RatingSelector({required this.selected, required this.onSelect});
+  const _RatingSelector({required this.selected, required this.onSelect});
 
   @override
   Widget build(BuildContext context) => Row(
@@ -1091,13 +1092,13 @@ class _RatingSelector extends StatelessWidget {
                     ),
                   ),
                   child: isSelected
-                      ? Center(
+                      ? const Center(
                           child: Icon(Icons.check,
                               size: 14, color: AppColors.socaYellow),
                         )
                       : null,
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   '$val',
                   style: TextStyle(
@@ -1121,7 +1122,7 @@ class _TagChip extends StatelessWidget {
   final String? imageUrl;
   final VoidCallback onRemove;
 
-  _TagChip({
+  const _TagChip({
     required this.name,
     this.imageUrl,
     required this.onRemove,
@@ -1129,7 +1130,7 @@ class _TagChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
           color: Colors.grey.shade100,
           borderRadius: BorderRadius.circular(20),
@@ -1145,22 +1146,23 @@ class _TagChip extends StatelessWidget {
                   ? NetworkImage(imageUrl!)
                   : null,
               child: (imageUrl == null || imageUrl!.isEmpty)
-                  ? Icon(Icons.person, size: 12, color: Colors.grey)
+                  ? const Icon(Icons.person, size: 12, color: Colors.grey)
                   : null,
             ),
-            SizedBox(width: 6),
+            const SizedBox(width: 6),
             Text(
               name.isEmpty ? AppStrings.userFallback : name,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 11,
                 color: AppColors.socaBlack,
               ),
             ),
-            SizedBox(width: 4),
+            const SizedBox(width: 4),
             GestureDetector(
               onTap: onRemove,
-              child: Icon(Icons.close, size: 14, color: AppColors.socaGrey),
+              child:
+                  const Icon(Icons.close, size: 14, color: AppColors.socaGrey),
             ),
           ],
         ),
@@ -1174,7 +1176,7 @@ class _TagPlayersSheet extends ConsumerStatefulWidget {
   final List<Map<String, dynamic>> alreadyTagged;
   final ValueChanged<List<Map<String, dynamic>>> onDone;
 
-  _TagPlayersSheet({
+  const _TagPlayersSheet({
     required this.userId,
     required this.alreadyTagged,
     required this.onDone,
@@ -1190,7 +1192,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
   final List<Map<String, dynamic>> _selected = [];
   bool _isLoading = false;
   int _start = 0;
-  static int _limit = 25;
+  static const int _limit = 25;
   bool _hasMore = true;
 
   @override
@@ -1273,7 +1275,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
         children: [
           // Handle
           Container(
-            margin: EdgeInsets.symmetric(vertical: 8),
+            margin: const EdgeInsets.symmetric(vertical: 8),
             width: 40,
             height: 4,
             decoration: BoxDecoration(
@@ -1284,13 +1286,13 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
 
           // Header
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   AppStrings.tagPlayers,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -1304,7 +1306,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                   },
                   child: Text(
                     AppStrings.done,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -1318,22 +1320,22 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
 
           // Search field
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: TextField(
               controller: _searchCtrl,
               autofocus: true,
-              style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+              style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
               decoration: InputDecoration(
                 hintText: AppStrings.searchByNameMinTwoCharacters,
                 hintStyle: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     color: Colors.grey.shade400),
-                prefixIcon: Icon(Icons.search, size: 20),
+                prefixIcon: const Icon(Icons.search, size: 20),
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
@@ -1342,7 +1344,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
             ),
           ),
 
-          Divider(height: 1),
+          const Divider(height: 1),
 
           // Results list
           Expanded(
@@ -1352,7 +1354,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                       _searchCtrl.text.length < 2
                           ? AppStrings.typeToSearchPlayers
                           : AppStrings.noPlayersFound,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         color: AppColors.socaGrey,
@@ -1364,7 +1366,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                     itemCount: _results.length + (_isLoading ? 1 : 0),
                     itemBuilder: (_, i) {
                       if (i == _results.length) {
-                        return Padding(
+                        return const Padding(
                           padding: EdgeInsets.all(16),
                           child: AppLoader(),
                         );
@@ -1385,12 +1387,12 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                                   ? NetworkImage(imageUrl)
                                   : null,
                           child: (imageUrl == null || imageUrl.isEmpty)
-                              ? Icon(Icons.person, color: Colors.grey)
+                              ? const Icon(Icons.person, color: Colors.grey)
                               : null,
                         ),
                         title: Text(
                           name.isEmpty ? AppStrings.unknown : name,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
@@ -1399,7 +1401,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                         subtitle: user['playPosition'] != null
                             ? Text(
                                 user['playPosition'].toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 11,
                                   color: AppColors.socaGrey,
@@ -1407,7 +1409,7 @@ class _TagPlayersSheetState extends ConsumerState<_TagPlayersSheet> {
                               )
                             : null,
                         trailing: sel
-                            ? Icon(Icons.check_circle,
+                            ? const Icon(Icons.check_circle,
                                 color: AppColors.socaBlack)
                             : Icon(Icons.radio_button_unchecked,
                                 color: Colors.grey.shade400),

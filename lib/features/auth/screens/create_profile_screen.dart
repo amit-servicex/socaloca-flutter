@@ -19,7 +19,7 @@ import '../../../shared/widgets/searchable_dropdown.dart';
 /// CreateProfileFragment equivalent - Complete profile creation form
 /// Shows after successful signup for verified users without profile
 class CreateProfileScreen extends ConsumerStatefulWidget {
-  CreateProfileScreen({super.key});
+  const CreateProfileScreen({super.key});
 
   @override
   ConsumerState<CreateProfileScreen> createState() =>
@@ -506,27 +506,27 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       // directly; fall back to locale only for ambiguous offsets.
       final tzOffset = DateTime.now().timeZoneOffset;
       final String countryCode;
-      if (tzOffset == Duration(hours: 5, minutes: 30)) {
+      if (tzOffset == const Duration(hours: 5, minutes: 30)) {
         countryCode = 'IN'; // IST — India
-      } else if (tzOffset == Duration(hours: 0)) {
+      } else if (tzOffset == const Duration(hours: 0)) {
         countryCode = 'GB';
-      } else if (tzOffset == Duration(hours: -5)) {
+      } else if (tzOffset == const Duration(hours: -5)) {
         countryCode = 'US';
-      } else if (tzOffset == Duration(hours: 1)) {
+      } else if (tzOffset == const Duration(hours: 1)) {
         countryCode = 'DE';
-      } else if (tzOffset == Duration(hours: 2)) {
+      } else if (tzOffset == const Duration(hours: 2)) {
         countryCode = 'EG';
-      } else if (tzOffset == Duration(hours: 5)) {
+      } else if (tzOffset == const Duration(hours: 5)) {
         countryCode = 'PK';
-      } else if (tzOffset == Duration(hours: 8)) {
+      } else if (tzOffset == const Duration(hours: 8)) {
         countryCode = 'CN';
-      } else if (tzOffset == Duration(hours: 9)) {
+      } else if (tzOffset == const Duration(hours: 9)) {
         countryCode = 'JP';
-      } else if (tzOffset == Duration(hours: 10)) {
+      } else if (tzOffset == const Duration(hours: 10)) {
         countryCode = 'AU';
-      } else if (tzOffset == Duration(hours: -3)) {
+      } else if (tzOffset == const Duration(hours: -3)) {
         countryCode = 'BR';
-      } else if (tzOffset == Duration(hours: -6)) {
+      } else if (tzOffset == const Duration(hours: -6)) {
         countryCode = 'MX';
       } else {
         // Ambiguous offset — fall back to locale country code
@@ -638,7 +638,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: AppColors.socaYellow,
               onPrimary: AppColors.socaBlack,
               surface: Colors.white,
@@ -722,30 +722,30 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.socaPageBg,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 AppStrings.selectPhoto,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ListTile(
                 // leading: Icon(Icons.camera_alt, color: AppColors.socaBlack),
                 title: Text(
                   AppStrings.takePhotoUpper,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
                     color: AppColors.socaBlack,
@@ -760,7 +760,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 // leading: Icon(Icons.photo_library, color: AppColors.socaBlack),
                 title: Text(
                   AppStrings.chooseGalleryUpper,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
                     color: AppColors.socaBlack,
@@ -773,10 +773,10 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               ),
               if (_profileImage != null || _selectedAvatar != null)
                 ListTile(
-                  leading: Icon(Icons.delete, color: Colors.red),
+                  leading: const Icon(Icons.delete, color: Colors.red),
                   title: Text(
                     AppStrings.removePhoto,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       color: Colors.red,
@@ -916,7 +916,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) {
@@ -927,10 +927,10 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           builder: (_, scrollController) => Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(
                   AppStrings.selectNationality,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -938,7 +938,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   ),
                 ),
               ),
-              Divider(height: 1),
+              const Divider(height: 1),
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
@@ -958,7 +958,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                         ),
                       ),
                       trailing: isSelected
-                          ? Icon(Icons.check, color: AppColors.socaBlack)
+                          ? const Icon(Icons.check, color: AppColors.socaBlack)
                           : null,
                       onTap: () {
                         setState(() {
@@ -1068,7 +1068,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             // padding: EdgeInsets.symmetric(horizontal: 20),
             child: Container(
               color: AppColors.socaPageBg,
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1088,7 +1088,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   // Title
                   Text(
                     AppStrings.createProfile,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
                       fontSize: 22,
@@ -1107,7 +1107,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   if (_firstNameError != null)
                     SocaLocaFieldError(errorText: _firstNameError!),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Last Name
                   CreateProfileTextField(
@@ -1118,7 +1118,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   if (_lastNameError != null)
                     SocaLocaFieldError(errorText: _lastNameError!),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Profile Name
                   CreateProfileTextField(
@@ -1137,7 +1137,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   ),
                   Text(
                     AppStrings.minimumFiveCharacters,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
                       color: AppColors.socaBlack,
@@ -1146,7 +1146,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   if (_profileNameError != null)
                     SocaLocaFieldError(errorText: _profileNameError!),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // About Me
                   Container(
@@ -1158,21 +1158,21 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                       controller: _aboutMeController,
                       maxLines: 3,
                       maxLength: 300,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
                       ),
                       decoration: InputDecoration(
                         hintText: AppStrings.aboutMe,
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           color: AppColors.socaBlack,
                         ),
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
-                        contentPadding: EdgeInsets.all(15),
+                        contentPadding: const EdgeInsets.all(15),
                       ),
                     ),
                   ),
@@ -1180,7 +1180,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     alignment: Alignment.centerRight,
                     child: Text(
                       AppStrings.max300Characters,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
@@ -1188,12 +1188,12 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Select Role
                   Text(
                     AppStrings.selectRoleRequired,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
                       fontSize: 20,
@@ -1201,7 +1201,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 7),
+                  const SizedBox(height: 7),
 
                   // Role chips
                   SingleChildScrollView(
@@ -1210,28 +1210,28 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                       children: [
                         _buildRoleChip(
                             'Player', AppStrings.playerRole, _isPlayer),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         _buildRoleChip('Coach', AppStrings.coach, _isCoach),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         _buildRoleChip(
                             'Manager', AppStrings.manager, _isManager),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         _buildRoleChip('Fan', AppStrings.fan, _isFan),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         _buildRoleChip(
                             'Referee', AppStrings.referee, _isReferee),
                       ],
                     ),
                   ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // DOB
                   GestureDetector(
                     onTap: _selectDate,
                     child: Container(
                       height: 50,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       decoration: BoxDecoration(
                         color: AppColors.socaGrey,
                         borderRadius: BorderRadius.circular(5),
@@ -1258,19 +1258,20 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   if (_dobError != null)
                     SocaLocaFieldError(errorText: _dobError!),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Country
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 10),
                     decoration: BoxDecoration(
                       color: AppColors.socaGrey,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       _selectedCountry,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
@@ -1279,45 +1280,45 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Gender
                   Row(
                     children: [
                       Text(
                         AppStrings.genderPlain,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           color: AppColors.socaBlack,
                         ),
                       ),
-                      SizedBox(width: 7),
+                      const SizedBox(width: 7),
                       RadioGroup<String>(
                         groupValue: _gender,
                         onChanged: (val) => setState(() => _gender = val!),
                         child: Row(
                           children: [
-                            Radio<String>(
+                            const Radio<String>(
                               value: 'male',
                               activeColor: AppColors.socaBlack,
                             ),
                             Text(
                               AppStrings.male,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: AppColors.socaBlack,
                               ),
                             ),
-                            SizedBox(width: 7),
-                            Radio<String>(
+                            const SizedBox(width: 7),
+                            const Radio<String>(
                               value: 'female',
                               activeColor: AppColors.socaBlack,
                             ),
                             Text(
                               AppStrings.female,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: AppColors.socaBlack,
@@ -1329,7 +1330,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     ],
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Player/Coach/Manager specific fields
                   if (_showPlayerFields || _showCoachManagerFields)
@@ -1348,19 +1349,19 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   if (!_isFan) ...[
                     _buildAvatarSection(),
                   ],
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
                   // Mandatory fields note
                   Text(
                     AppStrings.mandatoryFields,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 13,
                       color: AppColors.socaBlack,
                     ),
                   ),
 
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   // Submit Button
                   InkWell(
@@ -1386,20 +1387,20 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   // Privacy / Terms text
                   Text(
                     AppStrings.byClickingSubmitPolicy,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
                       color: AppColors.socaBlack,
                     ),
                   ),
 
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -1418,7 +1419,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     return GestureDetector(
       onTap: () => _onRoleToggle(value, !isSelected),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.socaBlack : Colors.transparent,
           borderRadius: BorderRadius.circular(5),
@@ -1445,17 +1446,17 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         if (_showPlayerFields) ...[
           Text(
             AppStrings.nationalityRequired,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           GestureDetector(
             onTap: _showNationalityPicker,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
               decoration: BoxDecoration(
                 color: AppColors.socaGrey,
                 borderRadius: BorderRadius.circular(5),
@@ -1465,7 +1466,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 children: [
                   Text(
                     _nationality.isEmpty ? AppStrings.select : _nationality,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
@@ -1478,14 +1479,14 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
         ],
 
         // Location (Player/Coach/Manager)
         GestureDetector(
           onTap: _openLocationPicker,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.socaGrey,
               borderRadius: BorderRadius.circular(5),
@@ -1494,13 +1495,13 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               children: [
                 Image.asset("assets/icons/ic_location.png",
                     width: 28, height: 28),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     _placeName.isEmpty
                         ? AppStrings.selectLocationFromMap
                         : _placeName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaBlack,
@@ -1512,19 +1513,19 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
           ),
         ),
 
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
 
         // Playing Position (Player only)
         if (_showPlayerFields) ...[
           Text(
             AppStrings.playingPositionPlain,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           _buildDropdown(
             value: _playPosition,
             items: _playPositions,
@@ -1535,90 +1536,90 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               });
             },
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           _buildDropdown(
             value: _playPositionType,
             items: _positionTypes[_playPosition]!,
             onChanged: (val) => setState(() => _playPositionType = val!),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
 
         // Jersey Number
         if (_showJerseyNumber) ...[
           Text(
             AppStrings.preferredJerseyNumber,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CreateProfileTextField(
             controller: _jerseyNumberController,
             hintText: AppStrings.zeroToNinetyNine,
             keyboardType: TextInputType.number,
             maxLength: 2,
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
 
         // Playing Level (Player only)
         if (_showPlayerFields) ...[
           Text(
             AppStrings.playingLevelRequired,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           _buildDropdown(
             value: _playLevel,
             items: _playingLevels,
             onChanged: (val) => setState(() => _playLevel = val!),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           // Preferred Foot
           Row(
             children: [
               Text(
                 AppStrings.preferredFoot,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(width: 7),
+              const SizedBox(width: 7),
               RadioGroup<String>(
                 groupValue: _preferredFoot,
                 onChanged: (val) => setState(() => _preferredFoot = val!),
                 child: Row(
                   children: [
-                    Radio<String>(
+                    const Radio<String>(
                       value: 'right',
                       activeColor: AppColors.socaBlack,
                     ),
                     Text(
                       AppStrings.right,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
                       ),
                     ),
-                    SizedBox(width: 7),
-                    Radio<String>(
+                    const SizedBox(width: 7),
+                    const Radio<String>(
                       value: 'left',
                       activeColor: AppColors.socaBlack,
                     ),
                     Text(
                       AppStrings.left,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack,
@@ -1630,38 +1631,38 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             ],
           ),
 
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
 
           // Height
           Text(
             AppStrings.height,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CreateProfileTextField(
             controller: _heightController,
             hintText: AppStrings.valueInCm,
             keyboardType: TextInputType.number,
             maxLength: 3,
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
 
         // Jersey Size
         if (_showJerseySize) ...[
           Text(
             AppStrings.shirtJerseySize,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -1672,7 +1673,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   child: Container(
                     width: 60,
                     height: 60,
-                    margin: EdgeInsets.only(right: 10),
+                    margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       color:
                           isSelected ? AppColors.socaBlack : Colors.transparent,
@@ -1696,20 +1697,20 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               }).toList(),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
 
         // Shoe Size
         if (_showShoeSize) ...[
           Text(
             AppStrings.shoeSize,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -1725,7 +1726,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   },
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: _buildDropdown(
                   value: _shoeSize,
@@ -1743,11 +1744,11 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
   Widget _buildFanLocationField() {
     return Column(
       children: [
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         GestureDetector(
           onTap: _openLocationPicker,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.socaGrey,
               borderRadius: BorderRadius.circular(5),
@@ -1756,13 +1757,13 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
               children: [
                 Image.asset("assets/icons/ic_location.png",
                     width: 28, height: 28),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     _placeName.isEmpty
                         ? AppStrings.selectLocationFromMap
                         : _placeName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaBlack,
@@ -1781,20 +1782,20 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               AppStrings.brandsYouLike,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
                 color: AppColors.socaBlack,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Wrap(
               spacing: 10,
               runSpacing: 10,
@@ -1811,7 +1812,8 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     });
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color:
                           isSelected ? AppColors.socaBlack : Colors.transparent,
@@ -1841,20 +1843,20 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
   Widget _buildLeaguesTeamsSection() {
     return Column(
       children: [
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               AppStrings.majorLeaguesYouFollow,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
                 color: AppColors.socaBlack,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _buildDropdown(
               value: _leagueFollow,
               items: _leagueTeams.keys.toList(),
@@ -1869,20 +1871,20 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             ),
           ],
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               AppStrings.teamsYouFollow,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
                 color: AppColors.socaBlack,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _buildDropdown(
               value: _teamFollow,
               items: _leagueTeams[_leagueFollow] ??
@@ -1897,9 +1899,9 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
 
   Widget _buildAvatarSection() {
     return Column(children: [
-      SizedBox(height: 15),
+      const SizedBox(height: 15),
       Center(child: _buildProfileImagePreview()),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       if (_isAdult) _buildPhotoUploadSection() else _buildAvatarGridSection(),
     ]);
   }
@@ -1930,7 +1932,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                               AppColors.socaYellow.withValues(alpha: 0.2),
                           child: Text(
                             _selectedAvatar![0].toUpperCase(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
                               fontSize: 64,
@@ -1942,7 +1944,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     : CircleAvatar(
                         backgroundColor:
                             AppColors.socaYellow.withValues(alpha: 0.15),
-                        child: Icon(Icons.person,
+                        child: const Icon(Icons.person,
                             size: 80, color: AppColors.socaBlack),
                       ),
           ),
@@ -1954,12 +1956,13 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
             child: GestureDetector(
               onTap: _showImageSourceDialog,
               child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
                   color: AppColors.socaBlack,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.edit, color: AppColors.socaYellow, size: 18),
+                child: const Icon(Icons.edit,
+                    color: AppColors.socaYellow, size: 18),
               ),
             ),
           ),
@@ -1973,20 +1976,21 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       children: [
         Text(
           AppStrings.uploadProfilePhoto,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 16,
             color: AppColors.socaBlack,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
               onTap: _pickImageFromCamera,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
@@ -1996,7 +2000,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                   children: [
                     Text(
                       AppStrings.takePhotoUpper,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
@@ -2007,11 +2011,12 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             InkWell(
               onTap: _pickImageFromGallery,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                 decoration: BoxDecoration(
                   color: AppColors.socaBlack,
                   borderRadius: BorderRadius.circular(5),
@@ -2023,7 +2028,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                     // SizedBox(width: 5),
                     Text(
                       AppStrings.chooseGalleryUpper,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
@@ -2043,7 +2048,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
   // Youth/Child mode: avatar grid only, no photo upload
   Widget _buildAvatarGridSection() {
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
@@ -2052,18 +2057,18 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
         children: [
           Text(
             AppStrings.chooseYourAvatar,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           GridView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
@@ -2097,7 +2102,7 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
                             AppColors.socaYellow.withValues(alpha: 0.2),
                         child: Text(
                           avatar[0].toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
                             fontSize: 20,

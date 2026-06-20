@@ -20,7 +20,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class SponsorBioScreen extends ConsumerStatefulWidget {
   final String sponsorId;
 
-  SponsorBioScreen({super.key, required this.sponsorId});
+  const SponsorBioScreen({super.key, required this.sponsorId});
 
   @override
   ConsumerState<SponsorBioScreen> createState() => _SponsorBioScreenState();
@@ -52,27 +52,27 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildTopBar(bio.details),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     _buildNameBox(bio.details.sponsorName),
                     _buildBasicInfo(bio.details),
                     if (bio.merchandises.isNotEmpty) ...[
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       _buildDivider(),
                       _buildMerchandiseSection(bio.merchandises),
                     ],
                     if (bio.newsList.isNotEmpty) ...[
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       _buildDivider(),
                       _buildNewsSection(bio.newsList),
                     ],
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
             ],
           );
         },
-        loading: () => AppLoader(),
+        loading: () => const AppLoader(),
         error: (e, _) => _buildError(e.toString()),
       ),
     );
@@ -83,7 +83,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
   Widget _buildTopBar(SponsorInfoModel info) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -92,7 +92,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
             child: Text(
               info.sponsorName,
               maxLines: 2,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -149,7 +149,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
       return Image.asset('assets/icons/ic_silver_badge.png',
           width: 28, height: 28);
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   // ─── Name box ────────────────────────────────────────────────────────────
@@ -158,10 +158,10 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
       child: Text(
         name,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           fontWeight: FontWeight.w700,
@@ -176,14 +176,14 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
   Widget _buildBasicInfo(SponsorInfoModel info) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: [
               _buildEntityImage(info.fullImageUrl),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               SizedBox(
                 width: 100,
                 child: ElevatedButton(
@@ -192,14 +192,14 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                     backgroundColor: AppColors.socaBlack,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: const EdgeInsets.symmetric(vertical: 6),
                     elevation: 0,
                   ),
                   child: Text(
                     _isFollowing
                         ? AppStrings.following.toUpperCase()
                         : AppStrings.follow.toUpperCase(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -208,10 +208,10 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 AppStrings.followersCount(info.followCount),
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 11,
                     color: AppColors.socaBlack),
@@ -219,7 +219,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
               ),
             ],
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,7 +282,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
 
   Widget _imageFallback() => Container(
         color: AppColors.socaGrey,
-        child: Icon(Icons.business, color: AppColors.socaBlack, size: 40),
+        child: const Icon(Icons.business, color: AppColors.socaBlack, size: 40),
       );
 
   Widget _buildDivider() => Container(height: 8, color: AppColors.socaPageBg);
@@ -296,14 +296,14 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClubBioSectionHeader(title: AppStrings.merchandise),
-          Divider(color: AppColors.socaBlack, thickness: .7),
+          const Divider(color: AppColors.socaBlack, thickness: .7),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             itemCount: items.length,
-            separatorBuilder: (_, __) =>
-                Divider(height: 1, color: AppColors.socaBlack, thickness: .7),
+            separatorBuilder: (_, __) => const Divider(
+                height: 1, color: AppColors.socaBlack, thickness: .7),
             itemBuilder: (context, i) => _buildMerchandiseRow(items[i]),
           ),
         ],
@@ -314,7 +314,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
   Widget _buildMerchandiseRow(SponsorMerchandiseModel item) {
     final imageUrl = item.fullImageUrl;
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -330,14 +330,14 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                     Container(width: 72, height: 72, color: AppColors.socaGrey),
               ),
             ),
-          if (imageUrl.isNotEmpty) SizedBox(width: 12),
+          if (imageUrl.isNotEmpty) const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   item.prodName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -348,10 +348,10 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                 ),
                 if (item.description != null && item.description!.isNotEmpty)
                   Padding(
-                    padding: EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.only(top: 4),
                     child: Text(
                       item.description!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         color: AppColors.textSecondary,
@@ -364,10 +364,10 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                   GestureDetector(
                     onTap: () => _launchUrl(item.link!),
                     child: Padding(
-                      padding: EdgeInsets.only(top: 4),
+                      padding: const EdgeInsets.only(top: 4),
                       child: Text(
                         AppStrings.view,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -394,14 +394,14 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClubBioSectionHeader(title: AppStrings.newsAnnouncements),
-          Divider(color: AppColors.socaBlack, thickness: .7),
+          const Divider(color: AppColors.socaBlack, thickness: .7),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             itemCount: newsList.length,
-            separatorBuilder: (_, __) =>
-                Divider(height: 1, color: AppColors.socaBlack, thickness: .7),
+            separatorBuilder: (_, __) => const Divider(
+                height: 1, color: AppColors.socaBlack, thickness: .7),
             itemBuilder: (context, i) => _buildNewsRow(newsList[i]),
           ),
         ],
@@ -419,7 +419,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
     return GestureDetector(
       onTap: tapUrl != null ? () => _launchUrl(tapUrl) : null,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -435,7 +435,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                       width: 80, height: 80, color: AppColors.socaGrey),
                 ),
               ),
-            if (imageUrl.isNotEmpty) SizedBox(width: 12),
+            if (imageUrl.isNotEmpty) const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,7 +443,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                   if (news.newsDate != null && news.newsDate!.isNotEmpty)
                     Text(
                       news.newsDate!,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           color: AppColors.textSecondary),
@@ -451,7 +451,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                   if (news.title != null && news.title!.isNotEmpty)
                     Text(
                       news.title!,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -462,7 +462,7 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
                   if (news.description != null && news.description!.isNotEmpty)
                     Text(
                       news.description!,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           color: AppColors.socaBlack),
@@ -485,10 +485,10 @@ class _SponsorBioScreenState extends ConsumerState<SponsorBioScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 48, color: AppColors.error),
-          SizedBox(height: 16),
+          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+          const SizedBox(height: 16),
           Text(message,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   color: AppColors.socaBlack)),

@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart' show SharePlus, ShareParams;
-import 'package:socaloca/core/router/app_routes.dart';
 import 'package:socaloca/features/home/widgets/full_screen_post_show.dart';
 import 'package:socaloca/features/social_feed/widgets/tag_chip_card.dart';
 

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
-import 'package:socaloca/core/router/app_routes.dart';
 import 'package:socaloca/features/my_bio/screens/my_skill_ratings_screen.dart';
 
 import '../../../core/theme/app_colors.dart';

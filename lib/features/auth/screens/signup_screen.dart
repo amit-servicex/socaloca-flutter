@@ -18,7 +18,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 /// NewSignUpFragment equivalent - matches Android XML layout exactly
 /// User enters mobile/email and password to create account
 class SignupScreen extends ConsumerStatefulWidget {
-  SignupScreen({super.key});
+  const SignupScreen({super.key});
 
   @override
   ConsumerState<SignupScreen> createState() => _SignupScreenState();
@@ -28,7 +28,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _mobileOrEmailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool _isPasswordVisible = false;
+  final bool _isPasswordVisible = false;
   bool _isLoading = false;
   String _selectedCountryCode = '+91'; // Default to India
   String _selectedCountryIso = 'IN';
@@ -52,8 +52,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   Future<void> _detectCountry() async {
     final country = await LocationService.detectCountry(context);
-    if (!mounted || country == null)
+    if (!mounted || country == null) {
       return; // null = GPS failed, keep +91 default
+    }
     setState(() {
       _selectedCountryCode = country.phoneCode;
       _selectedCountryIso = country.iso;
@@ -70,19 +71,19 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       builder: (context) => Dialog(
         child: Container(
           height: MediaQuery.of(context).size.height * 0.7,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               Text(
                 AppStrings.selectCountry,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
                   itemCount: countries.length,
@@ -91,14 +92,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     return ListTile(
                       title: Text(
                         country['name']!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                         ),
                       ),
                       trailing: Text(
                         country['code']!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -462,13 +463,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
                 // Top Box - marginLeft/Right 40dp,
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
                     children: [
                       // Title
                       Text(
                         AppStrings.signUp,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w700,
                           fontSize: 18,
@@ -477,7 +478,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                       ),
 
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       // Mobile/Email Input Box
                       SocaLocaMobileEmailField(
@@ -493,7 +494,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       if (_mobileOrEmailError != null)
                         SocaLocaFieldError(errorText: _mobileOrEmailError!),
 
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
 
                       // Password Input Box
                       SocaLocaPasswordField(
@@ -507,13 +508,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         SocaLocaFieldError(errorText: _passwordError!),
 
                       // Password Status Box
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             AppStrings.minimumSixCharacters,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
@@ -523,7 +524,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           if (passwordStrength != null)
                             Text(
                               passwordStrength,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: AppColors.socaBlack,
@@ -532,14 +533,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ],
                       ),
 
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
 
                       // Mandatory fields text
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           AppStrings.mandatoryFields,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             color: AppColors.socaBlack,
@@ -547,7 +548,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                       ),
 
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       // Continue Button
                       InkWell(
@@ -562,7 +563,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           child: Center(
                             child: Text(
                               AppStrings.continueLabel,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w900,
                                 fontSize: 24,
@@ -573,7 +574,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                       ),
 
-                      SizedBox(height: 25),
+                      const SizedBox(height: 25),
 
                       // Or continue with
                       Stack(
@@ -585,10 +586,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ),
                           Container(
                             color: AppColors.socaPageBg,
-                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: Text(
                               AppStrings.orContinueWith,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 12,
                                 color: AppColors.socaBlack,
@@ -599,7 +600,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ],
                       ),
 
-                      SizedBox(height: 25),
+                      const SizedBox(height: 25),
 
                       // Social buttons
                       Row(
@@ -618,10 +619,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                   return Container(
                                     height: 50,
                                     decoration: BoxDecoration(
-                                      color: Color(0xFF1877F2),
+                                      color: const Color(0xFF1877F2),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.facebook,
                                       color: Colors.white,
                                       size: 30,
@@ -631,7 +632,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           // Google button
                           Expanded(
                             child: InkWell(
@@ -649,7 +650,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                       borderRadius: BorderRadius.circular(5),
                                       border: Border.all(color: Colors.grey),
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.g_mobiledata,
                                       color: Colors.red,
                                       size: 40,
@@ -662,7 +663,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ],
                       ),
 
-                      SizedBox(height: 90),
+                      const SizedBox(height: 90),
                     ],
                   ),
                 ),
@@ -677,7 +678,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             bottom: 20,
             child: Text(
               AppStrings.socaLocaPrivacyNotice,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,
                 fontSize: 8,
@@ -689,7 +690,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           if (_isLoading)
             Container(
               color: Colors.black54,
-              child: AppLoader(size: 500),
+              child: const AppLoader(size: 500),
             ),
         ],
       ),

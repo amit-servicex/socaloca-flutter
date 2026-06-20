@@ -10,12 +10,12 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class TeamCard extends StatelessWidget {
   final TeamModel team;
 
-  TeamCard({
+  const TeamCard({
     super.key,
     required this.team,
   });
 
-  static double _logoSize = 80;
+  static const double _logoSize = 80;
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +24,17 @@ class TeamCard extends StatelessWidget {
 
     String gameTypeYear = '';
     try {
-      gameTypeYear = '${team.gameTypeYear}';
+      gameTypeYear = team.gameTypeYear;
     } catch (_) {}
 
     String teamName = '';
     try {
-      teamName = '${team.teamName}';
+      teamName = team.teamName;
     } catch (_) {}
 
     String memberText = '';
     try {
-      memberText = '${team.memberText}';
+      memberText = team.memberText;
     } catch (_) {}
 
     String country = '';
@@ -44,7 +44,7 @@ class TeamCard extends StatelessWidget {
     } catch (_) {}
 
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       color: Colors.white,
       elevation: 4,
@@ -53,12 +53,12 @@ class TeamCard extends StatelessWidget {
         onTap: () => _navigate(context),
         borderRadius: BorderRadius.circular(10),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 18),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildLogo(),
-              SizedBox(width: 14),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,19 +68,19 @@ class TeamCard extends StatelessWidget {
                     if (gameTypeYear.isNotEmpty) ...[
                       Text(
                         gameTypeYear,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           color: Colors.grey,
                         ),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                     ],
 
                     // BLUE DEVILS FC
                     Text(
                       teamName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -93,10 +93,10 @@ class TeamCard extends StatelessWidget {
 
                     // India
                     if (country.isNotEmpty) ...[
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       Text(
                         country,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack,
@@ -106,10 +106,10 @@ class TeamCard extends StatelessWidget {
 
                     // 0 Member
                     if (memberText.isNotEmpty) ...[
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       Text(
                         memberText,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           color: AppColors.socaBlack,
@@ -117,14 +117,14 @@ class TeamCard extends StatelessWidget {
                       ),
                     ],
 
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
                     // Rating ——
                     Row(
                       children: [
                         Text(
                           AppStrings.ratingLabel,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             color: AppColors.socaBlack,
@@ -137,7 +137,7 @@ class TeamCard extends StatelessWidget {
                               value: progressValue,
                               minHeight: 3,
                               backgroundColor: AppColors.socaBlack,
-                              valueColor: AlwaysStoppedAnimation<Color>(
+                              valueColor: const AlwaysStoppedAnimation<Color>(
                                 AppColors.socaBlack,
                               ),
                             ),
@@ -146,14 +146,14 @@ class TeamCard extends StatelessWidget {
                       ],
                     ),
 
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
 
                     // VIEW button
                     GestureDetector(
                       onTap: () => _navigate(context),
                       child: Container(
                         width: 80,
-                        padding: EdgeInsets.symmetric(vertical: 9),
+                        padding: const EdgeInsets.symmetric(vertical: 9),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(5),
@@ -161,7 +161,7 @@ class TeamCard extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           AppStrings.viewUpper,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -199,7 +199,7 @@ class TeamCard extends StatelessWidget {
           ? CachedNetworkImage(
               imageUrl: imageUrl,
               fit: BoxFit.cover,
-              placeholder: (_, __) => AppLoader(),
+              placeholder: (_, __) => const AppLoader(),
               errorWidget: (_, __, ___) => _logoFallback(),
             )
           : _logoFallback(),
@@ -207,7 +207,7 @@ class TeamCard extends StatelessWidget {
   }
 
   Widget _logoFallback() {
-    return Icon(Icons.emoji_events, size: 32, color: Colors.grey);
+    return const Icon(Icons.emoji_events, size: 32, color: Colors.grey);
   }
 
   void _navigate(BuildContext context) {

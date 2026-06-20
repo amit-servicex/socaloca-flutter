@@ -195,7 +195,7 @@ List<String> _countries = [
 // ─── Partners landing (nested 4-tab screen) ───────────────────────────────
 
 class PartnersScreen extends StatefulWidget {
-  PartnersScreen({super.key});
+  const PartnersScreen({super.key});
 
   @override
   State<PartnersScreen> createState() => _PartnersScreenState();
@@ -234,12 +234,12 @@ class _PartnersScreenState extends State<PartnersScreen>
             indicatorWeight: 3,
             labelColor: AppColors.socaBlack,
             unselectedLabelColor: AppColors.textSecondary,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -256,10 +256,10 @@ class _PartnersScreenState extends State<PartnersScreen>
           child: TabBarView(
             controller: _tabController,
             children: [
-              _FAsTab(),
-              _ConfedsTab(),
-              _SponsorsTab(),
-              _CharitiesTab(),
+              const _FAsTab(),
+              const _ConfedsTab(),
+              const _SponsorsTab(),
+              const _CharitiesTab(),
             ],
           ),
         ),
@@ -273,7 +273,7 @@ class _PartnersScreenState extends State<PartnersScreen>
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _FAsTab extends ConsumerStatefulWidget {
-  _FAsTab();
+  const _FAsTab();
 
   @override
   ConsumerState<_FAsTab> createState() => _FAsTabState();
@@ -340,17 +340,17 @@ class _FAsTabState extends ConsumerState<_FAsTab>
       onRefresh: () => ref.read(fasProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scroll,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     AppStrings.footballAssociationsIntro,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColors.socaBlack,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
@@ -361,13 +361,13 @@ class _FAsTabState extends ConsumerState<_FAsTab>
                     children: [
                       Text(
                         AppStrings.confderations,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppColors.socaBlack,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Poppins',
                             fontSize: 18),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Expanded(child: _buildConfedDropdown(state.confed)),
@@ -383,7 +383,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
             SliverFillRemaining(
                 child: Center(
                     child: Text(AppStrings.noFasFound,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -393,7 +393,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == state.fas.length) {
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.all(16),
                       child: AppLoader(),
                     );
@@ -411,7 +411,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
                 childCount: state.fas.length + (state.isLoadingMore ? 1 : 0),
               ),
             ),
-          SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
     );
@@ -423,7 +423,7 @@ class _FAsTabState extends ConsumerState<_FAsTab>
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _ConfedsTab extends ConsumerStatefulWidget {
-  _ConfedsTab();
+  const _ConfedsTab();
 
   @override
   ConsumerState<_ConfedsTab> createState() => _ConfedsTabState();
@@ -466,14 +466,14 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
       onRefresh: () => ref.read(confedsProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scroll,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Text(
                 AppStrings.footballConfederationsIntro,
-                style: TextStyle(
+                style: const TextStyle(
                     color: AppColors.socaBlack,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
@@ -482,12 +482,12 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
             ),
           ),
           if (state.isLoading && state.confeds.isEmpty)
-            SliverFillRemaining(child: AppLoader())
+            const SliverFillRemaining(child: AppLoader())
           else if (state.confeds.isEmpty)
             SliverFillRemaining(
                 child: Center(
                     child: Text(AppStrings.noConfederationsFound,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -497,7 +497,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == state.confeds.length) {
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.all(16),
                       child: AppLoader(),
                     );
@@ -515,7 +515,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
                     state.confeds.length + (state.isLoadingMore ? 1 : 0),
               ),
             ),
-          SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
     );
@@ -527,7 +527,7 @@ class _ConfedsTabState extends ConsumerState<_ConfedsTab>
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _SponsorsTab extends ConsumerStatefulWidget {
-  _SponsorsTab();
+  const _SponsorsTab();
 
   @override
   ConsumerState<_SponsorsTab> createState() => _SponsorsTabState();
@@ -570,23 +570,23 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
       onRefresh: () => ref.read(sponsorsProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scroll,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     AppStrings.sponsorsIntro,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColors.socaBlack,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         fontSize: 12),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   ClubFilterRow(
                     selectedCountry: state.country,
                     selectedPartnership: state.partnership,
@@ -601,12 +601,12 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
             ),
           ),
           if (state.isLoading && state.sponsors.isEmpty)
-            SliverFillRemaining(child: AppLoader())
+            const SliverFillRemaining(child: AppLoader())
           else if (state.sponsors.isEmpty)
             SliverFillRemaining(
                 child: Center(
                     child: Text(AppStrings.noSponsorsFound,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -616,7 +616,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == state.sponsors.length) {
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.all(16),
                       child: AppLoader(),
                     );
@@ -634,7 +634,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
                     state.sponsors.length + (state.isLoadingMore ? 1 : 0),
               ),
             ),
-          SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
     );
@@ -646,7 +646,7 @@ class _SponsorsTabState extends ConsumerState<_SponsorsTab>
 // ═══════════════════════════════════════════════════════════════════════════
 
 class _CharitiesTab extends ConsumerStatefulWidget {
-  _CharitiesTab();
+  const _CharitiesTab();
 
   @override
   ConsumerState<_CharitiesTab> createState() => _CharitiesTabState();
@@ -689,23 +689,23 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
       onRefresh: () => ref.read(charitiesProvider.notifier).refresh(),
       child: CustomScrollView(
         controller: _scroll,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     AppStrings.charitiesNgosIntro,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColors.socaBlack,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         fontSize: 12),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   ClubFilterRow(
                     selectedCountry: state.country,
                     selectedPartnership: state.partnership,
@@ -720,12 +720,12 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
             ),
           ),
           if (state.isLoading && state.charities.isEmpty)
-            SliverFillRemaining(child: AppLoader())
+            const SliverFillRemaining(child: AppLoader())
           else if (state.charities.isEmpty)
             SliverFillRemaining(
                 child: Center(
                     child: Text(AppStrings.noCharitiesNgosFound,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -735,7 +735,7 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   if (index == state.charities.length) {
-                    return Padding(
+                    return const Padding(
                       padding: EdgeInsets.all(16),
                       child: AppLoader(),
                     );
@@ -753,7 +753,7 @@ class _CharitiesTabState extends ConsumerState<_CharitiesTab>
                     state.charities.length + (state.isLoadingMore ? 1 : 0),
               ),
             ),
-          SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
       ),
     );

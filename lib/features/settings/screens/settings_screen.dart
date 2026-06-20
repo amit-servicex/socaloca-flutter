@@ -4,7 +4,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 // TODO: Implement SettingsScreen
 // See flutter_migration_docs/screens/ for full spec
 class SettingsScreen extends StatelessWidget {
-  SettingsScreen({super.key});
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

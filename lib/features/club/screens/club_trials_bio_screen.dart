@@ -93,7 +93,7 @@ class _ClubTrialsBioScreenState extends ConsumerState<ClubTrialsBioScreen> {
         ),
         title: Text(
           AppStrings.liveTrials,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 18,
@@ -228,7 +228,7 @@ class _TrialCardState extends ConsumerState<_TrialCard> {
                 const SizedBox(width: 6),
                 Text(
                   AppStrings.live,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 12,

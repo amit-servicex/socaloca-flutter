@@ -7,7 +7,6 @@ import 'package:socaloca/features/tournaments/data/tournament_repository.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../shared/providers/auth_provider.dart';
 import '../../../data/tournament_models.dart';
-import '../../../providers/tournament_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// League Match Management Tab
@@ -16,7 +15,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class LeagueMatchManagementTab extends ConsumerStatefulWidget {
   final String tournamentId;
 
-  LeagueMatchManagementTab({
+  const LeagueMatchManagementTab({
     super.key,
     required this.tournamentId,
   });
@@ -125,7 +124,7 @@ class _LeagueMatchManagementTabState
           return false;
         },
         child: ListView.builder(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           itemCount: _allMatches.length + (_hasMore ? 1 : 0),
           itemBuilder: (context, index) {
             if (index == _allMatches.length) {
@@ -153,7 +152,7 @@ class _LeagueMatchManagementTabState
             size: 64,
             color: Colors.grey[400],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             AppStrings.accessRestricted,
             style: TextStyle(
@@ -163,7 +162,7 @@ class _LeagueMatchManagementTabState
               color: Colors.grey[700],
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             AppStrings.matchManageRestricted,
             textAlign: TextAlign.center,
@@ -188,7 +187,7 @@ class _LeagueMatchManagementTabState
             size: 64,
             color: Colors.grey[400],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             AppStrings.noMatches,
             style: TextStyle(
@@ -198,7 +197,7 @@ class _LeagueMatchManagementTabState
               color: Colors.grey[700],
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             AppStrings.noMatchesAvailableForManagement,
             style: TextStyle(
@@ -213,7 +212,7 @@ class _LeagueMatchManagementTabState
   }
 
   Widget _buildLoadingIndicator() {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.all(16.0),
       child: AppLoader(),
     );
@@ -224,7 +223,7 @@ class _LeagueMatchManagementTabState
     final isLive = match.status == 'LIVE';
 
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -233,7 +232,7 @@ class _LeagueMatchManagementTabState
         onTap: () => _navigateToMatchManagement(match),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -241,7 +240,7 @@ class _LeagueMatchManagementTabState
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 4,
                     ),
@@ -265,7 +264,7 @@ class _LeagueMatchManagementTabState
                       ),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   if (match.matchDate != null)
                     Text(
                       match.matchDate!,
@@ -277,7 +276,7 @@ class _LeagueMatchManagementTabState
                     ),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // Teams
               Row(
@@ -290,23 +289,23 @@ class _LeagueMatchManagementTabState
                             match.homeTeamLogo!,
                             width: 40,
                             height: 40,
-                            errorBuilder: (_, __, ___) => Icon(
+                            errorBuilder: (_, __, ___) => const Icon(
                               Icons.shield,
                               size: 40,
                               color: Colors.grey,
                             ),
                           )
                         else
-                          Icon(
+                          const Icon(
                             Icons.shield,
                             size: 40,
                             color: Colors.grey,
                           ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           match.homeTeamName ?? 'Team A',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -316,7 +315,7 @@ class _LeagueMatchManagementTabState
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
                         if (!isUpcoming &&
@@ -324,7 +323,7 @@ class _LeagueMatchManagementTabState
                             match.awayScore != null)
                           Text(
                             '${match.homeScore} - ${match.awayScore}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
@@ -334,7 +333,7 @@ class _LeagueMatchManagementTabState
                         else
                           Text(
                             AppStrings.vs,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -352,23 +351,23 @@ class _LeagueMatchManagementTabState
                             match.awayTeamLogo!,
                             width: 40,
                             height: 40,
-                            errorBuilder: (_, __, ___) => Icon(
+                            errorBuilder: (_, __, ___) => const Icon(
                               Icons.shield,
                               size: 40,
                               color: Colors.grey,
                             ),
                           )
                         else
-                          Icon(
+                          const Icon(
                             Icons.shield,
                             size: 40,
                             color: Colors.grey,
                           ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           match.awayTeamName ?? 'Team B',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -379,19 +378,19 @@ class _LeagueMatchManagementTabState
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Manage button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () => _navigateToMatchManagement(match),
-                  icon: Icon(Icons.edit, size: 18),
+                  icon: const Icon(Icons.edit, size: 18),
                   label: Text(AppStrings.manageMatch),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.socaYellow,
                     foregroundColor: AppColors.socaBlack,
-                    padding: EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

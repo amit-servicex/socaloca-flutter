@@ -14,7 +14,7 @@ class AcademyGalleryScreen extends ConsumerStatefulWidget {
   final String academyId;
   final String academyName;
 
-  AcademyGalleryScreen({
+  const AcademyGalleryScreen({
     super.key,
     required this.academyId,
     required this.academyName,
@@ -32,7 +32,7 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
   bool _isLoadingMore = false;
   bool _hasMore = true;
   int _start = 0;
-  static int _limit = 10;
+  static const int _limit = 10;
   String? _error;
 
   @override
@@ -122,8 +122,10 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
       backgroundColor: AppColors.socaPageBg,
       appBar: AppBar(
         title: Text(
-          widget.academyName.isNotEmpty ? widget.academyName : AppStrings.gallery,
-          style: TextStyle(
+          widget.academyName.isNotEmpty
+              ? widget.academyName
+              : AppStrings.gallery,
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 16,
@@ -134,16 +136,16 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
         elevation: 0,
       ),
       body: _isLoading
-          ? AppLoader()
+          ? const AppLoader()
           : _error != null
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(_error!,
-                          style:
-                              TextStyle(fontFamily: 'Poppins', fontSize: 14)),
-                      SizedBox(height: 12),
+                          style: const TextStyle(
+                              fontFamily: 'Poppins', fontSize: 14)),
+                      const SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: _load,
                         style: ElevatedButton.styleFrom(
@@ -158,14 +160,15 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
               : _posts.isEmpty
                   ? Center(
                       child: Text('No posts yet.'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack)))
                   : GridView.builder(
                       controller: _scrollController,
-                      padding: EdgeInsets.all(8),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      padding: const EdgeInsets.all(8),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 4,
                         mainAxisSpacing: 4,
@@ -173,7 +176,7 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
                       itemCount: _posts.length + (_isLoadingMore ? 1 : 0),
                       itemBuilder: (_, i) {
                         if (i == _posts.length) {
-                          return AppLoader();
+                          return const AppLoader();
                         }
                         final post = _posts[i];
                         final imgUrl = ApiConstants.getImageUrl(
@@ -188,10 +191,12 @@ class _AcademyGalleryScreenState extends ConsumerState<AcademyGalleryScreen> {
                               ? CachedNetworkImage(
                                   imageUrl: imgUrl,
                                   fit: BoxFit.cover,
-                                  errorWidget: (_, __, ___) => Icon(Icons.image,
+                                  errorWidget: (_, __, ___) => const Icon(
+                                      Icons.image,
                                       color: AppColors.socaBlack),
                                 )
-                              : Icon(Icons.image, color: AppColors.socaBlack),
+                              : const Icon(Icons.image,
+                                  color: AppColors.socaBlack),
                         );
                       },
                     ),

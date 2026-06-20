@@ -13,7 +13,7 @@ import '../models/live_match_models.dart';
 import '../providers/live_match_providers.dart';
 
 class PlayerLiveMatchListScreen extends ConsumerStatefulWidget {
-  PlayerLiveMatchListScreen({super.key});
+  const PlayerLiveMatchListScreen({super.key});
 
   @override
   ConsumerState<PlayerLiveMatchListScreen> createState() =>
@@ -79,13 +79,13 @@ class _PlayerLiveMatchListScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.only(left: 16, top: 16, bottom: 16),
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            margin: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             // width: 250,
-            decoration: BoxDecoration(color: AppColors.socaBlack),
+            decoration: const BoxDecoration(color: AppColors.socaBlack),
             child: Text(
               'Live Matches'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -96,7 +96,7 @@ class _PlayerLiveMatchListScreenState
           // ── Filter row ─────────────────────────────────────────────────────
           Container(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
                 // Tournament dropdown
@@ -107,20 +107,18 @@ class _PlayerLiveMatchListScreenState
                       value: selectedTmnt ?? '',
                       items: [
                         'All Tournaments'.tr,
-                        ...items
-                            .map((t) => (t['tournamentName'] as String?) ?? '')
+                        ...items.map((t) => t['tournamentName'] ?? '')
                       ],
                       values: [
                         '',
-                        ...items
-                            .map((t) => (t['tournamentId'] as String?) ?? '')
+                        ...items.map((t) => t['tournamentId'] ?? '')
                       ],
                       onChanged: (v) => _onTournamentChanged(
                           v == null || v.isEmpty ? null : v),
                       height: 36,
                       fontSize: 12,
                     ),
-                    loading: () => SizedBox(
+                    loading: () => const SizedBox(
                       height: 36,
                       child: Center(
                           child: SizedBox(
@@ -129,10 +127,10 @@ class _PlayerLiveMatchListScreenState
                               child:
                                   CircularProgressIndicator(strokeWidth: 2))),
                     ),
-                    error: (_, __) => SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 // Country dropdown
                 Expanded(
                   child: countryAsync.when(
@@ -144,8 +142,8 @@ class _PlayerLiveMatchListScreenState
                       onChanged: (v) =>
                           _onCountryChanged(v == null || v.isEmpty ? null : v),
                     ),
-                    loading: () => SizedBox.shrink(),
-                    error: (_, __) => SizedBox.shrink(),
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
                   ),
                 ),
               ],
@@ -155,22 +153,22 @@ class _PlayerLiveMatchListScreenState
           // ── Match list ─────────────────────────────────────────────────────
           Expanded(
             child: matchState.isLoading && matchState.matches.isEmpty
-                ? AppLoader()
+                ? const AppLoader()
                 : matchState.error != null && matchState.matches.isEmpty
                     ? _ErrorState(
                         onRetry: () =>
                             ref.read(playerLiveMatchProvider.notifier).load(),
                       )
                     : matchState.matches.isEmpty
-                        ? _EmptyState()
+                        ? const _EmptyState()
                         : ListView.builder(
                             controller: _scrollController,
-                            padding: EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(12),
                             itemCount: matchState.matches.length +
                                 (matchState.isLoadingMore ? 1 : 0),
                             itemBuilder: (ctx, i) {
                               if (i == matchState.matches.length) {
-                                return Padding(
+                                return const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 16),
                                   child: Center(
                                       child: CircularProgressIndicator()),
@@ -211,7 +209,7 @@ class _PlayerLiveMatchListScreenState
 // ─── Tournament section header ────────────────────────────────────────────────
 
 class _TournamentHeader extends StatelessWidget {
-  _TournamentHeader({
+  const _TournamentHeader({
     required this.name,
     this.logoUrl,
     this.country,
@@ -223,10 +221,10 @@ class _TournamentHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 8, bottom: 4),
+      padding: const EdgeInsets.only(top: 8, bottom: 4),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.socaBlack,
           borderRadius: BorderRadius.circular(6),
@@ -241,15 +239,16 @@ class _TournamentHeader extends StatelessWidget {
                   width: 24,
                   height: 24,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => SizedBox(width: 24, height: 24),
+                  errorBuilder: (_, __, ___) =>
+                      const SizedBox(width: 24, height: 24),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
             ],
             Expanded(
               child: Text(
                 name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 13,
@@ -260,7 +259,7 @@ class _TournamentHeader extends StatelessWidget {
             if (country != null && country!.isNotEmpty)
               Text(
                 country!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Lato',
                   fontSize: 11,
                   color: Colors.white60,
@@ -276,7 +275,7 @@ class _TournamentHeader extends StatelessWidget {
 // ─── Match card ───────────────────────────────────────────────────────────────
 
 class _LiveMatchCard extends StatelessWidget {
-  _LiveMatchCard({required this.item, required this.onTap});
+  const _LiveMatchCard({required this.item, required this.onTap});
 
   final LiveMatchListItem item;
   final VoidCallback onTap;
@@ -298,7 +297,7 @@ class _LiveMatchCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -310,12 +309,12 @@ class _LiveMatchCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.all(14),
+          padding: const EdgeInsets.all(14),
           child: Column(
             children: [
               // Live badge + date
@@ -325,14 +324,15 @@ class _LiveMatchCard extends StatelessWidget {
                   if (state.isLive) _LivePulseBadge(stateLabel: state.label),
                   if (!state.isLive)
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: AppColors.socaGrey,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         state.label,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 10,
                             color: AppColors.socaBlack),
@@ -341,14 +341,14 @@ class _LiveMatchCard extends StatelessWidget {
                   if (dateStr.isNotEmpty)
                     Text(
                       dateStr,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 10,
                           color: AppColors.textSecondary),
                     ),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // Teams + score
               Row(
@@ -359,13 +359,13 @@ class _LiveMatchCard extends StatelessWidget {
                     child: Column(
                       children: [
                         _SmallTeamLogo(imageUrl: item.homeTeam?.imageUrl),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           item.homeTeam?.teamName ?? '',
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Lato',
                             fontWeight: FontWeight.w700,
                             fontSize: 13,
@@ -378,7 +378,7 @@ class _LiveMatchCard extends StatelessWidget {
 
                   // Score
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       hasScore
                           ? '${item.homeGoals}  —  ${item.awayGoals}'
@@ -397,13 +397,13 @@ class _LiveMatchCard extends StatelessWidget {
                     child: Column(
                       children: [
                         _SmallTeamLogo(imageUrl: item.awayTeam?.imageUrl),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           item.awayTeam?.teamName ?? '',
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Lato',
                             fontWeight: FontWeight.w700,
                             fontSize: 13,
@@ -424,7 +424,7 @@ class _LiveMatchCard extends StatelessWidget {
 }
 
 class _SmallTeamLogo extends StatelessWidget {
-  _SmallTeamLogo({this.imageUrl});
+  const _SmallTeamLogo({this.imageUrl});
   final String? imageUrl;
 
   @override
@@ -445,14 +445,15 @@ class _SmallTeamLogo extends StatelessWidget {
               child: Image.network(
                 url,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Icon(
+                errorBuilder: (_, __, ___) => const Icon(
                   Icons.sports_soccer,
                   size: 20,
                   color: AppColors.textSecondary,
                 ),
               ),
             )
-          : Icon(Icons.sports_soccer, size: 20, color: AppColors.textSecondary),
+          : const Icon(Icons.sports_soccer,
+              size: 20, color: AppColors.textSecondary),
     );
   }
 }
@@ -460,7 +461,7 @@ class _SmallTeamLogo extends StatelessWidget {
 // ─── Animated live badge ──────────────────────────────────────────────────────
 
 class _LivePulseBadge extends StatefulWidget {
-  _LivePulseBadge({required this.stateLabel});
+  const _LivePulseBadge({required this.stateLabel});
   final String stateLabel;
 
   @override
@@ -477,7 +478,7 @@ class _LivePulseBadgeState extends State<_LivePulseBadge>
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 900),
     )..repeat(reverse: true);
     _opacity = Tween<double>(begin: 0.4, end: 1.0).animate(_ctrl);
   }
@@ -493,7 +494,7 @@ class _LivePulseBadgeState extends State<_LivePulseBadge>
     return FadeTransition(
       opacity: _opacity,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(4),
@@ -501,11 +502,11 @@ class _LivePulseBadgeState extends State<_LivePulseBadge>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.circle, size: 7, color: Colors.white),
-            SizedBox(width: 4),
+            const Icon(Icons.circle, size: 7, color: Colors.white),
+            const SizedBox(width: 4),
             Text(
               '${AppStrings.live} · ${widget.stateLabel}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 10,
@@ -522,7 +523,7 @@ class _LivePulseBadgeState extends State<_LivePulseBadge>
 // ─── Empty / error states ─────────────────────────────────────────────────────
 
 class _EmptyState extends StatelessWidget {
-  _EmptyState();
+  const _EmptyState();
 
   @override
   Widget build(BuildContext context) {
@@ -530,21 +531,21 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.live_tv_outlined,
+          const Icon(Icons.live_tv_outlined,
               size: 56, color: AppColors.textSecondary),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text(
             'No live matches right now'.tr,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: AppColors.textSecondary,
             ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Text(
             'Matches update automatically every minute'.tr,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               color: AppColors.textHint,
@@ -557,7 +558,7 @@ class _EmptyState extends StatelessWidget {
 }
 
 class _ErrorState extends StatelessWidget {
-  _ErrorState({required this.onRetry});
+  const _ErrorState({required this.onRetry});
   final VoidCallback onRetry;
 
   @override
@@ -566,20 +567,21 @@ class _ErrorState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 48, color: AppColors.error),
-          SizedBox(height: 12),
+          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+          const SizedBox(height: 12),
           Text(
             'Failed to load live matches'.tr,
-            style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+            style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
             ),
-            child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
+            child:
+                Text('Retry'.tr, style: const TextStyle(fontFamily: 'Poppins')),
           ),
         ],
       ),

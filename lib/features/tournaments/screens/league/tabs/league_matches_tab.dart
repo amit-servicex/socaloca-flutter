@@ -154,8 +154,8 @@ class _LeagueMatchesTabState extends ConsumerState<LeagueMatchesTab>
 
     if (_upcomingMatches.isNotEmpty) {
       items.add(
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Text(
             'Upcoming Matches',
             style: TextStyle(
@@ -179,8 +179,8 @@ class _LeagueMatchesTabState extends ConsumerState<LeagueMatchesTab>
 
     if (!_hasMoreUpcoming && _playedMatches.isNotEmpty) {
       items.add(
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Text(
             'Played Matches',
             style: TextStyle(

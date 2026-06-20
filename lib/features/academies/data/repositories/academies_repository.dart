@@ -137,7 +137,8 @@ class AcademiesRepository {
       if (details['skillVdos'] is List) {
         for (final v in details['skillVdos'] as List) {
           if (v is! Map) continue;
-          skillVdos.add(AcademyPostModel.fromJson(Map<String, dynamic>.from(v)));
+          skillVdos
+              .add(AcademyPostModel.fromJson(Map<String, dynamic>.from(v)));
         }
         skillVdos.sort((a, b) => b.addedOn.compareTo(a.addedOn));
       }
@@ -146,7 +147,8 @@ class AcademiesRepository {
       if (details['matchVdos'] is List) {
         for (final v in details['matchVdos'] as List) {
           if (v is! Map) continue;
-          matchVdos.add(AcademyPostModel.fromJson(Map<String, dynamic>.from(v)));
+          matchVdos
+              .add(AcademyPostModel.fromJson(Map<String, dynamic>.from(v)));
         }
         matchVdos.sort((a, b) => b.addedOn.compareTo(a.addedOn));
       }

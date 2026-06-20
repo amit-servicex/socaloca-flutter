@@ -13,7 +13,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class TeamPlayersScreen extends ConsumerWidget {
   final String teamId;
 
-  TeamPlayersScreen({
+  const TeamPlayersScreen({
     super.key,
     required this.teamId,
   });
@@ -44,7 +44,7 @@ class TeamPlayersScreen extends ConsumerWidget {
   Widget _buildBody(
       BuildContext context, WidgetRef ref, TeamPlayersState state) {
     if (state.isLoading) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     if (state.error != null) {
@@ -62,30 +62,30 @@ class TeamPlayersScreen extends ConsumerWidget {
         await ref.read(teamPlayersProvider(teamId).notifier).refresh();
       },
       child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header with total count
             Container(
               color: Colors.white,
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Center(
                 child: Column(
                   children: [
                     Text(
                       AppStrings.players,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
                       decoration: BoxDecoration(
                         color: AppColors.socaGrey,
                         borderRadius: BorderRadius.circular(4),
@@ -104,35 +104,35 @@ class TeamPlayersScreen extends ConsumerWidget {
               ),
             ),
 
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
 
             // Goalkeepers
             if (state.goalkeepers.isNotEmpty) ...[
               _buildPositionSection(context, 'Goalkeepers', state.goalkeepers),
-              SizedBox(height: 35),
+              const SizedBox(height: 35),
             ],
             // Defenders
             if (state.defenders.isNotEmpty) ...[
               _buildPositionSection(context, 'Defenders', state.defenders),
-              SizedBox(height: 35),
+              const SizedBox(height: 35),
             ],
             // Midfielders
             if (state.midfielders.isNotEmpty) ...[
               _buildPositionSection(context, 'Midfielders', state.midfielders),
-              SizedBox(height: 35),
+              const SizedBox(height: 35),
             ],
 
             // Attackers
             if (state.attackers.isNotEmpty) ...[
               _buildPositionSection(context, 'Attackers', state.attackers),
-              SizedBox(height: 35),
+              const SizedBox(height: 35),
             ],
 
             // Coaches/Managers
             if (state.coaches.isNotEmpty) ...[
               _buildPositionSection(
                   context, 'Coaches & Managers', state.coaches),
-              SizedBox(height: 35),
+              const SizedBox(height: 35),
             ]
           ],
         ),
@@ -143,7 +143,7 @@ class TeamPlayersScreen extends ConsumerWidget {
   Widget _buildPositionSection(
       BuildContext context, String title, List<TeamPlayerModel> players) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
           color: AppColors.socaGrey, borderRadius: BorderRadius.circular(8)),
       child: Column(
@@ -153,12 +153,12 @@ class TeamPlayersScreen extends ConsumerWidget {
             children: [
               // Players List
               Container(
-                padding: EdgeInsets.only(right: 18),
+                padding: const EdgeInsets.only(right: 18),
                 child: ListView.separated(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: players.length,
-                  separatorBuilder: (_, index) => Divider(
+                  separatorBuilder: (_, index) => const Divider(
                     height: 1,
                     thickness: .6,
                     color: AppColors.socaBlack,
@@ -175,15 +175,16 @@ class TeamPlayersScreen extends ConsumerWidget {
                 top: -25,
                 left: 0,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  margin: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                  margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
                   child: Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -193,7 +194,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                 ),
               ),
 
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
             ],
           ),
         ],
@@ -212,7 +213,7 @@ class TeamPlayersScreen extends ConsumerWidget {
         }
       },
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             // Jersey Number
@@ -220,7 +221,7 @@ class TeamPlayersScreen extends ConsumerWidget {
               width: 40,
               child: Text(
                 player.jerseyNumber ?? '',
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -230,14 +231,14 @@ class TeamPlayersScreen extends ConsumerWidget {
               ),
             ),
 
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
 
             // Player Avatar
             ClipOval(
               child: _buildPlayerAvatar(player.profileImage, 50),
             ),
 
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
 
             // Player Info
             Expanded(
@@ -247,7 +248,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                   // Player Name
                   Text(
                     player.fullName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -256,7 +257,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
 
                   // Position and Country
                   Row(
@@ -274,7 +275,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                       if (player.playPosition != null &&
                           player.playPosition!.isNotEmpty)
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Container(
                             width: 4,
                             height: 4,
@@ -302,7 +303,7 @@ class TeamPlayersScreen extends ConsumerWidget {
                           player.jerseyNumber != null &&
                           player.jerseyNumber!.isNotEmpty)
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Container(
                             width: 4,
                             height: 4,
@@ -394,7 +395,7 @@ class TeamPlayersScreen extends ConsumerWidget {
         width: size,
         height: size,
         color: Colors.grey[200],
-        child: AppLoader(),
+        child: const AppLoader(),
       ),
       errorWidget: (context, url, error) => Container(
         width: size,
@@ -422,7 +423,7 @@ class TeamPlayersScreen extends ConsumerWidget {
             size: 80,
             color: Colors.red[300],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             AppStrings.failedToLoadPlayers,
             style: TextStyle(
@@ -432,9 +433,9 @@ class TeamPlayersScreen extends ConsumerWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               error,
               style: TextStyle(
@@ -445,7 +446,7 @@ class TeamPlayersScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               ref.read(teamPlayersProvider(teamId).notifier).refresh();
@@ -453,7 +454,7 @@ class TeamPlayersScreen extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.socaBlack,
               foregroundColor: AppColors.socaYellow,
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
             ),
             child: Text(AppStrings.retry),
           ),

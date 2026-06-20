@@ -67,14 +67,14 @@ class _MostFollowedTeamsSectionState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FeedSectionHeader(title: AppStrings.mostFollowedTeams),
-        Divider(
+        const Divider(
           color: AppColors.socaBlack,
           thickness: .7,
           height: 0,
           // indent: 12,
           // endIndent: 12,
         ),
-        SizedBox(
+        const SizedBox(
           height: 8,
         ),
         SizedBox(

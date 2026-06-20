@@ -9,7 +9,7 @@ class FaAllTeamsScreen extends StatelessWidget {
   final String faName;
   final List<FaTeamModel> teams;
 
-  FaAllTeamsScreen({
+  const FaAllTeamsScreen({
     super.key,
     required this.faName,
     required this.teams,
@@ -38,7 +38,7 @@ class FaAllTeamsScreen extends StatelessWidget {
           ? Center(
               child: Text(
                 AppStrings.noTeamsFound,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack,
@@ -48,7 +48,7 @@ class FaAllTeamsScreen extends StatelessWidget {
           : ListView.separated(
               padding: EdgeInsets.zero,
               itemCount: teams.length,
-              separatorBuilder: (_, __) => Divider(
+              separatorBuilder: (_, __) => const Divider(
                 height: 1,
                 thickness: 0.8,
                 color: AppColors.socaGrey,
@@ -70,7 +70,7 @@ class FaAllTeamsScreen extends StatelessWidget {
           Container(
             width: 44,
             height: 44,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.socaGrey,
             ),
@@ -79,20 +79,20 @@ class FaAllTeamsScreen extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => Icon(
+                      errorWidget: (_, __, ___) => const Icon(
                         Icons.group,
                         size: 24,
                         color: AppColors.socaBlack,
                       ),
                     )
-                  : Icon(
+                  : const Icon(
                       Icons.group,
                       size: 24,
                       color: AppColors.socaBlack,
                     ),
             ),
           ),
-          SizedBox(width: 14),
+          const SizedBox(width: 14),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,7 +102,7 @@ class FaAllTeamsScreen extends StatelessWidget {
                   children: [
                     Text(
                       team.teamName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -124,14 +124,14 @@ class FaAllTeamsScreen extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.socaBlack,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
                     "FEATURED",
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: AppColors.socaYellow,
                         fontSize: 12,
                         fontWeight: FontWeight.bold),

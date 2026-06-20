@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,7 +22,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class AcademyBioScreen extends ConsumerStatefulWidget {
   final String academyId;
 
-  AcademyBioScreen({super.key, required this.academyId});
+  const AcademyBioScreen({super.key, required this.academyId});
 
   @override
   ConsumerState<AcademyBioScreen> createState() => _AcademyBioScreenState();
@@ -105,7 +104,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             request
                 ? AppStrings.joiningRequestSent
                 : AppStrings.requestCancelled,
-            style: TextStyle(fontFamily: 'Poppins'),
+            style: const TextStyle(fontFamily: 'Poppins'),
           ),
           backgroundColor: AppColors.socaBlack,
         ));
@@ -147,7 +146,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           }
           return _buildContent(bio);
         },
-        loading: () => AppLoader(),
+        loading: () => const AppLoader(),
         error: (e, _) => _buildError(e.toString()),
       ),
     );
@@ -162,7 +161,8 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       //   elevation: 0,
       // ),
       body: Center(
-        child: Text(msg, style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+        child: Text(msg,
+            style: const TextStyle(fontFamily: 'Poppins', fontSize: 14)),
       ),
     );
   }
@@ -208,7 +208,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
               // Header: image, name, follow, country, category, year
               _buildHeader(bio, details),
-              Divider(
+              const Divider(
                 color: AppColors.socaBlack,
                 thickness: .8,
                 height: 1,
@@ -244,7 +244,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
               // Trial badge + Register button
               if (bio.trialDetails?.trialBadge == true) _buildTrialSection(bio),
 
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -260,7 +260,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       pinned: true,
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w700,
           fontSize: 18,
@@ -303,10 +303,10 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                 children: List.generate(
                   banners.length,
                   (i) => AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     width: i == _currentBanner ? 12 : 6,
                     height: 6,
-                    margin: EdgeInsets.symmetric(horizontal: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
                     decoration: BoxDecoration(
                       color: i == _currentBanner
                           ? AppColors.socaYellow
@@ -326,21 +326,21 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
     final imageUrl = _imageUrl(details?.imageUrl);
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Academy name at top
           Text(
             details?.name ?? '',
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 20,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           // Image | Info rows | CAT badge
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -358,7 +358,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                       ? CachedNetworkImage(
                           imageUrl: imageUrl,
                           fit: BoxFit.cover,
-                          placeholder: (_, __) => AppLoader(),
+                          placeholder: (_, __) => const AppLoader(),
                           errorWidget: (_, __, ___) => Image.asset(
                             'assets/images/logo.png',
                             fit: BoxFit.cover,
@@ -368,7 +368,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                           fit: BoxFit.cover),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -389,18 +389,18 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
               ),
               if (details?.category != null &&
                   details!.category!.isNotEmpty) ...[
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildCatBadge(details.category!),
               ],
             ],
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           // Follow + Join buttons row
           Row(
             children: [
               _buildFollowButton(bio),
               if (_canJoin) ...[
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildInlineJoinButton(),
               ],
             ],
@@ -414,7 +414,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
     return GestureDetector(
       onTap: () => _handleFollow(bio),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: !_isFollowing ? AppColors.socaBlack : Colors.white,
           border: Border.all(color: AppColors.socaBlack),
@@ -437,7 +437,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildInlineJoinButton() {
     if (_isJoining) {
-      return SizedBox(
+      return const SizedBox(
         width: 20,
         height: 20,
         child: CircularProgressIndicator(
@@ -446,7 +446,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
     }
     if (_joinedStatus == 'ACCEPTED') {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.socaBlack,
           borderRadius: BorderRadius.circular(5),
@@ -454,7 +454,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
         ),
         child: Text(
           AppStrings.academyJoined.toUpperCase(),
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 14,
@@ -467,14 +467,14 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       return GestureDetector(
         onTap: () => _handleJoin(false),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: AppColors.socaBlack,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Text(
             AppStrings.cancelRequest.toUpperCase(),
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 14,
@@ -487,14 +487,14 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
     return GestureDetector(
       onTap: () => _handleJoin(true),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.socaBlack,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Text(
           AppStrings.sendRequest.toUpperCase(),
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 14,
@@ -509,7 +509,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
     return Container(
       width: 80,
       height: 85,
-      padding: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       decoration: BoxDecoration(
         color: AppColors.socaBlack,
         borderRadius: BorderRadius.circular(8),
@@ -521,7 +521,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           Text(
             AppStrings.cat,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 16,
@@ -531,7 +531,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           Text(
             category,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 28,
@@ -545,15 +545,15 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _infoLabelValue(String label, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 3),
+      padding: const EdgeInsets.only(bottom: 3),
       child: RichText(
         text: TextSpan(
-          style: TextStyle(
+          style: const TextStyle(
               fontFamily: 'Poppins', fontSize: 12, color: AppColors.socaBlack),
           children: [
             TextSpan(
                 text: '$label - ',
-                style: TextStyle(fontWeight: FontWeight.w600)),
+                style: const TextStyle(fontWeight: FontWeight.w600)),
             TextSpan(text: value),
           ],
         ),
@@ -564,19 +564,19 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
   Widget _buildAboutSection(String about) {
     return Container(
       // color: AppColors.socaPageBg,
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(16),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
                 color: AppColors.socaPageBg,
                 borderRadius: BorderRadius.circular(4)),
             child: Text(
               about,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -588,14 +588,14 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             top: -20,
             left: 10,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 AppStrings.about.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -620,14 +620,14 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
   Widget _buildBioDetails(AcademyDetailModel d) {
     return Container(
       // color: AppColors.socaPageBg,
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(16),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           IntrinsicHeight(
             child: Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                   color: AppColors.socaPageBg,
                   borderRadius: BorderRadius.circular(8)),
@@ -642,7 +642,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                           _bioCell(AppStrings.academyDirector, d.director!),
                         if (d.director?.isNotEmpty == true &&
                             d.manager?.isNotEmpty == true)
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                         if (d.manager?.isNotEmpty == true)
                           _bioCell(AppStrings.academyManager, d.manager!),
                       ],
@@ -650,7 +650,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                   ),
                   if ((d.mobile?.isNotEmpty == true) ||
                       (d.email?.isNotEmpty == true)) ...[
-                    VerticalDivider(
+                    const VerticalDivider(
                         color: AppColors.socaBlack, thickness: 1, width: 24),
                     Expanded(
                       child: Column(
@@ -661,7 +661,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                                 AppStrings.academyContactNumber, d.mobile!),
                           if (d.mobile?.isNotEmpty == true &&
                               d.email?.isNotEmpty == true)
-                            SizedBox(height: 12),
+                            const SizedBox(height: 12),
                           if (d.email?.isNotEmpty == true)
                             _bioCell(AppStrings.academyContactEmail, d.email!),
                         ],
@@ -676,14 +676,14 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             top: -20,
             left: 10,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 AppStrings.bio.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -703,17 +703,17 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 11,
             fontWeight: FontWeight.w400,
             color: AppColors.socaBlack,
           ),
         ),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             fontWeight: FontWeight.w700,
@@ -727,13 +727,13 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
   Widget _buildSponsorsSection(List<AcademySponsorModel> sponsors) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: AppColors.socaPageBg,
@@ -741,14 +741,14 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             height: 150,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: sponsors.length,
-              separatorBuilder: (_, __) => SizedBox(width: 12),
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
               itemBuilder: (_, i) {
                 final s = sponsors[i];
                 final logoUrl = _imageUrl(s.logo);
                 final hasWebsite = s.website != null && s.website!.isNotEmpty;
-                log("this si the webside like of the sopsor item ${s.website} ${hasWebsite}");
+                log("this si the webside like of the sopsor item ${s.website} $hasWebsite");
                 return GestureDetector(
                   onTap: hasWebsite
                       ? () async {
@@ -782,11 +782,11 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                               ? CachedNetworkImage(
                                   imageUrl: logoUrl,
                                   fit: BoxFit.cover,
-                                  errorWidget: (_, __, ___) => Icon(
+                                  errorWidget: (_, __, ___) => const Icon(
                                       Icons.business,
                                       color: AppColors.socaBlack),
                                 )
-                              : Icon(Icons.business,
+                              : const Icon(Icons.business,
                                   color: AppColors.socaBlack),
                         ),
                       ),
@@ -795,7 +795,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                           width: 64,
                           child: Text(
                             s.name!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 9,
                               color: AppColors.socaBlack,
@@ -815,7 +815,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             top: -20,
             left: 10,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: _sectionTitle(AppStrings.sponsors),
             ),
           ),
@@ -826,8 +826,8 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildTeamsSection(List<AcademyTeamModel> teams) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(16),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -895,14 +895,14 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             top: -20,
             left: 10,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 AppStrings.teams.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -919,22 +919,22 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
   Widget _buildVideosSection(String title, List<AcademyPostModel> videos) {
     return Container(
       // color: Colors.white,
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.symmetric(vertical: 24),
             decoration: BoxDecoration(
                 color: AppColors.socaPageBg,
                 borderRadius: BorderRadius.circular(8)),
             height: 140,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: videos.length,
-              separatorBuilder: (_, __) => SizedBox(width: 10),
+              separatorBuilder: (_, __) => const SizedBox(width: 10),
               itemBuilder: (_, i) {
                 final v = videos[i];
                 // thumbnail is a full URL; imageUrl may be a relative path
@@ -963,13 +963,15 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                           CachedNetworkImage(
                             imageUrl: imgUrl,
                             fit: BoxFit.cover,
-                            errorWidget: (_, __, ___) => Icon(Icons.videocam,
+                            errorWidget: (_, __, ___) => const Icon(
+                                Icons.videocam,
                                 color: AppColors.socaBlack),
                           )
                         else
-                          Icon(Icons.videocam, color: AppColors.socaBlack),
+                          const Icon(Icons.videocam,
+                              color: AppColors.socaBlack),
                         Container(color: Colors.black26),
-                        Center(
+                        const Center(
                           child: Icon(Icons.play_circle_outline,
                               color: Colors.white, size: 36),
                         ),
@@ -983,7 +985,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
           Positioned(
             top: -20,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: _sectionTitle(title),
             ),
           ),
@@ -995,21 +997,21 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
   Widget _buildPostsSection(AcademyBioData bio) {
     final displayPosts = bio.postList.take(3).toList();
     return Container(
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(16),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: AppColors.socaPageBg,
             ),
             child: GridView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 6,
                 mainAxisSpacing: 6,
@@ -1030,10 +1032,10 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                       ? CachedNetworkImage(
                           imageUrl: imgUrl,
                           fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) =>
-                              Icon(Icons.image, color: AppColors.socaBlack),
+                          errorWidget: (_, __, ___) => const Icon(Icons.image,
+                              color: AppColors.socaBlack),
                         )
-                      : Icon(Icons.image, color: AppColors.socaBlack),
+                      : const Icon(Icons.image, color: AppColors.socaBlack),
                 );
               },
             ),
@@ -1058,7 +1060,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                     ),
                     child: Text(
                       'View All'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -1076,13 +1078,13 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
 
   Widget _buildNewsSection(List<AcademyNewsModel> newsList) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(16),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 16),
+            padding: const EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: AppColors.socaPageBg,
@@ -1097,14 +1099,14 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             top: -20,
             left: 10,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 AppStrings.academyNews.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
@@ -1131,9 +1133,9 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
             }
           : null,
       child: Container(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 10),
         // color: Colors.white,
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1149,7 +1151,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                       width: 90, height: 90, color: AppColors.socaGrey),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
             ],
             Expanded(
               child: Column(
@@ -1158,7 +1160,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                   if (news.newsDate?.isNotEmpty == true)
                     Text(
                       news.newsDate!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         color: AppColors.textSecondary,
@@ -1167,7 +1169,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                   if (news.title?.isNotEmpty == true)
                     Text(
                       news.title!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
@@ -1179,7 +1181,7 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
                   if (news.description?.isNotEmpty == true)
                     Text(
                       news.description!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         color: AppColors.socaBlack,
@@ -1199,19 +1201,19 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
   Widget _buildTrialSection(AcademyBioData bio) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.orange,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               'Live Trial'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 11,
@@ -1219,18 +1221,18 @@ class _AcademyBioScreenState extends ConsumerState<AcademyBioScreen> {
               ),
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           GestureDetector(
             onTap: () => _handleTrialRegister(bio),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
                 'Register'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 13,

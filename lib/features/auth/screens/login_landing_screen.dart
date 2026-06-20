@@ -16,13 +16,13 @@ import '../../../core/theme/app_colors.dart';
 ///   • "Sign Up" button — filled black, 5dp radius — height 80dp, hPad 50dp, yellow text
 ///   • Privacy text pinned at bottom of screen
 class LoginLandingScreen extends StatelessWidget {
-  LoginLandingScreen({super.key});
+  const LoginLandingScreen({super.key});
 
-  static Color _black = AppColors.socaBlack; // #1C1C1C
-  static Color _yellow = AppColors.socaYellow; // #EEFF41
-  static Color _pageBg = AppColors.socaPageBg; // #F6F6F6
+  static const Color _black = AppColors.socaBlack; // #1C1C1C
+  static const Color _yellow = AppColors.socaYellow; // #EEFF41
+  static const Color _pageBg = AppColors.socaPageBg; // #F6F6F6
 
-  static String _privacyText =
+  static const String _privacyText =
       '*SocaLoca only collects the data is necessary to provides its service and\n'
       'stores it in the anonymised way in our own self-hosted analytics system.';
 
@@ -37,7 +37,7 @@ class LoginLandingScreen extends StatelessWidget {
             // ── Scrollable content ────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 child: Column(
                   children: [
                     // Logo  — 150×150dp, centred, marginTop 50dp
@@ -56,7 +56,7 @@ class LoginLandingScreen extends StatelessWidget {
 
                     // ── LOGIN button — outlined stroke, no fill ───────────
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: GestureDetector(
                         onTap: () => context.push(AppRoutes.login),
                         child: Container(
@@ -69,7 +69,7 @@ class LoginLandingScreen extends StatelessWidget {
                           ),
                           child: Text(
                             AppStrings.login,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
                               fontSize: 32,
@@ -82,8 +82,8 @@ class LoginLandingScreen extends StatelessWidget {
 
                     // ── OR divider ────────────────────────────────────────
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 20),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -92,10 +92,10 @@ class LoginLandingScreen extends StatelessWidget {
                           // "or" text with page-bg background to mask line
                           Container(
                             color: _pageBg,
-                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
                             child: Text(
                               AppStrings.or,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
@@ -109,7 +109,7 @@ class LoginLandingScreen extends StatelessWidget {
 
                     // ── SIGN UP button — filled black ─────────────────────
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: GestureDetector(
                         onTap: () => context.push(AppRoutes.ageSelection),
                         child: Container(
@@ -121,7 +121,7 @@ class LoginLandingScreen extends StatelessWidget {
                           ),
                           child: Text(
                             AppStrings.signUp,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
                               fontSize: 32,
@@ -137,7 +137,7 @@ class LoginLandingScreen extends StatelessWidget {
             ),
 
             // ── Privacy text — pinned at bottom ──────────────────────────
-            Padding(
+            const Padding(
               padding: EdgeInsets.fromLTRB(20, 8, 20, 20),
               child: Text(
                 _privacyText,

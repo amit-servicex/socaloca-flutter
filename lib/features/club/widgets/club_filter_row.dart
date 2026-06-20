@@ -84,7 +84,9 @@ class ClubFilterRow extends StatelessWidget {
       value: value,
       values: items.map((e) => e.$1).toList(),
       items: items.map((e) => e.$2).toList(),
-      onChanged: (v) { if (v != null) onChanged(v); },
+      onChanged: (v) {
+        if (v != null) onChanged(v);
+      },
       height: 42,
       fontSize: 12,
     );

@@ -232,10 +232,12 @@ class _StatsPage extends ConsumerWidget {
           padding: EdgeInsets.zero,
           itemCount: stats.length + (hasHeader ? 1 : 0),
           itemBuilder: (_, index) {
-            if (showGoalsHeader && index == 0)
+            if (showGoalsHeader && index == 0) {
               return const _CupGoalsTableHeader();
-            if (showCardsHeader && index == 0)
+            }
+            if (showCardsHeader && index == 0) {
               return const _CupCardsTableHeader();
+            }
 
             final i = hasHeader ? index - 1 : index;
             if (showGoalsHeader) return _CupGoalStatRow(stat: stats[i]);

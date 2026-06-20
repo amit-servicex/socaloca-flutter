@@ -5,5 +5,7 @@ import '../data/repositories/partners_repository.dart';
 
 final sponsorBioProvider =
     FutureProvider.family<SponsorBioModel?, String>((ref, sponsorId) async {
-  return ref.read(partnersRepositoryProvider).getSponsorBio(sponsorId: sponsorId);
+  return ref
+      .read(partnersRepositoryProvider)
+      .getSponsorBio(sponsorId: sponsorId);
 });

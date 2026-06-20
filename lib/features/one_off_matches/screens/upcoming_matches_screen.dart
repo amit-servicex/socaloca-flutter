@@ -9,7 +9,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Full list of upcoming matches with pagination
 class UpcomingMatchesScreen extends ConsumerStatefulWidget {
-  UpcomingMatchesScreen({super.key});
+  const UpcomingMatchesScreen({super.key});
 
   @override
   ConsumerState<UpcomingMatchesScreen> createState() =>
@@ -68,11 +68,11 @@ class _UpcomingMatchesScreenState extends ConsumerState<UpcomingMatchesScreen> {
             },
             child: ListView.builder(
               controller: _scrollController,
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount: matches.length + 1,
               itemBuilder: (context, index) {
                 if (index == matches.length) {
-                  return Padding(
+                  return const Padding(
                     padding: EdgeInsets.all(16),
                     child: AppLoader(),
                   );
@@ -89,21 +89,21 @@ class _UpcomingMatchesScreenState extends ConsumerState<UpcomingMatchesScreen> {
             ),
           );
         },
-        loading: () => AppLoader(),
+        loading: () => const AppLoader(),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 AppStrings.errorLoadingMatches,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                   color: Colors.red,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   ref
@@ -115,7 +115,7 @@ class _UpcomingMatchesScreenState extends ConsumerState<UpcomingMatchesScreen> {
                 ),
                 child: Text(
                   AppStrings.retry,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 14,

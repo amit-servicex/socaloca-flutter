@@ -12,7 +12,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 
 /// Points table tab — mirrors Android TournamentsPointTableFragment
 class TournamentPointsTableTab extends ConsumerStatefulWidget {
-  TournamentPointsTableTab({super.key, required this.tournamentId});
+  const TournamentPointsTableTab({super.key, required this.tournamentId});
   final String tournamentId;
 
   @override
@@ -63,7 +63,7 @@ class _TournamentPointsTableTabState
     super.build(context);
 
     if (_loading) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     if (_table.isEmpty) {
@@ -85,7 +85,7 @@ class _TournamentPointsTableTabState
         await _load();
       },
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -94,7 +94,7 @@ class _TournamentPointsTableTabState
             children: [
               // Header row
               _TableHeader(),
-              Divider(height: 1, color: AppColors.socaGrey),
+              const Divider(height: 1, color: AppColors.socaGrey),
               // Data rows
               ..._table.asMap().entries.map((entry) {
                 final index = entry.key;
@@ -102,7 +102,7 @@ class _TournamentPointsTableTabState
                 return Column(
                   children: [
                     _TableRow(entry: row, position: index + 1),
-                    Divider(height: 1, color: AppColors.socaGrey),
+                    const Divider(height: 1, color: AppColors.socaGrey),
                   ],
                 );
               }),
@@ -119,8 +119,8 @@ class _TableHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.socaBlack,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-      child: Row(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      child: const Row(
         children: [
           SizedBox(width: 28, child: _HeaderCell(text: 'Pos')),
           SizedBox(width: 36),
@@ -140,14 +140,14 @@ class _TableHeader extends StatelessWidget {
 }
 
 class _HeaderCell extends StatelessWidget {
-  _HeaderCell({required this.text});
+  const _HeaderCell({required this.text});
   final String text;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(
+      style: const TextStyle(
         fontFamily: 'Poppins',
         fontWeight: FontWeight.w700,
         fontSize: 12,
@@ -159,7 +159,7 @@ class _HeaderCell extends StatelessWidget {
 }
 
 class _TableRow extends StatelessWidget {
-  _TableRow({required this.entry, required this.position});
+  const _TableRow({required this.entry, required this.position});
   final PointsTableEntry entry;
   final int position;
 
@@ -170,7 +170,7 @@ class _TableRow extends StatelessWidget {
     return Container(
       color:
           position.isEven ? AppColors.socaGrey.withOpacity(0.3) : Colors.white,
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: Row(
         children: [
           // Position
@@ -178,7 +178,7 @@ class _TableRow extends StatelessWidget {
             width: 28,
             child: Text(
               '$position',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
@@ -194,7 +194,7 @@ class _TableRow extends StatelessWidget {
               child: Container(
                 width: 28,
                 height: 28,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.socaGrey,
                 ),
@@ -203,13 +203,13 @@ class _TableRow extends StatelessWidget {
                       ? CachedNetworkImage(
                           imageUrl: logoUrl,
                           fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) => Icon(
+                          errorWidget: (_, __, ___) => const Icon(
                             Icons.shield,
                             size: 14,
                             color: AppColors.socaBlack,
                           ),
                         )
-                      : Icon(Icons.shield,
+                      : const Icon(Icons.shield,
                           size: 14, color: AppColors.socaBlack),
                 ),
               ),
@@ -220,7 +220,7 @@ class _TableRow extends StatelessWidget {
             width: 120,
             child: Text(
               entry.teamName ?? '',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
                 fontSize: 12,
@@ -245,7 +245,7 @@ class _TableRow extends StatelessWidget {
 }
 
 class _DataCell extends StatelessWidget {
-  _DataCell({required this.value, this.width = 32, this.bold = false});
+  const _DataCell({required this.value, this.width = 32, this.bold = false});
   final int value;
   final double width;
   final bool bold;

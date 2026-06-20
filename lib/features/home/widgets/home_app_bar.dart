@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:socaloca/shared/providers/auth_provider.dart';
 
@@ -164,10 +161,11 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 width: 40,
                 height: 40,
               ),
+
               SizedBox(
                   width: !(user?.isFan ?? false)
-                      ? MediaQuery.of(context).size.width * 0.18
-                      : MediaQuery.of(context).size.width * 0.014),
+                      ? MediaQuery.of(context).size.width * 0.195
+                      : MediaQuery.of(context).size.width * 0.077),
               // const Spacer(),
 
               // Search

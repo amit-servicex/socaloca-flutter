@@ -9,7 +9,7 @@ class FaAllCompetitionsScreen extends StatelessWidget {
   final String faName;
   final List<FaCompModel> competitions;
 
-  FaAllCompetitionsScreen({
+  const FaAllCompetitionsScreen({
     super.key,
     required this.faName,
     required this.competitions,
@@ -38,7 +38,7 @@ class FaAllCompetitionsScreen extends StatelessWidget {
           ? Center(
               child: Text(
                 AppStrings.noCompetitionsFound,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack,
@@ -48,7 +48,7 @@ class FaAllCompetitionsScreen extends StatelessWidget {
           : ListView.separated(
               padding: EdgeInsets.zero,
               itemCount: competitions.length,
-              separatorBuilder: (_, __) => Divider(
+              separatorBuilder: (_, __) => const Divider(
                 height: 1,
                 thickness: 0.8,
                 color: AppColors.socaGrey,
@@ -64,7 +64,7 @@ class FaAllCompetitionsScreen extends StatelessWidget {
       decoration: const BoxDecoration(
           border: Border(
               bottom: BorderSide(color: AppColors.socaBlack, width: .7))),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           Container(
@@ -79,24 +79,24 @@ class FaAllCompetitionsScreen extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => Icon(
+                      errorWidget: (_, __, ___) => const Icon(
                         Icons.emoji_events,
                         size: 24,
                         color: AppColors.socaBlack,
                       ),
                     )
-                  : Icon(
+                  : const Icon(
                       Icons.emoji_events,
                       size: 24,
                       color: AppColors.socaBlack,
                     ),
             ),
           ),
-          SizedBox(width: 14),
+          const SizedBox(width: 14),
           Expanded(
             child: Text(
               comp.compName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w600,

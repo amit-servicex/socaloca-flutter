@@ -12,7 +12,7 @@ import '../providers/auth_provider.dart';
 /// Adult (16+) → SocialThankYouScreen → CreateProfileScreen.
 /// Youth/Child → existing consent flows.
 class SocialAgeSelectionScreen extends ConsumerWidget {
-  SocialAgeSelectionScreen({super.key});
+  const SocialAgeSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,7 +22,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Center(
                 child: SvgPicture.asset(
                   'assets/icons/socaloca_logo.svg',
@@ -33,7 +33,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                 height: MediaQuery.of(context).size.height * 0.1,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   children: [
                     // Adult (16+)
@@ -47,7 +47,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                       child: Container(
                         width: double.infinity,
                         height: 100,
-                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(5),
@@ -57,7 +57,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                           children: [
                             Text(
                               AppStrings.iAmOver,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
@@ -71,7 +71,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                               children: [
                                 Text(
                                   AppStrings.sixteenYears,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24,
@@ -79,10 +79,10 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                     height: 1.0,
                                   ),
                                 ),
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Text(
                                   AppStrings.old,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
                                     fontSize: 20,
@@ -97,7 +97,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
 
                     // Youth (13-15)
                     InkWell(
@@ -110,7 +110,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                       child: Container(
                         width: double.infinity,
                         height: 100,
-                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(5),
@@ -120,7 +120,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                           children: [
                             Text(
                               AppStrings.iAm,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
@@ -134,7 +134,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                               children: [
                                 Text(
                                   AppStrings.thirteenToFifteenYears,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24,
@@ -142,10 +142,10 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                     height: 1.0,
                                   ),
                                 ),
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Text(
                                   AppStrings.old,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
                                     fontSize: 20,
@@ -160,7 +160,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
 
                     // Child (7-12) — parent/guardian registers
                     InkWell(
@@ -173,7 +173,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                       child: Container(
                         width: double.infinity,
                         height: 100,
-                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppColors.socaBlack,
                           borderRadius: BorderRadius.circular(5),
@@ -184,7 +184,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                             Text(
                               AppStrings.parentGuardianRegisteringOnBehalf,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
@@ -192,14 +192,14 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                 height: 1.0,
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   AppStrings.sevenToTwelve,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 20,
@@ -207,10 +207,10 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                     height: 1.0,
                                   ),
                                 ),
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Text(
                                   AppStrings.years,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 16,
@@ -218,10 +218,10 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
                                     height: 1.0,
                                   ),
                                 ),
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Text(
                                   AppStrings.old,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
                                     fontSize: 16,
@@ -249,7 +249,7 @@ class SocialAgeSelectionScreen extends ConsumerWidget {
 /// Shown after adult age selection during social login.
 /// "Thank you" message + "Create Profile" button → CreateProfileScreen.
 class SocialThankYouScreen extends StatelessWidget {
-  SocialThankYouScreen({super.key});
+  const SocialThankYouScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -257,39 +257,39 @@ class SocialThankYouScreen extends StatelessWidget {
       backgroundColor: AppColors.socaPageBg,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
             children: [
-              SizedBox(height: 60),
+              const SizedBox(height: 60),
               Center(
                 child: SvgPicture.asset(
                   'assets/icons/socaloca_logo.svg',
                   width: 200,
                 ),
               ),
-              SizedBox(height: 60),
+              const SizedBox(height: 60),
               Text(
                 AppStrings.thankYouForJoining,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 22,
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 AppStrings.createProfileToGetStarted,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
                   color: AppColors.socaBlack,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               InkWell(
                 onTap: () => context.push(AppRoutes.createProfile),
                 child: Container(
@@ -302,7 +302,7 @@ class SocialThankYouScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Text(
                     AppStrings.createProfileUpper,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 20,
@@ -311,7 +311,7 @@ class SocialThankYouScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
             ],
           ),
         ),

@@ -20,7 +20,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class CharityBioScreen extends ConsumerStatefulWidget {
   final String charityId;
 
-  CharityBioScreen({super.key, required this.charityId});
+  const CharityBioScreen({super.key, required this.charityId});
 
   @override
   ConsumerState<CharityBioScreen> createState() => _CharityBioScreenState();
@@ -52,30 +52,30 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildTopBar(bio.details),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     _buildNameBox(bio.details.charityName),
                     _buildBasicInfo(bio.details),
                     if (bio.bioArea != null &&
                         ((bio.bioArea!.bio != null &&
                                 bio.bioArea!.bio!.isNotEmpty) ||
                             bio.bioArea!.imageUrl != null)) ...[
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       _buildDivider(),
                       _buildBioAreaSection(bio.bioArea!),
                     ],
                     if (bio.newsList.isNotEmpty) ...[
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       _buildDivider(),
                       _buildNewsSection(bio.newsList),
                     ],
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
             ],
           );
         },
-        loading: () => AppLoader(),
+        loading: () => const AppLoader(),
         error: (e, _) => _buildError(e.toString()),
       ),
     );
@@ -86,7 +86,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
   Widget _buildTopBar(CharityInfoModel info) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -95,7 +95,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
             child: Text(
               info.charityName,
               maxLines: 2,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -152,7 +152,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
       return Image.asset('assets/icons/ic_silver_badge.png',
           width: 28, height: 28);
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   // ─── Name box ────────────────────────────────────────────────────────────
@@ -161,10 +161,10 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
       child: Text(
         name,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           fontWeight: FontWeight.w700,
@@ -179,14 +179,14 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
   Widget _buildBasicInfo(CharityInfoModel info) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: [
               _buildEntityImage(info.fullImageUrl),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               SizedBox(
                 width: 100,
                 child: ElevatedButton(
@@ -195,14 +195,14 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                     backgroundColor: AppColors.socaBlack,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: const EdgeInsets.symmetric(vertical: 6),
                     elevation: 0,
                   ),
                   child: Text(
                     _isFollowing
                         ? AppStrings.following.toUpperCase()
                         : AppStrings.follow.toUpperCase(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -211,10 +211,10 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 AppStrings.followersCount(info.followCount),
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 11,
                     color: AppColors.socaBlack),
@@ -222,7 +222,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
               ),
             ],
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,7 +288,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
 
   Widget _imageFallback() => Container(
         color: AppColors.socaGrey,
-        child: Icon(Icons.volunteer_activism,
+        child: const Icon(Icons.volunteer_activism,
             color: AppColors.socaBlack, size: 40),
       );
 
@@ -300,12 +300,12 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
     final imageUrl = bioArea.fullImageUrl;
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClubBioSectionHeader(title: AppStrings.about),
-          Divider(color: AppColors.socaBlack, thickness: .7),
+          const Divider(color: AppColors.socaBlack, thickness: .7),
           if (imageUrl.isNotEmpty)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
@@ -318,11 +318,11 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                     Container(height: 180, color: AppColors.socaGrey),
               ),
             ),
-          if (imageUrl.isNotEmpty) SizedBox(height: 12),
+          if (imageUrl.isNotEmpty) const SizedBox(height: 12),
           if (bioArea.bio != null && bioArea.bio!.isNotEmpty)
             Text(
               bioArea.bio!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,
@@ -342,14 +342,14 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClubBioSectionHeader(title: AppStrings.newsAnnouncements),
-          Divider(color: AppColors.socaBlack, thickness: .7),
+          const Divider(color: AppColors.socaBlack, thickness: .7),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             itemCount: newsList.length,
-            separatorBuilder: (_, __) =>
-                Divider(height: 1, color: AppColors.socaBlack, thickness: .7),
+            separatorBuilder: (_, __) => const Divider(
+                height: 1, color: AppColors.socaBlack, thickness: .7),
             itemBuilder: (context, i) => _buildNewsRow(newsList[i]),
           ),
         ],
@@ -367,7 +367,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
     return GestureDetector(
       onTap: tapUrl != null ? () => _launchUrl(tapUrl) : null,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -383,7 +383,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                       width: 80, height: 80, color: AppColors.socaGrey),
                 ),
               ),
-            if (imageUrl.isNotEmpty) SizedBox(width: 12),
+            if (imageUrl.isNotEmpty) const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -391,7 +391,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                   if (news.newsDate != null && news.newsDate!.isNotEmpty)
                     Text(
                       news.newsDate!,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           color: AppColors.textSecondary),
@@ -399,7 +399,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                   if (news.title != null && news.title!.isNotEmpty)
                     Text(
                       news.title!,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -410,7 +410,7 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
                   if (news.description != null && news.description!.isNotEmpty)
                     Text(
                       news.description!,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11,
                           color: AppColors.socaBlack),
@@ -433,10 +433,10 @@ class _CharityBioScreenState extends ConsumerState<CharityBioScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 48, color: AppColors.error),
-          SizedBox(height: 16),
+          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+          const SizedBox(height: 16),
           Text(message,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   color: AppColors.socaBlack)),

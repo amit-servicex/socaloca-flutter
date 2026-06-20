@@ -13,7 +13,7 @@ import 'package:socaloca/shared/widgets/app_loader.dart';
 class AddTrainingActivitySheet extends ConsumerStatefulWidget {
   final String userId;
 
-  AddTrainingActivitySheet({super.key, required this.userId});
+  const AddTrainingActivitySheet({super.key, required this.userId});
 
   @override
   ConsumerState<AddTrainingActivitySheet> createState() =>
@@ -61,7 +61,7 @@ class _AddTrainingActivitySheetState
       lastDate: DateTime.now(),
       builder: (ctx, child) => Theme(
         data: Theme.of(ctx).copyWith(
-          colorScheme: ColorScheme.light(
+          colorScheme: const ColorScheme.light(
             primary: AppColors.socaBlack,
             onPrimary: AppColors.socaYellow,
           ),
@@ -143,7 +143,7 @@ class _AddTrainingActivitySheetState
           children: [
             // ── Handle ──────────────────────────────────────────────────
             Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
+              margin: const EdgeInsets.symmetric(vertical: 8),
               width: 40,
               height: 4,
               decoration: BoxDecoration(
@@ -153,13 +153,13 @@ class _AddTrainingActivitySheetState
             ),
             // ── Title ────────────────────────────────────────────────────
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     AppStrings.addTrainingSession,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -167,18 +167,18 @@ class _AddTrainingActivitySheetState
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.close),
+                    icon: const Icon(Icons.close),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
             ),
-            Divider(height: 1),
+            const Divider(height: 1),
             // ── Form ─────────────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollCtrl,
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -192,7 +192,7 @@ class _AddTrainingActivitySheetState
                         onTap: _pickDate,
                         formatter: _formatDisplay,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Training Type
                       _label(AppStrings.trainingTypeLabel),
@@ -202,7 +202,7 @@ class _AddTrainingActivitySheetState
                         items: _trainTypes,
                         onChanged: (v) => setState(() => _trainType = v),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Minutes
                       _label(AppStrings.trainingMinutesLabel),
@@ -216,9 +216,10 @@ class _AddTrainingActivitySheetState
                         validator: (v) => (v == null || v.trim().isEmpty)
                             ? AppStrings.enterTrainingMinutes
                             : null,
-                        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                        style: const TextStyle(
+                            fontFamily: 'Poppins', fontSize: 13),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Notes
                       _label(AppStrings.notesOptionalLabel),
@@ -227,12 +228,13 @@ class _AddTrainingActivitySheetState
                         maxLines: 3,
                         decoration: _inputDecoration(
                             AppStrings.describeTrainingSession),
-                        style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                        style: const TextStyle(
+                            fontFamily: 'Poppins', fontSize: 13),
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
                       // Submit
-                      AppLoader(size: 24, centered: false),
+                      const AppLoader(size: 24, centered: false),
                     ],
                   ),
                 ),
@@ -245,10 +247,10 @@ class _AddTrainingActivitySheetState
   }
 
   Widget _label(String text) => Padding(
-        padding: EdgeInsets.only(bottom: 6),
+        padding: const EdgeInsets.only(bottom: 6),
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -264,7 +266,8 @@ class _AddTrainingActivitySheetState
           fontSize: 13,
           color: Colors.grey.shade400,
         ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -282,7 +285,7 @@ class _DatePicker extends StatelessWidget {
   final VoidCallback onTap;
   final String Function(DateTime) formatter;
 
-  _DatePicker({
+  const _DatePicker({
     required this.date,
     required this.placeholder,
     required this.onTap,
@@ -293,7 +296,7 @@ class _DatePicker extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade300),
             borderRadius: BorderRadius.circular(8),
@@ -312,7 +315,7 @@ class _DatePicker extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(Icons.calendar_today_outlined,
+              const Icon(Icons.calendar_today_outlined,
                   size: 18, color: AppColors.socaGrey),
             ],
           ),
@@ -326,7 +329,7 @@ class _DropdownField extends StatelessWidget {
   final List<String> items;
   final void Function(String?) onChanged;
 
-  _DropdownField({
+  const _DropdownField({
     required this.value,
     required this.hint,
     required this.items,

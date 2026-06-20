@@ -346,7 +346,7 @@ class _RatingPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 20),
                 // Emoji row (sad ← → happy)
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Sad emoji
@@ -354,17 +354,17 @@ class _RatingPage extends StatelessWidget {
                       width: 45,
                       child: Text(
                         '😞',
-                        style: const TextStyle(fontSize: 22),
+                        style: TextStyle(fontSize: 22),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    const SizedBox(width: 15 * 3 + 45 * 3), // spacer
+                    SizedBox(width: 15 * 3 + 45 * 3), // spacer
                     // Happy emoji
                     SizedBox(
                       width: 45,
                       child: Text(
                         '😊',
-                        style: const TextStyle(fontSize: 22),
+                        style: TextStyle(fontSize: 22),
                         textAlign: TextAlign.center,
                       ),
                     ),

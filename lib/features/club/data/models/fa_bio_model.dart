@@ -79,8 +79,9 @@ class FaInfoModel {
 
   String get displayPartnerLabel {
     final t = partnerType;
-    if (t == null || t.isEmpty || t.toLowerCase() == 'nopartner')
+    if (t == null || t.isEmpty || t.toLowerCase() == 'nopartner') {
       return 'Non-Partner';
+    }
     return '${t[0].toUpperCase()}${t.substring(1)} Partner';
   }
 }

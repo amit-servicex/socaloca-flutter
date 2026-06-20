@@ -15,7 +15,7 @@ const _kLimit = 10;
 /// Stats tab — mirrors Android LeagueStatsFragment with sub-tabs:
 /// Goals | Assists | Cards | MOM
 class TournamentStatsTab extends ConsumerStatefulWidget {
-  TournamentStatsTab({super.key, required this.tournamentId});
+  const TournamentStatsTab({super.key, required this.tournamentId});
   final String tournamentId;
 
   @override
@@ -139,19 +139,19 @@ class _TournamentStatsTabState extends ConsumerState<TournamentStatsTab>
       children: [
         // Sub-tabs: Goals, Assists, Cards, MOM
         Container(
-          color: Color(0xFFF3F3F3),
+          color: const Color(0xFFF3F3F3),
           child: TabBar(
             controller: _tabController,
             labelColor: AppColors.socaBlack,
             unselectedLabelColor: AppColors.socaBlack,
             indicatorColor: AppColors.socaBlack,
             indicatorWeight: 2,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w500,
               fontSize: 14,
             ),
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w500,
               fontSize: 14,
@@ -233,7 +233,7 @@ class _StatsListState extends State<_StatsList> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.loading) return AppLoader();
+    if (widget.loading) return const AppLoader();
 
     if (widget.stats.isEmpty) {
       return Center(
@@ -259,16 +259,16 @@ class _StatsListState extends State<_StatsList> {
           ((showGoalsHeader || showCardsHeader) ? 1 : 0),
       itemBuilder: (context, index) {
         if (showGoalsHeader && index == 0) {
-          return _GoalsTableHeader();
+          return const _GoalsTableHeader();
         }
         if (showCardsHeader && index == 0) {
-          return _CardsTableHeader();
+          return const _CardsTableHeader();
         }
 
         final statIndex =
             (showGoalsHeader || showCardsHeader) ? index - 1 : index;
         if (statIndex == widget.stats.length) {
-          return Padding(
+          return const Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
           );
@@ -299,8 +299,8 @@ class _CardsTableHeader extends StatelessWidget {
     return Container(
       height: 44,
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: const Row(
         children: [
           Expanded(
             child: Text(
@@ -339,7 +339,7 @@ class _CardHeaderIcon extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.18),
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -358,7 +358,7 @@ class _CardStatRow extends StatelessWidget {
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(16, 11, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 11, 16, 0),
       child: Column(
         children: [
           Row(
@@ -376,20 +376,20 @@ class _CardStatRow extends StatelessWidget {
                       ? CachedNetworkImage(
                           imageUrl: imageUrl,
                           fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) => Icon(
+                          errorWidget: (_, __, ___) => const Icon(
                             Icons.person,
                             color: AppColors.socaBlack,
                             size: 24,
                           ),
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.person,
                           color: AppColors.socaBlack,
                           size: 24,
                         ),
                 ),
               ),
-              SizedBox(width: 14),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -398,14 +398,14 @@ class _CardStatRow extends StatelessWidget {
                       (stat.playerName ?? '').toUpperCase(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: AppColors.socaBlack,
                       ),
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Text(
                       stat.teamName ?? '',
                       maxLines: 1,
@@ -420,13 +420,13 @@ class _CardStatRow extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               _CardCountText('${stat.redCards}'),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               _CardCountText('${stat.yellowCards}'),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Divider(
             height: 1,
             thickness: 0.8,
@@ -450,7 +450,7 @@ class _CardCountText extends StatelessWidget {
       child: Text(
         value,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14,
           fontWeight: FontWeight.w400,
@@ -469,8 +469,8 @@ class _GoalsTableHeader extends StatelessWidget {
     return Container(
       height: 44,
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: const Row(
         children: [
           Expanded(
             child: Text(
@@ -513,7 +513,7 @@ class _GoalStatRow extends StatelessWidget {
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(16, 11, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 11, 16, 0),
       child: Column(
         children: [
           Row(
@@ -531,20 +531,20 @@ class _GoalStatRow extends StatelessWidget {
                       ? CachedNetworkImage(
                           imageUrl: imageUrl,
                           fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) => Icon(
+                          errorWidget: (_, __, ___) => const Icon(
                             Icons.person,
                             color: AppColors.socaBlack,
                             size: 24,
                           ),
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.person,
                           color: AppColors.socaBlack,
                           size: 24,
                         ),
                 ),
               ),
-              SizedBox(width: 14),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -553,14 +553,14 @@ class _GoalStatRow extends StatelessWidget {
                       (stat.playerName ?? '').toUpperCase(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: AppColors.socaBlack,
                       ),
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Text(
                       stat.teamName ?? '',
                       maxLines: 1,
@@ -575,13 +575,13 @@ class _GoalStatRow extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               SizedBox(
                 width: 36,
                 child: Text(
                   '${stat.count}',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -591,7 +591,7 @@ class _GoalStatRow extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Divider(
             height: 1,
             thickness: 0.8,
@@ -604,7 +604,7 @@ class _GoalStatRow extends StatelessWidget {
 }
 
 class _StatCard extends StatelessWidget {
-  _StatCard({
+  const _StatCard({
     required this.stat,
     required this.position,
     this.isCards = false,
@@ -619,8 +619,8 @@ class _StatCard extends StatelessWidget {
     final imageUrl = ApiConstants.getImageUrl(stat.playerImage);
 
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -628,7 +628,7 @@ class _StatCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -639,7 +639,7 @@ class _StatCard extends StatelessWidget {
             width: 28,
             child: Text(
               '$position',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -648,13 +648,13 @@ class _StatCard extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
 
           // Player photo
           Container(
             width: 44,
             height: 44,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.socaGrey,
             ),
@@ -663,16 +663,17 @@ class _StatCard extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => Icon(
+                      errorWidget: (_, __, ___) => const Icon(
                         Icons.person,
                         color: AppColors.socaBlack,
                         size: 22,
                       ),
                     )
-                  : Icon(Icons.person, color: AppColors.socaBlack, size: 22),
+                  : const Icon(Icons.person,
+                      color: AppColors.socaBlack, size: 22),
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
 
           // Name + team
           Expanded(
@@ -681,7 +682,7 @@ class _StatCard extends StatelessWidget {
               children: [
                 Text(
                   stat.playerName ?? '',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
@@ -714,17 +715,17 @@ class _StatCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                   Text(
                     '${stat.yellowCards}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       color: AppColors.socaBlack,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                 ],
                 if (stat.redCards > 0) ...[
                   Container(
@@ -735,10 +736,10 @@ class _StatCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                   Text(
                     '${stat.redCards}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
@@ -752,14 +753,14 @@ class _StatCard extends StatelessWidget {
             Container(
               width: 36,
               height: 36,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.socaBlack,
               ),
               child: Center(
                 child: Text(
                   '${stat.count}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 14,

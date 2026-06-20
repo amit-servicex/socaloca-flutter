@@ -1,23 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:socaloca/features/tournaments/screens/tournaments_landing_screen.dart';
 
-import '../../../core/constants/api_constants.dart';
-import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
-import '../data/models/referee_tournament_model.dart';
-import '../providers/referee_providers.dart';
-import 'package:socaloca/shared/widgets/app_loader.dart';
-
 class RefereeTournamentScreen extends StatelessWidget {
-  RefereeTournamentScreen({super.key});
+  const RefereeTournamentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return TournamentsLandingScreen();
+    return const TournamentsLandingScreen();
   }
 }
 

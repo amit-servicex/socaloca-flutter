@@ -10,7 +10,7 @@ import '../../../core/theme/app_colors.dart';
 /// User selects their role: Player, Coach, Manager, Referee, Fan, or Professional Club.
 /// After selection, navigates to appropriate login/signup flow.
 class RoleChoiceScreen extends StatefulWidget {
-  RoleChoiceScreen({super.key});
+  const RoleChoiceScreen({super.key});
 
   @override
   State<RoleChoiceScreen> createState() => _RoleChoiceScreenState();
@@ -43,11 +43,12 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
           SingleChildScrollView(
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 80), // Space for bottom text
+                padding:
+                    const EdgeInsets.only(bottom: 80), // Space for bottom text
                 child: Column(
                   children: [
                     // Logo Box - marginTop 50dp
-                    SizedBox(height: 100),
+                    const SizedBox(height: 100),
                     Center(
                       child: SvgPicture.asset(
                         'assets/icons/socaloca_logo.svg',
@@ -60,14 +61,14 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                     // Top Box - marginTop 30dp, marginLeft/Right 50dp
                     SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // "I AM" label with rounded background (3dp radius)
                           Container(
-                            margin: EdgeInsets.only(left: 5),
-                            padding: EdgeInsets.only(
+                            margin: const EdgeInsets.only(left: 5),
+                            padding: const EdgeInsets.only(
                               left: 10,
                               right: 125,
                               top: 5,
@@ -79,7 +80,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                             ),
                             child: Text(
                               AppStrings.iAm.toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700, // poppins_bold
                                 fontSize: 24,
@@ -91,7 +92,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           ),
 
                           // Radio Group - marginTop 12dp (first item only)
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
 
                           // Player
                           _RadioOption(
@@ -160,7 +161,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
             child: Text(
               AppStrings.socaLocaPrivacyNotice,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400, // poppins_regular
                 fontSize: 8,
@@ -177,7 +178,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
 
 /// Radio button option matching Android RadioButton style
 class _RadioOption extends StatelessWidget {
-  _RadioOption({
+  const _RadioOption({
     required this.value,
     required this.groupValue,
     required this.label,
@@ -197,7 +198,7 @@ class _RadioOption extends StatelessWidget {
       onTap: () => onChanged(value),
       child: Padding(
         // paddingVertical="10dp" paddingStart="7dp" paddingEnd="20dp"
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 10,
           bottom: 10,
           left: 7,
@@ -221,7 +222,7 @@ class _RadioOption extends StatelessWidget {
                       child: Container(
                         width: 10,
                         height: 10,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.socaBlack,
                         ),
@@ -230,12 +231,12 @@ class _RadioOption extends StatelessWidget {
                   : null,
             ),
 
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
 
             // Label - poppins_bold, 16sp, new_black color
             Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700, // poppins_bold
                 fontSize: 16,

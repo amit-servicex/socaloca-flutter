@@ -12,7 +12,7 @@ class AcademyTrialRegisterDialog extends ConsumerStatefulWidget {
   final String academyName;
   final String academyEmail;
 
-  AcademyTrialRegisterDialog({
+  const AcademyTrialRegisterDialog({
     super.key,
     required this.academyId,
     required this.academyName,
@@ -65,7 +65,7 @@ class _AcademyTrialRegisterDialogState
             success
                 ? AppStrings.registrationSuccessful
                 : AppStrings.registrationFailed,
-            style: TextStyle(fontFamily: 'Poppins'),
+            style: const TextStyle(fontFamily: 'Poppins'),
           ),
           backgroundColor: success ? Colors.green : Colors.red,
         ));
@@ -74,7 +74,8 @@ class _AcademyTrialRegisterDialogState
       if (mounted) {
         setState(() => _isSubmitting = false);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
+          content:
+              Text('Error: $e', style: const TextStyle(fontFamily: 'Poppins')),
           backgroundColor: Colors.red,
         ));
       }
@@ -86,7 +87,7 @@ class _AcademyTrialRegisterDialogState
     return AlertDialog(
       title: Text(
         'Register for Trial'.tr,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w700,
           fontSize: 16,
@@ -100,25 +101,26 @@ class _AcademyTrialRegisterDialogState
           children: [
             Text(
               widget.academyName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 color: AppColors.socaBlack,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: 'Your Email'.tr,
-                labelStyle: TextStyle(fontFamily: 'Poppins', fontSize: 13),
-                border: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
+                labelStyle:
+                    const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                border: const OutlineInputBorder(),
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.socaYellow),
                 ),
               ),
-              style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+              style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return AppStrings.emailIsRequired;
@@ -138,7 +140,7 @@ class _AcademyTrialRegisterDialogState
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
           child: Text(
             'Cancel'.tr,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               color: AppColors.socaBlack,
             ),
@@ -151,10 +153,10 @@ class _AcademyTrialRegisterDialogState
             foregroundColor: AppColors.socaYellow,
           ),
           child: _isSubmitting
-              ? AppLoader(size: 24, centered: false)
+              ? const AppLoader(size: 24, centered: false)
               : Text(
                   'Register'.tr,
-                  style: TextStyle(fontFamily: 'Poppins'),
+                  style: const TextStyle(fontFamily: 'Poppins'),
                 ),
         ),
       ],

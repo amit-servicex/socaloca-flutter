@@ -10,7 +10,7 @@ import '../providers/player_bio_provider.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class PlayerReceivedTeamsScreen extends ConsumerStatefulWidget {
-  PlayerReceivedTeamsScreen({super.key});
+  const PlayerReceivedTeamsScreen({super.key});
 
   @override
   ConsumerState<PlayerReceivedTeamsScreen> createState() =>
@@ -24,7 +24,7 @@ class _PlayerReceivedTeamsScreenState
   bool _isLoadingMore = false;
   String? _error;
   int _start = 0;
-  static int _limit = 5;
+  static const int _limit = 5;
   bool _hasMore = true;
   late ScrollController _scrollController;
 
@@ -141,7 +141,7 @@ class _PlayerReceivedTeamsScreenState
           SnackBar(
             content: Text(
               accept ? 'Invitation accepted.' : 'Invitation declined.',
-              style: TextStyle(fontFamily: 'Poppins'),
+              style: const TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: accept ? Colors.green : Colors.orange,
           ),
@@ -151,7 +151,8 @@ class _PlayerReceivedTeamsScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e', style: TextStyle(fontFamily: 'Poppins')),
+            content: Text('Error: $e',
+                style: const TextStyle(fontFamily: 'Poppins')),
             backgroundColor: Colors.red,
           ),
         );
@@ -170,26 +171,27 @@ class _PlayerReceivedTeamsScreenState
         elevation: 0,
       ),
       body: _isLoading
-          ? AppLoader()
+          ? const AppLoader()
           : _error != null
               ? Center(
                   child: Text('Error: $_error',
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14)))
+                      style:
+                          const TextStyle(fontFamily: 'Poppins', fontSize: 14)))
               : _teams.isEmpty
                   ? Center(
                       child: Text('No team invitations.'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack)))
                   : ListView.separated(
                       controller: _scrollController,
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       itemCount: _teams.length + (_isLoadingMore ? 1 : 0),
-                      separatorBuilder: (_, __) => SizedBox(height: 8),
+                      separatorBuilder: (_, __) => const SizedBox(height: 8),
                       itemBuilder: (context, i) {
                         if (i == _teams.length) {
-                          return AppLoader();
+                          return const AppLoader();
                         }
                         final team = _teams[i];
                         final teamId = team['teamId'] as String? ??
@@ -203,7 +205,7 @@ class _PlayerReceivedTeamsScreenState
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 10),
                             child: Row(
                               children: [
@@ -213,11 +215,11 @@ class _PlayerReceivedTeamsScreenState
                                       : null,
                                   backgroundColor: AppColors.socaGrey,
                                   child: imageUrl.isEmpty
-                                      ? Icon(Icons.group,
+                                      ? const Icon(Icons.group,
                                           color: AppColors.socaBlack)
                                       : null,
                                 ),
-                                SizedBox(width: 12),
+                                const SizedBox(width: 12),
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: teamId.isNotEmpty
@@ -226,7 +228,7 @@ class _PlayerReceivedTeamsScreenState
                                         : null,
                                     child: Text(
                                       teamName,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w600,
                                         fontSize: 14,
@@ -235,38 +237,38 @@ class _PlayerReceivedTeamsScreenState
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 ElevatedButton(
                                   onPressed: () => _respond(team, i, true),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green,
                                     foregroundColor: Colors.white,
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 6),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(6)),
                                     elevation: 0,
                                   ),
                                   child: Text('Accept'.tr,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12)),
                                 ),
-                                SizedBox(width: 6),
+                                const SizedBox(width: 6),
                                 ElevatedButton(
                                   onPressed: () => _respond(team, i, false),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,
                                     foregroundColor: Colors.white,
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 6),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(6)),
                                     elevation: 0,
                                   ),
                                   child: Text('Decline'.tr,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12)),

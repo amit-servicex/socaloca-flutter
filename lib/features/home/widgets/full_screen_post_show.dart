@@ -138,7 +138,7 @@ class _FullScreenVideoScreenState extends State<FullScreenVideoScreen> {
 class FullScreenImageScreen extends StatelessWidget {
   final String imageUrl;
 
-  const FullScreenImageScreen({required this.imageUrl});
+  const FullScreenImageScreen({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {

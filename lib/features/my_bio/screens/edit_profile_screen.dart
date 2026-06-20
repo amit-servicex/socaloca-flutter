@@ -22,7 +22,7 @@ import 'package:socaloca/shared/widgets/nationality_picker.dart';
 class EditProfileScreen extends ConsumerStatefulWidget {
   final PlayerBioModel playerBio;
 
-  EditProfileScreen({super.key, required this.playerBio});
+  const EditProfileScreen({super.key, required this.playerBio});
 
   @override
   ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -704,29 +704,30 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.socaPageBg,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 AppStrings.selectPhoto,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ListTile(
-                leading: Icon(Icons.camera_alt, color: AppColors.socaBlack),
+                leading:
+                    const Icon(Icons.camera_alt, color: AppColors.socaBlack),
                 title: Text(AppStrings.camera,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         color: AppColors.socaBlack)),
@@ -736,9 +737,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo_library, color: AppColors.socaBlack),
+                leading:
+                    const Icon(Icons.photo_library, color: AppColors.socaBlack),
                 title: Text(AppStrings.gallery,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         color: AppColors.socaBlack)),
@@ -749,9 +751,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               ),
               if (_profileImage != null)
                 ListTile(
-                  leading: Icon(Icons.delete, color: Colors.red),
+                  leading: const Icon(Icons.delete, color: Colors.red),
                   title: Text(AppStrings.removePhoto,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 16,
                           color: Colors.red)),
@@ -891,20 +893,20 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         backgroundColor: AppColors.socaPageBg,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(child: _buildProfileImagePreview()),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   CreateProfileTextField(
                     controller: TextEditingController(text: userMobile),
                     enabled: false,
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // First Name
                   CreateProfileTextField(
@@ -914,7 +916,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ),
                   if (_firstNameError != null)
                     SocaLocaFieldError(errorText: _firstNameError!),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Last Name
                   CreateProfileTextField(
@@ -924,7 +926,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ),
                   if (_lastNameError != null)
                     SocaLocaFieldError(errorText: _lastNameError!),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Profile Name
                   CreateProfileTextField(
@@ -938,14 +940,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ),
                   Text(
                     AppStrings.minimumFiveCharacters,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         color: AppColors.socaBlack),
                   ),
                   if (_profileNameError != null)
                     SocaLocaFieldError(errorText: _profileNameError!),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // About Me
                   Container(
@@ -980,27 +982,27 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     alignment: Alignment.centerRight,
                     child: Text(
                       AppStrings.max300Characters,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           color: AppColors.socaBlack),
                     ),
                   ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Select Role
                   if (!_isFan) ...[
                     Text(
                       AppStrings.selectRoleRequired,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
                         fontSize: 20,
                         color: AppColors.socaBlack,
                       ),
                     ),
-                    SizedBox(height: 7),
+                    const SizedBox(height: 7),
                   ],
                   if (!_isFan)
                     SingleChildScrollView(
@@ -1008,28 +1010,28 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       child: Row(
                         children: [
                           _buildRoleChip('Player', _isPlayer),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           _buildRoleChip('Coach', _isCoach),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           _buildRoleChip('Manager', _isManager),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           if (!(_isPlayer || _isCoach || _isManager)) ...[
                             _buildRoleChip('Fan', _isFan),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             _buildRoleChip('Referee', _isReferee),
                           ]
                         ],
                       ),
                     ),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // DOB
                   GestureDetector(
                     onTap: _selectDate,
                     child: Container(
                       height: 50,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       decoration: BoxDecoration(
                         color: AppColors.socaGrey,
                         borderRadius: BorderRadius.circular(5),
@@ -1039,7 +1041,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         children: [
                           Text(
                             _birthDate ?? AppStrings.dateOfBirthPlaceholder,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: AppColors.socaBlack),
@@ -1054,19 +1056,20 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   if (_dobError != null)
                     SocaLocaFieldError(errorText: _dobError!),
 
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Country (display only)
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 10),
                     decoration: BoxDecoration(
                       color: AppColors.socaGrey,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       _selectedCountry,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
@@ -1075,19 +1078,19 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Gender
                   Row(
                     children: [
                       Text(
                         AppStrings.genderPlain,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             color: AppColors.socaBlack),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Radio<String>(
                         value: 'male',
                         groupValue: _gender,
@@ -1095,11 +1098,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         onChanged: (val) => setState(() => _gender = val!),
                       ),
                       Text(AppStrings.male,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack)),
-                      SizedBox(width: 7),
+                      const SizedBox(width: 7),
                       Radio<String>(
                         value: 'female',
                         groupValue: _gender,
@@ -1107,14 +1110,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         onChanged: (val) => setState(() => _gender = val!),
                       ),
                       Text(AppStrings.female,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack)),
                     ],
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Player/Coach/Manager specific fields
                   if (_showPlayerFields || _showCoachManagerFields)
@@ -1129,17 +1132,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   // Profile photo section
                   _buildPhotoSection(),
 
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
                   Text(
                     AppStrings.mandatoryFields,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         color: AppColors.socaBlack),
                   ),
 
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   // Save Button
                   InkWell(
@@ -1154,7 +1157,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       child: Center(
                         child: Text(
                           AppStrings.updateUpper,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
                             fontSize: 20,
@@ -1166,7 +1169,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -1178,7 +1181,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return GestureDetector(
       onTap: () => _onRoleToggle(label, !isSelected),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.socaBlack : Colors.white,
           borderRadius: BorderRadius.circular(5),
@@ -1203,15 +1206,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       children: [
         if (_showPlayerFields) ...[
           Text(AppStrings.nationalityRequired,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           GestureDetector(
             onTap: _showNationalityPicker,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
               decoration: BoxDecoration(
                   color: AppColors.socaGrey,
                   borderRadius: BorderRadius.circular(5)),
@@ -1247,14 +1250,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
         ],
 
         // Location
         GestureDetector(
           onTap: _openLocationPicker,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
             decoration: BoxDecoration(
                 color: AppColors.socaGrey,
                 borderRadius: BorderRadius.circular(5)),
@@ -1262,13 +1265,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               children: [
                 Image.asset("assets/icons/ic_location.png",
                     width: 28, height: 28),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     _placeName.isEmpty
                         ? AppStrings.selectLocationFromMap
                         : _placeName,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         color: AppColors.socaBlack),
@@ -1279,15 +1282,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           ),
         ),
 
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
 
         if (_showPlayerFields) ...[
           Text(AppStrings.playingPositionPlain,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           _buildDropdown(
             value: _playPosition,
             items: _playPositions,
@@ -1296,52 +1299,52 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               _playPositionType = _positionTypes[val]!.first;
             }),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           _buildDropdown(
             value: _playPositionType,
             items: _positionTypes[_playPosition]!,
             onChanged: (val) => setState(() => _playPositionType = val!),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
 
         if (_showJerseyNumber) ...[
           Text(AppStrings.preferredJerseyNumber,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CreateProfileTextField(
             controller: _jerseyNumberController,
             hintText: AppStrings.zeroToNinetyNine,
             keyboardType: TextInputType.number,
             maxLength: 2,
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
 
         if (_showPlayerFields) ...[
           Text(AppStrings.playingLevelRequired,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           _buildDropdown(
             value: _playLevel,
             items: _playingLevels,
             onChanged: (val) => setState(() => _playLevel = val!),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               Text(AppStrings.preferredFoot,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaBlack)),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Radio<String>(
                 value: 'right',
                 groupValue: _preferredFoot,
@@ -1349,11 +1352,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 onChanged: (val) => setState(() => _preferredFoot = val!),
               ),
               Text(AppStrings.right,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaBlack)),
-              SizedBox(width: 7),
+              const SizedBox(width: 7),
               Radio<String>(
                 value: 'left',
                 groupValue: _preferredFoot,
@@ -1361,35 +1364,35 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 onChanged: (val) => setState(() => _preferredFoot = val!),
               ),
               Text(AppStrings.left,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       color: AppColors.socaBlack)),
             ],
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Text(AppStrings.height,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CreateProfileTextField(
             controller: _heightController,
             hintText: AppStrings.valueInCm,
             keyboardType: TextInputType.number,
             maxLength: 3,
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
 
         if (_showJerseySize) ...[
           Text(AppStrings.shirtJerseySize,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -1400,7 +1403,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   child: Container(
                     width: 60,
                     height: 60,
-                    margin: EdgeInsets.only(right: 10),
+                    margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       color:
                           isSelected ? AppColors.socaBlack : Colors.transparent,
@@ -1424,16 +1427,16 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               }).toList(),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
 
         if (_showShoeSize) ...[
           Text(AppStrings.shoeSize,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   color: AppColors.socaBlack)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
@@ -1447,7 +1450,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   }),
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: _buildDropdown(
                   value: _shoeSize,
@@ -1466,19 +1469,19 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               AppStrings.brandsYouLike,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Lato',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
                   color: AppColors.socaBlack),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Wrap(
               spacing: 10,
               runSpacing: 10,
@@ -1491,7 +1494,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         : _selectedBrands.add(brand);
                   }),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color:
                           isSelected ? AppColors.socaBlack : Colors.transparent,
@@ -1521,17 +1525,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   Widget _buildLeaguesTeamsSection() {
     return Column(
       children: [
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(AppStrings.majorLeaguesYouFollow,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
                     color: AppColors.socaBlack)),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _buildDropdown(
               value: _leagueFollow,
               items: _leagueTeams.keys.toList(),
@@ -1546,17 +1550,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             ),
           ],
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(AppStrings.teamsYouFollow,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
                     color: AppColors.socaBlack)),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _buildDropdown(
               value: _teamFollow,
               items: _leagueTeams[_leagueFollow] ??
@@ -1572,13 +1576,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   Widget _buildPhotoSection() {
     return Column(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
           AppStrings.uploadProfilePhoto,
-          style: TextStyle(
+          style: const TextStyle(
               fontFamily: 'Poppins', fontSize: 16, color: AppColors.socaBlack),
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Row(
           children: [
             Expanded(
@@ -1593,7 +1597,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ),
                   child: Center(
                     child: Text(AppStrings.takePhotoUpper,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 10,
@@ -1602,7 +1606,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: InkWell(
                 onTap: () => _pickImage(ImageSource.gallery),
@@ -1614,7 +1618,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ),
                   child: Center(
                     child: Text(AppStrings.chooseGalleryUpper,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 10,
@@ -1643,7 +1647,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             : _selectedAvatar != null
                 ? Image.asset('assets/images/$_selectedAvatar',
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => CircleAvatar(
+                    errorBuilder: (_, __, ___) => const CircleAvatar(
                           backgroundColor: AppColors.socaGrey,
                           child: Icon(Icons.person,
                               size: 60, color: AppColors.socaBlack),
@@ -1652,13 +1656,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     ? Image.network(
                         ApiConstants.getImageUrl(_existingImageUrl),
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => CircleAvatar(
+                        errorBuilder: (_, __, ___) => const CircleAvatar(
                           backgroundColor: AppColors.socaGrey,
                           child: Icon(Icons.person,
                               size: 60, color: AppColors.socaBlack),
                         ),
                       )
-                    : CircleAvatar(
+                    : const CircleAvatar(
                         backgroundColor: AppColors.socaGrey,
                         child: Icon(Icons.person,
                             size: 60, color: AppColors.socaBlack),

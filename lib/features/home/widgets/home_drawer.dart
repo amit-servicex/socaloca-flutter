@@ -14,12 +14,11 @@ import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_snackbar.dart';
 import '../../player_bio/providers/player_bio_provider.dart';
 import 'language_selection_bottom_sheet.dart';
-import 'dart:developer';
 
 /// Right-side drawer matching Android common_menu.xml.
 /// Width: 300 dp, profile section: 220 dp black background.
 class HomeDrawer extends ConsumerStatefulWidget {
-  HomeDrawer({super.key});
+  const HomeDrawer({super.key});
 
   @override
   ConsumerState<HomeDrawer> createState() => _HomeDrawerState();
@@ -42,7 +41,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
     ref.watch(localeProvider);
     final user = ref.watch(currentUserProvider);
 
-    if (user == null) return SizedBox.shrink();
+    if (user == null) return const SizedBox.shrink();
 
     final socaId =
         user.sclId?.isNotEmpty == true ? user.sclId! : 'SCL${user.id}';
@@ -58,7 +57,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
               height: 280,
               width: double.infinity,
               color: AppColors.socaBlack,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: SafeArea(
                 bottom: false,
                 child: Column(
@@ -86,11 +85,11 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                       //       )
                       //     : null,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     // Full name — yellow
                     Text(
                       user.name ?? AppStrings.socaLocaUser,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w800,
                         fontSize: 24,
@@ -100,20 +99,20 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     // SocaLoca ID label (white) + value (yellow) + copy icon (27 dp)
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           AppStrings.socaLocaIdLabel,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Lato',
                             fontSize: 14,
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 0,
                         ),
                         Row(
@@ -122,14 +121,14 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                           children: [
                             Text(
                               socaId,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Lato',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 14,
                                 color: AppColors.socaYellow,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             GestureDetector(
@@ -138,7 +137,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
                                 AppSnackBar.showSuccess(
                                     context, AppStrings.socaLocaIdCopied);
                               },
-                              child: Padding(
+                              child: const Padding(
                                 padding: EdgeInsets.only(left: 6),
                                 child: Icon(
                                   Icons.copy,
@@ -388,7 +387,7 @@ class _HomeDrawerState extends ConsumerState<HomeDrawer> {
 }
 
 class _DrawerMenuItem extends StatelessWidget {
-  _DrawerMenuItem({
+  const _DrawerMenuItem({
     required this.icon,
     required this.title,
     required this.onTap,
@@ -406,15 +405,15 @@ class _DrawerMenuItem extends StatelessWidget {
         InkWell(
           onTap: onTap,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 13),
+            padding: const EdgeInsets.symmetric(vertical: 13),
             child: Row(
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 icon,
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
                     fontSize: 15,

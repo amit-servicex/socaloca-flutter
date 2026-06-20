@@ -841,7 +841,7 @@ class _JerseyAssignedTabState extends State<_JerseyAssignedTab>
               const SizedBox(height: 4),
               Text(
                 player.isPlayer
-                    ? '${player.playPositionType ?? ''}'.trim()
+                    ? (player.playPositionType ?? '').trim()
                     : player.roleLabel,
                 style: const TextStyle(
                   fontFamily: 'Poppins',

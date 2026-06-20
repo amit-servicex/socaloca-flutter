@@ -4,7 +4,7 @@ import 'package:socaloca/core/constants/app_strings.dart';
 // TODO: Implement LiveMatchScreen
 // See flutter_migration_docs/screens/ for full spec
 class LiveMatchScreen extends StatelessWidget {
-  LiveMatchScreen({super.key});
+  const LiveMatchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

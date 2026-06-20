@@ -10,7 +10,7 @@ import '../data/tournament_models.dart';
 /// Rendered separately from [TournamentFiltersWidget] so it stays fixed
 /// at the top of the screen and never scrolls away.
 class TournamentVisibilityToggle extends StatelessWidget {
-  TournamentVisibilityToggle({
+  const TournamentVisibilityToggle({
     super.key,
     required this.visibility,
     required this.onChanged,
@@ -24,7 +24,7 @@ class TournamentVisibilityToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(16, 15, 16, 5),
+      padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
       child: Center(
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -37,7 +37,7 @@ class TournamentVisibilityToggle extends StatelessWidget {
                 onTap: () => onChanged('local'),
               ),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             SizedBox(
               width: 100,
               child: _ToggleBtn(
@@ -110,7 +110,7 @@ const _countryOptions = [
 /// Tournament filters — filter dropdowns (country, location, game, gender, age).
 /// The NATIONAL/GLOBAL toggle is rendered separately via [TournamentVisibilityToggle].
 class TournamentFiltersWidget extends StatefulWidget {
-  TournamentFiltersWidget({
+  const TournamentFiltersWidget({
     super.key,
     required this.filters,
     required this.onFiltersChanged,
@@ -186,19 +186,19 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(20, 10, 20, 16),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             AppStrings.tournamentsIntro,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               color: AppColors.socaBlack,
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           // Country Dropdown
           _FilterDropdown(
             hint: _selectedCountry ?? AppStrings.country,
@@ -213,7 +213,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             },
           ),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           // Location TextField
           _TextField(
@@ -221,7 +221,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             hint: 'Location',
           ),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           // Game and Gender Row
           Row(
@@ -238,7 +238,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
                   },
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: _FilterDropdown(
                   hint: _filters.gender ?? 'Gender',
@@ -253,7 +253,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             ],
           ),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           // Age Group Dropdown
           _FilterDropdown(
@@ -266,7 +266,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             },
           ),
 
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
 
           // GO Button
           GestureDetector(
@@ -280,7 +280,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
               child: Center(
                 child: Text(
                   AppStrings.goUpper,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
@@ -291,11 +291,11 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
             ),
           ),
           if (_showSearchError) ...[
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(
               AppStrings.pleaseSelectFilter,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 12,
@@ -310,7 +310,7 @@ class _TournamentFiltersWidgetState extends State<TournamentFiltersWidget> {
 }
 
 class _ToggleBtn extends StatelessWidget {
-  _ToggleBtn({
+  const _ToggleBtn({
     required this.label,
     required this.active,
     required this.onTap,
@@ -324,7 +324,7 @@ class _ToggleBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: active ? AppColors.socaBlack : Colors.white,
           borderRadius: BorderRadius.circular(5),
@@ -350,7 +350,7 @@ class _ToggleBtn extends StatelessWidget {
 }
 
 class _FilterDropdown extends StatelessWidget {
-  _FilterDropdown({
+  const _FilterDropdown({
     required this.hint,
     required this.title,
     required this.value,
@@ -381,7 +381,7 @@ class _FilterDropdown extends StatelessWidget {
 }
 
 class _TextField extends StatelessWidget {
-  _TextField({
+  const _TextField({
     required this.controller,
     required this.hint,
   });
@@ -391,15 +391,15 @@ class _TextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      constraints: BoxConstraints(minHeight: 42),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      constraints: const BoxConstraints(minHeight: 42),
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(5),
       ),
       child: TextField(
         controller: controller,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 12,
           color: AppColors.socaBlack,
@@ -418,7 +418,7 @@ class _TextField extends StatelessWidget {
           focusedBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
           focusedErrorBorder: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(vertical: 14),
         ),
       ),
     );

@@ -91,7 +91,7 @@ class TeamPlayersNotifier extends StateNotifier<TeamPlayersState> {
 
         if (isCoachManager) {
           coaches.add(player);
-        } else if (position != null) {
+        } else {
           switch (position) {
             case 'goalkeeper':
               goalkeepers.add(player);

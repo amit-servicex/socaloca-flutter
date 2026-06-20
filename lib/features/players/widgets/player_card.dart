@@ -10,7 +10,7 @@ class PlayerCard extends StatelessWidget {
   final PlayerModel player;
   final VoidCallback? onTap;
 
-  PlayerCard({
+  const PlayerCard({
     super.key,
     required this.player,
     this.onTap,
@@ -19,14 +19,14 @@ class PlayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
       color: Colors.white,
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -53,7 +53,7 @@ class PlayerCard extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) => Container(
                               color: AppColors.socaGrey,
-                              child: Icon(
+                              child: const Icon(
                                 Icons.person,
                                 size: 40,
                                 color: Colors.white,
@@ -62,7 +62,7 @@ class PlayerCard extends StatelessWidget {
                           )
                         : Container(
                             color: AppColors.socaGrey,
-                            child: Icon(
+                            child: const Icon(
                               Icons.person,
                               size: 40,
                               color: Colors.white,
@@ -75,8 +75,8 @@ class PlayerCard extends StatelessWidget {
                 if (player.teamJerseyNo != null &&
                     player.teamJerseyNo!.isNotEmpty)
                   Container(
-                    margin: EdgeInsets.only(top: 5),
-                    padding: EdgeInsets.symmetric(
+                    margin: const EdgeInsets.only(top: 5),
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 7,
                       vertical: 4,
                     ),
@@ -89,7 +89,7 @@ class PlayerCard extends StatelessWidget {
                       children: [
                         Text(
                           'Jersey N°'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 10,
                             fontWeight: FontWeight.w400,
@@ -97,10 +97,10 @@ class PlayerCard extends StatelessWidget {
                             height: 1,
                           ),
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Text(
                           player.teamJerseyNo!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -114,7 +114,7 @@ class PlayerCard extends StatelessWidget {
               ],
             ),
 
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
 
             // Right side: Player info and button
             Expanded(
@@ -127,7 +127,7 @@ class PlayerCard extends StatelessWidget {
                       if (player.firstName != null)
                         Text(
                           player.firstName!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
@@ -136,12 +136,12 @@ class PlayerCard extends StatelessWidget {
                           ),
                         ),
                       if (player.firstName != null && player.lastName != null)
-                        SizedBox(width: 3),
+                        const SizedBox(width: 3),
                       if (player.lastName != null)
                         Flexible(
                           child: Text(
                             player.lastName!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
@@ -154,7 +154,7 @@ class PlayerCard extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 3),
+                  const SizedBox(height: 3),
 
                   // Position info
                   Row(
@@ -162,7 +162,7 @@ class PlayerCard extends StatelessWidget {
                       if (player.playPosition != null)
                         Text(
                           player.playPosition!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -171,21 +171,21 @@ class PlayerCard extends StatelessWidget {
                         ),
                       if (player.playPosition != null &&
                           player.playPositionType != null) ...[
-                        SizedBox(width: 3),
+                        const SizedBox(width: 3),
                         Container(
                           width: 5,
                           height: 5,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.socaBlack,
                             shape: BoxShape.circle,
                           ),
                         ),
-                        SizedBox(width: 3),
+                        const SizedBox(width: 3),
                       ],
                       if (player.playPositionType != null)
                         Text(
                           player.playPositionType!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
@@ -195,7 +195,7 @@ class PlayerCard extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // View details button
                   Align(
@@ -203,7 +203,7 @@ class PlayerCard extends StatelessWidget {
                     child: GestureDetector(
                       onTap: onTap,
                       child: Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,
                         ),
@@ -213,7 +213,7 @@ class PlayerCard extends StatelessWidget {
                         ),
                         child: Text(
                           'VIEW DETAILS'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w700,

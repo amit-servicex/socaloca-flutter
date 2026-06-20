@@ -243,7 +243,7 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             // Image Preview
@@ -263,7 +263,7 @@ class _EditTeamScreenState extends State<EditTeamScreen> {
                           : (widget.teamDetails.teamImage?.isNotEmpty == true)
                               ? Image.network(
                                   ApiConstants.getImageUrl(
-                                      widget.teamDetails.teamImage)!,
+                                      widget.teamDetails.teamImage),
                                   fit: BoxFit.cover,
                                   errorBuilder: (_, __, ___) =>
                                       const CircleAvatar(

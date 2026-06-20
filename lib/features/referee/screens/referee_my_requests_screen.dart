@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/api_constants.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
@@ -12,7 +10,7 @@ import '../widgets/referee_shared_widgets.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyRequestsScreen extends ConsumerStatefulWidget {
-  RefereeMyRequestsScreen({super.key});
+  const RefereeMyRequestsScreen({super.key});
 
   @override
   ConsumerState<RefereeMyRequestsScreen> createState() =>
@@ -77,26 +75,27 @@ class _RefereeMyRequestsScreenState
               selectedId: selectedTmnt,
               onChanged: _onTournamentChanged,
             ),
-            loading: () => RefereeDropdownLoading(),
-            error: (_, __) => SizedBox.shrink(),
+            loading: () => const RefereeDropdownLoading(),
+            error: (_, __) => const SizedBox.shrink(),
           ),
         ),
         Expanded(
           child: matchesState.when(
-            loading: () => AppLoader(),
+            loading: () => const AppLoader(),
             error: (e, _) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 48, color: AppColors.error),
-                  SizedBox(height: 12),
+                  const Icon(Icons.error_outline,
+                      size: 48, color: AppColors.error),
+                  const SizedBox(height: 12),
                   Text(e.toString(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           color: AppColors.socaBlack)),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () =>
                         ref.read(refereeRequestsProvider.notifier).load(
@@ -106,7 +105,7 @@ class _RefereeMyRequestsScreenState
                         backgroundColor: AppColors.socaBlack,
                         foregroundColor: AppColors.socaYellow),
                     child: Text('Retry'.tr,
-                        style: TextStyle(fontFamily: 'Poppins')),
+                        style: const TextStyle(fontFamily: 'Poppins')),
                   ),
                 ],
               ),
@@ -168,7 +167,7 @@ class _RefereeMyRequestsScreenState
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text('Decline Reason'.tr,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 16)),
@@ -177,7 +176,7 @@ class _RefereeMyRequestsScreenState
           maxLines: 3,
           decoration: InputDecoration(
             hintText: 'Enter reason...'.tr,
-            hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+            hintStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
           ),
         ),
@@ -185,7 +184,7 @@ class _RefereeMyRequestsScreenState
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text('Cancel'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins', color: AppColors.socaBlack)),
           ),
           ElevatedButton(
@@ -193,7 +192,8 @@ class _RefereeMyRequestsScreenState
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.socaBlack,
                 foregroundColor: AppColors.socaYellow),
-            child: Text('Submit'.tr, style: TextStyle(fontFamily: 'Poppins')),
+            child: Text('Submit'.tr,
+                style: const TextStyle(fontFamily: 'Poppins')),
           ),
         ],
       ),
@@ -208,7 +208,7 @@ class _RefereeMyRequestsScreenState
 // ─── Shared widgets used across multiple referee screens ─────────────────────
 
 class _RequestCard extends StatelessWidget {
-  _RequestCard({
+  const _RequestCard({
     required this.match,
     required this.onAccept,
     required this.onDecline,

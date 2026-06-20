@@ -13,7 +13,7 @@ class TaggedVideosSection extends StatelessWidget {
   final List<TaggedVideoModel> taggedVideos;
   final bool isLoadingTaggedVideos;
 
-  TaggedVideosSection({
+  const TaggedVideosSection({
     super.key,
     required this.taggedVideos,
     required this.isLoadingTaggedVideos,
@@ -28,11 +28,11 @@ class TaggedVideosSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingTaggedVideos) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     if (taggedVideos.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Column(
@@ -42,14 +42,14 @@ class TaggedVideosSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
                 'TAGGED SKILL VIDEOS'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -64,7 +64,7 @@ class TaggedVideosSection extends StatelessWidget {
                 },
                 child: Text(
                   'view all'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -74,9 +74,9 @@ class TaggedVideosSection extends StatelessWidget {
               ),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: AppColors.socaGrey.withOpacity(0.5),
             borderRadius: BorderRadius.circular(8),
@@ -94,7 +94,7 @@ class TaggedVideosSection extends StatelessWidget {
                   },
                   child: Container(
                     width: 120,
-                    margin: EdgeInsets.only(right: 12),
+                    margin: const EdgeInsets.only(right: 12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -115,15 +115,17 @@ class TaggedVideosSection extends StatelessWidget {
                                     imageUrl:
                                         '${ApiConstants.mediaBaseUrl}${video.thumbnail}',
                                     fit: BoxFit.cover,
-                                    placeholder: (context, url) => AppLoader(),
-                                    errorWidget: (context, url, error) => Icon(
+                                    placeholder: (context, url) =>
+                                        const AppLoader(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(
                                       Icons.videocam,
                                       color: AppColors.socaGrey,
                                       size: 40,
                                     ),
                                   )
                                 else
-                                  Icon(
+                                  const Icon(
                                     Icons.videocam,
                                     color: AppColors.socaGrey,
                                     size: 40,
@@ -138,7 +140,7 @@ class TaggedVideosSection extends StatelessWidget {
                                       color: Colors.black.withOpacity(0.6),
                                       shape: BoxShape.circle,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.play_arrow,
                                       color: Colors.white,
                                       size: 30,
@@ -149,13 +151,13 @@ class TaggedVideosSection extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
 
                         // Academy name
                         if (video.academy?.name != null)
                           Text(
                             video.academy!.name!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 11,
                               fontWeight: FontWeight.w600,

@@ -14,7 +14,7 @@ class CompetitionStatsSummarySection extends StatelessWidget {
   final PlayerBioModel playerBio;
   final bool isLoadingStats;
 
-  CompetitionStatsSummarySection({
+  const CompetitionStatsSummarySection({
     super.key,
     required this.footballStats,
     required this.futsalStats,
@@ -30,7 +30,7 @@ class CompetitionStatsSummarySection extends StatelessWidget {
       children: [
         _buildCompetitionSection(
             context, 'Football', footballStats, isGoalkeeper),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         _buildCompetitionSection(context, 'Futsal', futsalStats, isGoalkeeper),
       ],
     );
@@ -44,19 +44,19 @@ class CompetitionStatsSummarySection extends StatelessWidget {
   ) {
     return Column(
       children: [
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.socaGrey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: isLoadingStats
-                  ? AppLoader()
+                  ? const AppLoader()
                   : IntrinsicHeight(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,13 +66,13 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _buildStatItem('Appearances',
-                                    stats?.matchCount?.toString() ?? '0'),
-                                SizedBox(height: 16),
+                                    stats?.matchCount.toString() ?? '0'),
+                                const SizedBox(height: 16),
                                 _buildStatItem('Goals',
-                                    stats?.goalCount?.toString() ?? '0'),
-                                SizedBox(height: 16),
+                                    stats?.goalCount.toString() ?? '0'),
+                                const SizedBox(height: 16),
                                 _buildStatItem(
-                                    'POM', stats?.mvpCount?.toString() ?? '0'),
+                                    'POM', stats?.mvpCount.toString() ?? '0'),
                               ],
                             ),
                           ),
@@ -88,16 +88,16 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                                 _buildStatItem(
                                   isGoalkeeper ? 'Clean Sheets' : 'Assists',
                                   isGoalkeeper
-                                      ? (stats?.cleanSheetCount?.toString() ??
+                                      ? (stats?.cleanSheetCount.toString() ??
                                           '0')
-                                      : (stats?.assistCount?.toString() ?? '0'),
+                                      : (stats?.assistCount.toString() ?? '0'),
                                 ),
-                                SizedBox(height: 16),
+                                const SizedBox(height: 16),
                                 _buildStatItem('Yellow Cards',
-                                    stats?.yellowCardCount?.toString() ?? '0'),
-                                SizedBox(height: 16),
+                                    stats?.yellowCardCount.toString() ?? '0'),
+                                const SizedBox(height: 16),
                                 _buildStatItem('Red Cards',
-                                    stats?.redCardCount?.toString() ?? '0'),
+                                    stats?.redCardCount.toString() ?? '0'),
                               ],
                             ),
                           ),
@@ -108,7 +108,7 @@ class CompetitionStatsSummarySection extends StatelessWidget {
             Positioned(
               top: -20,
               left: 10,
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width - 50,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,15 +116,15 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 4),
                           decoration: BoxDecoration(
                             color: AppColors.socaBlack,
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
                             'COMPETITION STATS'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
@@ -132,10 +132,10 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           '$type, ${DateTime.now().year}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -150,7 +150,7 @@ class CompetitionStatsSummarySection extends StatelessWidget {
                       },
                       child: Text(
                         'past years'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -175,17 +175,17 @@ class CompetitionStatsSummarySection extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12,
               color: AppColors.socaBlack,
             ),
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w600,

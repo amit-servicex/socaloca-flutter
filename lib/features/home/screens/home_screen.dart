@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +28,7 @@ import '../widgets/recommended_users_section.dart';
 
 /// Home screen matching Android CommonHomeActivity.
 class HomeScreen extends ConsumerStatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -90,7 +89,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _startMatchUpdatesAutoSlide() {
-    _matchUpdatesTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _matchUpdatesTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (_matchUpdatesPageController.hasClients) {
         final matches = ref.read(matchUpdatesProvider).valueOrNull;
         if (matches == null || matches.isEmpty) return;
@@ -101,7 +100,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }
         _matchUpdatesPageController.animateToPage(
           nextPage,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       }
@@ -162,7 +161,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       children: [
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 14,
             fontWeight: FontWeight.w700,
@@ -171,7 +170,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 8,
             fontWeight: FontWeight.w400,
@@ -186,10 +185,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Row(
       children: [
         icon,
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 12,
             fontWeight: FontWeight.w400,
@@ -201,7 +200,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildMatchUpdatesSection(List<MatchUpdateModel> matches) {
-    if (matches.isEmpty) return SizedBox.shrink();
+    if (matches.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,10 +209,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         Container(
           width: double.infinity,
           color: AppColors.socaBlack,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Text(
             AppStrings.matchUpdates,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -302,7 +301,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 width: 18,
                                 height: 18,
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Icon(
+                                errorBuilder: (_, __, ___) => const Icon(
                                   Icons.emoji_events,
                                   size: 18,
                                   color: AppColors.socaYellow,
@@ -310,19 +309,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             )
                           else
-                            Icon(
+                            const Icon(
                               Icons.emoji_events,
                               size: 18,
                               color: AppColors.socaYellow,
                             ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Flexible(
                             child: Text(
                               tournamentName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -336,7 +335,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(0, 14, 0, 12),
+                        padding: const EdgeInsets.fromLTRB(0, 14, 0, 12),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -351,7 +350,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       textAlign: TextAlign.center,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 13,
                                         height: 1.15,
@@ -361,9 +360,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 22),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 22),
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -380,7 +380,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           children: [
                                             Text(
                                               scoreText,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontFamily: 'Poppins',
                                                 fontSize: 34,
                                                 height: 1,
@@ -388,11 +388,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                 color: Colors.black,
                                               ),
                                             ),
-                                            SizedBox(height: 9),
+                                            const SizedBox(height: 9),
                                             if (dateText.isNotEmpty) ...[
                                               Text(
                                                 dateText,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontFamily: 'Poppins',
                                                   fontSize: 12,
                                                   height: 1,
@@ -400,10 +400,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                   color: AppColors.socaBlack,
                                                 ),
                                               ),
-                                              SizedBox(height: 2),
+                                              const SizedBox(height: 2),
                                               Text(
                                                 timeText,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontFamily: 'Poppins',
                                                   fontSize: 12,
                                                   height: 1,
@@ -424,7 +424,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 6),
+                                const SizedBox(height: 6),
                                 SizedBox(
                                   width: 112,
                                   height: 30,
@@ -448,7 +448,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ),
                                     child: Text(
                                       AppStrings.viewDetails.toUpperCase(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 11,
                                         fontWeight: FontWeight.w800,
@@ -467,7 +467,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ? null
                                     : () => _matchUpdatesPageController
                                             .previousPage(
-                                          duration: Duration(milliseconds: 350),
+                                          duration:
+                                              const Duration(milliseconds: 350),
                                           curve: Curves.easeInOut,
                                         ),
                                 child: Icon(
@@ -487,7 +488,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ? null
                                     : () =>
                                         _matchUpdatesPageController.nextPage(
-                                          duration: Duration(milliseconds: 350),
+                                          duration:
+                                              const Duration(milliseconds: 350),
                                           curve: Curves.easeInOut,
                                         ),
                                 child: Icon(
@@ -518,11 +520,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return Container(
         width: 50,
         height: 50,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: AppColors.border,
           shape: BoxShape.circle,
         ),
-        child: Icon(Icons.sports_soccer, color: AppColors.textSecondary),
+        child: const Icon(Icons.sports_soccer, color: AppColors.textSecondary),
       );
     }
     return Container(
@@ -538,7 +540,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           fit: BoxFit.cover,
           errorBuilder: (_, __, ___) => Container(
             color: AppColors.border,
-            child: Icon(Icons.sports_soccer, color: AppColors.textSecondary),
+            child:
+                const Icon(Icons.sports_soccer, color: AppColors.textSecondary),
           ),
         ),
       ),
@@ -552,13 +555,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Column(
       children: [
         _buildMatchUpdateTeamLogo(logoUrl),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           name.toUpperCase(),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontSize: 11,
             height: 1.15,
@@ -600,13 +603,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         final Widget section;
         switch (currentType) {
           case typeInsertTournaments:
-            section = LiveTournamentsSection();
+            section = const LiveTournamentsSection();
             break;
           case typeInsertTeam:
-            section = NewTeamsSection();
+            section = const NewTeamsSection();
             break;
           case typeInsertUser:
-            section = RecommendedUsersSection();
+            section = const RecommendedUsersSection();
             break;
           default:
             section = const SizedBox.shrink();
@@ -636,7 +639,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (profileData != null) {
       if (profileData.runtimeType.toString() == 'UserModel') {
         user = profileData as dynamic;
-      } else if (profileData is Map<String, dynamic>) {
+      } else {
         final userDetails =
             profileData['response']?['userDetails'] ?? profileData;
         if (userDetails is Map<String, dynamic>) {
@@ -664,7 +667,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final feedState = _priorityHomeFeedsLoaded
         ? ref.watch(feedProvider)
         : const AsyncValue<FeedState>.loading();
-    log("this is the profile image ${user?.profileImage}");
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.socaPageBg,
@@ -705,7 +707,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
               child: CustomScrollView(
                 controller: _scrollController,
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
                   SliverAppBar(
                     backgroundColor: Colors.white,
@@ -716,7 +718,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     expandedHeight: user?.isFan == true ? 110 : 160,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Padding(
-                        padding: EdgeInsets.fromLTRB(16, 45, 16, 0),
+                        padding: const EdgeInsets.fromLTRB(16, 45, 16, 0),
                         child: Column(
                           children: [
                             Row(
@@ -728,11 +730,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(AppStrings.hello,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 14)),
                                     Text(user?.firstName ?? 'User!',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 16,
                                             fontWeight: FontWeight.w700)),
@@ -744,16 +746,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       _buildStatColumn(
                                           (user?.postCount ?? 0).toString(),
                                           AppStrings.posts.toUpperCase()),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       _buildStatColumn(
                                           (user?.likeCount ?? 0).toString(),
                                           AppStrings.cheers),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       _buildStatColumn(
                                           (user?.followersCount ?? 0)
                                               .toString(),
                                           AppStrings.followers.toUpperCase()),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       _buildStatColumn(
                                           (user?.followingCount ?? 0)
                                               .toString(),
@@ -791,7 +793,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         BorderSide(color: Colors.grey.shade300),
                                   ),
                                 ),
-                                padding: EdgeInsets.symmetric(vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -910,30 +913,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     SliverToBoxAdapter(
                       child: Container(
                         color: Colors.white,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        margin: EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        margin: const EdgeInsets.only(bottom: 8),
                         child: Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.all(2),
+                              padding: const EdgeInsets.all(2),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                     color: AppColors.socaBlack, width: 2),
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.add,
                                 size: 16,
                                 color: AppColors.socaBlack,
                                 weight: 2,
                               ),
                             ),
-                            SizedBox(width: 12),
+                            const SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 AppStrings.sharePostPrompt,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -945,7 +948,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 context.push(AppRoutes.createPost);
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: AppColors.socaBlack,
@@ -953,7 +956,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                                 child: Text(
                                   AppStrings.createPostUpper,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 10,
                                     fontWeight: FontWeight.w700,
@@ -968,7 +971,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
 
                   if (_priorityHomeFeedsLoaded)
-                    SliverToBoxAdapter(child: MostEndorsedSection())
+                    const SliverToBoxAdapter(child: MostEndorsedSection())
                   else
                     const SliverToBoxAdapter(
                       child: Padding(
@@ -978,23 +981,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
 
                   if (_priorityHomeFeedsLoaded && user?.isFan == false)
-                    SliverToBoxAdapter(child: MostFollowedTeamsSection()),
+                    const SliverToBoxAdapter(child: MostFollowedTeamsSection()),
                   if (_priorityHomeFeedsLoaded)
-                    SliverToBoxAdapter(child: LiveTournamentsSection()),
+                    const SliverToBoxAdapter(child: LiveTournamentsSection()),
                   if (_priorityHomeFeedsLoaded && user != null && !user.isFan)
                     SliverToBoxAdapter(
                       child: matchUpdates.when(
                         data: (matches) => _buildMatchUpdatesSection(matches),
-                        loading: () => SizedBox.shrink(),
-                        error: (_, __) => SizedBox.shrink(),
+                        loading: () => const SizedBox.shrink(),
+                        error: (_, __) => const SizedBox.shrink(),
                       ),
                     ),
                   SliverToBoxAdapter(
                     child: feedState.maybeWhen(
                       data: (feed) => feed.socaFeed != null
                           ? FeedPostCard(post: feed.socaFeed!)
-                          : SizedBox.shrink(),
-                      orElse: () => SizedBox.shrink(),
+                          : const SizedBox.shrink(),
+                      orElse: () => const SizedBox.shrink(),
                     ),
                   ),
                   // ── Interleaved feed: posts with section cards every 5 items ──

@@ -48,17 +48,17 @@ class EndorsementsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isLoadingEndorsements) {
       return Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.socaGrey,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: AppLoader(),
+        child: const AppLoader(),
       );
     }
 
     if (endorsements.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     final endorsement = endorsements.first;
@@ -68,8 +68,9 @@ class EndorsementsSection extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
-          margin: EdgeInsets.only(top: 12),
-          padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
+          margin: const EdgeInsets.only(top: 12),
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
           decoration: BoxDecoration(
             color: AppColors.socaGrey,
             borderRadius: BorderRadius.circular(8),
@@ -88,7 +89,7 @@ class EndorsementsSection extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -99,7 +100,7 @@ class EndorsementsSection extends StatelessWidget {
                     child: Container(
                       width: 64,
                       height: 64,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                       ),
@@ -109,7 +110,8 @@ class EndorsementsSection extends StatelessWidget {
                                 imageUrl:
                                     ApiConstants.getImageUrl(user!.imageUrl),
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => AppLoader(),
+                                placeholder: (context, url) =>
+                                    const AppLoader(),
                                 errorWidget: (context, url, error) => Icon(
                                   Icons.person,
                                   color: AppColors.socaBlack.withOpacity(0.2),
@@ -124,7 +126,7 @@ class EndorsementsSection extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +135,7 @@ class EndorsementsSection extends StatelessWidget {
                             endorsement.comment!.isNotEmpty) ...[
                           Text(
                             endorsement.comment!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
                               color: AppColors.socaBlack,
@@ -141,7 +143,7 @@ class EndorsementsSection extends StatelessWidget {
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 6),
+                          const SizedBox(height: 6),
                         ],
                         RichText(
                           text: TextSpan(
@@ -155,7 +157,7 @@ class EndorsementsSection extends StatelessWidget {
                                 text:
                                     '${user?.firstName ?? ''} ${user?.lastName ?? ''}'
                                         .trim(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.socaBlack,
                                 ),
@@ -168,7 +170,7 @@ class EndorsementsSection extends StatelessWidget {
                           ),
                         ),
                         if (endorsement.academy?.name != null) ...[
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           GestureDetector(
                             onTap: () {
                               // TODO: Navigate to academy
@@ -195,14 +197,14 @@ class EndorsementsSection extends StatelessWidget {
           top: -10,
           left: 16,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: AppColors.socaBlack,
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
               'Endorsements'.tr.toUpperCase(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -221,7 +223,7 @@ class EndorsementsSection extends StatelessWidget {
             },
             child: Text(
               'View All'.tr.toLowerCase(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,

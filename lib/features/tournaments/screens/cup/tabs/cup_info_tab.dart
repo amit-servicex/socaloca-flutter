@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:socaloca/core/constants/app_strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:socaloca/shared/models/team_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../shared/providers/auth_provider.dart';
 import '../../../data/models/cup_models.dart';
@@ -28,7 +25,7 @@ class CupInfoTab extends ConsumerWidget {
   final VoidCallback onFollowTap;
   final VoidCallback onRequestToJoin;
 
-  CupInfoTab({
+  const CupInfoTab({
     super.key,
     required this.cup,
     required this.onFollowTap,
@@ -89,18 +86,18 @@ class CupInfoTab extends ConsumerWidget {
           if (cup.rounds > 0)
             Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.emoji_events,
                     color: AppColors.socaYellow,
                     size: 20,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     'Knockout Rounds: ${cup.rounds}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -151,7 +148,7 @@ class CupInfoTab extends ConsumerWidget {
             ),
           ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Teams Playing
           if (cup.teams != null && cup.teams!.isNotEmpty)
@@ -168,11 +165,11 @@ class CupInfoTab extends ConsumerWidget {
               onTeamTap: (teamId) {
                 // log("this is the teams id list  ${cup.teams?.map((i) => i.toJson())}");
 
-                context.push('/teams/${teamId}');
+                context.push('/teams/$teamId');
               },
             ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Sponsors
           if (cup.sponsors != null && cup.sponsors!.isNotEmpty)
@@ -187,23 +184,23 @@ class CupInfoTab extends ConsumerWidget {
                   .toList(),
             ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Itinerary Button (shown when canView == true)
           _CupItinerarySection(tournamentId: cup.effectiveId),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Invitations Section (admin/coach only)
           if (user != null && (user.isAdmin || user.isCoach))
             _CupInvitationsSection(cup: cup),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Request to Join Button (role + status + visibility gated)
           _buildRequestToJoinButton(user),
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -234,17 +231,17 @@ class CupInfoTab extends ConsumerWidget {
   }
 
   Widget _buildRequestToJoinButton(dynamic user) {
-    if (user == null) return SizedBox.shrink();
+    if (user == null) return const SizedBox.shrink();
 
     // Only admin or coach can request to join
-    if (!user.isAdmin && !user.isCoach) return SizedBox.shrink();
+    if (!user.isAdmin && !user.isCoach) return const SizedBox.shrink();
 
     // Referees cannot join
-    if (user.isReferee == true) return SizedBox.shrink();
+    if (user.isReferee == true) return const SizedBox.shrink();
 
     // Cannot join live or ended tournaments
     final status = cup.status?.toLowerCase() ?? '';
-    if (status == 'live' || status == 'end') return SizedBox.shrink();
+    if (status == 'live' || status == 'end') return const SizedBox.shrink();
 
     // Local tournaments: user's country must match cup country
     final visibility = cup.visibility?.toLowerCase() ?? 'global';
@@ -254,13 +251,13 @@ class CupInfoTab extends ConsumerWidget {
       if (userCountry.isEmpty ||
           cupCountry.isEmpty ||
           userCountry != cupCountry) {
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       }
     }
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
@@ -268,7 +265,7 @@ class CupInfoTab extends ConsumerWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.socaYellow,
             foregroundColor: AppColors.socaBlack,
-            padding: EdgeInsets.symmetric(vertical: 14),
+            padding: const EdgeInsets.symmetric(vertical: 14),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -276,7 +273,7 @@ class CupInfoTab extends ConsumerWidget {
           ),
           child: Text(
             AppStrings.requestToJoinCup,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 15,
@@ -292,18 +289,18 @@ class CupInfoTab extends ConsumerWidget {
 class _CupItinerarySection extends ConsumerWidget {
   final String tournamentId;
 
-  _CupItinerarySection({required this.tournamentId});
+  const _CupItinerarySection({required this.tournamentId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final itineraryAsync = ref.watch(cupItineraryUrlProvider(tournamentId));
     return itineraryAsync.when(
       data: (url) {
-        if (url == null || url.isEmpty) return SizedBox.shrink();
+        if (url == null || url.isEmpty) return const SizedBox.shrink();
         return CupItineraryButton(docUrl: url);
       },
-      loading: () => SizedBox.shrink(),
-      error: (_, __) => SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }
@@ -312,7 +309,7 @@ class _CupItinerarySection extends ConsumerWidget {
 class _CupInvitationsSection extends ConsumerWidget {
   final TournamentCupModel cup;
 
-  _CupInvitationsSection({required this.cup});
+  const _CupInvitationsSection({required this.cup});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -321,30 +318,30 @@ class _CupInvitationsSection extends ConsumerWidget {
 
     return invitesAsync.when(
       data: (teams) {
-        if (teams.isEmpty) return SizedBox.shrink();
+        if (teams.isEmpty) return const SizedBox.shrink();
         return Container(
           color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 AppStrings.pendingInvitations,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
                   color: AppColors.socaBlack,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               ...teams.map((team) => _CupInvitationRow(team: team, cup: cup)),
             ],
           ),
         );
       },
-      loading: () => SizedBox.shrink(),
-      error: (_, __) => SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }
@@ -354,20 +351,20 @@ class _CupInvitationRow extends ConsumerWidget {
   final CupTeamModel team;
   final TournamentCupModel cup;
 
-  _CupInvitationRow({required this.team, required this.cup});
+  const _CupInvitationRow({required this.team, required this.cup});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentId = cup.effectiveId;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
           Expanded(
             child: Text(
               team.teamName ?? 'Unknown Team',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -375,40 +372,40 @@ class _CupInvitationRow extends ConsumerWidget {
               ),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           ElevatedButton(
             onPressed: () => _respond(context, ref, tournamentId, accept: true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
               elevation: 0,
             ),
             child: Text(
               AppStrings.accept,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 13),
             ),
           ),
-          SizedBox(width: 6),
+          const SizedBox(width: 6),
           ElevatedButton(
             onPressed: () =>
                 _respond(context, ref, tournamentId, accept: false),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
               elevation: 0,
             ),
             child: Text(
               AppStrings.decline,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 13),
@@ -445,7 +442,7 @@ class _CupInvitationRow extends ConsumerWidget {
               success
                   ? (accept ? 'Invitation accepted.' : 'Invitation declined.')
                   : 'Action failed. Please try again.',
-              style: TextStyle(fontFamily: 'Poppins'),
+              style: const TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: success ? Colors.green : Colors.red,
           ),
@@ -457,7 +454,7 @@ class _CupInvitationRow extends ConsumerWidget {
           SnackBar(
             content: Text(
               'Error: $e',
-              style: TextStyle(fontFamily: 'Poppins'),
+              style: const TextStyle(fontFamily: 'Poppins'),
             ),
             backgroundColor: Colors.red,
           ),
@@ -471,20 +468,20 @@ class _CupInvitationRow extends ConsumerWidget {
 class CupItineraryButton extends StatelessWidget {
   final String docUrl;
 
-  CupItineraryButton({super.key, required this.docUrl});
+  const CupItineraryButton({super.key, required this.docUrl});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: SizedBox(
         width: double.infinity,
         child: OutlinedButton.icon(
-          icon: Icon(Icons.description_outlined),
+          icon: const Icon(Icons.description_outlined),
           label: Text(
             AppStrings.viewItinerary,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 14,
@@ -492,7 +489,7 @@ class CupItineraryButton extends StatelessWidget {
           ),
           onPressed: () => _launch(context),
           style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),

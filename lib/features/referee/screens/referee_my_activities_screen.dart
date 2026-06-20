@@ -9,7 +9,7 @@ import '../providers/referee_providers.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class RefereeMyActivitiesScreen extends ConsumerStatefulWidget {
-  RefereeMyActivitiesScreen({super.key});
+  const RefereeMyActivitiesScreen({super.key});
 
   @override
   ConsumerState<RefereeMyActivitiesScreen> createState() =>
@@ -24,7 +24,7 @@ class _RefereeMyActivitiesScreenState
   bool _isLoadingMore = false;
   String? _error;
   int _start = 0;
-  static int _limit = 10;
+  static const int _limit = 10;
 
   final _scrollController = ScrollController();
 
@@ -103,12 +103,12 @@ class _RefereeMyActivitiesScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
+          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
           onPressed: () => context.pop(),
         ),
         title: Text(
           AppStrings.myActivities,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 18,
@@ -122,7 +122,7 @@ class _RefereeMyActivitiesScreenState
 
   Widget _buildBody() {
     if (_isLoading) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     if (_error != null) {
@@ -130,18 +130,19 @@ class _RefereeMyActivitiesScreenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            SizedBox(height: 12),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const SizedBox(height: 12),
             Text(_error!,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
-            SizedBox(height: 12),
+                style: const TextStyle(fontFamily: 'Poppins', fontSize: 13)),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: _load,
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.socaBlack,
                   foregroundColor: AppColors.socaYellow),
-              child: Text('Retry'.tr, style: TextStyle(fontFamily: 'Poppins')),
+              child: Text('Retry'.tr,
+                  style: const TextStyle(fontFamily: 'Poppins')),
             ),
           ],
         ),
@@ -153,10 +154,11 @@ class _RefereeMyActivitiesScreenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.history_outlined, size: 60, color: AppColors.socaGrey),
-            SizedBox(height: 16),
+            const Icon(Icons.history_outlined,
+                size: 60, color: AppColors.socaGrey),
+            const SizedBox(height: 16),
             Text('No activities yet'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Poppins', fontSize: 14, color: Colors.grey)),
           ],
         ),
@@ -168,11 +170,11 @@ class _RefereeMyActivitiesScreenState
       onRefresh: _load,
       child: ListView.builder(
         controller: _scrollController,
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         itemCount: _activities.length + (_isLoadingMore ? 1 : 0),
         itemBuilder: (ctx, i) {
           if (i == _activities.length) {
-            return Padding(
+            return const Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: AppLoader(),
             );
@@ -185,7 +187,7 @@ class _RefereeMyActivitiesScreenState
 }
 
 class _ActivityCard extends StatelessWidget {
-  _ActivityCard({required this.activity});
+  const _ActivityCard({required this.activity});
   final RefereeActivityModel activity;
 
   @override
@@ -193,17 +195,17 @@ class _ActivityCard extends StatelessWidget {
     final hasScore = activity.teamAScore != null && activity.teamBScore != null;
 
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(14),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Color(0xFFE0E0E0)),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -213,7 +215,7 @@ class _ActivityCard extends StatelessWidget {
           // Tournament + round
           Text(
             activity.tournamentName ?? '',
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w600,
               fontSize: 13,
@@ -221,14 +223,14 @@ class _ActivityCard extends StatelessWidget {
             ),
           ),
           if (activity.roundName?.isNotEmpty == true) ...[
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               activity.roundName!,
-              style: TextStyle(
+              style: const TextStyle(
                   fontFamily: 'Lato', fontSize: 12, color: Colors.grey),
             ),
           ],
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Teams + score
           Row(
@@ -237,7 +239,7 @@ class _ActivityCard extends StatelessWidget {
                 child: Text(
                   activity.teamA ?? '',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
@@ -245,7 +247,8 @@ class _ActivityCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                 decoration: BoxDecoration(
                   color: AppColors.socaBlack,
                   borderRadius: BorderRadius.circular(5),
@@ -254,7 +257,7 @@ class _ActivityCard extends StatelessWidget {
                   hasScore
                       ? '${activity.teamAScore} - ${activity.teamBScore}'
                       : 'vs',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
@@ -265,7 +268,7 @@ class _ActivityCard extends StatelessWidget {
                 child: Text(
                   activity.teamB ?? '',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
@@ -274,27 +277,27 @@ class _ActivityCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Date + cards
           Row(
             children: [
               if (activity.matchDate?.isNotEmpty == true) ...[
-                Icon(Icons.calendar_today, size: 12, color: Colors.grey),
-                SizedBox(width: 4),
+                const Icon(Icons.calendar_today, size: 12, color: Colors.grey),
+                const SizedBox(width: 4),
                 Text(activity.matchDate!,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Lato', fontSize: 12, color: Colors.grey)),
-                SizedBox(width: 14),
+                const SizedBox(width: 14),
               ],
               Text(
                 '🟡 ${activity.yellowCardsGiven ?? 0}',
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 '🔴 ${activity.redCardsGiven ?? 0}',
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             ],
           ),

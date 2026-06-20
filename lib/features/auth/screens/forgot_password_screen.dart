@@ -27,7 +27,7 @@ import '../providers/auth_provider.dart';
 ///
 /// [isClubPath] = true → club forgot-password (email-only, single step).
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
-  ForgotPasswordScreen({super.key, this.isClubPath = false});
+  const ForgotPasswordScreen({super.key, this.isClubPath = false});
 
   final bool isClubPath;
 
@@ -37,7 +37,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
-  static String _typeSclId = 'sclId';
+  static const String _typeSclId = 'sclId';
   static const String _typeEmail = 'email';
   static const String _typeMobile = 'mobile';
 
@@ -154,7 +154,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   void _showToast(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(msg, style: TextStyle(fontFamily: 'Poppins')),
+        content: Text(msg, style: const TextStyle(fontFamily: 'Poppins')),
         backgroundColor: AppColors.socaBlack,
       ),
     );
@@ -172,8 +172,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         builder: (ctx, setStateDialog) => AlertDialog(
           title: Text(
             AppStrings.addEmail,
-            style:
-                TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w700),
+            style: const TextStyle(
+                fontFamily: 'Poppins', fontWeight: FontWeight.w700),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -181,9 +181,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             children: [
               Text(
                 AppStrings.addEmailOtpPrompt,
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               _buildInputBox(
                 controller: emailCtrl,
                 hint: AppStrings.emailAddressRequired,
@@ -191,10 +191,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               ),
               if (dialogError != null)
                 Padding(
-                  padding: EdgeInsets.only(top: 6),
+                  padding: const EdgeInsets.only(top: 6),
                   child: Text(
                     dialogError!,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.red, fontSize: 12, fontFamily: 'Poppins'),
                   ),
                 ),
@@ -204,7 +204,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
               child: Text(AppStrings.cancel,
-                  style: TextStyle(fontFamily: 'Poppins')),
+                  style: const TextStyle(fontFamily: 'Poppins')),
             ),
             TextButton(
               onPressed: () async {
@@ -229,7 +229,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 }
               },
               child: Text(AppStrings.sendOtp,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       color: AppColors.socaBlack)),
@@ -301,24 +301,25 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       builder: (ctx) => Dialog(
         child: Container(
           height: MediaQuery.of(context).size.height * 0.6,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               Text(AppStrings.selectCountry,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       fontSize: 16)),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Expanded(
                 child: ListView.builder(
                   itemCount: countries.length,
                   itemBuilder: (_, i) => ListTile(
                     dense: true,
                     title: Text(countries[i]['name']!,
-                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14)),
+                        style: const TextStyle(
+                            fontFamily: 'Poppins', fontSize: 14)),
                     trailing: Text(countries[i]['code']!,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 14)),
@@ -352,13 +353,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             color: _inputError != null ? Colors.red : Colors.black,
             width: 0.8,
           ),
-          boxShadow: [BoxShadow(color: Color(0x22000000), blurRadius: 8)],
+          boxShadow: [const BoxShadow(color: Color(0x22000000), blurRadius: 8)],
         ),
         child: TextField(
           controller: controller,
           keyboardType: keyboardType,
           inputFormatters: formatters,
-          style: TextStyle(
+          style: const TextStyle(
               fontFamily: 'Poppins', fontSize: 14, color: AppColors.socaBlack),
           decoration: InputDecoration(
             errorBorder: InputBorder.none,
@@ -367,10 +368,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             disabledBorder: InputBorder.none,
             focusedErrorBorder: InputBorder.none,
             hintText: hint,
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
                 fontFamily: 'Poppins', fontSize: 14, color: Colors.grey),
             border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           ),
           onChanged: (_) {
             if (_inputError != null) setState(() => _inputError = null);
@@ -382,7 +384,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
+      value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
       ),
@@ -390,12 +392,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         backgroundColor: AppColors.socaPageBg,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // ── Logo ──────────────────────────────────────────────────
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Center(
                   child: SvgPicture.asset(
                     'assets/icons/socaloca_logo.svg',
@@ -404,20 +406,20 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // ── Title ─────────────────────────────────────────────────
                 Text(
                   AppStrings.forgotPassword,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 24,
                     color: AppColors.socaBlack,
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
 
                 // ── Radio buttons (hidden for club path) ──────────────────
                 if (!widget.isClubPath) ...[
@@ -451,7 +453,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       _inputError = null;
                     }),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
 
                 // ── Input box (with optional country code prefix) ─────────
@@ -464,7 +466,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       width: 0.8,
                     ),
                     boxShadow: [
-                      BoxShadow(color: Color(0x22000000), blurRadius: 8)
+                      const BoxShadow(color: Color(0x22000000), blurRadius: 8)
                     ],
                   ),
                   child: Row(
@@ -474,22 +476,22 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         GestureDetector(
                           onTap: _pickCountry,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 14),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   _selectedCountryCode,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
                                     color: AppColors.socaBlack,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                SizedBox(width: 4),
-                                Icon(Icons.arrow_drop_down,
+                                const SizedBox(width: 4),
+                                const Icon(Icons.arrow_drop_down,
                                     size: 18, color: AppColors.socaBlack),
                               ],
                             ),
@@ -508,7 +510,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                                   ? TextInputType.emailAddress
                                   : TextInputType.text,
                           maxLength: 100,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14,
                             color: AppColors.socaBlack,
@@ -520,13 +522,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                             disabledBorder: InputBorder.none,
                             focusedErrorBorder: InputBorder.none,
                             hintText: _hintText,
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
                                 color: Colors.grey),
                             border: InputBorder.none,
                             counterText: '',
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 14, vertical: 14),
                           ),
                           onChanged: (_) {
@@ -542,10 +544,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
                 // ── Error text ───────────────────────────────────────────
                 if (_inputError != null) ...[
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Text(
                     _inputError!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
                       color: Colors.red,
@@ -554,16 +556,16 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 ],
 
                 // ── Mandatory fields ─────────────────────────────────────
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   AppStrings.mandatoryFields,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     color: AppColors.socaBlack,
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
 
                 // ── SEND OTP button ──────────────────────────────────────
                 GestureDetector(
@@ -573,7 +575,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     height: 60,
                     color: AppColors.socaBlack,
                     child: _isLoading
-                        ? SizedBox(
+                        ? const SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
@@ -585,7 +587,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                             widget.isClubPath
                                 ? AppStrings.sendResetLink
                                 : AppStrings.sendOtp,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
                               fontSize: 22,
@@ -594,7 +596,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                           ),
                   ),
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
               ],
             ),
           ),
@@ -609,7 +611,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 // (deprecated after Flutter v3.32.0).
 
 class _RadioOption extends StatelessWidget {
-  _RadioOption({
+  const _RadioOption({
     required this.label,
     required this.value,
     required this.groupValue,
@@ -628,7 +630,7 @@ class _RadioOption extends StatelessWidget {
     return InkWell(
       onTap: () => onChanged(value),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
           children: [
             // Custom radio circle
@@ -647,7 +649,7 @@ class _RadioOption extends StatelessWidget {
                       child: Container(
                         width: 11,
                         height: 11,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.socaBlack,
                         ),
@@ -655,10 +657,10 @@ class _RadioOption extends StatelessWidget {
                     )
                   : null,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 color: AppColors.socaBlack,

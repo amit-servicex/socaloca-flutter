@@ -20,7 +20,7 @@ class MatchManagementScreen extends ConsumerStatefulWidget {
   final TournamentMatchModel match;
   final String tournamentId;
 
-  MatchManagementScreen({
+  const MatchManagementScreen({
     super.key,
     required this.matchId,
     required this.match,
@@ -55,7 +55,7 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
       appBar: AppBar(
         title: Text(
           AppStrings.matchManagement,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
             fontSize: 18,
@@ -65,7 +65,7 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.socaBlack),
+          icon: const Icon(Icons.arrow_back, color: AppColors.socaBlack),
           onPressed: () => context.pop(),
         ),
       ),
@@ -84,12 +84,12 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
               indicatorColor: AppColors.socaYellow,
               indicatorWeight: 3,
               isScrollable: true,
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
-              unselectedLabelStyle: TextStyle(
+              unselectedLabelStyle: const TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
@@ -148,7 +148,7 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           // Teams and Score
@@ -163,23 +163,23 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
                         match.homeTeamLogo!,
                         width: 50,
                         height: 50,
-                        errorBuilder: (_, __, ___) => Icon(
+                        errorBuilder: (_, __, ___) => const Icon(
                           Icons.shield,
                           size: 50,
                           color: Colors.grey,
                         ),
                       )
                     else
-                      Icon(
+                      const Icon(
                         Icons.shield,
                         size: 50,
                         color: Colors.grey,
                       ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       match.homeTeamName ?? 'Team A',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -191,13 +191,13 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
 
               // Score or VS
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   children: [
                     if (hasScore)
                       Text(
                         '${match.homeScore} - ${match.awayScore}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
@@ -207,7 +207,7 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
                     else
                       Text(
                         AppStrings.vs,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
@@ -227,23 +227,23 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
                         match.awayTeamLogo!,
                         width: 50,
                         height: 50,
-                        errorBuilder: (_, __, ___) => Icon(
+                        errorBuilder: (_, __, ___) => const Icon(
                           Icons.shield,
                           size: 50,
                           color: Colors.grey,
                         ),
                       )
                     else
-                      Icon(
+                      const Icon(
                         Icons.shield,
                         size: 50,
                         color: Colors.grey,
                       ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       match.awayTeamName ?? 'Team B',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -255,15 +255,15 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
             ],
           ),
 
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
 
           // Match Info
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (match.matchDate != null) ...[
-                Icon(Icons.calendar_today, size: 14, color: Colors.grey),
-                SizedBox(width: 4),
+                const Icon(Icons.calendar_today, size: 14, color: Colors.grey),
+                const SizedBox(width: 4),
                 Text(
                   match.matchDate!,
                   style: TextStyle(
@@ -274,9 +274,9 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
                 ),
               ],
               if (match.venue != null) ...[
-                SizedBox(width: 16),
-                Icon(Icons.location_on, size: 14, color: Colors.grey),
-                SizedBox(width: 4),
+                const SizedBox(width: 16),
+                const Icon(Icons.location_on, size: 14, color: Colors.grey),
+                const SizedBox(width: 4),
                 Text(
                   match.venue!,
                   style: TextStyle(
@@ -289,18 +289,18 @@ class _MatchManagementScreenState extends ConsumerState<MatchManagementScreen>
             ],
           ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           // Status Badge
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: _getStatusColor(match.status),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
               match.status ?? 'UNKNOWN',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
                 fontWeight: FontWeight.w700,

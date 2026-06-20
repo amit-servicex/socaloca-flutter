@@ -17,7 +17,7 @@ class AcademiesSection extends StatelessWidget {
   final List<AcademyModel> academies;
   final bool isLoadingAcademies;
 
-  AcademiesSection({
+  const AcademiesSection({
     super.key,
     required this.academies,
     required this.isLoadingAcademies,
@@ -32,11 +32,11 @@ class AcademiesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoadingAcademies) {
-      return AppLoader();
+      return const AppLoader();
     }
 
     if (academies.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Column(
@@ -46,14 +46,14 @@ class AcademiesSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: AppColors.socaBlack,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
                 'ACADEMIES'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -68,7 +68,7 @@ class AcademiesSection extends StatelessWidget {
                 },
                 child: Text(
                   'view all'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -78,9 +78,9 @@ class AcademiesSection extends StatelessWidget {
               ),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: AppColors.socaGrey.withOpacity(0.5),
             borderRadius: BorderRadius.circular(8),
@@ -101,7 +101,7 @@ class AcademiesSection extends StatelessWidget {
                   },
                   child: Container(
                     width: 80,
-                    margin: EdgeInsets.only(right: 12),
+                    margin: const EdgeInsets.only(right: 12),
                     child: Column(
                       children: [
                         Container(
@@ -117,24 +117,26 @@ class AcademiesSection extends StatelessWidget {
                                     imageUrl: ApiConstants.getImageUrl(
                                         academy.imageUrl),
                                     fit: BoxFit.cover,
-                                    placeholder: (context, url) => AppLoader(),
-                                    errorWidget: (context, url, error) => Icon(
+                                    placeholder: (context, url) =>
+                                        const AppLoader(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(
                                       Icons.school,
                                       color: AppColors.socaGrey,
                                       size: 30,
                                     ),
                                   )
-                                : Icon(
+                                : const Icon(
                                     Icons.school,
                                     color: AppColors.socaGrey,
                                     size: 30,
                                   ),
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           academy.name ?? '',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 11,
                             color: AppColors.socaBlack,

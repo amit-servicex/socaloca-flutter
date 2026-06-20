@@ -9,7 +9,7 @@ import '../widgets/club_filter_row.dart';
 import 'package:socaloca/shared/widgets/app_loader.dart';
 
 class ClubsScreen extends ConsumerStatefulWidget {
-  ClubsScreen({super.key});
+  const ClubsScreen({super.key});
 
   @override
   ConsumerState<ClubsScreen> createState() => _ClubsScreenState();
@@ -19,7 +19,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
   final ScrollController _scrollController = ScrollController();
 
   // World countries matching Android Utils.Confed.getCountries()
-  static List<String> _countries = [
+  static final List<String> _countries = [
     'Afghanistan',
     'Albania',
     'Algeria',
@@ -249,7 +249,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
           onRefresh: () => ref.read(clubsProvider.notifier).refresh(),
           child: CustomScrollView(
             controller: _scrollController,
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               SliverToBoxAdapter(
                 child: Column(
@@ -258,7 +258,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                       padding: const EdgeInsets.all(16),
                       child: Text(
                         AppStrings.clubsPartnerIntro,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -283,7 +283,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                 ),
               ),
               if (state.isLoading && state.clubs.isEmpty)
-                SliverFillRemaining(
+                const SliverFillRemaining(
                   child: AppLoader(),
                 )
               else if (state.error != null && state.clubs.isEmpty)
@@ -292,29 +292,29 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.error_outline,
+                        const Icon(Icons.error_outline,
                             size: 48, color: AppColors.error),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           AppStrings.errorLoadingClubs,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: AppColors.socaBlack,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           state.error!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12,
                             color: AppColors.textSecondary,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () =>
                               ref.read(clubsProvider.notifier).load(),
@@ -329,7 +329,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                   child: Center(
                     child: Text(
                       AppStrings.noClubsFound,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -343,7 +343,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       if (index == state.clubs.length) {
-                        return Padding(
+                        return const Padding(
                           padding: EdgeInsets.all(16),
                           child: AppLoader(),
                         );
@@ -354,7 +354,7 @@ class _ClubsScreenState extends ConsumerState<ClubsScreen> {
                         state.clubs.length + (state.isLoadingMore ? 1 : 0),
                   ),
                 ),
-              SliverToBoxAdapter(child: SizedBox(height: 20)),
+              const SliverToBoxAdapter(child: SizedBox(height: 20)),
             ],
           ),
         ),

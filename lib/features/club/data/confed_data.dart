@@ -15,218 +15,628 @@ class ConfedData {
   ConfedData._();
 
   static const List<ConfedInfo> _data = [
-    ConfedInfo(country: 'Afghanistan', confed: 'AFC', leagues: ['Afghan Premier League']),
-    ConfedInfo(country: 'Albania', confed: 'UEFA', leagues: ['Kategoria Superiore']),
-    ConfedInfo(country: 'Algeria', confed: 'CAF', leagues: ['Ligue Professionnelle 1']),
-    ConfedInfo(country: 'American Samoa', confed: 'OFC', leagues: ['FFAS Senior League']),
-    ConfedInfo(country: 'Andorra', confed: 'UEFA', leagues: ['Primera Divisió']),
+    ConfedInfo(
+        country: 'Afghanistan',
+        confed: 'AFC',
+        leagues: ['Afghan Premier League']),
+    ConfedInfo(
+        country: 'Albania', confed: 'UEFA', leagues: ['Kategoria Superiore']),
+    ConfedInfo(
+        country: 'Algeria',
+        confed: 'CAF',
+        leagues: ['Ligue Professionnelle 1']),
+    ConfedInfo(
+        country: 'American Samoa',
+        confed: 'OFC',
+        leagues: ['FFAS Senior League']),
+    ConfedInfo(
+        country: 'Andorra', confed: 'UEFA', leagues: ['Primera Divisió']),
     ConfedInfo(country: 'Angola', confed: 'CAF', leagues: ['Girabola']),
-    ConfedInfo(country: 'Anguilla', confed: 'CONCACAF', leagues: ['AFA Senior Male League']),
-    ConfedInfo(country: 'Antigua and Barbuda', confed: 'CONCACAF', leagues: ['Antigua and Barbuda Premier Division']),
-    ConfedInfo(country: 'Argentina', confed: 'Conmebol', leagues: ['Liga Profesional de Fútbol']),
-    ConfedInfo(country: 'Armenia', confed: 'UEFA', leagues: ['Bardzragujn khumb', 'First League']),
-    ConfedInfo(country: 'Aruba', confed: 'CONCACAF', leagues: ['Aruban Division di Honor']),
+    ConfedInfo(
+        country: 'Anguilla',
+        confed: 'CONCACAF',
+        leagues: ['AFA Senior Male League']),
+    ConfedInfo(
+        country: 'Antigua and Barbuda',
+        confed: 'CONCACAF',
+        leagues: ['Antigua and Barbuda Premier Division']),
+    ConfedInfo(
+        country: 'Argentina',
+        confed: 'Conmebol',
+        leagues: ['Liga Profesional de Fútbol']),
+    ConfedInfo(
+        country: 'Armenia',
+        confed: 'UEFA',
+        leagues: ['Bardzragujn khumb', 'First League']),
+    ConfedInfo(
+        country: 'Aruba',
+        confed: 'CONCACAF',
+        leagues: ['Aruban Division di Honor']),
     ConfedInfo(country: 'Australia', confed: 'AFC', leagues: ['A-League']),
-    ConfedInfo(country: 'Austria', confed: 'UEFA', leagues: ['Austrian Bundesliga', '2. Liga']),
-    ConfedInfo(country: 'Azerbaijan', confed: 'UEFA', leagues: ['Premyer Liqasi']),
-    ConfedInfo(country: 'Bahamas', confed: 'CONCACAF', leagues: ['BFA Senior League']),
-    ConfedInfo(country: 'Bahrain', confed: 'AFC', leagues: ['Bahraini Premier League']),
-    ConfedInfo(country: 'Bangladesh', confed: 'AFC', leagues: ['Bangladesh PL']),
-    ConfedInfo(country: 'Barbados', confed: 'CONCACAF', leagues: ['Barbados Premier League']),
-    ConfedInfo(country: 'Belarus', confed: 'UEFA', leagues: ['Pershaja Liga', 'Vysheyshaya Liga']),
-    ConfedInfo(country: 'Belgium', confed: 'UEFA', leagues: ['Jupiler Pro League', 'Proximus League']),
-    ConfedInfo(country: 'Belize', confed: 'CONCACAF', leagues: ['Premier League of Belize']),
-    ConfedInfo(country: 'Benin', confed: 'CAF', leagues: ['Benin Premier League']),
-    ConfedInfo(country: 'Bermuda', confed: 'CONCACAF', leagues: ['Bermudian Premier Division']),
-    ConfedInfo(country: 'Bhutan', confed: 'AFC', leagues: ['Bhutan Premier League']),
-    ConfedInfo(country: 'Bolivia', confed: 'Conmebol', leagues: ['Div. Prof. Clausura']),
-    ConfedInfo(country: 'Bosnia and Herzegovina', confed: 'UEFA', leagues: ['Premijer Liga', 'Prva liga FBIH', 'Prva Liga RS']),
-    ConfedInfo(country: 'Botswana', confed: 'CAF', leagues: ['Botswana Premier League']),
+    ConfedInfo(
+        country: 'Austria',
+        confed: 'UEFA',
+        leagues: ['Austrian Bundesliga', '2. Liga']),
+    ConfedInfo(
+        country: 'Azerbaijan', confed: 'UEFA', leagues: ['Premyer Liqasi']),
+    ConfedInfo(
+        country: 'Bahamas', confed: 'CONCACAF', leagues: ['BFA Senior League']),
+    ConfedInfo(
+        country: 'Bahrain',
+        confed: 'AFC',
+        leagues: ['Bahraini Premier League']),
+    ConfedInfo(
+        country: 'Bangladesh', confed: 'AFC', leagues: ['Bangladesh PL']),
+    ConfedInfo(
+        country: 'Barbados',
+        confed: 'CONCACAF',
+        leagues: ['Barbados Premier League']),
+    ConfedInfo(
+        country: 'Belarus',
+        confed: 'UEFA',
+        leagues: ['Pershaja Liga', 'Vysheyshaya Liga']),
+    ConfedInfo(
+        country: 'Belgium',
+        confed: 'UEFA',
+        leagues: ['Jupiler Pro League', 'Proximus League']),
+    ConfedInfo(
+        country: 'Belize',
+        confed: 'CONCACAF',
+        leagues: ['Premier League of Belize']),
+    ConfedInfo(
+        country: 'Benin', confed: 'CAF', leagues: ['Benin Premier League']),
+    ConfedInfo(
+        country: 'Bermuda',
+        confed: 'CONCACAF',
+        leagues: ['Bermudian Premier Division']),
+    ConfedInfo(
+        country: 'Bhutan', confed: 'AFC', leagues: ['Bhutan Premier League']),
+    ConfedInfo(
+        country: 'Bolivia',
+        confed: 'Conmebol',
+        leagues: ['Div. Prof. Clausura']),
+    ConfedInfo(
+        country: 'Bosnia and Herzegovina',
+        confed: 'UEFA',
+        leagues: ['Premijer Liga', 'Prva liga FBIH', 'Prva Liga RS']),
+    ConfedInfo(
+        country: 'Botswana',
+        confed: 'CAF',
+        leagues: ['Botswana Premier League']),
     ConfedInfo(country: 'Brazil', confed: 'Conmebol', leagues: ['Série A']),
-    ConfedInfo(country: 'British Virgin Islands', confed: 'CONCACAF', leagues: ['BVIFA National Football League']),
-    ConfedInfo(country: 'Brunei Darussalam', confed: 'AFC', leagues: ['Brunei Super League']),
-    ConfedInfo(country: 'Bulgaria', confed: 'UEFA', leagues: ['efbet Liga', 'Vtora Liga']),
-    ConfedInfo(country: 'Burkina Faso', confed: 'CAF', leagues: ['Burkinabé Premier League']),
-    ConfedInfo(country: 'Burundi', confed: 'CAF', leagues: ['Burundi Premier League']),
-    ConfedInfo(country: 'Cabo Verde', confed: 'CAF', leagues: ['Cape Verdean Football Championship']),
+    ConfedInfo(
+        country: 'British Virgin Islands',
+        confed: 'CONCACAF',
+        leagues: ['BVIFA National Football League']),
+    ConfedInfo(
+        country: 'Brunei Darussalam',
+        confed: 'AFC',
+        leagues: ['Brunei Super League']),
+    ConfedInfo(
+        country: 'Bulgaria',
+        confed: 'UEFA',
+        leagues: ['efbet Liga', 'Vtora Liga']),
+    ConfedInfo(
+        country: 'Burkina Faso',
+        confed: 'CAF',
+        leagues: ['Burkinabé Premier League']),
+    ConfedInfo(
+        country: 'Burundi', confed: 'CAF', leagues: ['Burundi Premier League']),
+    ConfedInfo(
+        country: 'Cabo Verde',
+        confed: 'CAF',
+        leagues: ['Cape Verdean Football Championship']),
     ConfedInfo(country: 'Cambodia', confed: 'AFC', leagues: ['C-League']),
     ConfedInfo(country: 'Cameroon', confed: 'CAF', leagues: ['Elite One']),
-    ConfedInfo(country: 'Canada', confed: 'CONCACAF', leagues: ['Canadian Premier League']),
-    ConfedInfo(country: 'Cayman Islands', confed: 'CONCACAF', leagues: ['Cayman Islands Premier League']),
-    ConfedInfo(country: 'Central African Republic', confed: 'CAF', leagues: ['Central African Republic League']),
-    ConfedInfo(country: 'Chad', confed: 'CAF', leagues: ['Chad Premier League']),
-    ConfedInfo(country: 'Chile', confed: 'Conmebol', leagues: ['Primera División']),
+    ConfedInfo(
+        country: 'Canada',
+        confed: 'CONCACAF',
+        leagues: ['Canadian Premier League']),
+    ConfedInfo(
+        country: 'Cayman Islands',
+        confed: 'CONCACAF',
+        leagues: ['Cayman Islands Premier League']),
+    ConfedInfo(
+        country: 'Central African Republic',
+        confed: 'CAF',
+        leagues: ['Central African Republic League']),
+    ConfedInfo(
+        country: 'Chad', confed: 'CAF', leagues: ['Chad Premier League']),
+    ConfedInfo(
+        country: 'Chile', confed: 'Conmebol', leagues: ['Primera División']),
     ConfedInfo(country: 'China', confed: 'AFC', leagues: ['Super League']),
-    ConfedInfo(country: 'Chinese Tapei', confed: 'AFC', leagues: ['Football Premier League']),
-    ConfedInfo(country: 'Colombia', confed: 'Conmebol', leagues: ['Liga DIMAYOR I']),
-    ConfedInfo(country: 'Comoros', confed: 'CAF', leagues: ['Comoros Premier League']),
-    ConfedInfo(country: 'Congo', confed: 'CAF', leagues: ['Congo Premier League']),
+    ConfedInfo(
+        country: 'Chinese Tapei',
+        confed: 'AFC',
+        leagues: ['Football Premier League']),
+    ConfedInfo(
+        country: 'Colombia', confed: 'Conmebol', leagues: ['Liga DIMAYOR I']),
+    ConfedInfo(
+        country: 'Comoros', confed: 'CAF', leagues: ['Comoros Premier League']),
+    ConfedInfo(
+        country: 'Congo', confed: 'CAF', leagues: ['Congo Premier League']),
     ConfedInfo(country: 'Congo DR', confed: 'CAF', leagues: ['Linafoot']),
-    ConfedInfo(country: 'Cook Islands', confed: 'OFC', leagues: ['Cook Islands Round Cup']),
-    ConfedInfo(country: 'Costa Rica', confed: 'CONCACAF', leagues: ['Primera Div. Apertura', 'Primera Div. Clausura']),
+    ConfedInfo(
+        country: 'Cook Islands',
+        confed: 'OFC',
+        leagues: ['Cook Islands Round Cup']),
+    ConfedInfo(
+        country: 'Costa Rica',
+        confed: 'CONCACAF',
+        leagues: ['Primera Div. Apertura', 'Primera Div. Clausura']),
     ConfedInfo(country: "Côte d'Ivoire", confed: 'CAF', leagues: ['Ligue 1']),
     ConfedInfo(country: 'Croatia', confed: 'UEFA', leagues: ['1.HNL', '2.HNL']),
-    ConfedInfo(country: 'Cuba', confed: 'CONCACAF', leagues: ['Campeonato Nacional de Fútbol de Cuba']),
-    ConfedInfo(country: 'Curaçao', confed: 'CONCACAF', leagues: ['Curaçao Promé Divishon']),
-    ConfedInfo(country: 'Cyprus', confed: 'UEFA', leagues: ['Cypriot First Division']),
-    ConfedInfo(country: 'Czech Republic', confed: 'UEFA', leagues: ['Fortuna Liga', 'FNL']),
-    ConfedInfo(country: 'Denmark', confed: 'UEFA', leagues: ['NordicBet LIGA', 'Superligaen']),
-    ConfedInfo(country: 'Djibouti', confed: 'CAF', leagues: ['Djibouti Premier League']),
-    ConfedInfo(country: 'Dominica', confed: 'CONCACAF', leagues: ['Dominica Premiere League']),
-    ConfedInfo(country: 'Dominican Republic', confed: 'CONCACAF', leagues: ['Liga Dominicana de Fútbol']),
-    ConfedInfo(country: 'Ecuador', confed: 'Conmebol', leagues: ['LigaPro Serie A Primera Etapa', 'LigaPro Serie A Segunda Etapa']),
+    ConfedInfo(
+        country: 'Cuba',
+        confed: 'CONCACAF',
+        leagues: ['Campeonato Nacional de Fútbol de Cuba']),
+    ConfedInfo(
+        country: 'Curaçao',
+        confed: 'CONCACAF',
+        leagues: ['Curaçao Promé Divishon']),
+    ConfedInfo(
+        country: 'Cyprus', confed: 'UEFA', leagues: ['Cypriot First Division']),
+    ConfedInfo(
+        country: 'Czech Republic',
+        confed: 'UEFA',
+        leagues: ['Fortuna Liga', 'FNL']),
+    ConfedInfo(
+        country: 'Denmark',
+        confed: 'UEFA',
+        leagues: ['NordicBet LIGA', 'Superligaen']),
+    ConfedInfo(
+        country: 'Djibouti',
+        confed: 'CAF',
+        leagues: ['Djibouti Premier League']),
+    ConfedInfo(
+        country: 'Dominica',
+        confed: 'CONCACAF',
+        leagues: ['Dominica Premiere League']),
+    ConfedInfo(
+        country: 'Dominican Republic',
+        confed: 'CONCACAF',
+        leagues: ['Liga Dominicana de Fútbol']),
+    ConfedInfo(country: 'Ecuador', confed: 'Conmebol', leagues: [
+      'LigaPro Serie A Primera Etapa',
+      'LigaPro Serie A Segunda Etapa'
+    ]),
     ConfedInfo(country: 'Egypt', confed: 'CAF', leagues: ['Premier League']),
-    ConfedInfo(country: 'El Salvador', confed: 'CONCACAF', leagues: ['Salvadoran Primera División']),
-    ConfedInfo(country: 'England', confed: 'UEFA', leagues: ['Championship', 'League 1', 'League 2', 'Premier League']),
-    ConfedInfo(country: 'Equatorial Guinea', confed: 'CAF', leagues: ['Equatoguinean Primera División']),
-    ConfedInfo(country: 'Eritrea', confed: 'CAF', leagues: ['Eritrean Premier League']),
-    ConfedInfo(country: 'Estonia', confed: 'UEFA', leagues: ['Esiliiga', 'Premium Liiga']),
-    ConfedInfo(country: 'Eswatini', confed: 'CAF', leagues: ['Premier League of Eswatini']),
-    ConfedInfo(country: 'Ethiopia', confed: 'CAF', leagues: ['Ethiopian Premier League']),
-    ConfedInfo(country: 'Faroe Islands', confed: 'UEFA', leagues: ['1. deild', 'Betri-deildin']),
+    ConfedInfo(
+        country: 'El Salvador',
+        confed: 'CONCACAF',
+        leagues: ['Salvadoran Primera División']),
+    ConfedInfo(
+        country: 'England',
+        confed: 'UEFA',
+        leagues: ['Championship', 'League 1', 'League 2', 'Premier League']),
+    ConfedInfo(
+        country: 'Equatorial Guinea',
+        confed: 'CAF',
+        leagues: ['Equatoguinean Primera División']),
+    ConfedInfo(
+        country: 'Eritrea',
+        confed: 'CAF',
+        leagues: ['Eritrean Premier League']),
+    ConfedInfo(
+        country: 'Estonia',
+        confed: 'UEFA',
+        leagues: ['Esiliiga', 'Premium Liiga']),
+    ConfedInfo(
+        country: 'Eswatini',
+        confed: 'CAF',
+        leagues: ['Premier League of Eswatini']),
+    ConfedInfo(
+        country: 'Ethiopia',
+        confed: 'CAF',
+        leagues: ['Ethiopian Premier League']),
+    ConfedInfo(
+        country: 'Faroe Islands',
+        confed: 'UEFA',
+        leagues: ['1. deild', 'Betri-deildin']),
     ConfedInfo(country: 'Fiji', confed: 'OFC', leagues: ['Premier League']),
-    ConfedInfo(country: 'Finland', confed: 'UEFA', leagues: ['Veikkausliiga', 'Ykkönen']),
-    ConfedInfo(country: 'France', confed: 'UEFA', leagues: ['Ligue 1', 'Ligue 2']),
-    ConfedInfo(country: 'Gabon', confed: 'CAF', leagues: ['Gabon Championnat National D1']),
-    ConfedInfo(country: 'Gambia', confed: 'CAF', leagues: ['GFA League First Division']),
-    ConfedInfo(country: 'Georgia', confed: 'UEFA', leagues: ['Crystalbet Erovnuli Liga']),
-    ConfedInfo(country: 'Germany', confed: 'UEFA', leagues: ['Bundesliga', '2. Bundesliga']),
-    ConfedInfo(country: 'Ghana', confed: 'CAF', leagues: ['Ghana Premier League']),
-    ConfedInfo(country: 'Gibraltar', confed: 'UEFA', leagues: ['Gibraltar National League']),
-    ConfedInfo(country: 'Greece', confed: 'UEFA', leagues: ['Super League 1', 'Super League 2']),
-    ConfedInfo(country: 'Grenada', confed: 'CONCACAF', leagues: ['GFA Premier Division']),
+    ConfedInfo(
+        country: 'Finland',
+        confed: 'UEFA',
+        leagues: ['Veikkausliiga', 'Ykkönen']),
+    ConfedInfo(
+        country: 'France', confed: 'UEFA', leagues: ['Ligue 1', 'Ligue 2']),
+    ConfedInfo(
+        country: 'Gabon',
+        confed: 'CAF',
+        leagues: ['Gabon Championnat National D1']),
+    ConfedInfo(
+        country: 'Gambia',
+        confed: 'CAF',
+        leagues: ['GFA League First Division']),
+    ConfedInfo(
+        country: 'Georgia',
+        confed: 'UEFA',
+        leagues: ['Crystalbet Erovnuli Liga']),
+    ConfedInfo(
+        country: 'Germany',
+        confed: 'UEFA',
+        leagues: ['Bundesliga', '2. Bundesliga']),
+    ConfedInfo(
+        country: 'Ghana', confed: 'CAF', leagues: ['Ghana Premier League']),
+    ConfedInfo(
+        country: 'Gibraltar',
+        confed: 'UEFA',
+        leagues: ['Gibraltar National League']),
+    ConfedInfo(
+        country: 'Greece',
+        confed: 'UEFA',
+        leagues: ['Super League 1', 'Super League 2']),
+    ConfedInfo(
+        country: 'Grenada',
+        confed: 'CONCACAF',
+        leagues: ['GFA Premier Division']),
     ConfedInfo(country: 'Guam', confed: 'AFC', leagues: ['Guam Soccer League']),
-    ConfedInfo(country: 'Guatemala', confed: 'CONCACAF', leagues: ['Liga Nacional Apertura', 'Liga Nacional Clausura']),
-    ConfedInfo(country: 'Guinea', confed: 'CAF', leagues: ['Guinée Championnat National']),
-    ConfedInfo(country: 'Guinea-Bissau', confed: 'CAF', leagues: ['Campeonato Nacional da Guiné-Bissau']),
-    ConfedInfo(country: 'Guyana', confed: 'CONCACAF', leagues: ['GFF National Super League']),
-    ConfedInfo(country: 'Haiti', confed: 'CONCACAF', leagues: ['Ligue Haïtienne']),
-    ConfedInfo(country: 'Honduras', confed: 'CONCACAF', leagues: ['Liga Salva Vida']),
+    ConfedInfo(
+        country: 'Guatemala',
+        confed: 'CONCACAF',
+        leagues: ['Liga Nacional Apertura', 'Liga Nacional Clausura']),
+    ConfedInfo(
+        country: 'Guinea',
+        confed: 'CAF',
+        leagues: ['Guinée Championnat National']),
+    ConfedInfo(
+        country: 'Guinea-Bissau',
+        confed: 'CAF',
+        leagues: ['Campeonato Nacional da Guiné-Bissau']),
+    ConfedInfo(
+        country: 'Guyana',
+        confed: 'CONCACAF',
+        leagues: ['GFF National Super League']),
+    ConfedInfo(
+        country: 'Haiti', confed: 'CONCACAF', leagues: ['Ligue Haïtienne']),
+    ConfedInfo(
+        country: 'Honduras', confed: 'CONCACAF', leagues: ['Liga Salva Vida']),
     ConfedInfo(country: 'Hong Kong', confed: 'AFC', leagues: ['Hong Kong PL']),
-    ConfedInfo(country: 'Hungary', confed: 'UEFA', leagues: ['NB I.', 'NB II.']),
-    ConfedInfo(country: 'Iceland', confed: 'UEFA', leagues: ['Lengjudeild', 'Pepsi Max deild']),
-    ConfedInfo(country: 'India', confed: 'AFC', leagues: ['Indian Super League']),
+    ConfedInfo(
+        country: 'Hungary', confed: 'UEFA', leagues: ['NB I.', 'NB II.']),
+    ConfedInfo(
+        country: 'Iceland',
+        confed: 'UEFA',
+        leagues: ['Lengjudeild', 'Pepsi Max deild']),
+    ConfedInfo(
+        country: 'India', confed: 'AFC', leagues: ['Indian Super League']),
     ConfedInfo(country: 'Indonesia', confed: 'AFC', leagues: ['Liga 1']),
-    ConfedInfo(country: 'Iran', confed: 'AFC', leagues: ['Persian Gulf Pro League']),
-    ConfedInfo(country: 'Iraq', confed: 'AFC', leagues: ['Iraqi Premier League']),
-    ConfedInfo(country: 'Ireland', confed: 'UEFA', leagues: ['First Division', 'Premier League']),
-    ConfedInfo(country: 'Israel', confed: 'UEFA', leagues: ["Ligat ha'Al", 'Liga Leumit']),
-    ConfedInfo(country: 'Italy', confed: 'UEFA', leagues: ['Serie A', 'Serie B']),
+    ConfedInfo(
+        country: 'Iran', confed: 'AFC', leagues: ['Persian Gulf Pro League']),
+    ConfedInfo(
+        country: 'Iraq', confed: 'AFC', leagues: ['Iraqi Premier League']),
+    ConfedInfo(
+        country: 'Ireland',
+        confed: 'UEFA',
+        leagues: ['First Division', 'Premier League']),
+    ConfedInfo(
+        country: 'Israel',
+        confed: 'UEFA',
+        leagues: ["Ligat ha'Al", 'Liga Leumit']),
+    ConfedInfo(
+        country: 'Italy', confed: 'UEFA', leagues: ['Serie A', 'Serie B']),
     ConfedInfo(country: 'Ivory Coast', confed: 'CAF', leagues: ['MTN Ligue 1']),
-    ConfedInfo(country: 'Jamaica', confed: 'CONCACAF', leagues: ['Jamaica National Premier League']),
+    ConfedInfo(
+        country: 'Jamaica',
+        confed: 'CONCACAF',
+        leagues: ['Jamaica National Premier League']),
     ConfedInfo(country: 'Japan', confed: 'AFC', leagues: ['MJ1 League']),
-    ConfedInfo(country: 'Jordan', confed: 'AFC', leagues: ['Jordanian Pro League']),
-    ConfedInfo(country: 'Kazakhstan', confed: 'UEFA', leagues: ['Pervaya Liga', 'Premier Liga']),
-    ConfedInfo(country: 'Kenya', confed: 'CAF', leagues: ['Kenyan Premier League']),
-    ConfedInfo(country: 'Kosovo', confed: 'UEFA', leagues: ['Superliga e Kosovës']),
-    ConfedInfo(country: 'Kuwait', confed: 'AFC', leagues: ['STC Premier League']),
-    ConfedInfo(country: 'Kyrgyzstan', confed: 'AFC', leagues: ['Shoro Premier Liga']),
+    ConfedInfo(
+        country: 'Jordan', confed: 'AFC', leagues: ['Jordanian Pro League']),
+    ConfedInfo(
+        country: 'Kazakhstan',
+        confed: 'UEFA',
+        leagues: ['Pervaya Liga', 'Premier Liga']),
+    ConfedInfo(
+        country: 'Kenya', confed: 'CAF', leagues: ['Kenyan Premier League']),
+    ConfedInfo(
+        country: 'Kosovo', confed: 'UEFA', leagues: ['Superliga e Kosovës']),
+    ConfedInfo(
+        country: 'Kuwait', confed: 'AFC', leagues: ['STC Premier League']),
+    ConfedInfo(
+        country: 'Kyrgyzstan', confed: 'AFC', leagues: ['Shoro Premier Liga']),
     ConfedInfo(country: 'Laos', confed: 'AFC', leagues: ['Lao League 1']),
-    ConfedInfo(country: 'Latvia', confed: 'UEFA', leagues: ['1.Liga', 'Virsliga']),
+    ConfedInfo(
+        country: 'Latvia', confed: 'UEFA', leagues: ['1.Liga', 'Virsliga']),
     ConfedInfo(country: 'Lebanon', confed: 'AFC', leagues: ['Premier League']),
-    ConfedInfo(country: 'Lesotho', confed: 'CAF', leagues: ['Lesotho Premier League']),
-    ConfedInfo(country: 'Liberia', confed: 'CAF', leagues: ['Liberian First Division']),
-    ConfedInfo(country: 'Libya', confed: 'CAF', leagues: ['Libyan Premier League']),
-    ConfedInfo(country: 'Liechtenstein', confed: 'UEFA', leagues: ['Liechtenstein Cup']),
-    ConfedInfo(country: 'Lithuania', confed: 'UEFA', leagues: ['A Lyga', 'A Lyga - Championship Round']),
-    ConfedInfo(country: 'Luxembourg', confed: 'UEFA', leagues: ['BGL Ligue', 'Ehrenpromotion']),
+    ConfedInfo(
+        country: 'Lesotho', confed: 'CAF', leagues: ['Lesotho Premier League']),
+    ConfedInfo(
+        country: 'Liberia',
+        confed: 'CAF',
+        leagues: ['Liberian First Division']),
+    ConfedInfo(
+        country: 'Libya', confed: 'CAF', leagues: ['Libyan Premier League']),
+    ConfedInfo(
+        country: 'Liechtenstein',
+        confed: 'UEFA',
+        leagues: ['Liechtenstein Cup']),
+    ConfedInfo(
+        country: 'Lithuania',
+        confed: 'UEFA',
+        leagues: ['A Lyga', 'A Lyga - Championship Round']),
+    ConfedInfo(
+        country: 'Luxembourg',
+        confed: 'UEFA',
+        leagues: ['BGL Ligue', 'Ehrenpromotion']),
     ConfedInfo(country: 'Macau', confed: 'AFC', leagues: ['Liga de Elite']),
-    ConfedInfo(country: 'Madagascar', confed: 'CAF', leagues: ['Malagasy Pro League']),
-    ConfedInfo(country: 'Malawi', confed: 'CAF', leagues: ['Malawi Premier Division']),
+    ConfedInfo(
+        country: 'Madagascar', confed: 'CAF', leagues: ['Malagasy Pro League']),
+    ConfedInfo(
+        country: 'Malawi', confed: 'CAF', leagues: ['Malawi Premier Division']),
     ConfedInfo(country: 'Malaysia', confed: 'AFC', leagues: ['Super League']),
-    ConfedInfo(country: 'Maldives', confed: 'AFC', leagues: ['Dhivehi Premier League']),
-    ConfedInfo(country: 'Mali', confed: 'CAF', leagues: ['Malian Première Division']),
-    ConfedInfo(country: 'Malta', confed: 'UEFA', leagues: ['Challenge League', 'Premier League']),
-    ConfedInfo(country: 'Mauritania', confed: 'CAF', leagues: ['Ligue 1 Mauritania']),
-    ConfedInfo(country: 'Mauritius', confed: 'CAF', leagues: ['Mauritian Premier League']),
-    ConfedInfo(country: 'Mexico', confed: 'CONCACAF', leagues: ['Liga MX Apertura']),
-    ConfedInfo(country: 'Moldova', confed: 'UEFA', leagues: ['Divizia Nationala']),
-    ConfedInfo(country: 'Mongolia', confed: 'AFC', leagues: ['Mongolian National Premier League']),
-    ConfedInfo(country: 'Montenegro', confed: 'UEFA', leagues: ['1. CFL', 'Druga Liga']),
-    ConfedInfo(country: 'Montserrat', confed: 'CONCACAF', leagues: ['Montserrat Championship']),
+    ConfedInfo(
+        country: 'Maldives',
+        confed: 'AFC',
+        leagues: ['Dhivehi Premier League']),
+    ConfedInfo(
+        country: 'Mali', confed: 'CAF', leagues: ['Malian Première Division']),
+    ConfedInfo(
+        country: 'Malta',
+        confed: 'UEFA',
+        leagues: ['Challenge League', 'Premier League']),
+    ConfedInfo(
+        country: 'Mauritania', confed: 'CAF', leagues: ['Ligue 1 Mauritania']),
+    ConfedInfo(
+        country: 'Mauritius',
+        confed: 'CAF',
+        leagues: ['Mauritian Premier League']),
+    ConfedInfo(
+        country: 'Mexico', confed: 'CONCACAF', leagues: ['Liga MX Apertura']),
+    ConfedInfo(
+        country: 'Moldova', confed: 'UEFA', leagues: ['Divizia Nationala']),
+    ConfedInfo(
+        country: 'Mongolia',
+        confed: 'AFC',
+        leagues: ['Mongolian National Premier League']),
+    ConfedInfo(
+        country: 'Montenegro',
+        confed: 'UEFA',
+        leagues: ['1. CFL', 'Druga Liga']),
+    ConfedInfo(
+        country: 'Montserrat',
+        confed: 'CONCACAF',
+        leagues: ['Montserrat Championship']),
     ConfedInfo(country: 'Morocco', confed: 'CAF', leagues: ['Botola Pro']),
     ConfedInfo(country: 'Mozambique', confed: 'CAF', leagues: ['Moçambola']),
     ConfedInfo(country: 'Myanmar', confed: 'AFC', leagues: ['National League']),
-    ConfedInfo(country: 'Namibia', confed: 'CAF', leagues: ['Namibia Premier League']),
-    ConfedInfo(country: 'Nepal', confed: 'AFC', leagues: ["Martyr's Memorial A-Division League"]),
-    ConfedInfo(country: 'Netherlands', confed: 'UEFA', leagues: ['Eredivisie', 'Keuken Kampioen Divisie']),
-    ConfedInfo(country: 'New Caledonia', confed: 'OFC', leagues: ['New Caledonia Super Ligue']),
-    ConfedInfo(country: 'New Zealand', confed: 'OFC', leagues: ['New Zealand Premiership']),
-    ConfedInfo(country: 'Nicaragua', confed: 'CONCACAF', leagues: ['Nicaraguan Primera División']),
-    ConfedInfo(country: 'Niger', confed: 'CAF', leagues: ['Niger Premier League']),
-    ConfedInfo(country: 'Nigeria', confed: 'CAF', leagues: ['Nigerian Professional Football League']),
-    ConfedInfo(country: 'North Macedonia', confed: 'UEFA', leagues: ['Prva liga']),
-    ConfedInfo(country: 'Northern Ireland', confed: 'UEFA', leagues: ['Premiership']),
-    ConfedInfo(country: 'Norway', confed: 'UEFA', leagues: ['Eliteserien', 'OBOS-ligaen']),
-    ConfedInfo(country: 'Oman', confed: 'AFC', leagues: ['Oman Professional League']),
-    ConfedInfo(country: 'Pakistan', confed: 'AFC', leagues: ['Pakistan Premier League']),
-    ConfedInfo(country: 'Palestine', confed: 'AFC', leagues: ['Gaza Strip Premier League']),
-    ConfedInfo(country: 'Panama', confed: 'CONCACAF', leagues: ['Liga Panameña de Fútbol']),
-    ConfedInfo(country: 'Papua New Guinea', confed: 'OFC', leagues: ['Papua New Guinea National Soccer League']),
-    ConfedInfo(country: 'Paraguay', confed: 'Conmebol', leagues: ['Primera División Apertura', 'Primera División Clausura']),
-    ConfedInfo(country: 'Peru', confed: 'Conmebol', leagues: ['Liga 1 Apertura']),
+    ConfedInfo(
+        country: 'Namibia', confed: 'CAF', leagues: ['Namibia Premier League']),
+    ConfedInfo(
+        country: 'Nepal',
+        confed: 'AFC',
+        leagues: ["Martyr's Memorial A-Division League"]),
+    ConfedInfo(
+        country: 'Netherlands',
+        confed: 'UEFA',
+        leagues: ['Eredivisie', 'Keuken Kampioen Divisie']),
+    ConfedInfo(
+        country: 'New Caledonia',
+        confed: 'OFC',
+        leagues: ['New Caledonia Super Ligue']),
+    ConfedInfo(
+        country: 'New Zealand',
+        confed: 'OFC',
+        leagues: ['New Zealand Premiership']),
+    ConfedInfo(
+        country: 'Nicaragua',
+        confed: 'CONCACAF',
+        leagues: ['Nicaraguan Primera División']),
+    ConfedInfo(
+        country: 'Niger', confed: 'CAF', leagues: ['Niger Premier League']),
+    ConfedInfo(
+        country: 'Nigeria',
+        confed: 'CAF',
+        leagues: ['Nigerian Professional Football League']),
+    ConfedInfo(
+        country: 'North Macedonia', confed: 'UEFA', leagues: ['Prva liga']),
+    ConfedInfo(
+        country: 'Northern Ireland', confed: 'UEFA', leagues: ['Premiership']),
+    ConfedInfo(
+        country: 'Norway',
+        confed: 'UEFA',
+        leagues: ['Eliteserien', 'OBOS-ligaen']),
+    ConfedInfo(
+        country: 'Oman', confed: 'AFC', leagues: ['Oman Professional League']),
+    ConfedInfo(
+        country: 'Pakistan',
+        confed: 'AFC',
+        leagues: ['Pakistan Premier League']),
+    ConfedInfo(
+        country: 'Palestine',
+        confed: 'AFC',
+        leagues: ['Gaza Strip Premier League']),
+    ConfedInfo(
+        country: 'Panama',
+        confed: 'CONCACAF',
+        leagues: ['Liga Panameña de Fútbol']),
+    ConfedInfo(
+        country: 'Papua New Guinea',
+        confed: 'OFC',
+        leagues: ['Papua New Guinea National Soccer League']),
+    ConfedInfo(
+        country: 'Paraguay',
+        confed: 'Conmebol',
+        leagues: ['Primera División Apertura', 'Primera División Clausura']),
+    ConfedInfo(
+        country: 'Peru', confed: 'Conmebol', leagues: ['Liga 1 Apertura']),
     ConfedInfo(country: 'Philippines', confed: 'AFC', leagues: ['PFL']),
-    ConfedInfo(country: 'Poland', confed: 'UEFA', leagues: ['1 Liga', 'Ekstraklasa']),
-    ConfedInfo(country: 'Portugal', confed: 'UEFA', leagues: ['Liga NOS', 'Liga Pro']),
-    ConfedInfo(country: 'Puerto Rico', confed: 'CONCACAF', leagues: ['Liga Puerto Rico']),
+    ConfedInfo(
+        country: 'Poland', confed: 'UEFA', leagues: ['1 Liga', 'Ekstraklasa']),
+    ConfedInfo(
+        country: 'Portugal', confed: 'UEFA', leagues: ['Liga NOS', 'Liga Pro']),
+    ConfedInfo(
+        country: 'Puerto Rico',
+        confed: 'CONCACAF',
+        leagues: ['Liga Puerto Rico']),
     ConfedInfo(country: 'Qatar', confed: 'AFC', leagues: ['Stars League']),
-    ConfedInfo(country: 'Republic of Ireland', confed: 'UEFA', leagues: ['League of Ireland Premier Division']),
-    ConfedInfo(country: 'Romania', confed: 'UEFA', leagues: ['Liga 1', 'Liga 2']),
-    ConfedInfo(country: 'Russia', confed: 'UEFA', leagues: ['1.Division', 'Premier Liga']),
-    ConfedInfo(country: 'Rwanda', confed: 'CAF', leagues: ['Rwanda Premier League']),
-    ConfedInfo(country: 'Samoa', confed: 'OFC', leagues: ['Samoa National League']),
-    ConfedInfo(country: 'San Marino', confed: 'UEFA', leagues: ['Camp. Sammarinese']),
-    ConfedInfo(country: 'São Tomé and Príncipe', confed: 'CAF', leagues: ['São Tomé and Príncipe Championship']),
-    ConfedInfo(country: 'Saudi Arabia', confed: 'AFC', leagues: ['Professional League']),
-    ConfedInfo(country: 'Scotland', confed: 'UEFA', leagues: ['Championship', 'Premiership']),
-    ConfedInfo(country: 'Senegal', confed: 'CAF', leagues: ['Senegal Premier League']),
-    ConfedInfo(country: 'Serbia', confed: 'UEFA', leagues: ['Prva liga Srbije', 'Super liga Srbije']),
-    ConfedInfo(country: 'Seychelles', confed: 'CAF', leagues: ['Seychelles First Division']),
-    ConfedInfo(country: 'Sierra Leone', confed: 'CAF', leagues: ['Sierra Leone National Premier League']),
-    ConfedInfo(country: 'Singapore', confed: 'AFC', leagues: ['Premier League']),
-    ConfedInfo(country: 'Slovakia', confed: 'UEFA', leagues: ['Fortuna Liga', 'II. Liga']),
-    ConfedInfo(country: 'Slovenia', confed: 'UEFA', leagues: ['Druga Liga', 'Prva Liga']),
-    ConfedInfo(country: 'Solomon Islands', confed: 'OFC', leagues: ['Solomon Islands S-League']),
-    ConfedInfo(country: 'Somalia', confed: 'CAF', leagues: ['Somali First Division']),
-    ConfedInfo(country: 'South Africa', confed: 'CAF', leagues: ['DStv Premiership']),
+    ConfedInfo(
+        country: 'Republic of Ireland',
+        confed: 'UEFA',
+        leagues: ['League of Ireland Premier Division']),
+    ConfedInfo(
+        country: 'Romania', confed: 'UEFA', leagues: ['Liga 1', 'Liga 2']),
+    ConfedInfo(
+        country: 'Russia',
+        confed: 'UEFA',
+        leagues: ['1.Division', 'Premier Liga']),
+    ConfedInfo(
+        country: 'Rwanda', confed: 'CAF', leagues: ['Rwanda Premier League']),
+    ConfedInfo(
+        country: 'Samoa', confed: 'OFC', leagues: ['Samoa National League']),
+    ConfedInfo(
+        country: 'San Marino', confed: 'UEFA', leagues: ['Camp. Sammarinese']),
+    ConfedInfo(
+        country: 'São Tomé and Príncipe',
+        confed: 'CAF',
+        leagues: ['São Tomé and Príncipe Championship']),
+    ConfedInfo(
+        country: 'Saudi Arabia',
+        confed: 'AFC',
+        leagues: ['Professional League']),
+    ConfedInfo(
+        country: 'Scotland',
+        confed: 'UEFA',
+        leagues: ['Championship', 'Premiership']),
+    ConfedInfo(
+        country: 'Senegal', confed: 'CAF', leagues: ['Senegal Premier League']),
+    ConfedInfo(
+        country: 'Serbia',
+        confed: 'UEFA',
+        leagues: ['Prva liga Srbije', 'Super liga Srbije']),
+    ConfedInfo(
+        country: 'Seychelles',
+        confed: 'CAF',
+        leagues: ['Seychelles First Division']),
+    ConfedInfo(
+        country: 'Sierra Leone',
+        confed: 'CAF',
+        leagues: ['Sierra Leone National Premier League']),
+    ConfedInfo(
+        country: 'Singapore', confed: 'AFC', leagues: ['Premier League']),
+    ConfedInfo(
+        country: 'Slovakia',
+        confed: 'UEFA',
+        leagues: ['Fortuna Liga', 'II. Liga']),
+    ConfedInfo(
+        country: 'Slovenia',
+        confed: 'UEFA',
+        leagues: ['Druga Liga', 'Prva Liga']),
+    ConfedInfo(
+        country: 'Solomon Islands',
+        confed: 'OFC',
+        leagues: ['Solomon Islands S-League']),
+    ConfedInfo(
+        country: 'Somalia', confed: 'CAF', leagues: ['Somali First Division']),
+    ConfedInfo(
+        country: 'South Africa', confed: 'CAF', leagues: ['DStv Premiership']),
     ConfedInfo(country: 'South Korea', confed: 'AFC', leagues: ['K League 1']),
-    ConfedInfo(country: 'South Sudan', confed: 'CAF', leagues: ['South Sudan Football Championship']),
-    ConfedInfo(country: 'Spain', confed: 'UEFA', leagues: ['LaLiga', 'LaLiga2']),
+    ConfedInfo(
+        country: 'South Sudan',
+        confed: 'CAF',
+        leagues: ['South Sudan Football Championship']),
+    ConfedInfo(
+        country: 'Spain', confed: 'UEFA', leagues: ['LaLiga', 'LaLiga2']),
     ConfedInfo(country: 'Sri Lanka', confed: 'AFC', leagues: ['S1 League']),
-    ConfedInfo(country: 'St. Kitts and Nevis', confed: 'CONCACAF', leagues: ['SKNFA Super League']),
-    ConfedInfo(country: 'St. Lucia', confed: 'CONCACAF', leagues: ['SLFA First Division']),
-    ConfedInfo(country: 'St. Vincent and the Grenadines', confed: 'CONCACAF', leagues: ['SVGFF Premier Division']),
-    ConfedInfo(country: 'Sudan', confed: 'CAF', leagues: ['Sudan Premier League']),
-    ConfedInfo(country: 'Suriname', confed: 'CONCACAF', leagues: ['SVB Eerste Divisie']),
-    ConfedInfo(country: 'Sweden', confed: 'UEFA', leagues: ['Allsvenskan', 'Superettan']),
-    ConfedInfo(country: 'Switzerland', confed: 'UEFA', leagues: ['Challenge League', 'Super League']),
-    ConfedInfo(country: 'Syria', confed: 'AFC', leagues: ['Syrian Premier League']),
+    ConfedInfo(
+        country: 'St. Kitts and Nevis',
+        confed: 'CONCACAF',
+        leagues: ['SKNFA Super League']),
+    ConfedInfo(
+        country: 'St. Lucia',
+        confed: 'CONCACAF',
+        leagues: ['SLFA First Division']),
+    ConfedInfo(
+        country: 'St. Vincent and the Grenadines',
+        confed: 'CONCACAF',
+        leagues: ['SVGFF Premier Division']),
+    ConfedInfo(
+        country: 'Sudan', confed: 'CAF', leagues: ['Sudan Premier League']),
+    ConfedInfo(
+        country: 'Suriname',
+        confed: 'CONCACAF',
+        leagues: ['SVB Eerste Divisie']),
+    ConfedInfo(
+        country: 'Sweden',
+        confed: 'UEFA',
+        leagues: ['Allsvenskan', 'Superettan']),
+    ConfedInfo(
+        country: 'Switzerland',
+        confed: 'UEFA',
+        leagues: ['Challenge League', 'Super League']),
+    ConfedInfo(
+        country: 'Syria', confed: 'AFC', leagues: ['Syrian Premier League']),
     ConfedInfo(country: 'Tahiti', confed: 'OFC', leagues: ['Tahitian Ligue 1']),
-    ConfedInfo(country: 'Tajikistan', confed: 'AFC', leagues: ['Vysshaya Liga']),
-    ConfedInfo(country: 'Tanzania', confed: 'CAF', leagues: ['Tanzanian Premier League']),
+    ConfedInfo(
+        country: 'Tajikistan', confed: 'AFC', leagues: ['Vysshaya Liga']),
+    ConfedInfo(
+        country: 'Tanzania',
+        confed: 'CAF',
+        leagues: ['Tanzanian Premier League']),
     ConfedInfo(country: 'Thailand', confed: 'AFC', leagues: ['Thai League']),
-    ConfedInfo(country: 'Timor-Leste', confed: 'AFC', leagues: ['Liga Futebol Amadora Primeira Divisão']),
-    ConfedInfo(country: 'Togo', confed: 'CAF', leagues: ['Championnat National de Premiere Division']),
-    ConfedInfo(country: 'Tonga', confed: 'OFC', leagues: ['Tonga Major League']),
-    ConfedInfo(country: 'Trinidad and Tobago', confed: 'CONCACAF', leagues: ['TT Pro League']),
-    ConfedInfo(country: 'Tunisia', confed: 'CAF', leagues: ['Championnat de la Ligue Professionnelle 1', 'Ligue I Pro']),
-    ConfedInfo(country: 'Turkey', confed: 'UEFA', leagues: ['1.Lig', 'Süper Lig']),
-    ConfedInfo(country: 'Turkmenistan', confed: 'AFC', leagues: ['Turkmenistan Higher League']),
-    ConfedInfo(country: 'Turks and Caicos Islands', confed: 'CONCACAF', leagues: ['Provo Premier League']),
-    ConfedInfo(country: 'Uganda', confed: 'CAF', leagues: ['Uganda Premier League']),
-    ConfedInfo(country: 'Ukraine', confed: 'UEFA', leagues: ['Premier Liga', 'Persha Liga']),
-    ConfedInfo(country: 'United Arab Emirates', confed: 'AFC', leagues: ['UAE Gulf League']),
-    ConfedInfo(country: 'Uruguay', confed: 'Conmebol', leagues: ['Liga Profesional de Primera División', 'Primera División Apertura']),
-    ConfedInfo(country: 'US Virgin Islands', confed: 'CONCACAF', leagues: ['U.S. Virgin Islands Championship']),
+    ConfedInfo(
+        country: 'Timor-Leste',
+        confed: 'AFC',
+        leagues: ['Liga Futebol Amadora Primeira Divisão']),
+    ConfedInfo(
+        country: 'Togo',
+        confed: 'CAF',
+        leagues: ['Championnat National de Premiere Division']),
+    ConfedInfo(
+        country: 'Tonga', confed: 'OFC', leagues: ['Tonga Major League']),
+    ConfedInfo(
+        country: 'Trinidad and Tobago',
+        confed: 'CONCACAF',
+        leagues: ['TT Pro League']),
+    ConfedInfo(
+        country: 'Tunisia',
+        confed: 'CAF',
+        leagues: ['Championnat de la Ligue Professionnelle 1', 'Ligue I Pro']),
+    ConfedInfo(
+        country: 'Turkey', confed: 'UEFA', leagues: ['1.Lig', 'Süper Lig']),
+    ConfedInfo(
+        country: 'Turkmenistan',
+        confed: 'AFC',
+        leagues: ['Turkmenistan Higher League']),
+    ConfedInfo(
+        country: 'Turks and Caicos Islands',
+        confed: 'CONCACAF',
+        leagues: ['Provo Premier League']),
+    ConfedInfo(
+        country: 'Uganda', confed: 'CAF', leagues: ['Uganda Premier League']),
+    ConfedInfo(
+        country: 'Ukraine',
+        confed: 'UEFA',
+        leagues: ['Premier Liga', 'Persha Liga']),
+    ConfedInfo(
+        country: 'United Arab Emirates',
+        confed: 'AFC',
+        leagues: ['UAE Gulf League']),
+    ConfedInfo(country: 'Uruguay', confed: 'Conmebol', leagues: [
+      'Liga Profesional de Primera División',
+      'Primera División Apertura'
+    ]),
+    ConfedInfo(
+        country: 'US Virgin Islands',
+        confed: 'CONCACAF',
+        leagues: ['U.S. Virgin Islands Championship']),
     ConfedInfo(country: 'USA', confed: 'CONCACAF', leagues: ['MLS']),
     ConfedInfo(country: 'Uzbekistan', confed: 'AFC', leagues: ['Superliga']),
-    ConfedInfo(country: 'Vanuatu', confed: 'OFC', leagues: ['Port Vila Football League']),
-    ConfedInfo(country: 'Venezuela', confed: 'Conmebol', leagues: ['Torneo Apertura']),
+    ConfedInfo(
+        country: 'Vanuatu',
+        confed: 'OFC',
+        leagues: ['Port Vila Football League']),
+    ConfedInfo(
+        country: 'Venezuela', confed: 'Conmebol', leagues: ['Torneo Apertura']),
     ConfedInfo(country: 'Vietnam', confed: 'AFC', leagues: ['V.League 1']),
     ConfedInfo(country: 'Wales', confed: 'UEFA', leagues: ['Cymru Premier']),
     ConfedInfo(country: 'Yemen', confed: 'AFC', leagues: ['Yemeni League']),
-    ConfedInfo(country: 'Zambia', confed: 'CAF', leagues: ['Zambia Super League']),
-    ConfedInfo(country: 'Zimbabwe', confed: 'CAF', leagues: ['Zimbabwe Premier Soccer League']),
+    ConfedInfo(
+        country: 'Zambia', confed: 'CAF', leagues: ['Zambia Super League']),
+    ConfedInfo(
+        country: 'Zimbabwe',
+        confed: 'CAF',
+        leagues: ['Zimbabwe Premier Soccer League']),
   ];
 
   /// Sorted list of all country names for the dropdown.
